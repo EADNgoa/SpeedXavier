@@ -195,8 +195,16 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\CouponController.cs" />
+    <Compile Include="Controllers\CruiseController.cs" />
+    <Compile Include="Controllers\FacilityController.cs" />
+    <Compile Include="Controllers\BookingStatusController.cs" />
+    <Compile Include="Controllers\GuideLanguageController.cs" />
+    <Compile Include="Controllers\CategoryController.cs" />
+    <Compile Include="Controllers\AttractionController.cs" />
     <Compile Include="Controllers\EAController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ActivityController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -348,6 +356,24 @@
     <Content Include="Views\Shared\pli.cshtml" />
     <Content Include="Views\Shared\_MenuPartial.cshtml" />
     <Content Include="Views\Shared\_ReportsLayout.cshtml" />
+    <Content Include="Views\Activity\Index.cshtml" />
+    <Content Include="Views\Activity\Manage.cshtml" />
+    <Content Include="Views\Items - Copy\Index.cshtml" />
+    <Content Include="Views\Items - Copy\Manage.cshtml" />
+    <Content Include="Views\Attraction\Index.cshtml" />
+    <Content Include="Views\Attraction\Manage.cshtml" />
+    <Content Include="Views\Category\Index.cshtml" />
+    <Content Include="Views\Category\Manage.cshtml" />
+    <Content Include="Views\GuideLanguage\Index.cshtml" />
+    <Content Include="Views\GuideLanguage\Manage.cshtml" />
+    <Content Include="Views\BookingStatus\Index.cshtml" />
+    <Content Include="Views\BookingStatus\Manage.cshtml" />
+    <Content Include="Views\Facility\Index.cshtml" />
+    <Content Include="Views\Facility\Manage.cshtml" />
+    <Content Include="Views\Cruise\Index.cshtml" />
+    <Content Include="Views\Cruise\Manage.cshtml" />
+    <Content Include="Views\Coupon\Index.cshtml" />
+    <Content Include="Views\Coupon\Manage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

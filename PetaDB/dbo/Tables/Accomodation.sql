@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[Accomodation]
 (
-	[AccomodationID] INT NOT NULL PRIMARY KEY, 
+	[AccomodationID] INT NOT NULL PRIMARY KEY IDENTITY, 
     [AccomName] VARCHAR(150) NULL, 
     [Description] VARCHAR(MAX) NULL, 
     [GeoTreeID] INT NULL, 
