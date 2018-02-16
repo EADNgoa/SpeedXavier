@@ -1,0 +1,82 @@
+﻿@model PagedList.IPagedList<DiscountCoupon>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Discount Coupons";
+}
+
+<center>
+    <h2 class="section-to-print"><b>@ViewBag.Title</b></h2>
+    
+    @using (Html.BeginForm("Index", "DiscountCoupon", FormMethod.Get))
+    {
+        <div class="row section-to-Not-print">
+            <div>
+                <table>
+                    <tr style="text-align:center">
+                        <td>&nbsp;Coupon Code:</td>
+                        <td> @Html.TextBox("AN", ViewBag.CurrentFilter as string, new { @class = "form-control" })</td>
+
+                        <td class="col-lg-1"></td>
+                        <td><input type="submit" value="Search" class="btn btn-default" /></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    }
+</center>
+
+<p>
+    @Html.ActionLink("Create New", "Manage")
+</p>
+<table class="table">
+    <tr>
+        <th>Sr No</th>
+        <th>
+            Coupon Code
+        </th>
+        <th>
+            Valid From
+        </th>
+        <th>
+           Valid To
+        </th>
+        <th>
+           Amount
+        </th>
+        <th>
+           Perc
+        </th>
+    </tr>
+    @{int i = 1;}
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @i
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CouponCode)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ValidFrom)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ValidTo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Amount)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Perc)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Manage", new { id = item.DiscountCouponID })
+        </td>
+    </tr>
+    i++;
+}
+
+</table>
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))

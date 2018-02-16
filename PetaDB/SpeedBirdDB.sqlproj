@@ -69,8 +69,40 @@
     <Build Include="dbo\Tables\AspNetUserLogins.sql" />
     <Build Include="dbo\Tables\AspNetUserRoles.sql" />
     <Build Include="dbo\Tables\AspNetUsers.sql" />
+    <Build Include="dbo\Tables\Accomodation.sql" />
+    <Build Include="dbo\Tables\Activity.sql" />
+    <Build Include="dbo\Tables\AgentDiscount.sql" />
+    <Build Include="dbo\Tables\Attraaction.sql" />
+    <Build Include="dbo\Tables\BookedCustomer.sql" />
+    <Build Include="dbo\Tables\Booking.sql" />
+    <Build Include="dbo\Tables\BookingDetail.sql" />
+    <Build Include="dbo\Tables\BookingStatus.sql" />
+    <Build Include="dbo\Tables\CarBike.sql" />
+    <Build Include="dbo\Tables\Cart.sql" />
+    <Build Include="dbo\Tables\Category.sql" />
+    <Build Include="dbo\Tables\Cruise.sql" />
     <Build Include="dbo\Tables\Customer.sql" />
-    <Build Include="dbo\Tables\Receipt.sql" />
-    <Build Include="dbo\Tables\Voucher.sql" />
+    <Build Include="dbo\Tables\Facility.sql" />
+    <Build Include="dbo\Tables\Facility_Accomodation.sql" />
+    <Build Include="dbo\Tables\GeoTree.sql" />
+    <Build Include="dbo\Tables\GuideLanguage.sql" />
+    <Build Include="dbo\Tables\LateBreak.sql" />
+    <Build Include="dbo\Tables\OptionType.sql" />
+    <Build Include="dbo\Tables\Package.sql" />
+    <Build Include="dbo\Tables\Package_Activity.sql" />
+    <Build Include="dbo\Tables\Package_Attraction.sql" />
+    <Build Include="dbo\Tables\Package_Category.sql" />
+    <Build Include="dbo\Tables\Package_GeoTree.sql" />
+    <Build Include="dbo\Tables\Picture.sql" />
+    <Build Include="dbo\Tables\Prices.sql" />
+    <Build Include="dbo\Tables\Review.sql" />
+    <Build Include="dbo\Tables\ReviewReplies.sql" />
+    <Build Include="dbo\Tables\DiscountCoupon.sql" />
+    <Build Include="dbo\Tables\ServiceDiscount.sql" />
+    <Build Include="dbo\Tables\MICE.sql" />
+    <Build Include="dbo\Tables\Visa.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="SpeedBirdDB.refactorlog" />
   </ItemGroup>
 </Project>

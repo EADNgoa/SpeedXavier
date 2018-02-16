@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace DeMonte.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : EAController
     {
         public ActionResult Index()
         {
