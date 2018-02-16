@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using PagedList;
 
-namespace DeMonte.Controllers
+namespace Speedbird.Controllers
 {
     [HandleError]
     public class EAController : Controller

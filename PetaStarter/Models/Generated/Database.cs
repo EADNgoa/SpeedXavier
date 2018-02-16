@@ -16,7 +16,7 @@ using System.Linq;
 using System.Web;
 using PetaPoco;
 
-namespace DeMonte
+namespace Speedbird
 {
 	public partial class Repository : Database
 	{
@@ -465,22 +465,6 @@ namespace DeMonte
 		[Column("Price")] public decimal? _Price { get; set; }
 	}
     
-	[TableName("dbo.Receipt")]
-	[PrimaryKey("ReceiptID")]
-	[ExplicitColumns]
-    public partial class Receipt  
-    {
-		[Column] public int ReceiptID { get; set; }
-		[Column] public DateTime? TDate { get; set; }
-		[Column] public string Name { get; set; }
-		[Column] public decimal? Amount { get; set; }
-		[Column] public string ChequeNo { get; set; }
-		[Column] public DateTime? ChqDate { get; set; }
-		[Column] public string DrawnOn { get; set; }
-		[Column] public string RoomNo { get; set; }
-		[Column] public int? BillNo { get; set; }
-	}
-    
 	[TableName("dbo.Review")]
 	[PrimaryKey("ReviewID")]
 	[ExplicitColumns]
@@ -529,19 +513,5 @@ namespace DeMonte
 		[Column] public string FlagPicture { get; set; }
 		[Column] public byte[] EmbassyAddress { get; set; }
 		[Column] public string Details { get; set; }
-	}
-    
-	[TableName("dbo.Voucher")]
-	[PrimaryKey("VoucherID")]
-	[ExplicitColumns]
-    public partial class Voucher  
-    {
-		[Column] public int VoucherID { get; set; }
-		[Column] public DateTime? TDate { get; set; }
-		[Column] public string PayTo { get; set; }
-		[Column] public decimal? Amount { get; set; }
-		[Column] public string OnAccountOf { get; set; }
-		[Column] public string ChequeNo { get; set; }
-		[Column] public string DrawnOn { get; set; }
 	}
 }

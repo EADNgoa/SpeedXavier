@@ -6,10 +6,10 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
-using DeMonte.Models;
+using Speedbird.Models;
 
 //made in the new NTHR
-namespace DeMonte.Controllers
+namespace Speedbird.Controllers
 {
     [Authorize]
     public class ManageController : EAController

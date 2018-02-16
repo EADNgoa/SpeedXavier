@@ -194,6 +194,7 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Areas\SBBoss\SBBossAreaRegistration.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CouponController.cs" />
     <Compile Include="Controllers\CruiseController.cs" />
@@ -201,7 +202,7 @@
     <Compile Include="Controllers\BookingStatusController.cs" />
     <Compile Include="Controllers\GuideLanguageController.cs" />
     <Compile Include="Controllers\CategoryController.cs" />
-    <Compile Include="Controllers\AttractionController.cs" />
+    <Compile Include="Areas\SBBoss\Controllers\AttractionController.cs" />
     <Compile Include="Controllers\EAController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ActivityController.cs" />
@@ -297,6 +298,9 @@
     </Content>
     <Content Include="Models\Generated\PetaPoco.Generator.ttinclude" />
     <Content Include="Models\Generated\PetaPoco.Core.ttinclude" />
+    <Content Include="Areas\SBBoss\Views\web.config" />
+    <Content Include="Areas\SBBoss\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\SBBoss\Views\_ViewStart.cshtml" />
     <None Include="Scripts\jquery-3.2.1.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -360,8 +364,8 @@
     <Content Include="Views\Activity\Manage.cshtml" />
     <Content Include="Views\Items - Copy\Index.cshtml" />
     <Content Include="Views\Items - Copy\Manage.cshtml" />
-    <Content Include="Views\Attraction\Index.cshtml" />
-    <Content Include="Views\Attraction\Manage.cshtml" />
+    <Content Include="Areas\SBBoss\Views\Attraction\Index.cshtml" />
+    <Content Include="Areas\SBBoss\Views\Attraction\Manage.cshtml" />
     <Content Include="Views\Category\Index.cshtml" />
     <Content Include="Views\Category\Manage.cshtml" />
     <Content Include="Views\GuideLanguage\Index.cshtml" />
@@ -377,6 +381,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Areas\SBBoss\Models\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

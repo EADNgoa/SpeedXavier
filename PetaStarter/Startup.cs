@@ -1,8 +1,8 @@
 ﻿using Microsoft.Owin;
 using Owin;
 
-[assembly: OwinStartupAttribute(typeof(DeMonte.Startup))]
-namespace DeMonte
+[assembly: OwinStartupAttribute(typeof(Speedbird.Startup))]
+namespace Speedbird
 {
     public partial class Startup
     {

@@ -5,9 +5,9 @@ using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.Google;
 using Owin;
-using DeMonte.Models;
+using Speedbird.Models;
 
-namespace DeMonte
+namespace Speedbird
 {
     public partial class Startup
     {

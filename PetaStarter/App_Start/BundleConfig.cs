@@ -1,7 +1,7 @@
 ﻿using System.Web;
 using System.Web.Optimization;
 
-namespace DeMonte
+namespace Speedbird
 {
     public class BundleConfig
     {
