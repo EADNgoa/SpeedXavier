@@ -2,7 +2,7 @@
 <#
 	// Settings
     ConnectionStringName = "DefaultConnection";			// Uses last connection string in config if not specified
-    Namespace = "DeMonte";
+    Namespace = "Speedbird";
     RepoName = "Repository";
     GenerateOperations = false;
 	GeneratePocos = true;

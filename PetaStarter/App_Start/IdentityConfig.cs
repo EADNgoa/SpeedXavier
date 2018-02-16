@@ -10,9 +10,9 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
-using DeMonte.Models;
+using Speedbird.Models;
 
-namespace DeMonte
+namespace Speedbird
 {
     public class EmailService : IIdentityMessageService
     {

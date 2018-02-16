@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace DeMonte.Models
+namespace Speedbird.Models
 {
     public class ExternalLoginConfirmationViewModel
     {

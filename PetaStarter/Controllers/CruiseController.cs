@@ -1,4 +1,4 @@
-﻿using DeMonte.Controllers;
+﻿using Speedbird.Controllers;
 using System;
 //using System.Collections.Generic;
 using System.Data;
@@ -9,7 +9,7 @@ using System.Net;
 using System.Web.Mvc;
 
 
-namespace DeMonte.Controllers
+namespace Speedbird.Controllers
 {
     public class CruiseController : EAController
     {

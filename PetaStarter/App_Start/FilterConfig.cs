@@ -1,7 +1,7 @@
 ﻿using System.Web;
 using System.Web.Mvc;
 
-namespace DeMonte
+namespace Speedbird
 {
     public class FilterConfig
     {
