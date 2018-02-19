@@ -33,6 +33,11 @@ namespace Speedbird
                       "~/Content/bootstrap.css",
                       "~/Content/site.css",
                       "~/Content/EA.css"));
+
+            bundles.Add(new StyleBundle("~/Content/AdminCss").Include(
+                      "~/Content/bootstrap.css",
+                      "~/Content/site.css",
+                      "~/Content/EAadmin.css"));
         }
     }
 }
