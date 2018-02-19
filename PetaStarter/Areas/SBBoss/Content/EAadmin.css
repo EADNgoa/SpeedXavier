@@ -8,6 +8,7 @@ body {
     background-repeat: no-repeat;
     height: 100vh;
     width: 240px;
+    padding-right:10px;
     background-size: cover;
 }
 
