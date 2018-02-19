@@ -5,23 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - </title>
     <link rel="icon" href="~/Custom/BBS.ico">
-    @*@Styles.Render("~/Content/themes/base/css")
+        @Styles.Render("~/Content/themes/base/css")
         @Scripts.Render("~/bundles/modernizr")
-        @Styles.Render("~/Content/AdminCss")
-        @Styles.Render("~/Content/dtpic")*@
+        @Styles.Render("~/Content/css")
+        @Styles.Render("~/Content/dtpic")
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" href="~/Content/EAadmin.css" >
-    <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+
+    <link rel="stylesheet" href="~/Content/EAadmin.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>    
+
 
 </head>
 <body>
 
-    @*@Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jquery")
 
     @Scripts.Render("~/bundles/jqueryui")
 
-    @Scripts.Render("~/bundles/jquerydtpicker")*@
+    @Scripts.Render("~/bundles/jquerydtpicker")
 
 
     <ul id="navHorz" class="nav justify-content-end small">
@@ -88,15 +89,76 @@
     </footer>
 
 
-    @*@Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("scripts", required: false)*@
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
 
 
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    <script>
+        $(function () {
+            //Change the "a" in menu and body
+            var sel = $('.dropdown-menu a');
+            sel.addClass('myamenu');
+
+            var bdy = $("#TopBody a");
+            bdy.addClass('myatag');
+
+
+
+            //DateTime picker
+            $('input[type=date]').datepicker({
+                dateFormat: "dd-M-yy",
+                showButtonPanel: true,
+                changeMonth: true,
+                changeYear: true
+            }).attr('type', 'text').attr('autocomplete', 'off');
+
+            //Disable teh browsers default date picker
+            jQuery.validator.methods["date"] = function (value, element) { return true; }
+
+
+        });
+
+        //autocomplete on any view without id
+        //<input type="text" id="Item" name="Item" data-autocomplete-url="@@Url.Action("AutoComplete")" />
+        //   $(document).ready(function () {
+        //       $('*[data-autocomplete-url]')
+        //           .each(function () {
+        //               $(this).autocomplete({
+        //                   source: $(this).data("autocomplete-url")
+        //               });
+        //           });
+        //   });
+
+
+        //Autocomplete on any view with id
+        // @@Html.HiddenFor(model => model.CustomerID) //choose the ID field of your model
+        // <input type="text" id="Customer" name="Customer" style="color:black;" data-autocomplete-idholder="#CustomerID" data-autocombo-url="@@Url.Action("AutoCompleteCusts")"  class="form-control" />  //for Create View
+        // <input type="text"  value="@@Model.Customer.Name" id="Customer" name="Customer" style="color:black;" data-autocomplete-idholder="#CustomerID" data-autocombo-url="@@Url.Action("AutoCompleteCusts")" class="form-control" />  //for edit view
+        //sample controller
+        // public ActionResult AutoCompleteCusts(string term)
+        //        {
+        //            var filteredItems = db.Customers.Where(c => c.Name.Contains(term)).Select(c => new { id = c.CustomerID, value = c.Name });
+
+        //           return Json(filteredItems, JsonRequestBehavior.AllowGet);
+        //        }
+
+
+        $(document).ready(function () {
+            $('*[data-autocombo-url]')
+                .each(function () {
+                    $(this).autocomplete({
+                        source: $(this).data("autocombo-url"),
+                        minLenght: 3,
+                        delay: 500,
+                        select: function (event, ui) {
+                            $($(this).data("autocomplete-idholder")).val(ui.item.id);
+                        }
+                    });
+                });
+        });
+
+    </script>
 
 
 

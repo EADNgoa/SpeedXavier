@@ -20,7 +20,7 @@ namespace Speedbird
                         "~/Scripts/modernizr-*"));
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
-                      "~/Scripts/bootstrap.js",
+                      "~/Scripts/bootstrap.js",                      
                       "~/Scripts/respond.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryui").Include(
@@ -31,13 +31,16 @@ namespace Speedbird
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
-                      "~/Content/site.css",
-                      "~/Content/EA.css"));
+                      "~/Content/site.css"));
 
-            bundles.Add(new StyleBundle("~/Content/AdminCss").Include(
-                      "~/Content/bootstrap.css",
-                      "~/Content/site.css",
-                      "~/Content/EAadmin.css"));
+            ;
+
+            bundles.Add(new ScriptBundle("~/bundles/jquerydtpicker").Include(
+                    "~/Scripts/jquery-ui-timepicker-addon.js"));
+            bundles.Add(new StyleBundle("~/Content/dtpic").Include(
+                    "~/Content/jquery-ui-timepicker-addon.css"));
+
+            BundleTable.EnableOptimizations = true;
         }
     }
 }

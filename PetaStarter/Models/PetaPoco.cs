@@ -2,7 +2,7 @@
 //      Apache License, Version 2.0 https://github.com/CollaboratingPlatypus/PetaPoco/blob/master/LICENSE.txt
 // </copyright>
 // <author>PetaPoco - CollaboratingPlatypus</author>
-// <date>2017/05/17</date>
+// <date>2017/12/13</date>
 
 // --------------------------WARNING--------------------------------
 // -----------------------------------------------------------------
@@ -1923,6 +1923,24 @@ namespace PetaPoco
         }
 
         /// <summary>
+        ///     Perform a multi-poco fetch
+        /// </summary>
+        /// <typeparam name="T1">The first POCO type</typeparam>
+        /// <typeparam name="T2">The second POCO type</typeparam>
+        /// <typeparam name="T3">The third POCO type</typeparam>
+        /// <typeparam name="T4">The fourth POCO type</typeparam>
+        /// <typeparam name="T5">The fifth POCO type</typeparam>
+        /// <typeparam name="TRet">The returned list POCO type</typeparam>
+        /// <param name="cb">A callback function to connect the POCO instances, or null to automatically guess the relationships</param>
+        /// <param name="sql">The SQL query to be executed</param>
+        /// <param name="args">Arguments to any embedded parameters in the SQL</param>
+        /// <returns>A collection of POCO's as a List</returns>
+        public List<TRet> Fetch<T1, T2, T3, T4, T5, TRet>(Func<T1, T2, T3, T4, T5, TRet> cb, string sql, params object[] args)
+        {
+            return Query<T1, T2, T3, T4, T5, TRet>(cb, sql, args).ToList();
+        }
+
+        /// <summary>
         ///     Perform a multi-poco query
         /// </summary>
         /// <typeparam name="T1">The first POCO type</typeparam>
@@ -1971,6 +1989,24 @@ namespace PetaPoco
         }
 
         /// <summary>
+        ///     Perform a multi-poco query
+        /// </summary>
+        /// <typeparam name="T1">The first POCO type</typeparam>
+        /// <typeparam name="T2">The second POCO type</typeparam>
+        /// <typeparam name="T3">The third POCO type</typeparam>
+        /// <typeparam name="T4">The fourth POCO type</typeparam>
+        /// <typeparam name="T5">The fifth POCO type</typeparam>
+        /// <typeparam name="TRet">The type of objects in the returned IEnumerable</typeparam>
+        /// <param name="cb">A callback function to connect the POCO instances, or null to automatically guess the relationships</param>
+        /// <param name="sql">The SQL query to be executed</param>
+        /// <param name="args">Arguments to any embedded parameters in the SQL</param>
+        /// <returns>A collection of POCO's as an IEnumerable</returns>
+        public IEnumerable<TRet> Query<T1, T2, T3, T4, T5, TRet>(Func<T1, T2, T3, T4, T5, TRet> cb, string sql, params object[] args)
+        {
+            return Query<TRet>(new Type[] { typeof(T1), typeof(T2), typeof(T3), typeof(T4), typeof(T5) }, cb, sql, args);
+        }
+
+        /// <summary>
         ///     Perform a multi-poco fetch
         /// </summary>
         /// <typeparam name="T1">The first POCO type</typeparam>
@@ -2013,6 +2049,23 @@ namespace PetaPoco
         public List<TRet> Fetch<T1, T2, T3, T4, TRet>(Func<T1, T2, T3, T4, TRet> cb, Sql sql)
         {
             return Query<T1, T2, T3, T4, TRet>(cb, sql.SQL, sql.Arguments).ToList();
+        }
+
+        /// <summary>
+        ///     Perform a multi-poco fetch
+        /// </summary>
+        /// <typeparam name="T1">The first POCO type</typeparam>
+        /// <typeparam name="T2">The second POCO type</typeparam>
+        /// <typeparam name="T3">The third POCO type</typeparam>
+        /// <typeparam name="T4">The fourth POCO type</typeparam>
+        /// <typeparam name="T5">The fifth POCO type</typeparam>
+        /// <typeparam name="TRet">The returned list POCO type</typeparam>
+        /// <param name="cb">A callback function to connect the POCO instances, or null to automatically guess the relationships</param>
+        /// <param name="sql">An SQL builder object representing the query and it's arguments</param>
+        /// <returns>A collection of POCO's as a List</returns>
+        public List<TRet> Fetch<T1, T2, T3, T4, T5, TRet>(Func<T1, T2, T3, T4, T5, TRet> cb, Sql sql)
+        {
+            return Query<T1, T2, T3, T4, T5, TRet>(cb, sql.SQL, sql.Arguments).ToList();
         }
 
         /// <summary>
@@ -2061,6 +2114,23 @@ namespace PetaPoco
         }
 
         /// <summary>
+        ///     Perform a multi-poco query
+        /// </summary>
+        /// <typeparam name="T1">The first POCO type</typeparam>
+        /// <typeparam name="T2">The second POCO type</typeparam>
+        /// <typeparam name="T3">The third POCO type</typeparam>
+        /// <typeparam name="T4">The fourth POCO type</typeparam>
+        /// <typeparam name="T5">The fifth POCO type</typeparam>
+        /// <typeparam name="TRet">The type of objects in the returned IEnumerable</typeparam>
+        /// <param name="cb">A callback function to connect the POCO instances, or null to automatically guess the relationships</param>
+        /// <param name="sql">An SQL builder object representing the query and it's arguments</param>
+        /// <returns>A collection of POCO's as an IEnumerable</returns>
+        public IEnumerable<TRet> Query<T1, T2, T3, T4, T5, TRet>(Func<T1, T2, T3, T4, T5, TRet> cb, Sql sql)
+        {
+            return Query<TRet>(new Type[] { typeof(T1), typeof(T2), typeof(T3), typeof(T4), typeof(T5) }, cb, sql.SQL, sql.Arguments);
+        }
+
+        /// <summary>
         ///     Perform a multi-poco fetch
         /// </summary>
         /// <typeparam name="T1">The first POCO type</typeparam>
@@ -2100,6 +2170,22 @@ namespace PetaPoco
         public List<T1> Fetch<T1, T2, T3, T4>(string sql, params object[] args)
         {
             return Query<T1, T2, T3, T4>(sql, args).ToList();
+        }
+
+        /// <summary>
+        ///     Perform a multi-poco fetch
+        /// </summary>
+        /// <typeparam name="T1">The first POCO type</typeparam>
+        /// <typeparam name="T2">The second POCO type</typeparam>
+        /// <typeparam name="T3">The third POCO type</typeparam>
+        /// <typeparam name="T4">The fourth POCO type</typeparam>
+        /// <typeparam name="T5">The fifth POCO type</typeparam>
+        /// <param name="sql">The SQL query to be executed</param>
+        /// <param name="args">Arguments to any embedded parameters in the SQL</param>
+        /// <returns>A collection of POCO's as a List</returns>
+        public List<T1> Fetch<T1, T2, T3, T4, T5>(string sql, params object[] args)
+        {
+            return Query<T1, T2, T3, T4, T5>(sql, args).ToList();
         }
 
         /// <summary>
@@ -2145,6 +2231,22 @@ namespace PetaPoco
         }
 
         /// <summary>
+        ///     Perform a multi-poco query
+        /// </summary>
+        /// <typeparam name="T1">The first POCO type</typeparam>
+        /// <typeparam name="T2">The second POCO type</typeparam>
+        /// <typeparam name="T3">The third POCO type</typeparam>
+        /// <typeparam name="T4">The fourth POCO type</typeparam>
+        /// <typeparam name="T5">The fifth POCO type</typeparam>
+        /// <param name="sql">The SQL query to be executed</param>
+        /// <param name="args">Arguments to any embedded parameters in the SQL</param>
+        /// <returns>A collection of POCO's as an IEnumerable</returns>
+        public IEnumerable<T1> Query<T1, T2, T3, T4, T5>(string sql, params object[] args)
+        {
+            return Query<T1>(new Type[] { typeof(T1), typeof(T2), typeof(T3), typeof(T4), typeof(T5) }, null, sql, args);
+        }
+
+        /// <summary>
         ///     Perform a multi-poco fetch
         /// </summary>
         /// <typeparam name="T1">The first POCO type</typeparam>
@@ -2184,6 +2286,21 @@ namespace PetaPoco
         }
 
         /// <summary>
+        ///     Perform a multi-poco fetch
+        /// </summary>
+        /// <typeparam name="T1">The first POCO type</typeparam>
+        /// <typeparam name="T2">The second POCO type</typeparam>
+        /// <typeparam name="T3">The third POCO type</typeparam>
+        /// <typeparam name="T4">The fourth POCO type</typeparam>
+        /// <typeparam name="T5">The fifth POCO type</typeparam>
+        /// <param name="sql">An SQL builder object representing the query and it's arguments</param>
+        /// <returns>A collection of POCO's as a List</returns>
+        public List<T1> Fetch<T1, T2, T3, T4, T5>(Sql sql)
+        {
+            return Query<T1, T2, T3, T4, T5>(sql.SQL, sql.Arguments).ToList();
+        }
+
+        /// <summary>
         ///     Perform a multi-poco query
         /// </summary>
         /// <typeparam name="T1">The first POCO type</typeparam>
@@ -2220,6 +2337,21 @@ namespace PetaPoco
         public IEnumerable<T1> Query<T1, T2, T3, T4>(Sql sql)
         {
             return Query<T1>(new Type[] { typeof(T1), typeof(T2), typeof(T3), typeof(T4) }, null, sql.SQL, sql.Arguments);
+        }
+
+        /// <summary>
+        ///     Perform a multi-poco query
+        /// </summary>
+        /// <typeparam name="T1">The first POCO type</typeparam>
+        /// <typeparam name="T2">The second POCO type</typeparam>
+        /// <typeparam name="T3">The third POCO type</typeparam>
+        /// <typeparam name="T4">The fourth POCO type</typeparam>
+        /// <typeparam name="T5">The fifth POCO type</typeparam>
+        /// <param name="sql">An SQL builder object representing the query and it's arguments</param>
+        /// <returns>A collection of POCO's as an IEnumerable</returns>
+        public IEnumerable<T1> Query<T1, T2, T3, T4, T5>(Sql sql)
+        {
+            return Query<T1>(new Type[] { typeof(T1), typeof(T2), typeof(T3), typeof(T4), typeof(T5) }, null, sql.SQL, sql.Arguments);
         }
 
         /// <summary>
@@ -2494,21 +2626,6 @@ namespace PetaPoco
         #endregion
 
         #region Internal operations
-
-        internal void ExecuteNonQueryHelper(IDbCommand cmd)
-        {
-            DoPreExecute(cmd);
-            cmd.ExecuteNonQuery();
-            OnExecutedCommand(cmd);
-        }
-
-        internal object ExecuteScalarHelper(IDbCommand cmd)
-        {
-            DoPreExecute(cmd);
-            object r = cmd.ExecuteScalar();
-            OnExecutedCommand(cmd);
-            return r;
-        }
 
         internal void DoPreExecute(IDbCommand cmd)
         {
@@ -3427,6 +3544,21 @@ namespace PetaPoco
         /// </summary>
         /// <typeparam name="T1">The first POCO type</typeparam>
         /// <typeparam name="T2">The second POCO type</typeparam>
+        /// <typeparam name="T3">The third POCO type</typeparam>
+        /// <typeparam name="T4">The fourth POCO type</typeparam>
+        /// <typeparam name="T5">The fifth POCO type</typeparam>
+        /// <typeparam name="TRet">The type of objects in the returned IEnumerable</typeparam>
+        /// <param name="cb">A callback function to connect the POCO instances, or null to automatically guess the relationships</param>
+        /// <param name="sql">The SQL query to be executed</param>
+        /// <param name="args">Arguments to any embedded parameters in the SQL</param>
+        /// <returns>A collection of POCO's as an IEnumerable</returns>
+        IEnumerable<TRet> Query<T1, T2, T3, T4, T5, TRet>(Func<T1, T2, T3, T4, T5, TRet> cb, string sql, params object[] args);
+
+        /// <summary>
+        ///     Perform a multi-poco query
+        /// </summary>
+        /// <typeparam name="T1">The first POCO type</typeparam>
+        /// <typeparam name="T2">The second POCO type</typeparam>
         /// <typeparam name="TRet">The type of objects in the returned IEnumerable</typeparam>
         /// <param name="cb">A callback function to connect the POCO instances, or null to automatically guess the relationships</param>
         /// <param name="sql">An SQL builder object representing the query and it's arguments</param>
@@ -3457,6 +3589,20 @@ namespace PetaPoco
         /// <param name="sql">An SQL builder object representing the query and it's arguments</param>
         /// <returns>A collection of POCO's as an IEnumerable</returns>
         IEnumerable<TRet> Query<T1, T2, T3, T4, TRet>(Func<T1, T2, T3, T4, TRet> cb, Sql sql);
+
+        /// <summary>
+        ///     Perform a multi-poco query
+        /// </summary>
+        /// <typeparam name="T1">The first POCO type</typeparam>
+        /// <typeparam name="T2">The second POCO type</typeparam>
+        /// <typeparam name="T3">The third POCO type</typeparam>
+        /// <typeparam name="T4">The fourth POCO type</typeparam>
+        /// <typeparam name="T5">The fifth POCO type</typeparam>
+        /// <typeparam name="TRet">The type of objects in the returned IEnumerable</typeparam>
+        /// <param name="cb">A callback function to connect the POCO instances, or null to automatically guess the relationships</param>
+        /// <param name="sql">An SQL builder object representing the query and it's arguments</param>
+        /// <returns>A collection of POCO's as an IEnumerable</returns>
+        IEnumerable<TRet> Query<T1, T2, T3, T4, T5, TRet>(Func<T1, T2, T3, T4, T5, TRet> cb, Sql sql);
 
         /// <summary>
         ///     Perform a multi-poco query
@@ -3496,6 +3642,19 @@ namespace PetaPoco
         /// </summary>
         /// <typeparam name="T1">The first POCO type</typeparam>
         /// <typeparam name="T2">The second POCO type</typeparam>
+        /// <typeparam name="T3">The third POCO type</typeparam>
+        /// <typeparam name="T4">The fourth POCO type</typeparam>
+        /// <typeparam name="T5">The fifth POCO type</typeparam>
+        /// <param name="sql">The SQL query to be executed</param>
+        /// <param name="args">Arguments to any embedded parameters in the SQL</param>
+        /// <returns>A collection of POCO's as an IEnumerable</returns>
+        IEnumerable<T1> Query<T1, T2, T3, T4, T5>(string sql, params object[] args);
+
+        /// <summary>
+        ///     Perform a multi-poco query
+        /// </summary>
+        /// <typeparam name="T1">The first POCO type</typeparam>
+        /// <typeparam name="T2">The second POCO type</typeparam>
         /// <param name="sql">An SQL builder object representing the query and it's arguments</param>
         /// <returns>A collection of POCO's as an IEnumerable</returns>
         IEnumerable<T1> Query<T1, T2>(Sql sql);
@@ -3520,6 +3679,18 @@ namespace PetaPoco
         /// <param name="sql">An SQL builder object representing the query and it's arguments</param>
         /// <returns>A collection of POCO's as an IEnumerable</returns>
         IEnumerable<T1> Query<T1, T2, T3, T4>(Sql sql);
+
+        /// <summary>
+        ///     Perform a multi-poco query
+        /// </summary>
+        /// <typeparam name="T1">The first POCO type</typeparam>
+        /// <typeparam name="T2">The second POCO type</typeparam>
+        /// <typeparam name="T3">The third POCO type</typeparam>
+        /// <typeparam name="T4">The fourth POCO type</typeparam>
+        /// <typeparam name="T5">The fifth POCO type</typeparam>
+        /// <param name="sql">An SQL builder object representing the query and it's arguments</param>
+        /// <returns>A collection of POCO's as an IEnumerable</returns>
+        IEnumerable<T1> Query<T1, T2, T3, T4, T5>(Sql sql);
 
         /// <summary>
         ///     Performs a multi-poco query
@@ -3829,6 +4000,21 @@ namespace PetaPoco
         /// </summary>
         /// <typeparam name="T1">The first POCO type</typeparam>
         /// <typeparam name="T2">The second POCO type</typeparam>
+        /// <typeparam name="T3">The third POCO type</typeparam>
+        /// <typeparam name="T4">The fourth POCO type</typeparam>
+        /// <typeparam name="T5">The fifth POCO type</typeparam>
+        /// <typeparam name="TRet">The returned list POCO type</typeparam>
+        /// <param name="cb">A callback function to connect the POCO instances, or null to automatically guess the relationships</param>
+        /// <param name="sql">The SQL query to be executed</param>
+        /// <param name="args">Arguments to any embedded parameters in the SQL</param>
+        /// <returns>A collection of POCO's as a List</returns>
+        List<TRet> Fetch<T1, T2, T3, T4, T5, TRet>(Func<T1, T2, T3, T4, T5, TRet> cb, string sql, params object[] args);
+
+        /// <summary>
+        ///     Perform a multi-poco fetch
+        /// </summary>
+        /// <typeparam name="T1">The first POCO type</typeparam>
+        /// <typeparam name="T2">The second POCO type</typeparam>
         /// <typeparam name="TRet">The returned list POCO type</typeparam>
         /// <param name="cb">A callback function to connect the POCO instances, or null to automatically guess the relationships</param>
         /// <param name="sql">An SQL builder object representing the query and it's arguments</param>
@@ -3859,6 +4045,20 @@ namespace PetaPoco
         /// <param name="sql">An SQL builder object representing the query and it's arguments</param>
         /// <returns>A collection of POCO's as a List</returns>
         List<TRet> Fetch<T1, T2, T3, T4, TRet>(Func<T1, T2, T3, T4, TRet> cb, Sql sql);
+
+        /// <summary>
+        ///     Perform a multi-poco fetch
+        /// </summary>
+        /// <typeparam name="T1">The first POCO type</typeparam>
+        /// <typeparam name="T2">The second POCO type</typeparam>
+        /// <typeparam name="T3">The third POCO type</typeparam>
+        /// <typeparam name="T4">The fourth POCO type</typeparam>
+        /// <typeparam name="T5">The fifth POCO type</typeparam>
+        /// <typeparam name="TRet">The returned list POCO type</typeparam>
+        /// <param name="cb">A callback function to connect the POCO instances, or null to automatically guess the relationships</param>
+        /// <param name="sql">An SQL builder object representing the query and it's arguments</param>
+        /// <returns>A collection of POCO's as a List</returns>
+        List<TRet> Fetch<T1, T2, T3, T4, T5, TRet>(Func<T1, T2, T3, T4, T5, TRet> cb, Sql sql);
 
         /// <summary>
         ///     Perform a multi-poco fetch
@@ -3898,6 +4098,19 @@ namespace PetaPoco
         /// </summary>
         /// <typeparam name="T1">The first POCO type</typeparam>
         /// <typeparam name="T2">The second POCO type</typeparam>
+        /// <typeparam name="T3">The third POCO type</typeparam>
+        /// <typeparam name="T4">The fourth POCO type</typeparam>
+        /// <typeparam name="T5">The fifth POCO type</typeparam>
+        /// <param name="sql">The SQL query to be executed</param>
+        /// <param name="args">Arguments to any embedded parameters in the SQL</param>
+        /// <returns>A collection of POCO's as a List</returns>
+        List<T1> Fetch<T1, T2, T3, T4, T5>(string sql, params object[] args);
+
+        /// <summary>
+        ///     Perform a multi-poco fetch
+        /// </summary>
+        /// <typeparam name="T1">The first POCO type</typeparam>
+        /// <typeparam name="T2">The second POCO type</typeparam>
         /// <param name="sql">An SQL builder object representing the query and it's arguments</param>
         /// <returns>A collection of POCO's as a List</returns>
         List<T1> Fetch<T1, T2>(Sql sql);
@@ -3922,6 +4135,18 @@ namespace PetaPoco
         /// <param name="sql">An SQL builder object representing the query and it's arguments</param>
         /// <returns>A collection of POCO's as a List</returns>
         List<T1> Fetch<T1, T2, T3, T4>(Sql sql);
+
+        /// <summary>
+        ///     Perform a multi-poco fetch
+        /// </summary>
+        /// <typeparam name="T1">The first POCO type</typeparam>
+        /// <typeparam name="T2">The second POCO type</typeparam>
+        /// <typeparam name="T3">The third POCO type</typeparam>
+        /// <typeparam name="T4">The fourth POCO type</typeparam>
+        /// <typeparam name="T5">The fourth POCO type</typeparam>
+        /// <param name="sql">An SQL builder object representing the query and it's arguments</param>
+        /// <returns>A collection of POCO's as a List</returns>
+        List<T1> Fetch<T1, T2, T3, T4, T5>(Sql sql);
 
         /// <summary> 
         /// Perform a multi-results set query 
@@ -4235,6 +4460,27 @@ namespace PetaPoco
 
 
     /// <summary>
+    /// Represents an attribute which can decorate a Poco property conver value from database type to property type and conversely.
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Property)]
+    public abstract class ValueConverterAttribute : Attribute
+    {
+        /// <summary>
+        /// Function to convert property value to database type value.
+        /// </summary>
+        /// <param name="value">Property value</param>
+        /// <returns>Converted database value</returns>
+        public abstract object ConvertToDb(object value);
+        /// <summary>
+        /// Function to convert database value to property type value.
+        /// </summary>
+        /// <param name="value">Database value</param>
+        /// <returns>Converted property type value</returns>
+        public abstract object ConvertFromDb(object value);
+    }
+
+
+    /// <summary>
     ///     Wrap strings in an instance of this class to force use of DBType.AnsiString
     /// </summary>
     public class AnsiString
@@ -4489,6 +4735,26 @@ namespace PetaPoco
 
                 return true;
             };
+            FromDbConverter = (pi, t) =>
+            {
+                if (pi != null)
+                {
+                    var valueConverter = pi.GetCustomAttributes(typeof(ValueConverterAttribute), true).FirstOrDefault() as ValueConverterAttribute;
+                    if (valueConverter != null)
+                        return valueConverter.ConvertFromDb;
+                }
+                return null;
+            };
+            ToDbConverter = (pi) =>
+            {
+                if (pi != null)
+                {
+                    var valueConverter = pi.GetCustomAttributes(typeof(ValueConverterAttribute), true).FirstOrDefault() as ValueConverterAttribute;
+                    if (valueConverter != null)
+                        return valueConverter.ConvertToDb;
+                }
+                return null;
+            };
         }
 
         /// <summary>
@@ -4687,7 +4953,7 @@ namespace PetaPoco
         public virtual object ExecuteInsert(Database database, IDbCommand cmd, string primaryKeyName)
         {
             cmd.CommandText += ";\nSELECT @@IDENTITY AS NewID;";
-            return database.ExecuteScalarHelper(cmd);
+            return ExecuteScalarHelper(database, cmd);
         }
 
         /// <summary>
@@ -4702,11 +4968,8 @@ namespace PetaPoco
             foreach (var assemblyName in assemblyQualifiedNames)
             {
                 ft = Type.GetType(assemblyName);
-
                 if (ft != null)
-                {
                     break;
-                }
             }
 
             if (ft == null)
@@ -4813,6 +5076,23 @@ namespace PetaPoco
             var unwrapped = sp.GetService(factory.GetType()) as DbProviderFactory;
             return unwrapped == null ? factory : Unwrap(unwrapped);
         }
+
+        protected void ExecuteNonQueryHelper(Database db, IDbCommand cmd)
+        {
+            db.DoPreExecute(cmd);
+            cmd.ExecuteNonQuery();
+            db.OnExecutedCommand(cmd);
+        }
+
+        protected object ExecuteScalarHelper(Database db, IDbCommand cmd)
+        {
+            db.DoPreExecute(cmd);
+            object r = cmd.ExecuteScalar();
+            db.OnExecutedCommand(cmd);
+            return r;
+        }
+
+
     }
 
 
@@ -7112,7 +7392,7 @@ namespace PetaPoco
                 cmd.CommandText = cmd.CommandText.Substring(0, cmd.CommandText.Length - 1);
 
             cmd.CommandText += " RETURNING " + EscapeSqlIdentifier(primaryKeyName) + ";";
-            return database.ExecuteScalarHelper(cmd);
+            return ExecuteScalarHelper(database, cmd);
         }
 
         public override string EscapeSqlIdentifier(string sqlIdentifier)
@@ -7159,9 +7439,9 @@ namespace PetaPoco
 
         public override object ExecuteInsert(Database database, IDbCommand cmd, string primaryKeyName)
         {
-            database.ExecuteNonQueryHelper(cmd);
+            ExecuteNonQueryHelper(database, cmd);
             cmd.CommandText = "SELECT @@IDENTITY AS NewID;";
-            return database.ExecuteScalarHelper(cmd);
+            return ExecuteScalarHelper(database, cmd);
         }
 
         public override string BuildPageQuery(long skip, long take, SQLParts parts, ref object[] args)
@@ -7252,12 +7532,12 @@ namespace PetaPoco
                 param.Direction = ParameterDirection.ReturnValue;
                 param.DbType = DbType.Int64;
                 cmd.Parameters.Add(param);
-                db.ExecuteNonQueryHelper(cmd);
+                ExecuteNonQueryHelper(db, cmd);
                 return param.Value;
             }
             else
             {
-                db.ExecuteNonQueryHelper(cmd);
+                ExecuteNonQueryHelper(db, cmd);
                 return -1;
             }
         }
@@ -7300,11 +7580,11 @@ namespace PetaPoco
             if (primaryKeyName != null)
             {
                 cmd.CommandText += string.Format("returning {0} as NewID", EscapeSqlIdentifier(primaryKeyName));
-                return db.ExecuteScalarHelper(cmd);
+                return ExecuteScalarHelper(db, cmd);
             }
             else
             {
-                db.ExecuteNonQueryHelper(cmd);
+                ExecuteNonQueryHelper(db, cmd);
                 return -1;
             }
         }
@@ -7331,11 +7611,11 @@ namespace PetaPoco
             if (primaryKeyName != null)
             {
                 cmd.CommandText += ";\nSELECT last_insert_rowid();";
-                return db.ExecuteScalarHelper(cmd);
+                return ExecuteScalarHelper(db, cmd);
             }
             else
             {
-                db.ExecuteNonQueryHelper(cmd);
+                ExecuteNonQueryHelper(db, cmd);
                 return -1;
             }
         }
@@ -7365,7 +7645,7 @@ namespace PetaPoco
 
         public override object ExecuteInsert(Database db, System.Data.IDbCommand cmd, string primaryKeyName)
         {
-            db.ExecuteNonQueryHelper(cmd);
+            ExecuteNonQueryHelper(db, cmd);
             return db.ExecuteScalar<object>("SELECT @@@IDENTITY AS NewID;");
         }
     }
@@ -7402,7 +7682,7 @@ namespace PetaPoco
 
         public override object ExecuteInsert(Database db, System.Data.IDbCommand cmd, string primaryKeyName)
         {
-            return db.ExecuteScalarHelper(cmd);
+            return ExecuteScalarHelper(db, cmd);
         }
 
         public override string GetExistsSql()

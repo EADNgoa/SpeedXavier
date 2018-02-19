@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
   <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.8\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.8\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
   <Import Project="..\packages\Microsoft.Net.Compilers.2.4.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.2.4.0\build\Microsoft.Net.Compilers.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
@@ -26,6 +27,7 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <TypeScriptToolsVersion>2.5</TypeScriptToolsVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -228,12 +230,16 @@
   <ItemGroup>
     <Content Include="Areas\SBBoss\Custom\Logo.jpg" />
     <Content Include="Areas\SBBoss\Custom\sidenav5.jpg" />
-    <Content Include="Content\bootstrap-theme.css" />
-    <Content Include="Content\bootstrap-theme.min.css" />
+    <Content Include="Content\bootstrap-grid.css" />
+    <Content Include="Content\bootstrap-grid.min.css" />
+    <Content Include="Content\bootstrap-reboot.css" />
+    <Content Include="Content\bootstrap-reboot.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\EAadmin.css" />
     <Content Include="Content\EA.css" />
+    <Content Include="Content\jquery-ui-timepicker-addon.css" />
+    <Content Include="Content\jquery-ui-timepicker-addon.min.css" />
     <Content Include="Content\PagedList.css" />
     <Content Include="Content\themes\base\accordion.css" />
     <Content Include="Content\themes\base\all.css" />
@@ -281,48 +287,116 @@
     <Content Include="Custom\Emblem.png" />
     <Content Include="Custom\HeaderRaised.jpg" />
     <Content Include="favicon.ico" />
-    <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="fonts\glyphicons-halflings-regular.woff2" />
-    <Content Include="fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="Content\bootstrap.min.css.map" />
-    <Content Include="Content\bootstrap.css.map" />
-    <Content Include="Content\bootstrap-theme.min.css.map" />
-    <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Models\Generated\Database.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Database.cs</LastGenOutput>
     </Content>
-    <Content Include="Models\Generated\PetaPoco.Generator.ttinclude" />
-    <Content Include="Models\Generated\PetaPoco.Core.ttinclude" />
     <Content Include="Areas\SBBoss\Views\web.config" />
     <Content Include="Areas\SBBoss\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\SBBoss\Views\_ViewStart.cshtml" />
-    <None Include="Scripts\jquery-3.2.1.intellisense.js" />
+    <Content Include="Scripts\bootstrap.bundle.js" />
+    <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="Scripts\jquery-3.2.1.js" />
-    <Content Include="Scripts\jquery-3.2.1.min.js" />
-    <Content Include="Scripts\jquery-3.2.1.slim.js" />
-    <Content Include="Scripts\jquery-3.2.1.slim.min.js" />
-    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\esm\popper-utils.js" />
+    <Content Include="Scripts\esm\popper-utils.min.js" />
+    <Content Include="Scripts\esm\popper.js" />
+    <Content Include="Scripts\esm\popper.min.js" />
+    <Content Include="Scripts\esm\popper.min.js.map" />
+    <Content Include="Scripts\esm\popper.js.map" />
+    <Content Include="Scripts\esm\popper-utils.min.js.map" />
+    <Content Include="Scripts\esm\popper-utils.js.map" />
+    <Content Include="Scripts\bootstrap.min.js.map" />
+    <Content Include="Scripts\bootstrap.js.map" />
+    <Content Include="Scripts\bootstrap.bundle.min.js.map" />
+    <Content Include="Scripts\bootstrap.bundle.js.map" />
+    <Content Include="Content\bootstrap.min.css.map" />
+    <Content Include="Content\bootstrap.css.map" />
+    <Content Include="Content\bootstrap-reboot.min.css.map" />
+    <Content Include="Content\bootstrap-reboot.css.map" />
+    <Content Include="Content\bootstrap-grid.min.css.map" />
+    <Content Include="Content\bootstrap-grid.css.map" />
+    <Content Include="Models\Generated\PetaPoco.Generator.ttinclude" />
+    <Content Include="Models\Generated\PetaPoco.Core.ttinclude" />
+    <None Include="Scripts\jquery-3.3.1.intellisense.js" />
+    <Content Include="Scripts\i18n\jquery-ui-timepicker-addon-i18n.js" />
+    <Content Include="Scripts\i18n\jquery-ui-timepicker-addon-i18n.min.js" />
+    <Content Include="Scripts\i18n\jquery-ui-timepicker-af.js" />
+    <Content Include="Scripts\i18n\jquery-ui-timepicker-am.js" />
+    <Content Include="Scripts\i18n\jquery-ui-timepicker-bg.js" />
+    <Content Include="Scripts\i18n\jquery-ui-timepicker-ca.js" />
+    <Content Include="Scripts\i18n\jquery-ui-timepicker-cs.js" />
+    <Content Include="Scripts\i18n\jquery-ui-timepicker-da.js" />
+    <Content Include="Scripts\i18n\jquery-ui-timepicker-de.js" />
+    <Content Include="Scripts\i18n\jquery-ui-timepicker-el.js" />
+    <Content Include="Scripts\i18n\jquery-ui-timepicker-es.js" />
+    <Content Include="Scripts\i18n\jquery-ui-timepicker-et.js" />
+    <Content Include="Scripts\i18n\jquery-ui-timepicker-eu.js" />
+    <Content Include="Scripts\i18n\jquery-ui-timepicker-fa.js" />
+    <Content Include="Scripts\i18n\jquery-ui-timepicker-fi.js" />
+    <Content Include="Scripts\i18n\jquery-ui-timepicker-fr.js" />
+    <Content Include="Scripts\i18n\jquery-ui-timepicker-gl.js" />
+    <Content Include="Scripts\i18n\jquery-ui-timepicker-he.js" />
+    <Content Include="Scripts\i18n\jquery-ui-timepicker-hr.js" />
+    <Content Include="Scripts\i18n\jquery-ui-timepicker-hu.js" />
+    <Content Include="Scripts\i18n\jquery-ui-timepicker-id.js" />
+    <Content Include="Scripts\i18n\jquery-ui-timepicker-it.js" />
+    <Content Include="Scripts\i18n\jquery-ui-timepicker-ja.js" />
+    <Content Include="Scripts\i18n\jquery-ui-timepicker-ko.js" />
+    <Content Include="Scripts\i18n\jquery-ui-timepicker-lt.js" />
+    <Content Include="Scripts\i18n\jquery-ui-timepicker-lv.js" />
+    <Content Include="Scripts\i18n\jquery-ui-timepicker-mk.js" />
+    <Content Include="Scripts\i18n\jquery-ui-timepicker-nl.js" />
+    <Content Include="Scripts\i18n\jquery-ui-timepicker-no.js" />
+    <Content Include="Scripts\i18n\jquery-ui-timepicker-pl.js" />
+    <Content Include="Scripts\i18n\jquery-ui-timepicker-pt-BR.js" />
+    <Content Include="Scripts\i18n\jquery-ui-timepicker-pt.js" />
+    <Content Include="Scripts\i18n\jquery-ui-timepicker-ro.js" />
+    <Content Include="Scripts\i18n\jquery-ui-timepicker-ru.js" />
+    <Content Include="Scripts\i18n\jquery-ui-timepicker-sk.js" />
+    <Content Include="Scripts\i18n\jquery-ui-timepicker-sl.js" />
+    <Content Include="Scripts\i18n\jquery-ui-timepicker-sq.js" />
+    <Content Include="Scripts\i18n\jquery-ui-timepicker-sr-RS.js" />
+    <Content Include="Scripts\i18n\jquery-ui-timepicker-sr-YU.js" />
+    <Content Include="Scripts\i18n\jquery-ui-timepicker-sv.js" />
+    <Content Include="Scripts\i18n\jquery-ui-timepicker-th.js" />
+    <Content Include="Scripts\i18n\jquery-ui-timepicker-tr.js" />
+    <Content Include="Scripts\i18n\jquery-ui-timepicker-uk.js" />
+    <Content Include="Scripts\i18n\jquery-ui-timepicker-vi.js" />
+    <Content Include="Scripts\i18n\jquery-ui-timepicker-zh-CN.js" />
+    <Content Include="Scripts\i18n\jquery-ui-timepicker-zh-TW.js" />
+    <Content Include="Scripts\jquery-3.3.1.js" />
+    <Content Include="Scripts\jquery-3.3.1.min.js" />
+    <Content Include="Scripts\jquery-3.3.1.slim.js" />
+    <Content Include="Scripts\jquery-3.3.1.slim.min.js" />
     <Content Include="Scripts\jquery-ui-1.12.1.js" />
     <Content Include="Scripts\jquery-ui-1.12.1.min.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery-ui-sliderAccess.js" />
+    <Content Include="Scripts\jquery-ui-timepicker-addon.js" />
+    <Content Include="Scripts\jquery-ui-timepicker-addon.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\popper-utils.js" />
+    <Content Include="Scripts\popper-utils.min.js" />
+    <Content Include="Scripts\popper.js" />
+    <Content Include="Scripts\popper.min.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\umd\popper-utils.js" />
+    <Content Include="Scripts\umd\popper-utils.min.js" />
+    <Content Include="Scripts\umd\popper.js" />
+    <Content Include="Scripts\umd\popper.min.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -381,6 +455,15 @@
     <Content Include="Views\Cruise\Manage.cshtml" />
     <Content Include="Views\Coupon\Index.cshtml" />
     <Content Include="Views\Coupon\Manage.cshtml" />
+    <Content Include="Scripts\umd\popper.min.js.map" />
+    <Content Include="Scripts\umd\popper.js.map" />
+    <Content Include="Scripts\umd\popper-utils.min.js.map" />
+    <Content Include="Scripts\umd\popper-utils.js.map" />
+    <Content Include="Scripts\README.md" />
+    <Content Include="Scripts\popper.min.js.map" />
+    <Content Include="Scripts\popper.js.map" />
+    <Content Include="Scripts\popper-utils.min.js.map" />
+    <Content Include="Scripts\popper-utils.js.map" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -388,17 +471,22 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <Content Include="Scripts\jquery-3.2.1.slim.min.map" />
-    <Content Include="Scripts\jquery-3.2.1.min.map" />
+    <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
+    <Content Include="Scripts\jquery-3.3.1.min.map" />
   </ItemGroup>
   <ItemGroup>
+    <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="Scripts\index.d.ts" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
   <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">

@@ -71,12 +71,9 @@ li {
 
 /* Nice box for details in a Mast Detail screen */
 .MastDet {
-        background-image: url(../EAwell.jpg);
-        background-size: 100% 100%;
-        background-repeat: no-repeat;
-        padding-top: 5px;
-        padding-left: 30px;
-        padding-bottom: 10px;
-        padding-right: 15px;
-    }
+    background-image: url(../EAwell.jpg);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    padding: 5px 15px 10px 30px;
+}
 
