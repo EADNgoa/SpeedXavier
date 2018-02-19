@@ -9,5 +9,6 @@
     [Dificulty] INT NULL, 
     [GroupSize] INT NULL, 
     [GuideLanguageID] INT NULL, 
+    [StartTime] VARCHAR(300) NULL, 
     CONSTRAINT [FK_Package_GuideLanguage] FOREIGN KEY ([GuideLanguageID]) REFERENCES [GuideLanguage]([GuideLanguageID])
 )
