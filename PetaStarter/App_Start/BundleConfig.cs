@@ -33,14 +33,22 @@ namespace Speedbird
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
 
-            ;
+            bundles.Add(new StyleBundle("~/Content/EAcss").Include(
+                      "~/Content/EA.css"));
+            bundles.Add(new StyleBundle("~/SBBoss/Content/EAcss").Include(
+                      "~/Areas/SBBoss/Content/EAadmin.css"));
+
 
             bundles.Add(new ScriptBundle("~/bundles/jquerydtpicker").Include(
                     "~/Scripts/jquery-ui-timepicker-addon.js"));
             bundles.Add(new StyleBundle("~/Content/dtpic").Include(
                     "~/Content/jquery-ui-timepicker-addon.css"));
 
-            BundleTable.EnableOptimizations = true;
+            bundles.Add(new ScriptBundle("~/fa5").Include(
+                      "~/fa5/svg-with-js/js/fa-solid.js",
+                      "~/fa5/svg-with-js/js/fontawesome.js"));
+
+            BundleTable.EnableOptimizations = false;
         }
     }
 }
