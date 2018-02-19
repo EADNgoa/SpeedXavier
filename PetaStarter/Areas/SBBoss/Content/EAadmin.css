@@ -63,7 +63,7 @@ li {
 }
 /*=======================*/
 #emblem {
-    position: fixed;
+    position: absolute;
     left: 3px;
     top: 5px;
     border-radius: 3px;
