@@ -108,10 +108,10 @@
         $(function () {
             $(function () {
                 $(".side-nav .collapse").on("hide.bs.collapse", function () {
-                    $(this).prev().find(".fas").eq(1).removeClass("fas-angle-right").addClass("fas-angle-down");
+                    $(this).prev().find(".float-right").removeClass("fa-angle-right").addClass("fa-angle-down");
                 });
                 $('.side-nav .collapse').on("show.bs.collapse", function () {
-                    $(this).prev().find(".fas").eq(1).removeClass("fas-angle-down").addClass("fas-angle-right");
+                    $(this).prev().find(".float-right").removeClass("fa-angle-down").addClass("fa-angle-right"); 
                 });
             })
 

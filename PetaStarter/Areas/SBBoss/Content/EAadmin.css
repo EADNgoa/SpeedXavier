@@ -61,6 +61,10 @@ li {
 .table th {
     border-top:none;
 }
+
+.nav-item li {
+    list-style:none;
+}
 /*=======================*/
 #emblem {
     position: absolute;
