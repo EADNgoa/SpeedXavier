@@ -14,11 +14,11 @@
         @using (Html.BeginForm("Index", "Attraction", FormMethod.Get))
         {
             <div class="row d-print-none">                
-                    <table>
+                    <table width="100%">
                         <tr style="text-align:center">
                             <td>&nbsp;Attraction Name:</td>
                             <td> @Html.TextBox("AN", ViewBag.CurrentFilter as string, new { @class = "form-control" })</td>
-                            <td class="col-lg-1"></td>
+                            
                             <td><input type="submit" value="Search" class="btn btn-primary" /></td>
                         </tr>
                     </table>
