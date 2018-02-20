@@ -9,15 +9,15 @@ using System.Net;
 using System.Web.Mvc;
 
 
-namespace Speedbird.Controllers
+namespace Speedbird.Areas.SBBoss.Controllers 
 {
-    public class ActivityController : EAController
+    public class CouponController : EAController
     {
         // GET: Clients
         public ActionResult Index(int? page ,string AN )
         {
             if (AN?.Length > 0) page = 1;
-            return View("Index", base.BaseIndex<Activity>(page, " * ","Activity Where ActivityName like '%" + AN + "%'"));
+            return View("Index", base.BaseIndex<DiscountCoupon>(page, " * ","DiscountCoupon Where CouponCode like '%" + AN + "%'"));
         }
 
 
@@ -27,7 +27,7 @@ namespace Speedbird.Controllers
         {
            // ViewBag.UnitID = new SelectList(db.Fetch<Unit>("Select UnitID,UnitName from Units"), "UnitID", "UnitName");
             
-            return View(base.BaseCreateEdit<Activity>(id, "ActivityID"));
+            return View(base.BaseCreateEdit<DiscountCoupon>(id, "DiscountCouponID"));
         }
 
         // POST: Clients/Create
@@ -35,9 +35,9 @@ namespace Speedbird.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Manage([Bind(Include = "ActivityID,ActivityName")] Activity item)
+        public ActionResult Manage([Bind(Include = "DiscountCouponID,CouponCode,ValidFrom,ValidTo,Amount,Perc")] DiscountCoupon item)
         {            
-            return base.BaseSave<Activity>(item, item.ActivityID > 0);
+            return base.BaseSave<DiscountCoupon>(item, item.DiscountCouponID > 0);
         }
 
         protected override void Dispose(bool disposing)

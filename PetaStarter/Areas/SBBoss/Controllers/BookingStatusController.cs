@@ -9,15 +9,15 @@ using System.Net;
 using System.Web.Mvc;
 
 
-namespace Speedbird.Controllers
+namespace Speedbird.Areas.SBBoss.Controllers
 {
-    public class GuideLanguageController : EAController
+    public class BookingStatusController : EAController
     {
         // GET: Clients
         public ActionResult Index(int? page ,string AN )
         {
             if (AN?.Length > 0) page = 1;
-            return View("Index", base.BaseIndex<GuideLanguage>(page, " * ","GuideLanguage Where GuideLanguageName like '%" + AN + "%'"));
+            return View("Index", base.BaseIndex<BookingStatus>(page, " * ","BookingStatus Where BookingStatusName like '%" + AN + "%'"));
         }
 
 
@@ -27,7 +27,7 @@ namespace Speedbird.Controllers
         {
            // ViewBag.UnitID = new SelectList(db.Fetch<Unit>("Select UnitID,UnitName from Units"), "UnitID", "UnitName");
             
-            return View(base.BaseCreateEdit<GuideLanguage>(id, "GuideLanguageID"));
+            return View(base.BaseCreateEdit<BookingStatus>(id, "BookingStatusID"));
         }
 
         // POST: Clients/Create
@@ -35,9 +35,9 @@ namespace Speedbird.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Manage([Bind(Include = "GuideLanguageID,GuideLanguageName")] GuideLanguage item)
+        public ActionResult Manage([Bind(Include = "BookingStatusID,BookingStatusName")] BookingStatus item)
         {            
-            return base.BaseSave<GuideLanguage>(item, item.GuideLanguageID > 0);
+            return base.BaseSave<BookingStatus>(item, item.BookingStatusID > 0);
         }
 
         protected override void Dispose(bool disposing)

@@ -9,15 +9,15 @@ using System.Net;
 using System.Web.Mvc;
 
 
-namespace Speedbird.Controllers
+namespace Speedbird.Areas.SBBoss.Controllers
 {
-    public class CategoryController : EAController
+    public class FacilityController : EAController
     {
         // GET: Clients
         public ActionResult Index(int? page ,string AN )
         {
             if (AN?.Length > 0) page = 1;
-            return View("Index", base.BaseIndex<Category>(page, " * ", "Category Where CategoryName like '%" + AN + "%'"));
+            return View("Index", base.BaseIndex<Facility>(page, " * ","Facility Where FacilityName like '%" + AN + "%'"));
         }
 
 
@@ -27,7 +27,7 @@ namespace Speedbird.Controllers
         {
            // ViewBag.UnitID = new SelectList(db.Fetch<Unit>("Select UnitID,UnitName from Units"), "UnitID", "UnitName");
             
-            return View(base.BaseCreateEdit<Category>(id, "CategoryID"));
+            return View(base.BaseCreateEdit<Facility>(id, "FacilityID"));
         }
 
         // POST: Clients/Create
@@ -35,9 +35,9 @@ namespace Speedbird.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Manage([Bind(Include = "CategoryID,CategoryName")] Category item)
+        public ActionResult Manage([Bind(Include = "FacilityID,FacilityName")] Facility item)
         {            
-            return base.BaseSave<Category>(item, item.CategoryID > 0);
+            return base.BaseSave<Facility>(item, item.FacilityID > 0);
         }
 
         protected override void Dispose(bool disposing)
