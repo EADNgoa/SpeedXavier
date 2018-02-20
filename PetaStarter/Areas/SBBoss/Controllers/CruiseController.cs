@@ -9,7 +9,7 @@ using System.Net;
 using System.Web.Mvc;
 
 
-namespace Speedbird.Controllers
+namespace Speedbird.Areas.SBBoss.Controllerss
 {
     public class CruiseController : EAController
     {

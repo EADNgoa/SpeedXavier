@@ -1,0 +1,51 @@
+﻿@model Speedbird.Facility
+
+@{
+    ViewBag.Title = "Manage Categories";
+}
+
+<div class="card border rounded DropShadow">
+    <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
+        <span class="h3">@ViewBag.Title</span>
+        <a href="@Url.Action("Index","Category")"><i class="fas fa-undo-alt fa-inverse h3 float-right DropShadow"></i></a>
+    </div>
+    <div class="card-body">
+        <h5>&nbsp;</h5>
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal">
+
+                <hr />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @if (Model?.FacilityID > 0)
+                {
+                    @Html.HiddenFor(model => model.FacilityID)
+                }
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.FacilityName, "Category Name", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.FacilityName, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.FacilityName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Save" class="btn btn-default" />
+                    </div>
+                </div>
+            </div>
+        }
+        
+
+    </div>
+</div>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

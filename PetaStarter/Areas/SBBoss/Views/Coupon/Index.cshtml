@@ -1,0 +1,99 @@
+﻿@model PagedList.IPagedList<Speedbird.DiscountCoupon>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Discount Coupons";
+}
+
+
+<div class="card border rounded DropShadow">
+    <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
+        <span class="h3">Search</span>        
+    </div>
+    <div class="card-body">
+        <h5 class="card-title">&nbsp;</h5>
+        @using (Html.BeginForm("Index", "DiscountCoupon", FormMethod.Get))
+        {
+            <div class="row d-print-none">                
+                    <table>
+                        <tr style="text-align:center">
+                            <td>&nbsp;Coupon Code:</td>
+                            <td> @Html.TextBox("AN", ViewBag.CurrentFilter as string, new { @class = "form-control" })</td>
+                            <td><input type="submit" value="Search" class="btn btn-primary" /></td>
+                        </tr>
+                    </table>
+                
+            </div>
+        }
+    </div>
+</div>
+
+
+<div class="card border rounded DropShadow">
+    <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
+        <span class="h3">@ViewBag.Title</span>
+        <a href="@Url.Action("Manage","DiscountCoupon")"><i class="fas fa-plus-circle fa-inverse h3 float-right DropShadow"></i></a>
+    </div>
+    <div class="card-body">
+        <h5>&nbsp;</h5>
+        <table class="table">
+            <tr>
+                <th>Sr No</th>
+                <th>
+                    Coupon Code
+                </th>
+                <th>
+                    Valid From
+                </th>
+                <th>
+                    Valid To
+                </th>
+                <th>
+                    Amount
+                </th>
+                <th>
+                    Perc
+                </th>
+          
+            </tr>
+            @{int i = 1;}
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td>
+                    @i
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CouponCode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ValidFrom)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ValidTo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Amount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Perc)
+                </td>
+            
+                <td>
+                    <a href="@Url.Action("Manage","DiscountCoupon", new {id = item.DiscountCouponID })"><i title="Edit" class="fas fa-edit fa-inverse h3 float-right DropShadow"></i></a>
+                </td>
+            </tr>
+                i++;
+             }
+
+        </table>
+        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+        @Html.PagedListPager(Model, page => Url.Action("Index",
+        new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+
+    </div>
+</div>
+
+
+
+
