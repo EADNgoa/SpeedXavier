@@ -15,6 +15,38 @@ namespace Speedbird
     {
     }
 
+    public class FacilityDets
+    {
+        public int FacilityID { get; set; }
+        public string FacilityName { get; set; }
+        public string AccomodationID { get; set; }
+    }
+    public class PictureDets
+    {
+       public int PictureID { get; set; }
+       public int ServiceID { get; set; }
+       public int ServiceTypeID { get; set; }
+       public string PictureName { get; set; }
+       public HttpPostedFileBase UploadedFile { get; set; }
+    }
+    public class PriceDets
+    {
+        public int PriceID { get; set; }
+        public int OptionTypeID { get; set; }
+        public string OptionTypeName { get; set; }
+        public int ServiceTypeID { get; set; }
+        public int ServiceID { get; set; }
+        public DateTime WEF { get; set; }
+        public decimal Price { get; set;}
+    }
+
+    public enum ServiceTypeEnum
+    {
+        Accomodation,
+        Packages,
+    }
+ 
+
     //[MetadataType(typeof(ConfigMetadata))]
     //public partial class Config
     //{

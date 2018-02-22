@@ -1,7 +1,7 @@
-﻿@model PagedList.IPagedList<Speedbird.Facility>
+﻿@model PagedList.IPagedList<Speedbird.Accomodation>
 @using PagedList.Mvc;
 @{
-    ViewBag.Title = "Facilities";
+    ViewBag.Title = "Accomodation";
 }
 
 
@@ -11,12 +11,12 @@
     </div>
     <div class="card-body">
         <h5 class="card-title">&nbsp;</h5>
-        @using (Html.BeginForm("Index", "Facility", FormMethod.Get))
+        @using (Html.BeginForm("Index", "Accomodation", FormMethod.Get))
         {
             <div class="row d-print-none">                
                     <table>
                         <tr style="text-align:center">
-                            <td>&nbsp;Facility Name:</td>
+                            <td>&nbsp;Accomodation Name:</td>
                             <td> @Html.TextBox("AN", ViewBag.CurrentFilter as string, new { @class = "form-control" })</td>
                             <td><input type="submit" value="Search" class="btn btn-primary" /></td>
                         </tr>
@@ -31,7 +31,7 @@
 <div class="card border rounded DropShadow">
     <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
         <span class="h3">@ViewBag.Title</span>
-        <a href="@Url.Action("Manage","Facility")"><i class="fas fa-plus-circle fa-inverse h3 float-right DropShadow"></i></a>
+        <a href="@Url.Action("Manage","Accomodation")"><i class="fas fa-plus-circle fa-inverse h3 float-right DropShadow"></i></a>
     </div>
     <div class="card-body">
         <h5>&nbsp;</h5>
@@ -39,8 +39,21 @@
             <tr>
                 <th>Sr No</th>
                 <th>
-                    Facility Name
+                    Accomodation Name
                 </th>
+                <th>
+                    Description
+                </th>
+                <th>
+                    Location
+                </th>
+                <th>
+                    Latitude
+                </th>
+                <th>
+                    Longitude
+                </th>
+                    
                 <th></th>
             </tr>
             @{int i = 1;}
@@ -51,10 +64,22 @@
                     @i
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.FacilityName)
+                    @Html.DisplayFor(modelItem => item.AccomName)
                 </td>
                 <td>
-                    <a href="@Url.Action("Manage","Facility", new {id = item.FacilityID })"><i title="Edit" class="fas fa-edit fa-inverse h3 float-right DropShadow"></i></a>                    
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.GeoTreeID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.lat)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.longt)
+                </td>
+                <td>
+                    <a href="@Url.Action("Manage","Accomodation", new {id = item.AccomodationID })"><i title="Edit" class="fas fa-edit fa-inverse h3 float-right DropShadow"></i></a>
                 </td>
             </tr>
                 i++;

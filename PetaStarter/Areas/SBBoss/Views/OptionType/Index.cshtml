@@ -1,8 +1,7 @@
-﻿@model PagedList.IPagedList<Speedbird.Activity>
-
+﻿@model PagedList.IPagedList<Speedbird.OptionType>
 @using PagedList.Mvc;
 @{
-    ViewBag.Title = "Activity";
+    ViewBag.Title = "Option Types";
 }
 
 
@@ -12,12 +11,12 @@
     </div>
     <div class="card-body">
         <h5 class="card-title">&nbsp;</h5>
-        @using (Html.BeginForm("Index", "Activity", FormMethod.Get))
+        @using (Html.BeginForm("Index", "OptionType", FormMethod.Get))
         {
             <div class="row d-print-none">
                 <table>
                     <tr style="text-align:center">
-                        <td>&nbsp;Activity Name:</td>
+                        <td>&nbsp;Option Type Name:</td>
                         <td> @Html.TextBox("AN", ViewBag.CurrentFilter as string, new { @class = "form-control" })</td>
                         <td><input type="submit" value="Search" class="btn btn-primary" /></td>
                     </tr>
@@ -32,7 +31,7 @@
 <div class="card border rounded DropShadow">
     <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
         <span class="h3">@ViewBag.Title</span>
-        <a href="@Url.Action("Manage","Activity")"><i class="fas fa-plus-circle fa-inverse h3 float-right DropShadow"></i></a>
+        <a href="@Url.Action("Manage","OptionType")"><i class="fas fa-plus-circle fa-inverse h3 float-right DropShadow"></i></a>
     </div>
     <div class="card-body">
         <h5>&nbsp;</h5>
@@ -40,7 +39,10 @@
             <tr>
                 <th>Sr No</th>
                 <th>
-                    Activity Name
+                    Option Type
+                </th>
+                <th>
+                    Service Type
                 </th>
                 <th></th>
             </tr>
@@ -52,10 +54,13 @@
                         @i
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.ActivityName)
+                        @Html.DisplayFor(modelItem => item.OptionTypeName)
                     </td>
                     <td>
-                        <a href="@Url.Action("Manage","Activity", new {id = item.ActivityID })"><i title="Edit" class="fas fa-edit fa-inverse h3 float-right DropShadow"></i></a>
+                        @((Speedbird.ServiceTypeEnum)item.ServiceTypeID)
+                    </td>
+                    <td>
+                        <a href="@Url.Action("Manage","OptionType", new {id = item.OptionTypeID })"><i title="Edit" class="fas fa-edit fa-inverse h3 float-right DropShadow"></i></a>
                     </td>
                 </tr>
                 i++;
@@ -65,10 +70,12 @@
         Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 
         @Html.PagedListPager(Model, page => Url.Action("Index",
-                  new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+             new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
 
     </div>
 </div>
+
+
 
 
 
