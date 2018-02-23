@@ -26,40 +26,23 @@
 
 
 
-    <ul id="navHorz" class="nav justify-content-end small">
-        <li class="nav-item">
-            <i class="fas fa-user fa-inverse"></i><a class="nav-link active" href="#">Active</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">Link</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">Link</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link disabled" href="#">Disabled</a>
-        </li>
-    </ul>
-
-
-
     <div class="container-fluid">
         <div class="row no-gutters">
             <div class="col-sm-1">
-                <ul class="nav flex-column small side-nav" id="navVert">
+                <ul class="nav flex-column small side-nav DropShadow" id="navVert">
                     <li height="70px;"><br /><br /><br /><hr /></li>
                     <li class="nav-item">
-                        <a href="#" data-toggle="collapse" data-target="#submenu-1"><i class="fas fa-magic fa-inverse"></i> Masters<i class="fas fa-angle-down float-right"></i></a>
+                        <a href="#" data-toggle="collapse" data-target="#submenu-1"><span style="display:block;"><i class="fas fa-magic fa-inverse"></i> Masters<i class="fas fa-angle-down float-right"></i></span></a>
                         <ul id="submenu-1" class="collapse">
-                            <li><a href="~/SBBoss/Activity"><i class="fas fa-angle-double-right"></i>Activity</a></li>
-                            <li><a href="~/SBBoss/Attraction"><i class="fas fa-angle-double-right"></i> Attraction</a></li>
-                            <li><a href="~/SBBoss/GuideLanguage"><i class="fas fa-angle-double-right"></i> Guide Language</a></li>
-                            <li><a href="~/SBBoss/Facility"><i class="fas fa-angle-double-right"></i> Facility</a></li>
-                            <li><a href="~/SBBoss/Coupon"><i class="fas fa-angle-double-right"></i> Discount Coupons</a></li>
-                            <li><a href="~/SBBoss/Cruise"><i class="fas fa-angle-double-right"></i> Cruise</a></li>
-                            <li><a href="~/SBBoss/BookingStatus"><i class="fas fa-angle-double-right"></i> Booking Status</a></li>
-                            <li><a href="~/SBBoss/Category"><i class="fas fa-angle-double-right"></i> Category</a></li>
-                            <li><a href="~/SBBoss/OptionType"><i class="fas fa-angle-double-right"></i> Option Type</a></li>
+                            <li><a href="~/SBBoss/Activity"><span style="display:block;"><i class="fas fa-angle-double-right"></i> Activity</span></a></li>
+                            <li><a href="~/SBBoss/Attraction"><span style="display:block;"><i class="fas fa-angle-double-right"></i> Attraction</span></a></li>
+                            <li><a href="~/SBBoss/GuideLanguage"><span style="display:block;"><i class="fas fa-angle-double-right"></i> Guide Language</span></a></li>
+                            <li><a href="~/SBBoss/Facility"><span style="display:block;"><i class="fas fa-angle-double-right"></i> Facility</span></a></li>
+                            <li><a href="~/SBBoss/Coupon"><span style="display:block;"><i class="fas fa-angle-double-right"></i> Coupons</span></a></li>
+                            <li><a href="~/SBBoss/Cruise"><span style="display:block;"><i class="fas fa-angle-double-right"></i> Cruise</span></a></li>
+                            <li><a href="~/SBBoss/BookingStatus"><span style="display:block;"><i class="fas fa-angle-double-right"></i> Booking Status</span></a></li>
+                            <li><a href="~/SBBoss/Category"><span style="display:block;"><i class="fas fa-angle-double-right"></i> Category</span></a></li>
+                            <li><a href="~/SBBoss/OptionType"><span style="display:block;"><i class="fas fa-angle-double-right"></i> Option Type</span></a></li>
 
 
                         </ul>
@@ -103,17 +86,29 @@
 
             </div>
         </div>
+
     </div>
 
 
-    <img src="/Areas/SBBoss/Custom/Logo.jpg" id="emblem" class="DropShadow zindex-tooltip" />
 
-
-    
-    <footer>
+    <ul id="navHorz" class="nav justify-content-end small">
+        <li class="nav-item">
+            <i class="fas fa-user fa-inverse"></i><a class="nav-link active" href="#">Active</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">Link</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">Link</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link disabled" href="#">Disabled</a>
+        </li>
+    </ul>
+    <img src="/Areas/SBBoss/Custom/Logo.jpg" id="emblem" class="zindex-tooltip" />
+    <div class="EAfoot">
         <p class="text-center" style="margin-bottom:0px; line-height: 1.8rem; color:white"><span class="text-muted">&copy; @DateTime.Now.Year -</span> EEAAtech</p>
-    </footer>
-
+    </div>
 
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
@@ -127,7 +122,7 @@
                     $(this).prev().find(".float-right").removeClass("fa-angle-right").addClass("fa-angle-down");
                 });
                 $('.side-nav .collapse').on("show.bs.collapse", function () {
-                    $(this).prev().find(".float-right").removeClass("fa-angle-down").addClass("fa-angle-right"); 
+                    $(this).prev().find(".float-right").removeClass("fa-angle-down").addClass("fa-angle-right");
                 });
             })
 

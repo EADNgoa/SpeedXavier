@@ -22,9 +22,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
 
         public ActionResult Manage(int? id)
-        {
-           // ViewBag.UnitID = new SelectList(db.Fetch<Unit>("Select UnitID,UnitName from Units"), "UnitID", "UnitName");
-            
+        {                    
             return View(base.BaseCreateEdit<Accomodation>(id, "AccomodationID"));
         }
 
