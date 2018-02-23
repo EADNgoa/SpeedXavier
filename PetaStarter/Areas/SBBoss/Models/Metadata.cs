@@ -34,6 +34,20 @@ namespace Speedbird
         public DateTime DateExpiry;
     }
 
+    public class DiscountCouponMetadata
+    {
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd-MMM-yyyy}", ApplyFormatInEditMode = true)]
+        [Display(Name = "Valid From")]
+        public DateTime ValidFrom;
+
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd-MMM-yyyy}", ApplyFormatInEditMode = true)]
+        [Display(Name = "Valid To")]
+        public DateTime ValidTo;
+
+    }
+
     //public class EmpTypeMetadata
     //{
     //    [Display(Name = "Employee Type")]
