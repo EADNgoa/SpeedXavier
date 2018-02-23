@@ -17,18 +17,28 @@ body {
 #navHorz {
     background: linear-gradient(to bottom, #3F5C80,#13243b );
     font-family: Roboto, sans-serif;
+    position: fixed;
+    width: 100%;
+    top: 0px;
+    left: 0px;
+    box-shadow: 0 0 3px #ffd800;
 }
 
-footer {
+.EAfoot {
     background: linear-gradient(to bottom, #3F5C80,#13243b );
     font-family: Roboto, sans-serif;
-    text-align: center;    
+    text-align: center;
+    position: fixed;
+    width: 100%;
+    bottom: 0px;
+    left: 0px;
 }
 
 .nav-item a, i {
     font-family: Roboto, sans-serif;
     color: white;
     display: inline !important;
+    width:300px;
 }
 
 a {
@@ -36,10 +46,15 @@ a {
 }
 
 a:hover {
+    color:aqua;
+}
+
+.nav-item span:hover {
     outline: none;
     border-color: #9ecaed;
-    color:cyan;
-    font-weight:800;
+    color: navajowhite;
+    font-weight: 800;
+    font-size: larger;
     box-shadow: 0 0 10px #ffd800;
 }
 
@@ -91,6 +106,7 @@ li {
     left: 3px;
     top: 5px;
     border-radius: 3px;
+    box-shadow: 0 0 10px cyan;
 }
 
 
