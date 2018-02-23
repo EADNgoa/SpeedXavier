@@ -273,4 +273,11 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="VisaID" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="afa5d751-2350-4c0f-b997-32e5e051bbc3" ChangeDateTime="02/23/2018 05:50:21">
+    <Property Name="ElementName" Value="[dbo].[Accomodation].[long]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Accomodation]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="longt" />
+  </Operation>
 </Operations>

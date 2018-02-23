@@ -1,0 +1,125 @@
+﻿@model Speedbird.Price
+
+@{
+    ViewBag.Title = $"Manage Price";
+}
+<style>
+    a{
+        color:red
+    }
+</style>
+
+
+<div class="card border rounded DropShadow">
+    <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
+        <span class="h3">Accomomdation Details</span>
+        <a href="@Url.Action("Manage","Package",new {id=ViewBag.Pack.PackageID })"><i class="fas fa-undo-alt fa-inverse h3 float-right DropShadow"></i></a>
+
+    </div>
+    <div class="card-body">
+        <h5 class="card-title">&nbsp;</h5>
+        <table class="table section-to-print " width="70%">
+            <tr>
+                <td>Package Name</td>
+                <td>@ViewBag.Pack.PackageName</td>
+            </tr>
+
+            <tr>
+                <td>Duration</td>
+                <td>@ViewBag.Pack.Duration</td>
+            </tr>
+            <tr>
+                <td>Group Size</td>
+                <td>@ViewBag.Pack.GroupSize</td>
+            </tr>
+       
+        </table>
+    </div>
+</div>
+
+
+<div class="card border rounded DropShadow">
+    <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
+        <span class="h3">@ViewBag.Title</span>
+    </div>
+    <div class="card-body">
+        <h5>&nbsp;</h5>
+        <div class="section-to-Not-print">
+       @using (Html.BeginForm("PackPrice", "Package", FormMethod.Post))
+       {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal ">
+
+                <hr />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                @Html.Hidden("ServiceID", (int)ViewBag.Pack.PackageID)
+
+                <div class="form-group">
+                    @Html.Label("Option Type", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.DropDownList("OptionTypeID", null, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.OptionTypeID, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.WEF, "With Effect From", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.WEF, new { htmlAttributes = new { @type = "date", @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.WEF, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model._Price, "Price", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model._Price, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model._Price, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Save" class="btn btn-default" />
+                    </div>
+                </div>
+            </div>
+    }
+        </div>
+       <br />
+        
+
+        <hr />
+        <table class="table section-to-print" width="100%">
+            <tr>
+                <th>Option Type</th>
+                <th>With Effect From</th>
+                <th>Price</th>
+                <th class="section-to-Not-print"></th>
+            </tr>
+        @foreach(var item in(IEnumerable<Speedbird.PriceDets>) ViewBag.Price)
+        {
+            <tr>
+                <td>
+                    @item.OptionTypeName
+                </td>
+                <td>
+                    @item.WEF
+                </td>
+                <td>
+                    @item.Price
+                </td>
+                <td>
+                    <a href="@Url.Action("Price","Package",new {EID=item.PriceID })">Edit</a>
+                </td>
+            </tr>
+        }
+          
+        </table>
+   
+   
+    </div>
+    </div>
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }

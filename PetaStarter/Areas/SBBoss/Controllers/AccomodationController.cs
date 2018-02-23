@@ -127,8 +127,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
         public ActionResult Price(int? id,int? EID)
         {
             ViewBag.Accom = db.FirstOrDefault<Accomodation>($"Select * From Accomodation Where AccomodationID='{id}'");
-            ViewBag.Price = db.Fetch<PriceDets>($"Select * from Prices p inner join OptionType ot on ot.OptionTypeID = p.OptionTypeID where ServiceID= {id}");
-            ViewBag.OptionTypeID = new SelectList(db.Fetch<OptionType>("Select OptionTypeID,OptionTypeName from OptionType"), "OptionTypeID", "OptionTypeName");
+            ViewBag.Price = db.Fetch<PriceDets>($"Select * from Prices p inner join OptionType ot on ot.OptionTypeID = p.OptionTypeID where ServiceID= '{id}' and ot.ServiceTypeID ='{(int)ServiceTypeEnum.Accomodation}'");
+            ViewBag.OptionTypeID = new SelectList(db.Fetch<OptionType>("Select OptionTypeID,OptionTypeName from OptionType where ServiceTypeID=@0",(int)ServiceTypeEnum.Accomodation), "OptionTypeID", "OptionTypeName");
 
             return View(base.BaseCreateEdit<Price>(EID, "PriceID"));
         }
@@ -138,7 +138,6 @@ namespace Speedbird.Areas.SBBoss.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Price([Bind(Include = "PriceID,ServiceID,OptionTypeID,WEF,_Price")] Price item)
         {
-            item.ServiceTypeID =(int) ServiceTypeEnum.Accomodation;
              base.BaseSave<Price>(item, item.PriceID > 0);
             return RedirectToAction("Price");
 
