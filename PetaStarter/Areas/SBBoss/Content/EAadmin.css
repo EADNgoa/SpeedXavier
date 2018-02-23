@@ -1,5 +1,7 @@
 body {
-    background-color: #EEEEEE;
+    background-image:url("../Custom/paper.jpg");
+    background-repeat:repeat;
+    /*background-color: #EEEEEE;*/
 }
 
 
@@ -23,10 +25,22 @@ footer {
     text-align: center;    
 }
 
-a, i {
+.nav-item a, i {
     font-family: Roboto, sans-serif;
     color: white;
     display: inline !important;
+}
+
+a {
+    color:white;
+}
+
+a:hover {
+    outline: none;
+    border-color: #9ecaed;
+    color:cyan;
+    font-weight:800;
+    box-shadow: 0 0 10px #ffd800;
 }
 
 li {
