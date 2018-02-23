@@ -39,6 +39,48 @@ namespace Speedbird
         public DateTime WEF { get; set; }
         public decimal Price { get; set;}
     }
+    public class PackageDets
+    {
+        public int PackageID { get; set; }
+        public int ServiceTypeID { get; set; }
+        public string PackageName { get; set; }
+        public string Description { get; set; }
+        public int Duration { get; set; }
+        public string Itinerary { get; set; }
+        public int Dificulty { get; set; }
+        public int GroupSize { get; set; }
+        public int GuideLanguageID { get; set; }
+        public string StartTime { get; set; }
+        public string Inclusion { get; set; }
+        public string Exclusion { get; set; }
+
+        public string GuideLanguageName { get; set; }
+
+    }
+    public class ActivityDets
+    {
+        public int PackageID { get; set; }
+        public int ActivityID { get; set; }
+        public string ActivityName { get; set; }
+
+
+    }
+    public class AttractionDets
+    {
+        public int PackageID { get; set; }
+        public int AttractionID { get; set; }
+        public string AttractionName { get; set; }
+
+
+    }
+    public class CategoryDets
+    {
+        public int PackageID { get; set; }
+        public int CategoryID { get; set; }
+        public string CategoryName { get; set; }
+
+
+    }
 
     public enum ServiceTypeEnum
     {

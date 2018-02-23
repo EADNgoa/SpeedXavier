@@ -1,7 +1,7 @@
-﻿@model Speedbird.Accomodation
+﻿@model Speedbird.Package
 
 @{
-    ViewBag.Title = $"Manage Facility";
+    ViewBag.Title = $"Manage Category";
 }
 <style>
     a{
@@ -11,27 +11,27 @@
 
 <div class="card border rounded DropShadow">
     <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
-        <span class="h3">Accomomdation Details</span>
-        <a href="@Url.Action("Manage","Accomodation",new {id=ViewBag.Accom.AccomodationID })"><i class="fas fa-undo-alt fa-inverse h3 float-right DropShadow"></i></a>
+        <span class="h3">Package Details</span>
+        <a href="@Url.Action("Manage","Package",new {id=ViewBag.Pack.PackageID })"><i class="fas fa-undo-alt fa-inverse h3 float-right DropShadow"></i></a>
 
     </div>
     <div class="card-body">
         <h5 class="card-title">&nbsp;</h5>
         <table class="table section-to-print " width="70%">
             <tr>
-                <td>Accomodation Name</td>
-                <td>@ViewBag.Accom.AccomName</td>
+                <td>Package Name</td>
+                <td>@ViewBag.Pack.PackageName</td>
             </tr>
 
             <tr>
-                <td>Latitude</td>
-                <td>@ViewBag.Accom.lat</td>
+                <td>Duration</td>
+                <td>@ViewBag.Pack.Duration</td>
             </tr>
             <tr>
-                <td>Longitude</td>
-                <td>@ViewBag.Accom.longt</td>
+                <td>Group Size</td>
+                <td>@ViewBag.Pack.GroupSize</td>
             </tr>
-       
+
         </table>
     </div>
 </div>
@@ -44,7 +44,7 @@
     <div class="card-body">
         <h5>&nbsp;</h5>
         <div class="section-to-Not-print">
-       @using (Html.BeginForm("FacManage", "Accomodation", FormMethod.Post))
+       @using (Html.BeginForm("CatManage", "Package", FormMethod.Post))
        {
             @Html.AntiForgeryToken()
 
@@ -53,12 +53,12 @@
                 <hr />
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-                  @Html.Hidden("id", (int)ViewBag.Accom.AccomodationID)
+                  @Html.Hidden("id", (int)ViewBag.Pack.PackageID)
        
                 <div class="form-group">
-                    @Html.Label("Facility", htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.Label("Category", htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
-                        @Html.DropDownList("FacilityID", null, new { @class = "form-control" } )
+                        @Html.DropDownList("CategoryID", null, new { @class = "form-control" } )
                     </div>
                 </div>
                 <div class="form-group">
@@ -75,19 +75,20 @@
         <hr />
         <table class="table section-to-print" width="100%">
             <tr>
-                <th>Facility Name</th>
+                <th>Category Name</th>
                 
 
                 <th class="section-to-Not-print"></th>
             </tr>
-        @foreach(var item in(IEnumerable<Speedbird.FacilityDets>) ViewBag.Facility)
+        @foreach(var item in(IEnumerable<Speedbird.CategoryDets>)ViewBag.Category)
         {
             <tr>
                 <td>
-                    @item.FacilityName
+                    @item.CategoryName
                 </td>
                 <td>
-                    <a href="@Url.Action("Delete","Accomodation",new {aid = Model.AccomodationID ,fid= item.FacilityID })">Delete</a>
+                    <a href="@Url.Action("Delete","Package",new {PackID = Model.PackageID ,CatID= item.CategoryID
+                        })">Delete</a>
                 </td>
             </tr>
         }

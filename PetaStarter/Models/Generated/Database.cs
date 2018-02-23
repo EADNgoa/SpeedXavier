@@ -97,7 +97,6 @@ namespace Speedbird
 		[Column] public string AccomName { get; set; }
 		[Column] public string Description { get; set; }
 		[Column] public int? GeoTreeID { get; set; }
-		[Column] public int? FacilityID { get; set; }
 		[Column] public string lat { get; set; }
 		[Column] public string longt { get; set; }
 	}
@@ -239,12 +238,13 @@ namespace Speedbird
 	}
     
 	[TableName("dbo.CarBike")]
-	[PrimaryKey("CarBikeID", AutoIncrement=false)]
+	[PrimaryKey("CarBikeID")]
 	[ExplicitColumns]
     public partial class CarBike  
     {
 		[Column] public int CarBikeID { get; set; }
 		[Column] public string CarBikeName { get; set; }
+		[Column] public int GeoTreeId { get; set; }
 		[Column] public string Description { get; set; }
 		[Column] public int? NoPax { get; set; }
 		[Column] public int? NoSmallBags { get; set; }
@@ -291,6 +291,15 @@ namespace Speedbird
 		[Column] public int? Duration { get; set; }
 		[Column] public string Itinerary { get; set; }
 		[Column] public int? StarRating { get; set; }
+	}
+    
+	[TableName("dbo.Cruise_GeoTree")]
+	[PrimaryKey("CruiseID", AutoIncrement=false)]
+	[ExplicitColumns]
+    public partial class Cruise_GeoTree  
+    {
+		[Column] public int CruiseID { get; set; }
+		[Column] public int GeoTreeID { get; set; }
 	}
     
 	[TableName("dbo.Customer")]
@@ -403,6 +412,9 @@ namespace Speedbird
 		[Column] public int? Dificulty { get; set; }
 		[Column] public int? GroupSize { get; set; }
 		[Column] public int? GuideLanguageID { get; set; }
+		[Column] public string StartTime { get; set; }
+		[Column] public string Inclusion { get; set; }
+		[Column] public string Exclusion { get; set; }
 	}
     
 	[TableName("dbo.Package_Activity")]
@@ -441,6 +453,26 @@ namespace Speedbird
 		[Column] public int GeoTreeID { get; set; }
 	}
     
+	[TableName("dbo.Package_Language")]
+	[PrimaryKey("PackageId", AutoIncrement=false)]
+	[ExplicitColumns]
+    public partial class Package_Language  
+    {
+		[Column] public int PackageId { get; set; }
+		[Column] public int GuideLanguageId { get; set; }
+	}
+    
+	[TableName("dbo.PackageValidity")]
+	[PrimaryKey("PVId", AutoIncrement=false)]
+	[ExplicitColumns]
+    public partial class PackageValidity  
+    {
+		[Column] public int PVId { get; set; }
+		[Column] public int PackageId { get; set; }
+		[Column] public DateTime ValidFrom { get; set; }
+		[Column] public DateTime ValidTo { get; set; }
+	}
+    
 	[TableName("dbo.Picture")]
 	[PrimaryKey("PictureID")]
 	[ExplicitColumns]
@@ -459,7 +491,6 @@ namespace Speedbird
     {
 		[Column] public int PriceID { get; set; }
 		[Column] public int? ServiceID { get; set; }
-		[Column] public int? ServiceTypeID { get; set; }
 		[Column] public int? OptionTypeID { get; set; }
 		[Column] public DateTime? WEF { get; set; }
 		[Column("Price")] public decimal? _Price { get; set; }
