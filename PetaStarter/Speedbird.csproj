@@ -196,6 +196,8 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Areas\SBBoss\Controllers\AccomodationController.cs" />
+    <Compile Include="Areas\SBBoss\Controllers\OptionTypeController.cs" />
     <Compile Include="Areas\SBBoss\Controllers\ActivityController.cs" />
     <Compile Include="Areas\SBBoss\Controllers\BookingStatusController.cs" />
     <Compile Include="Areas\SBBoss\Controllers\CategoryController.cs" />
@@ -221,8 +223,8 @@
     </Compile>
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
-    <Compile Include="Models\Metadata.cs" />
-    <Compile Include="Models\PartialClasses.cs" />
+    <Compile Include="Areas\SBBoss\Models\Metadata.cs" />
+    <Compile Include="Areas\SBBoss\Models\PartialClasses.cs" />
     <Compile Include="Models\PetaPoco.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -337,6 +339,13 @@
     <Content Include="Areas\SBBoss\Views\Facility\Manage.cshtml" />
     <Content Include="Areas\SBBoss\Views\GuideLanguage\Index.cshtml" />
     <Content Include="Areas\SBBoss\Views\GuideLanguage\Manage.cshtml" />
+    <Content Include="Areas\SBBoss\Views\Accomodation\Index.cshtml" />
+    <Content Include="Areas\SBBoss\Views\Accomodation\Manage.cshtml" />
+    <Content Include="Areas\SBBoss\Views\Accomodation\FacManage.cshtml" />
+    <Content Include="Areas\SBBoss\Views\Accomodation\Picture.cshtml" />
+    <Content Include="Areas\SBBoss\Views\OptionType\Index.cshtml" />
+    <Content Include="Areas\SBBoss\Views\OptionType\Manage.cshtml" />
+    <Content Include="Areas\SBBoss\Views\Accomodation\Price.cshtml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\i18n\jquery-ui-timepicker-addon-i18n.js" />
     <Content Include="Scripts\i18n\jquery-ui-timepicker-addon-i18n.min.js" />
@@ -451,24 +460,8 @@
     <Content Include="Views\Shared\pli.cshtml" />
     <Content Include="Views\Shared\_MenuPartial.cshtml" />
     <Content Include="Views\Shared\_ReportsLayout.cshtml" />
-    <Content Include="Views\Activity\Index.cshtml" />
-    <Content Include="Views\Activity\Manage.cshtml" />
-    <Content Include="Views\Items - Copy\Index.cshtml" />
-    <Content Include="Views\Items - Copy\Manage.cshtml" />
     <Content Include="Areas\SBBoss\Views\Attraction\Index.cshtml" />
     <Content Include="Areas\SBBoss\Views\Attraction\Manage.cshtml" />
-    <Content Include="Views\Category\Index.cshtml" />
-    <Content Include="Views\Category\Manage.cshtml" />
-    <Content Include="Views\GuideLanguage\Index.cshtml" />
-    <Content Include="Views\GuideLanguage\Manage.cshtml" />
-    <Content Include="Views\BookingStatus\Index.cshtml" />
-    <Content Include="Views\BookingStatus\Manage.cshtml" />
-    <Content Include="Views\Facility\Index.cshtml" />
-    <Content Include="Views\Facility\Manage.cshtml" />
-    <Content Include="Views\Cruise\Index.cshtml" />
-    <Content Include="Views\Cruise\Manage.cshtml" />
-    <Content Include="Views\Coupon\Index.cshtml" />
-    <Content Include="Views\Coupon\Manage.cshtml" />
     <Content Include="Scripts\umd\popper.min.js.map" />
     <Content Include="Scripts\umd\popper.js.map" />
     <Content Include="Scripts\umd\popper-utils.min.js.map" />
@@ -481,7 +474,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Areas\SBBoss\Models\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
