@@ -15,6 +15,11 @@ namespace Speedbird
     {
     }
 
+    [MetadataType(typeof(DiscountCouponMetadata))]
+    public partial class DiscountCoupon
+    {
+    }
+
     public class FacilityDets
     {
         public int FacilityID { get; set; }
