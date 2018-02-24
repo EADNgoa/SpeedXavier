@@ -196,6 +196,7 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Areas\SBBoss\Controllers\CarBikeController.cs" />
     <Compile Include="Areas\SBBoss\Controllers\PackageController.cs" />
     <Compile Include="Areas\SBBoss\Controllers\AccomodationController.cs" />
     <Compile Include="Areas\SBBoss\Controllers\OptionTypeController.cs" />
@@ -357,6 +358,8 @@
     <Content Include="Areas\SBBoss\Views\Package\CatManage.cshtml" />
     <Content Include="Areas\SBBoss\Views\Shared\DisplayTemplates\DateTime.cshtml" />
     <Content Include="Areas\SBBoss\Views\Shared\DisplayTemplates\Decimal.cshtml" />
+    <Content Include="Areas\SBBoss\Views\CarBike\Index.cshtml" />
+    <Content Include="Areas\SBBoss\Views\CarBike\Manage.cshtml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\i18n\jquery-ui-timepicker-addon-i18n.js" />
     <Content Include="Scripts\i18n\jquery-ui-timepicker-addon-i18n.min.js" />

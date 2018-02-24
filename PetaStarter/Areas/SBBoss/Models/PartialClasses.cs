@@ -91,6 +91,20 @@ namespace Speedbird
 
 
     }
+    public class CarBikeDets
+    {
+        public int CarBikeID { get; set; }
+        public int GeoTreeID { get; set; }
+        public string GeoTreeName { get; set; }
+        public string CarBikeName { get; set; }
+        public string Description { get; set; }
+        public int NoPax { get; set; }
+        public int NoSmallBags { get; set; }
+        public int NoLargeBags { get; set; }
+        public bool HasAc { get; set; }
+        public bool HasCarrier { get; set; }
+        public bool InclHelmet { get; set; }
+    }
 
     public enum ServiceTypeEnum
     {
