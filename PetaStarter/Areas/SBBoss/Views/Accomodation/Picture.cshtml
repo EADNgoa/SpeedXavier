@@ -3,21 +3,13 @@
 @{
     ViewBag.Title = $"Manage Images";
 }
-<style>
-    a{
-        color:red
-    }
-    img{
-        width:150px;
-        height:150px;
-    }
-</style>
+
 
 
 
 <div class="card border rounded DropShadow">
     <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
-        <span class="h3">Accomomdation Details</span>
+        <span class="h5">Accomomdation Details</span>
         <a href="@Url.Action("Manage","Accomodation",new {id=ViewBag.Accom.AccomodationID })"><i class="fas fa-undo-alt fa-inverse h3 float-right DropShadow"></i></a>
 
     </div>
@@ -81,7 +73,7 @@
         
 
         <hr />
-        <table class="table section-to-print" width="100%">
+        <table class="table section-to-print index-css" width="100%">
             <tr>
                 <th>Image</th>
                 

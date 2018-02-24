@@ -100,6 +100,14 @@ li {
 .nav-item li {
     list-style:none;
 }
+
+.index-css a {
+    color: red
+}
+
+.index-css img {
+    width: 150px; 
+}
 /*=======================*/
 #emblem {
     position: absolute;

@@ -97,8 +97,10 @@ namespace Speedbird
 		[Column] public string AccomName { get; set; }
 		[Column] public string Description { get; set; }
 		[Column] public int? GeoTreeID { get; set; }
+
 		[Column] public string lat { get; set; }
 		[Column] public string longt { get; set; }
+
 	}
     
 	[TableName("dbo.Activity")]
@@ -238,13 +240,17 @@ namespace Speedbird
 	}
     
 	[TableName("dbo.CarBike")]
+
 	[PrimaryKey("CarBikeID")]
+
 	[ExplicitColumns]
     public partial class CarBike  
     {
 		[Column] public int CarBikeID { get; set; }
 		[Column] public string CarBikeName { get; set; }
+
 		[Column] public int GeoTreeId { get; set; }
+
 		[Column] public string Description { get; set; }
 		[Column] public int? NoPax { get; set; }
 		[Column] public int? NoSmallBags { get; set; }
@@ -293,6 +299,7 @@ namespace Speedbird
 		[Column] public int? StarRating { get; set; }
 	}
     
+
 	[TableName("dbo.Cruise_GeoTree")]
 	[PrimaryKey("CruiseID", AutoIncrement=false)]
 	[ExplicitColumns]
@@ -412,9 +419,21 @@ namespace Speedbird
 		[Column] public int? Dificulty { get; set; }
 		[Column] public int? GroupSize { get; set; }
 		[Column] public int? GuideLanguageID { get; set; }
+
 		[Column] public string StartTime { get; set; }
+
+
+
+
+
 		[Column] public string Inclusion { get; set; }
+
+
+
+
+
 		[Column] public string Exclusion { get; set; }
+
 	}
     
 	[TableName("dbo.Package_Activity")]
@@ -453,6 +472,7 @@ namespace Speedbird
 		[Column] public int GeoTreeID { get; set; }
 	}
     
+
 	[TableName("dbo.Package_Language")]
 	[PrimaryKey("PackageId", AutoIncrement=false)]
 	[ExplicitColumns]
@@ -491,6 +511,7 @@ namespace Speedbird
     {
 		[Column] public int PriceID { get; set; }
 		[Column] public int? ServiceID { get; set; }
+
 		[Column] public int? OptionTypeID { get; set; }
 		[Column] public DateTime? WEF { get; set; }
 		[Column("Price")] public decimal? _Price { get; set; }
