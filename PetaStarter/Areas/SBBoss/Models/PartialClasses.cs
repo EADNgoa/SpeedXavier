@@ -20,6 +20,11 @@ namespace Speedbird
     {
     }
 
+    [MetadataType(typeof(PriceMetadata))]
+    public partial class Price
+    {
+    }
+
     public class FacilityDets
     {
         public int FacilityID { get; set; }

@@ -193,13 +193,17 @@ namespace Speedbird
 
 		[Column] public int? GeoTreeID { get; set; }
 
+
+
+
+
 		[Column] public string lat { get; set; }
 
 
 
 
 
-		[Column("long")] public string @long { get; set; }
+		[Column] public string longt { get; set; }
 
 
 
@@ -727,7 +731,12 @@ namespace Speedbird
 
 	[TableName("dbo.CarBike")]
 
+
+
 	[PrimaryKey("CarBikeID")]
+
+
+
 
 	[ExplicitColumns]
 
@@ -744,7 +753,15 @@ namespace Speedbird
 
 		[Column] public string CarBikeName { get; set; }
 
+
+
+
+
 		[Column] public int GeoTreeId { get; set; }
+
+
+
+
 
 		[Column] public string Description { get; set; }
 
@@ -978,16 +995,6 @@ namespace Speedbird
 
 	}
 
-    
-
-	[TableName("dbo.Cruise_GeoTree")]
-	[PrimaryKey("CruiseID", AutoIncrement=false)]
-	[ExplicitColumns]
-    public partial class Cruise_GeoTree  
-    {
-		[Column] public int CruiseID { get; set; }
-		[Column] public int GeoTreeID { get; set; }
-	}
     
 
 	[TableName("dbo.Customer")]
@@ -1412,9 +1419,25 @@ namespace Speedbird
 
 		[Column] public int? GuideLanguageID { get; set; }
 
+
+
+
+
 		[Column] public string StartTime { get; set; }
+
+
+
+
+
 		[Column] public string Inclusion { get; set; }
+
+
+
+
+
 		[Column] public string Exclusion { get; set; }
+
+
 
 	}
 
@@ -1600,26 +1623,6 @@ namespace Speedbird
 
     
 
-	[TableName("dbo.Package_Language")]
-	[PrimaryKey("PackageId", AutoIncrement=false)]
-	[ExplicitColumns]
-    public partial class Package_Language  
-    {
-		[Column] public int PackageId { get; set; }
-		[Column] public int GuideLanguageId { get; set; }
-	}
-    
-	[TableName("dbo.PackageValidity")]
-	[PrimaryKey("PVId", AutoIncrement=false)]
-	[ExplicitColumns]
-    public partial class PackageValidity  
-    {
-		[Column] public int PVId { get; set; }
-		[Column] public int PackageId { get; set; }
-		[Column] public DateTime ValidFrom { get; set; }
-		[Column] public DateTime ValidTo { get; set; }
-	}
-
 	[TableName("dbo.Picture")]
 
 
@@ -1685,6 +1688,10 @@ namespace Speedbird
 
 
 		[Column] public int? ServiceID { get; set; }
+
+
+
+
 
 		[Column] public int? OptionTypeID { get; set; }
 

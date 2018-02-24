@@ -3,15 +3,11 @@
 @{
     ViewBag.Title = $"Manage Activity";
 }
-<style>
-    a{
-        color:red
-    }
-</style>
+
 
 <div class="card border rounded DropShadow">
     <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
-        <span class="h3">Package Details</span>
+        <span class="h5">Package Details</span>
         <a href="@Url.Action("Manage","Package",new {id=ViewBag.Pack.PackageID })"><i class="fas fa-undo-alt fa-inverse h3 float-right DropShadow"></i></a>
 
     </div>
@@ -63,7 +59,7 @@
                 </div>
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
-                        <input type="submit" value="Save" class="btn btn-default" />
+                        <input type="submit" value="Save" class="btn btn-primary" />
                     </div>
                 </div>
             </div>
@@ -73,7 +69,7 @@
         
 
         <hr />
-        <table class="table section-to-print" width="100%">
+        <table class="table section-to-print index-css" width="100%">
             <tr>
                 <th>Activity Name</th>
                 

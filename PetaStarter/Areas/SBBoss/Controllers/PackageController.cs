@@ -171,25 +171,25 @@ namespace Speedbird.Areas.SBBoss.Controllers
             if (ActID != null && PackID != null)
             {
                 db.Execute($"Delete From Package_Activity Where PackageID={PackID} and ActivityID={ActID}");
-                return RedirectToAction("ActManage", new { id = ActID });
+                return RedirectToAction("ActManage", new { id = PackID });
 
             }
             if (AttractID != null && PackID != null)
             {
                 db.Execute($"Delete From Package_Attraction Where PackageID={PackID} and AttractionID={AttractID}");
-                return RedirectToAction("AttractManage", new { id = AttractID });
+                return RedirectToAction("AttractManage", new { id = PackID });
 
             }
             if (CatID != null && PackID != null)
             {
                 db.Execute($"Delete From Package_Category Where PackageID={PackID} and CategoryID={CatID}");
-                return RedirectToAction("CatManage", new { id = CatID });
+                return RedirectToAction("CatManage", new { id = PackID });
 
             }
             if (pid != null)
             {
                 db.Execute($"Delete From Picture Where PictureID={pid}");
-                return RedirectToAction("PackPicture", new { id = sid });
+                return RedirectToAction("PackPicture", new { id = PackID });
 
             }
             return RedirectToAction("Manage");
