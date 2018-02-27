@@ -75,6 +75,14 @@ namespace Speedbird
 
 
     }
+    public class LanguageDets
+    {
+        public int PackageID { get; set; }
+        public int GuideLanguageID { get; set; }
+        public string GuideLanguageName { get; set; }
+
+
+    }
     public class AttractionDets
     {
         public int PackageID { get; set; }
@@ -110,6 +118,7 @@ namespace Speedbird
     {
         Accomodation,
         Packages,
+        CarBike,
     }
  
 

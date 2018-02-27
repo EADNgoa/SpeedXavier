@@ -77,6 +77,26 @@ namespace Speedbird.Areas.SBBoss.Controllers
             return RedirectToAction("AttractManage");
         }
 
+        public ActionResult LangManage(int? id)
+        {
+            ViewBag.Pack = db.FirstOrDefault<Package>($"Select * From Package Where PackageID='{id}'");
+            ViewBag.GuideLanguageID = new SelectList(db.Fetch<GuideLanguage>("Select GuideLanguageID,GuideLanguageName from GuideLanguage"), "GuideLanguageID", "GuideLanguageName");
+
+            ViewBag.Lang = db.Fetch<LanguageDets>($"Select * From Package_Language pa inner join Package p on p.PackageID =pa.PackageID inner join GuideLanguage a on pa.GuideLanguageID=a.GuideLanguageID where pa.PackageID ='{id}'");
+            return View(base.BaseCreateEdit<Package>(id, "PackageID"));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult LangManage(FormCollection fm)
+        {
+            int pid = int.Parse(fm["Id"]);
+            int aid = int.Parse(fm["GuideLanguageID"]);
+            var item = new Package_Language { GuideLanguageId = aid, PackageId = pid };
+            db.Insert(item);
+            return RedirectToAction("LangManage");
+        }
+
         public ActionResult ActManage(int? id)
         {
             ViewBag.Pack = db.FirstOrDefault<Package>($"Select * From Package Where PackageID='{id}'");
@@ -85,6 +105,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             ViewBag.Activity = db.Fetch<ActivityDets>($"Select * From Package_Activity pa inner join Package p on p.PackageID =pa.PackageID inner join Activity a on pa.ActivityID=a.ActivityID where pa.PackageID ='{id}'");
             return View(base.BaseCreateEdit<Package>(id, "PackageID"));
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -166,12 +187,18 @@ namespace Speedbird.Areas.SBBoss.Controllers
             return RedirectToAction("PackPrice");
 
         }
-        public ActionResult Delete(int? PackID, int? ActID, int? pid, int? sid, int? AttractID, int? CatID)
+        public ActionResult Delete(int? PackID, int? ActID, int? pid, int? sid, int? AttractID, int? CatID,int? GuideID)
         {
             if (ActID != null && PackID != null)
             {
                 db.Execute($"Delete From Package_Activity Where PackageID={PackID} and ActivityID={ActID}");
                 return RedirectToAction("ActManage", new { id = PackID });
+
+            }
+            if (GuideID != null && PackID != null)
+            {
+                db.Execute($"Delete From Package_Language Where PackageID={PackID} and GuideLanguageID={GuideID}");
+                return RedirectToAction("LangManage", new { id = PackID });
 
             }
             if (AttractID != null && PackID != null)

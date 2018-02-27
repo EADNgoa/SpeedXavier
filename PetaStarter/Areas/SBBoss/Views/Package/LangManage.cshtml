@@ -1,0 +1,98 @@
+﻿@model Speedbird.Package
+
+@{
+    ViewBag.Title = $"Manage Guide Language";
+}
+
+
+<div class="card border rounded DropShadow">
+    <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
+        <span class="h5">Package Details</span>
+        <a href="@Url.Action("Manage","Package",new {id=ViewBag.Pack.PackageID })"><i class="fas fa-undo-alt fa-inverse h3 float-right DropShadow"></i></a>
+
+    </div>
+    <div class="card-body">
+        <h5 class="card-title">&nbsp;</h5>
+        <table class="table section-to-print " width="70%">
+            <tr>
+                <td>Package Name</td>
+                <td>@ViewBag.Pack.PackageName</td>
+            </tr>
+
+            <tr>
+                <td>Duration</td>
+                <td>@ViewBag.Pack.Duration</td>
+            </tr>
+            <tr>
+                <td>Group Size</td>
+                <td>@ViewBag.Pack.GroupSize</td>
+            </tr>
+
+        </table>
+    </div>
+</div>
+
+
+<div class="card border rounded DropShadow">
+    <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
+        <span class="h3">@ViewBag.Title</span>
+    </div>
+    <div class="card-body">
+        <h5>&nbsp;</h5>
+        <div class="section-to-Not-print">
+       @using (Html.BeginForm("LangManage", "Package", FormMethod.Post))
+       {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal ">
+
+                <hr />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                  @Html.Hidden("id", (int)ViewBag.Pack.PackageID)
+       
+                <div class="form-group">
+                    @Html.Label("Guide Language", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.DropDownList("GuideLanguageID", null, new { @class = "form-control" } )
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Save" class="btn btn-primary" />
+                    </div>
+                </div>
+            </div>
+    }
+        </div>
+       <br />
+        
+
+        <hr />
+        <table class="table section-to-print index-css" width="100%">
+            <tr>
+                <th>Guide Language Name</th>
+                
+
+                <th class="section-to-Not-print"></th>
+            </tr>
+        @foreach(var item in(IEnumerable<Speedbird.LanguageDets>) ViewBag.Lang)
+        {
+            <tr>
+                <td>
+                    @item.GuideLanguageName
+                </td>
+                <td>
+                    <a href="@Url.Action("Delete","Package",new {PackID = Model.PackageID ,GuideID= item.GuideLanguageID })">Delete</a>
+                </td>
+            </tr>
+        }
+          
+        </table>
+   
+   
+    </div>
+    </div>
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }

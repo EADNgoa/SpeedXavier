@@ -23,26 +23,32 @@
             @if (Model?.PackageID > 0)
     {
         @Html.HiddenFor(model => model.PackageID)
-        <div class="row">
-            <div class="col-md-2">
-                <a class="btn btn-success" href="~/SBBoss/Package/ActManage/@Model.PackageID">Activity</a>
-            </div>
-            <div class=" col-md-2">
-                <a class="btn btn-success" href="~/SBBoss/Package/AttractManage/@Model.PackageID">Attraction</a>
-            </div>
-            <div class=" col-md-2">
-                <a class="btn btn-success" href="~/SBBoss/Package/CatManage/@Model.PackageID">Category</a>
-            </div>
-            <div class=" col-md-2">
-                <a class="btn btn-success" href="~/SBBoss/Package/GeoTree/@Model.PackageID">Geo Location</a>
-            </div>
-            <div class=" col-md-2">
-                <a class="btn btn-success" href="~/SBBoss/Package/PackPrice/@Model.PackageID">Price</a>
-            </div>
-            <div class=" col-md-2">
-                <a class="btn btn-success" href="~/SBBoss/Package/PackPicture/@Model.PackageID">Image</a>
-            </div>
-        </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <a class="btn btn-success" href="~/SBBoss/Package/ActManage/@Model.PackageID">Activity</a>
+                </div>
+                <div class=" col-md-2">
+                    <a class="btn btn-success" href="~/SBBoss/Package/AttractManage/@Model.PackageID">Attraction</a>
+                </div>
+                <div class=" col-md-2">
+                    <a class="btn btn-success" href="~/SBBoss/Package/CatManage/@Model.PackageID">Category</a>
+                </div>
+                <div class=" col-md-2">
+                    <a class="btn btn-success" href="~/SBBoss/Package/GeoTree/@Model.PackageID">Geo Location</a>
+                </div>
+             </div>
+             <br />
+                <div class="row">
+                    <div class=" col-md-2">
+                        <a class="btn btn-success" href="~/SBBoss/Package/PackPrice/@Model.PackageID">Price</a>
+                    </div>
+                    <div class=" col-md-2">
+                        <a class="btn btn-success" href="~/SBBoss/Package/PackPicture/@Model.PackageID">Image</a>
+                    </div>
+                    <div class=" col-md-2">
+                        <a class="btn btn-success" href="~/SBBoss/Package/LangManage/@Model.PackageID">Language</a>
+                    </div>
+                </div>
         <br />
 }
 

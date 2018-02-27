@@ -360,6 +360,8 @@
     <Content Include="Areas\SBBoss\Views\Shared\DisplayTemplates\Decimal.cshtml" />
     <Content Include="Areas\SBBoss\Views\CarBike\Index.cshtml" />
     <Content Include="Areas\SBBoss\Views\CarBike\Manage.cshtml" />
+    <Content Include="Areas\SBBoss\Views\CarBike\CarPicture.cshtml" />
+    <Content Include="Areas\SBBoss\Views\Package\LangManage.cshtml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\i18n\jquery-ui-timepicker-addon-i18n.js" />
     <Content Include="Scripts\i18n\jquery-ui-timepicker-addon-i18n.min.js" />
