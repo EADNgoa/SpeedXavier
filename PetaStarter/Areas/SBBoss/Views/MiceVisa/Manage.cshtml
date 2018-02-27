@@ -1,0 +1,86 @@
+﻿
+@model Speedbird.VisaDets
+
+@{
+    ViewBag.Title = "Manage Visa";
+}
+
+<div class="card border rounded DropShadow">
+    <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
+        <span class="h3">@ViewBag.Title</span>
+        <a href="@Url.Action("Visa","MiceVisa")"><i class="fas fa-undo-alt fa-inverse h3 float-right DropShadow"></i></a>
+    </div>
+    <div class="card-body">
+        <h5>&nbsp;</h5>
+
+        @using (Html.BeginForm("Manage", "MiceVisa", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @if (Model?.VisaID > 0)
+        {
+            @Html.HiddenFor(model => model.VisaID)
+            @Html.HiddenFor(model => model.FlagPicture)
+            @Html.HiddenFor(model => model.Details)
+
+    }
+            <div class="form-group">
+                @Html.LabelFor(model => model.VisaCountry, "Country", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.VisaCountry, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.VisaCountry, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.EmbassyAddress, "Embassy Address", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.EmbassyAddress, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.EmbassyAddress, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            @if (Model.VisaID == 0)
+        {
+            <div class="form-group">
+                <label class="control-label col-md-2">Flag Picture</label>
+                <div class="col-md-10">
+                    <input class="form-control" type="file" id="UploadedFile1" name="UploadedFile1" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-2">Detail</label>
+                <div class="col-md-10">
+                    <input class="form-control" type="file" id="UploadedFile2" name="UploadedFile2" />
+                </div>
+            </div>
+
+
+    }
+    else
+    {
+        <div class="form-group">
+            @Html.LabelFor(model => model.FlagPicture, "Flag Picture", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <img src="/Images/@Model.FlagPicture" style="width:100px;height:100px" />
+            </div>
+        </div>
+
+}
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Save" class="btn btn-default" />
+                </div>
+            </div>
+        </div>
+}
+
+    </div>
+</div>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -100,7 +100,7 @@
     <Build Include="dbo\Tables\ReviewReplies.sql" />
     <Build Include="dbo\Tables\DiscountCoupon.sql" />
     <Build Include="dbo\Tables\ServiceDiscount.sql" />
-    <Build Include="dbo\Tables\MICE.sql" />
+    <Build Include="dbo\Tables\MieDetails.sql" />
     <Build Include="dbo\Tables\Visa.sql" />
     <Build Include="dbo\Tables\Package_Language.sql" />
     <Build Include="dbo\Tables\PackageValidity.sql" />
