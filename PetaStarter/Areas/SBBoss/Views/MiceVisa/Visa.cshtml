@@ -1,0 +1,94 @@
+﻿@model PagedList.IPagedList<Speedbird.Visa>
+
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Visa Details";
+}
+
+
+<div class="card border rounded DropShadow">
+    <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
+        <span class="h5">Search</span>
+    </div>
+    <div class="card-body">
+        <h5 class="card-title">&nbsp;</h5>
+        @using (Html.BeginForm("Index", "Visa", FormMethod.Get))
+        {
+            <div class="row d-print-none">
+                <table>
+                    <tr style="text-align:center">
+                        <td>&nbsp;Country:</td>
+                        <td> @Html.TextBox("AN", ViewBag.CurrentFilter as string, new { @class = "form-control" })</td>
+                        <td><input type="submit" value="Search" class="btn btn-primary" /></td>
+                    </tr>
+                </table>
+
+            </div>
+        }
+    </div>
+</div>
+
+
+<div class="card border rounded DropShadow">
+    <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
+        <span class="h3">@ViewBag.Title</span>
+        <a href="@Url.Action("Manage","MiceVisa")"><i class="fas fa-plus-circle fa-inverse h3 float-right DropShadow"></i></a>
+    </div>
+    <div class="card-body">
+        <h5>&nbsp;</h5>
+        <table class="table">
+            <tr>
+                <th>Sr No</th>
+                <th>
+                   Visa Country
+                </th>
+                <th>
+                  Flag Picture
+                </th>
+                <th>
+                    Embassy Address
+                </th>
+                <th>
+                    Detail
+                </th>
+             
+                <th></th>
+            </tr>
+            @{int i = 1;}
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td>
+                    @i
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.VisaCountry)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FlagPicture)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EmbassyAddress)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Details)
+                </td>
+             
+                <td>
+                    <a href="@Url.Action("Manage","MiceVisa", new {id = item.VisaID })"><i title="Edit" class="fas fa-edit fa-inverse h3 float-right DropShadow"></i></a>
+                </td>
+            </tr>
+                i++;
+            }
+
+        </table>
+        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+        @Html.PagedListPager(Model, page => Url.Action("Index",
+                  new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+
+    </div>
+</div>
+
+
+

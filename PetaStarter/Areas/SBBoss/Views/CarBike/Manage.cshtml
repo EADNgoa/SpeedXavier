@@ -23,6 +23,16 @@
             @if (Model?.CarBikeID > 0)
              {
                  @Html.HiddenFor(model => model.CarBikeID)
+            <div class="row">
+                <div class=" col-md-1">
+                    
+                </div>
+                <div class=" col-md-1">
+                    <a class="btn btn-success" href="~/SBBoss/CarBike/CarPicture/@Model.CarBikeID">Images</a>
+                </div>
+            </div>
+            <br />
+            
              }
 
             <div class="form-group">

@@ -75,6 +75,14 @@ namespace Speedbird
 
 
     }
+    public class LanguageDets
+    {
+        public int PackageID { get; set; }
+        public int GuideLanguageID { get; set; }
+        public string GuideLanguageName { get; set; }
+
+
+    }
     public class AttractionDets
     {
         public int PackageID { get; set; }
@@ -105,11 +113,24 @@ namespace Speedbird
         public bool HasCarrier { get; set; }
         public bool InclHelmet { get; set; }
     }
+    public class VisaDets
+    {
+        public int VisaID { get; set; }
+        public string VisaCountry { get; set; }
+        public string FlagPicture { get; set; }
+        public string EmbassyAddress { get; set; }
+        public string Details { get; set; }
+
+        public HttpPostedFileBase UploadedFile1 { get; set; }
+        public HttpPostedFileBase UploadedFile2 { get; set; }
+
+    }
 
     public enum ServiceTypeEnum
     {
         Accomodation,
         Packages,
+        CarBike,
     }
  
 
