@@ -22,8 +22,15 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
 
         public ActionResult Manage(int? id)
-        {                    
-            return View(base.BaseCreateEdit<Accomodation>(id, "AccomodationID"));
+        {
+            var newAcc = base.BaseCreateEdit<Accomodation>(id, "AccomodationID");
+            if (!id.HasValue)
+            {
+                newAcc = new Accomodation();
+                newAcc.lat = "15.498626410761135";
+                newAcc.longt = "73.82881432771683";
+            }
+            return View(newAcc);
         }
 
   

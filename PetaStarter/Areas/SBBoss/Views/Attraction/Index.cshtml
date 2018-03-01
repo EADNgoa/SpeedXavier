@@ -14,7 +14,7 @@
         @using (Html.BeginForm("Index", "Attraction", FormMethod.Get))
         {
             <div class="row d-print-none">                
-                    <table width="100%">
+                    <table>
                         <tr style="text-align:center">
                             <td>&nbsp;Attraction Name:</td>
                             <td> @Html.TextBox("AN", ViewBag.CurrentFilter as string, new { @class = "form-control" })</td>
