@@ -74,6 +74,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
                 string SavePath = System.IO.Path.Combine(Server.MapPath("~/Images"), fn);
                 rec.UploadedFile1.SaveAs(SavePath);
+
+                SavePath = System.IO.Path.Combine(Server.MapPath("~/Images"), fn2);
                 rec.UploadedFile2.SaveAs(SavePath);
 
                 d.FlagPicture = fn;
