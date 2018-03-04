@@ -1,0 +1,96 @@
+﻿@model PagedList.IPagedList<Speedbird.Review>
+
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Reviews";
+}
+
+
+<div class="card border rounded DropShadow">
+    <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
+        <span class="h5">Search</span>
+    </div>
+    <div class="card-body">
+        <h5 class="card-title">&nbsp;</h5>
+        @using (Html.BeginForm("Index", "Review", FormMethod.Get))
+        {
+            <div class="row d-print-none">
+                <table>
+                    <tr style="text-align:center">
+                        <td>&nbsp;Booking ID No:</td>
+                        <td> @Html.TextBox("AN", ViewBag.CurrentFilter as string, new { @class = "form-control" })</td>
+                        <td><input type="submit" value="Search" class="btn btn-primary" /></td>
+                    </tr>
+                </table>
+
+            </div>
+        }
+    </div>
+</div>
+
+
+<div class="card border rounded DropShadow">
+    <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
+        <span class="h3">@ViewBag.Title</span>
+        <a href="@Url.Action("Manage","Review")"><i class="fas fa-plus-circle fa-inverse h3 float-right DropShadow"></i></a>
+    </div>
+    <div class="card-body">
+        <h5>&nbsp;</h5>
+        <table class="table">
+            <tr>
+                <th>
+                    ServiceType
+                </th>
+                <th>
+                    Review Date
+                </th>
+                <th>
+                    Review
+                </th>
+                <th>
+                    Is Visible
+                </th>
+                <th></th>
+            </tr>
+            @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @((Speedbird.ServiceTypeEnum)item.ServiceTypeID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReviewDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item._Review)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsVisible)
+            </td>
+      
+            <td style="color:black !important">
+                @if(item.IsVisible==true)
+                 {
+                     @Html.ActionLink("Hide", "", new { hide = item.ReviewID }) 
+
+                 }
+                else
+                {
+                  @Html.ActionLink("Show", "", new { show = item.ReviewID }) 
+                }
+
+                |<a href="~/SBBoss/Review/Reply/@item.ReviewID">Reply</a>
+            </td>
+        </tr>
+}
+        </table>
+        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+        @Html.PagedListPager(Model, page => Url.Action("Index",
+                  new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+
+    </div>
+</div>
+
+
+

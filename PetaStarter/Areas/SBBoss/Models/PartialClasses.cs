@@ -91,6 +91,34 @@ namespace Speedbird
 
 
     }
+    public class BookingDets
+    {
+        public int BookingID { get; set; }
+        public int UserID { get; set; }
+        public DateTime BookDate { get; set; }
+        public int StatusID { get; set; }
+        public int BookingStatusID { get; set; }
+        public string BookingStatusName { get; set; }
+        public int BookingDetailID { get; set; }
+        public int ServiceID { get; set; }
+        public int ServiceTypeID { get; set; }
+        public int OptionTypeID { get; set; }
+        public int Qty { get; set; }
+        public DateTime CheckIn { get; set; }
+        public DateTime CheckOut { get; set; }
+        public int NoOfGuests { get; set; }
+        public decimal Price { get; set; }
+        public string BlockedReason { get; set; }
+        public int Id { get; set; }
+        public string UserName { get; set; }
+        public int CustomerID { get; set; }
+        public string FName { get; set; }
+        public string SName { get; set; }
+        public string Email { get; set; }
+        public string Phone { get; set; }
+        public string IdPicture { get; set; }
+
+    }
     public class CategoryDets
     {
         public int PackageID { get; set; }
@@ -123,6 +151,18 @@ namespace Speedbird
 
         public HttpPostedFileBase UploadedFile1 { get; set; }
         public HttpPostedFileBase UploadedFile2 { get; set; }
+
+    }
+    public class ReviewRepDets
+    {
+        public int ReviewReplyID { get; set; }
+        public int ReviewID { get; set; }
+        public string UserID { get; set; }
+        public string UserName { get; set; }
+        public string Reply { get; set; }
+        public DateTime ReviewDate { get; set; }
+        public bool IsVisible { get; set; }
+
 
     }
 
