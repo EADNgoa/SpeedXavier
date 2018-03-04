@@ -1,0 +1,132 @@
+﻿@model PagedList.IPagedList<Speedbird.BookingDets>
+
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Booking Details";
+}
+
+
+<div class="card border rounded DropShadow">
+    <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
+        <span class="h5">Search</span>
+    </div>
+    <div class="card-body">
+        <h5 class="card-title">&nbsp;</h5>
+        @using (Html.BeginForm("Index", "Booking", FormMethod.Get))
+        {
+            <div class="row d-print-none">
+                <table>
+                    <tr style="text-align:center">
+                        <td>&nbsp;Booking ID No:</td>
+                        <td> @Html.TextBox("AN", ViewBag.CurrentFilter as string, new { @class = "form-control" })</td>
+                        <td><input type="submit" value="Search" class="btn btn-primary" /></td>
+                    </tr>
+                </table>
+
+            </div>
+        }
+    </div>
+</div>
+
+
+<div class="card border rounded DropShadow">
+    <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
+        <span class="h3">@ViewBag.Title</span>
+        <a href="@Url.Action("Manage","Booking")"><i class="fas fa-plus-circle fa-inverse h3 float-right DropShadow"></i></a>
+    </div>
+    <div class="card-body">
+        <h5>&nbsp;</h5>
+        <table class="table">
+            <tr>
+                <th>Booking Ref.</th>
+                <th>
+                    Pax Name
+                </th>
+                <th>
+                   Booking Date
+                </th>
+                <th>
+                    Status
+                </th>
+                <th></th>
+            </tr>
+            @foreach (var item in Model)
+    {
+
+        <tr style="background-color:gray;">
+            <td>
+                BkRef- @item.BookingID
+            </td>
+            <td>
+                @if (item.StatusID == 4)
+    {
+            @:Blocked by admin
+}
+else
+{
+            @item.FName
+            @item.SName
+
+
+}
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BookDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BookingStatusName)
+            </td>
+            <td>
+                @Html.ActionLink("Confirm", "", new { confirm = item.BookingID })
+                @Html.ActionLink("Cancel", "", new { cancel = item.BookingID })
+
+            </td>
+        </tr>
+        <tr>
+            <td colspan="4">
+                <table class="table-bordered">
+                    <tbody>
+                        @foreach (var bd in Model.Where(a=>a.BookingID == item.BookingID) )
+                {
+                        <tr>
+                            <td><u>@((Speedbird.ServiceTypeEnum)item.ServiceTypeID)</u></td>
+                            <td>In: @Html.DisplayFor(modelItem => bd.CheckIn)</td>
+                            <td>Out: @Html.DisplayFor(modelItem => bd.CheckOut)</td>
+                            <td>Guest: @Html.DisplayFor(modelItem => bd.NoOfGuests)</td>
+                            <td>Price: @Html.DisplayFor(modelItem => bd.Price)</td>
+
+                        </tr>
+        }
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="4">
+                <strong>Lead Pax Detail</strong>
+                <table width=80%>
+                    @foreach (var g in Model.Where(a=>a.BookingID==item.BookingID))
+            {
+                <tr>
+                    <td>@g.FName &nbsp; @g.SName</td>
+                    <td width=10%></td>
+                    <td>@g.Phone</td>
+                    <td width=10%></td>
+                    <td>@g.Email</td>
+                </tr>
+    }
+                </table>
+            </td>
+        </tr>
+}
+        </table>
+        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+        @Html.PagedListPager(Model, page => Url.Action("Index",
+                  new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+
+    </div>
+</div>
+
+
+
