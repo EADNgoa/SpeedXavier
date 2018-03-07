@@ -1,5 +1,5 @@
 body {
-    background-color: #ccc;
+    background-color:white;
     color: black;
 }
 
@@ -196,4 +196,131 @@ input[type=checkbox] {
 .chat_list .pull-left {
     width: 55px;
     text-align: center;
+}
+
+
+
+.navbar.top-bar {
+    border-radius: 0;
+    padding: 16px 0;
+    z-index: 16;
+}
+
+.navbar-toggler {
+    border: 1px solid #fff;
+    color: #fff;
+    position: absolute;
+    right: 21px;
+}
+
+.sps {
+    padding: 1em .5em;
+    position: fixed;
+    top: 0;
+    left: 0;
+    transition: all 0.25s ease;
+    width: 100%;
+}
+
+.sps--abv {
+    background-color: transparent;
+    color: #000;
+}
+
+.sps--blw {
+    background-color: #fff;
+    color: #fff;
+}
+
+.top-bar a.navbar-brand {
+    color: #fff;
+    font-size: 26px;
+    font-weight: 800;
+    padding: 5px 0 0 10px;
+    text-transform: uppercase;
+}
+
+.sps--blw.top-bar a.navbar-brand {
+    color: #000;
+}
+
+.top-bar a.navbar-brand span {
+    color: #0297ff;
+}
+
+.top-bar .nav-link {
+    color: #fff;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 12px 18px !important;
+}
+
+.sps--blw.top-bar .nav-link {
+    color: #000
+}
+
+.top-bar .navbar-nav .nav-item {
+    margin: 0
+}
+
+.top-bar .nav-link:hover, .top-bar .nav-item.active a {
+    color: #fff;
+    border-bottom: 2px solid #fff;
+    border-radius: 0;
+}
+
+.sps--blw.top-bar .nav-link:hover, .sps--blw.top-bar .nav-item.active a {
+    color: #0297ff;
+    border-bottom: none;
+    border-radius: 0;
+}
+@keyframes shake {
+    0% {
+        transform: translate(1px, 1px) rotate(0deg);
+    }
+
+    10% {
+        transform: translate(-1px, -2px) rotate(-1deg);
+    }
+
+    20% {
+        transform: translate(-3px, 0px) rotate(1deg);
+    }
+
+    30% {
+        transform: translate(3px, 2px) rotate(0deg);
+    }
+
+    40% {
+        transform: translate(1px, -1px) rotate(1deg);
+    }
+
+    50% {
+        transform: translate(-1px, 2px) rotate(-1deg);
+    }
+
+    60% {
+        transform: translate(-3px, 1px) rotate(0deg);
+    }
+
+    70% {
+        transform: translate(3px, 1px) rotate(-1deg);
+    }
+
+    80% {
+        transform: translate(-1px, -1px) rotate(1deg);
+    }
+
+    90% {
+        transform: translate(1px, 2px) rotate(0deg);
+    }
+
+    100% {
+        transform: translate(1px, -2px) rotate(-1deg);
+    }
+}
+@keyframes anim-1 {
+	0%, 8.3% { left: -100%; opacity: 0; }
+  8.3%,25% { left: 25%; opacity: 1; }
+  33.33%, 100% { left: 110%; opacity: 1; }
 }

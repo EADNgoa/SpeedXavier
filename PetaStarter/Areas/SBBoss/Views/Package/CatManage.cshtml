@@ -13,9 +13,20 @@
     </div>
     <div class="card-body">
         <h5 class="card-title">&nbsp;</h5>
-        <table class="table section-to-print " width="70%">
+<table class="table section-to-print " width="70%">
             <tr>
+                @if (ViewBag.Pack.ServiceTypID == 1)
+                {
                 <td>Package Name</td>
+                }
+                else if (ViewBag.Pack.ServiceTypID == 2)
+                {
+                <td>Cruise Name</td>
+                }
+                else if (ViewBag.Pack.ServiceTypID == 3)
+                {
+                <td>Sight Seeing</td>
+                }
                 <td>@ViewBag.Pack.PackageName</td>
             </tr>
 
@@ -23,12 +34,16 @@
                 <td>Duration</td>
                 <td>@ViewBag.Pack.Duration</td>
             </tr>
-            <tr>
+              @if (ViewBag.Pack.ServiceTypID == 1)
+                {
+                 <tr>
                 <td>Group Size</td>
                 <td>@ViewBag.Pack.GroupSize</td>
             </tr>
+                }
+          
 
-        </table>
+        </table> 
     </div>
 </div>
 

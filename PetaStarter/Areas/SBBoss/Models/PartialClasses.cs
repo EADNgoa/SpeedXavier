@@ -171,6 +171,8 @@ namespace Speedbird
     {
         Accomodation,
         Packages,
+        Cruise,
+        SightSeeing,
         CarBike,
     }
  
