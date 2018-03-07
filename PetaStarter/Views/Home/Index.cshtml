@@ -1,13 +1,121 @@
-﻿@{
-    ViewBag.Title = "Home Page";
-}
-<p>&nbsp;</p>
+﻿<?php
+session_start();
 
-  <p>&nbsp;</p>
-    <p>&nbsp;</p>
-    <p>&nbsp;</p>
-    <p>&nbsp;</p>
-    <p>&nbsp;</p>
-    <p>&nbsp;</p>
-    <p>&nbsp;</p>
-    
+	if (!isset($_SESSION['userid']))
+	{
+		$_SESSION['msg'] = "You must log in first";
+		header('location: admin-login.php');
+	}
+
+	if (isset($_GET['logout']))
+	{
+		session_destroy();
+		unset($_SESSION['userid']);
+		header("location: admin-login.php");
+	}
+
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Admin</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--===============================================================================================-->
+    <link rel="icon" type="image/png" href="images/icons/favicon.ico" />
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="vendor/animate/animate.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="vendor/css-hamburgers/hamburgers.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="vendor/select2/select2.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="css/util.css">
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <!--===============================================================================================-->
+
+</head>
+<body>
+
+
+    <div class="limiter">
+        <div class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
+                <div data-role="main" class="ui-content">
+                    <a href="admin-la.php" class="display-name">
+                        <?php  if (isset($_SESSION['userid'])) :
+                        echo $_SESSION['userid']; ?>
+                    </a>
+
+                    &nbsp&nbsp&nbsp
+                    <a href="logout.php"
+                       name="logout-btn">
+                        Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="container-login100">
+            <div class="wrap-login100">
+
+                <form class="login100-form validate-form" action="admin-la.php" method="post">
+
+                    <span class="login100-form-title">
+                        Admin
+                    </span>
+                    <div class="container-login100-form-btn">
+                        <button id="view-comp" class="login100-form-btn">
+                            View Complaints
+                        </button>
+                    </div>
+
+                    <div class="container-login100-form-btn">
+                        <button id="ass-comp" class="login100-form-btn">
+                            Assign Complaints
+                        </button>
+                    </div>
+
+                    <div class="container-login100-form-btn">
+                        <input type="button" id="add-eng" name="add-engineer" class="login100-form-btn" type="submit" onclick="add-engineer.php" value="Add/Remove Engineer">
+                        </input>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <!--===============================================================================================-->
+    <script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="vendor/bootstrap/js/popper.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="vendor/select2/select2.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="vendor/tilt/tilt.jquery.min.js"></script>
+    <script>
+		$('.js-tilt').tilt({
+			scale: 1.1
+		})
+    </script>
+    <!--===============================================================================================-->
+    <script type="text/javascript">
+    	document.getElementById("add-eng").onclick = function () {
+        location.href = "add-engineer.php";
+       	};
+    </script>
+
+    <!--===============================================================================================-->
+    <script src="js/main.js"></script>
+
+
+</body>
+</html>

@@ -1,0 +1,89 @@
+﻿@model PagedList.IPagedList<AspNetRole>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Reservations";
+}
+<center><h2>Add Users To Groups</h2></center>
+<div class="col-md-6">
+    <div class="row">
+        @using (Html.BeginForm("ExistingUserRec", "UserRights", FormMethod.Post, new {id="Ugform" }))
+        {
+            @Html.Hidden("Id");
+            <div class="form-group">
+                @Html.Label("User Name", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <input type="text" id="UserName" name="UserName" style="color:black;" data-autocomplete-idholder="#Id" value="" data-autocombo-url="@Url.Action("AutoCompleteUsers")" class="form-control" />
+                    <input type="hidden" id="GroupID" name="Group"  value=" "  />
+                      
+                </div>
+            </div>
+            <br />
+       <br />
+            <div class="form-group">
+                <div class="col-md-10">
+                    <input type="submit" value="Add User" class="btn btn-default" />
+                </div>
+            </div>
+           
+            <br />
+        }
+    </div>
+    <br />
+    <br />
+    <div class="MastDet">
+        <h4>List Of Groups</h4>
+        <table class="table table-hover " height="100%">
+            <tr>
+                <th>Sr No</th>
+                <th>Group Name</th>
+            </tr>
+            <tbody>
+                @{int i = 1; }
+                @foreach(var item in (IEnumerable<Group>)ViewBag.Grp)
+                {
+                    <tr>
+                        <td>
+                            @i
+                        </td>
+                        <td>
+                            <a href="#" id="@item.GroupID" class="activeRec">@item.GroupName</a>
+                        </td>
+                    </tr>
+                    i++;
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="col-md-6" id="ExistingUsers">
+   
+    
+</div>
+@section Scripts {
+
+    @Scripts.Render("~/bundles/jqueryval")
+}
+<script>
+    $(document).ready(function () {
+        $('.activeRec').click(function () {         
+            var GID = this.id;
+            $('#ExistingUsers').html("");
+            $('#ExistingUsers').load("/UserRights/ExistingUserRec?GID=" + GID);            
+            $("#GroupID").val(GID);
+            return false;
+        })
+    });
+    $(document).ready(function () {
+        $("#Ugform").submit(function (event) {
+                event.preventDefault();
+                $('#ExistingUsers').html("");
+                var gp = $('#GroupID').val();
+                var $form = $(this),
+                url = $form.attr('action');
+                var posting = $.post(url, { UserName: $('#UserName').val(), Group: $('#GroupID').val(), Id: $('#Id').val() });
+                posting.done(function (data) { $('#ExistingUsers').load("/UserRights/ExistingUserRec?GID=" + gp);});
+            });
+    })
+
+    
+</script>

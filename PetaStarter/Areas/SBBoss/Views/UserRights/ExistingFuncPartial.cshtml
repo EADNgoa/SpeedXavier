@@ -1,0 +1,83 @@
+﻿@model IEnumerable<Cavala.Models.ExistingFuncViewModel>
+   
+
+
+
+
+    @if (Model != null)
+    {
+        <div class="row MastDet" style="margin-top:24%">
+            <h4><u><b>Functions In Groups</b></u></h4>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        Sr No
+                    </th>
+                    <th>
+                        Function Name
+                    </th>
+                    <th>
+                        Read/Write
+                    </th>
+                    <th>
+
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @{ int i = 1;}
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @i
+                        </td>
+                        <td>
+                            @item.FunctionName
+                        </td>
+                        <td>
+                            @item.Writable
+                        </td>
+                        <td>
+                            @using (Html.BeginForm("DelFuncRec", "UserRights", FormMethod.Post, new { id = "Delrec", @class="drc"}))
+                            {
+                                <div class="form-group">
+                                    <div class=" col-md-3">
+                                        <input type="hidden" id="GroupID" name="GroupID" value="@item.GroupID" />
+                                        <input type="hidden" id="FunctionID" name="FunctionID" value="@item.FunctionID" />
+
+                                        <input type="submit" value="Delete Function" data-fid="@item.FunctionID" class="btn btn-default " />
+                                    </div>
+                                </div>
+                            }
+                        </td>
+                      
+                    </tr>
+                    i++;
+                }
+            </tbody>
+        </table>
+    </div>
+ <br />
+   
+        }
+  <script>
+       $(document).ready(function () {
+           $('.drc').submit(function (e) {
+               e.preventDefault();
+               $('#ExistingFunc').html("");
+
+
+               var gp = $('#GroupID').val();
+
+
+               var $form = $(this),
+                   url = $form.attr('action');
+
+               var posting = $.post(url, { GroupID: $('#GroupID').val(), FunctionID: $form["0"][1].value  });
+               posting.done(function (data) { $('#ExistingFunc').load("/UserRights/DelFuncRec?GID=" +gp); });
+
+           });
+       })
+</script>          

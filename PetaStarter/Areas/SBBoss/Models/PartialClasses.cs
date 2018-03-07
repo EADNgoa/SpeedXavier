@@ -94,7 +94,7 @@ namespace Speedbird
     public class BookingDets
     {
         public int BookingID { get; set; }
-        public int UserID { get; set; }
+        public string UserID { get; set; }
         public DateTime BookDate { get; set; }
         public int StatusID { get; set; }
         public int BookingStatusID { get; set; }
@@ -103,6 +103,7 @@ namespace Speedbird
         public int ServiceID { get; set; }
         public int ServiceTypeID { get; set; }
         public int OptionTypeID { get; set; }
+        public string OptionTypeName { get; set; }
         public int Qty { get; set; }
         public DateTime CheckIn { get; set; }
         public DateTime CheckOut { get; set; }
