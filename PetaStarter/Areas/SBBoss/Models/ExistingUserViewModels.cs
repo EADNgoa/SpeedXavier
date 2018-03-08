@@ -11,10 +11,8 @@ using PetaPoco;
 //using Cavala.Models;for dynamic roles
 //using Microsoft.AspNet.Identity.EntityFramework;for dynamic roles
 
-namespace Cavala.Models
+namespace Speedbird.Areas.SBBoss.Models
 {
- 
-
     public class ExistingUserViewModel
     {
         public string Id { get; set; }

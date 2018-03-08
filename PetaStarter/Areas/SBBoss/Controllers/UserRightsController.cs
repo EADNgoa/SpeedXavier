@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 
-namespace Cavala.Controllers
+namespace Speedbird.Areas.SBBoss.Controllers
 {
     public class UserRightsController : EAController
     {
@@ -40,8 +40,8 @@ namespace Cavala.Controllers
                 
 
             }
-            List<Cavala.Models.ExistingUserViewModel> recs = db.Fetch<Cavala.Models.ExistingUserViewModel>("Select * from AspNetUsers anu inner join UserGroups ug on anu.Id = ug.UserID inner Join Groups g on g.GroupID = ug.GroupID Where ug.GroupID = @0", GID ?? 0);
-            ViewBag.func = db.Fetch<Cavala.Models.ExistingUserViewModel>("Select * from UserFunctions uf inner join FunctionGroups fg on uf.FunctionID =fg.FunctionID inner join Groups g on g.GroupID = fg.GroupID where fg.GroupID=@0;",GID ?? 0);
+            List<Speedbird.Areas.SBBoss.Models.ExistingUserViewModel> recs = db.Fetch<Speedbird.Areas.SBBoss.Models.ExistingUserViewModel>("Select * from AspNetUsers anu inner join UserGroups ug on anu.Id = ug.UserID inner Join Groups g on g.GroupID = ug.GroupID Where ug.GroupID = @0", GID ?? 0);
+            ViewBag.func = db.Fetch< Speedbird.Areas.SBBoss.Models.ExistingUserViewModel>("Select * from UserFunctions uf inner join FunctionGroups fg on uf.FunctionID =fg.FunctionID inner join Groups g on g.GroupID = fg.GroupID where fg.GroupID=@0;",GID ?? 0);
             return PartialView("ExistingUsersPartial", recs);
         }
         public ActionResult DelUserRec(int? GID, FormCollection fm)
@@ -53,8 +53,8 @@ namespace Cavala.Controllers
               var DeleteRec = db.Execute("Delete from UserGroups Where UserID=@0 and GroupID=@1 ", uid, gid);
                 GID = gid;
             }
-            List<Cavala.Models.ExistingUserViewModel> recs = db.Fetch<Cavala.Models.ExistingUserViewModel>("Select * from AspNetUsers anu inner join UserGroups ug on anu.Id = ug.UserID inner Join Groups g on g.GroupID = ug.GroupID Where ug.GroupID = @0", (int)GID);
-            ViewBag.func = db.Fetch<Cavala.Models.ExistingUserViewModel>("Select * from UserFunctions uf inner join FunctionGroups fg on uf.FunctionID =fg.FunctionID inner join Groups g on g.GroupID = fg.GroupID where fg.GroupID=@0", (int)GID);
+            List<Speedbird.Areas.SBBoss.Models.ExistingUserViewModel> recs = db.Fetch<Speedbird.Areas.SBBoss.Models.ExistingUserViewModel>("Select * from AspNetUsers anu inner join UserGroups ug on anu.Id = ug.UserID inner Join Groups g on g.GroupID = ug.GroupID Where ug.GroupID = @0", (int)GID);
+            ViewBag.func = db.Fetch<Speedbird.Areas.SBBoss.Models.ExistingUserViewModel>("Select * from UserFunctions uf inner join FunctionGroups fg on uf.FunctionID =fg.FunctionID inner join Groups g on g.GroupID = fg.GroupID where fg.GroupID=@0", (int)GID);
             return PartialView("ExistingUsersPartial", recs);
         }
 
@@ -62,7 +62,7 @@ namespace Cavala.Controllers
         public ActionResult AddFuncGroups(int? page)
         {
             ViewBag.GroupID = db.Fetch<Group>("Select GroupID,GroupName from Groups");
-            ViewBag.Func = db.Fetch<Cavala.Models.ExistingFuncViewModel>("Select FunctionID,FunctionName,Module from UserFunctions ORDER BY Module,FunctionName ASC");
+            ViewBag.Func = db.Fetch<Speedbird.Areas.SBBoss.Models.ExistingFuncViewModel>("Select FunctionID,FunctionName,Module from UserFunctions ORDER BY Module,FunctionName ASC");
             return View();
                     
         }
@@ -95,7 +95,7 @@ namespace Cavala.Controllers
                 Console.WriteLine("Please Select The Group: '{0}'", e);
 
             }
-            List<Cavala.Models.ExistingFuncViewModel> recs = db.Fetch<Cavala.Models.ExistingFuncViewModel>("Select * from UserFunctions uf inner join FunctionGroups fg on uf.FunctionID = fg.FunctionID inner join Groups g on g.GroupID = fg.GroupID where fg.GroupID = @0", GID ?? 0);
+            List<Speedbird.Areas.SBBoss.Models.ExistingFuncViewModel> recs = db.Fetch<Speedbird.Areas.SBBoss.Models.ExistingFuncViewModel>("Select * from UserFunctions uf inner join FunctionGroups fg on uf.FunctionID = fg.FunctionID inner join Groups g on g.GroupID = fg.GroupID where fg.GroupID = @0", GID ?? 0);
             return PartialView("ExistingFuncPartial", recs);
         }
         [EAAuthorize(FunctionName = "User Rights", Writable = true)]
@@ -108,7 +108,7 @@ namespace Cavala.Controllers
                 var DeleteRec = db.Execute("Delete from FunctionGroups Where FunctionID=@0 and GroupID=@1 ", fid, gid);
                 GID = gid;
             }
-            List<Cavala.Models.ExistingFuncViewModel> recs = db.Fetch<Cavala.Models.ExistingFuncViewModel>("Select * from UserFunctions uf inner join FunctionGroups fg on uf.FunctionID = fg.FunctionID inner join Groups g on g.GroupID = fg.GroupID where fg.GroupID = @0", (int)GID);
+            List<Speedbird.Areas.SBBoss.Models.ExistingFuncViewModel> recs = db.Fetch<Speedbird.Areas.SBBoss.Models.ExistingFuncViewModel>("Select * from UserFunctions uf inner join FunctionGroups fg on uf.FunctionID = fg.FunctionID inner join Groups g on g.GroupID = fg.GroupID where fg.GroupID = @0", (int)GID);
             return PartialView("ExistingFuncPartial", recs);
         }
 

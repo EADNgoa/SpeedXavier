@@ -1,4 +1,5 @@
-﻿using Speedbird.Controllers;
+﻿using PagedList;
+using Speedbird.Controllers;
 using System;
 //using System.Collections.Generic;
 using System.Data;
@@ -19,10 +20,17 @@ namespace Speedbird.Areas.SBBoss.Controllers
             if (AN !=null) page = 1;
             if(confirm!=null) db.Execute($"Update Booking Set StatusID ={2} where BookingID ={confirm}");
             if (cancel != null) db.Execute($"Update Booking Set StatusID ={3} where BookingID ={cancel}");
-            return View("Index", base.BaseIndex<BookingDets>(page, " * ","Booking b inner join BookingStatus bs on b.StatusID = bs.BookingStatusID inner join BookingDetail bd on bd.BookingID = b.BookingID inner join BookedCustomer bc on bc.BookingID = b.BookingID inner join Customer c on bc.CustomerID = c.CustomerID Where b.BookingID like '%" + AN + "%'"));
+            var bookings = db.Fetch<BookingRec>("Select * from Booking b inner join BookingStatus bs on b.StatusID = bs.BookingStatusID  inner join AspNetUsers anu on b.UserID=anu.Id");
+            bookings.ForEach(b =>
+            {
+                b.bookdets = db.Query<BookingDets>($"Select * from BookingDetail bd inner join OptionType ot on bd.OptionTypeID = ot.OptionTypeID where BookingID={b.BookingID}");
+                b.Customer = db.Query<CustomerDets>($"Select * from Customer c inner join BookedCustomer bc on c.CustomerID = bc.CustomerID inner join Booking b on bc.BookingID = b.BookingID Where bc.BookingID = {b.BookingID}");
+            });
+            int pageSize = 10;
+            int pageNumber = (page ?? 1);
+            return View(bookings.ToList().ToPagedList(pageNumber, pageSize));
+
         }
-
-
 
 
         protected override void Dispose(bool disposing)

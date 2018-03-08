@@ -7,7 +7,7 @@
 
 <div class="card border rounded DropShadow">
     <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
-        <span class="h5">Package Details</span>
+        <span class="h5"> Details</span>
         <a href="@Url.Action("Manage","Package",new {id=ViewBag.Pack.PackageID })"><i class="fas fa-undo-alt fa-inverse h3 float-right DropShadow"></i></a>
 
     </div>
@@ -15,15 +15,15 @@
         <h5 class="card-title">&nbsp;</h5>
 <table class="table section-to-print " width="70%">
             <tr>
-                @if (ViewBag.Pack.ServiceTypID == 1)
+                @if (ViewBag.Pack.ServiceTypeID == 1)
                 {
                 <td>Package Name</td>
                 }
-                else if (ViewBag.Pack.ServiceTypID == 2)
+                else if (ViewBag.Pack.ServiceTypeID == 2)
                 {
                 <td>Cruise Name</td>
                 }
-                else if (ViewBag.Pack.ServiceTypID == 3)
+                else if (ViewBag.Pack.ServiceTypeID == 3)
                 {
                 <td>Sight Seeing</td>
                 }
@@ -34,7 +34,7 @@
                 <td>Duration</td>
                 <td>@ViewBag.Pack.Duration</td>
             </tr>
-              @if (ViewBag.Pack.ServiceTypID == 1)
+              @if (ViewBag.Pack.ServiceTypeID == 1)
                 {
                  <tr>
                 <td>Group Size</td>

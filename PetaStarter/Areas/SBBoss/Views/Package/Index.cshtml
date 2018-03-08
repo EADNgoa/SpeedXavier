@@ -1,8 +1,6 @@
 ﻿@model PagedList.IPagedList<Speedbird.PackageDets>
 @using PagedList.Mvc;
-@{
-    ViewBag.Title = "Packages";
-}
+
 
 
 <div class="card border rounded DropShadow">
@@ -16,7 +14,7 @@
             <div class="row d-print-none">                
                     <table>
                         <tr style="text-align:center">
-                            <td>&nbsp;Package Name:</td>
+                            <td>&nbsp;Name:</td>
                             <td> @Html.TextBox("AN", ViewBag.CurrentFilter as string, new { @class = "form-control" })</td>
                             <td><input type="submit" value="Search" class="btn btn-primary" /></td>
                         </tr>
@@ -137,7 +135,7 @@
                     </td>
                 }
                 <td>
-                    <a href="@Url.Action("Manage","Package", new {id = item.PackageID })"><i title="Edit" class="fas fa-edit fa-inverse h3 float-right DropShadow"></i></a>
+                    <a href="@Url.Action("Manage","Package", new { id = item.PackageID, sid=item.ServiceTypeID })"><i title="Edit" class="fas fa-edit fa-inverse h3 float-right DropShadow"></i></a>
                 </td>
             </tr>
                 i++;

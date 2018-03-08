@@ -21,15 +21,18 @@ namespace Speedbird.Areas.SBBoss.Controllers
             ViewBag.sid = sid;
             int pageSize = 10;
             int pageNumber = (page ?? 1);
-            if (sid == 1 && sid == 3)
+            if (sid == 1) { ViewBag.Title = "Packages"; }
+            if (sid == 2) { ViewBag.Title = "Cruises"; }
+            if (sid == 3) { ViewBag.Title = "Sight Seeing"; }
+            if (sid == 1 || sid == 3)
             {
-                var rec = db.Fetch<PackageDets>("Package p inner join GuideLanguage gl on p.GuideLanguageID =gl.GuideLanguageID Where PackageName like '%" + AN + "%' and ServiceTypeID =@0", sid).ToList();
+                var rec = db.Fetch<PackageDets>("Select * From Package p inner join GuideLanguage gl on p.GuideLanguageID =gl.GuideLanguageID Where PackageName like '%" + AN + "%' and ServiceTypeID =@0", sid).ToList();
                 return View(rec.ToPagedList(pageNumber, pageSize));
 
             }
             if (sid == 2)
             {
-                var rec = db.Fetch<PackageDets>("Package Where PackageName like '%" + AN + "%' and ServiceTypeID =@0", sid).ToList();
+                var rec = db.Fetch<PackageDets>(" Select * from Package Where PackageName like '%" + AN + "%' and ServiceTypeID =@0", sid).ToList();
 
                 return View(rec.ToPagedList(pageNumber, pageSize));
             }
@@ -43,6 +46,9 @@ namespace Speedbird.Areas.SBBoss.Controllers
         {
             ViewBag.GuideLanguageID = new SelectList(db.Fetch<GuideLanguage>("Select GuideLanguageID,GuideLanguageName from GuideLanguage"), "GuideLanguageID", "GuideLanguageName");
             ViewBag.sid = sid;
+            if (sid == 1) ViewBag.Title = "Manage Packages";
+            if (sid == 2) ViewBag.Title = "Manage Cruises";
+            if (sid == 3) ViewBag.Title = "Manage SightSeeing";
             return View(base.BaseCreateEdit<Package>(id, "PackageID"));
         }
 
@@ -51,7 +57,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Manage([Bind(Include = "PackageID,ServiceTypeID,PackageName,Description,Duration,Itinerary,Dificulty,GroupSize,GuideLanguageID,StartTime,Inclusion,Exclusion")] Package item)
         {
-            return base.BaseSave<Package>(item, item.PackageID > 0);
+           base.BaseSave<Package>(item, item.PackageID > 0);
+           return RedirectToAction("Index", new { serviceType = item.ServiceTypeID });
         }
 
         public ActionResult CatManage(int? id)
@@ -84,13 +91,11 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult PVManage(FormCollection fm)
+        public ActionResult PVManage([Bind(Include = "PVID,PackageId,ValidFrom,ValidTo,")] PackageValidity item)
         {
-            int pid = int.Parse(fm["Id"]);
-            int aid = int.Parse(fm["CategoryID"]);
-            var item = new Package_Category { PackageID = pid, CategoryID = aid };
-            db.Insert(item);
-            return RedirectToAction("CatManage");
+            base.BaseSave<PackageValidity>(item, item.PVId > 0);
+            return RedirectToAction("PVManage");
+
         }
 
 

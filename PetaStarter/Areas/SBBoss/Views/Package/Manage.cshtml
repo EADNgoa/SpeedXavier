@@ -1,8 +1,5 @@
 ﻿@model Speedbird.Package
 
-@{
-    ViewBag.Title = "Manage Package";
-}
 
 <div class="card border rounded DropShadow">
     <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
@@ -20,10 +17,11 @@
 
             <hr />
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.Hidden("ServiceTypeID", (int)ViewBag.sid)
+
             @if (Model?.PackageID > 0)
-             {
+    {
         @Html.HiddenFor(model => model.PackageID)
-                @Html.Hidden("ServicecTypeID",(int)ViewBag.sid);
         <div class="row">
             <div class="col-md-2">
                 <a class="btn btn-success" href="~/SBBoss/Package/ActManage/@Model.PackageID">Activity</a>
@@ -57,18 +55,20 @@
 }
 
             <div class="form-group">
-                @if (Model.ServiceTypeID == 1)
+                @if (ViewBag.sid == 1)
         {
             @Html.LabelFor(model => model.PackageName, "Package Name", htmlAttributes: new { @class = "control-label col-md-2" })
 }
-else if (Model.ServiceTypeID == 2)
+else if (ViewBag.sid == 2)
 {
         @Html.LabelFor(model => model.PackageName, "Cruise Name", htmlAttributes: new { @class = "control-label col-md-2" })
 
+
 }
-else if (Model.ServiceTypeID == 3)
+else if (ViewBag.sid == 3)
 {
         @Html.LabelFor(model => model.PackageName, "SightSeeing", htmlAttributes: new { @class = "control-label col-md-2" })
+
 
 }
                 <div class="col-md-10">
@@ -98,11 +98,11 @@ else if (Model.ServiceTypeID == 3)
                 </div>
             </div>
             <div class="form-group">
-                @if (Model.ServiceTypeID == 1 || Model.ServiceTypeID == 3)
+                @if (ViewBag.sid == 1 || ViewBag.sid == 3)
         {
             @Html.LabelFor(model => model.Dificulty, "Difficulty", htmlAttributes: new { @class = "control-label col-md-2" })
 }
-else if (Model.ServiceTypeID == 2)
+else if (ViewBag.sid == 2)
 {
         @Html.LabelFor(model => model.PackageName, "Star Rating", htmlAttributes: new { @class = "control-label col-md-2" })
 
@@ -112,7 +112,7 @@ else if (Model.ServiceTypeID == 2)
                     @Html.ValidationMessageFor(model => model.Dificulty, "", new { @class = "text-danger" })
                 </div>
             </div>
-            @if (Model.ServiceTypeID == 1 || Model.ServiceTypeID == 3)
+            @if (ViewBag.sid == 1 || ViewBag.sid == 3)
     {
         <div class="form-group">
             @Html.LabelFor(model => model.GroupSize, "Group Size (Max people)", htmlAttributes: new { @class = "control-label col-md-2" })

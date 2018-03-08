@@ -1,4 +1,4 @@
-﻿@model PagedList.IPagedList<Speedbird.BookingDets>
+﻿@model PagedList.IPagedList<Speedbird.BookingRec>
 
 @using PagedList.Mvc;
 @{
@@ -32,7 +32,6 @@
 <div class="card border rounded DropShadow">
     <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
         <span class="h3">@ViewBag.Title</span>
-        <a href="@Url.Action("Manage","Booking")"><i class="fas fa-plus-circle fa-inverse h3 float-right DropShadow"></i></a>
     </div>
     <div class="card-body">
         <h5>&nbsp;</h5>
@@ -58,14 +57,14 @@
                 BkRef- @item.BookingID
             </td>
             <td>
-                @if (item.StatusID == 4)
+                @if (item.BookingStatusID == 4)
     {
             @:Blocked by admin
 }
 else
 {
-            @item.FName
-            @item.SName
+            @item.Customer.FirstOrDefault().FName
+            @item.Customer.FirstOrDefault().SName
 
 
 }
@@ -86,10 +85,10 @@ else
             <td colspan="4">
                 <table class="table-bordered">
                     <tbody>
-                        @foreach (var bd in Model.Where(a=>a.BookingID == item.BookingID) )
+                        @foreach (var bd in item.bookdets )
                 {
                         <tr>
-                            <td><u>@((Speedbird.ServiceTypeEnum)item.ServiceTypeID)</u></td>
+                            <td><u>@((Speedbird.ServiceTypeEnum)bd.ServiceTypeID)</u></td>
                             <td>In: @Html.DisplayFor(modelItem => bd.CheckIn)</td>
                             <td>Out: @Html.DisplayFor(modelItem => bd.CheckOut)</td>
                             <td>Guest: @Html.DisplayFor(modelItem => bd.NoOfGuests)</td>
@@ -105,16 +104,14 @@ else
             <td colspan="4">
                 <strong>Lead Pax Detail</strong>
                 <table width=80%>
-                    @foreach (var g in Model.Where(a=>a.BookingID==item.BookingID))
-            {
+        
                 <tr>
-                    <td>@g.FName &nbsp; @g.SName</td>
+                    <td>@item.Customer.FirstOrDefault().FName &nbsp; @item.Customer.FirstOrDefault().SName</td>
                     <td width=10%></td>
-                    <td>@g.Phone</td>
+                    <td>@item.Customer.FirstOrDefault().Phone</td>
                     <td width=10%></td>
-                    <td>@g.Email</td>
+                    <td>@item.Customer.FirstOrDefault().Email</td>
                 </tr>
-    }
                 </table>
             </td>
         </tr>

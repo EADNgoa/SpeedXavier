@@ -196,6 +196,7 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Areas\SBBoss\Controllers\EAController.cs" />
     <Compile Include="Areas\SBBoss\Controllers\PackageController.cs" />
     <Compile Include="Areas\SBBoss\Controllers\BookingController.cs" />
     <Compile Include="Areas\SBBoss\Controllers\ReviewController.cs" />
@@ -378,7 +379,6 @@
     <Content Include="Areas\SBBoss\Views\UserRights\AddUserGroups.cshtml" />
     <Content Include="Areas\SBBoss\Views\UserRights\ExistingFuncPartial.cshtml" />
     <Content Include="Areas\SBBoss\Views\UserRights\ExistingUsersPartial.cshtml" />
-    <Content Include="Areas\SBBoss\Views\UserRights\Manage.cshtml" />
     <Content Include="Areas\SBBoss\Views\Package\PVManage.cshtml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\i18n\jquery-ui-timepicker-addon-i18n.js" />
