@@ -196,11 +196,11 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Areas\SBBoss\Controllers\PackageController.cs" />
     <Compile Include="Areas\SBBoss\Controllers\BookingController.cs" />
     <Compile Include="Areas\SBBoss\Controllers\ReviewController.cs" />
     <Compile Include="Areas\SBBoss\Controllers\MiceVisaController.cs" />
     <Compile Include="Areas\SBBoss\Controllers\CarBikeController.cs" />
-    <Compile Include="Areas\SBBoss\Controllers\PackageController.cs" />
     <Compile Include="Areas\SBBoss\Controllers\AccomodationController.cs" />
     <Compile Include="Areas\SBBoss\Controllers\OptionTypeController.cs" />
     <Compile Include="Areas\SBBoss\Controllers\ActivityController.cs" />
