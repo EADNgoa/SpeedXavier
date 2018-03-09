@@ -111,11 +111,16 @@ namespace Speedbird
 	}
     
 	[TableName("dbo.AgentDiscount")]
-	[PrimaryKey("Id", AutoIncrement=false)]
+	[PrimaryKey("AgentDiscountID")]
 	[ExplicitColumns]
     public partial class AgentDiscount  
     {
-		[Column] public int Id { get; set; }
+		[Column] public int AgentDiscountID { get; set; }
+		[Column] public string UserID { get; set; }
+		[Column] public int? ServiceTypeID { get; set; }
+		[Column] public decimal? Amount { get; set; }
+		[Column] public decimal? Percentage { get; set; }
+		[Column] public bool? IsApproved { get; set; }
 	}
     
 	[TableName("dbo.AspNetRoles")]
@@ -177,6 +182,7 @@ namespace Speedbird
 		[Column] public DateTime DateCreated { get; set; }
 		[Column] public bool Disabled { get; set; }
 		[Column] public DateTime? LastLogin { get; set; }
+		[Column] public int? UserType { get; set; }
 	}
     
 	[TableName("dbo.Attraaction")]

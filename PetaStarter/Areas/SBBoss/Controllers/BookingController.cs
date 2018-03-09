@@ -19,7 +19,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         {
             if (AN !=null) page = 1;
             if(confirm!=null) db.Execute($"Update Booking Set StatusID ={2} where BookingID ={confirm}");
-            if (cancel != null) db.Execute($"Update Booking Set StatusID ={3} where BookingID ={cancel}");
+            if(cancel != null) db.Execute($"Update Booking Set StatusID ={3} where BookingID ={cancel}");
             var bookings = db.Fetch<BookingRec>("Select * from Booking b inner join BookingStatus bs on b.StatusID = bs.BookingStatusID  inner join AspNetUsers anu on b.UserID=anu.Id");
             bookings.ForEach(b =>
             {
@@ -31,8 +31,6 @@ namespace Speedbird.Areas.SBBoss.Controllers
             return View(bookings.ToList().ToPagedList(pageNumber, pageSize));
 
         }
-
-
         protected override void Dispose(bool disposing)
         {
             if (disposing)
