@@ -37,7 +37,7 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.EmbassyAddress, "Embassy Address", htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.EditorFor(model => model.EmbassyAddress, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.TextAreaFor(model => model.EmbassyAddress,3,43, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.EmbassyAddress, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -71,7 +71,7 @@
 }
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Save" class="btn btn-default" />
+                    <input type="submit" value="Save" class="btn btn-primary" />
                 </div>
             </div>
         </div>

@@ -1,45 +1,41 @@
-﻿
-
-<div class="navbar navbar-inverse navbar-fixed-top">
+﻿<nav class="navbar navbar-expand-md navbar-dark" style="height:120px;background-color:orangered">
     <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            @*<a id="emblem" href="~/"><img src="~/Custom/Emblem.png" height=100px; alt="De Monte Hospitality" /> </a>*@
-            @Html.ActionLink("Speed Bird", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-        </div>
-        <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-                <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Masters<span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="~/Configs/Edit/1">Configuration</a></li>
-                        <li><a href="~/Activity">Activity</a></li>
-                        <li><a href="~/SBBoss/Attraction">Attraction</a></li>
-                        <li><a href="~/Category">Category</a></li>
-                        <li><a href="~/GuideLanguage">Guide Language</a></li>
-                        <li><a href="~/BookingStatus">Booking Status</a></li>
-                        <li><a href="~/Facility">Facility</a></li>
-                        <li><a href="~/Cruise">Cruise</a></li>
-                        <li><a href="~/Coupon">Discount Coupons</a></li>
-                    </ul>
+        <a class="navbar-brand" href="index.html">SpeedBird.Com</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarsExampleDefault">
+            <ul class="navbar-nav m-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html">Home</a>
                 </li>
-
-                <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Finance<span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="~/Receipt">Receipt</a></li>                                                
-                        <li><a href="~/Voucher">Voucher</a></li>
-                        <li><a href="~/Voucher">Bill</a></li>                                                
-                    </ul>
+                <li class="nav-item active">
+                    <a class="nav-link" href="category.html">Services <span class="sr-only">(current)</span></a>
                 </li>
-
-
-                    </ul>
-            @Html.Partial("_LoginPartial")
+                <li class="nav-item">
+                    <a class="nav-link" href="product.html">Cart</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="cart.html">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="contact.html">Contact</a>
+                </li>
+            </ul>
+            <form class="form-inline my-2 my-lg-0">
+                <div class="input-group input-group-sm">
+                    <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" placeholder="Search...">
+                    <div class="input-group-append">
+                        <button type="button" class="btn btn-secondary btn-number">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+                <a class="btn btn-success btn-sm ml-3" href="cart.html">
+                    <i class="fa fa-shopping-cart"></i> Cart
+                    <span class="badge badge-light">3</span>
+                </a>
+            </form>
         </div>
     </div>
-</div>
+</nav>

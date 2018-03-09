@@ -3,6 +3,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
 //using System.Web.Mvc; for dynamic roles
 //using Microsoft.AspNet.Identity;for dynamic roles
 //using Speedbird.Models;for dynamic roles
@@ -91,34 +93,7 @@ namespace Speedbird
 
 
     }
-    public class BookingDets
-    {
-        public int BookingID { get; set; }
-        public int UserID { get; set; }
-        public DateTime BookDate { get; set; }
-        public int StatusID { get; set; }
-        public int BookingStatusID { get; set; }
-        public string BookingStatusName { get; set; }
-        public int BookingDetailID { get; set; }
-        public int ServiceID { get; set; }
-        public int ServiceTypeID { get; set; }
-        public int OptionTypeID { get; set; }
-        public int Qty { get; set; }
-        public DateTime CheckIn { get; set; }
-        public DateTime CheckOut { get; set; }
-        public int NoOfGuests { get; set; }
-        public decimal Price { get; set; }
-        public string BlockedReason { get; set; }
-        public int Id { get; set; }
-        public string UserName { get; set; }
-        public int CustomerID { get; set; }
-        public string FName { get; set; }
-        public string SName { get; set; }
-        public string Email { get; set; }
-        public string Phone { get; set; }
-        public string IdPicture { get; set; }
 
-    }
     public class CategoryDets
     {
         public int PackageID { get; set; }
@@ -165,14 +140,68 @@ namespace Speedbird
 
 
     }
+    public class BookingDets
+    {
+        public int BookingID { get; set; }
+        public int BookingDetailID { get; set; }
+        public int ServiceID { get; set; }
+        public int ServiceTypeID { get; set; }
+        public int OptionTypeID { get; set; }
+        public string OptionTypeName { get; set; }
+        public int Qty { get; set; }
+        public DateTime CheckIn { get; set; }
+        public DateTime CheckOut { get; set; }
+        public int NoOfGuests { get; set; }
+        public decimal Price { get; set; }
+        public string BlockedReason { get; set; }
+      
 
+    }
+    public class CustomerDets
+    {
+        public int CustomerID { get; set; }
+        public int BookingID { get; set; }
+        public string FName { get; set; }
+        public string SName { get; set; }
+        public string Email { get; set; }
+        public string Phone { get; set; }
+        public string IdPicture { get; set; }
+
+    }
+    public class BookingRec
+    {
+        public int BookingStatusID { get; set; }
+        public string BookingStatusName { get; set; }
+        public int BookingID { get; set; }
+        public string UserID { get; set; }
+        public string UserName { get; set; }
+        public DateTime BookDate { get; set; }
+        public int StatusID { get; set; }
+        public IEnumerable<BookingDets> bookdets { get; set; }
+        public  IEnumerable<CustomerDets> Customer { get; set; }
+    }
     public enum ServiceTypeEnum
     {
         Accomodation,
         Packages,
+        Cruise,
+        SightSeeing,
         CarBike,
     }
- 
+
+    public class EAAuthorizeAttribute : AuthorizeAttribute
+    {
+        public string FunctionName { get; set; }
+        public bool Writable { get; set; }
+        private Repository rep;
+
+
+        protected override bool AuthorizeCore(HttpContextBase httpContext)
+        {
+            rep = new Repository();
+            return MyExtensions.IsPermitted(rep, FunctionName, Writable, httpContext.User.Identity.GetUserId());
+        }
+    }
 
     //[MetadataType(typeof(ConfigMetadata))]
     //public partial class Config

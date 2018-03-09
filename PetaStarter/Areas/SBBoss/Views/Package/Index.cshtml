@@ -1,8 +1,6 @@
 ﻿@model PagedList.IPagedList<Speedbird.PackageDets>
 @using PagedList.Mvc;
-@{
-    ViewBag.Title = "Packages";
-}
+
 
 
 <div class="card border rounded DropShadow">
@@ -16,7 +14,7 @@
             <div class="row d-print-none">                
                     <table>
                         <tr style="text-align:center">
-                            <td>&nbsp;Package Name:</td>
+                            <td>&nbsp;Name:</td>
                             <td> @Html.TextBox("AN", ViewBag.CurrentFilter as string, new { @class = "form-control" })</td>
                             <td><input type="submit" value="Search" class="btn btn-primary" /></td>
                         </tr>
@@ -31,7 +29,7 @@
 <div class="card border rounded DropShadow">
     <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
         <span class="h3">@ViewBag.Title</span>
-        <a href="@Url.Action("Manage","Package")"><i class="fas fa-plus-circle fa-inverse h3 float-right DropShadow"></i></a>
+        <a href="@Url.Action("Manage","Package",new {sid= ViewBag.sid})"><i class="fas fa-plus-circle fa-inverse h3 float-right DropShadow"></i></a>
     </div>
     <div class="card-body">
         <h5>&nbsp;</h5>
@@ -39,7 +37,19 @@
             <tr>
                 <th>Sr No</th>
                 <th>
-                    Package Name
+                    @if(ViewBag.sid == 1)
+                    {
+                        @:Package Name
+                    }
+                    @if(ViewBag.sid == 2)
+                    {
+                        @:Cruise Name
+                    }
+                     @if(ViewBag.sid == 3)
+                    {
+                        @:Sight Seeing
+                    }
+                    
                 </th>
                 <th>
                     Description
@@ -51,8 +61,18 @@
                     Itinerary
                 </th>
                 <th>
-                    Dificulty
+                    @if(ViewBag.sid == 2)
+                    {
+                        @:Star Rating
+                    }
+                    else
+                    {
+                        @:Dificulty
+                    }
+                    
                 </th>
+                @if (ViewBag.sid == 1 && ViewBag.sid == 3)
+                {
                 <th>
                     GroupSize
                 </th>
@@ -68,6 +88,7 @@
                 <th>
                     Exclusion
                 </th>
+                }
                     
                 <th></th>
             </tr>
@@ -93,24 +114,28 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Dificulty)
                 </td>
+                @if (ViewBag.sid == 1 && ViewBag.sid == 3)
+                {
+
                 <td>
                     @Html.DisplayFor(modelItem => item.GroupSize)
                 </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.GuideLanguageName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.StartTime)
+                    <td>
+                        @Html.DisplayFor(modelItem => item.GuideLanguageName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.StartTime)
 
-                </td>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Inclusion)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Exclusion)
+                    </td>
+                }
                 <td>
-                    @Html.DisplayFor(modelItem => item.Inclusion)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Exclusion)
-                </td>
-                <td>
-                    <a href="@Url.Action("Manage","Package", new {id = item.GuideLanguageID })"><i title="Edit" class="fas fa-edit fa-inverse h3 float-right DropShadow"></i></a>
+                    <a href="@Url.Action("Manage","Package", new { id = item.PackageID, sid=item.ServiceTypeID })"><i title="Edit" class="fas fa-edit fa-inverse h3 float-right DropShadow"></i></a>
                 </td>
             </tr>
                 i++;

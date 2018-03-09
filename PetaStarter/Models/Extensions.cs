@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PetaPoco;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -13,6 +14,31 @@ namespace Speedbird
 
     public static class MyExtensions
     {
+
+        /// <summary>
+        /// Finds if the User has permission for the given action
+        /// </summary>
+        /// <param name="db">Petapoco repository insance</param>
+        /// <param name="FunctionName">Function to be checked for</param>
+        /// <param name="Writable">Is write access provided</param>
+        /// <param name="CurrUser">The user GUID as string who is to be permitted</param>
+        /// <returns></returns>
+        public static bool IsPermitted(Repository db, string FunctionName, bool Writable, string CurrUser)
+        {
+            int Perms;
+
+            Sql sq = new Sql("Select count(1) from AspNetUsers u, UserGroups ug, UserFunctions uf, FunctionGroups fg " +
+                    " where u.id = ug.UserID and uf.FunctionID = fg.FunctionID and fg.GroupID = ug.GroupID and u.Id = @0  " +
+                    "and uf.FunctionName = @1", CurrUser, FunctionName);
+
+            if (Writable)//We check for writable permissions only if the calling method writes to the DB
+                sq.Append(" and fg.Writable = @0", Writable);
+            Perms = db.ExecuteScalar<int>(sq);
+
+
+            return (Perms > 0) ? true : false;
+        }
+
         /// <summary>
         /// Populate the ViewBag with a selectlist for a Year Dropdown
         /// </summary>

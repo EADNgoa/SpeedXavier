@@ -1,8 +1,5 @@
 ﻿@model Speedbird.Package
 
-@{
-    ViewBag.Title = "Manage Package";
-}
 
 <div class="card border rounded DropShadow">
     <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
@@ -20,40 +17,60 @@
 
             <hr />
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.Hidden("ServiceTypeID", (int)ViewBag.sid)
+
             @if (Model?.PackageID > 0)
     {
         @Html.HiddenFor(model => model.PackageID)
-            <div class="row">
-                <div class="col-md-2">
-                    <a class="btn btn-success" href="~/SBBoss/Package/ActManage/@Model.PackageID">Activity</a>
-                </div>
-                <div class=" col-md-2">
-                    <a class="btn btn-success" href="~/SBBoss/Package/AttractManage/@Model.PackageID">Attraction</a>
-                </div>
-                <div class=" col-md-2">
-                    <a class="btn btn-success" href="~/SBBoss/Package/CatManage/@Model.PackageID">Category</a>
-                </div>
-                <div class=" col-md-2">
-                    <a class="btn btn-success" href="~/SBBoss/Package/GeoTree/@Model.PackageID">Geo Location</a>
-                </div>
-             </div>
-             <br />
-                <div class="row">
-                    <div class=" col-md-2">
-                        <a class="btn btn-success" href="~/SBBoss/Package/PackPrice/@Model.PackageID">Price</a>
-                    </div>
-                    <div class=" col-md-2">
-                        <a class="btn btn-success" href="~/SBBoss/Package/PackPicture/@Model.PackageID">Image</a>
-                    </div>
-                    <div class=" col-md-2">
-                        <a class="btn btn-success" href="~/SBBoss/Package/LangManage/@Model.PackageID">Language</a>
-                    </div>
-                </div>
+        <div class="row">
+            <div class="col-md-2">
+                <a class="btn btn-success" href="~/SBBoss/Package/ActManage/@Model.PackageID">Activity</a>
+            </div>
+            <div class=" col-md-2">
+                <a class="btn btn-success" href="~/SBBoss/Package/AttractManage/@Model.PackageID">Attraction</a>
+            </div>
+            <div class=" col-md-2">
+                <a class="btn btn-success" href="~/SBBoss/Package/CatManage/@Model.PackageID">Category</a>
+            </div>
+            <div class=" col-md-2">
+                <a class="btn btn-success" href="~/SBBoss/Package/GeoTree/@Model.PackageID">Geo Location</a>
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class=" col-md-2">
+                <a class="btn btn-success" href="~/SBBoss/Package/PackPrice/@Model.PackageID">Price</a>
+            </div>
+            <div class=" col-md-2">
+                <a class="btn btn-success" href="~/SBBoss/Package/PackPicture/@Model.PackageID">Image</a>
+            </div>
+            <div class=" col-md-2">
+                <a class="btn btn-success" href="~/SBBoss/Package/LangManage/@Model.PackageID">Language</a>
+            </div>
+            <div class=" col-md-2">
+                <a class="btn btn-success" href="~/SBBoss/Package/PVManage/@Model.PackageID">Validity</a>
+            </div>
+        </div>
         <br />
 }
 
             <div class="form-group">
-                @Html.LabelFor(model => model.PackageName, "Package Name", htmlAttributes: new { @class = "control-label col-md-2" })
+                @if (ViewBag.sid == 1)
+        {
+            @Html.LabelFor(model => model.PackageName, "Package Name", htmlAttributes: new { @class = "control-label col-md-2" })
+}
+else if (ViewBag.sid == 2)
+{
+        @Html.LabelFor(model => model.PackageName, "Cruise Name", htmlAttributes: new { @class = "control-label col-md-2" })
+
+
+}
+else if (ViewBag.sid == 3)
+{
+        @Html.LabelFor(model => model.PackageName, "SightSeeing", htmlAttributes: new { @class = "control-label col-md-2" })
+
+
+}
                 <div class="col-md-10">
                     @Html.EditorFor(model => model.PackageName, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.PackageName, "", new { @class = "text-danger" })
@@ -76,52 +93,63 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.Itinerary, "Itinerary", htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.TextAreaFor(model => model.Itinerary,3,700, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.TextAreaFor(model => model.Itinerary, 3, 700, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.Itinerary, "", new { @class = "text-danger" })
                 </div>
             </div>
             <div class="form-group">
-                @Html.LabelFor(model => model.Dificulty, "Difficulty", htmlAttributes: new { @class = "control-label col-md-2" })
+                @if (ViewBag.sid == 1 || ViewBag.sid == 3)
+        {
+            @Html.LabelFor(model => model.Dificulty, "Difficulty", htmlAttributes: new { @class = "control-label col-md-2" })
+}
+else if (ViewBag.sid == 2)
+{
+        @Html.LabelFor(model => model.PackageName, "Star Rating", htmlAttributes: new { @class = "control-label col-md-2" })
+
+}
                 <div class="col-md-10">
                     @Html.EditorFor(model => model.Dificulty, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.Dificulty, "", new { @class = "text-danger" })
                 </div>
             </div>
-            <div class="form-group">
-                @Html.LabelFor(model => model.GroupSize, "Group Size (Max people)", htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.GroupSize, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.GroupSize, "", new { @class = "text-danger" })
-                </div>
+            @if (ViewBag.sid == 1 || ViewBag.sid == 3)
+    {
+        <div class="form-group">
+            @Html.LabelFor(model => model.GroupSize, "Group Size (Max people)", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.GroupSize, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.GroupSize, "", new { @class = "text-danger" })
             </div>
-            <div class="form-group">
-                @Html.LabelFor(model => model.GuideLanguageID, "Guide Language", htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.DropDownListFor(model => model.GuideLanguageID,null,new { @class = "form-control" } )
-                    @Html.ValidationMessageFor(model => model.GuideLanguageID, "", new { @class = "text-danger" })
-                </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.GuideLanguageID, "Guide Language", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.GuideLanguageID, null, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.GuideLanguageID, "", new { @class = "text-danger" })
             </div>
-            <div class="form-group">
-                @Html.LabelFor(model => model.StartTime, "Start Time", htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.StartTime, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.StartTime, "", new { @class = "text-danger" })
-                </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.StartTime, "Start Time", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.StartTime, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.StartTime, "", new { @class = "text-danger" })
             </div>
-            <div class="form-group">
-                @Html.LabelFor(model => model.Inclusion, "Inclusions", htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.TextAreaFor(model => model.Inclusion,3,43,new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Inclusion, "", new { @class = "text-danger" })
-                </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Inclusion, "Inclusions", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.Inclusion, 3, 43, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Inclusion, "", new { @class = "text-danger" })
             </div>
-            <div class="form-group">
-                @Html.LabelFor(model => model.Exclusion, "Exclusions", htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.TextAreaFor(model => model.Exclusion,3,43, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Exclusion, "", new { @class = "text-danger" })
-                </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Exclusion, "Exclusions", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.Exclusion, 3, 43, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Exclusion, "", new { @class = "text-danger" })
             </div>
+        </div>
+}
 
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">

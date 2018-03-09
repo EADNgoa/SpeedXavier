@@ -1,0 +1,104 @@
+﻿@model IEnumerable<Speedbird.Areas.SBBoss.Models.ExistingUserViewModel>
+   
+    @{ int i = 1;}
+
+
+
+    @if (Model != null)
+    {
+        <div class="row MastDet" style="margin-top:24%">
+            <h4><u><b>List of Users</b></u></h4>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        Sr No
+                    </th>
+                    <th>
+                        User Name
+                    </th>
+                    <th>
+
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @i
+                        </td>
+                        <td>
+                            @item.UserName
+                        </td>
+                        <td>
+                            @using (Html.BeginForm("DelUserRec","UserRights", FormMethod.Post, new { id = "drec", @class="Dfuncrec"}))
+                            {
+                            <div class="form-group">
+                                <div class=" col-md-3">
+                                    <input type="hidden" id="GroupID" name="GroupID" value="@item.GroupID" />
+                                    <input type="hidden" id="Id" name="Id" value="@item.Id" />
+
+                                    <input type="submit" value="Delete User" data-uid="@item.Id" class="btn btn-default " />
+                                </div>
+                            </div>
+                             }
+                        </td>
+                      
+                    </tr>
+                    i++;
+                }
+            </tbody>
+        </table>
+    </div>
+ <br />
+    <div class="row MastDet">
+        <h4><u><b>List Of Functions</b></u></h4>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        Sr No
+                    </th>
+                    <th>
+                        Function Name
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var item in ViewBag.func)
+                {
+                    <tr>
+                        <td>
+                            @i
+                        </td>
+                        <td>
+                            @item.FunctionName
+                        </td>
+                    </tr>
+                    i++;
+                }
+            </tbody>
+        </table>
+        </div>
+        }
+  <script>
+      $(document).ready(function () {
+          $('.Dfuncrec').submit(function (e) {
+              e.preventDefault();
+              $('#ExistingUsers').html("");
+        
+              var gp = $('#GroupID').val();
+             
+              var $form = $(this),
+                  url = $form.attr('action');
+
+              var posting = $.post(url, { UserName: $('#UserName').val(), GroupID: $('#GroupID').val(), Id: $form["0"][1].value});
+              posting.done(function (data) { $('#ExistingUsers').load("/SBBoss/UserRights/DelUserRec?GID=" + gp); });
+
+          });
+      })
+  </script>      

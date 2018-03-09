@@ -1,13 +1,73 @@
-﻿@{
-    ViewBag.Title = "Home Page";
-}
-<p>&nbsp;</p>
+﻿<style>
+    img {
+        width: 370px;
+        height: 380px;
+        box-shadow: 10px 10px 5px grey;
+    }
 
-  <p>&nbsp;</p>
-    <p>&nbsp;</p>
-    <p>&nbsp;</p>
-    <p>&nbsp;</p>
-    <p>&nbsp;</p>
-    <p>&nbsp;</p>
-    <p>&nbsp;</p>
-    
+        img:hover {
+            animation: shake 0.5s;
+            animation-iteration-count: infinite;
+        }
+
+    .item-1 {
+        top: 2em;
+        animation-duration: 50s;
+    }
+
+    .item-1 {
+        animation-name: anim-1;
+    }
+    .container {
+        position: relative;
+    }
+
+    /* Bottom right text */
+    .text-block {
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+        background-color:black;
+        color: white;
+        padding-left: 20px;
+        padding-right: 20px;
+        opacity:inherit;
+    }
+
+
+
+
+
+</style>
+<head>
+    <link href="https://fonts.googleapis.com/css?family=Quintessential" rel="stylesheet">
+</head>
+<br />
+
+<center>
+    <h2 style="font-family: 'Quintessential', cursive;font-size:100px" class="item-1">How Can I Help?</h2>
+</center>
+<br />
+<div class="row" >
+    <div class="col-md-4 container">
+        <img src="/Images/Goa.jpg" class="rounded-circle" alt="Goa" style="width:100%;">
+        <div class="text-block">
+            <h4>Goa</h4>
+            <p>Get Wet in Hottest Beaches</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <img src="/Images/India.jpg" class="rounded-circle" alt="India">
+        <div class="text-block">
+            <h4>India</h4>
+            <p>East Or West India is the Best</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <img src="/Images/World.jpg" class="rounded-circle" alt="World">
+        <div class="text-block">
+            <h4>World</h4>
+            <p>Travel World With Us </p>
+        </div>
+    </div>
+</div>

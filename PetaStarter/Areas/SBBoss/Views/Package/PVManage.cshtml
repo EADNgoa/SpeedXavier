@@ -1,7 +1,7 @@
-﻿@model Speedbird.Package
+﻿@model Speedbird.PackageValidity
 
 @{
-    ViewBag.Title = $"Manage Category";
+    ViewBag.Title = $"Manage Package Validity";
 }
 
 
@@ -13,7 +13,7 @@
     </div>
     <div class="card-body">
         <h5 class="card-title">&nbsp;</h5>
-<table class="table section-to-print " width="70%">
+       <table class="table section-to-print " width="70%">
             <tr>
                 @if (ViewBag.Pack.ServiceTypeID == 1)
                 {
@@ -43,7 +43,7 @@
                 }
           
 
-        </table> 
+        </table>
     </div>
 </div>
 
@@ -55,7 +55,7 @@
     <div class="card-body">
         <h5>&nbsp;</h5>
         <div class="section-to-Not-print">
-       @using (Html.BeginForm("CatManage", "Package", FormMethod.Post))
+       @using (Html.BeginForm("PVManage", "Package", FormMethod.Post))
        {
             @Html.AntiForgeryToken()
 
@@ -64,12 +64,20 @@
                 <hr />
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-                  @Html.Hidden("id", (int)ViewBag.Pack.PackageID)
-       
+                @Html.Hidden("PackageID", (int)ViewBag.Pack.PackageID)
+
                 <div class="form-group">
-                    @Html.Label("Category", htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.LabelFor(model => model.ValidFrom, "Validity From", htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
-                        @Html.DropDownList("CategoryID", null, new { @class = "form-control" } )
+                        @Html.EditorFor(model => model.ValidFrom, new { htmlAttributes = new { @type = "date", @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.ValidFrom, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ValidTo, "Validity To", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.ValidTo, new { htmlAttributes = new { @type = "date", @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.ValidTo, "", new { @class = "text-danger" })
                     </div>
                 </div>
                 <div class="form-group">
@@ -86,20 +94,22 @@
         <hr />
         <table class="table section-to-print index-css" width="100%">
             <tr>
-                <th>Category Name</th>
-                
+                <th>From </th>
 
+                <th>To </th>
                 <th class="section-to-Not-print"></th>
             </tr>
-        @foreach(var item in(IEnumerable<Speedbird.CategoryDets>)ViewBag.Category)
+        @foreach(var item in(IEnumerable<Speedbird.PackageValidity>)ViewBag.Validity)
         {
             <tr>
                 <td>
-                    @item.CategoryName
+                    @item.ValidFrom
                 </td>
                 <td>
-                    <a href="@Url.Action("Delete","Package",new {PackID = Model.PackageID ,CatID= item.CategoryID
-                        })">Delete</a>
+                    @item.ValidTo
+                </td>
+                <td>
+                    <a href="@Url.Action("PVManage","Package",new {EID = item.PVId})">EDIT</a>
                 </td>
             </tr>
         }

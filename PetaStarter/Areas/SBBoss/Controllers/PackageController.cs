@@ -1,4 +1,5 @@
-﻿using Speedbird.Controllers;
+﻿using PagedList;
+using Speedbird.Controllers;
 using System;
 //using System.Collections.Generic;
 using System.Data;
@@ -13,27 +14,51 @@ namespace Speedbird.Areas.SBBoss.Controllers
 {
     public class PackageController : EAController
     {
-        public ActionResult Index(int? page ,string AN )
+        public ActionResult Index(int? page, string AN, ServiceTypeEnum? serviceType)
         {
             if (AN?.Length > 0) page = 1;
-            return View("Index", base.BaseIndex<PackageDets>(page, " * ","Package p inner join GuideLanguage gl on p.GuideLanguageID =gl.GuideLanguageID Where PackageName like '%" + AN + "%'"));
+            int sid = (int)serviceType;
+            ViewBag.sid = sid;
+            int pageSize = 10;
+            int pageNumber = (page ?? 1);
+            if (sid == 1) { ViewBag.Title = "Packages"; }
+            if (sid == 2) { ViewBag.Title = "Cruises"; }
+            if (sid == 3) { ViewBag.Title = "Sight Seeing"; }
+            if (sid == 1 || sid == 3)
+            {
+                var rec = db.Fetch<PackageDets>("Select * From Package p inner join GuideLanguage gl on p.GuideLanguageID =gl.GuideLanguageID Where PackageName like '%" + AN + "%' and ServiceTypeID =@0", sid).ToList();
+                return View(rec.ToPagedList(pageNumber, pageSize));
+
+            }
+            if (sid == 2)
+            {
+                var rec = db.Fetch<PackageDets>(" Select * from Package Where PackageName like '%" + AN + "%' and ServiceTypeID =@0", sid).ToList();
+
+                return View(rec.ToPagedList(pageNumber, pageSize));
+            }
+            return View();
+
         }
 
 
 
-        public ActionResult Manage(int? id)
+        public ActionResult Manage(int? id, int? sid)
         {
-           ViewBag.GuideLanguageID = new SelectList(db.Fetch<GuideLanguage>("Select GuideLanguageID,GuideLanguageName from GuideLanguage"), "GuideLanguageID", "GuideLanguageName");
-            
+            ViewBag.GuideLanguageID = new SelectList(db.Fetch<GuideLanguage>("Select GuideLanguageID,GuideLanguageName from GuideLanguage"), "GuideLanguageID", "GuideLanguageName");
+            ViewBag.sid = sid;
+            if (sid == 1) ViewBag.Title = "Manage Packages";
+            if (sid == 2) ViewBag.Title = "Manage Cruises";
+            if (sid == 3) ViewBag.Title = "Manage SightSeeing";
             return View(base.BaseCreateEdit<Package>(id, "PackageID"));
         }
 
-  
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Manage([Bind(Include = "PackageID,ServiceTypeID,PackageName,Description,Duration,Itinerary,Dificulty,GroupSize,GuideLanguageID,StartTime,Inclusion,Exclusion")] Package item)
-        {            
-            return base.BaseSave<Package>(item, item.PackageID > 0);
+        {
+           base.BaseSave<Package>(item, item.PackageID > 0);
+           return RedirectToAction("Index", new { serviceType = item.ServiceTypeID });
         }
 
         public ActionResult CatManage(int? id)
@@ -51,9 +76,26 @@ namespace Speedbird.Areas.SBBoss.Controllers
         {
             int pid = int.Parse(fm["Id"]);
             int aid = int.Parse(fm["CategoryID"]);
-            var item = new Package_Category { PackageID=pid,CategoryID=aid };
+            var item = new Package_Category { PackageID = pid, CategoryID = aid };
             db.Insert(item);
             return RedirectToAction("CatManage");
+        }
+
+        public ActionResult PVManage(int? id, int? EID)
+        {
+            ViewBag.Pack = db.FirstOrDefault<Package>($"Select * From Package Where PackageID='{id}'");
+
+            ViewBag.Validity = db.Fetch<PackageValidity>($"Select * From PackageValidity where PackageID ='{id}'");
+            return View(base.BaseCreateEdit<PackageValidity>(EID, "PVID"));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult PVManage([Bind(Include = "PVID,PackageId,ValidFrom,ValidTo,")] PackageValidity item)
+        {
+            base.BaseSave<PackageValidity>(item, item.PVId > 0);
+            return RedirectToAction("PVManage");
+
         }
 
 
@@ -123,9 +165,9 @@ namespace Speedbird.Areas.SBBoss.Controllers
             ViewBag.Pack = db.FirstOrDefault<Package>($"Select * From Package Where PackageID='{id}'");
             ViewBag.Pics = db.Fetch<Picture>($"Select * From Picture where ServiceID='{id}' and ServiceTypeID='{(int)ServiceTypeEnum.Packages}'");
             base.BaseCreateEdit<Picture>(id, "PictureID");
-       
-                PictureDets ci = new PictureDets() { };
-            return View(ci);     
+
+            PictureDets ci = new PictureDets() { };
+            return View(ci);
 
         }
 
@@ -134,42 +176,42 @@ namespace Speedbird.Areas.SBBoss.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult PackPicture([Bind(Include = "PictureID,ServiceTypeID,PictureName,ServiceID,UploadedFile")] PictureDets pics)
         {
-          
-                    Picture res = new Picture
-                    {
-                        PictureID=pics.PictureID,
-                        ServiceID=pics.ServiceID,
-                        ServiceTypeID=pics.ServiceTypeID
-                        
-                    };
 
-                    if (pics.UploadedFile != null)
-                    {
-                        string fn = pics.UploadedFile.FileName.Substring(pics.UploadedFile.FileName.LastIndexOf('\\') + 1);
-                        fn = pics.ServiceTypeID.ToString() + "_" + fn;
-                        string SavePath = System.IO.Path.Combine(Server.MapPath("~/Images"), fn);
-                        pics.UploadedFile.SaveAs(SavePath);
+            Picture res = new Picture
+            {
+                PictureID = pics.PictureID,
+                ServiceID = pics.ServiceID,
+                ServiceTypeID = pics.ServiceTypeID
 
-                        //System.Drawing.Bitmap upimg = new System.Drawing.Bitmap(siteTransaction.UploadedFile.InputStream);
-                        //System.Drawing.Bitmap svimg = MyExtensions.CropUnwantedBackground(upimg);
-                        //svimg.Save(System.IO.Path.Combine(Server.MapPath("~/Images"), fn));
+            };
 
-                        res.PictureName = fn;
-                    }
-                  
-                    base.BaseSave<Picture>(res, pics.PictureID > 0);
-               
-                    return RedirectToAction("PackPicture");
-             
-            
+            if (pics.UploadedFile != null)
+            {
+                string fn = pics.UploadedFile.FileName.Substring(pics.UploadedFile.FileName.LastIndexOf('\\') + 1);
+                fn = pics.ServiceTypeID.ToString() + "_" + fn;
+                string SavePath = System.IO.Path.Combine(Server.MapPath("~/Images"), fn);
+                pics.UploadedFile.SaveAs(SavePath);
+
+                //System.Drawing.Bitmap upimg = new System.Drawing.Bitmap(siteTransaction.UploadedFile.InputStream);
+                //System.Drawing.Bitmap svimg = MyExtensions.CropUnwantedBackground(upimg);
+                //svimg.Save(System.IO.Path.Combine(Server.MapPath("~/Images"), fn));
+
+                res.PictureName = fn;
+            }
+
+            base.BaseSave<Picture>(res, pics.PictureID > 0);
+
+            return RedirectToAction("PackPicture");
+
+
         }
 
 
 
 
-  
 
-        public ActionResult PackPrice(int? id,int? EID)
+
+        public ActionResult PackPrice(int? id, int? EID)
         {
             ViewBag.Pack = db.FirstOrDefault<Package>($"Select * From Package Where PackageID='{id}'");
             ViewBag.Price = db.Fetch<PriceDets>($"Select * from Prices p inner join OptionType ot on ot.OptionTypeID = p.OptionTypeID where ServiceID= {id} and ServiceTypeID ='{(int)ServiceTypeEnum.Packages}'");
@@ -183,11 +225,11 @@ namespace Speedbird.Areas.SBBoss.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult PackPrice([Bind(Include = "PriceID,ServiceID,OptionTypeID,WEF,_Price")] Price item)
         {
-             base.BaseSave<Price>(item, item.PriceID > 0);
+            base.BaseSave<Price>(item, item.PriceID > 0);
             return RedirectToAction("PackPrice");
 
         }
-        public ActionResult Delete(int? PackID, int? ActID, int? pid, int? sid, int? AttractID, int? CatID,int? GuideID)
+        public ActionResult Delete(int? PackID, int? ActID, int? pid, int? sid, int? AttractID, int? CatID, int? GuideID)
         {
             if (ActID != null && PackID != null)
             {

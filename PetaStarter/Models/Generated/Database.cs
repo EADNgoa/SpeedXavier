@@ -346,6 +346,16 @@ namespace Speedbird
 		[Column] public int AccomodationID { get; set; }
 	}
     
+	[TableName("dbo.FunctionGroups")]
+	[PrimaryKey("FunctionID", AutoIncrement=false)]
+	[ExplicitColumns]
+    public partial class FunctionGroup  
+    {
+		[Column] public int FunctionID { get; set; }
+		[Column] public int GroupID { get; set; }
+		[Column] public bool Writable { get; set; }
+	}
+    
 	[TableName("dbo.GeoTree")]
 	[PrimaryKey("GeoTreeID")]
 	[ExplicitColumns]
@@ -355,6 +365,15 @@ namespace Speedbird
 		[Column] public string GeoName { get; set; }
 		[Column] public int? GeoParentID { get; set; }
 		[Column] public int? GeoLevel { get; set; }
+	}
+    
+	[TableName("dbo.Groups")]
+	[PrimaryKey("GroupID")]
+	[ExplicitColumns]
+    public partial class Group  
+    {
+		[Column] public int GroupID { get; set; }
+		[Column] public string GroupName { get; set; }
 	}
     
 	[TableName("dbo.GuideLanguage")]
@@ -549,6 +568,25 @@ namespace Speedbird
 		[Column] public int? ServiceID { get; set; }
 		[Column] public int? ServiceTypeID { get; set; }
 		[Column] public string CouponCode { get; set; }
+	}
+    
+	[TableName("dbo.UserFunctions")]
+	[PrimaryKey("FunctionID")]
+	[ExplicitColumns]
+    public partial class UserFunction  
+    {
+		[Column] public int FunctionID { get; set; }
+		[Column] public string FunctionName { get; set; }
+		[Column] public string Module { get; set; }
+	}
+    
+	[TableName("dbo.UserGroups")]
+	[PrimaryKey("UserID", AutoIncrement=false)]
+	[ExplicitColumns]
+    public partial class UserGroup  
+    {
+		[Column] public string UserID { get; set; }
+		[Column] public int GroupID { get; set; }
 	}
     
 	[TableName("dbo.Visa")]
