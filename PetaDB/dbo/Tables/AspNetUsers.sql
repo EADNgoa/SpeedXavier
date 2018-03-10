@@ -14,6 +14,7 @@
     [DateCreated] DATETIME NOT NULL DEFAULT GetUTCDATE(), 
     [Disabled] BIT NOT NULL DEFAULT 0, 
     [LastLogin] DATETIME NULL, 
+    [UserType] INT NULL, 
     CONSTRAINT [PK_dbo.AspNetUsers] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
 

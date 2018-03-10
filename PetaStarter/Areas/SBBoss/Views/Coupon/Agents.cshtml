@@ -1,0 +1,88 @@
+﻿@model PagedList.IPagedList<Speedbird.AgentDiscDets>
+@using PagedList.Mvc;
+
+<style>
+    a{
+        color:black;
+    }
+</style>
+
+<div class="card border rounded DropShadow">
+    <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
+        <span class="h5">Search</span>        
+    </div>
+    <div class="card-body">
+        <h5 class="card-title">&nbsp;</h5>
+        @using (Html.BeginForm("Agent", "Coupon", FormMethod.Get))
+        {
+            <div class="row d-print-none">                
+                    <table>
+                        <tr style="text-align:center">
+                            <td>&nbsp;Name:</td>
+                            <td> @Html.TextBox("AN", ViewBag.CurrentFilter as string, new { @class = "form-control" })</td>
+                            <td><input type="submit" value="Search" class="btn btn-primary" /></td>
+                        </tr>
+                    </table>
+                
+            </div>
+        }
+    </div>
+</div>
+
+
+<div class="card border rounded DropShadow">
+    <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
+        <span class="h3">Approve and Apply Agent Discounts</span>
+    </div>
+    <div class="card-body">
+        <h5>&nbsp;</h5>
+        <table class="table">
+            <tr>
+                <th>Sr No</th>
+                <th>
+                   User Name
+                    
+                </th>
+                <th>
+                   Is Approved
+                </th>
+                 <th></th>   
+                <th></th>
+            </tr>
+            @{int i = 1;}
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td>
+                    @i
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserName)
+                </td>
+                <td >
+                    @item.IsApproved
+                </td>
+                <td>
+                    @Html.ActionLink("Confirm", "Agents", new { confirm = item.AgentDiscountID })
+                    @Html.ActionLink("Cancel", "Agents", new { cancel = item.AgentDiscountID })
+
+                </td>            
+                <td>
+                    <a href="@Url.Action("AgentManage","Coupon", new { id = item.AgentDiscountID})"><i title="Edit" class="fas fa-edit fa-inverse h3 float-left DropShadow"></i></a>
+                </td>
+            </tr>
+                i++;
+             }
+
+        </table>
+        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+        @Html.PagedListPager(Model, page => Url.Action("Index",
+        new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+
+    </div>
+</div>
+
+
+
+

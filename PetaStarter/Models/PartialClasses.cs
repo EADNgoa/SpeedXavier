@@ -168,6 +168,22 @@ namespace Speedbird
         public string IdPicture { get; set; }
 
     }
+    public class AgentDiscDets
+    {
+        public int AgentDiscountID { get; set; }
+        public string UserID { get; set; }
+        public string UserName { get; set; }
+        public int ServiceTypeID { get; set; }
+        public decimal Amount { get; set; }
+        public decimal Percantage { get; set; }
+        public bool IsApproved { get; set; }
+
+
+
+
+
+
+    }
     public class BookingRec
     {
         public int BookingStatusID { get; set; }
@@ -180,6 +196,7 @@ namespace Speedbird
         public IEnumerable<BookingDets> bookdets { get; set; }
         public  IEnumerable<CustomerDets> Customer { get; set; }
     }
+
     public enum ServiceTypeEnum
     {
         Accomodation,
@@ -187,6 +204,12 @@ namespace Speedbird
         Cruise,
         SightSeeing,
         CarBike,
+    }
+    public enum UserTypeEnum
+    {
+        Admin,
+        Agent,
+        Guest
     }
 
     public class EAAuthorizeAttribute : AuthorizeAttribute

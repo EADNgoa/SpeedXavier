@@ -232,8 +232,8 @@
     </Compile>
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
-    <Compile Include="Areas\SBBoss\Models\Metadata.cs" />
-    <Compile Include="Areas\SBBoss\Models\PartialClasses.cs" />
+    <Compile Include="Models\Metadata.cs" />
+    <Compile Include="Models\PartialClasses.cs" />
     <Compile Include="Models\PetaPoco.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -380,6 +380,8 @@
     <Content Include="Areas\SBBoss\Views\UserRights\ExistingFuncPartial.cshtml" />
     <Content Include="Areas\SBBoss\Views\UserRights\ExistingUsersPartial.cshtml" />
     <Content Include="Areas\SBBoss\Views\Package\PVManage.cshtml" />
+    <Content Include="Areas\SBBoss\Views\Coupon\Agents.cshtml" />
+    <Content Include="Areas\SBBoss\Views\Coupon\AgentManage.cshtml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\i18n\jquery-ui-timepicker-addon-i18n.js" />
     <Content Include="Scripts\i18n\jquery-ui-timepicker-addon-i18n.min.js" />
@@ -505,6 +507,7 @@
     <Content Include="Scripts\popper.js.map" />
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
+    <Content Include="Views\Account\AgentRegister.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
