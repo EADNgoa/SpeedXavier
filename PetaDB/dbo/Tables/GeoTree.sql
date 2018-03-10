@@ -3,5 +3,6 @@
 	[GeoTreeID] INT NOT NULL PRIMARY KEY IDENTITY, 
     [GeoName] VARCHAR(150) NULL, 
     [GeoParentID] INT NULL, 
-    [GeoLevel] INT NULL
+    [GeoLevel] INT NULL, 
+    [ImagePath] VARCHAR(50) NULL
 )
