@@ -10,93 +10,95 @@
     @Styles.Render("~/Content/css")
     @Styles.Render("~/Content/dtpic")
     @Styles.Render("~/Content/EAcss")
-    
-    
+    @Scripts.Render("~/fa5")
+
+   
 </head>
 <body>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
     @Html.Partial("_MenuPartial")
-    
+
     @Scripts.Render("~/bundles/jquery")
-    
+
     @Scripts.Render("~/bundles/jqueryui")
 
     @Scripts.Render("~/bundles/jquerydtpicker")
-    <div id="TopBody" class="container body-content">
+    <div id="TopBody" class="container-fluid body-content">
         @RenderBody()
         <hr />
-    
+
     </div>
 
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
 
-<script>
-    $(function () {
-        //Change the "a" in menu and body
-        var sel = $('.dropdown-menu a');
-        sel.addClass('myamenu');
+    <script>
+        $(function () {
+            //Change the "a" in menu and body
+            var sel = $('.dropdown-menu a');
+            sel.addClass('myamenu');
 
-        var bdy = $("#TopBody a");
-        bdy.addClass('myatag');
-
-        
-
-        //DateTime picker
-        $('input[type=date]').datepicker({
-            dateFormat: "dd-M-yy",
-            showButtonPanel: true,
-            changeMonth: true,
-            changeYear: true
-        }).attr('type', 'text').attr('autocomplete', 'off');
-
-        //Disable the browsers default date picker
-        jQuery.validator.methods["date"] = function (value, element) { return true; }
+            var bdy = $("#TopBody a");
+            bdy.addClass('myatag');
 
 
-    });
 
-   //autocomplete on any view without id
-	//<input type="text" id="Item" name="Item" data-autocomplete-url="@@Url.Action("AutoComplete")" />
- //   $(document).ready(function () {
- //       $('*[data-autocomplete-url]')
- //           .each(function () {
- //               $(this).autocomplete({
- //                   source: $(this).data("autocomplete-url")
- //               });
- //           });
- //   });
+            //DateTime picker
+            $('input[type=date]').datepicker({
+                dateFormat: "dd-M-yy",
+                showButtonPanel: true,
+                changeMonth: true,
+                changeYear: true
+            }).attr('type', 'text').attr('autocomplete', 'off');
+
+            //Disable the browsers default date picker
+            jQuery.validator.methods["date"] = function (value, element) { return true; }
 
 
-//Autocomplete on any view with id
-// @@Html.HiddenFor(model => model.CustomerID) //choose the ID field of your model
-// <input type="text" id="Customer" name="Customer" style="color:black;" data-autocomplete-idholder="#CustomerID" data-autocombo-url="@@Url.Action("AutoCompleteCusts")"  class="form-control" />  //for Create View
-// <input type="text"  value="@@Model.Customer.Name" id="Customer" name="Customer" style="color:black;" data-autocomplete-idholder="#CustomerID" data-autocombo-url="@@Url.Action("AutoCompleteCusts")" class="form-control" />  //for edit view
-//sample controller
-// public ActionResult AutoCompleteCusts(string term)
-//        {
-//            var filteredItems = db.Customers.Where(c => c.Name.Contains(term)).Select(c => new { id = c.CustomerID, value = c.Name });
+        });
 
-//           return Json(filteredItems, JsonRequestBehavior.AllowGet);
-//        }
+        //autocomplete on any view without id
+        //<input type="text" id="Item" name="Item" data-autocomplete-url="@@Url.Action("AutoComplete")" />
+        //   $(document).ready(function () {
+        //       $('*[data-autocomplete-url]')
+        //           .each(function () {
+        //               $(this).autocomplete({
+        //                   source: $(this).data("autocomplete-url")
+        //               });
+        //           });
+        //   });
 
-    
- $(document).ready(function () {
-        $('*[data-autocombo-url]')
-            .each(function () {
-                $(this).autocomplete({
-                    source: $(this).data("autocombo-url"),
-                    minLenght: 3,
-                    delay: 500,
-                    select: function (event, ui) {
-                        $($(this).data("autocomplete-idholder")).val(ui.item.id);
-                    }
+
+        //Autocomplete on any view with id
+        // @@Html.HiddenFor(model => model.CustomerID) //choose the ID field of your model
+        // <input type="text" id="Customer" name="Customer" style="color:black;" data-autocomplete-idholder="#CustomerID" data-autocombo-url="@@Url.Action("AutoCompleteCusts")"  class="form-control" />  //for Create View
+        // <input type="text"  value="@@Model.Customer.Name" id="Customer" name="Customer" style="color:black;" data-autocomplete-idholder="#CustomerID" data-autocombo-url="@@Url.Action("AutoCompleteCusts")" class="form-control" />  //for edit view
+        //sample controller
+        // public ActionResult AutoCompleteCusts(string term)
+        //        {
+        //            var filteredItems = db.Customers.Where(c => c.Name.Contains(term)).Select(c => new { id = c.CustomerID, value = c.Name });
+
+        //           return Json(filteredItems, JsonRequestBehavior.AllowGet);
+        //        }
+
+
+        $(document).ready(function () {
+            $('*[data-autocombo-url]')
+                .each(function () {
+                    $(this).autocomplete({
+                        source: $(this).data("autocombo-url"),
+                        minLenght: 3,
+                        delay: 500,
+                        select: function (event, ui) {
+                            $($(this).data("autocomplete-idholder")).val(ui.item.id);
+                        }
+                    });
                 });
-            });
-    });
+        });
 
-</script>
+    </script>
 
-   
+
 </body>
 
 </html>

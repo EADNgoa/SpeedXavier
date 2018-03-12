@@ -12,6 +12,10 @@ namespace Speedbird.Controllers
         {
             return View();
         }
+        public ActionResult LoadService()
+        {
+            return View();
+        }
 
         public ActionResult About()
         {
