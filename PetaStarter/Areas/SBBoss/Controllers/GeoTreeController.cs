@@ -28,7 +28,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 ViewBag.GeoParentId = 0;
                 ViewBag.GeoName = "Worldwide";
             }
-            ViewBag.GeoId = db.Query<GeoTree>("Select * from GeoTree where GeoParentId is NULL").Select(sl => new SelectListItem { Text=sl.GeoName, Value=sl.GeoTreeID.ToString()});
+            
             return View("Index", base.BaseIndex<GeoTree>(1, " * ", (GeoId.HasValue && GeoId > 0) ? "GeoTree Where GeoParentId = " + GeoId : "GeoTree Where GeoParentId IS NULL"));
         }
 

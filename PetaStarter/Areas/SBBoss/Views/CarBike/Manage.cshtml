@@ -45,7 +45,12 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.GeoTreeId, "Location", htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.DropDownListFor(model => model.GeoTreeId, null, new { @class = "form-control" })
+                    <select id="GeoTreeID" name="GeoTreeID" style="width:280px;" data-AllowMultiple="false" class="GeoSelect">
+                        @foreach(var o in ViewBag.GeoId)
+                        {
+                            <option value="@o.Value">@o.Text</option>
+                        }
+                    </select>                    
                     @Html.ValidationMessageFor(model => model.GeoTreeId, "", new { @class = "text-danger" })
                 </div>
             </div>

@@ -53,13 +53,13 @@
                         <i class="fas fa-user fa-inverse"></i><a class="nav-link active" href="~/SBBoss/Accomodation">Accomodation</a>
                     </li>
                     <li class="nav-item">
-                        <i class="fas fa-user fa-inverse"></i><a class="nav-link active" href="~/SBBoss/Package?serviceType=@Speedbird.ServiceTypeEnum.Packages">Package</a>
+                        <i class="fas fa-user fa-inverse"></i><a class="nav-link active" href="~/SBBoss/Package?sid=@((int)Speedbird.ServiceTypeEnum.Packages)">Package</a>
                     </li>
                     <li class="nav-item">
-                        <i class="fas fa-user fa-inverse"></i><a class="nav-link active" href="~/SBBoss/Package?serviceType=@Speedbird.ServiceTypeEnum.Cruise">Cruise</a>
+                        <i class="fas fa-user fa-inverse"></i><a class="nav-link active" href="~/SBBoss/Package?sid=@((int)Speedbird.ServiceTypeEnum.Cruise)">Cruise</a>
                     </li>
                     <li class="nav-item">
-                        <i class="fas fa-user fa-inverse"></i><a class="nav-link active" href="~/SBBoss/Package?serviceType=@Speedbird.ServiceTypeEnum.SightSeeing">Sight Seeing</a>
+                        <i class="fas fa-user fa-inverse"></i><a class="nav-link active" href="~/SBBoss/Package?sid=@((int)Speedbird.ServiceTypeEnum.SightSeeing)">Sight Seeing</a>
                     </li>
 
                     <li class="nav-item">
@@ -137,12 +137,38 @@
 
             //Disable the browsers default date picker
             jQuery.validator.methods["date"] = function (value, element) { return true; }
-
-
-
-
-
         });
+
+        //GeoSelector
+         $(document).ready(function () {
+                function formatState(state) {
+                    if (!state.id) {
+                        return state.text;
+                    }
+                    var parts = state.text.split(",");
+                    return parts[0];
+
+                };
+
+
+
+                $(".GeoSelect").select2({
+                    placeholder: "Type 3 letters to choose",
+                    minimumInputLength: 3,
+                    templateSelection: formatState,
+                    
+                    ajax: {
+                        url: '@(Url.Action("GetLocations", "GeoTree"))',
+                        dataType: 'json',
+                        quietMillis: 250,
+                        results: function (data, page) {
+                            return { results: data.data };
+                        }
+                    }
+                });
+
+               
+            });
 
         //autocomplete on any view without id
         //<input type="text" id="Item" name="Item" data-autocomplete-url="@@Url.Action("AutoComplete")" />

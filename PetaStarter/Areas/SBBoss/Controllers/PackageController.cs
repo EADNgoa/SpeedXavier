@@ -14,10 +14,9 @@ namespace Speedbird.Areas.SBBoss.Controllers
 {
     public class PackageController : EAController
     {
-        public ActionResult Index(int? page, string AN, ServiceTypeEnum? serviceType)
+        public ActionResult Index(int? page, string AN, int? sid)
         {
             if (AN?.Length > 0) page = 1;
-            int sid = (int)serviceType;
             ViewBag.sid = sid;
             int pageSize = 10;
             int pageNumber = (page ?? 1);
@@ -49,16 +48,38 @@ namespace Speedbird.Areas.SBBoss.Controllers
             if (sid == 1) ViewBag.Title = "Manage Packages";
             if (sid == 2) ViewBag.Title = "Manage Cruises";
             if (sid == 3) ViewBag.Title = "Manage SightSeeing";
-            return View(base.BaseCreateEdit<Package>(id, "PackageID"));
+
+            var pkg = base.BaseCreateEdit<Package>(id, "PackageID");
+            ViewBag.GeoId = db.Query<GeoTree>("Select * from GeoTree where GeoTreeId in (Select GeoTreeId from Package_GeoTree where PackageId=@0)", pkg?.PackageID?? 0).Select(sl => new SelectListItem { Text = sl.GeoName, Value = sl.GeoTreeID.ToString() , Selected=true });
+            return View(pkg);
         }
 
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Manage([Bind(Include = "PackageID,ServiceTypeID,PackageName,Description,Duration,Itinerary,Dificulty,GroupSize,GuideLanguageID,StartTime,Inclusion,Exclusion")] Package item)
+        public ActionResult Manage([Bind(Include = "PackageID,ServiceTypeID,PackageName,Description,Duration,Itinerary,Dificulty,GroupSize,GuideLanguageID,StartTime,Inclusion,Exclusion")] Package item, System.Collections.Generic.List<int> GeoTreeID )
         {
-           base.BaseSave<Package>(item, item.PackageID > 0);
-           return RedirectToAction("Index", new { serviceType = item.ServiceTypeID });
+            using (var transaction = db.GetTransaction())
+            {
+                if (ModelState.IsValid)
+                {
+                    var r = (item.PackageID > 0) ? db.Update(item) : db.Insert(item);
+
+
+                    db.Execute("Delete from Package_GeoTree where packageId=@0", item.PackageID);
+                    GeoTreeID.ForEach(g =>
+                    {
+                        db.Insert(new Package_GeoTree { GeoTreeID = g, PackageID = item.PackageID });
+                    });
+
+                    transaction.Complete();
+                } else
+                {
+                    transaction.Dispose();
+                    return RedirectToAction("Manage", new { id=item.PackageID, sid = item.ServiceTypeID });
+                }
+            }
+           return RedirectToAction("Index", new { sid = item.ServiceTypeID });
         }
 
         public ActionResult CatManage(int? id)

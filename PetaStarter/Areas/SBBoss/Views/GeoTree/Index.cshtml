@@ -19,9 +19,7 @@
                         <td>&nbsp;Geo Location Name:</td>
 
                         <td>
-                            <select id="GeoId" name="GeoId" style="width:500px;"></select>
-                            
-                            
+                            <select id="GeoId" name="GeoId" style="width:500px;" data-AllowMultiple="false" class="GeoSelect"></select>
                         </td>
 
                         <td><input type="submit" value="Search" class="btn btn-primary" /></td>
@@ -112,36 +110,7 @@
 
 
 <script>
-    $(document).ready(function () {
-        function formatState(state) {
-            if (!state.id) {
-                return state.text;
-            }
-            var parts = state.text.split(",");
-            return parts[0];
-            
-        };
-
-
-
-        $("#GeoId").select2({
-            placeholder: "Type 3 letters to choose",
-            minimumInputLength: 3,
-            templateSelection: formatState,
-            multiple: false,
-            ajax: {
-                url: '@(Url.Action("GetLocations", "GeoTree"))',
-                dataType: 'json',
-                quietMillis: 250,
-                results: function (data, page) {
-                    return { results: data.data };
-                }
-            }
-        });
-
-        $('#GeoId').on('select2:select', function (e) {
-            $('#SearchGeo').submit();
-        });
+    $('#GeoId').on('select2:select', function (e) {
+        $('#SearchGeo').submit();
     });
 </script>
-

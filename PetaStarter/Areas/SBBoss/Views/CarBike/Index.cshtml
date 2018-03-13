@@ -61,7 +61,7 @@
                     Ac
                 </th>
                 <th>
-                   Carrier
+                    Carrier
                 </th>
                 <th>
                     Helmet
@@ -71,41 +71,41 @@
             @{int i = 1;}
             @foreach (var item in Model)
             {
-            <tr>
-                <td>
-                    @i
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CarBikeName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.GeoTreeName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Description)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.NoPax)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.NoSmallBags)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.NoLargeBags)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.HasAc)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.HasCarrier)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.InclHelmet)
-                </td>
-                <td>
-                    <a href="@Url.Action("Manage","CarBike", new {id = item.CarBikeID })"><i title="Edit" class="fas fa-edit fa-inverse h3 float-right DropShadow"></i></a>
-                </td>
-            </tr>
+                <tr>
+                    <td>
+                        @i
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CarBikeName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.GeoTreeName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NoPax)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NoSmallBags)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NoLargeBags)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.HasAc)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.HasCarrier)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.InclHelmet)
+                    </td>
+                    <td>
+                        <a href="@Url.Action("Manage","CarBike", new {id = item.CarBikeID })"><i title="Edit" class="fas fa-edit fa-inverse h3 float-right DropShadow"></i></a>
+                    </td>
+                </tr>
                 i++;
             }
 
@@ -113,7 +113,7 @@
         Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 
         @Html.PagedListPager(Model, page => Url.Action("Index",
-                  new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+                       new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
 
     </div>
 </div>

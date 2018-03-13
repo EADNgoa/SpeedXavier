@@ -24,12 +24,13 @@ namespace Speedbird.Areas.SBBoss.Controllers
         public ActionResult Manage(int? id)
         {
             var newAcc = base.BaseCreateEdit<Accomodation>(id, "AccomodationID");
-            if (!id.HasValue)
+            if (!id.HasValue) //Create mode
             {
                 newAcc = new Accomodation();
                 newAcc.lat = "15.498626410761135";
                 newAcc.longt = "73.82881432771683";
             }
+            ViewBag.GeoId = db.Query<GeoTree>("Select * from GeoTree where GeoTreeId=@0",newAcc.GeoTreeID??0).Select(sl => new SelectListItem { Text = sl.GeoName, Value = sl.GeoTreeID.ToString() });
             return View(newAcc);
         }
 
