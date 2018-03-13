@@ -36,6 +36,7 @@
                         <ul id="submenu-1" class="collapse">
                             <li><a href="~/SBBoss/Activity"><span style="display:block;"><i class="fas fa-angle-double-right"></i> Activity</span></a></li>
                             <li><a href="~/SBBoss/Attraction"><span style="display:block;"><i class="fas fa-angle-double-right"></i> Attraction</span></a></li>
+                            <li><a href="~/SBBoss/GeoTree"><span style="display:block;"><i class="fas fa-angle-double-right"></i> GeoTree</span></a></li>
                             <li><a href="~/SBBoss/GuideLanguage"><span style="display:block;"><i class="fas fa-angle-double-right"></i> Guide Language</span></a></li>
                             <li><a href="~/SBBoss/Facility"><span style="display:block;"><i class="fas fa-angle-double-right"></i> Facility</span></a></li>
                             <li><a href="~/SBBoss/Coupon"><span style="display:block;"><i class="fas fa-angle-double-right"></i> Coupons</span></a></li>
@@ -52,13 +53,13 @@
                         <i class="fas fa-user fa-inverse"></i><a class="nav-link active" href="~/SBBoss/Accomodation">Accomodation</a>
                     </li>
                     <li class="nav-item">
-                        <i class="fas fa-user fa-inverse"></i><a class="nav-link active" href="~/SBBoss/Package?serviceType=@Speedbird.ServiceTypeEnum.Packages">Package</a>
+                        <i class="fas fa-user fa-inverse"></i><a class="nav-link active" href="~/SBBoss/Package?sid=@((int)Speedbird.ServiceTypeEnum.Packages)">Package</a>
                     </li>
                     <li class="nav-item">
-                        <i class="fas fa-user fa-inverse"></i><a class="nav-link active" href="~/SBBoss/Package?serviceType=@Speedbird.ServiceTypeEnum.Cruise">Cruise</a>
+                        <i class="fas fa-user fa-inverse"></i><a class="nav-link active" href="~/SBBoss/Package?sid=@((int)Speedbird.ServiceTypeEnum.Cruise)">Cruise</a>
                     </li>
                     <li class="nav-item">
-                        <i class="fas fa-user fa-inverse"></i><a class="nav-link active" href="~/SBBoss/Package?serviceType=@Speedbird.ServiceTypeEnum.SightSeeing">Sight Seeing</a>
+                        <i class="fas fa-user fa-inverse"></i><a class="nav-link active" href="~/SBBoss/Package?sid=@((int)Speedbird.ServiceTypeEnum.SightSeeing)">Sight Seeing</a>
                     </li>
 
                     <li class="nav-item">
@@ -79,24 +80,7 @@
                     <li class="nav-item">
                         <i class="fas fa-magic fa-inverse" data-fa-transform="rotate-90"></i><a class="nav-link" href="~/SBBoss/Coupon/Agents"> Agents</a>
                     </li>
-                    <li class="nav-item">
-                        <a href="#" data-toggle="collapse" data-target="#submenu-1"><i class="fas fa-magic fa-inverse"></i> MENU 1 <i class="fas fa-angle-down float-right"></i></a>
-                        <ul id="submenu-1" class="collapse">
-                            <li><a href="#"><i class="fas fa-angle-double-right"></i> SUBMENU 1.1</a></li>
-                            <li><a href="#"><i class="fas fa-angle-double-right"></i> SUBMENU 1.2</a></li>
-                            <li><a href="#"><i class="fas fa-angle-double-right"></i> SUBMENU 1.3</a></li>
-                        </ul>
-                    </li>
-
-                    <li class="nav-item">
-                        <i class="fas fa-sun fa-inverse"></i><a class="nav-link" href="#">Link</a>
-                    </li>
-                    <li>
-                        <span class="fa-layers">
-                            <i class="fas fa-envelope fa-inverse"></i><a class="nav-link" href="#">Link</a>
-                            <span class="fa-layers-counter" style="background:Tomato">1,419</span>
-                        </span>
-                    </li>
+                    
 
                 </ul>
             </div>
@@ -151,11 +135,40 @@
                 changeYear: true
             }).attr('type', 'text').attr('autocomplete', 'off');
 
-            //Disable teh browsers default date picker
+            //Disable the browsers default date picker
             jQuery.validator.methods["date"] = function (value, element) { return true; }
-
-
         });
+
+        //GeoSelector
+         $(document).ready(function () {
+                function formatState(state) {
+                    if (!state.id) {
+                        return state.text;
+                    }
+                    var parts = state.text.split(",");
+                    return parts[0];
+
+                };
+
+
+
+                $(".GeoSelect").select2({
+                    placeholder: "Type 3 letters to choose",
+                    minimumInputLength: 3,
+                    templateSelection: formatState,
+                    
+                    ajax: {
+                        url: '@(Url.Action("GetLocations", "GeoTree"))',
+                        dataType: 'json',
+                        quietMillis: 250,
+                        results: function (data, page) {
+                            return { results: data.data };
+                        }
+                    }
+                });
+
+               
+            });
 
         //autocomplete on any view without id
         //<input type="text" id="Item" name="Item" data-autocomplete-url="@@Url.Action("AutoComplete")" />

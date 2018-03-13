@@ -1,0 +1,116 @@
+﻿@model PagedList.IPagedList<Speedbird.GeoTree>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "GeoTree";
+}
+
+
+<div class="card border rounded DropShadow">
+    <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
+        <span class="h5">Search</span>
+    </div>
+    <div class="card-body">
+        <h5 class="card-title">&nbsp;</h5>
+        @using (Html.BeginForm("Index", "GeoTree", FormMethod.Get, new { id = "SearchGeo" }))
+        {
+            <div class="row d-print-none">
+                <table>
+                    <tr style="text-align:center">
+                        <td>&nbsp;Geo Location Name:</td>
+
+                        <td>
+                            <select id="GeoId" name="GeoId" style="width:500px;" data-AllowMultiple="false" class="GeoSelect"></select>
+                        </td>
+
+                        <td><input type="submit" value="Search" class="btn btn-primary" /></td>
+                    </tr>
+                </table>
+
+            </div>
+        }
+    </div>
+</div>
+
+
+<div class="card border rounded DropShadow">
+    <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
+        @using (Html.BeginForm("AddGeo", "GeoTree", FormMethod.Post, new { id = "AddGeo" }))
+        {
+            @Html.AntiForgeryToken()
+            <table>
+                <tr>
+                    <td width="80%">
+                        <span class="h3">@ViewBag.Title : @ViewBag.GeoName </span>
+                    </td>
+                    <td>
+                        @Html.TextBox("GeoName", " ", new { @class = "form-control", @style = "padding-top:12px;" })
+                        @Html.Hidden("GeoParentId", (int)ViewBag.GeoParentid)
+                    </td>
+                    <td>
+                        <a style="margin-left:10px; padding-top:12px;" href="#" onclick="document.getElementById('AddGeo').submit();"><i class="fas fa-plus-circle fa-inverse h3 float-right DropShadow"></i></a>
+                    </td>
+                    <td>
+                        @if (ViewBag.GeoGrandParentId != null)
+                        {
+                            <a style="margin-left:10px; padding-top:12px;" href="@Url.Action("Index","GeoTree", new {GeoParentId = ViewBag.GeoGrandParentId  })"><i class="fas fa-arrow-circle-up fa-inverse h3 float-right DropShadow"></i></a>
+                        }
+                    </td>
+                </tr>
+            </table>
+        }
+    </div>
+    <div class="card-body">
+        <h5>&nbsp;</h5>
+        @if (@ViewBag.GeoBrdCrmb != null)
+        {
+            <div style="color:blue;">
+
+                <br />
+                @foreach (var bc in @ViewBag.GeoBrdCrmb)
+                {
+
+                    <a style="color:blue; margin-left:10px;" href="@Url.Action("Index", "GeoTree", new { GeoParentId = bc.GeoTreeID })">@bc.GeoName</a>
+                    @: >
+                }
+                &nbsp;
+                @ViewBag.GeoName
+            </div>
+        }
+        <table class="table table-condensed">
+            <tr>
+                <th width="70%">
+                    Location Name
+                </th>
+                <th>Edit</th>
+                <th>Add Children</th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.GeoName)
+                    </td>
+                    <td>
+                        <a href="@Url.Action("Manage","GeoTree", new {id = item.GeoTreeID })"><i title="Edit" class="fas fa-edit fa-inverse h3 DropShadow"></i></a>
+                    </td>
+                    <td>
+                        <a href="@Url.Action("Index","GeoTree", new {GeoParentId = item.GeoTreeID })"><i title="AddKids" class="fas fa-plus-circle h3 DropShadow"></i></a>
+                    </td>
+                </tr>
+
+            }
+
+        </table>
+
+
+    </div>
+</div>
+
+
+
+<script>
+    $('#GeoId').on('select2:select', function (e) {
+        $('#SearchGeo').submit();
+    });
+</script>

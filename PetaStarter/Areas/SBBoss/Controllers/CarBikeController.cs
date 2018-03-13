@@ -25,8 +25,9 @@ namespace Speedbird.Areas.SBBoss.Controllers
         // GET: Clients/Create
         public ActionResult Manage(int? id)
         {
-            ViewBag.GeoTreeID = new SelectList(db.Fetch<GeoTree>("Select GeoTreeID,GeoName from GeoTree"), "GeoTreeID", "GeoName");
-            return View(base.BaseCreateEdit<CarBike>(id, "CarBikeID"));
+            var carBike = base.BaseCreateEdit<CarBike>(id, "CarBikeID");
+            ViewBag.GeoId = db.Query<GeoTree>("Select * from GeoTree where GeoTreeId=@0", carBike?.GeoTreeId??0).Select(sl => new SelectListItem { Text = sl.GeoName, Value = sl.GeoTreeID.ToString() });
+            return View(carBike);
         }
 
         // POST: Clients/Create

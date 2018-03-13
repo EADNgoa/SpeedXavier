@@ -64,9 +64,27 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 return View(ObjToSave);
             }
 
+            protected ActionResult BaseSave<T>(T ObjToSave, bool isExisting, object routeValues)
+            {
+                return BaseSave<T>(ObjToSave, isExisting, "Index", routeValues);
+            }
 
-            // GET: EA
-            protected override void OnActionExecuting(ActionExecutingContext filterContext)
+            protected ActionResult BaseSave<T>(T ObjToSave, bool isExisting, string RAction, object routeValues)
+            {
+                if (ModelState.IsValid)
+                {
+                    var r = (isExisting) ? db.Update(ObjToSave) : db.Insert(ObjToSave);
+                    return RedirectToAction(RAction, routeValues);
+                }
+
+                return View(ObjToSave);
+            }
+
+
+
+
+        // GET: EA
+        protected override void OnActionExecuting(ActionExecutingContext filterContext)
             {
                 //if (DateTime.Now.Date > DateTime.Parse("15 Aug 2017"))
                 //{                

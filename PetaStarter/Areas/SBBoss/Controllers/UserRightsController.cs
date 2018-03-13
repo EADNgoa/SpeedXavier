@@ -13,12 +13,9 @@ namespace Speedbird.Areas.SBBoss.Controllers
         [EAAuthorize(FunctionName = "User Rights", Writable = false)]
         public ActionResult AddUserGroups(int? page)
         {
-         
-
             ViewBag.UserName = db.Fetch<Group>("Select Id,UserName from AspNetUsers");
             ViewBag.Grp = db.Fetch<Group>("Select * from Groups");
             return View();
-
         }
         [EAAuthorize(FunctionName = "User Rights", Writable = true)]
         public ActionResult ExistingUserRec(int? GID, FormCollection fm)
