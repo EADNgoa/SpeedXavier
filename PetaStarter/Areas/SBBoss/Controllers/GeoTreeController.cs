@@ -14,21 +14,22 @@ namespace Speedbird.Areas.SBBoss.Controllers
     public class GeoTreeController : EAController
     {
         // GET: Clients
-        public ActionResult Index(int? GeoParentId)
+        public ActionResult Index(int? GeoId)
         {
-            if (GeoParentId.HasValue && GeoParentId>0)
+            if (GeoId.HasValue && GeoId>0)
             {
-                var thisGeo = db.Single<GeoTree>("Select * from GeoTree where GeoTreeId=@0", GeoParentId);
+                var thisGeo = db.Single<GeoTree>("Select * from GeoTree where GeoTreeId=@0", GeoId);
                 ViewBag.GeoName = thisGeo.GeoName;
                 ViewBag.GeoGrandParentId = thisGeo.GeoParentID??0;
-                ViewBag.GeoParentId = GeoParentId;
-                ViewBag.GeoBrdCrmb = db.Query<GeoTree>("Select * from GetGeoAncestors(@0)", GeoParentId);
+                ViewBag.GeoParentId = GeoId;
+                ViewBag.GeoBrdCrmb = db.Query<GeoTree>("Select * from GetGeoAncestors(@0)", GeoId);
             } else
             {
                 ViewBag.GeoParentId = 0;
                 ViewBag.GeoName = "Worldwide";
             }
-            return View("Index", base.BaseIndex<GeoTree>(1, " * ", (GeoParentId.HasValue && GeoParentId > 0) ? "GeoTree Where GeoParentId = " + GeoParentId : "GeoTree Where GeoParentId IS NULL"));
+            ViewBag.GeoId = db.Query<GeoTree>("Select * from GeoTree where GeoParentId is NULL").Select(sl => new SelectListItem { Text=sl.GeoName, Value=sl.GeoTreeID.ToString()});
+            return View("Index", base.BaseIndex<GeoTree>(1, " * ", (GeoId.HasValue && GeoId > 0) ? "GeoTree Where GeoParentId = " + GeoId : "GeoTree Where GeoParentId IS NULL"));
         }
 
 
@@ -57,6 +58,11 @@ namespace Speedbird.Areas.SBBoss.Controllers
             return base.BaseSave<GeoTree>(item, false,"Index",new { GeoparentId=item.GeoParentID});
         }
 
+        public JsonResult GetLocations(string term)
+        {
+            var locs = db.Fetch<GeoTree>("Select CONCAT(g.GeoName,': ', dbo.GetGeoAncestorsStr(g.GeoTreeID)) as GeoName,g.GeoTreeID from GeoTree g where GeoName like '%" + term + "%'");
+            return Json(new { results = locs.Select(a => new { id = a.GeoTreeID, text = a.GeoName.TrimEnd(',',' ') }) }, JsonRequestBehavior.AllowGet);
+        }
 
         protected override void Dispose(bool disposing)
         {
