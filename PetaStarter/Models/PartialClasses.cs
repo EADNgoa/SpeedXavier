@@ -41,6 +41,7 @@ namespace Speedbird
        public string PictureName { get; set; }
        public HttpPostedFileBase UploadedFile { get; set; }
     }
+
     public class PriceDets
     {
         public int PriceID { get; set; }

@@ -42,7 +42,7 @@
                             <a class="btn btn-success" href="~/SBBoss/Package/PackPrice/@Model.PackageID">Price</a>
                         </div>
                         <div class=" col-md-2">
-                            <a class="btn btn-success" href="~/SBBoss/Package/PackPicture/@Model.PackageID">Image</a>
+                            <a class="btn btn-success" href="~/SBBoss/Package/PackPicture/@Model.PackageID?stid=@Model.ServiceTypeID">Image</a>
                         </div>
                         <div class=" col-md-2">
                             <a class="btn btn-success" href="~/SBBoss/Package/LangManage/@Model.PackageID">Language</a>
@@ -79,7 +79,7 @@
                 <div class="form-group">
                     <label class="control-label col-md-2">Docks at</label>
                     <div class="col-md-10">
-                        <select id="GeoTreeID" name="GeoTreeID" style="width:280px;" data-AllowMultiple=1 class="GeoSelect"  multiple="multiple">
+                        <select id="GeoTreeID" name="GeoTreeID" style="width:280px;" class="GeoSelect"  multiple="multiple">
                             @foreach (var o in ViewBag.GeoId)
                             {
                                 <option value="@o.Value" selected="selected">@o.Text</option>

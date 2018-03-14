@@ -79,8 +79,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Picture([Bind(Include = "PictureID,ServiceTypeID,PictureName,ServiceID,UploadedFile")] PictureDets pics)
-        {
-          
+        {          
                     Picture res = new Picture
                     {
                         PictureID=pics.PictureID,
@@ -92,22 +91,14 @@ namespace Speedbird.Areas.SBBoss.Controllers
                     if (pics.UploadedFile != null)
                     {
                         string fn = pics.UploadedFile.FileName.Substring(pics.UploadedFile.FileName.LastIndexOf('\\') + 1);
-                        fn = pics.ServiceTypeID.ToString() + "_" + fn;
+                        fn =  String.Concat("Acc_",  pics.ServiceID.ToString(),"_",  fn);
                         string SavePath = System.IO.Path.Combine(Server.MapPath("~/Images"), fn);
-                        pics.UploadedFile.SaveAs(SavePath);
-
-                        //System.Drawing.Bitmap upimg = new System.Drawing.Bitmap(siteTransaction.UploadedFile.InputStream);
-                        //System.Drawing.Bitmap svimg = MyExtensions.CropUnwantedBackground(upimg);
-                        //svimg.Save(System.IO.Path.Combine(Server.MapPath("~/Images"), fn));
+                        pics.UploadedFile.SaveAs(SavePath);                
 
                         res.PictureName = fn;
                     }
                   
-                    base.BaseSave<Picture>(res, pics.PictureID > 0);
-               
-                    return RedirectToAction("Picture");
-             
-            
+                    return base.BaseSave<Picture>(res, pics.PictureID > 0,"Picture",new { pics.ServiceID});
         }
 
 
@@ -123,6 +114,10 @@ namespace Speedbird.Areas.SBBoss.Controllers
             }
             if (pid!= null) 
             {
+                //First remove the old img (if exists)
+                string oldImg = db.Single<string>("Select PictureName from Picture where PictureId=@0", pid);
+                if (oldImg?.Length > 0) System.IO.File.Delete(System.IO.Path.Combine(Server.MapPath("~/Images"), oldImg));
+
                 db.Execute($"Delete From Picture Where PictureID={pid}");
                 return RedirectToAction("Picture", new { id = sid });
 
@@ -144,9 +139,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Price([Bind(Include = "PriceID,ServiceID,OptionTypeID,WEF,_Price")] Price item)
         {
-             base.BaseSave<Price>(item, item.PriceID > 0);
-            return RedirectToAction("Price");
-
+             return base.BaseSave<Price>(item, item.PriceID > 0, "Price", new { id = item.ServiceID});
         }
 
         protected override void Dispose(bool disposing)

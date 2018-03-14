@@ -45,9 +45,24 @@ namespace Speedbird.Areas.SBBoss.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Manage([Bind(Include = "GeoTreeID,GeoName,GeoParentID")] GeoTree item)
-        {            
-            return base.BaseSave<GeoTree>(item, true, "Index", new { GeoparentId = item.GeoParentID });
+        public ActionResult Manage([Bind(Include = "GeoTreeID,GeoName,GeoParentID,ImagePath")] GeoTree item, System.Web.HttpPostedFileBase UploadedFile)
+        {
+            if (UploadedFile != null)
+            {
+                //First remove the old img (if exists)
+                string oldImg = db.Single<string>("Select ImagePath from GeoTree where GeoTreeId=@0", item.GeoTreeID);
+                if (oldImg?.Length>0) System.IO.File.Delete(System.IO.Path.Combine(Server.MapPath("~/Images"), oldImg));
+
+                //Save the new file
+                string fn = UploadedFile.FileName.Substring(UploadedFile.FileName.LastIndexOf('\\') + 1);
+                fn = String.Concat("GeoTree_", item.GeoTreeID.ToString(), "_", fn);                
+                string SavePath = System.IO.Path.Combine(Server.MapPath("~/Images"), fn);
+                UploadedFile.SaveAs(SavePath);                
+                item.ImagePath = fn;
+            }
+
+            //Now save the new file
+            return base.BaseSave<GeoTree>(item, true, "Index", new { GeoId = item.GeoParentID });
         }
 
         [HttpPost]

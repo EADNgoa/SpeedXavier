@@ -180,11 +180,10 @@ namespace Speedbird.Areas.SBBoss.Controllers
             db.Insert(item);
             return RedirectToAction("ActManage");
         }
-        public ActionResult PackPicture(int? id)
+        public ActionResult PackPicture(int? id, int stid)
         {
-
             ViewBag.Pack = db.FirstOrDefault<Package>($"Select * From Package Where PackageID='{id}'");
-            ViewBag.Pics = db.Fetch<Picture>($"Select * From Picture where ServiceID='{id}' and ServiceTypeID='{(int)ServiceTypeEnum.Packages}'");
+            ViewBag.Pics = db.Fetch<Picture>($"Select * From Picture where ServiceID='{id}' and ServiceTypeID='{stid}'");
             base.BaseCreateEdit<Picture>(id, "PictureID");
 
             PictureDets ci = new PictureDets() { };
@@ -197,33 +196,25 @@ namespace Speedbird.Areas.SBBoss.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult PackPicture([Bind(Include = "PictureID,ServiceTypeID,PictureName,ServiceID,UploadedFile")] PictureDets pics)
         {
-
             Picture res = new Picture
             {
                 PictureID = pics.PictureID,
                 ServiceID = pics.ServiceID,
                 ServiceTypeID = pics.ServiceTypeID
-
             };
 
             if (pics.UploadedFile != null)
             {
                 string fn = pics.UploadedFile.FileName.Substring(pics.UploadedFile.FileName.LastIndexOf('\\') + 1);
-                fn = pics.ServiceTypeID.ToString() + "_" + fn;
+                fn = String.Concat( ((ServiceTypeEnum)pics.ServiceTypeID).ToString() ,"_", pics.ServiceID.ToString(), "_", fn);
+                
                 string SavePath = System.IO.Path.Combine(Server.MapPath("~/Images"), fn);
                 pics.UploadedFile.SaveAs(SavePath);
-
-                //System.Drawing.Bitmap upimg = new System.Drawing.Bitmap(siteTransaction.UploadedFile.InputStream);
-                //System.Drawing.Bitmap svimg = MyExtensions.CropUnwantedBackground(upimg);
-                //svimg.Save(System.IO.Path.Combine(Server.MapPath("~/Images"), fn));
 
                 res.PictureName = fn;
             }
 
-            base.BaseSave<Picture>(res, pics.PictureID > 0);
-
-            return RedirectToAction("PackPicture");
-
+            return base.BaseSave<Picture>(res, pics.PictureID > 0,"PackPicture", new { id=pics.ServiceID, stid=pics.ServiceTypeID});           
 
         }
 
@@ -250,7 +241,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             return RedirectToAction("PackPrice");
 
         }
-        public ActionResult Delete(int? PackID, int? ActID, int? pid, int? sid, int? AttractID, int? CatID, int? GuideID)
+        public ActionResult Delete(int? PackID, int? ActID, int? pid, int? sid, int? AttractID, int? CatID, int? GuideID, int? stid)
         {
             if (ActID != null && PackID != null)
             {
@@ -278,8 +269,12 @@ namespace Speedbird.Areas.SBBoss.Controllers
             }
             if (pid != null)
             {
+                //First remove the old img (if exists)
+                string oldImg = db.Single<string>("Select PictureName from Picture where PictureId=@0", pid);
+                if (oldImg?.Length > 0) System.IO.File.Delete(System.IO.Path.Combine(Server.MapPath("~/Images"), oldImg));
+
                 db.Execute($"Delete From Picture Where PictureID={pid}");
-                return RedirectToAction("PackPicture", new { id = PackID });
+                return RedirectToAction("PackPicture", routeValues: new { id = sid, stid=stid.Value });
 
             }
             return RedirectToAction("Manage");
