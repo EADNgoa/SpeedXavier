@@ -8,7 +8,7 @@
 <div class="card border rounded DropShadow">
     <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
         <span class="h5"> Details</span>
-        <a href="@Url.Action("Manage","Package",new {id=ViewBag.Pack.PackageID })"><i class="fas fa-undo-alt fa-inverse h3 float-right DropShadow"></i></a>
+        <a href="@Url.Action("Manage","Package",new {id=ViewBag.Pack.PackageID,sid=(int)ViewBag.Pack.ServiceTypeID})"><i class="fas fa-undo-alt fa-inverse h3 float-right DropShadow"></i></a>
 
     </div>
     <div class="card-body">
