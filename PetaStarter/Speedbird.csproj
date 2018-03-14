@@ -209,7 +209,6 @@
     <Compile Include="Areas\SBBoss\Controllers\BookingStatusController.cs" />
     <Compile Include="Areas\SBBoss\Controllers\CategoryController.cs" />
     <Compile Include="Areas\SBBoss\Controllers\CouponController.cs" />
-    <Compile Include="Areas\SBBoss\Controllers\CruiseController.cs" />
     <Compile Include="Areas\SBBoss\Controllers\FacilityController.cs" />
     <Compile Include="Areas\SBBoss\Controllers\GuideLanguageController.cs" />
     <Compile Include="Areas\SBBoss\Controllers\UserRightsController.cs" />

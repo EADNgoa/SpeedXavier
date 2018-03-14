@@ -1761,7 +1761,9 @@ namespace Speedbird
 
 
 
-	[PrimaryKey("PVId", AutoIncrement=false)]
+	[PrimaryKey("PVId")]
+
+
 
 
 	[ExplicitColumns]
