@@ -78,9 +78,26 @@ namespace Speedbird.Areas.SBBoss.Controllers
             base.BaseSave<Picture>(res, pics.PictureID > 0);
 
             return RedirectToAction("CarPicture");
-
-
         }
+
+        public ActionResult Price(int? id, int? EID)
+        {
+            ViewBag.CarBike = db.FirstOrDefault<CarBike>($"Select * From CarBike Where CarBikeID='{id}'");
+            ViewBag.Price = db.Fetch<PriceDets>($"Select * from Prices p inner join OptionType ot on ot.OptionTypeID = p.OptionTypeID where ServiceID= '{id}' and ot.ServiceTypeID ='{(int)ServiceTypeEnum.CarBike}'");
+            ViewBag.OptionTypeID = new SelectList(db.Fetch<OptionType>("Select OptionTypeID,OptionTypeName from OptionType where ServiceTypeID=@0", (int)ServiceTypeEnum.CarBike), "OptionTypeID", "OptionTypeName");
+
+            return View(base.BaseCreateEdit<Price>(EID, "PriceID"));
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Price([Bind(Include = "PriceID,ServiceID,OptionTypeID,WEF,_Price")] Price item)
+        {
+            return base.BaseSave<Price>(item, item.PriceID > 0, "Price", new { id = item.ServiceID });
+        }
+
+
 
         public ActionResult Delete(int? CarID, int? pid)
         {

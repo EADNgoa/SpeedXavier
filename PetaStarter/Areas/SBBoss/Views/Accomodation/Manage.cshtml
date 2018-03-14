@@ -29,20 +29,31 @@
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             @if (Model?.AccomodationID > 0)
         {
-        @Html.HiddenFor(model => model.AccomodationID)        
-        <div class="row">
-            <div class="col-md-1">&nbsp;</div>
-            <div class="col-md-offset-1 col-md-2">
-                <a class="btn btn-success" href="~/SBBoss/Accomodation/FacManage/@Model.AccomodationID">Facility</a>
-            </div>
-            <div class=" col-md-2">
-                <a class="btn btn-success" href="~/SBBoss/Accomodation/Picture/@Model.AccomodationID">Images</a>
-            </div>
-            <div class=" col-md-2">
-                <a class="btn btn-success" href="~/SBBoss/Accomodation/Price/@Model.AccomodationID">Price</a>
-            </div>
-        </div>
-        <br />
+        @Html.HiddenFor(model => model.AccomodationID)    
+                
+            <nav class="navbar navbar-expand-sm bg-light" role="navigation">
+                <a class="navbar-brand" href="#">Details For this Accomodation: </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="~/SBBoss/Accomodation/FacManage/@Model.AccomodationID">Facility</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="~/SBBoss/Accomodation/Picture/@Model.AccomodationID">Images</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="~/SBBoss/Accomodation/Price/@Model.AccomodationID">Price</a>
+                        </li>    
+                    </ul>
+                </div>
+            </nav> 
+
+            
+        <hr />
 }
 
             <div class="form-group">

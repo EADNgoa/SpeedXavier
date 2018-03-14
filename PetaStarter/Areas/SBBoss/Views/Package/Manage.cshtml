@@ -22,36 +22,45 @@
                 @if (Model?.PackageID > 0)
                 {
                     @Html.HiddenFor(model => model.PackageID)
-                    <div class="row">
-                        <div class="col-md-2">
-                            <a class="btn btn-success" href="~/SBBoss/Package/ActManage/@Model.PackageID">Activity</a>
+
+                    <nav class="navbar navbar-expand-sm bg-light" role="navigation">
+                        <a class="navbar-brand" href="#">Details For this @ViewBag.Title: </a>
+                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+
+                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                            <ul class="navbar-nav mr-auto">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="~/SBBoss/Package/ActManage/@Model.PackageID">Activity</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="~/SBBoss/Package/AttractManage/@Model.PackageID">Attraction</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="~/SBBoss/Package/CatManage/@Model.PackageID">Category</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="~/SBBoss/Package/GeoTree/@Model.PackageID">Geo Location</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="~/SBBoss/Package/PackPrice/@Model.PackageID">Price</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="~/SBBoss/Package/PackPicture/@Model.PackageID?stid=@Model.ServiceTypeID">Image</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="~/SBBoss/Package/LangManage/@Model.PackageID">Language</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="~/SBBoss/Package/PVManage/@Model.PackageID">Validity</a>
+                                </li>
+                            </ul>
                         </div>
-                        <div class=" col-md-2">
-                            <a class="btn btn-success" href="~/SBBoss/Package/AttractManage/@Model.PackageID">Attraction</a>
-                        </div>
-                        <div class=" col-md-2">
-                            <a class="btn btn-success" href="~/SBBoss/Package/CatManage/@Model.PackageID">Category</a>
-                        </div>
-                        <div class=" col-md-2">
-                            <a class="btn btn-success" href="~/SBBoss/Package/GeoTree/@Model.PackageID">Geo Location</a>
-                        </div>
-                    </div>
-                    <br />
-                    <div class="row">
-                        <div class=" col-md-2">
-                            <a class="btn btn-success" href="~/SBBoss/Package/PackPrice/@Model.PackageID">Price</a>
-                        </div>
-                        <div class=" col-md-2">
-                            <a class="btn btn-success" href="~/SBBoss/Package/PackPicture/@Model.PackageID?stid=@Model.ServiceTypeID">Image</a>
-                        </div>
-                        <div class=" col-md-2">
-                            <a class="btn btn-success" href="~/SBBoss/Package/LangManage/@Model.PackageID">Language</a>
-                        </div>
-                        <div class=" col-md-2">
-                            <a class="btn btn-success" href="~/SBBoss/Package/PVManage/@Model.PackageID">Validity</a>
-                        </div>
-                    </div>
-                    <br />
+                    </nav>
+
+                    
+                    <hr />
                 }
 
                 <div class="form-group">
@@ -79,7 +88,7 @@
                 <div class="form-group">
                     <label class="control-label col-md-2">Docks at</label>
                     <div class="col-md-10">
-                        <select id="GeoTreeID" name="GeoTreeID" style="width:280px;" class="GeoSelect"  multiple="multiple">
+                        <select id="GeoTreeID" name="GeoTreeID" style="width:280px;" class="GeoSelect" multiple="multiple">
                             @foreach (var o in ViewBag.GeoId)
                             {
                                 <option value="@o.Value" selected="selected">@o.Text</option>

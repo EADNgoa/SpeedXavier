@@ -34,20 +34,17 @@ body {
     left: 0px;
 }
 
-.nav-item a, i {
+.PermNavs a, i {
     font-family: Roboto, sans-serif;
     color: white;
     display: inline !important;
-    width:300px;
+    width: 300px;
 }
 
-a {
-    color:white;
+.PermNavs a:hover{
+    color: aqua;
 }
 
-a:hover {
-    color:aqua;
-}
 
 .nav-item span:hover {
     outline: none;

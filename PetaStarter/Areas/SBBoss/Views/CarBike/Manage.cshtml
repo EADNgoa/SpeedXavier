@@ -21,19 +21,31 @@
             <hr />
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             @if (Model?.CarBikeID > 0)
-             {
-                 @Html.HiddenFor(model => model.CarBikeID)
-            <div class="row">
-                <div class=" col-md-1">
-                    
-                </div>
-                <div class=" col-md-1">
-                    <a class="btn btn-success" href="~/SBBoss/CarBike/CarPicture/@Model.CarBikeID">Images</a>
-                </div>
+    {
+        @Html.HiddenFor(model => model.CarBikeID)
+
+
+        <nav class="navbar navbar-expand-sm bg-light" role="navigation">
+            <a class="navbar-brand" href="#">Details For this Vehicle: </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="~/SBBoss/CarBike/CarPicture/@Model.CarBikeID">Images</a>
+                    </li>                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="~/SBBoss/CarBike/Price/@Model.CarBikeID">Price</a>
+                    </li>
+                </ul>
             </div>
-            <br />
-            
-             }
+        </nav>
+                
+        <hr />
+
+}
 
             <div class="form-group">
                 @Html.LabelFor(model => model.CarBikeName, "Car/Bike Name", htmlAttributes: new { @class = "control-label col-md-2" })
@@ -46,11 +58,11 @@
                 @Html.LabelFor(model => model.GeoTreeId, "Location", htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
                     <select id="GeoTreeID" name="GeoTreeID" style="width:280px;" class="GeoSelect">
-                        @foreach(var o in ViewBag.GeoId)
-                        {
-                            <option value="@o.Value">@o.Text</option>
-                        }
-                    </select>                    
+                        @foreach (var o in ViewBag.GeoId)
+                {
+                    <option value="@o.Value">@o.Text</option>
+        }
+                    </select>
                     @Html.ValidationMessageFor(model => model.GeoTreeId, "", new { @class = "text-danger" })
                 </div>
             </div>
