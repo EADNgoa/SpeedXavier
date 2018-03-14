@@ -442,6 +442,7 @@
     <Content Include="Areas\SBBoss\Views\Coupon\AgentManage.cshtml" />
     <Content Include="Areas\SBBoss\Views\GeoTree\Index.cshtml" />
     <Content Include="Areas\SBBoss\Views\GeoTree\Manage.cshtml" />
+    <Content Include="Areas\SBBoss\Views\CarBike\Price.cshtml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\i18n\jquery-ui-timepicker-addon-i18n.js" />
     <Content Include="Scripts\i18n\jquery-ui-timepicker-addon-i18n.min.js" />

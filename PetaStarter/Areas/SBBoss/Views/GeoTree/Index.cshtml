@@ -61,21 +61,20 @@
     </div>
     <div class="card-body">
         <h5>&nbsp;</h5>
-        @if (@ViewBag.GeoBrdCrmb != null)
-        {
-            <div style="color:blue;">
 
-                <br />
-                @foreach (var bc in @ViewBag.GeoBrdCrmb)
-                {
-
-                    <a style="color:blue; margin-left:10px;" href="@Url.Action("Index", "GeoTree", new { GeoParentId = bc.GeoTreeID })">@bc.GeoName</a>
-                    @: >
-                }
-                &nbsp;
-                @ViewBag.GeoName
-            </div>
+        @if (@ViewBag.GeoBrdCrmb != null) { 
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="~/SBBoss/GeoTree">Worldwide</a></li>
+                    @foreach (var bc in @ViewBag.GeoBrdCrmb)
+                    {
+                        <li class="breadcrumb-item"><a href="@Url.Action("Index", "GeoTree", new { GeoId = bc.GeoTreeID })">@bc.GeoName</a></li>
+                    }
+                    <li class="breadcrumb-item active" aria-current="page">@ViewBag.GeoName</li>
+                </ol>
+            </nav>
         }
+
         <table class="table table-condensed">
             <tr>
                 <th width="70%">
@@ -95,7 +94,7 @@
                         <a href="@Url.Action("Manage","GeoTree", new {id = item.GeoTreeID })"><i title="Edit" class="fas fa-edit fa-inverse h3 DropShadow"></i></a>
                     </td>
                     <td>
-                        <a href="@Url.Action("Index","GeoTree", new {GeoId = item.GeoTreeID })"><i title="AddKids" class="fas fa-plus-circle h3 DropShadow"></i></a>
+                        <a href="@Url.Action("Index","GeoTree", new {GeoId = item.GeoTreeID })"><i title="AddKids" class="fas fa-plus-circle fa-inverse h3 DropShadow"></i></a>
                     </td>
                 </tr>
 

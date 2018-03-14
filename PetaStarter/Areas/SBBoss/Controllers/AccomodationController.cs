@@ -16,7 +16,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         public ActionResult Index(int? page ,string AN )
         {
             if (AN?.Length > 0) page = 1;
-            return View("Index", base.BaseIndex<Accomodation>(page, " * ","Accomodation Where AccomName like '%" + AN + "%'"));
+            return View("Index", base.BaseIndex<Accomodation>(page, "AccomodationID, AccomName,substring(Description,1,80) as Description, lat,longt ", "Accomodation Where AccomName like '%" + AN + "%'"));
         }
 
 
