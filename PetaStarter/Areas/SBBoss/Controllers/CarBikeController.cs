@@ -68,13 +68,9 @@ namespace Speedbird.Areas.SBBoss.Controllers
             if (pics.UploadedFile != null)
             {
                 string fn = pics.UploadedFile.FileName.Substring(pics.UploadedFile.FileName.LastIndexOf('\\') + 1);
-                fn = pics.ServiceTypeID.ToString() + "_" + fn;
+                fn = String.Concat("Car_", pics.ServiceID.ToString(), "_", fn); 
                 string SavePath = System.IO.Path.Combine(Server.MapPath("~/Images"), fn);
                 pics.UploadedFile.SaveAs(SavePath);
-
-                //System.Drawing.Bitmap upimg = new System.Drawing.Bitmap(siteTransaction.UploadedFile.InputStream);
-                //System.Drawing.Bitmap svimg = MyExtensions.CropUnwantedBackground(upimg);
-                //svimg.Save(System.IO.Path.Combine(Server.MapPath("~/Images"), fn));
 
                 res.PictureName = fn;
             }
@@ -85,14 +81,18 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
 
         }
-           public ActionResult Delete(int? CarID, int? pid)
+
+        public ActionResult Delete(int? CarID, int? pid)
         {
        
             if (pid != null)
             {
+                //First remove the old img (if exists)
+                string oldImg = db.Single<string>("Select PictureName from Picture where PictureId=@0", pid);
+                if (oldImg?.Length > 0) System.IO.File.Delete(System.IO.Path.Combine(Server.MapPath("~/Images"), oldImg));
+
                 db.Execute($"Delete From Picture Where PictureID={pid}");
                 return RedirectToAction("CarPicture", new { id = CarID });
-
             }
             return RedirectToAction("Manage");
         }
