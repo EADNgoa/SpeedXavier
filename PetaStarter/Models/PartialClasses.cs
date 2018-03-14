@@ -67,7 +67,8 @@ namespace Speedbird
         public string Exclusion { get; set; }
 
         public string GuideLanguageName { get; set; }
-
+        public int ServiceID { get; set; }
+        public string PictureName { get; set; }
     }
     public class ActivityDets
     {
@@ -115,6 +116,8 @@ namespace Speedbird
         public bool HasAc { get; set; }
         public bool HasCarrier { get; set; }
         public bool InclHelmet { get; set; }
+        public int ServiceID { get; set; }
+        public string PictureName { get; set; }
     }
     public class VisaDets
     {
@@ -195,6 +198,19 @@ namespace Speedbird
         public int StatusID { get; set; }
         public IEnumerable<BookingDets> bookdets { get; set; }
         public  IEnumerable<CustomerDets> Customer { get; set; }
+    }
+
+    public class AccomodationDets
+    {
+        public int AccomodationID { get; set; }
+        public string AccomName { get; set; }
+        public string Description { get; set; }
+        public int GeoTreeID { get; set; }
+        public string Lat { get; set; }
+        public string longt { get; set; }
+        public int ServiceID { get; set; }
+        public string PictureName { get; set; }
+
     }
 
     public enum ServiceTypeEnum
