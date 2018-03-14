@@ -23,19 +23,11 @@ namespace Speedbird.Areas.SBBoss.Controllers
             if (sid == 1) { ViewBag.Title = "Packages"; }
             if (sid == 2) { ViewBag.Title = "Cruises"; }
             if (sid == 3) { ViewBag.Title = "Sight Seeing"; }
-            if (sid == 1 || sid == 3)
-            {
-                var rec = db.Fetch<PackageDets>("Select * From Package p inner join GuideLanguage gl on p.GuideLanguageID =gl.GuideLanguageID Where PackageName like '%" + AN + "%' and ServiceTypeID =@0", sid).ToList();
-                return View(rec.ToPagedList(pageNumber, pageSize));
-
-            }
-            if (sid == 2)
-            {
+         
                 var rec = db.Fetch<PackageDets>(" Select * from Package Where PackageName like '%" + AN + "%' and ServiceTypeID =@0", sid).ToList();
 
                 return View(rec.ToPagedList(pageNumber, pageSize));
-            }
-            return View();
+      
 
         }
 
