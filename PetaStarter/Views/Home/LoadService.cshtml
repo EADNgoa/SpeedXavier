@@ -1,23 +1,42 @@
-﻿<style>
+﻿@model  IEnumerable<Speedbird.CategoryRec>
+<style>
 
     h2 {
-        font-size: 50px;
+        font-size: 57px;
         color: #006aa7;
-        font-weight: 700;
+        font-weight:900;
         margin: 0;
         margin-bottom: 8px;
         padding: 0;
-        margin-top:30px;
-        margin-bottom:30px;
+        margin-top: 30px;
+        margin-bottom: 30px;
     }
-    .card {
-        width: 250px !important;
-        margin: 10px;
-        height: 400px;
-        box-shadow:inherit;
-    }
-   
 
+    .card {
+        width: 280px !important;
+       
+        box-shadow: 0 3px 5px rgba(50,50,50,.4);
+        position: relative;
+        overflow: hidden;
+        display: block;
+        color: #11496d;
+        padding-bottom: 55px;
+        background-color: #fff;
+        margin-bottom: 14px;
+        height: 435px;
+    }
+    .card-img-top
+    {
+            height:280px;
+    }
+
+    #Container,#Container2 {
+        margin: 0 auto;
+    }
+    .card-title {
+        font-family: "Quattrocento Sans",sans-serif;
+       padding-top:8px;
+    }
 </style>
 
 <head>
@@ -27,103 +46,91 @@
     <link href="https://fonts.googleapis.com/css?family=Quintessential" rel="stylesheet">
 </head>
 <br />
-    <img src="/Images/page1pic.jpg" alt="Goa" style="width:100%;height:500px;margin:0;border-bottom:thick;  border-bottom: 10px solid grey; background-color: lightgrey;">
-<br />
+<img src="/Images/page1pic.jpg" alt="Goa" style="width:100%;height:500px;margin:0;border-bottom:thick;  border-bottom: 10px solid grey; background-color: lightgrey;">
 <br />
 
-<br />
-<div class="container">
-    <h2>Best Tours and Excursion in  Goa</h2>
+<div class="container-fluid">
+    <center>
+        <h2>
+            Best Tours and Excursion 
+        </h2>
+    </center>
+   
     <div id="Container">
         <center>
             <div class="card ServiceTypes" style="width: 20rem;">
-                <img class="card-img-top" src="/Images/World.jpg" alt="Card image cap">
+                <img class="card-img-top" src="/Images/@ViewBag.Accomodation.PictureName" alt="Card image cap">
                 <div class="card-block">
                     <h4 class="card-title">Accomodation</h4>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                     <button class="btn btn-primary" style="padding:10px">Go somewhere</button>
                     <br />
                 </div>
             </div>
             <div class="card ServiceTypes" style="width: 20rem;">
-                <img class="card-img-top" src="/Images/World.jpg" alt="Card image cap">
+                <img class="card-img-top" src="/Images/@ViewBag.Package.PictureName" alt="Card image cap">
                 <div class="card-block">
-                    <h4 class="card-title">Accomodation</h4>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    <h4 class="card-title">Packages</h4>
                     <button class="btn btn-primary" style="padding:10px">Go somewhere</button>
                     <br />
                 </div>
             </div>
             <div class="card ServiceTypes" style="width: 20rem;">
-                <img class="card-img-top" src="/Images/World.jpg" alt="Card image cap">
+                <img class="card-img-top" src="/Images/@ViewBag.CarBike.PictureName" alt="Card image cap">
                 <div class="card-block">
-                    <h4 class="card-title">Accomodation</h4>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    <h4 class="card-title">Car / Bike Rentals</h4>
                     <button class="btn btn-primary" style="padding:10px">Go somewhere</button>
                     <br />
                 </div>
             </div>
-            <div class="card ServiceTypes" style="width: 20rem;">
-                <img class="card-img-top" src="/Images/World.jpg" alt="Card image cap">
-                <div class="card-block">
-                    <h4 class="card-title">Accomodation</h4>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                    <button class="btn btn-primary" style="padding:10px">Go somewhere</button>
-                    <br />
+           @if (ViewBag.loc != "Goa")
+            {
+                <div class="card ServiceTypes" style="width: 20rem;">
+                    <img class="card-img-top" src="/Images/@ViewBag.SightSeeing.PictureName" alt="Card image cap">
+                    <div class="card-block">
+                        <h4 class="card-title">Sight Seeing</h4>
+                        <button class="btn btn-primary" style="padding:10px">Go somewhere</button>
+                        <br />
+                    </div>
                 </div>
-            </div>
-
-    </center>
-
-
-</div>
-</div>
-<div class="container">
-    <h2>Package Categories</h2>
-    <div id="Container2">
-        <center>
-            <div class="card Package" style="width: 20rem;">
-                <img class="card-img-top" src="/Images/World.jpg" alt="Card image cap">
-                <div class="card-block">
-                    <h4 class="card-title">Nature</h4>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                    <button class="btn btn-primary" style="padding:10px">Go somewhere</button>
-                    <br />
+               if (ViewBag.loc != "India")
+               {
+                <div class="card ServiceTypes" style="width: 20rem;">
+                    <img class="card-img-top" src="/Images/@ViewBag.Cruise.PictureName" alt="Card image cap">
+                    <div class="card-block">
+                        <h4 class="card-title">Cruise</h4>
+                        <button class="btn btn-primary" style="padding:10px">Go somewhere</button>
+                        <br />
+                    </div>
                 </div>
-            </div>
-            <div class="card Package" style="width: 20rem;">
-                <img class="card-img-top" src="/Images/World.jpg" alt="Card image cap">
-                <div class="card-block">
-                    <h4 class="card-title">Adventure</h4>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                    <button class="btn btn-primary" style="padding:10px">Go somewhere</button>
-                    <br />
-                </div>
-            </div>
-            <div class="card Package" style="width: 20rem;">
-                <img class="card-img-top" src="/Images/World.jpg" alt="Card image cap">
-                <div class="card-block">
-                    <h4 class="card-title">Sun Bathing</h4>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                    <button class="btn btn-primary" style="padding:10px">Go somewhere</button>
-                    <br />
-                </div>
-            </div>
-            <div class="card Package" style="width: 20rem;">
-                <img class="card-img-top" src="/Images/World.jpg" alt="Card image cap">
-                <div class="card-block">
-                    <h4 class="card-title">Churches</h4>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                    <button class="btn btn-primary" style="padding:10px">Go somewhere</button>
-                    <br />
-                </div>
-            </div>
+               }
+           }
 
         </center>
 
 
     </div>
-</div>
+
+    <center>
+            <h2>Package Categories</h2>
+    </center>
+    <div id="Container2">
+        <center>
+             @foreach (var item in Model)
+            {
+             <div class="card Package" >
+                <img class="card-img-top" src="/Images/@item.pack.First().PictureName" alt="Card image cap">
+                <div class="card-block">
+                    <h4 class="card-title">@item.CategoryName</h4>
+                    <button class="btn btn-primary" style="padding:10px">Go somewhere</button>
+                    <br />
+                    <br />
+                </div>
+            </div>    
+             }
+           
+        </center>
+     </div>
+ </div>
 <script>
     var $container = $('#Container');
     $container.imagesLoaded(function () {
@@ -131,7 +138,7 @@
             itemSelector: '.ServiceTypes',
             columnWidth: 10,
             isFitWidth: true,
-            isAnimated: true,            
+            isAnimated: true,
         });
     });
     var $container2 = $('#Container2');
@@ -144,4 +151,3 @@
         });
     });
 </script>
-    

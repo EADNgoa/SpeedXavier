@@ -240,9 +240,10 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Areas\SBBoss\Custom\Logo.jpg" />
-    <Content Include="Areas\SBBoss\Custom\paper.jpg" />
-    <Content Include="Areas\SBBoss\Custom\sidenav5.jpg" />
+    <Content Include="Areas\SBBoss\Custom\BBS.ico" />
+    <Content Include="Areas\SBBoss\Custom\EAwell.jpg" />
+    <Content Include="Areas\SBBoss\Custom\Emblem.png" />
+    <Content Include="Areas\SBBoss\Custom\HeaderRaised.jpg" />
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />
     <Content Include="Content\bootstrap-reboot.css" />
@@ -571,6 +572,7 @@
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\Account\AgentRegister.cshtml" />
+    <Content Include="Views\Home\LoadService.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

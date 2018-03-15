@@ -12,9 +12,31 @@ namespace Speedbird.Controllers
         {
             return View();
         }
-        public ActionResult LoadService()
+        public ActionResult LoadService(int? Goa,int? India,int? World)
         {
-            return View();
+            if (Goa != null)
+            {
+                ViewBag.loc = "Goa";
+            }
+            else if (India != null)
+            {
+                ViewBag.loc = "India";
+            }
+            else if (World != null)
+            {
+                ViewBag.loc = "Interational";
+            }
+            ViewBag.Accomodation = db.FirstOrDefault<AccomodationDets>("Select Top 1 * From Accomodation a inner join Picture p on a.AccomodationID = p.ServiceID");
+            ViewBag.Package = db.FirstOrDefault<PackageDets>($"Select Top 1 * From Package a inner join Picture p on a.PackageID = p.ServiceID where a.ServiceTypeID={(int)ServiceTypeEnum.Packages}");
+            ViewBag.SightSeeing = db.FirstOrDefault<PackageDets>($"Select Top 1 * From Package a inner join Picture p on a.PackageID = p.ServiceID where a.ServiceTypeID={(int)ServiceTypeEnum.SightSeeing}");
+            ViewBag.Cruise = db.FirstOrDefault<PackageDets>($"Select Top 1 * From Package a inner join Picture p on a.PackageID = p.ServiceID where a.ServiceTypeID={(int)ServiceTypeEnum.Cruise}");
+            ViewBag.CarBike = db.FirstOrDefault<CarBikeDets>($"Select Top 1 * From CarBike a inner join Picture p on a.CarBikeID = p.ServiceID ");
+            var cat = db.Fetch<CategoryRec>("Select * from Category");
+            cat.ForEach(c=>
+            {
+                c.pack = db.Fetch<PackageDets>($"Select Top 1 * From Package a inner join Picture p on a.PackageID = p.ServiceID inner join Package_Category pc on a.PackageID = pc.PackageID inner join Category c on c.CategoryID = pc.CategoryID where pc.CategoryID={c.CategoryID}").ToList(); 
+            });
+            return View(cat);
         }
 
         public ActionResult About()
