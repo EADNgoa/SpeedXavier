@@ -68,13 +68,19 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    @Html.LabelFor(model => model._Price, "Price", htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.LabelFor(model => model._Price, "Weekday Price", htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
                         @Html.EditorFor(model => model._Price, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model._Price, "", new { @class = "text-danger" })
                     </div>
                 </div>
-
+                <div class="form-group">
+                    @Html.LabelFor(model => model.WeekendPrice, "Weekend Price", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.WeekendPrice, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.WeekendPrice, "", new { @class = "text-danger" })
+                    </div>
+                </div>
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
                         <input type="submit" value="Save" class="btn btn-primary" />
@@ -91,7 +97,8 @@
             <tr>
                 <th>Option Type</th>
                 <th>With Effect From</th>
-                <th>Price</th>
+                <th>Weekday Price</th>
+                <th>Weekend Price</th>
                 <th class="section-to-Not-print"></th>
             </tr>
         @foreach(var item in(IEnumerable<Speedbird.PriceDets>) ViewBag.Price)
@@ -107,7 +114,13 @@
                     @item.Price
                 </td>
                 <td>
-                    <a href="@Url.Action("Price","Accomodation",new {EID=item.PriceID })">Edit</a>
+                    @item.WeekendPrice
+                </td>
+                <td>
+                    <a href="@Url.Action("Price","Accomodation",new {id= ViewBag.Accom.AccomodationID , EID=item.PriceID })"><i title="Edit" class="fas fa-edit fa-inverse h3 float-right DropShadow"></i></a>
+                </td>
+                <td>
+                    <a href="@Url.Action("PriceInclusions","Accomodation",new {id=item.PriceID })"><i title="Inclusions" class="fas fa-plus-circle fa-inverse h3 float-right DropShadow"></i></a>
                 </td>
             </tr>
         }

@@ -137,9 +137,26 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Price([Bind(Include = "PriceID,ServiceID,OptionTypeID,WEF,_Price")] Price item)
+        public ActionResult Price([Bind(Include = "PriceID,ServiceID,OptionTypeID,WEF,_Price,WeekendPrice")] Price item)
         {
              return base.BaseSave<Price>(item, item.PriceID > 0, "Price", new { id = item.ServiceID});
+        }
+
+        public ActionResult PriceInclusions(int? id, int? EID)
+        {            
+            ViewBag.Price = db.Single<PriceDets>($"Select * from Prices p inner join OptionType ot on ot.OptionTypeID = p.OptionTypeID where PriceID= @0 ",id);
+            ViewBag.PriceInclusions = db.Fetch<PriceInclusion>($"Select * from PriceInclusions where PriceID= @0 ", id);
+            ViewBag.MealPlanId = Enum.GetValues(typeof(MealPlanEnum)).Cast<MealPlanEnum>()
+                .Select(v => new SelectListItem { Text = v.ToString(), Value = ((int)v).ToString() }).ToList();
+            return View(base.BaseCreateEdit<PriceInclusion>(EID, "PriceInclusionId"));
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult PriceInclusions([Bind(Include = "PriceInclusionId, PriceID,Amount,Description,MealPlanId")] PriceInclusion item)
+        {
+            return base.BaseSave<PriceInclusion>(item, item.PriceInclusionId > 0, "PriceInclusions", new { id = item.PriceId});
         }
 
         protected override void Dispose(bool disposing)
