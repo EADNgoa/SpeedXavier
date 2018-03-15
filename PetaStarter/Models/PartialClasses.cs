@@ -199,6 +199,12 @@ namespace Speedbird
         public IEnumerable<BookingDets> bookdets { get; set; }
         public  IEnumerable<CustomerDets> Customer { get; set; }
     }
+    public class CategoryRec
+    {
+        public int CategoryID { get; set; }
+        public string CategoryName { get; set; }      
+        public IEnumerable<PackageDets> pack { get; set; }
+    }
 
     public class AccomodationDets
     {
