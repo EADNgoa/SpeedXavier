@@ -39,10 +39,7 @@
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="~/SBBoss/Package/CatManage/@Model.PackageID">Category</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="~/SBBoss/Package/GeoTree/@Model.PackageID">Geo Location</a>
-                                </li>
+                                </li>                                
                                 <li class="nav-item">
                                     <a class="nav-link" href="~/SBBoss/Package/PackPrice/@Model.PackageID">Price</a>
                                 </li>
@@ -151,7 +148,7 @@
                     <div class="form-group">
                         @Html.LabelFor(model => model.StartTime, "Start Time", htmlAttributes: new { @class = "control-label col-md-2" })
                         <div class="col-md-10">
-                            @Html.EditorFor(model => model.StartTime, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.TextAreaFor(model => model.StartTime, 3, 43, new { htmlAttributes = new { @class = "form-control" } })
                             @Html.ValidationMessageFor(model => model.StartTime, "", new { @class = "text-danger" })
                         </div>
                     </div>

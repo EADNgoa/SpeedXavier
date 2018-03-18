@@ -9,25 +9,25 @@ using System.Net;
 using System.Web.Mvc;
 
 
-namespace Speedbird.Areas.SBBoss.Controllerss
+namespace Speedbird.Areas.SBBoss.Controllers
 {
-    public class CruiseController : EAController
+    public class TaxController : EAController
     {
         // GET: Clients
         public ActionResult Index(int? page ,string AN )
         {
             if (AN?.Length > 0) page = 1;
-            return View("Index", base.BaseIndex<Cruise>(page, " * ","Cruise Where CruiseName like '%" + AN + "%'"));
+            return View("Index", base.BaseIndex<Tax>(page, " * ","Taxes Where TaxName like '%" + AN + "%'"));
         }
 
 
 
         // GET: Clients/Create
         public ActionResult Manage(int? id)
-        {
-           // ViewBag.UnitID = new SelectList(db.Fetch<Unit>("Select UnitID,UnitName from Units"), "UnitID", "UnitName");
-            
-            return View(base.BaseCreateEdit<Cruise>(id, "CruiseID"));
+        {   
+            ViewBag.ServiceTypeId = Enum.GetValues(typeof(ServiceTypeEnum)).Cast<ServiceTypeEnum>()
+                .Select(v => new SelectListItem { Text = v.ToString(), Value = ((int)v).ToString() }).ToList();
+            return View(base.BaseCreateEdit<Tax>(id, "TaxID"));
         }
 
         // POST: Clients/Create
@@ -35,9 +35,9 @@ namespace Speedbird.Areas.SBBoss.Controllerss
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Manage([Bind(Include = "CruiseID,CruiseName,Description,Duration,Itinerary,StarRating")] Cruise item)
-        {            
-            return base.BaseSave<Cruise>(item, item.CruiseID > 0);
+        public ActionResult Manage([Bind(Include = "TaxID,TaxName, ServiceTypeId,WEF,Percentage")] Tax item)
+        {
+            return base.BaseSave<Tax>(item, item.TaxId > 0);
         }
 
         protected override void Dispose(bool disposing)

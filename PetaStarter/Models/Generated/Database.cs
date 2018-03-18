@@ -1761,7 +1761,9 @@ namespace Speedbird
 
 
 
-	[PrimaryKey("PVId", AutoIncrement=false)]
+	[PrimaryKey("PVId")]
+
+
 
 
 	[ExplicitColumns]
@@ -1839,6 +1841,54 @@ namespace Speedbird
 
     
 
+	[TableName("dbo.PriceInclusions")]
+
+
+
+	[PrimaryKey("PriceInclusionId")]
+
+
+
+
+	[ExplicitColumns]
+
+    public partial class PriceInclusion  
+    {
+
+
+
+		[Column] public int PriceInclusionId { get; set; }
+
+
+
+
+
+		[Column] public int PriceId { get; set; }
+
+
+
+
+
+		[Column] public decimal Amount { get; set; }
+
+
+
+
+
+		[Column] public string Description { get; set; }
+
+
+
+
+
+		[Column] public int? MealPlanId { get; set; }
+
+
+
+	}
+
+    
+
 	[TableName("dbo.Prices")]
 
 
@@ -1880,6 +1930,12 @@ namespace Speedbird
 
 
 		[Column("Price")] public decimal? _Price { get; set; }
+
+
+
+
+
+		[Column] public decimal? WeekendPrice { get; set; }
 
 
 
@@ -2036,6 +2092,54 @@ namespace Speedbird
 
 
 		[Column] public string CouponCode { get; set; }
+
+
+
+	}
+
+    
+
+	[TableName("dbo.Taxes")]
+
+
+
+	[PrimaryKey("TaxId")]
+
+
+
+
+	[ExplicitColumns]
+
+    public partial class Tax  
+    {
+
+
+
+		[Column] public int TaxId { get; set; }
+
+
+
+
+
+		[Column] public int ServiceTypeId { get; set; }
+
+
+
+
+
+		[Column] public DateTime? WEF { get; set; }
+
+
+
+
+
+		[Column] public decimal Percentage { get; set; }
+
+
+
+
+
+		[Column] public string TaxName { get; set; }
 
 
 

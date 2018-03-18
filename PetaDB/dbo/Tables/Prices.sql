@@ -4,5 +4,6 @@
     [ServiceID] INT NULL, 
     [OptionTypeID] INT NULL, 
     [WEF] DATE NULL, 
-    [Price] DECIMAL(18, 2) NULL
+    [Price] DECIMAL(18, 2) NULL, 
+    [WeekendPrice] DECIMAL(18, 2) NULL
 )
