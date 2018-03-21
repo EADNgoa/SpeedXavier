@@ -1,0 +1,296 @@
+﻿@model  IEnumerable<Speedbird.AccomodationDets>
+<style>
+
+    h2 {
+        font-size: 57px;
+        color: #006aa7;
+        font-weight: 900;
+        margin: 0;
+        margin-bottom: 8px;
+        padding: 0;
+        font-family: "Merriweather Sans",serif;
+        
+    }
+
+
+
+
+    .card-img-top {
+        
+        height: 220px;
+    }
+
+
+    .card {
+        margin-left: 10px;
+      
+        box-shadow: 0 3px 5px rgba(50,50,50,.6);
+        position: relative;
+        overflow: hidden;
+        display: block;
+        color: #11496d;
+        height: auto;
+        margin-bottom: 10px;
+    }
+
+    .card-title{
+        text-align:left;
+    }
+    .card-body{
+        text-align:left;
+    }
+    .FloatBadge {
+        font-family: "Quattrocento Sans",sans-serif;
+        display: inline-block;
+        position: absolute;
+        text-transform: uppercase;
+        font-size: 16px;
+        font-weight: 700;
+        line-height: 100%;
+        padding: 7px;
+        background-color: #f18e00;
+        color: #fff;
+        left: 0;
+        top: 15px;
+        font-size: 16px;
+        box-shadow: 3px 0 5px 0 rgba(50,50,50,.4);
+    }
+
+    .breadcrumb {
+        padding-top: 0;
+        padding-bottom: 0;
+        background-color: white;
+        position: absolute;
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+
+    .breadcrumb-item {
+        padding-top: 0;
+        margin-top: 0;
+        font-size: 10px;
+        background-color: white;
+        padding-bottom: 0;
+        margin-bottom: 0;
+        margin-right: 5px;
+        width: auto;
+        display: inline-block;
+        color: #a5a5a5;
+        font-family: "Quattrocento Sans",serif;
+    }
+
+    .container {
+        padding-top: 0;
+        padding-bottom: 0;
+        margin-bottom: 0;
+        margin-top: 0;
+    }
+
+    span {
+        padding: 0;
+        margin: 0;
+        font-size: 10px;
+        text-decoration: none;
+        color: dimgray;
+        font-family: "Quattrocento Sans",serif;
+    }
+
+    .HeroTitle {
+        font-size: 140px;
+        font-family: "Quattrocento Sans",sans-serif;
+        font-weight: 300;
+        position: absolute;
+        color: #fff;
+        text-shadow: 1px 1px 1px #000;
+        line-height: 80%;
+        bottom: 200px;
+        left: 50px;
+    }
+    .sidenav {
+        width: 200px;
+        background: #eee;
+        overflow-x: hidden;
+        padding:50px;
+        height: auto;
+        min-height: 500px;
+        box-shadow: 0 3px 5px rgba(50,50,50,.6);
+        background-color:white;
+        
+    }
+
+.sidenav a {
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #2196F3;
+    display:block;
+}
+
+.sidenav a:hover {
+    color: #064579;
+}
+
+
+.imgicon{
+    padding-left:5px;
+    padding-right:80px;
+    bottom:-10px;
+    padding-bottom:0;
+    float:left;
+   
+}.container-fluid{
+   margin-left:50px;
+ }
+</style>
+
+<head>
+    <script src="/Scripts/jquery.masonry.min.js"></script>
+    <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
+
+    <link href="https://fonts.googleapis.com" rel="stylesheet">
+</head>
+<div class="container" ">
+    <hr style="padding-bottom:0;margin-bottom:0;padding-top:2px;margin-top:0;line-height: 1.428571429;" />
+    <nav class="breadcrumb">
+        <span>you are here:&nbsp;</span>
+        <a class="breadcrumb-item" href="@Request.UrlReferrer.AbsoluteUri">Home</a>
+        <a class="breadcrumb-item" href="@Request.Url.AbsoluteUri">@ViewBag.Loc</a>
+    </nav>
+</div>
+<br />
+
+
+<div class="container-fluid">
+
+ <br />  
+    <div class="row">
+        <div class=" col-md-2">
+            <div class="sidenav">
+
+                <h4>Categories</h4>
+                <form>
+                    <table class="d-xl-table-cell">
+
+                        @foreach (var item in ViewBag.Cats)
+                    {
+                        <tr>
+                            <td>
+
+                                <label class="form-check-label">
+                                    <input type="checkbox" name="@item.CategoryName" value="@item.CategoryID" class="form-check-input">
+                                    @item.CategoryName
+                                </label>
+                            </td>
+                        </tr>
+                }
+
+                    </table>
+                </form>
+                <hr />
+                <h4>Activities</h4>
+                <table class="d-xl-table-cell">
+
+                    @foreach (var item in ViewBag.Acts)
+                {
+                    <tr>
+                        <td>
+                            <label class="form-check-label">
+                                <input type="checkbox" name="@item.ActivityName" value="@item.ActivityID" class="form-check-input">
+                                @item.ActivityName
+                            </label>
+                        </td>
+                    </tr>
+            }
+
+                </table>
+
+            </div>
+        </div>
+
+        <div class="col-md-10">
+            <h2>@ViewBag.ServiceTitle</h2>
+            <div id="Container">
+
+
+                @if (ViewBag.Accomodation != null)
+            {
+                foreach (var item in ViewBag.Accomodation)
+                {
+
+                    <div class="card ServiceTypes" style="width: 18rem;">
+                        <img class="card-img-top" src="/Images/@item.PictureName" alt="Card image cap">
+                        <div class="card-body">
+                            <div class="FloatBadge">
+                                @item.GeoName
+                            </div>
+                            <h5 class="card-title">@item.AccomName</h5>
+                            <p class="card-text">@item.Description</p>
+
+                        </div>
+
+                    </div>
+
+            }
+        }
+                @if (ViewBag.Package != null)
+            {
+                foreach (var item in ViewBag.Package)
+                {
+
+                    <div class="card ServiceTypes" style="width: 18rem;">
+                        <img class="card-img-top" src="/Images/@item.PictureName" alt="Card image cap">
+                        <div class="card-body">
+                            <div class="FloatBadge">
+                                @item.GeoName
+                            </div>
+                            <h5 class="card-title">@item.PackageName</h5>
+                            <p class="card-text">@item.Description</p>
+
+                        </div>
+
+                    </div>
+
+            }
+        }
+
+                @if (ViewBag.CarBike != null)
+            {
+                foreach (var item in ViewBag.CarBike)
+                {
+
+                    <div class="card ServiceTypes" style="width: 18rem;">
+                        <img class="card-img-top" src="/Images/@item.PictureName" alt="Card image cap">
+                        <div class="card-body">
+                            <div class="FloatBadge">
+                                @item.GeoName
+                            </div>
+                            <h5 class="card-title">@item.CarBikeName</h5>
+                            <p class="card-text">@item.Description</p>
+
+                        </div>
+
+                    </div>
+
+            }
+        }
+
+
+            </div>
+        </div>
+
+    </div>
+  
+
+  
+</div>
+<script>
+    var $container = $('#Container');
+    $container.imagesLoaded(function () {
+        $container.masonry({
+            itemSelector: '.ServiceTypes',
+            columnWidth: 10,
+            isAnimated: true,
+        });
+    });
+    
+</script>
