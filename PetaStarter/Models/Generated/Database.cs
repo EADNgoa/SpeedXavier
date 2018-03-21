@@ -237,6 +237,12 @@ namespace Speedbird
 
 
 
+
+
+		[Column] public string ImagePath { get; set; }
+
+
+
 	}
 
     
@@ -562,6 +568,18 @@ namespace Speedbird
 
 
 		[Column] public string AttractionName { get; set; }
+
+
+
+
+
+		[Column] public string ImagePath { get; set; }
+
+
+
+
+
+		[Column] public string Description { get; set; }
 
 
 
@@ -946,6 +964,12 @@ namespace Speedbird
 
 
 		[Column] public string CategoryName { get; set; }
+
+
+
+
+
+		[Column] public string ImagePath { get; set; }
 
 
 
@@ -1610,6 +1634,12 @@ namespace Speedbird
 
 
 		[Column] public string Exclusion { get; set; }
+
+
+
+
+
+		[Column] public string Highlights { get; set; }
 
 
 

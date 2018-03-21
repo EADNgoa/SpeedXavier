@@ -34,26 +34,29 @@ body {
     left: 0px;
 }
 
-.PermNavs a, i {
+#navVert a, i {
     font-family: Roboto, sans-serif;
     color: white;
     display: inline !important;
     width: 300px;
 }
 
-.PermNavs a:hover{
-    color: aqua;
+#navHorz a, i {
+    font-family: Roboto, sans-serif;
+    color: white;
+    display: inline !important;
+    width: 300px;
 }
 
 
-.nav-item span:hover {
-    outline: none;
-    border-color: #9ecaed;
-    color: navajowhite;
+
+.nav-item:hover {
+    outline: none;    
     font-weight: 800;
-    font-size: larger;
-    box-shadow: 0 0 10px #ffd800;
+    box-shadow: 3px 1px 3px #ffd800;
 }
+
+
 
 li {
     padding-left: 10px;

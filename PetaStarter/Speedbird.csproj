@@ -257,6 +257,7 @@
     <Content Include="Content\jquery-ui-timepicker-addon.css" />
     <Content Include="Content\jquery-ui-timepicker-addon.min.css" />
     <Content Include="Content\PagedList.css" />
+    <Content Include="Custom\sidenav5.jpg" />
     <Content Include="Scripts\i18n\af.js" />
     <Content Include="Scripts\i18n\ar.js" />
     <Content Include="Scripts\i18n\az.js" />
@@ -447,6 +448,7 @@
     <Content Include="Areas\SBBoss\Views\Tax\Index.cshtml" />
     <Content Include="Areas\SBBoss\Views\Tax\Manage.cshtml" />
     <Content Include="Areas\SBBoss\Views\Accomodation\PriceInclusions.cshtml" />
+    <Content Include="Areas\SBBoss\Views\Shared\_ImagePath.cshtml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\i18n\jquery-ui-timepicker-addon-i18n.js" />
     <Content Include="Scripts\i18n\jquery-ui-timepicker-addon-i18n.min.js" />

@@ -24,9 +24,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
         // GET: Clients/Create
         public ActionResult Manage(int? id)
-        {
-           // ViewBag.UnitID = new SelectList(db.Fetch<Unit>("Select UnitID,UnitName from Units"), "UnitID", "UnitName");
-            
+        {              
             return View(base.BaseCreateEdit<Attraaction>(id, "AttractionID"));
         }
 
@@ -35,8 +33,9 @@ namespace Speedbird.Areas.SBBoss.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Manage([Bind(Include = "AttractionID,AttractionName")] Attraaction item)
-        {            
+        public ActionResult Manage([Bind(Include = "AttractionID,AttractionName,Description")] Attraaction item, System.Web.HttpPostedFileBase UploadedFile)
+        {
+            item.ImagePath = SaveImage(new PetaPoco.Sql("Select ImagePath from Attraaction where AttractionID=@0", item.AttractionID), "Attraction", item.AttractionID, UploadedFile);
             return base.BaseSave<Attraaction>(item, item.AttractionID > 0);
         }
 

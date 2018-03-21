@@ -12,5 +12,6 @@
     [StartTime] VARCHAR(300) NULL, 
     [Inclusion] VARCHAR(MAX) NULL, 
     [Exclusion] VARCHAR(MAX) NULL, 
+	[Highlights] VARCHAR(MAX) NULL, 
     CONSTRAINT [FK_Package_GuideLanguage] FOREIGN KEY ([GuideLanguageID]) REFERENCES [GuideLanguage]([GuideLanguageID])
 )

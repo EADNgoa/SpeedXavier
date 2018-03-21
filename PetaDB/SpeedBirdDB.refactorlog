@@ -301,4 +301,11 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="TaxId" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="359e1f03-cc03-4d33-bfe8-a1c4f4e097aa" ChangeDateTime="03/21/2018 07:08:51">
+    <Property Name="ElementName" Value="[dbo].[Attraaction].[Imagepath]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Attraaction]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="ImagePath" />
+  </Operation>
 </Operations>
