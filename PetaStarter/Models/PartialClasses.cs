@@ -56,8 +56,11 @@ namespace Speedbird
     {
         public int PackageID { get; set; }
         public int ServiceTypeID { get; set; }
+        public int GeoTreeID { get; set; }
         public string PackageName { get; set; }
         public string Description { get; set; }
+        public string GeoName { get; set; }
+
         public int Duration { get; set; }
         public string Itinerary { get; set; }
         public int Dificulty { get; set; }
@@ -108,7 +111,9 @@ namespace Speedbird
     {
         public int CarBikeID { get; set; }
         public int GeoTreeID { get; set; }
+        public string GeoName { get; set; }
         public string GeoTreeName { get; set; }
+
         public string CarBikeName { get; set; }
         public string Description { get; set; }
         public int NoPax { get; set; }
@@ -213,6 +218,7 @@ namespace Speedbird
         public string AccomName { get; set; }
         public string Description { get; set; }
         public int GeoTreeID { get; set; }
+        public int GeoName { get; set; }
         public string Lat { get; set; }
         public string longt { get; set; }
         public int ServiceID { get; set; }

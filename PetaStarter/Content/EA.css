@@ -1,9 +1,30 @@
 body {
     background-color:white;
     color: black;
+   
+}
+.FloatBadge {
+    font-family: "Quattrocento Sans",sans-serif;
+    display: inline-block;
+    position: absolute;
+    text-transform: uppercase;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 100%;
+    padding: 7px;
+    background-color: #f18e00;
+    color: #fff;
+    left: 0;
+    top: 15px;
+    font-size: 16px;
+    box-shadow: 3px 0 5px 0 rgba(50,50,50,.4);
 }
 
 
+.container-fluid{
+    padding-right:0;
+    padding-left:0;
+}
 
 
 
@@ -14,6 +35,15 @@ body {
         visibility:hidden;
         display:none;
     }
+@media screen and (max-height: 450px) {
+    .sidenav {
+        padding-top: 15px;
+    }
+
+        .sidenav a {
+            font-size: 18px;
+        }
+}
 
 
 @media print {
