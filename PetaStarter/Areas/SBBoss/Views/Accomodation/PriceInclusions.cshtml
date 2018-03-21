@@ -1,0 +1,132 @@
+﻿@model Speedbird.PriceInclusion
+
+@{
+    ViewBag.Title = $"Manage Inclusions";
+}
+
+
+
+<div class="card border rounded DropShadow">
+    <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
+        <span class="h5">Inclusion Details</span>
+        <a href="@Url.Action("Price","Accomodation",new {id=ViewBag.Price.ServiceID })"><i class="fas fa-undo-alt fa-inverse h3 float-right DropShadow"></i></a>
+
+    </div>
+    <div class="card-body">
+        <h5 class="card-title">&nbsp;</h5>
+        <table class="table section-to-print " width="70%">
+            
+            <tr>
+                <td>Option Name</td>
+                <td>@ViewBag.Price.OptionTypeName</td>
+            </tr>
+            <tr>
+                <td>Effective From</td>
+                <td>@($"{ViewBag.Price.WEF:dd/MMM/yyyy}")</td>
+            </tr>
+
+            <tr>
+                <td>Weekday Price</td>
+                <td>@ViewBag.Price.Price</td>
+            </tr>
+            <tr>
+                <td>Weekend Price</td>
+                <td>@ViewBag.Price.WeekendPrice</td>
+            </tr>
+
+        </table>
+    </div>
+</div>
+
+
+<div class="card border rounded DropShadow">
+    <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
+        <span class="h3">@ViewBag.Title</span>
+    </div>
+    <div class="card-body">
+        <h5>&nbsp;</h5>
+        <div class="section-to-Not-print">
+       @using (Html.BeginForm("PriceInclusions", "Accomodation", FormMethod.Post))
+       {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal ">
+
+                <hr />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                @Html.Hidden("PriceId", (int)ViewBag.Price.PriceID)
+
+                @if (Model?.PriceInclusionId > 0)
+                { @Html.HiddenFor(model => model.PriceInclusionId) }
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.MealPlanId, "Meal Plan", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.DropDownListFor(model => model.MealPlanId, null, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.MealPlanId, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Description, "Other Inclusion", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Amount, "Amount (0 if free)", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Amount, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Save" class="btn btn-primary" />
+                    </div>
+                </div>
+            </div>
+    }
+        </div>
+       <br />
+        
+
+        <hr />
+        <table class="table section-to-print index-css" width="100%">
+            <tr>
+                <th>Meal Plan</th>
+                <th>Other Inclusion</th>
+                <th>Chargeable</th>
+                
+                <th class="section-to-Not-print"></th>
+            </tr>
+        @foreach(var item in ViewBag.PriceInclusions)
+        {
+            <tr>
+                <td>
+                    @(((Speedbird.MealPlanEnum)item.MealPlanId).ToString())
+                </td>
+                <td>
+                    @item.Description
+                </td>
+                <td>
+                    @item.Amount
+                </td>
+                
+                <td>
+                    <a href="@Url.Action("PriceInclusions","Accomodation",new {id=item.PriceId, EID=item.PriceInclusionId })"><i title="Edit" class="fas fa-edit fa-inverse h3 float-right DropShadow"></i></a>
+                
+                </td>
+            </tr>
+        }
+          
+        </table>
+   
+   
+    </div>
+    </div>
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }

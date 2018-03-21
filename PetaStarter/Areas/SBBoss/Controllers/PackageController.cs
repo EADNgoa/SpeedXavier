@@ -24,7 +24,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             if (sid == 2) { ViewBag.Title = "Cruises"; }
             if (sid == 3) { ViewBag.Title = "Sight Seeing"; }
          
-                var rec = db.Fetch<PackageDets>(" Select * from Package Where PackageName like '%" + AN + "%' and ServiceTypeID =@0", sid).ToList();
+                var rec = db.Fetch<PackageDets>(" Select [PackageID], [ServiceTypeID], [PackageName], Substring(Description,1,100) as Description, [Duration], substring([Itinerary],1,100) as Itinerary, [Dificulty] from Package Where PackageName like '%" + AN + "%' and ServiceTypeID =@0", sid).ToList();
 
                 return View(rec.ToPagedList(pageNumber, pageSize));
       

@@ -43,7 +43,7 @@
                         <span class="h3">@ViewBag.Title : @ViewBag.GeoName </span>
                     </td>
                     <td>
-                        @Html.TextBox("GeoName", " ", new { @class = "form-control", @style = "padding-top:12px;" })
+                        @Html.TextBox("GeoName", "", new { @class = "form-control", @style = "padding-top:12px;", placeholder= "Enter new location" })
                         @Html.Hidden("GeoParentId", (int)ViewBag.GeoParentid)
                     </td>
                     <td>
@@ -111,5 +111,9 @@
 <script>
     $('#GeoId').on('select2:select', function (e) {
         $('#SearchGeo').submit();
+    });
+
+    $(function () {
+        $('#GeoName').focus();
     });
 </script>

@@ -17,7 +17,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         public ActionResult Index(int? page, string AN)
         {
             if (AN?.Length > 0) page = 1;
-            return View("Index", base.BaseIndex<CarBikeDets>(page, " * ", "CarBike c inner join GeoTree g on c.GeoTreeID = g.GeoTreeID Where CarBikeName like '%" + AN + "%'"));
+            return View("Index", base.BaseIndex<CarBikeDets>(page, " [CarBikeID], [CarBikeName], GeoName as GeoTreeName, c.GeoTreeId, Substring(Description,1,100) as Description, [NoPax], [NoSmallBags], [NoLargeBags], [HasAc], [HasCarrier], [InclHelmet] ", "CarBike c inner join GeoTree g on c.GeoTreeID = g.GeoTreeID Where CarBikeName like '%" + AN + "%'"));
         }
 
 

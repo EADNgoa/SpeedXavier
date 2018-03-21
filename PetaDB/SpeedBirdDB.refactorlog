@@ -280,4 +280,25 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="longt" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="5d412dc3-6ac0-4132-9811-f6044bb23601" ChangeDateTime="03/15/2018 10:29:21">
+    <Property Name="ElementName" Value="[dbo].[PriceInclusions].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[PriceInclusions]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="PriceInclusionId" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="b1f23e4a-50a4-4a8b-9dc6-44fed614f4fb" ChangeDateTime="03/15/2018 10:30:15">
+    <Property Name="ElementName" Value="[dbo].[PriceInclusions].[Description]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[PriceInclusions]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Amount" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="da783027-2a98-424e-8bdd-6fdd96963acb" ChangeDateTime="03/15/2018 10:32:57">
+    <Property Name="ElementName" Value="[dbo].[Taxes].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Taxes]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="TaxId" />
+  </Operation>
 </Operations>

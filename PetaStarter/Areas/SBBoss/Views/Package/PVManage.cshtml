@@ -103,10 +103,10 @@
         {
             <tr>
                 <td>
-                    @item.ValidFrom
+                    @($"{item.ValidFrom:dd/MMM/yyyy}")
                 </td>
                 <td>
-                    @item.ValidTo
+                    @($"{item.ValidTo:dd/MMM/yyyy}")                    
                 </td>
                 <td>
                     <a href="@Url.Action("PVManage","Package",new {EID = item.PVId})">EDIT</a>

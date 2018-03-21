@@ -70,7 +70,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         public ActionResult AddGeo([Bind(Include = "GeoParentId,GeoName")] GeoTree item)
         {
             if (item.GeoParentID == 0) item.GeoParentID = null;
-            return base.BaseSave<GeoTree>(item, false,"Index",new { GeoparentId=item.GeoParentID});
+            return base.BaseSave<GeoTree>(item, false,"Index",new { GeoId=item.GeoParentID});
         }
 
         public JsonResult GetLocations(string term)

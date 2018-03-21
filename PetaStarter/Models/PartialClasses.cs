@@ -51,6 +51,7 @@ namespace Speedbird
         public int ServiceID { get; set; }
         public DateTime WEF { get; set; }
         public decimal Price { get; set;}
+        public decimal WeekendPrice { get; set; }
     }
     public class PackageDets
     {
@@ -186,13 +187,8 @@ namespace Speedbird
         public decimal Amount { get; set; }
         public decimal Percantage { get; set; }
         public bool IsApproved { get; set; }
-
-
-
-
-
-
     }
+
     public class BookingRec
     {
         public int BookingStatusID { get; set; }
@@ -234,6 +230,16 @@ namespace Speedbird
         SightSeeing,
         CarBike,
     }
+
+    public enum MealPlanEnum
+    {
+        None,
+        Breakfast,
+        Lunch,
+        Tea,
+        Dinner
+    }
+
     public enum UserTypeEnum
     {
         Admin,
