@@ -35,8 +35,10 @@ namespace Speedbird.Areas.SBBoss.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Manage([Bind(Include = "CategoryID,CategoryName")] Category item)
-        {            
+        public ActionResult Manage([Bind(Include = "CategoryID,CategoryName")] Category item, System.Web.HttpPostedFileBase UploadedFile)
+        {
+            item.ImagePath = SaveImage(new PetaPoco.Sql("Select ImagePath from Category where CategoryID=@0", item.CategoryID), "Category", item.CategoryID, UploadedFile);
+            
             return base.BaseSave<Category>(item, item.CategoryID > 0);
         }
 

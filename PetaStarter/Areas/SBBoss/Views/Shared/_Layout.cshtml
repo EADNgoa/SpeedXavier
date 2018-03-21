@@ -27,9 +27,13 @@
 
 
     <div class="container-fluid">
-        <div class="row no-gutters">
-            <div class="col-sm-1">
-                <ul class="nav flex-column small side-nav DropShadow PermNavs" id="navVert">
+        <div class="row">
+
+            <div class="col-sm-10" id="EAbody">
+                @RenderBody()
+            </div>
+            <div class="col-sm-2">
+                <ul class="nav flex-column small side-nav DropShadow" id="navVert">
                     <li height="70px;"><br /><br /><br /><hr /></li>
                     <li class="nav-item">
                         <a href="#" data-toggle="collapse" data-target="#submenu-1"><span style="display:block;"><i class="fas fa-magic fa-inverse"></i> Masters<i class="fas fa-angle-down float-right"></i></span></a>
@@ -51,26 +55,26 @@
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <i class="fas fa-user fa-inverse"></i><a class="nav-link active" href="~/SBBoss/Accomodation">Accomodation</a>
+                        <i class="fas fa-user fa-inverse"></i><a class="nav-link" href="~/SBBoss/Accomodation">Accomodation</a>
                     </li>
                     <li class="nav-item">
-                        <i class="fas fa-user fa-inverse"></i><a class="nav-link active" href="~/SBBoss/Package?sid=@((int)Speedbird.ServiceTypeEnum.Packages)">Package</a>
+                        <i class="fas fa-user fa-inverse"></i><a class="nav-link " href="~/SBBoss/Package?sid=@((int)Speedbird.ServiceTypeEnum.Packages)">Package</a>
                     </li>
                     <li class="nav-item">
-                        <i class="fas fa-user fa-inverse"></i><a class="nav-link active" href="~/SBBoss/Package?sid=@((int)Speedbird.ServiceTypeEnum.Cruise)">Cruise</a>
+                        <i class="fas fa-user fa-inverse"></i><a class="nav-link " href="~/SBBoss/Package?sid=@((int)Speedbird.ServiceTypeEnum.Cruise)">Cruise</a>
                     </li>
                     <li class="nav-item">
-                        <i class="fas fa-user fa-inverse"></i><a class="nav-link active" href="~/SBBoss/Package?sid=@((int)Speedbird.ServiceTypeEnum.SightSeeing)">Sight Seeing</a>
+                        <i class="fas fa-user fa-inverse"></i><a class="nav-link " href="~/SBBoss/Package?sid=@((int)Speedbird.ServiceTypeEnum.SightSeeing)">Sight Seeing</a>
                     </li>
 
                     <li class="nav-item">
-                        <i class="fas fa-magic fa-inverse" data-fa-transform="rotate-90"></i><a class="nav-link" href="~/SBBoss/CarBike">Car/Bike</a>
+                        <i class="fas fa-user fa-inverse"></i><a class="nav-link" href="~/SBBoss/CarBike">Car/Bike</a>
                     </li>
                     <li class="nav-item">
-                        <i class="fas fa-magic fa-inverse" data-fa-transform="rotate-90"></i><a class="nav-link" href="~/SBBoss/MiceVisa/Mice">Mice</a>
+                        <i class="fas fa-magic fa-inverse"></i><a class="nav-link" href="~/SBBoss/MiceVisa/Mice">Mice</a>
                     </li>
                     <li class="nav-item">
-                        <i class="fas fa-magic fa-inverse" data-fa-transform="rotate-90"></i><a class="nav-link" href="~/SBBoss/MiceVisa/Visa">Visa</a>
+                        <i class="fas fa-magic fa-inverse"></i><a class="nav-link" href="~/SBBoss/MiceVisa/Visa">Visa</a>
                     </li>
                     <li class="nav-item">
                         <i class="fas fa-magic fa-inverse" data-fa-transform="rotate-90"></i><a class="nav-link" href="~/SBBoss/Booking/Index">Bookings</a>
@@ -81,18 +85,9 @@
                     <li class="nav-item">
                         <i class="fas fa-magic fa-inverse" data-fa-transform="rotate-90"></i><a class="nav-link" href="~/SBBoss/Coupon/Agents"> Agents</a>
                     </li>
-                    
+
 
                 </ul>
-            </div>
-            <div class="col-sm-11" id="EAbody">
-
-
-
-                @RenderBody()
-
-
-
             </div>
         </div>
 
@@ -100,9 +95,9 @@
 
 
 
-    <ul id="navHorz" class="nav justify-content-end small PermNavs">
+    <ul id="navHorz" class="nav small">
         <li class="nav-item">
-            <i class="fas fa-user fa-inverse"></i><a class="nav-link active" href="#">Active</a>
+            <i class="fas fa-user fa-inverse"></i><a class="nav-link " href="#">Active</a>
         </li>
         
     </ul>

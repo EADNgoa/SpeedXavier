@@ -108,6 +108,11 @@ namespace Speedbird
     {
 		[Column] public int ActivityID { get; set; }
 		[Column] public string ActivityName { get; set; }
+
+
+		[Column] public string ImagePath { get; set; }
+
+
 	}
     
 	[TableName("dbo.AgentDiscount")]
@@ -192,6 +197,16 @@ namespace Speedbird
     {
 		[Column] public int AttractionID { get; set; }
 		[Column] public string AttractionName { get; set; }
+
+
+		[Column] public string ImagePath { get; set; }
+
+
+
+
+
+		[Column] public string Description { get; set; }
+
 	}
     
 	[TableName("dbo.BookedCustomer")]
@@ -284,6 +299,10 @@ namespace Speedbird
     {
 		[Column] public int CategoryID { get; set; }
 		[Column] public string CategoryName { get; set; }
+
+
+		[Column] public string ImagePath { get; set; }
+
 	}
     
 	[TableName("dbo.Cruise")]
@@ -442,6 +461,9 @@ namespace Speedbird
 		[Column] public string StartTime { get; set; }
 		[Column] public string Inclusion { get; set; }
 		[Column] public string Exclusion { get; set; }
+
+		[Column] public string Highlights { get; set; }
+
 	}
     
 	[TableName("dbo.Package_Activity")]
