@@ -27,8 +27,12 @@
 
 
     <div class="container-fluid">
-        <div class="row no-gutters">
-            <div class="col-sm-1">
+        <div class="row">
+
+            <div class="col-sm-10" id="EAbody">
+                @RenderBody()
+            </div>
+            <div class="col-sm-2">
                 <ul class="nav flex-column small side-nav DropShadow" id="navVert">
                     <li height="70px;"><br /><br /><br /><hr /></li>
                     <li class="nav-item">
@@ -70,7 +74,7 @@
                         <i class="fas fa-magic fa-inverse"></i><a class="nav-link" href="~/SBBoss/MiceVisa/Mice">Mice</a>
                     </li>
                     <li class="nav-item">
-                        <i class="fas fa-magic fa-inverse" ></i><a class="nav-link" href="~/SBBoss/MiceVisa/Visa">Visa</a>
+                        <i class="fas fa-magic fa-inverse"></i><a class="nav-link" href="~/SBBoss/MiceVisa/Visa">Visa</a>
                     </li>
                     <li class="nav-item">
                         <i class="fas fa-magic fa-inverse" data-fa-transform="rotate-90"></i><a class="nav-link" href="~/SBBoss/Booking/Index">Bookings</a>
@@ -81,18 +85,9 @@
                     <li class="nav-item">
                         <i class="fas fa-magic fa-inverse" data-fa-transform="rotate-90"></i><a class="nav-link" href="~/SBBoss/Coupon/Agents"> Agents</a>
                     </li>
-                    
+
 
                 </ul>
-            </div>
-            <div class="col-sm-11" id="EAbody">
-
-
-
-                @RenderBody()
-
-
-
             </div>
         </div>
 
@@ -100,7 +95,7 @@
 
 
 
-    <ul id="navHorz" class="nav justify-content-end small">
+    <ul id="navHorz" class="nav small">
         <li class="nav-item">
             <i class="fas fa-user fa-inverse"></i><a class="nav-link " href="#">Active</a>
         </li>
