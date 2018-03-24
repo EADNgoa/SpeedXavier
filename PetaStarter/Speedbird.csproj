@@ -579,6 +579,7 @@
     <Content Include="Views\Account\AgentRegister.cshtml" />
     <Content Include="Views\Home\LoadService.cshtml" />
     <Content Include="Views\Home\LoadPackages.cshtml" />
+    <Content Include="Views\Home\PackagesPartialView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

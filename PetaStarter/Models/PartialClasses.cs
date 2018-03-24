@@ -57,7 +57,7 @@ namespace Speedbird
     {
         public int PackageID { get; set; }
         public int ServiceTypeID { get; set; }
-        public int GeoTreeID { get; set; }
+        public int CategoryID { get; set; }
         public string PackageName { get; set; }
         public string Description { get; set; }
         public string GeoName { get; set; }
@@ -74,6 +74,12 @@ namespace Speedbird
         public string GuideLanguageName { get; set; }
         public int ServiceID { get; set; }
         public string PictureName { get; set; }
+        public IEnumerable<PictureDets> Pic { get; set; }
+        public IEnumerable<CategoryDets>Cat { get; set; }
+        public IEnumerable<PriceDets>Pric { get; set; }
+        public IEnumerable<ActivityDets> Act { get; set; }
+
+
     }
     public class ActivityDets
     {
