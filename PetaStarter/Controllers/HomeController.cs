@@ -10,8 +10,35 @@ namespace Speedbird.Controllers
     {
         public ActionResult Index()
         {
-            return View();
+            var cat = db.Fetch<CategoryRec>("Select Top 3 * from Category Order By NewID()");
+            cat.ForEach(c =>
+            {
+                c.pack = db.Fetch<PackageDets>($"Select Top 1 * From Package a inner join Picture p on a.PackageID = p.ServiceID inner join Package_Category pc on a.PackageID = pc.PackageID inner join Category c on c.CategoryID = pc.CategoryID where pc.CategoryID={c.CategoryID} Order By NewID()").ToList();
+            });
+            return View(cat);
         }
+
+        ///Activities(partial view of index)
+        public ActionResult IndexActPartial()
+        {
+            var Act = db.Fetch<ActivityRec>("Select Top 3 * from Activity Order By NewID()");
+            Act.ForEach(c =>
+            {
+                c.pack = db.Fetch<PackageDets>($"Select Top 1 * From Package a inner join Picture p on a.PackageID = p.ServiceID inner join Package_Activity pa on a.PackageID = pa.PackageID inner join Activity ac on ac.ActivityID = pa.ActivityID where pa.ActivityID={c.ActivityID} Order By NewID()").ToList();
+            });
+            return PartialView(Act);
+        }
+        ///Attraction(Partial view of index)
+        public ActionResult IndexAttractPartial()
+        {
+            var Act = db.Fetch<AttractRec>("Select Top 3 * from Attraaction Order By NewID()");
+            Act.ForEach(c =>
+            {
+                c.pack = db.Fetch<PackageDets>($"Select Top 1 * From Package a inner join Picture p on a.PackageID = p.ServiceID inner join Package_Attraction pa on a.PackageID = pa.PackageID inner join Attraaction ac on ac.AttractionID = pa.AttractionID where pa.AttractionID={c.AttractionID} Order By NewID()").ToList();
+            });
+            return PartialView(Act);
+        }
+
         public ActionResult LoadService(int? Goa,int? India,int? World)
         {
             if (Goa != null)

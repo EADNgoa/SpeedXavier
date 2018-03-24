@@ -1,0 +1,21 @@
+﻿@model  IEnumerable<Speedbird.ActivityRec>
+
+<h2>Activities</h2>
+
+<div id="Container">
+    <center>
+        @foreach (var item in Model)
+        {
+            <div class="card Package">
+                <img class="card-img-top" src="/Images/@item.pack.First().PictureName" alt="Card image cap">
+
+                <div class="card-block">
+                    <h4 class="card-title">@item.ActivityName</h4>
+                </div>
+            </div>
+        }
+    </center>
+</div>
+
+
+

@@ -1,24 +1,24 @@
-﻿<style>
+﻿@model  IEnumerable<Speedbird.CategoryRec>
+<style>
+
     .im {
         width: 100%;
         height: auto;
-        color:white;
-        vertical-align:middle;
-    
+        color: white;
+        vertical-align: middle;
     }
 
         .im:hover {
-          
             transform: scale(1.3)
         }
 
 
 
-        .zoom:hover {
-            -ms-transform: scale(1.5); /* IE 9 */
-            -webkit-transform: scale(1.5); /* Safari 3-8 */
-            transform: scale(1.5);
-        }
+    .zoom:hover {
+        -ms-transform: scale(1.5); /* IE 9 */
+        -webkit-transform: scale(1.5); /* Safari 3-8 */
+        transform: scale(1.5);
+    }
 
     .item-1 {
         top: 2em;
@@ -28,6 +28,7 @@
     .item-1 {
         animation-name: anim-1;
     }
+
     h1 {
         color: #fff;
         font-size: 85px;
@@ -40,28 +41,26 @@
 
     /* Bottom right text */
     .text-block {
-        
         right: 20px;
-        background-color:black;
+        background-color: black;
         color: white;
         padding-left: 20px;
         padding-right: 20px;
-        opacity:0.8;
-        width:inherit ;
-       margin-top:20px;
+        opacity: 0.8;
+        width: inherit;
+        margin-top: 20px;
     }
 
     .carousel {
         width: 100% !important;
-        position: absolute;
-
+        bottom: 30px;
     }
-.img-fluid{
-    max-width:100%;
-    width:100%;
-    height:700px;
-   
-}
+
+    .img-fluid {
+        max-width: 100%;
+        width: 100%;
+        height: 700px;
+    }
 
     .carousel-caption {
         max-width: 100%;
@@ -69,23 +68,90 @@
         width: 100%;
         left: 0;
         height: 100%;
-        max-height:100%;
-    }
-    .btmbrd{
-       
-        position:relative;
-        top:98%;
-        width:100%;
-   
-    }
-    .high{
-        height:12px;
+        max-height: 100%;
     }
 
+    .btmbrd {
+        position: relative;
+        top: 98%;
+        width: 100%;
+    }
+
+    .card-title {
+        font-family: "Quattrocento Sans",sans-serif;
+        padding-top: 8px;
+        background-color: #428bca;
+        font-size: 18px;
+        text-align: center;
+    }
+
+    .card-block {
+        height: 8px;
+        color: white;
+        background-color: black;
+    }
+
+    .high {
+        height: 12px;
+    }
+
+    h2 {
+        font-size: 57px;
+        color: #006aa7;
+        font-weight: 900;
+        margin-bottom: 8px;
+        padding: 0;
+        margin-bottom: 20px;
+        font-family: "Merriweather Sans",serif;
+        margin-left: 90px;
+    }
+
+
+    .card {
+        width: 380px !important;
+        margin-right: auto;
+        box-shadow: 0 3px 5px rgba(50,50,50,.6);
+        position: relative;
+        overflow: hidden;
+        display: block;
+        color: #11496d;
+        padding-bottom: 24px;
+        background-color: #428bca;
+        margin-bottom: 14px;
+        height: auto;
+        background-color: grey;
+    }
+
+    .card-img-top {
+        height: 280px;
+    }
+
+    #Container,#Container3, #Container2 {
+        margin: 0 auto;
+    }
+
+
+    .card-title {
+        font-family: "Quattrocento Sans",sans-serif;
+        padding-top: 8px;
+        background-color: #428bca;
+        font-size: 18px;
+        text-align: center;
+    }
+
+    .card-block {
+        height: 8px;
+        color: white;
+        background-color: black;
+    }
 </style>
 <head>
-    <link href="https://fonts.googleapis.com/css?family=Niconne" rel="stylesheet"></head>
+    <link href="https://fonts.googleapis.com/css?family=Niconne" rel="stylesheet">
+    <script src="/Scripts/jquery.masonry.min.js"></script>
+    <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
+</head>
 <br />
+
 <div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
     <div class="carousel-inner" role="listbox">
 
@@ -93,7 +159,7 @@
             <img class="d-block img-fluid" src="/Images/c1.jpg" alt="First slide">
         </div>
         <div class="carousel-item">
-            <img class="d-block img-fluid" src="/Images/c2.jpg" alt="Second slide">
+            <img class="d-block img-fluid" src="/Images/c1.jpg" alt="Second slide">
         </div>
         <div class="carousel-item">
             <img class="d-block img-fluid" src="/Images/c3.jpg" alt="Third slide">
@@ -165,9 +231,70 @@
         </div>
     </div>
 </div>
+
+<div class="container-fluid">
+    <h2>Categories</h2>
+    <div id="Container2">
+        <center>
+            @foreach (var item in Model)
+            {
+                <div class="card Package">
+                    <img class="card-img-top" src="/Images/@item.pack.First().PictureName" alt="Card image cap">
+
+                    <div class="card-block">
+                        <h4 class="card-title">@item.CategoryName</h4>
+                    </div>
+                </div>
+            }
+        </center>
+    </div>
+
+</div>
+<div class="container-fluid">
+        @Html.Action("IndexActPartial", "Home", new { st = ViewBag.st, Loc = ViewBag.loc })
+
+</div>
+
+<div class="container-fluid">
+    @Html.Action("IndexAttractPartial", "Home", new { st = ViewBag.st, Loc = ViewBag.loc })
+
+</div>
+
+
 <script>
+    var $container3 = $('#Container3');
+    $container3.imagesLoaded(function () {
+        $container3.masonry({
+            itemSelector: '.Package',
+            columnWidth: 200,
+            isAnimated: true,
+            isFitWidth: true,
+
+        });
+    });
+    var $container = $('#Container');
+    $container.imagesLoaded(function () {
+        $container.masonry({
+            itemSelector: '.Package',
+            columnWidth: 200,
+            isAnimated: true,
+            isFitWidth: true,
+
+        });
+    });
+
+    var $container2 = $('#Container2');
+    $container2.imagesLoaded(function () {
+        $container2.masonry({
+            itemSelector: '.Package',
+            columnWidth: 200,
+            isFitWidth: true,
+            isAnimated: true,
+        });
+    });
     $('.carousel').carousel({
         interval: 8000,
-        
-    })
+
+    });
+
 </script>

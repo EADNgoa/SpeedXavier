@@ -580,6 +580,8 @@
     <Content Include="Views\Home\LoadService.cshtml" />
     <Content Include="Views\Home\LoadPackages.cshtml" />
     <Content Include="Views\Home\PackagesPartialView.cshtml" />
+    <Content Include="Views\Home\IndexActPartial.cshtml" />
+    <Content Include="Views\Home\IndexAttractPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

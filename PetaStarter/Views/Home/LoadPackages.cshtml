@@ -20,16 +20,19 @@
 
 
     .card {
-        margin-left: 10px;
+        width: 380px !important;
+        margin-right: auto;
         box-shadow: 0 3px 5px rgba(50,50,50,.6);
         position: relative;
         overflow: hidden;
         display: block;
         color: #11496d;
+        padding-bottom: 24px;
+        background-color: #428bca;
+        margin-bottom: 14px;
         height: auto;
-        margin-bottom: 10px;
+        background-color: grey;
     }
-
     .card-title {
         text-align: left;
     }
@@ -38,22 +41,7 @@
         text-align: left;
     }
 
-    .FloatBadge {
-        font-family: "Quattrocento Sans",sans-serif;
-        display: inline-block;
-        position: absolute;
-        text-transform: uppercase;
-        font-size: 16px;
-        font-weight: 700;
-        line-height: 100%;
-        padding: 7px;
-        background-color: #f18e00;
-        color: #fff;
-        left: 0;
-        top: 15px;
-        font-size: 16px;
-        box-shadow: 3px 0 5px 0 rgba(50,50,50,.4);
-    }
+ 
 
     .breadcrumb {
         padding-top: 0;
@@ -167,45 +155,50 @@
         <div class=" col-md-2">
             <div class="sidenav">
 
-                <h4>Categories</h4>
-                <form>
-                    <table class="d-xl-table-cell">
-                        @Html.Hidden("st", (int)ViewBag.st)
-                        @Html.Hidden("Loc", (string)ViewBag.loc)
-                        @foreach (var item in ViewBag.Cats)
-                          {
-                            <tr>
-                                <td>
-
-                                    <label class="form-check-label">
-                       
-
-                                        <input type="checkbox" name="cat" value="@item.CategoryID" class="cat form-check-input">
-                                        @item.CategoryName
-                                    </label>
-                                </td>
-                            </tr>
-                          }
-
-                    </table>
-                </form>
-                <hr />
-                <h4>Activities</h4>
-                <table class="d-xl-table-cell">
-
-                    @foreach (var item in ViewBag.Acts)
+              
+                    @if (@ViewBag.st == ServiceTypeEnum.Packages || @ViewBag.st == ServiceTypeEnum.SightSeeing)
                     {
+                           <h4>Categories</h4>
+                           <table class="d-xl-table-cell">
+                            @Html.Hidden("st", (int)ViewBag.st)
+                            @Html.Hidden("Loc", (string)ViewBag.loc)
+                            @foreach (var item in ViewBag.Cats)
+                             {
                         <tr>
                             <td>
+
                                 <label class="form-check-label">
-                                    <input type="checkbox" name="act" value="@item.ActivityID" class=" act form-check-input">
-                                    @item.ActivityName
+
+
+                                    <input type="checkbox" name="cat" value="@item.CategoryID" class="cat form-check-input">
+                                    @item.CategoryName
                                 </label>
                             </td>
                         </tr>
-                    }
+                     }
 
-                </table>
+                                </table>
+            
+                             <hr />
+                    <h4>Activities</h4>
+                    <table class="d-xl-table-cell">
+
+                        @foreach (var item in ViewBag.Acts)
+                        {
+                            <tr>
+                                <td>
+                                    <label class="form-check-label">
+                                        <input type="checkbox" name="act" value="@item.ActivityID" class=" act form-check-input">
+                                        @item.ActivityName
+                                    </label>
+                                </td>
+                            </tr>
+                        }
+
+                    </table>
+                    }
+                         
+               
 
             </div>
         </div>          
