@@ -1,0 +1,83 @@
+﻿@model  IEnumerable<Speedbird.PackageDets>
+<div class="partialview col-md-10">
+    <h2>@ViewBag.ServiceTitle</h2>
+    <div id="Container">
+
+
+        @if (ViewBag.Accomodation != null)
+        {
+            foreach (var item in ViewBag.Accomodation)
+            {
+
+                <div class="card ServiceTypes" style="width: 18rem;">
+                    <img class="card-img-top" src="/Images/@item.PictureName" alt="Card image cap">
+                    <div class="card-body">
+                        <div class="FloatBadge">
+                            @item.GeoName
+                        </div>
+                        <h5 class="card-title">@item.AccomName</h5>
+                        <p class="card-text">@item.Description</p>
+
+                    </div>
+
+                </div>
+
+            }
+        }
+        @if (Model != null)
+        {
+            foreach (var item in Model)
+            {
+                <div class="card ServiceTypes" style="width: 18rem;">
+                    <img class="card-img-top" src="/Images/@item.Pic.First().PictureName" alt="Card image cap">
+                    <div class="card-body">
+                        <div class="FloatBadge">
+                            @item.GeoName
+                        </div>
+                        <h5 class="card-title">@item.PackageName</h5>
+                        <p class="card-text">@item.Description</p>
+
+                    </div>
+
+                </div>
+
+            }
+        }
+
+        @if (ViewBag.CarBike != null)
+        {
+            foreach (var item in ViewBag.CarBike)
+            {
+
+                <div class="card ServiceTypes" style="width: 18rem;">
+                    <img class="card-img-top" src="/Images/@item.PictureName" alt="Card image cap">
+                    <div class="card-body">
+                        <div class="FloatBadge">
+                            @item.GeoName
+                        </div>
+                        <h5 class="card-title">@item.CarBikeName</h5>
+                        <p class="card-text">@item.Description</p>
+
+                    </div>
+
+                </div>
+
+            }
+        }
+
+
+    </div>
+</div>
+
+
+<script>
+    var $container = $('#Container');
+    $container.imagesLoaded(function () {
+        $container.masonry({
+            itemSelector: '.ServiceTypes',
+            columnWidth: 10,
+            isAnimated: true,
+        });
+    });
+
+</script>

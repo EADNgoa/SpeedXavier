@@ -1,0 +1,24 @@
+﻿@model  IEnumerable<Speedbird.AttractRec>
+
+<h2>Attractions</h2>
+
+<div id="Container3">
+    <center>
+        @foreach (var item in Model)
+        {
+            <div class="card Package">
+                <img class="card-img-top" src="/Images/@item.pack.First().PictureName" alt="Card image cap">
+
+                <div class="card-block">
+                    <h4 class="card-title">@item.AttractionName</h4>
+                </div>
+            </div>
+        }
+    </center>
+</div>
+
+
+
+<script>
+    
+</script>
