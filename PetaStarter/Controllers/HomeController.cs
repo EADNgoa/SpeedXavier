@@ -71,15 +71,31 @@ namespace Speedbird.Controllers
         {
             ViewBag.st = st;
             ViewBag.loc = Loc;
+            ViewBag.GuideLanguageID = new SelectList(db.Fetch<GuideLanguage>("Select GuideLanguageID,GuideLanguageName from GuideLanguage"), "GuideLanguageID", "GuideLanguageName");
+
+            List<SelectListItem> items = new List<SelectListItem>();
+            for(int i = 1; i <= 10; i++)
+            {
+                items.Add(new SelectListItem { Text = ""+i, Value= ""+i });
+            }
+
+
+
+            ViewBag.nums = items;
+            var geoloc = db.FirstOrDefault<GeoTree>("Select * from GeoTree where GeoName = @0", Loc);
+
             if (st == ServiceTypeEnum.Packages || st == ServiceTypeEnum.SightSeeing)
             {
                 ViewBag.Cats = db.Fetch<Category>("Select * From Category");
-
                 ViewBag.Acts = db.Fetch<Activity>("Select * From Activity");
+                ViewBag.Attracts = db.Fetch<Attraaction>("Select a.* From Attraaction a inner join Package_Attraction pa on pa.AttractionID = a.AttractionID inner join Package p on p.PackageID =pa.PackageID inner join Package_GeoTree pg on pg.PackageID= p.PackageID inner join GeoTree g on g.GeoTreeID=pg.GeoTreeID where g.GeoTreeID in(Select GeotreeId from GetChildGeos(@0))",geoloc.GeoTreeID);
+
+
+
             }
             return View();
         }
-        public ActionResult PackagesPartialView(ServiceTypeEnum? st, string Loc ,IEnumerable<int> CatID, IEnumerable<int> ActID)
+        public ActionResult PackagesPartialView(ServiceTypeEnum? st, string Loc ,IEnumerable<int> CatID, IEnumerable<int> ActID,int? Gsize,int? diff,int? dur,int? GuideLanguageID, IEnumerable<int> AttractID)
         {
             var geoloc = db.FirstOrDefault<GeoTree>("Select * from GeoTree where GeoName = @0", Loc);
 
@@ -96,45 +112,67 @@ namespace Speedbird.Controllers
             if (st == ServiceTypeEnum.Packages || st == ServiceTypeEnum.SightSeeing || st == ServiceTypeEnum.Cruise)
             {
                 ViewBag.ServiceTitle = "Our Best Tours And Excursions";
-              
+
                 ViewBag.st = st;
 
-                List<PackageDets> pack = new List<PackageDets>();
+                PetaPoco.Sql MainSql = new PetaPoco.Sql("Select Distinct p.PackageID,p.ServiceTypeID,p.PackageName,p.Description,p.Duration,p.Itinerary," +
+                                                        "p.Dificulty,p.GroupSize,p.StartTime,p.Inclusion,p.Exclusion,p.HighLights");
+                PetaPoco.Sql FromSql = new PetaPoco.Sql("from Package p,GeoTree g,Package_GeoTree pg");
+                PetaPoco.Sql WhereSql = new PetaPoco.Sql("where p.PackageID=pg.PackageID and g.GeoTreeID=pg.GeoTreeID and  p.ServiceTypeID=@0 and g.GeoTreeID in (Select GeoTreeID from GetChildGeos(@1))", (int)st, geoloc.GeoTreeID);
+
                 if (CatID != null)
                 {
-                   pack = db.Query<PackageDets>("Select a.PackageID,a.ServiceTypeID,a.PackageName,a.Description,a.Duration,a.Itinerary,a.Dificulty,a.GroupSize,a.StartTime,a.Inclusion,a.Exclusion,a.HighLights,pg.GeoTreeID,g.GeoName,pc.CategoryID From Package a" +
-                    $"  inner join Package_Geotree pg on a.PackageID=pg.PackageID inner join GeoTree g on g.GeoTreeID = pg.GeoTreeID inner join Package_Category pc on pc.PackageID =a.PackageID inner join Category c on c.CategoryID=pc.CategoryID where a.ServiceTypeID=@0 and pc.CategoryID in (@2) and g.GeoTreeID in (Select GeoTreeID from GetChildGeos(@1))", (int)st, geoloc.GeoTreeID, CatID).ToList();                    
+                    FromSql.Append(",Package_Category pc,Category c");
+                    WhereSql.Append("and p.PackageID = pc.PackageID and c.CategoryID = pc.CategoryID and pc.CategoryID in (@0)",  CatID.ToArray());
+                }
 
-                }
-                else if (ActID!=null)
+                if (ActID != null)
                 {
-                    pack = db.Query<PackageDets>("Select a.PackageID,a.ServiceTypeID,a.PackageName,a.Description,a.Duration,a.Itinerary,a.Dificulty,a.GroupSize,a.StartTime,a.Inclusion,a.Exclusion,a.HighLights,pg.GeoTreeID,g.GeoName,pc.ActivityID From Package a" +
-           $"  inner join Package_Geotree pg on a.PackageID=pg.PackageID inner join GeoTree g on g.GeoTreeID = pg.GeoTreeID inner join Package_Activity pc on pc.PackageID =a.PackageID inner join Activity c on c.ActivityID=pc.ActivityID where a.ServiceTypeID=@0 and pc.ActivityID in (@2) and g.GeoTreeID in (Select GeoTreeID from GetChildGeos(@1))", (int)st, geoloc.GeoTreeID, ActID).ToList();
+                    FromSql.Append(",Package_Activity pa, Activity a");
+                    WhereSql.Append("and p.PackageID = pa.PackageID and a.ActivityID= pa.ActivityID and pa.ActivityID in (@0)",  ActID.ToArray());
                 }
-                else if ( ActID!=null && CatID!=null)
+                if (AttractID != null)
                 {
-                    pack = db.Query<PackageDets>("Select a.PackageID,a.ServiceTypeID,a.PackageName,a.Description,a.Duration,a.Itinerary,a.Dificulty,a.GroupSize,a.StartTime,a.Inclusion,a.Exclusion,a.HighLights,pg.GeoTreeID,g.GeoName,pc.CategoryID,pc.ActivityID From Package a" +
-                              $"  inner join Package_Geotree pg on a.PackageID=pg.PackageID inner join GeoTree g on g.GeoTreeID = pg.GeoTreeID inner join Package_Activity pa on pa.PackageID =a.PackageID inner join Activity a on a.ActivityID=pa.ActivityID inner join Package_Category pc on pc.PackageID = a.PackageID inner join Category c on c.CategoryID = pc.CategoryID where a.ServiceTypeID=@0 and pc.CategoryID in (@2) and pa.ActivityID = (@3) and g.GeoTreeID in (Select GeoTreeID from GetChildGeos(@1))", (int)st, geoloc.GeoTreeID,CatID ,ActID).ToList();
+                    FromSql.Append(",Package_Attraction pat, Attraaction at");
+                    WhereSql.Append("and p.PackageID = pat.PackageID and at.AttractionID= pat.AttractionID and pat.AttractionID in (@0)", AttractID.ToArray());
                 }
-                else if(CatID==null)
+                if (Gsize!=null)
                 {
-                   pack = db.Query<PackageDets>("Select a.PackageID,a.ServiceTypeID,a.PackageName,a.Description,a.Duration,a.Itinerary,a.Dificulty,a.GroupSize,a.StartTime,a.Inclusion,a.Exclusion,a.HighLights,pg.GeoTreeID,g.GeoName From Package a" +
-                            $"  inner join Package_Geotree pg on a.PackageID=pg.PackageID inner join GeoTree g on g.GeoTreeID = pg.GeoTreeID where a.ServiceTypeID=@0 and g.GeoTreeID in (Select GeoTreeID from GetChildGeos(@1))", (int)st, geoloc.GeoTreeID).ToList();                    
+                    WhereSql.Append("and p.GroupSize <= @0",Gsize);
+                }
+                if (diff != null)
+                {
+                    WhereSql.Append("and p.Dificulty <= @0", diff);
+                }
+                if (dur != null)
+                {
+                    WhereSql.Append("and p.Duration <= @0", dur);
+                }
+                if (GuideLanguageID != null)
+                {
+                    FromSql.Append(",Package_Language pl, GuideLanguage gl");
+                    WhereSql.Append("and p.PackageID= pl.PackageId and pl.GuideLanguageId = gl.GuideLanguageID and pl.GuideLanguageId ", GuideLanguageID);
+                }
 
-                }
+
+
+
+                MainSql.Append(FromSql);
+                MainSql.Append(WhereSql);
+                var pack = db.Query<PackageDets>(MainSql).ToList();
+
                 pack.ForEach(p =>
                 {
                     p.Act = db.Fetch<ActivityDets>("Select * From Activity a inner join Package_Activity pa on a.ActivityID = pa.ActivityID inner join Package p on p.PackageID=pa.PackageID Where p.PackageID=@0 Order By NewID()", p.PackageID).ToList();
                     p.Cat = db.Fetch<CategoryDets>("Select * From Category a inner join Package_Category pa on a.CategoryID = pa.CategoryID inner join Package p on p.PackageID=pa.PackageID Where p.PackageID=@0 Order By NewID()", p.PackageID).ToList();
                     p.Pic = db.Fetch<PictureDets>("Select Top 1 * From Picture Where ServiceID=@0 and ServiceTypeID=@1 Order By NewID()", p.PackageID, p.ServiceTypeID).ToList();
                 });
+
                 return PartialView(pack);
-
-
-
 
             }
             return PartialView();
+
 
         }
 

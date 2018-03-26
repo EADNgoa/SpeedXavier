@@ -20,7 +20,7 @@
 
 
     .card {
-        width: 380px !important;
+        width: 280px !important;
         margin-right: auto;
         box-shadow: 0 3px 5px rgba(50,50,50,.6);
         position: relative;
@@ -31,7 +31,7 @@
         background-color: #428bca;
         margin-bottom: 14px;
         height: auto;
-        background-color: grey;
+        background-color: ghostwhite;
     }
     .card-title {
         text-align: left;
@@ -125,6 +125,8 @@
         padding-bottom: 0;
         float: left;
     }
+
+
 </style>
 
 <head>
@@ -155,50 +157,118 @@
         <div class=" col-md-2">
             <div class="sidenav">
 
-              
-                    @if (@ViewBag.st == ServiceTypeEnum.Packages || @ViewBag.st == ServiceTypeEnum.SightSeeing)
-                    {
-                           <h4>Categories</h4>
-                           <table class="d-xl-table-cell">
-                            @Html.Hidden("st", (int)ViewBag.st)
-                            @Html.Hidden("Loc", (string)ViewBag.loc)
-                            @foreach (var item in ViewBag.Cats)
-                             {
-                        <tr>
-                            <td>
 
-                                <label class="form-check-label">
+                @if (@ViewBag.st == ServiceTypeEnum.Packages || @ViewBag.st == ServiceTypeEnum.SightSeeing)
+    {
+            <h4>Categories</h4>
+            <table class="d-xl-table-cell">
+                @Html.Hidden("st", (int)ViewBag.st)
+                @Html.Hidden("Loc", (string)ViewBag.loc)
+                @foreach (var item in ViewBag.Cats)
+    {
+            <tr>
+                <td>
+
+                    <label class="form-check-label">
 
 
-                                    <input type="checkbox" name="cat" value="@item.CategoryID" class="cat form-check-input">
-                                    @item.CategoryName
-                                </label>
-                            </td>
-                        </tr>
-                     }
+                        <input type="checkbox" name="cat" value="@item.CategoryID" class="cat form-check-input">
+                        @item.CategoryName
+                    </label>
+                </td>
+            </tr>
+}
 
-                                </table>
-            
-                             <hr />
-                    <h4>Activities</h4>
-                    <table class="d-xl-table-cell">
+            </table>
 
-                        @foreach (var item in ViewBag.Acts)
-                        {
-                            <tr>
-                                <td>
-                                    <label class="form-check-label">
-                                        <input type="checkbox" name="act" value="@item.ActivityID" class=" act form-check-input">
-                                        @item.ActivityName
-                                    </label>
-                                </td>
-                            </tr>
-                        }
+            <hr />
+            <h4>Activities</h4>
+            <table class="d-xl-table-cell">
 
-                    </table>
-                    }
-                         
-               
+                @foreach (var item in ViewBag.Acts)
+    {
+            <tr>
+                <td>
+                    <label class="form-check-label">
+                        <input type="checkbox" name="act" value="@item.ActivityID" class=" act form-check-input">
+                        @item.ActivityName
+                    </label>
+                </td>
+            </tr>
+
+}
+
+            </table>
+            <hr />
+            <table class="d-xl-table-cell">
+                <tr>
+                    <td>
+                        <div class="form-group">
+                            <label>Group Size</label>
+                            <div class="col-md-12">
+                                @Html.DropDownList("nums", ViewBag.nums as IEnumerable<SelectListItem>, "---", new { @class = "form-control gsize" })
+                            </div>
+                        </div>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="form-group">
+                            <label>Dificulty</label>
+                            <div class="col-md-12">
+                                @Html.DropDownList("nums", ViewBag.nums as IEnumerable<SelectListItem>, "---", new { @class = "form-control diffic" })
+                            </div>
+                        </div>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="form-group">
+                            <label>Duration</label>
+                            <div class="col-md-12">
+                                @Html.DropDownList("nums", ViewBag.nums as IEnumerable<SelectListItem>, "---", new { @class = "form-control dur" })
+                            </div>
+                        </div>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="form-group">
+                            <label>Guide Language</label>
+                            <div class="col-md-12">
+                                @Html.DropDownList("GuideLanguageID", ViewBag.GuideLanguageID as IEnumerable<SelectListItem>, "---", new { @class = "form-control language" })
+                            </div>
+                        </div>
+
+                    </td>
+                </tr>
+            </table>
+            <hr />
+            <h4> Attractions</h4>
+            <table class="d-xl-table-cell">
+
+                @foreach (var item in ViewBag.Attracts)
+    {
+            <tr>
+                <td>
+                    <label class="form-check-label">
+                        <input type="checkbox" name="attract" value="@item.AttractionID" class=" attract form-check-input">
+                        @item.AttractionName
+                    </label>
+                </td>
+            </tr>
+
+}
+
+            </table>
+          
+
+}
+
+
 
             </div>
         </div>          
@@ -213,17 +283,19 @@
     $container.imagesLoaded(function () {
         $container.masonry({
             itemSelector: '.ServiceTypes',
-            columnWidth: 10,
+            columnWidth: 150,
             isAnimated: true,
         });
     });
   $(document).ready(function () {
         var CatValues = [];
         var ActValues = [];
+        var AttractValues = [];
+
         var CatLoc = $('#Loc').val();
         var CatSt = $('#st').val();
 
-        $(".cat,.act").click(function () {
+        $(".cat,.act,.gsize,.diffic,.dur,.attract,.language").change(function () {
             CatValues = [];
             $.each($(".cat:checked"), function () {
                 CatValues.push($(".cat:checked").val());
@@ -232,9 +304,17 @@
             $.each($(".act:checked"), function () {
                 ActValues.push($(".act:checked").val());
             });
+            AttractValues = [];
+            $.each($(".attract:checked"), function () {
+                AttractValues.push($(".attract:checked").val());
+            });
 
             if ($(".cat:checked").is(':checked')) {
                 CatValues.push($(this).val());
+            }
+
+            if ($(".attract:checked").is(':checked')) {
+                AttractValues.push($(this).val());
             }
             if ($(".act:checked").is(':checked')) {
               ActValues.push($(this).val());                 
@@ -242,7 +322,11 @@
             $('.partialview').html(" ");
             $('.partialview').load(
                 '@Url.Action("PackagesPartialView", "Home")',
-                { st: CatSt, Loc: CatLoc, CatID: CatValues, ActID: ActValues }
+                {
+                    st: CatSt, Loc: CatLoc, CatID: CatValues, ActID: ActValues,
+                    Gsize: $(".gsize option:selected").text(), diff: $(".diffic option:selected").text(),
+                    dur: $(".dur option:selected").text(), AttractID: AttractValues, GuideLanguageID: $(".language option:selected").text()
+                }
             );
 
         });
