@@ -95,7 +95,7 @@
     }
 
     .sidenav {
-        width: 200px;
+        width: auto;
         background: #eee;
         overflow-x: hidden;
         padding: 50px;
@@ -154,18 +154,82 @@
 
     <br />
     <div class="row">
-        <div class=" col-md-2">
+        <div class=" col-md-3">
             <div class="sidenav">
 
 
-                @if (@ViewBag.st == ServiceTypeEnum.Packages || @ViewBag.st == ServiceTypeEnum.SightSeeing)
-    {
+   @if (@ViewBag.st == ServiceTypeEnum.Packages || @ViewBag.st == ServiceTypeEnum.SightSeeing || @ViewBag.st == ServiceTypeEnum.Accomodation || @ViewBag.st == ServiceTypeEnum.CarBike)
+   {
+         @Html.Hidden("st", (int)ViewBag.st)
+         @Html.Hidden("Loc", (string)ViewBag.loc)
+       if(@ViewBag.st == ServiceTypeEnum.CarBike)
+       {
+                <table class="d-sm-table-cell">
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                <label>No Of Passenger</label>
+                                <div class="col-md-12">
+                                    @Html.DropDownList("nums", ViewBag.nums as IEnumerable<SelectListItem>, "---", new { @class = "form-control nopax" })
+                                </div>
+                            </div>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                <label>Large Bags</label>
+                                <div class="col-md-12">
+                                    @Html.DropDownList("nums", ViewBag.nums as IEnumerable<SelectListItem>, "---", new { @class = "form-control large" })
+                                </div>
+                            </div>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                <label>Small Bags</label>
+                                <div class="col-md-12">
+                                    @Html.DropDownList("nums", ViewBag.nums as IEnumerable<SelectListItem>, "---", new { @class = "form-control Small" })
+                                </div>
+                            </div>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                <label>Ac</label>
+                                <div class="col-md-12">
+                                    @Html.DropDownList("TF", ViewBag.TF as IEnumerable<SelectListItem>, "---", new { @class = "form-control Ac" })
+                                </div>
+                            </div>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                <label>Has Carrier</label>
+                                <div class="col-md-12">
+                                    @Html.DropDownList("TF", ViewBag.TF as IEnumerable<SelectListItem>, "---", new { @class = "form-control Carrier" })
+                                </div>
+                            </div>
+                        </td>
+
+                    </tr>
+                </table>
+       }
+       if (@ViewBag.st != ServiceTypeEnum.Accomodation && @ViewBag.st != ServiceTypeEnum.CarBike)
+       {
             <h4>Categories</h4>
             <table class="d-xl-table-cell">
-                @Html.Hidden("st", (int)ViewBag.st)
-                @Html.Hidden("Loc", (string)ViewBag.loc)
+              
                 @foreach (var item in ViewBag.Cats)
     {
+
             <tr>
                 <td>
 
@@ -199,53 +263,70 @@
 }
 
             </table>
+}
             <hr />
+
             <table class="d-xl-table-cell">
+   @if (@ViewBag.st != ServiceTypeEnum.Accomodation && @ViewBag.st != ServiceTypeEnum.CarBike)
+    {
+            <tr>
+                <td>
+                    <div class="form-group">
+                        <label>Group Size</label>
+                        <div class="col-md-12">
+                            @Html.DropDownList("nums", ViewBag.nums as IEnumerable<SelectListItem>, "---", new { @class = "form-control gsize" })
+                        </div>
+                    </div>
+
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="form-group">
+                        <label>Dificulty</label>
+                        <div class="col-md-12">
+                            @Html.DropDownList("nums", ViewBag.nums as IEnumerable<SelectListItem>, "---", new { @class = "form-control diffic" })
+                        </div>
+                    </div>
+
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="form-group">
+                        <label>Duration</label>
+                        <div class="col-md-12">
+                            @Html.DropDownList("nums", ViewBag.nums as IEnumerable<SelectListItem>, "---", new { @class = "form-control dur" })
+                        </div>
+                    </div>
+
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="form-group">
+                        <label>Guide Language</label>
+                        <div class="col-md-12">
+                            @Html.DropDownList("GuideLanguageID", ViewBag.GuideLanguageID as IEnumerable<SelectListItem>, "---", new { @class = "form-control language" })
+                        </div>
+                    </div>
+
+                </td>
+            </tr>
+}
                 <tr>
                     <td>
-                        <div class="form-group">
-                            <label>Group Size</label>
-                            <div class="col-md-12">
-                                @Html.DropDownList("nums", ViewBag.nums as IEnumerable<SelectListItem>, "---", new { @class = "form-control gsize" })
-                            </div>
-                        </div>
+                        <p>
+                            <label for="amount">Price range:</label>
+                            <input type="text" id="amount" class="prange" value=" " readonly style="border:0; color:#000000; font-weight:bold;">
+                        </p>
 
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="form-group">
-                            <label>Dificulty</label>
-                            <div class="col-md-12">
-                                @Html.DropDownList("nums", ViewBag.nums as IEnumerable<SelectListItem>, "---", new { @class = "form-control diffic" })
-                            </div>
-                        </div>
-
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="form-group">
-                            <label>Duration</label>
-                            <div class="col-md-12">
-                                @Html.DropDownList("nums", ViewBag.nums as IEnumerable<SelectListItem>, "---", new { @class = "form-control dur" })
-                            </div>
-                        </div>
-
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="form-group">
-                            <label>Guide Language</label>
-                            <div class="col-md-12">
-                                @Html.DropDownList("GuideLanguageID", ViewBag.GuideLanguageID as IEnumerable<SelectListItem>, "---", new { @class = "form-control language" })
-                            </div>
-                        </div>
-
+                        <div id="slider-range"></div>
                     </td>
                 </tr>
             </table>
+if (@ViewBag.st != ServiceTypeEnum.Accomodation && @ViewBag.st != ServiceTypeEnum.CarBike)
+{
             <hr />
             <h4> Attractions</h4>
             <table class="d-xl-table-cell">
@@ -263,17 +344,49 @@
 
 }
 
-            </table>
-          
 
+            </table>
+
+                    }
+                    if (@ViewBag.st != ServiceTypeEnum.Packages && @ViewBag.st != ServiceTypeEnum.SightSeeing && @ViewBag.st != ServiceTypeEnum.Cruise && @ViewBag.st != ServiceTypeEnum.CarBike)
+                    {
+            <hr />
+            <h4> Attractions</h4>
+            <table class="d-xl-table-cell">
+
+                @foreach (var item in ViewBag.fac)
+                 {
+                        <tr>
+                            <td>
+                                <label class="form-check-label">
+                                    <input type="checkbox" name="fac" value="@item.FacilityID" class=" fac form-check-input">
+                                    @item.FacilityName
+                                </label>
+                            </td>
+                        </tr>
+
+               }
+
+
+            </table>
+
+}
 }
 
 
 
             </div>
-        </div>          
+        </div> 
+        @Html.Hidden("maxPrice")
+        @Html.Hidden("minPrice")
+        
+        <div class=" col-md-9" id="partialview">
             @Html.Action("PackagesPartialView", "Home", new { st = ViewBag.st, Loc = ViewBag.loc })
-  </div>
+
+        </div>
+    </div>
+
+        
 
 
 
@@ -287,6 +400,9 @@
             isAnimated: true,
         });
     });
+
+    
+    //Filter
   $(document).ready(function () {
         var CatValues = [];
         var ActValues = [];
@@ -295,41 +411,68 @@
         var CatLoc = $('#Loc').val();
         var CatSt = $('#st').val();
 
-        $(".cat,.act,.gsize,.diffic,.dur,.attract,.language").change(function () {
+        var setFilters = function () {
             CatValues = [];
             $.each($(".cat:checked"), function () {
-                CatValues.push($(".cat:checked").val());
+                CatValues.push($(this).val());
             });
-            ActValues = [];                
+            ActValues = [];
             $.each($(".act:checked"), function () {
-                ActValues.push($(".act:checked").val());
+                ActValues.push($(this).val());
             });
             AttractValues = [];
             $.each($(".attract:checked"), function () {
-                AttractValues.push($(".attract:checked").val());
-            });
-
-            if ($(".cat:checked").is(':checked')) {
-                CatValues.push($(this).val());
-            }
-
-            if ($(".attract:checked").is(':checked')) {
                 AttractValues.push($(this).val());
-            }
-            if ($(".act:checked").is(':checked')) {
-              ActValues.push($(this).val());                 
-            }               
-            $('.partialview').html(" ");
-            $('.partialview').load(
+            });
+            FacValues = [];
+            $.each($(".fac:checked"), function () {
+                FacValues.push($(this).val());
+            });
+          
+            $('#partialview').html(" ");
+            $('#partialview').load(
                 '@Url.Action("PackagesPartialView", "Home")',
                 {
                     st: CatSt, Loc: CatLoc, CatID: CatValues, ActID: ActValues,
                     Gsize: $(".gsize option:selected").text(), diff: $(".diffic option:selected").text(),
-                    dur: $(".dur option:selected").text(), AttractID: AttractValues, GuideLanguageID: $(".language option:selected").text()
+                    dur: $(".dur option:selected").text(), AttractID: AttractValues,
+                    GuideLanguageID: parseInt($(".language option:selected").val()),
+                    maxPrice: $("#maxPrice").val(), minPrice: $("#minPrice").val(),
+                    FacilityID: FacValues, NoPax: parseInt($(".nopax option:selected").val()),
+                    large: parseInt($(".large option:selected").val()), small: parseInt($(".large option:selected").val()), HasAc: $(".Ac option:selected").val(),
+                    HasCarrier: $(".Carrier option:selected").val(),
                 }
             );
 
-        });
+        };
 
-    });
+
+        $(".cat,.act,.gsize,.diffic,.dur,.attract,.language,.fac,.nopax,.large,.small,.Ac,.Carrier").change(setFilters);
+
+    
+
+    //Slider
+    
+        $("#slider-range").slider({
+            range: true,
+            min: 0,
+            max: 100000,
+            values: [2000, 10000],
+            slide: function (event, ui) {
+                $("#amount").val("Rs " + ui.values[0] + " - Rs " + ui.values[1]);
+                $("#minPrice").val(ui.values[0]);
+                $("#maxPrice").val(ui.values[1]);
+            },
+            stop: function (event, ui) {
+                setFilters();
+                //alert("Hey Diptesh!");
+            }
+            
+        });
+        $("#amount").val("Rs" + $("#slider-range").slider("values", 0) +
+            " - Rs" + $("#slider-range").slider("values", 1));
+
+      
+  });
+
 </script>
