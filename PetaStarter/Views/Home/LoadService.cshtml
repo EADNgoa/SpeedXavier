@@ -16,7 +16,6 @@
 
     .card {
         width: 380px !important;
-        margin-right: auto;
         box-shadow: 0 3px 5px rgba(50,50,50,.6);
         position: relative;
         overflow: hidden;
@@ -197,7 +196,7 @@
                 </div>
             </div>
         </a>
-if (ViewBag.loc != "India")
+if (ViewBag.loc == "International")
 {
         <a href="/Home/LoadPackages/?st=@Speedbird.ServiceTypeEnum.Cruise&&loc=@ViewBag.Loc">
 

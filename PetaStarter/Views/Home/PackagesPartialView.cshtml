@@ -1,72 +1,29 @@
-﻿@model  IEnumerable<Speedbird.PackageDets>
-<div class="partialview col-md-10">
-    <h2>@ViewBag.ServiceTitle</h2>
-    <div id="Container">
+﻿
+@model  IEnumerable<Speedbird.AccomPackCarBike>
 
 
-        @if (ViewBag.Accomodation != null)
+<h2>@ViewBag.ServiceTitle</h2>
+<div id="Container">
+
+
+
+       @foreach (var item in Model)
         {
-            foreach (var item in ViewBag.Accomodation)
-            {
-
-                <div class="card ServiceTypes" style="width: 18rem;">
-                    <img class="card-img-top" src="/Images/@item.PictureName" alt="Card image cap">
-                    <div class="card-body">
-                        <div class="FloatBadge">
-                            @item.GeoName
-                        </div>
-                        <h5 class="card-title">@item.AccomName</h5>
-                        <p class="card-text">@item.Description</p>
-
+            <div class="card ServiceTypes" style="width: 18rem;">
+                <img class="card-img-top" src="/Images/@item.ServicePic" alt="Card image cap">
+                <div class="card-body">
+                    <div class="FloatBadge">
+                        @item.ServiceGeoName
                     </div>
+                    <h5 class="card-title">@item.ServiceName</h5>
+                    <p class="card-text">@item.ServiceDescription</p>
 
                 </div>
 
-            }
+            </div>
+
         }
-        @if (Model != null)
-        {
-            foreach (var item in Model)
-            {
-                <div class="card ServiceTypes" style="width: 18rem;">
-                    <img class="card-img-top" src="/Images/@item.Pic.First().PictureName" alt="Card image cap">
-                    <div class="card-body">
-                        <div class="FloatBadge">
-                            @item.GeoName
-                        </div>
-                        <h5 class="card-title">@item.PackageName</h5>
-                        <p class="card-text">@item.Description</p>
-
-                    </div>
-
-                </div>
-
-            }
-        }
-
-        @if (ViewBag.CarBike != null)
-        {
-            foreach (var item in ViewBag.CarBike)
-            {
-
-                <div class="card ServiceTypes" style="width: 18rem;">
-                    <img class="card-img-top" src="/Images/@item.PictureName" alt="Card image cap">
-                    <div class="card-body">
-                        <div class="FloatBadge">
-                            @item.GeoName
-                        </div>
-                        <h5 class="card-title">@item.CarBikeName</h5>
-                        <p class="card-text">@item.Description</p>
-
-                    </div>
-
-                </div>
-
-            }
-        }
-
-
-    </div>
+   
 </div>
 
 
@@ -75,7 +32,7 @@
     $container.imagesLoaded(function () {
         $container.masonry({
             itemSelector: '.ServiceTypes',
-            columnWidth: 10,
+            columnWidth: 150,
             isAnimated: true,
         });
     });

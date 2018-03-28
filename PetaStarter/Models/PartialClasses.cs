@@ -131,7 +131,13 @@ namespace Speedbird
         public bool HasCarrier { get; set; }
         public bool InclHelmet { get; set; }
         public int ServiceID { get; set; }
+        public int ServiceTypeID { get; set; }
+
         public string PictureName { get; set; }
+        public IEnumerable<PriceDets> Pric { get; set; }
+        public IEnumerable<PictureDets> pic { get; set; }
+
+
     }
     public class VisaDets
     {
@@ -233,14 +239,28 @@ namespace Speedbird
         public string AccomName { get; set; }
         public string Description { get; set; }
         public int GeoTreeID { get; set; }
-        public int GeoName { get; set; }
+        public string GeoName { get; set; }
         public string Lat { get; set; }
         public string longt { get; set; }
         public int ServiceID { get; set; }
         public string PictureName { get; set; }
+        public IEnumerable<PriceDets> Pric { get; set; }
+        public IEnumerable<PictureDets> pic { get; set; }
 
     }
 
+    public class AccomPackCarBike
+    {
+        public int ServiceID { get; set; }
+        public string ServiceName { get; set; }
+        public string ServiceDescription { get; set; }
+        public string ServiceGeoName { get; set; }
+        public string ServicePic { get; set; }
+
+
+
+
+    }
     public enum ServiceTypeEnum
     {
         Accomodation,
