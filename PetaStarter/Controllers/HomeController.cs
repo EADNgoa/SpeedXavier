@@ -110,6 +110,7 @@ namespace Speedbird.Controllers
             var geoloc = db.FirstOrDefault<GeoTree>("Select * from GeoTree where GeoName = @0", Loc);
             List<AccomPackCarBike> apc = new List<AccomPackCarBike>();
 
+            ViewBag.st = st;
             if (st == ServiceTypeEnum.Accomodation)
             {
                 ViewBag.ServiceTitle = "Accomodations";
@@ -187,7 +188,6 @@ namespace Speedbird.Controllers
             {
                 ViewBag.ServiceTitle = "Our Best Tours And Excursions";
 
-                ViewBag.st = st;
 
                 PetaPoco.Sql MainSql = new PetaPoco.Sql("Select Distinct p.PackageID,p.ServiceTypeID,p.PackageName,p.Description,p.Duration,p.Itinerary," +
                                                         "p.Dificulty,p.GroupSize,p.StartTime,p.Inclusion,p.Exclusion,p.HighLights");
@@ -252,8 +252,44 @@ namespace Speedbird.Controllers
 
         }
 
+        public ActionResult InfoPage(int? ServiceID, ServiceTypeEnum? st)
+        {
+            ViewBag.ST = st;
+            ViewBag.ServiceID = ServiceID;
+            List<SelectListItem> items = new List<SelectListItem>();
+            for (int i = 1; i <= 10; i++)
+            {
+                items.Add(new SelectListItem { Text = "" + i, Value = "" + i });
+            }
+            ViewBag.nums = items;
+            return View();
+        }
+        public ActionResult InfoAccomPartial(int? ServiceID, ServiceTypeEnum? st)
+        {
+            var accom = db.Query<AccomodationDets>("select * From Accomodation  Where AccomodationID =@0", ServiceID).ToList().FirstOrDefault();
+            accom.pic = db.Fetch<PictureDets>("Select * From Picture Where ServiceID=@0 and ServiceTypeID=@1 Order By NewID()", accom.AccomodationID, (int)ServiceTypeEnum.Accomodation).ToList();
+            accom.GeoName = db.First<string>("Select GeoName From GeoTree  where GeoTreeID=@0", accom.GeoTreeID);
+            int facID = db.ExecuteScalar<int>("Select FacilityID From Facility_Accomodation where AccomodationID=@0 ",accom.AccomodationID);
+            ViewBag.SimilarAccom = db.Query<AccomodationDets>("Select * From Accomodation a inner join Facility_Accomodation fa on a.AccomodationID= fa.AccomodationID inner join Facility f on f.FacilityID = fa.FacilityID where fa.FacilityID=@0 ", facID);
 
+            return PartialView(accom);
+        }
+        public ActionResult InfoCarBikePartial(int? ServiceID, ServiceTypeEnum? st)
+        {
+            var CarBike = db.FirstOrDefault<CarBikeDets>("select * From CarBike  Where CarBikeID =@0", ServiceID);
+            CarBike.pic = db.Fetch<PictureDets>("Select * From Picture Where ServiceID=@0 and ServiceTypeID=@1 Order By NewID()", CarBike.CarBikeID, (int)ServiceTypeEnum.CarBike).ToList();
+            CarBike.GeoName = db.First<string>("Select GeoName From GeoTree  where GeoTreeID=@0", CarBike.GeoTreeID);
 
+            return PartialView();
+        }
+
+        public ActionResult InfoPackagePartial(int? ServiceID, ServiceTypeEnum? st)
+        {
+            var Packages = db.FirstOrDefault<PackageDets>("select * From Package  Where PackageID =@0 and ServiceTypeID=@0", ServiceID, st);
+            Packages.Pic = db.Fetch<PictureDets>("Select * From Picture Where ServiceID=@0 and ServiceTypeID=@1 Order By NewID()", Packages.PackageID, st).ToList();
+            Packages.GeoName = db.First<string>("Select GeoName From GeoTree g,Package_GeoTree pg  where pg.PackageID=@0 and g.GeoTreeID = pg.GeoTreeID", Packages.PackageID);
+            return PartialView();
+        }
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";

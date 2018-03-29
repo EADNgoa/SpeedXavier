@@ -9,6 +9,7 @@
 
        @foreach (var item in Model)
         {
+           <a href="/Home/InfoPage/?st=@ViewBag.st&&ServiceID=@item.ServiceID">
             <div class="card ServiceTypes" style="width: 18rem;">
                 <img class="card-img-top" src="/Images/@item.ServicePic" alt="Card image cap">
                 <div class="card-body">
@@ -16,12 +17,12 @@
                         @item.ServiceGeoName
                     </div>
                     <h5 class="card-title">@item.ServiceName</h5>
-                    <p class="card-text">@item.ServiceDescription</p>
+                    <p class="card-text">@item.ServiceDescription.Substring(1,25)</p>
 
                 </div>
 
             </div>
-
+          </a>
         }
    
 </div>

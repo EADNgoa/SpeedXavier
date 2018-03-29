@@ -1,0 +1,283 @@
+﻿<style>
+    /*small change*/
+    .carousel {
+        width: 100% !important;
+        bottom: 30px;
+        height: 455px;
+        overflow: hidden
+    }
+
+    .img-fluid {
+        max-width: 100%;
+        width: 100%;
+        height: 450px;
+    }
+
+    .carousel-control-prev, .carousel-control-next {
+        top: 200px;
+        overflow: hidden;
+    }
+
+    .carousel-control-prev-icon, .carousel-control-next-icon {
+        height: 100px;
+        width: 50px;
+    }
+    /*reused*/
+    .breadcrumb span {
+        padding: 0;
+        margin: 0;
+        font-size: 10px;
+        text-decoration: none;
+        color: dimgray;
+        font-family: "Quattrocento Sans",serif;
+    }
+
+    .breadcrumb {
+        padding-top: 0;
+        padding-bottom: 0;
+        background-color: white;
+        position: absolute;
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+
+    .breadcrumb-item {
+        padding-top: 0;
+        margin-top: 0;
+        font-size: 10px;
+        background-color: white;
+        padding-bottom: 0;
+        margin-bottom: 0;
+        margin-right: 5px;
+        width: auto;
+        display: inline-block;
+        color: #a5a5a5;
+        font-family: "Quattrocento Sans",serif;
+    }
+
+    /*Specific*/
+    .DetailBlock {
+        background: #f4f3ea;
+        padding: 10px;
+        margin-left:30px;
+    }
+
+    .addcart {
+        background-color: #fff;
+        box-shadow: 0 3px 5px rgba(50,50,50,0.4);
+        margin-right: 30px;
+        padding: 10px;
+        font-style: normal;
+        font-weight: normal;
+        text-decoration: inherit;
+        font-family: "Merriweather Sans",serif;
+    }
+    nput {
+        padding: 10px;
+        font-family: FontAwesome, "Open Sans", Verdana, sans-serif;
+        font-style: normal;
+        font-weight: normal;
+        text-decoration: inherit;
+        border-radius: 0 !important;
+    }
+
+    .form-control {
+        border-radius: 0 !important;
+        font-size: 14px;
+        font-family: FontAwesome, "Open Sans", Verdana, sans-serif;
+    }
+
+    .clickable {
+        cursor: pointer;
+    }
+    .block-sb-info {
+        background-color: #eeeeec;
+        box-shadow: 0 3px 5px rgba(50,50,50,0.4);
+        margin-bottom: 20px;
+        padding: 20px;
+        margin-right:30px;
+       
+
+    }
+    h2 {
+        font-family: "Merriweather Sans",serif;
+        font-size: 37px;
+        color: #006aa7;
+        font-weight: bold;
+    }
+
+    .block-title {
+        display: block;
+        font-size: 1.5em;
+        -webkit-margin-before: 0.83em;
+        -webkit-margin-after: 0.83em;
+        -webkit-margin-start: 0px;
+        -webkit-margin-end: 0px;
+        font-weight: bold;
+        color: #006aa7;
+    }
+    li {
+      
+        margin-bottom: 3px;
+        list-style: none outside none;
+        font-size: 17px;
+        line-height: 17px;
+        padding-left: 0;
+        font-family: "Quattrocento Sans",serif;
+    }
+    .btn {
+   
+        font-family: inherit;
+        font-size: inherit;
+        line-height: inherit;
+    }
+   
+    .fa-check{
+        height:18px;
+        width:18px;
+        margin-left:-50px;
+    }
+    .sbhr{
+        margin-right:30px;
+    }
+
+    .grid-sizer,
+    .grid-item {
+        width: 20%;
+    }
+    /* 2 columns */
+    .grid-item--width2 {
+        width: 40%;
+    }
+
+</style>
+<div class="container">
+    <hr style="padding-bottom:0;margin-bottom:0;padding-top:2px;margin-top:0;line-height: 1.428571429;" />
+
+    <div class="row">
+        <nav class="breadcrumb">
+            <span>you are here:&nbsp;</span>
+            <a class="breadcrumb-item" href="Request.UrlReferrer.AbsoluteUri">Home</a>
+            <a class="breadcrumb-item" href="Request.Url.AbsoluteUri">ViewBag.Loc</a>
+        </nav>
+    </div>
+
+</div>
+<br />
+<br />
+
+@if (ViewBag.ST == ServiceTypeEnum.Accomodation)
+{
+    @Html.Action("InfoAccomPartial", "Home", new { ServiceID = ViewBag.ServiceID, st = ViewBag.ST })
+}
+@if (ViewBag.ST == ServiceTypeEnum.CarBike)
+{
+    @Html.Action("InfoCarBikePartial", "Home", new { ServiceID = ViewBag.ServiceID, st = ViewBag.ST })
+}
+@if (ViewBag.ST == ServiceTypeEnum.Packages)
+{
+    @Html.Action("InfoPackagePartial", "Home", new { ServiceID = ViewBag.ServiceID, st = ViewBag.ST })
+}
+<div class="col-md-4">
+    <div class="addcart">
+        <div class="container">
+            <center>
+                <div style="background-color:deepskyblue">
+                    <h2 class="block-title">Book This Experience</h2>
+                </div>
+
+                <br />
+                <div class="form-group">
+                    <input id="dp1" type="date" class="form-control clickable input-md" id="DtChkIn" placeholder="&#xf133;  Check-In">
+                </div>
+                <div class="form-group">
+                    <input id="dp2" type="date" class="form-control clickable input-md" id="DtChkOut" placeholder="&#xf133;  Check-Out">
+                </div>
+                <div class="form-group">
+                    <div class="col-md-12">
+                        @Html.DropDownList("nums", ViewBag.nums as IEnumerable<SelectListItem>, "Select No Of People", new { @class = "form-control nopax" })
+                    </div>
+                </div>
+                <fieldset>
+                    <div style="background-color:deepskyblue">
+                        <h2 class="block-title">Customer Detail</h2>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-11">
+                            <input type="text" name="fname" placeholder="&#xf2c0 First Name" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-11">
+                            <input type="text" name="sname" placeholder="&#xf2c0  Sur Name" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-11">
+                            <input type="text" name="email" placeholder="&#xf003 Your Email..." class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-11">
+                            <input type="text" name="phno" placeholder="&#xf2a0 Mobile No..." class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-11">
+                            <input type="File" name="Idpicture" class="form-control" />
+                        </div>
+                    </div>
+                </fieldset>
+
+                <div class="form-group">
+                    <div class="col-md-11">
+                        @Html.TextArea("Query", null, new { @class = "form-control", placeholder = "Entery Your Query Here...." })
+                    </div>
+                </div>
+                <button class="btn btn-success">Submit Query</button>
+                <button class="btn btn-success">Add To Cart</button>
+
+            </center>
+        </div>
+        <br />
+
+    </div>
+    <br />
+    <br />
+    <hr class="sbhr" />
+
+    <div class="block-sb-info">
+
+        <div class="container  ">
+            <h2>Why Speed Bird?</h2>
+            <ul class="tck">
+                <li>
+                    <i class="fa fa-check" style="font-size:48px;color:green"></i>
+                    We Personally vet our offers
+                </li>
+                <li>
+                    <i class="fa fa-check" style="font-size:48px;color:green"></i>
+                    We use only professional operators
+                </li>
+                <li>
+                    <i class="fa fa-check" style="font-size:48px;color:green"></i>
+                    Our prices are transparent 100%
+                </li>
+            </ul>
+
+        </div>
+    </div>
+    <hr class="sbhr"/>
+
+</div>
+</div>
+</div>
+<script>
+    $('.grid').masonry({
+        // set itemSelector so .grid-sizer is not used in layout
+        itemSelector: '.grid-item',
+        // use element for option
+        columnWidth: '.grid-sizer',
+        percentPosition: true
+    })
+</script>
