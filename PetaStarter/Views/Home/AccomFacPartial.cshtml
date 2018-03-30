@@ -1,0 +1,26 @@
+﻿
+@model  IEnumerable<Speedbird.AccomodationDets>
+<div class="container">
+   <h2>Similar Accomdations  to  @Model.FirstOrDefault().FacilityName</h2>
+    <div id="Container2">
+        <center>
+            @foreach (var item in Model)
+            {
+            <div class="card Package">
+                <img class="card-img-top" src="/Images/@item.pic.FirstOrDefault().PictureName" alt="Card image cap">
+                <div class="card-block">
+                    <h4 class="card-title">@item.AccomName</h4>
+                </div>
+                <div class="img-title">
+                    @item.GeoName
+                </div>
+            </div>
+
+            }
+
+        </center>
+    </div>
+</div>
+
+
+

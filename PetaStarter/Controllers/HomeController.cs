@@ -274,21 +274,33 @@ namespace Speedbird.Controllers
 
             return PartialView(accom);
         }
+        public ActionResult AccomFacPartial(int? ServiceID)
+        {
+            int facID = db.ExecuteScalar<int>("Select FacilityID From Facility_Accomodation where AccomodationID=@0 ", ServiceID);
+            var Similar = db.Query<AccomodationDets>("Select * From Accomodation a inner join Facility_Accomodation fa on a.AccomodationID= fa.AccomodationID inner join Facility f on f.FacilityID = fa.FacilityID where fa.FacilityID=@0 ", facID).ToList();
+            Similar.ForEach(a=>
+            {
+                a.pic = db.Fetch<PictureDets>("Select Top 1 * From Picture Where ServiceID=@0 and ServiceTypeID=@1 Order By NewID()", a.AccomodationID, (int)Speedbird.ServiceTypeEnum.Accomodation).ToList();
+                a.GeoName = db.First<string>("Select GeoName From GeoTree Where GeoTreeID= @0", a.GeoTreeID);
+            });
+            return PartialView(Similar);
+        }
         public ActionResult InfoCarBikePartial(int? ServiceID, ServiceTypeEnum? st)
         {
             var CarBike = db.FirstOrDefault<CarBikeDets>("select * From CarBike  Where CarBikeID =@0", ServiceID);
             CarBike.pic = db.Fetch<PictureDets>("Select * From Picture Where ServiceID=@0 and ServiceTypeID=@1 Order By NewID()", CarBike.CarBikeID, (int)ServiceTypeEnum.CarBike).ToList();
             CarBike.GeoName = db.First<string>("Select GeoName From GeoTree  where GeoTreeID=@0", CarBike.GeoTreeID);
 
-            return PartialView();
+            return PartialView(CarBike);
         }
 
         public ActionResult InfoPackagePartial(int? ServiceID, ServiceTypeEnum? st)
         {
-            var Packages = db.FirstOrDefault<PackageDets>("select * From Package  Where PackageID =@0 and ServiceTypeID=@0", ServiceID, st);
+            var Packages = db.FirstOrDefault<PackageDets>("select * From Package  Where PackageID =@0 and ServiceTypeID=@1", ServiceID, st);
             Packages.Pic = db.Fetch<PictureDets>("Select * From Picture Where ServiceID=@0 and ServiceTypeID=@1 Order By NewID()", Packages.PackageID, st).ToList();
             Packages.GeoName = db.First<string>("Select GeoName From GeoTree g,Package_GeoTree pg  where pg.PackageID=@0 and g.GeoTreeID = pg.GeoTreeID", Packages.PackageID);
-            return PartialView();
+            Packages.Glang = db.Fetch<GuideLanguage>("Select * from GuideLanguage g  inner join Package_Language pl on pl.GuideLanguageID= g.GuideLanguageID inner join Package p on p.PackageID= pl.PackageID where pl.PackageID=@0",Packages.PackageID);
+            return PartialView(Packages);
         }
         public ActionResult About()
         {

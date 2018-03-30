@@ -1,4 +1,8 @@
-﻿<style>
+﻿<head>
+    <script src="/Scripts/jquery.masonry.min.js"></script>
+    <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
+</head>
+<style>
     /*small change*/
     .carousel {
         width: 100% !important;
@@ -58,8 +62,11 @@
     /*Specific*/
     .DetailBlock {
         background: #f4f3ea;
-        padding: 10px;
+        padding: 50px;
         margin-left:30px;
+        min-height:450px;
+        margin-bottom:20px;
+        width:100%;
     }
 
     .addcart {
@@ -101,9 +108,17 @@
     }
     h2 {
         font-family: "Merriweather Sans",serif;
+        font-size: 56px;
+        color: #006aa7;
+        font-weight: bold;
+        padding-left: 18px;
+    }
+    h3 {
+        font-family: "Merriweather Sans",serif;
         font-size: 37px;
         color: #006aa7;
         font-weight: bold;
+        padding-left: 18px;
     }
 
     .block-title {
@@ -141,15 +156,55 @@
         margin-right:30px;
     }
 
-    .grid-sizer,
-    .grid-item {
-        width: 20%;
-    }
-    /* 2 columns */
-    .grid-item--width2 {
-        width: 40%;
-    }
+ 
 
+    .card{
+        width:250px;
+        height:165px;
+        margin:10px;
+    }
+    .card-block {
+        height: 6px;
+        color: white;
+        background-color: white;
+    }
+    .card-title {
+        font-family: "Quattrocento Sans",sans-serif;
+        padding-top: 8px;
+        background-color:#0094ff;
+        font-size: 18px;
+
+        text-align: center;
+        color:black
+    }
+ 
+    #Container2{
+        margin-left:20px;
+    }
+    .desc {
+        text-transform: uppercase;
+        color: #009de0;
+        font-size: 25px;
+        border-bottom: 1px solid #e8e7e2;
+        font-weight: normal;
+        font-family: "Merriweather Sans",serif;
+        margin-top: 0;
+        margin-bottom: 0;
+        line-height: 1.4;
+    }
+    .img-title {
+        position: absolute;
+        top: 70px;
+        max-width: 90%;
+        padding-left: 20px;
+        font-size: 48px;
+        line-height: 58px;
+        font-family: 'Merriweather Sans';
+        letter-spacing: -3px;
+        font-weight: bold;
+        color: #fff;
+        text-shadow: 4px 4px 4px #000;
+    }
 </style>
 <div class="container">
     <hr style="padding-bottom:0;margin-bottom:0;padding-top:2px;margin-top:0;line-height: 1.428571429;" />
@@ -179,6 +234,9 @@
     @Html.Action("InfoPackagePartial", "Home", new { ServiceID = ViewBag.ServiceID, st = ViewBag.ST })
 }
 <div class="col-md-4">
+    <br />
+    <br />
+    <br />
     <div class="addcart">
         <div class="container">
             <center>
@@ -243,13 +301,12 @@
 
     </div>
     <br />
-    <br />
     <hr class="sbhr" />
 
     <div class="block-sb-info">
 
         <div class="container  ">
-            <h2>Why Speed Bird?</h2>
+            <h3>Why Speed Bird?</h3>
             <ul class="tck">
                 <li>
                     <i class="fa fa-check" style="font-size:48px;color:green"></i>
@@ -267,17 +324,43 @@
 
         </div>
     </div>
-    <hr class="sbhr"/>
+    <hr class="sbhr" />
+    @if (ViewBag.ST == ServiceTypeEnum.Packages)
+    {
+        <h3>Similar Packages</h3>
+        <div class="container">
 
+            <div class="card bg-dark text-white" style="width:360px;;height:150px; margin-left:0;">
+                <img class="card-img" src="/Images/World.jpg" alt="Card image" style="width:360px;height:150px; ">
+                <div class="card-img-overlay">
+                    <p class="img-title">Panjim</p>
+                </div>
+            </div>
+            <div class="card bg-dark text-white" style="width:360px;;height:150px; margin-left:0;">
+                <img class="card-img" src="/Images/World.jpg" alt="Card image" style="width:360px;height:150px; ">
+                <div class="card-img-overlay">
+                    <p class="img-title">Panjim</p>
+                </div>
+            </div>
+            <div class="card bg-dark text-white" style="width:360px;;height:150px; margin-left:0;">
+                <img class="card-img" src="/Images/World.jpg" alt="Card image" style="width:360px;height:150px; ">
+                <div class="card-img-overlay">
+                    <p class="img-title">Panjim</p>
+                </div>
+            </div>
+        </div>
+    }
 </div>
 </div>
 </div>
 <script>
-    $('.grid').masonry({
-        // set itemSelector so .grid-sizer is not used in layout
-        itemSelector: '.grid-item',
-        // use element for option
-        columnWidth: '.grid-sizer',
-        percentPosition: true
-    })
+    var $container2 = $('#Container2');
+    $container2.imagesLoaded(function () {
+        $container2.masonry({
+            itemSelector: '.Package',
+            columnWidth: 10,
+            isFitWidth: true,
+            isAnimated: true,
+        });
+    });
 </script>
