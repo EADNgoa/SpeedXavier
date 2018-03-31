@@ -40,11 +40,42 @@
         <div class="col-md-8">
             <div class="row">
                 <h2 style="margin-left:60px;">@Model.PackageName</h2>
+                <br />
                 <div class="DetailBlock">
                     <div class="row">
                         <table class="table">
                             <tr>
-                                <td class="desc">Description</td>
+                                <td class="desc">
+                                    <i class="material-icons" style="color:#009de0;">&#xe25f;</i>  @Model.PackageName HighLights
+                                </td>
+                            </tr>                            
+                            <tr>
+                                <td style="color:#11496d;">
+                                    @Model.Highlights
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                </div>
+                <div class="DescriptionBlock">
+                    <div class="row">
+                        <table class="table">
+                            <tr>
+                                <td class="desc">
+                                    <i style="font-size:24px" class="fa">&#xf036;</i>
+                                    Description
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="card bg-dark text-white" id="descimgcard" >
+                                        <img class="card-img" src="/Images/@Model.Pic.Last().PictureName" alt="Card image" style="width:100%;height:300px; ">
+                                        <div class="card-img-overlay">
+                                            @Model.GeoName
+                                        </div>
+                                    </div>
+                                </td>
                             </tr>
                             <tr>
                                 <td>
@@ -55,11 +86,14 @@
                     </div>
 
                 </div>
-                <div class="DetailBlock">
+                <div class="DetailBlock" style="padding:30px;min-height:0;">
                     <div class="row">
                         <table class="table">
                             <tr>
-                                <td class="desc" colspan="2">Package Details</td>
+                                <td class="desc d-lg-table-cell" colspan="2">
+                                    <i style="font-size:24px" class="fa">&#xf072;</i>
+                                    Package Details
+                                </td>
                             </tr>
                             <tr>
                                 <td>
@@ -98,10 +132,10 @@
                                     Guide Languages
                                 </td>
                                 <td>
-                              @foreach (var i in Model.Glang)
-                               {
-                                     @i.GuideLanguageName
-                               }
+                               @foreach (var i in Model.Glang)
+                                {
+                                    @i.GuideLanguageName
+                                }   
                                 </td>
                             </tr>
 
@@ -124,21 +158,13 @@
                             </tr>
                             <tr>
                                 <td>
-                                   Exclusion
+                                    Exclusion
                                 </td>
                                 <td>
                                     @Model.Exclusion
                                 </td>
                             </tr>
 
-                            <tr>
-                                <td>
-                                    Highlights
-                                </td>
-                                <td>
-                                    @Model.Highlights
-                                </td>
-                            </tr>
 
                         </table>
                     </div>

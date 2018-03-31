@@ -76,6 +76,10 @@ namespace Speedbird
         public string GuideLanguageName { get; set; }
         public int ServiceID { get; set; }
         public string PictureName { get; set; }
+        public string AttractionName { get; set; }
+        public string ActivityName { get; set; }
+        public string CategoryName { get; set; }
+
         public IEnumerable<PictureDets> Pic { get; set; }
         public IEnumerable<GuideLanguage> Glang { get; set; }
 

@@ -41,7 +41,10 @@
             <div class="row">
                 <h2 style="margin-left:60px;">@Model.AccomName</h2>
                 <div class="DetailBlock">
-                    <h4 class="desc">Description</h4>
+                    <h4 class="desc">
+                        <i style="font-size:24px" class="fa">&#xf036;</i>
+                        Description
+                    </h4>
                     <br />
                     @Model.Description
                 </div>
@@ -49,7 +52,7 @@
             <br />
             <br />
             <div class="row">
-              @Html.Action("AccomFacPartial","Home",new {ServiceID=Model.AccomodationID})
+              @Html.Action("AccomFacPartial","Home",new {ServiceID=Model.AccomodationID,GeoTreeID=Model.GeoTreeID})
             </div> 
         </div>
        

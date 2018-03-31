@@ -6,8 +6,8 @@
         <center>
             @foreach (var item in Model)
             {
-            <div class="card Package">
-                <img class="card-img-top" src="/Images/@item.pic.FirstOrDefault().PictureName" alt="Card image cap">
+            <div class="card " id="accomfaccard">
+                <img class="card-img-top"  id="cardimgtop"src="/Images/@item.pic.FirstOrDefault().PictureName" alt="Card image cap">
                 <div class="card-block">
                     <h4 class="card-title">@item.AccomName</h4>
                 </div>

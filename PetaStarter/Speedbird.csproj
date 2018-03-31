@@ -588,6 +588,9 @@
     <Content Include="Views\Home\AccomFacPartial.cshtml" />
     <Content Include="Views\Home\InfoCarBikePartial.cshtml" />
     <Content Include="Views\Home\InfoPackagePartial.cshtml" />
+    <Content Include="Views\Home\PackageAttractPartial.cshtml" />
+    <Content Include="Views\Home\PackageCatPartial.cshtml" />
+    <Content Include="Views\Home\GetPrice.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
