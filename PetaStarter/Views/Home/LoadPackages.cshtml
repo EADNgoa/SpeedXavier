@@ -33,6 +33,7 @@
         height: auto;
         background-color: ghostwhite;
     }
+
     .card-title {
         text-align: left;
     }
@@ -41,7 +42,7 @@
         text-align: left;
     }
 
- 
+
 
     .breadcrumb {
         padding-top: 0;
@@ -125,16 +126,9 @@
         padding-bottom: 0;
         float: left;
     }
-
-
 </style>
 
-<head>
-    <script src="/Scripts/jquery.masonry.min.js"></script>
-    <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
 
-    <link href="https://fonts.googleapis.com" rel="stylesheet">
-</head>
 <div class="container">
     <hr style="padding-bottom:0;margin-bottom:0;padding-top:2px;margin-top:0;line-height: 1.428571429;" />
 
@@ -158,77 +152,106 @@
             <div class="sidenav">
 
 
-   @if (@ViewBag.st == ServiceTypeEnum.Packages || @ViewBag.st == ServiceTypeEnum.SightSeeing || @ViewBag.st == ServiceTypeEnum.Accomodation || @ViewBag.st == ServiceTypeEnum.CarBike)
-   {
-         @Html.Hidden("st", (int)ViewBag.st)
-         @Html.Hidden("Loc", (string)ViewBag.loc)
-       if(@ViewBag.st == ServiceTypeEnum.CarBike)
-       {
-                <table class="d-sm-table-cell">
-                    <tr>
-                        <td>
-                            <div class="form-group">
-                                <label>No Of Passenger</label>
-                                <div class="col-md-12">
-                                    @Html.DropDownList("nums", ViewBag.nums as IEnumerable<SelectListItem>, "---", new { @class = "form-control nopax" })
-                                </div>
-                            </div>
-
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="form-group">
-                                <label>Large Bags</label>
-                                <div class="col-md-12">
-                                    @Html.DropDownList("nums", ViewBag.nums as IEnumerable<SelectListItem>, "---", new { @class = "form-control large" })
-                                </div>
-                            </div>
-
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="form-group">
-                                <label>Small Bags</label>
-                                <div class="col-md-12">
-                                    @Html.DropDownList("nums", ViewBag.nums as IEnumerable<SelectListItem>, "---", new { @class = "form-control Small" })
-                                </div>
-                            </div>
-
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="form-group">
-                                <label>Ac</label>
-                                <div class="col-md-12">
-                                    @Html.DropDownList("TF", ViewBag.TF as IEnumerable<SelectListItem>, "---", new { @class = "form-control Ac" })
-                                </div>
-                            </div>
-                        </td>
-
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="form-group">
-                                <label>Has Carrier</label>
-                                <div class="col-md-12">
-                                    @Html.DropDownList("TF", ViewBag.TF as IEnumerable<SelectListItem>, "---", new { @class = "form-control Carrier" })
-                                </div>
-                            </div>
-                        </td>
-
-                    </tr>
-                </table>
-       }
-       if (@ViewBag.st != ServiceTypeEnum.Accomodation && @ViewBag.st != ServiceTypeEnum.CarBike)
-       {
-            <h4>Categories</h4>
-            <table class="d-xl-table-cell">
-              
-                @foreach (var item in ViewBag.Cats)
+                @if (@ViewBag.st == ServiceTypeEnum.Packages || @ViewBag.st == ServiceTypeEnum.SightSeeing || @ViewBag.st == ServiceTypeEnum.Accomodation || @ViewBag.st == ServiceTypeEnum.CarBike)
     {
+            @Html.Hidden("st", (int)ViewBag.st)
+            @Html.Hidden("Loc", (int)ViewBag.loc)
+if (@ViewBag.st == ServiceTypeEnum.CarBike)
+{
+            <table class="d-sm-table-cell">
+                <tr>
+                    <td>
+                        <div class="form-group">
+                            <label>Destination</label>
+                            <div class="col-md-12">
+                                <select style="width:280px;" class="GeoSelect" multiple="multiple">
+                                    <option value="0">Default</option>
+                                </select>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="form-group">
+                            <label>No Of Passenger</label>
+                            <div class="col-md-12">
+                                @Html.DropDownList("nums", ViewBag.nums as IEnumerable<SelectListItem>, "---", new { @class = "form-control nopax" })
+                            </div>
+                        </div>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="form-group">
+                            <label>Large Bags</label>
+                            <div class="col-md-12">
+                                @Html.DropDownList("nums", ViewBag.nums as IEnumerable<SelectListItem>, "---", new { @class = "form-control large" })
+                            </div>
+                        </div>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="form-group">
+                            <label>Small Bags</label>
+                            <div class="col-md-12">
+                                @Html.DropDownList("nums", ViewBag.nums as IEnumerable<SelectListItem>, "---", new { @class = "form-control Small" })
+                            </div>
+                        </div>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="form-group">
+                            <label>Ac</label>
+                            <div class="col-md-12">
+                                @Html.DropDownList("TF", ViewBag.TF as IEnumerable<SelectListItem>, "---", new { @class = "form-control Ac" })
+                            </div>
+                        </div>
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>
+                        <div class="form-group">
+                            <label>Has Carrier</label>
+                            <div class="col-md-12">
+                                @Html.DropDownList("TF", ViewBag.TF as IEnumerable<SelectListItem>, "---", new { @class = "form-control Carrier" })
+                            </div>
+                        </div>
+                    </td>
+
+                </tr>
+            </table>
+}
+if (@ViewBag.st != ServiceTypeEnum.Accomodation && @ViewBag.st != ServiceTypeEnum.CarBike)
+{
+
+            <h4>Destinations</h4>
+            <table class="d-xl-table-cell">
+                <tr>
+                    <td>
+                        <div class="form-group">
+                            <label>Destination</label>
+                            <div class="col-md-12">
+                                <select class="GeoSelect form-control-lg" multiple="multiple">
+                                    <option value="0">Default</option>
+                                </select>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                </table>
+
+                <h4>Categories</h4>
+                <table class="d-xl-table-cell">
+
+                    @foreach (var item in ViewBag.Cats)
+        {
 
             <tr>
                 <td>
@@ -243,14 +266,14 @@
             </tr>
 }
 
-            </table>
+                </table>
 
-            <hr />
-            <h4>Activities</h4>
-            <table class="d-xl-table-cell">
+                <hr />
+                <h4>Activities</h4>
+                <table class="d-xl-table-cell">
 
-                @foreach (var item in ViewBag.Acts)
-    {
+                    @foreach (var item in ViewBag.Acts)
+        {
             <tr>
                 <td>
                     <label class="form-check-label">
@@ -262,13 +285,13 @@
 
 }
 
-            </table>
-}
-            <hr />
+                </table>
+                }
+                <hr />
 
-            <table class="d-xl-table-cell">
-   @if (@ViewBag.st != ServiceTypeEnum.Accomodation && @ViewBag.st != ServiceTypeEnum.CarBike)
-    {
+                <table class="d-xl-table-cell">
+                    @if (@ViewBag.st != ServiceTypeEnum.Accomodation && @ViewBag.st != ServiceTypeEnum.CarBike)
+        {
             <tr>
                 <td>
                     <div class="form-group">
@@ -314,25 +337,25 @@
                 </td>
             </tr>
 }
-                <tr>
-                    <td>
-                        <p>
-                            <label for="amount">Price range:</label>
-                            <input type="text" id="amount" class="prange" value=" " readonly style="border:0; color:#000000; font-weight:bold;">
-                        </p>
+                    <tr>
+                        <td>
+                            <p>
+                                <label for="amount">Price range:</label>
+                                <input type="text" id="amount" class="prange" value=" " readonly style="border:0; color:#000000; font-weight:bold;">
+                            </p>
 
-                        <div id="slider-range"></div>
-                    </td>
-                </tr>
-            </table>
-if (@ViewBag.st != ServiceTypeEnum.Accomodation && @ViewBag.st != ServiceTypeEnum.CarBike)
-{
-            <hr />
-            <h4> Attractions</h4>
-            <table class="d-xl-table-cell">
+                            <div id="slider-range"></div>
+                        </td>
+                    </tr>
+                </table>
+                if (@ViewBag.st != ServiceTypeEnum.Accomodation && @ViewBag.st != ServiceTypeEnum.CarBike)
+                {
+                <hr />
+                <h4> Attractions</h4>
+                <table class="d-xl-table-cell">
 
-                @foreach (var item in ViewBag.Attracts)
-    {
+                    @foreach (var item in ViewBag.Attracts)
+        {
             <tr>
                 <td>
                     <label class="form-check-label">
@@ -345,70 +368,58 @@ if (@ViewBag.st != ServiceTypeEnum.Accomodation && @ViewBag.st != ServiceTypeEnu
 }
 
 
-            </table>
+                </table>
 
-                    }
-                    if (@ViewBag.st != ServiceTypeEnum.Packages && @ViewBag.st != ServiceTypeEnum.SightSeeing && @ViewBag.st != ServiceTypeEnum.Cruise && @ViewBag.st != ServiceTypeEnum.CarBike)
-                    {
-            <hr />
-            <h4> Attractions</h4>
-            <table class="d-xl-table-cell">
+                }
+                if (@ViewBag.st != ServiceTypeEnum.Packages && @ViewBag.st != ServiceTypeEnum.SightSeeing && @ViewBag.st != ServiceTypeEnum.Cruise && @ViewBag.st != ServiceTypeEnum.CarBike)
+                {
+                <hr />
+                <h4> Attractions</h4>
+                <table class="d-xl-table-cell">
 
-                @foreach (var item in ViewBag.fac)
-                 {
-                        <tr>
-                            <td>
-                                <label class="form-check-label">
-                                    <input type="checkbox" name="fac" value="@item.FacilityID" class=" fac form-check-input">
-                                    @item.FacilityName
-                                </label>
-                            </td>
-                        </tr>
-
-               }
-
-
-            </table>
+                    @foreach (var item in ViewBag.fac)
+        {
+            <tr>
+                <td>
+                    <label class="form-check-label">
+                        <input type="checkbox" name="fac" value="@item.FacilityID" class=" fac form-check-input">
+                        @item.FacilityName
+                    </label>
+                </td>
+            </tr>
 
 }
-}
+
+
+                </table>
+
+                }
+                }
 
 
 
             </div>
-        </div> 
+        </div>
         @Html.Hidden("maxPrice")
         @Html.Hidden("minPrice")
-        
-        <div class=" col-md-9" id="partialview">
-            @Html.Action("PackagesPartialView", "Home", new { st = ViewBag.st, Loc = ViewBag.loc })
 
+        <div class=" col-md-9" id="partialview">
+            @Html.Action("PackagesPartialView", "Home", new { st = ViewBag.st, DestIds = new List<int>() { (int)ViewBag.Loc } } )
         </div>
     </div>
 
-        
+
 
 
 
 </div>
 <script type="text/javascript">
-    var $container = $('#Container');
-    $container.imagesLoaded(function () {
-        $container.masonry({
-            itemSelector: '.ServiceTypes',
-            columnWidth: 150,
-            isAnimated: true,
-        });
-    });
 
-    
+
+
     //Filter
   $(document).ready(function () {
-        var CatValues = [];
-        var ActValues = [];
-        var AttractValues = [];
-
-        var CatLoc = $('#Loc').val();
+         
         var CatSt = $('#st').val();
 
         var setFilters = function () {
@@ -428,19 +439,27 @@ if (@ViewBag.st != ServiceTypeEnum.Accomodation && @ViewBag.st != ServiceTypeEnu
             $.each($(".fac:checked"), function () {
                 FacValues.push($(this).val());
             });
-          
+            DestValues = [];
+            var Dests = $('.GeoSelect').val();
+            for (var i = 0; i < Dests.length; i++) {
+                DestValues.push(Dests[i]);
+            }
+
+            if (DestValues.length < 1)
+                DestValues.push($('#Loc').val());
+
             $('#partialview').html(" ");
             $('#partialview').load(
                 '@Url.Action("PackagesPartialView", "Home")',
                 {
-                    st: CatSt, Loc: CatLoc, CatID: CatValues, ActID: ActValues,
+                    st: CatSt, CatID: CatValues, ActID: ActValues,
                     Gsize: $(".gsize option:selected").text(), diff: $(".diffic option:selected").text(),
                     dur: $(".dur option:selected").text(), AttractID: AttractValues,
                     GuideLanguageID: parseInt($(".language option:selected").val()),
                     maxPrice: $("#maxPrice").val(), minPrice: $("#minPrice").val(),
                     FacilityID: FacValues, NoPax: parseInt($(".nopax option:selected").val()),
                     large: parseInt($(".large option:selected").val()), small: parseInt($(".large option:selected").val()), HasAc: $(".Ac option:selected").val(),
-                    HasCarrier: $(".Carrier option:selected").val(),
+                    HasCarrier: $(".Carrier option:selected").val(), DestIds: DestValues
                 }
             );
 
@@ -448,11 +467,12 @@ if (@ViewBag.st != ServiceTypeEnum.Accomodation && @ViewBag.st != ServiceTypeEnu
 
 
         $(".cat,.act,.gsize,.diffic,.dur,.attract,.language,.fac,.nopax,.large,.small,.Ac,.Carrier").change(setFilters);
-
-    
+        $(".GeoSelect").on('change', function (e) {
+            setFilters();
+        });
 
     //Slider
-    
+
         $("#slider-range").slider({
             range: true,
             min: 0,
@@ -467,12 +487,12 @@ if (@ViewBag.st != ServiceTypeEnum.Accomodation && @ViewBag.st != ServiceTypeEnu
                 setFilters();
                 //alert("Hey Diptesh!");
             }
-            
+
         });
         $("#amount").val("Rs" + $("#slider-range").slider("values", 0) +
             " - Rs" + $("#slider-range").slider("values", 1));
 
-      
+
   });
 
 </script>

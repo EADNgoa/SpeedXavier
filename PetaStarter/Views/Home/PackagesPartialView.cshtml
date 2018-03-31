@@ -1,26 +1,32 @@
-﻿
-@model  IEnumerable<Speedbird.AccomPackCarBike>
+﻿@model  List<Speedbird.AccomPackCarBike>
 
 
 <h2>@ViewBag.ServiceTitle</h2>
-<div id="Container">
+<div id="ResContainer">
 
 
 
        @foreach (var item in Model)
         {
-            <div class="card ServiceTypes" style="width: 18rem;">
-                <img class="card-img-top" src="/Images/@item.ServicePic" alt="Card image cap">
-                <div class="card-body">
-                    <div class="FloatBadge">
-                        @item.ServiceGeoName
-                    </div>
-                    <h5 class="card-title">@item.ServiceName</h5>
-                    <p class="card-text">@item.ServiceDescription</p>
-
-                </div>
-
+    <div class="card ServiceTypes" style="width: 18rem;">
+        @if (item.ServicePic != "")
+    {
+        <img class="card-img-top" src="/Images/@item.ServicePic" alt="Card image cap">
+}
+else
+{
+    <img class="card-img-top" src="/Images/ComingSoon.png" alt="Card image cap">
+}
+        <div class="card-body">
+            <div class="FloatBadge">
+                @item.ServiceGeoName
             </div>
+            <h5 class="card-title">@item.ServiceName</h5>
+            <p class="card-text">@item.ServiceDescription</p>
+
+        </div>
+
+    </div>
 
         }
    
@@ -28,13 +34,13 @@
 
 
 <script>
-    var $container = $('#Container');
-    $container.imagesLoaded(function () {
-        $container.masonry({
+    
+    //$container.imagesLoaded(function () {
+    $('#ResContainer').masonry({
             itemSelector: '.ServiceTypes',
             columnWidth: 150,
             isAnimated: true,
         });
-    });
+    //});
 
 </script>
