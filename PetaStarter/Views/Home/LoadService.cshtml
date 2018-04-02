@@ -1,21 +1,21 @@
 ﻿@model  IEnumerable<Speedbird.CategoryRec>
 <style>
 
-    h2 {
-        font-size: 57px;
+    h3 {
+        font-size: 47px;
         color: #006aa7;
-        font-weight: 900;
+        font-weight: 800;
         margin-bottom: 8px;
         padding: 0;
         margin-top: 30px;
-        margin-bottom: 20px;
+        margin-bottom: 10px;
         font-family: "Merriweather Sans",serif;
-        margin-left:90px;
+        margin-left: 90px;
     }
 
 
     .card {
-        width: 380px !important;
+        /*width: 210px !important;*/
         box-shadow: 0 3px 5px rgba(50,50,50,.6);
         position: relative;
         overflow: hidden;
@@ -26,7 +26,6 @@
         margin-bottom: 14px;
         height: auto;
         background-color: grey;
-
     }
 
     .card-img-top {
@@ -42,7 +41,7 @@
         padding-top: 8px;
         background-color: #428bca;
         font-size: 18px;
-        text-align:center;
+        text-align: center;
     }
 
     .card-block {
@@ -51,20 +50,20 @@
         background-color: black;
     }
 
-   
+
     .breadcrumb {
         padding-top: 0;
         padding-bottom: 0;
         background-color: white;
-        position:absolute;
-        margin-top:0;
-        margin-bottom:0;
-
+        position: absolute;
+        margin-top: 0;
+        margin-bottom: 0;
     }
+
     .breadcrumb-item {
         padding-top: 0;
         margin-top: 0;
-        font-size: 10px;
+        /*font-size: 10px;*/
         background-color: white;
         padding-bottom: 0;
         margin-bottom: 0;
@@ -72,33 +71,28 @@
         width: auto;
         display: inline-block;
         color: #a5a5a5;
-        font-family: "Quattrocento Sans",serif;
+        /*font-family: "Quattrocento Sans",serif;*/
     }
+
     .container {
         padding-top: 0;
         padding-bottom: 0;
         margin-bottom: 0;
         margin-top: 0;
     }
-   .breadcrumb span {
-        padding: 0;
-        margin:0;
-        font-size: 10px;
-        text-decoration: none;
-        color:dimgray;
-        font-family: "Quattrocento Sans",serif;
-    }
-    .HeroTitle{
+
+
+    .HeroTitle {
+
         font-size: 140px;
         font-family: "Quattrocento Sans",sans-serif;
         font-weight: 300;
-  
         position: absolute;
         color: #fff;
         text-shadow: 1px 1px 1px #000;
         line-height: 80%;
-        bottom: 200px;
-        left:90px;
+        top: 300px;
+        left: 90px;
     }
     .money {
         font-size: 30px;
@@ -118,20 +112,21 @@
     <script src="/Scripts/jquery.masonry.min.js"></script>
     <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
 
-    <link href="https://fonts.googleapis.com" rel="stylesheet">
+    
 </head>
-<div class="container">
-    <hr style="padding-bottom:0;margin-bottom:0;padding-top:2px;margin-top:0;line-height: 1.428571429;" />
 
-    <div class="row">
-        <nav class="breadcrumb">
-            <span>you are here:&nbsp;</span>
-            <a class="breadcrumb-item" href="@Request.UrlReferrer.AbsoluteUri">Home</a>
-            <a class="breadcrumb-item" href="@Request.Url.AbsoluteUri">@ViewBag.Loc</a>
-        </nav>
-    </div>
+<hr style="padding-bottom:0;margin-bottom:0;padding-top:2px;margin-top:0;line-height: 1.428571429;" />
 
+<div class="row">
+    
+    <nav class="breadcrumb ml-5">
+        <span class="breadcrumb-item" href="#">&nbsp; &nbsp; </span>
+        <a class="breadcrumb-item" href="@Request.UrlReferrer.AbsoluteUri">Home</a>
+        <a class="breadcrumb-item" href="@Request.Url.AbsoluteUri">@ViewBag.Loc</a>
+    </nav>
 </div>
+
+
 <br />
 
 <center>
@@ -140,11 +135,13 @@
 <h1 class="HeroTitle">@ViewBag.Loc</h1>
 
 <div class="container-fluid">
-    
-        <h2>
-            Best Tours and Excursion
-        </h2>
-    
+
+    <center>
+        <h3>
+            Best Tours and Excursions in @ViewBag.Loc
+        </h3>
+    </center>
+
 
     <div id="Container">
         <center>
@@ -195,59 +192,59 @@
                 </div>
             </a>
             @if (ViewBag.loc != "Goa")
-    {
-        <a href="/Home/LoadPackages/?st=@Speedbird.ServiceTypeEnum.SightSeeing&&loc=@ViewBag.Loc">
-
-            <div class="card ServiceTypes" style="width: 20rem;">
-                <img class="card-img-top" src="/Images/@ViewBag.SightSeeing.PictureName" alt="Card image cap">
-                <div class="FloatBadge">
-                    @ViewBag.Loc
-                </div>
-                <div class="card-block">
-                    <h4 class="card-title">Sight Seeing</h4>
-                </div>
-            </div>
-        </a>
-if (ViewBag.loc == "International")
-{
-        <a href="/Home/LoadPackages/?st=@Speedbird.ServiceTypeEnum.Cruise&&loc=@ViewBag.Loc">
-
-            <div class="card ServiceTypes" style="width: 20rem;">
-                <img class="card-img-top" src="/Images/@ViewBag.Cruise.PictureName" alt="Card image cap">
-                <div class="FloatBadge">
-                    @ViewBag.Loc
-                </div>
-                <div class="card-block">
-                    <h4 class="card-title">Cruise</h4>
-                </div>
-            </div>
-            </a>
-            }
-            }
-
-        </center>
-
-
-    </div>
-
-        <h2>Package Categories</h2>
-    <div id="Container2">
-        <center>
-            @foreach (var item in Model)
             {
-                <div class="card Package">
-                    <img class="card-img-top" src="/Images/@item.pack.First().PictureName" alt="Card image cap">
-                    <div class="FloatBadge">
-                        @ViewBag.Loc
+                <a href="/Home/LoadPackages/?st=@Speedbird.ServiceTypeEnum.SightSeeing&&loc=@ViewBag.Loc">
+
+                    <div class="card ServiceTypes" style="width: 20rem;">
+                        <img class="card-img-top" src="/Images/@ViewBag.SightSeeing.PictureName" alt="Card image cap">
+                        <div class="FloatBadge">
+                            @ViewBag.Loc
+                        </div>
+                        <div class="card-block">
+                            <h4 class="card-title">Sight Seeing</h4>
+                        </div>
                     </div>
-                    <div class="card-block">
-                        <h4 class="card-title">@item.CategoryName</h4>
-                    </div>
-                </div>
+                </a>
+                if (ViewBag.loc == "International")
+                {
+                    <a href="/Home/LoadPackages/?st=@Speedbird.ServiceTypeEnum.Cruise&&loc=@ViewBag.Loc">
+
+                        <div class="card ServiceTypes" style="width: 20rem;">
+                            <img class="card-img-top" src="/Images/@ViewBag.Cruise.PictureName" alt="Card image cap">
+                            <div class="FloatBadge">
+                                @ViewBag.Loc
+                            </div>
+                            <div class="card-block">
+                                <h4 class="card-title">Cruise</h4>
+                            </div>
+                        </div>
+                    </a>
+                }
             }
 
         </center>
+
+
     </div>
+
+    @*<h2>Package Categories</h2>
+        <div id="Container2">
+            <center>
+                @foreach (var item in Model)
+                {
+                    <div class="card Package">
+                        <img class="card-img-top" src="/Images/@item.pack.First().PictureName" alt="Card image cap">
+                        <div class="FloatBadge">
+                            @ViewBag.Loc
+                        </div>
+                        <div class="card-block">
+                            <h4 class="card-title">@item.CategoryName</h4>
+                        </div>
+                    </div>
+                }
+
+            </center>
+        </div>*@
 </div>
 <script>
     var $container = $('#Container');

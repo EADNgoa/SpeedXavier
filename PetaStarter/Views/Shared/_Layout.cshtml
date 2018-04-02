@@ -11,18 +11,19 @@
     @Styles.Render("~/Content/dtpic")
     @Styles.Render("~/Content/EAcss")
 
+
     @Scripts.Render("~/fa5")
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Quattrocento+Sans|Merriweather+Sans">
+
 
     <link href="https://fonts.googleapis.com" rel="stylesheet">
     <script src="/Scripts/jquery.masonry.min.js"></script>
     <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
 </head>
 <body>
-    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
-    <script src="/Scripts/jquery.masonry.min.js"></script>
-    <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
-
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
     @Html.Partial("_MenuPartial")
 
@@ -31,6 +32,8 @@
     @Scripts.Render("~/bundles/jqueryui")
 
     @Scripts.Render("~/bundles/jquerydtpicker")
+    <script src="/Scripts/jquery.masonry.min.js"></script>
+    <script src="/Scripts/imagesloaded.pkgd.min.js"></script>
     <div id="TopBody">
         @RenderBody()
         <hr />
@@ -49,6 +52,29 @@
             var bdy = $("#TopBody a");
             bdy.addClass('myatag');
 
+            function formatState(state) {
+                if (!state.id) {
+                    return state.text;
+                }
+                var parts = state.text.split(",");
+                return parts[0];
+
+            };
+
+             $(".GeoSelect").select2({
+                    placeholder: "Type 3 letters to choose",
+                    minimumInputLength: 3,
+                    templateSelection: formatState,
+
+                    ajax: {
+                        url: '@(Url.Action("GetLocations", "GeoTree"))',
+                        dataType: 'json',
+                        quietMillis: 250,
+                        results: function (data, page) {
+                            return { results: data.data };
+                        }
+                    }
+            });
 
 
             //DateTime picker
@@ -63,7 +89,10 @@
             jQuery.validator.methods["date"] = function (value, element) { return true; }
 
 
+
+
         });
+
 
         //autocomplete on any view without id
         //<input type="text" id="Item" name="Item" data-autocomplete-url="@@Url.Action("AutoComplete")" />

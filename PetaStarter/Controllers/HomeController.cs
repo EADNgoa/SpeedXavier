@@ -70,7 +70,7 @@ namespace Speedbird.Controllers
         public ActionResult LoadPackages(ServiceTypeEnum? st,string Loc,int? CatID)
         {
             ViewBag.st = st;
-            ViewBag.loc = Loc;
+            
             ViewBag.GuideLanguageID = new SelectList(db.Fetch<GuideLanguage>("Select GuideLanguageID,GuideLanguageName from GuideLanguage"), "GuideLanguageID", "GuideLanguageName");
 
             List<SelectListItem> items = new List<SelectListItem>();
@@ -89,14 +89,12 @@ namespace Speedbird.Controllers
             ViewBag.TF = tf;
             ViewBag.nums = items;
             var geoloc = db.FirstOrDefault<GeoTree>("Select * from GeoTree where GeoName = @0", Loc);
-
+            ViewBag.LocId = geoloc.GeoTreeID;
             if (st == ServiceTypeEnum.Packages || st == ServiceTypeEnum.SightSeeing)
             {
                 ViewBag.Cats = db.Fetch<Category>("Select * From Category");
                 ViewBag.Acts = db.Fetch<Activity>("Select * From Activity");
-                ViewBag.Attracts = db.Fetch<Attraaction>("Select a.* From Attraaction a inner join Package_Attraction pa on pa.AttractionID = a.AttractionID inner join Package p on p.PackageID =pa.PackageID inner join Package_GeoTree pg on pg.PackageID= p.PackageID inner join GeoTree g on g.GeoTreeID=pg.GeoTreeID where g.GeoTreeID in(Select GeotreeId from GetChildGeos(@0))",geoloc.GeoTreeID);
-
-
+                ViewBag.Attracts = db.Fetch<Attraaction>("Select Distinct a.* From Attraaction a inner join Package_Attraction pa on pa.AttractionID = a.AttractionID inner join Package p on p.PackageID =pa.PackageID inner join Package_GeoTree pg on pg.PackageID= p.PackageID where pg.GeoTreeID in(Select GeotreeId from GetChildGeos(@0))",geoloc.GeoTreeID);
 
             }
             if (st == ServiceTypeEnum.Accomodation)
@@ -105,9 +103,9 @@ namespace Speedbird.Controllers
             }
             return View();
         }
-        public ActionResult PackagesPartialView(ServiceTypeEnum? st, string Loc ,IEnumerable<int> CatID, IEnumerable<int> ActID,int? Gsize,int? diff,int? dur,int? GuideLanguageID, IEnumerable<int> AttractID,IEnumerable<int> FacilityID,decimal? maxPrice,decimal? minPrice,int? NoPax,int? large,int? small,int? hasAc,int? HasCarrier)
+        public ActionResult PackagesPartialView(ServiceTypeEnum? st, IEnumerable<int> CatID, IEnumerable<int> ActID,int? Gsize,int? diff,int? dur,int? GuideLanguageID, IEnumerable<int> AttractID,IEnumerable<int> FacilityID,decimal? maxPrice,decimal? minPrice,int? NoPax,int? large,int? small,int? hasAc,int? HasCarrier,IEnumerable<int> DestIds)
         {
-            var geoloc = db.FirstOrDefault<GeoTree>("Select * from GeoTree where GeoName = @0", Loc);
+            
             List<AccomPackCarBike> apc = new List<AccomPackCarBike>();
 
             ViewBag.st = st;
@@ -116,7 +114,7 @@ namespace Speedbird.Controllers
                 ViewBag.ServiceTitle = "Accomodations";
                 PetaPoco.Sql MainSql = new PetaPoco.Sql("Select Distinct a.AccomodationID,a.AccomName,a.Description,a.GeoTreeID,a.lat,a.longt");
                 PetaPoco.Sql FromSql = new PetaPoco.Sql("from Accomodation a,GeoTree g");
-                PetaPoco.Sql WhereSql = new PetaPoco.Sql("where a.GeoTreeID=g.GeoTreeID  and g.GeoTreeID in (Select GeoTreeID from GetChildGeos(@1))", (int)st, geoloc.GeoTreeID);
+                PetaPoco.Sql WhereSql = new PetaPoco.Sql("where a.GeoTreeID=g.GeoTreeID  and g.GeoTreeID in (Select GeoTreeID from GetChildGeos(@1))", (int)st, DestIds.First());
                 if (maxPrice != null && minPrice != null)
                 {
                     FromSql.Append(",Prices pr,OptionType ot");
@@ -135,7 +133,7 @@ namespace Speedbird.Controllers
                 {
                     a.pic = db.Fetch<PictureDets>("Select Top 1 * From Picture Where ServiceID=@0 and ServiceTypeID=@1 Order By NewID()", a.AccomodationID,(int)Speedbird.ServiceTypeEnum.Accomodation).ToList();
                     a.GeoName = db.First<string>("Select GeoName From GeoTree Where GeoTreeID= @0",a.GeoTreeID);
-                    apc.Add(new AccomPackCarBike { ServiceDescription = a.Description, ServiceGeoName = a.GeoName, ServiceID =a.AccomodationID, ServiceName = a.AccomName, ServicePic = a.pic.FirstOrDefault().PictureName });
+                    apc.Add(new AccomPackCarBike { ServiceDescription = a.Description.Substring(0,Math.Min(100,a.Description.Length)) + "...", ServiceGeoName = a.GeoName, ServiceID =a.AccomodationID, ServiceName = a.AccomName, ServicePic = (a.pic.Count() > 0) ? a.pic.FirstOrDefault().PictureName : "" });
 
                 });
 
@@ -143,7 +141,7 @@ namespace Speedbird.Controllers
             if (st == ServiceTypeEnum.CarBike)
             {
                 ViewBag.ServiceTitle = "Car And Bikes Rental";
-                var CarBike = db.Fetch<CarBikeDets>("Select * From CarBike c where GeoTreeID in (Select GeoTreeID from GetChildGeos(@0))", geoloc.GeoTreeID);
+                var CarBike = db.Fetch<CarBikeDets>("Select * From CarBike c where GeoTreeID in (Select GeoTreeID from GetChildGeos(@0))", DestIds.First());
                 if (NoPax != null)
                 {
                     CarBike = CarBike.Where(c=>c.NoPax <= NoPax).ToList();
@@ -179,7 +177,7 @@ namespace Speedbird.Controllers
                     c.GeoName = db.First<string>("Select GeoName From GeoTree Where GeoTreeID= @0", c.GeoTreeID);
 
                     c.pic= db.Fetch<PictureDets>("Select Top 1 * From Picture Where ServiceID=@0 and ServiceTypeID=@1 Order By NewID()", c.CarBikeID, (int)ServiceTypeEnum.CarBike).ToList();
-                    apc.Add(new AccomPackCarBike { ServiceDescription = c.Description, ServiceGeoName = c.GeoName, ServiceID = c.CarBikeID, ServiceName = c.CarBikeName, ServicePic = c.pic.FirstOrDefault().PictureName });
+                    apc.Add(new AccomPackCarBike { ServiceDescription = c.Description.Substring(0, Math.Min(100, c.Description.Length)) + "...", ServiceGeoName = c.GeoName, ServiceID = c.CarBikeID, ServiceName = c.CarBikeName, ServicePic = (c.pic.Count() > 0) ? c.pic.FirstOrDefault().PictureName : ""});
 
                 });
 
@@ -191,8 +189,8 @@ namespace Speedbird.Controllers
 
                 PetaPoco.Sql MainSql = new PetaPoco.Sql("Select Distinct p.PackageID,p.ServiceTypeID,p.PackageName,p.Description,p.Duration,p.Itinerary," +
                                                         "p.Dificulty,p.GroupSize,p.StartTime,p.Inclusion,p.Exclusion,p.HighLights");
-                PetaPoco.Sql FromSql = new PetaPoco.Sql("from Package p,GeoTree g,Package_GeoTree pg");
-                PetaPoco.Sql WhereSql = new PetaPoco.Sql("where p.PackageID=pg.PackageID and g.GeoTreeID=pg.GeoTreeID and  p.ServiceTypeID=@0 and g.GeoTreeID in (Select GeoTreeID from GetChildGeos(@1))", (int)st, geoloc.GeoTreeID);
+                PetaPoco.Sql FromSql = new PetaPoco.Sql("from Package p");
+                PetaPoco.Sql WhereSql = new PetaPoco.Sql("where p.ServiceTypeID=@0", (int)st);
 
                 if (CatID != null)
                 {
@@ -230,10 +228,15 @@ namespace Speedbird.Controllers
                 if(maxPrice!=null && minPrice != null)
                 {
                     FromSql.Append(",Prices pri");
-                    WhereSql.Append("and p.PackageID = pri.ServiceID and Price Between @0 and @1 ", minPrice,maxPrice);
-
-
+                    WhereSql.Append("and p.PackageID = pri.ServiceID and Price Between @0 and @1 and pri.PriceID = (select top 1 PriceID from Prices where p.PackageID = Prices.ServiceID and Prices.WEF<GetDate() order by Prices.WEF desc) ", minPrice,maxPrice);
                 }
+                if (DestIds != null)
+                {
+                    string Dests = string.Join(",", DestIds.ToArray());
+                    FromSql.Append(",Package_geotree pg");
+                    WhereSql.Append($"and p.PackageID= pg.PackageId and pg.GeoTreeId in (SELECT GeoTreeID FROM STRING_SPLIT('{Dests}', ',') CROSS APPLY dbo.GetChildGeos(value))");
+                }
+
                 MainSql.Append(FromSql);
                 MainSql.Append(WhereSql);
                 var pack = db.Query<PackageDets>(MainSql).ToList();
@@ -241,7 +244,7 @@ namespace Speedbird.Controllers
                 {
                     p.Pic = db.Fetch<PictureDets>("Select Top 1 * From Picture Where ServiceID=@0 and ServiceTypeID=@1 Order By NewID()", p.PackageID, p.ServiceTypeID).ToList();
                     p.GeoName = db.First<string>("Select GeoName From GeoTree g,Package_GeoTree pg  where pg.PackageID=@0 and g.GeoTreeID = pg.GeoTreeID",p.PackageID );
-                    apc.Add(new AccomPackCarBike {ServiceDescription=p.Description,ServiceGeoName=p.GeoName,ServiceID=p.PackageID,ServiceName=p.PackageName,ServicePic=p.Pic.FirstOrDefault().PictureName });
+                    apc.Add(new AccomPackCarBike {ServiceDescription=p.Description.Substring(0,100)+"...",ServiceGeoName=p.GeoName,ServiceID=p.PackageID,ServiceName=p.PackageName,ServicePic=(p.Pic.Count()>0)?p.Pic.FirstOrDefault().PictureName  :""});
 
                 });
 
