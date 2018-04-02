@@ -71,12 +71,6 @@
         max-height: 100%;
     }
 
-    .btmbrd {
-        position: relative;
-        top: 98%;
-        width: 100%;
-    }
-
     .card-title {
         font-family: "Quattrocento Sans",sans-serif;
         padding-top: 8px;
@@ -208,7 +202,7 @@
             </div>
         </div>
     </div>
-    <div class="btmbrd">
+    
         <div class="row ">
             <div class="col-md-2 high" style="background-color:dodgerblue">
 
@@ -229,17 +223,17 @@
 
             </div>
         </div>
-    </div>
+    
 </div>
 
-<div class="container-fluid">
+@*<div class="container-fluid">
     <h2>Categories</h2>
     <div id="Container2">
         <center>
             @foreach (var item in Model)
             {
                 <div class="card Package">
-                    <img class="card-img-top" src="/Images/@item.pack.First().PictureName" alt="Card image cap">
+                    <img class="card-img-top" src="/Images/@item.pack.FirstOrDefault()?.PictureName" alt="Card image cap">
 
                     <div class="card-block">
                         <h4 class="card-title">@item.CategoryName</h4>
@@ -253,7 +247,7 @@
 <div class="container-fluid">
         @Html.Action("IndexActPartial", "Home", new { st = ViewBag.st, Loc = ViewBag.loc })
 
-</div>
+</div>*@
 
 
 

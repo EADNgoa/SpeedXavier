@@ -1,94 +1,45 @@
-﻿<style>
-    a {
-        color: black;
-        border: medium none;
-        font-size: 16px;
-        font-family: "Quattrocento Sans",serif;
-        font-weight: bold;
-        -moz-appearance: none;
-        -webkit-appearance: none;
-        cursor: pointer;
-        padding: 0;
-        text-align: left;
-        width: 88px;
-        height: 22px !important;
-        color: #000;
-        box-shadow: none;
-        border-radius: 0;
-    }
-    .fake-input {
-        position: relative;
-        width: 240px;
-    }
-
-        .fake-input input {
-            background:#fff;
-            width: 100%;
-            box-sizing: border-box
-        }
-
-        .fake-input img {
-            position: absolute;
-            top: 2px;
-            right: 5px
-        }
-
+﻿
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="ml-5">&nbsp;</div>
     
-</style>
-<div class="row">
-    <nav class="navbar navbar-expand-md bg-white">
-        <div class="container-fluid">
-            <div class="col-md-2">
-                <a class="navbar-brand" href="/Home" style="margin-left:100px;"><img src="/Images/Logo.png" width="160" height="32" /></a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+    <a class="navbar-brand" href="/Home"><img src="/Images/Logo.png" width="160" height="32" /></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
 
-            </div>
-          
-            <div class="collapse navbar-collapse justify-content-end col-md-10" id="navbarsExampleDefault" style="float:left;margin-right:120px;margin-top:10px;">
-
-                <ul class="navbar-nav ">
-                    <li style="margin-right:150px;margin-left:250px;">
-                        <form class="form-inline my-2 my-lg-0 ">
-                            <div class="fake-input">
-                                <input class="form-control mr-sm-2" type="text" placeholder="Search">
-                                
-                            </div>
-                            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-
-                        </form>
-                    </li>
-                    <li>
-                        &nbsp;
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.html">Log in</a>
-                    </li>
-                    <li class="dropdown nav-item">
-                        <a class="nav-link dropdown-toggle" style="color:black" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Help
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                            <button class="dropdown-item" type="button">Action</button>
-                            <button class="dropdown-item" type="button">Another action</button>
-                            <button class="dropdown-item" type="button">Something else here</button>
-                        </div>
-                    </li>
-                    <li>
-
-                    <li class="nav-item">
-                        <a href="https://icons8.com " style="visibility:hidden;"></a>
-                        <a href="#" class="nav-link">
-                            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAMGSURBVFhHzVhLa9RQFI74nnZyM1Nf1f4DwY0bF7oQ7MKF+EBEXYgLEexGly4UQREEF8VXfWwUl0VdSXFRe2MdS8EqaouPnRtftLZJZkatdiZ+Jz0dpL2UZnJT7wcfSU5uzndy7rmPxDIeXp+d96U47Lni6HT6rnOo+Di3npv+H/iueA6Gs9O+Fw5ZS/iR+QUyNUxBeFJUwW1ej9g4xUDmNvvSvhkFKcUFfmR+4bvZ7QjyYSDFETbNAAJ8hCyWhgtNWTaZhcAVu6Msu/Y+NpmFMSkcdH8F3XyNTeYBtfgSGRziS/OA4NppIAW9jSvZZBaCHmcn1SG6ey+bzAJN6FEduuIym8wDpppX6OpB76nIpclqX8tylowHyh51c+qUth9KaxnLzh1T82HaxMLxniXjIZCNK2gkq5zqpCftkywZH3j4jcqpLiJ7E+Xu/DqWiw84uTLdqU6ih7pYqj7QPKhyrIuJ1/vis4ZVqdWhFN+rXdZSlqoftCYrBZJSiqsskQxw1jHDuQbSJpklkoHqRCWQiNJ+ze6ToyQza5QiiegcZ/d6gIHyVi0Un/A1rn0bh4K+oRKrh5j8H7BbfYDT/Sqx+ujsYLf6UC40rVWLxSOWtq/YuSxit3qB2vmgEo1DzAgX2Z1+YAN7a1JE3I0+8GMSwbXTysTu9AMCBzkLrWwyCyMy3xJ1lRTn2WQe0L3v0F0v+NI8IINnKYuBFLvYZBboKwyD5SNGdAXZ7Ec27yPgzrkS9Xs71YFCKD3JNCPIIgRpRP+kY0Rpl8HRf4n7E1E7KX7Xzl27jV2lg9rfL2mfDkNrwZgrtlIAsHVwkwgj/XkbbX4gIJfOo80vfWdL8ZmbpAOInKEAi90Nq9lEtkFkqMCXEUZ7nQ38IsfYRDV8jmyp/vNBxvaw8Cm6DlxniyqDnwaaMwj6F2WQfoZSUPwiX7hJOgg7rYWorx4KEsfyZLDiG82T3KQGzJkn+P44AvuDYwUvdoBvp4dwwFqMbLRB7A51+WwjE/dbEeR1BHfJl9lNbFbAsv4C0GzB36MkPRMAAAAASUVORK5CYII=" height="25" style="margin-left:30px; margin-bottom:10px !important;">
-                        </a>
-                    </li>
-                </ul>
-            </div>
-
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="mr-auto">&nbsp;</div>
+        <div class="my-2 my-lg-0">
+            <ul class="navbar-nav mr-5">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/Home">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Help
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="tel:+91 832 22 30 853">Phone +91 832 22 30 853</a>
+                        <a class="dropdown-item" href="mailto:info@speedbirdtravels.com">info@speedbirdtravels.com</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Chat</a>
+                        <a class="dropdown-item" href="#">Contact</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html">Log in</a>
+                </li>
+                <li class="nav-item">
+                    <a href="https://icons8.com " style="visibility:hidden;"></a>
+                    <a href="#" class="nav-link">
+                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAMGSURBVFhHzVhLa9RQFI74nnZyM1Nf1f4DwY0bF7oQ7MKF+EBEXYgLEexGly4UQREEF8VXfWwUl0VdSXFRe2MdS8EqaouPnRtftLZJZkatdiZ+Jz0dpL2UZnJT7wcfSU5uzndy7rmPxDIeXp+d96U47Lni6HT6rnOo+Di3npv+H/iueA6Gs9O+Fw5ZS/iR+QUyNUxBeFJUwW1ej9g4xUDmNvvSvhkFKcUFfmR+4bvZ7QjyYSDFETbNAAJ8hCyWhgtNWTaZhcAVu6Msu/Y+NpmFMSkcdH8F3XyNTeYBtfgSGRziS/OA4NppIAW9jSvZZBaCHmcn1SG6ey+bzAJN6FEduuIym8wDpppX6OpB76nIpclqX8tylowHyh51c+qUth9KaxnLzh1T82HaxMLxniXjIZCNK2gkq5zqpCftkywZH3j4jcqpLiJ7E+Xu/DqWiw84uTLdqU6ih7pYqj7QPKhyrIuJ1/vis4ZVqdWhFN+rXdZSlqoftCYrBZJSiqsskQxw1jHDuQbSJpklkoHqRCWQiNJ+ze6ToyQza5QiiegcZ/d6gIHyVi0Un/A1rn0bh4K+oRKrh5j8H7BbfYDT/Sqx+ujsYLf6UC40rVWLxSOWtq/YuSxit3qB2vmgEo1DzAgX2Z1+YAN7a1JE3I0+8GMSwbXTysTu9AMCBzkLrWwyCyMy3xJ1lRTn2WQe0L3v0F0v+NI8IINnKYuBFLvYZBboKwyD5SNGdAXZ7Ec27yPgzrkS9Xs71YFCKD3JNCPIIgRpRP+kY0Rpl8HRf4n7E1E7KX7Xzl27jV2lg9rfL2mfDkNrwZgrtlIAsHVwkwgj/XkbbX4gIJfOo80vfWdL8ZmbpAOInKEAi90Nq9lEtkFkqMCXEUZ7nQ38IsfYRDV8jmyp/vNBxvaw8Cm6DlxniyqDnwaaMwj6F2WQfoZSUPwiX7hJOgg7rYWorx4KEsfyZLDiG82T3KQGzJkn+P44AvuDYwUvdoBvp4dwwFqMbLRB7A51+WwjE/dbEeR1BHfJl9lNbFbAsv4C0GzB36MkPRMAAAAASUVORK5CYII=" height="25" style="margin-left:30px; margin-bottom:10px !important;">
+                    </a>
+                </li>
+            </ul>
         </div>
-
-
-    </nav>
-
-</div>
+        @*<form class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </form>*@
+    </div>
+</nav>

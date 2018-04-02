@@ -89,12 +89,12 @@ namespace Speedbird.Controllers
             ViewBag.TF = tf;
             ViewBag.nums = items;
             var geoloc = db.FirstOrDefault<GeoTree>("Select * from GeoTree where GeoName = @0", Loc);
-            ViewBag.Loc = geoloc.GeoTreeID;
+            ViewBag.LocId = geoloc.GeoTreeID;
             if (st == ServiceTypeEnum.Packages || st == ServiceTypeEnum.SightSeeing)
             {
                 ViewBag.Cats = db.Fetch<Category>("Select * From Category");
                 ViewBag.Acts = db.Fetch<Activity>("Select * From Activity");
-                ViewBag.Attracts = db.Fetch<Attraaction>("Select a.* From Attraaction a inner join Package_Attraction pa on pa.AttractionID = a.AttractionID inner join Package p on p.PackageID =pa.PackageID inner join Package_GeoTree pg on pg.PackageID= p.PackageID where pg.GeoTreeID in(Select GeotreeId from GetChildGeos(@0))",geoloc.GeoTreeID);
+                ViewBag.Attracts = db.Fetch<Attraaction>("Select Distinct a.* From Attraaction a inner join Package_Attraction pa on pa.AttractionID = a.AttractionID inner join Package p on p.PackageID =pa.PackageID inner join Package_GeoTree pg on pg.PackageID= p.PackageID where pg.GeoTreeID in(Select GeotreeId from GetChildGeos(@0))",geoloc.GeoTreeID);
 
             }
             if (st == ServiceTypeEnum.Accomodation)
@@ -228,7 +228,7 @@ namespace Speedbird.Controllers
                 if(maxPrice!=null && minPrice != null)
                 {
                     FromSql.Append(",Prices pri");
-                    WhereSql.Append("and p.PackageID = pri.ServiceID and Price Between @0 and @1 ", minPrice,maxPrice);
+                    WhereSql.Append("and p.PackageID = pri.ServiceID and Price Between @0 and @1 and pri.PriceID = (select top 1 PriceID from Prices where p.PackageID = Prices.ServiceID and Prices.WEF<GetDate() order by Prices.WEF desc) ", minPrice,maxPrice);
                 }
                 if (DestIds != null)
                 {
