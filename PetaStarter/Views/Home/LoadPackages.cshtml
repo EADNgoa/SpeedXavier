@@ -143,245 +143,186 @@
         <div class=" col-md-3">
             <div class="sidenav">
 
+                <div class="form-group">
+                    <label class="lead">Destination</label>
+                    <div class="col-md-12">
+                        <select class="GeoSelect w-100" multiple="multiple">
+                            <option value="0">Default</option>
+                        </select>
+                    </div>
+                </div>
 
-                @if (@ViewBag.st == ServiceTypeEnum.Packages || @ViewBag.st == ServiceTypeEnum.SightSeeing || @ViewBag.st == ServiceTypeEnum.Accomodation || @ViewBag.st == ServiceTypeEnum.CarBike)
+                <div class="form-group">
+                    <label class="lead" for="amount">Price range:</label>
+                    <input type="text" id="amount" class="prange" value=" " readonly style="border:0; color:#000000; font-weight:bold;">
+
+                    <div class="col-12"><div id="slider-range"></div></div>
+                </div>
+
+                @Html.Hidden("st", (int)ViewBag.st)
+                @Html.Hidden("LocId", (int)ViewBag.LocId)
+
+                @if (@ViewBag.st == ServiceTypeEnum.CarBike)
                 {
-                    @Html.Hidden("st", (int)ViewBag.st)
-                    @Html.Hidden("LocId", (int)ViewBag.LocId)
-                    if (@ViewBag.st == ServiceTypeEnum.CarBike)
-                    {
-                        <table class="d-sm-table-cell">
-                           
-                            <tr>
-                                <td>
-                                    <div class="form-group">
-                                        <label class="lead">No Of Passengers</label>
-                                        <div class="col-md-12">
-                                            @Html.DropDownList("nums", ViewBag.nums as IEnumerable<SelectListItem>, "---", new { @class = "form-control nopax" })
-                                        </div>
-                                    </div>
-
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="form-group">
-                                        <label class="lead">Large Bags</label>
-                                        <div class="col-md-12">
-                                            @Html.DropDownList("nums", ViewBag.nums as IEnumerable<SelectListItem>, "---", new { @class = "form-control large" })
-                                        </div>
-                                    </div>
-
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="form-group">
-                                        <label class="lead">Small Bags</label>
-                                        <div class="col-md-12">
-                                            @Html.DropDownList("nums", ViewBag.nums as IEnumerable<SelectListItem>, "---", new { @class = "form-control Small" })
-                                        </div>
-                                    </div>
-
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="form-group">
-                                        <label class="lead">Ac</label>
-                                        <div class="col-md-12">
-                                            @Html.DropDownList("TF", ViewBag.TF as IEnumerable<SelectListItem>, "---", new { @class = "form-control Ac" })
-                                        </div>
-                                    </div>
-                                </td>
-
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="form-group">
-                                        <label class="lead">Has Carrier</label>
-                                        <div class="col-md-12">
-                                            @Html.DropDownList("TF", ViewBag.TF as IEnumerable<SelectListItem>, "---", new { @class = "form-control Carrier" })
-                                        </div>
-                                    </div>
-                                </td>
-
-                            </tr>
-                        </table>
-                    }
-                    if (@ViewBag.st != ServiceTypeEnum.Accomodation && @ViewBag.st != ServiceTypeEnum.CarBike)
-                    {
-
-
-
                         <div class="form-group">
-                            <label class="lead">Categories</label>
+                            <label class="lead">No Of Passengers</label>
                             <div class="col-md-12">
-                                @foreach (var item in ViewBag.Cats)
-                                {
-                                    <div style="display:block;">
-                                        <label class="form-check-label">
-                                            <input type="checkbox" name="cat" value="@item.CategoryID" class="cat form-check-input">
-                                            @item.CategoryName
-                                        </label>
-                                    </div>
-
-                                }
+                                @Html.DropDownList("nums", ViewBag.nums as IEnumerable<SelectListItem>, "---", new { @class = "form-control nopax" })
+                            </div>
+                        </div>
+                    
+                        <div class="form-group">
+                            <label class="lead">Large Bags</label>
+                            <div class="col-md-12">
+                                @Html.DropDownList("nums", ViewBag.nums as IEnumerable<SelectListItem>, "---", new { @class = "form-control large" })
                             </div>
                         </div>
 
-                        <hr />
-
                         <div class="form-group">
-                            <label class="lead">Activities</label>
+                            <label class="lead">Small Bags</label>
                             <div class="col-md-12">
-
-                                @foreach (var item in ViewBag.Acts)
-                                {
-                                    <div style="display:block;">
-                                        <label class="form-check-label">
-                                            <input type="checkbox" name="act" value="@item.ActivityID" class=" act form-check-input">
-                                            @item.ActivityName
-                                        </label>
-                                    </div>
-                                }
-
+                                @Html.DropDownList("nums", ViewBag.nums as IEnumerable<SelectListItem>, "---", new { @class = "form-control Small" })
                             </div>
                         </div>
-                    }
+
+                        <div class="form-group">
+                            <label class="lead">Has air conditioning</label>
+                            <div class="col-md-12">
+                                @Html.DropDownList("TF", ViewBag.TF as IEnumerable<SelectListItem>, "---", new { @class = "form-control Ac" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="lead">Has Carrier</label>
+                            <div class="col-md-12">
+                                @Html.DropDownList("TF", ViewBag.TF as IEnumerable<SelectListItem>, "---", new { @class = "form-control Carrier" })
+                            </div>
+                        </div>
+                    
+                }
+
+
+                @if (@ViewBag.st == ServiceTypeEnum.Packages || @ViewBag.st == ServiceTypeEnum.SightSeeing || @ViewBag.st == ServiceTypeEnum.Cruise)
+                {
+
+
+                    <div class="form-group">
+                        <label class="lead">Categories</label>
+                        <div class="col-md-12">
+                            @foreach (var item in ViewBag.Cats)
+                            {
+
+                                <div style="display:block;">
+                                    <label class="form-check-label">
+                                        <input type="checkbox" name="cat" value="@item.CategoryID" class="cat form-check-input">
+                                        @item.CategoryName
+                                    </label>
+                                </div>
+                            }
+                        </div>
+                    </div>
+
                     <hr />
 
-                    <table class="d-xl-table-cell">
-                        @if (@ViewBag.st != ServiceTypeEnum.Accomodation && @ViewBag.st != ServiceTypeEnum.CarBike)
-    {
-                    <tr>
-                        <td>
-                            <div class="form-group">
-                                <label class="lead">Group Size</label>
-                                <div class="col-md-12">
-                                    @Html.DropDownList("nums", ViewBag.nums as IEnumerable<SelectListItem>, "---", new { @class = "form-control gsize" })
+                    <div class="form-group">
+                        <label class="lead">Activities</label>
+                        <div class="col-md-12">
+                            @foreach (var item in ViewBag.Acts)
+                            {
+                                <div style="display:block;">
+                                    <label class="form-check-label">
+                                        <input type="checkbox" name="act" value="@item.ActivityID" class=" act form-check-input">
+                                        @item.ActivityName
+                                    </label>
                                 </div>
-                            </div>
+                            }
 
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="form-group">
-                                <label class="lead">Difficulty</label>
-                                <div class="col-md-12">
-                                    @Html.DropDownList("nums", ViewBag.nums as IEnumerable<SelectListItem>, "---", new { @class = "form-control diffic" })
-                                </div>
-                            </div>
+                        </div>
+                    </div>
 
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="form-group">
-                                <label class="lead">Duration</label>
-                                <div class="col-md-12">
-                                    @Html.DropDownList("nums", ViewBag.nums as IEnumerable<SelectListItem>, "---", new { @class = "form-control dur" })
-                                </div>
-                            </div>
+                    <hr />
 
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="form-group">
-                                <label class="lead">Guide Language</label>
-                                <div class="col-md-12">
-                                    @Html.DropDownList("GuideLanguageID", ViewBag.GuideLanguageID as IEnumerable<SelectListItem>, "---", new { @class = "form-control language" })
-                                </div>
-                            </div>
-
-                        </td>
-                    </tr>
-}
-                      
-                        <tr>
-                            <td>
-                                <div class="form-group">
-                                    <label class="lead">Destination</label>
-                                    <div class="col-md-12">
-                                        <select style="width:280px;" class="GeoSelect" multiple="multiple">
-                                            <option value="0">Default</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <p>
-                                    <label class="lead" for="amount">Price range:</label>
-                                    <input type="text" id="amount" class="prange" value=" " readonly style="border:0; color:#000000; font-weight:bold;">
-                                </p>
-
-                                <div id="slider-range"></div>
-                            </td>
-                        </tr>
-                    </table>
-                    if (@ViewBag.st != ServiceTypeEnum.Accomodation && @ViewBag.st != ServiceTypeEnum.CarBike)
-                    {
-                        <hr />
                         <div class="form-group">
-                            <label class="lead"> Attractions</label>
-                            <div class="col-12">
-                                @foreach (var item in ViewBag.Attracts)
-                                {
-
-                                    <div style="display:block;"><label class="form-check-label">
-                                        <input type="checkbox" name="attract" value="@item.AttractionID" class=" attract form-check-input">
-                                        @item.AttractionName
-                                    </label></div>
-                                }
+                            <label class="lead">Group Size</label>
+                            <div class="col-md-12">
+                                @Html.DropDownList("nums", ViewBag.nums as IEnumerable<SelectListItem>, "---", new { @class = "form-control gsize" })
                             </div>
                         </div>
-                    }
-
-                    if (@ViewBag.st != ServiceTypeEnum.Packages && @ViewBag.st != ServiceTypeEnum.SightSeeing && @ViewBag.st != ServiceTypeEnum.Cruise && @ViewBag.st != ServiceTypeEnum.CarBike)
-                    {
-                            <hr />
-                            <div class="form-group">
-                                <label class="lead"> Facilities</label>
-
-                                    <div class="col-12" style="display:block;">
-                                @foreach (var item in ViewBag.fac)
-                                {
-                                        <div style="display:block;">
-                                        <label class="form-check-label">
-                                            <input type="checkbox" name="fac" value="@item.FacilityID" class=" fac form-check-input">
-                                            @item.FacilityName
-                                        </label></div>
-                                }
-                                    </div>
-
-
+                        <div class="form-group">
+                            <label class="lead">Difficulty</label>
+                            <div class="col-md-12">
+                                @Html.DropDownList("nums", ViewBag.nums as IEnumerable<SelectListItem>, "---", new { @class = "form-control diffic" })
                             </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="lead">Duration</label>
+                            <div class="col-md-12">
+                                @Html.DropDownList("nums", ViewBag.nums as IEnumerable<SelectListItem>, "---", new { @class = "form-control dur" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="lead">Guide Language</label>
+                            <div class="col-md-12">
+                                @Html.DropDownList("GuideLanguageID", ViewBag.GuideLanguageID as IEnumerable<SelectListItem>, "---", new { @class = "form-control language" })
+                            </div>
+                        </div>
 
-                        }
-                    }
+                    <hr />
+                    <div class="form-group">
+                        <label class="lead"> Attractions</label>
+                        <div class="col-12">
+                            @foreach (var item in ViewBag.Attracts)
+                            {
+
+                                <div style="display:block;">
+                                    <label class="form-check-label">
+                                        <input type="checkbox" name="attract" value="@item.AttractionID" class=" attract form-check-input">
+                                        @item.AttractionName
+                                    </label>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+
+                @if (@ViewBag.st == ServiceTypeEnum.Accomodation )
+                {
+                    <hr />
+                    <div class="form-group">
+                        <label class="lead"> Facilities</label>
+
+                        <div class="col-12" style="display:block;">
+                            @foreach (var item in ViewBag.fac)
+                            {
+                                <div style="display:block;">
+                                    <label class="form-check-label">
+                                        <input type="checkbox" name="fac" value="@item.FacilityID" class=" fac form-check-input">
+                                        @item.FacilityName
+                                    </label>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
 
 
 
-                </div>
-            </div>
-            @Html.Hidden("maxPrice")
-            @Html.Hidden("minPrice")
 
-            <div class=" col-md-9" id="partialview">
-                @Html.Action("PackagesPartialView", "Home", new { st = ViewBag.st, DestIds = new List<int>() { (int)ViewBag.LocId } })
             </div>
         </div>
+        @Html.Hidden("maxPrice")
+        @Html.Hidden("minPrice")
 
-
-
-
-
+        <div class=" col-md-9" id="partialview">
+            @Html.Action("PackagesPartialView", "Home", new { st = ViewBag.st, DestIds = new List<int>() { (int)ViewBag.LocId } })
+        </div>
     </div>
-    <script type="text/javascript">
+
+
+
+
+
+</div>
+<script type="text/javascript">
 
 
 
@@ -463,4 +404,4 @@
 
   });
 
-    </script>
+</script>

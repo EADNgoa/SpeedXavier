@@ -116,7 +116,7 @@
                                     Difficuty
                                 </td>
                                 <td>
-                                    @Model.Dificulty/10
+                                    @Model.Dificulty
                                 </td>
                             </tr>
                             <tr>
@@ -124,18 +124,15 @@
                                     Group Size
                                 </td>
                                 <td>
-                                    @Model.GroupSize/10
+                                    @Model.GroupSize
                                 </td>
                             </tr>
                             <tr>
                                 <td>
                                     Guide Languages
                                 </td>
-                                <td>
-                               @foreach (var i in Model.Glang)
-                                {
-                                    @i.GuideLanguageName
-                                }   
+                                <td>                               
+                                    @Model.Glang                                    
                                 </td>
                             </tr>
 
