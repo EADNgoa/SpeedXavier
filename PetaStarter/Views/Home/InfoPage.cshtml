@@ -2,7 +2,7 @@
     <script src="/Scripts/jquery.masonry.min.js"></script>
     <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <style>
     /*small change*/
@@ -15,10 +15,10 @@
 
     td {
         width: 80px;
-     
     }
-    table{
-        padding:30px;
+
+    table {
+        padding: 30px;
     }
 
     .img-fluid {
@@ -40,10 +40,10 @@
     .breadcrumb span {
         padding: 0;
         margin: 0;
-        font-size: 10px;
+        /*font-size: 10px;*/
         text-decoration: none;
         color: dimgray;
-        font-family: "Quattrocento Sans",serif;
+        /*font-family: "Quattrocento Sans",serif;*/
     }
 
     .breadcrumb {
@@ -58,7 +58,7 @@
     .breadcrumb-item {
         padding-top: 0;
         margin-top: 0;
-        font-size: 10px;
+        /*font-size: 10px;*/
         background-color: white;
         padding-bottom: 0;
         margin-bottom: 0;
@@ -66,7 +66,7 @@
         width: auto;
         display: inline-block;
         color: #a5a5a5;
-        font-family: "Quattrocento Sans",serif;
+        /*font-family: "Quattrocento Sans",serif;*/
     }
 
     /*Specific*/
@@ -76,17 +76,18 @@
         min-height: 450px;
         margin-bottom: 20px;
         width: 100%;
-       
     }
+
     .DetailBlock {
         background: #f4f3ea;
-        margin-right:50px;
-        margin-left:60px;
+        margin-right: 50px;
+        margin-left: 60px;
     }
+
     .DescriptionBlock {
         background: white;
     }
-   
+
 
     .addcart {
         background-color: #fff;
@@ -98,6 +99,7 @@
         text-decoration: inherit;
         font-family: "Merriweather Sans",serif;
     }
+
     nput {
         padding: 10px;
         font-family: FontAwesome, "Open Sans", Verdana, sans-serif;
@@ -116,15 +118,15 @@
     .clickable {
         cursor: pointer;
     }
+
     .block-sb-info {
         background-color: #eeeeec;
         box-shadow: 0 3px 5px rgba(50,50,50,0.4);
         margin-bottom: 20px;
         padding: 20px;
-        margin-right:30px;
-       
-
+        margin-right: 30px;
     }
+
     h2 {
         font-family: "Merriweather Sans",serif;
         font-size: 56px;
@@ -132,6 +134,7 @@
         font-weight: bold;
         padding-left: 18px;
     }
+
     h3 {
         font-family: "Merriweather Sans",serif;
         font-size: 37px;
@@ -150,8 +153,8 @@
         font-weight: bold;
         color: #006aa7;
     }
+
     li {
-      
         margin-bottom: 3px;
         list-style: none outside none;
         font-size: 17px;
@@ -159,20 +162,21 @@
         padding-left: 0;
         font-family: "Quattrocento Sans",serif;
     }
+
     .btn {
-   
         font-family: inherit;
         font-size: inherit;
         line-height: inherit;
     }
-   
-    .fa-check{
-        height:18px;
-        width:18px;
-        margin-left:-50px;
+
+    .fa-check {
+        height: 18px;
+        width: 18px;
+        margin-left: -50px;
     }
-    .sbhr{
-        margin-right:30px;
+
+    .sbhr {
+        margin-right: 30px;
     }
 
 
@@ -182,29 +186,32 @@
         height: 165px;
         margin: 27px;
     }
+
     #descimgcard {
         width: 250px;
         height: 165px;
         margin: 27px;
     }
+
     .card-block {
         height: 6px;
         color: white;
         background-color: white;
     }
+
     .card-title {
         font-family: "Quattrocento Sans",sans-serif;
         padding-top: 8px;
-        background-color:#0094ff;
+        background-color: #0094ff;
         font-size: 18px;
-
         text-align: center;
-        color:black
+        color: black
     }
- 
-    #Container2{
-        margin-left:20px;
+
+    #Container2 {
+        margin-left: 20px;
     }
+
     .desc {
         text-transform: uppercase;
         color: #009de0;
@@ -216,6 +223,7 @@
         margin-bottom: 0;
         line-height: 1.4;
     }
+
     .img-title {
         position: absolute;
         top: 70px;
@@ -229,6 +237,7 @@
         color: #fff;
         text-shadow: 4px 4px 4px #000;
     }
+
     .money {
         font-size: 30px;
         font-weight: bold;
@@ -241,34 +250,36 @@
         text-align: right;
         color: #e53f20;
     }
+
     .sub_label {
         margin-right: 20px;
         text-align: right;
         font-size: 12px;
-        color:grey;
+        color: grey;
     }
-    #accomfaccard{
-        width:250px;
-        height:150px;
+
+    #accomfaccard {
+        width: 250px;
+        height: 150px;
     }
+
     #cardimgtop {
         width: 248px;
         height: 150px;
     }
-  
 </style>
-<div class="container">
-    <hr style="padding-bottom:0;margin-bottom:0;padding-top:2px;margin-top:0;line-height: 1.428571429;" />
 
-    <div class="row">
-        <nav class="breadcrumb">
-            <span>you are here:&nbsp;</span>
-            <a class="breadcrumb-item" href="Request.UrlReferrer.AbsoluteUri">Home</a>
-            <a class="breadcrumb-item" href="Request.Url.AbsoluteUri">ViewBag.Loc</a>
-        </nav>
-    </div>
+<hr style="padding-bottom:0;margin-bottom:0;padding-top:2px;margin-top:0;line-height: 1.428571429;" />
 
+<div class="row">
+
+    <nav class="breadcrumb ml-5">
+        <span class="breadcrumb-item" href="#">&nbsp; &nbsp; </span>
+        <a class="breadcrumb-item" href="@Request.UrlReferrer.AbsoluteUri">Home</a>      
+        @*<a class="breadcrumb-item" href="Request.Url.AbsoluteUri">@ViewBag.Loc</a>*@
+    </nav>
 </div>
+<br />
 <br />
 <br />
 
@@ -280,7 +291,7 @@
 {
     @Html.Action("InfoCarBikePartial", "Home", new { ServiceID = ViewBag.ServiceID, st = ViewBag.ST })
 }
-@if (ViewBag.ST == ServiceTypeEnum.Packages || ViewBag.ST == ServiceTypeEnum.SightSeeing|| ViewBag.ST == ServiceTypeEnum.Cruise)
+@if (ViewBag.ST == ServiceTypeEnum.Packages || ViewBag.ST == ServiceTypeEnum.SightSeeing || ViewBag.ST == ServiceTypeEnum.Cruise)
 {
     @Html.Action("InfoPackagePartial", "Home", new { ServiceID = ViewBag.ServiceID, st = ViewBag.ST })
 }
@@ -292,18 +303,16 @@
         <div class="container">
             <center>
                 <div class="col-md-12">
-                    @Html.Action("GetPrice", "Home", new { ServiceID = ViewBag.ServiceID, st = ViewBag.ST })             
+                    @Html.Action("GetPrice", "Home", new { ServiceID = ViewBag.ServiceID, st = ViewBag.ST })
                 </div>
                 <div style="background-color:#428bca;">
                     <h2 class="block-title" style="color:white">Book This Experience</h2>
                 </div>
-
-                <br />
                 <div class="form-group">
-                    <input id="dp1" type="date" class="form-control clickable input-md" id="DtChkIn" placeholder="&#xf133;  Check-In">
+                    <div class="col-12"><input id="dp1" type="date" class="form-control clickable input-md" placeholder="&#xf133;  Check-In"></div>
                 </div>
                 <div class="form-group">
-                    <input id="dp2" type="date" class="form-control clickable input-md" id="DtChkOut" placeholder="&#xf133;  Check-Out">
+                    <div class="col-12"><input id="dp2" type="date" class="form-control clickable input-md" placeholder="&#xf133;  Check-Out"></div>
                 </div>
                 <div class="form-group">
                     <div class="col-md-12">
@@ -312,37 +321,37 @@
                 </div>
                 <fieldset>
                     <div style="background-color:#428bca;">
-                        <h2 class="block-title" style="color:white">Customer Detail</h2>
+                        <h2 class="block-title" style="color:white">Customer Details</h2>
                     </div>
                     <div class="form-group">
-                        <div class="col-md-11">
-                            <input type="text" name="fname" placeholder="&#xf2c0 First Name" class="form-control" />
+                        <div class="col-md-12">
+                            <input type="text" name="fname" placeholder="&#xf2c0  First Name" class="form-control" />
                         </div>
                     </div>
                     <div class="form-group">
-                        <div class="col-md-11">
+                        <div class="col-md-12">
                             <input type="text" name="sname" placeholder="&#xf2c0  Sur Name" class="form-control" />
                         </div>
                     </div>
                     <div class="form-group">
-                        <div class="col-md-11">
+                        <div class="col-md-12">
                             <input type="text" name="email" placeholder="&#xf003 Your Email..." class="form-control" />
                         </div>
                     </div>
                     <div class="form-group">
-                        <div class="col-md-11">
+                        <div class="col-md-12">
                             <input type="text" name="phno" placeholder="&#xf2a0 Mobile No..." class="form-control" />
                         </div>
                     </div>
                     <div class="form-group">
-                        <div class="col-md-11">
-                            <input type="File" name="Idpicture" class="form-control" />
+                        <div class="col-md-12">
+                            <input type="File" name="Idpicture" class="form-control" placeholder="ID Proof" />
                         </div>
                     </div>
                 </fieldset>
 
                 <div class="form-group">
-                    <div class="col-md-11">
+                    <div class="col-md-12">
                         @Html.TextArea("Query", null, new { @class = "form-control", placeholder = "Entery Your Query Here...." })
                     </div>
                 </div>
@@ -379,11 +388,11 @@
         </div>
     </div>
     <hr class="sbhr" />
-    @if (ViewBag.ST == ServiceTypeEnum.Packages || ViewBag.ST == ServiceTypeEnum.SightSeeing|| ViewBag.ST == ServiceTypeEnum.Cruise)
+    @*@if (ViewBag.ST == ServiceTypeEnum.Packages || ViewBag.ST == ServiceTypeEnum.SightSeeing || ViewBag.ST == ServiceTypeEnum.Cruise)
     {
         @Html.Action("InfoPackAttractPartial", "Home", new { ServiceID = ViewBag.ServiceID, st = ViewBag.ST })
 
-    }
+    }*@
 </div>
 </div>
 </div>

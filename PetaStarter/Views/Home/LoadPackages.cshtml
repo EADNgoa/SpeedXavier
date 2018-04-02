@@ -151,22 +151,11 @@
                     if (@ViewBag.st == ServiceTypeEnum.CarBike)
                     {
                         <table class="d-sm-table-cell">
+                           
                             <tr>
                                 <td>
                                     <div class="form-group">
-                                        <label>Destination</label>
-                                        <div class="col-md-12">
-                                            <select style="width:280px;" class="GeoSelect" multiple="multiple">
-                                                <option value="0">Default</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="form-group">
-                                        <label>No Of Passenger</label>
+                                        <label class="lead">No Of Passengers</label>
                                         <div class="col-md-12">
                                             @Html.DropDownList("nums", ViewBag.nums as IEnumerable<SelectListItem>, "---", new { @class = "form-control nopax" })
                                         </div>
@@ -177,7 +166,7 @@
                             <tr>
                                 <td>
                                     <div class="form-group">
-                                        <label>Large Bags</label>
+                                        <label class="lead">Large Bags</label>
                                         <div class="col-md-12">
                                             @Html.DropDownList("nums", ViewBag.nums as IEnumerable<SelectListItem>, "---", new { @class = "form-control large" })
                                         </div>
@@ -188,7 +177,7 @@
                             <tr>
                                 <td>
                                     <div class="form-group">
-                                        <label>Small Bags</label>
+                                        <label class="lead">Small Bags</label>
                                         <div class="col-md-12">
                                             @Html.DropDownList("nums", ViewBag.nums as IEnumerable<SelectListItem>, "---", new { @class = "form-control Small" })
                                         </div>
@@ -199,7 +188,7 @@
                             <tr>
                                 <td>
                                     <div class="form-group">
-                                        <label>Ac</label>
+                                        <label class="lead">Ac</label>
                                         <div class="col-md-12">
                                             @Html.DropDownList("TF", ViewBag.TF as IEnumerable<SelectListItem>, "---", new { @class = "form-control Ac" })
                                         </div>
@@ -210,7 +199,7 @@
                             <tr>
                                 <td>
                                     <div class="form-group">
-                                        <label>Has Carrier</label>
+                                        <label class="lead">Has Carrier</label>
                                         <div class="col-md-12">
                                             @Html.DropDownList("TF", ViewBag.TF as IEnumerable<SelectListItem>, "---", new { @class = "form-control Carrier" })
                                         </div>
@@ -224,15 +213,6 @@
                     {
 
 
-
-                        <div class="form-group">
-                            <label class="lead">Destinations:</label>
-                            <div class="col-12">
-                                <select class="GeoSelect form-control" multiple="multiple">
-                                    <option value="0">Default</option>
-                                </select>
-                            </div>
-                        </div>
 
                         <div class="form-group">
                             <label class="lead">Categories</label>
@@ -273,52 +253,65 @@
 
                     <table class="d-xl-table-cell">
                         @if (@ViewBag.st != ServiceTypeEnum.Accomodation && @ViewBag.st != ServiceTypeEnum.CarBike)
-                        {
-                            <tr>
-                                <td>
-                                    <div class="form-group">
-                                        <label class="lead">Group Size</label>
-                                        <div class="col-md-12">
-                                            @Html.DropDownList("nums", ViewBag.nums as IEnumerable<SelectListItem>, "---", new { @class = "form-control gsize" })
-                                        </div>
-                                    </div>
+    {
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                <label class="lead">Group Size</label>
+                                <div class="col-md-12">
+                                    @Html.DropDownList("nums", ViewBag.nums as IEnumerable<SelectListItem>, "---", new { @class = "form-control gsize" })
+                                </div>
+                            </div>
 
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="form-group">
-                                        <label class="lead">Difficulty</label>
-                                        <div class="col-md-12">
-                                            @Html.DropDownList("nums", ViewBag.nums as IEnumerable<SelectListItem>, "---", new { @class = "form-control diffic" })
-                                        </div>
-                                    </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                <label class="lead">Difficulty</label>
+                                <div class="col-md-12">
+                                    @Html.DropDownList("nums", ViewBag.nums as IEnumerable<SelectListItem>, "---", new { @class = "form-control diffic" })
+                                </div>
+                            </div>
 
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="form-group">
-                                        <label class="lead">Duration</label>
-                                        <div class="col-md-12">
-                                            @Html.DropDownList("nums", ViewBag.nums as IEnumerable<SelectListItem>, "---", new { @class = "form-control dur" })
-                                        </div>
-                                    </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                <label class="lead">Duration</label>
+                                <div class="col-md-12">
+                                    @Html.DropDownList("nums", ViewBag.nums as IEnumerable<SelectListItem>, "---", new { @class = "form-control dur" })
+                                </div>
+                            </div>
 
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="form-group">
-                                        <label class="lead">Guide Language</label>
-                                        <div class="col-md-12">
-                                            @Html.DropDownList("GuideLanguageID", ViewBag.GuideLanguageID as IEnumerable<SelectListItem>, "---", new { @class = "form-control language" })
-                                        </div>
-                                    </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                <label class="lead">Guide Language</label>
+                                <div class="col-md-12">
+                                    @Html.DropDownList("GuideLanguageID", ViewBag.GuideLanguageID as IEnumerable<SelectListItem>, "---", new { @class = "form-control language" })
+                                </div>
+                            </div>
 
-                                </td>
-                            </tr>
-                        }
+                        </td>
+                    </tr>
+}
+                      
+                        <tr>
+                            <td>
+                                <div class="form-group">
+                                    <label class="lead">Destination</label>
+                                    <div class="col-md-12">
+                                        <select style="width:280px;" class="GeoSelect" multiple="multiple">
+                                            <option value="0">Default</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
                         <tr>
                             <td>
                                 <p>
