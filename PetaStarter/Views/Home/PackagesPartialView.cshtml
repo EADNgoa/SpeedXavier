@@ -8,6 +8,9 @@
 
        @foreach (var item in Model)
         {
+
+           <a href="/Home/InfoPage/?st=@ViewBag.st&&ServiceID=@item.ServiceID">
+
     <div class="card ServiceTypes" style="width: 18rem;">
         @if (item.ServicePic != "")
     {
@@ -24,10 +27,12 @@ else
             <h5 class="card-title">@item.ServiceName</h5>
             <p class="card-text">@item.ServiceDescription</p>
 
+
         </div>
 
-    </div>
 
+            </div>
+          </a>
         }
    
 </div>

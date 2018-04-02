@@ -108,6 +108,7 @@ namespace Speedbird.Controllers
             
             List<AccomPackCarBike> apc = new List<AccomPackCarBike>();
 
+            ViewBag.st = st;
             if (st == ServiceTypeEnum.Accomodation)
             {
                 ViewBag.ServiceTitle = "Accomodations";
@@ -185,7 +186,6 @@ namespace Speedbird.Controllers
             {
                 ViewBag.ServiceTitle = "Our Best Tours And Excursions";
 
-                ViewBag.st = st;
 
                 PetaPoco.Sql MainSql = new PetaPoco.Sql("Select Distinct p.PackageID,p.ServiceTypeID,p.PackageName,p.Description,p.Duration,p.Itinerary," +
                                                         "p.Dificulty,p.GroupSize,p.StartTime,p.Inclusion,p.Exclusion,p.HighLights");
@@ -255,13 +255,104 @@ namespace Speedbird.Controllers
 
         }
 
-
-
-        public ActionResult About()
+        public ActionResult InfoPage(int? ServiceID, ServiceTypeEnum? st)
         {
-            ViewBag.Message = "Your application description page.";
-
+            ViewBag.ST = st;
+            ViewBag.ServiceID = ServiceID;
+            List<SelectListItem> items = new List<SelectListItem>();
+            for (int i = 1; i <= 10; i++)
+            {
+                items.Add(new SelectListItem { Text = "" + i, Value = "" + i });
+            }
+            ViewBag.nums = items;
             return View();
+        }
+        public ActionResult InfoAccomPartial(int? ServiceID, ServiceTypeEnum? st)
+        {
+            var accom = db.Query<AccomodationDets>("select * From Accomodation  Where AccomodationID =@0", ServiceID).ToList().FirstOrDefault();
+            accom.pic = db.Fetch<PictureDets>("Select * From Picture Where ServiceID=@0 and ServiceTypeID=@1 Order By NewID()", accom.AccomodationID, (int)ServiceTypeEnum.Accomodation).ToList();
+            accom.GeoName = db.First<string>("Select GeoName From GeoTree  where GeoTreeID=@0", accom.GeoTreeID);
+            int facID = db.ExecuteScalar<int>("Select FacilityID From Facility_Accomodation where AccomodationID=@0 ",accom.AccomodationID);
+            ViewBag.SimilarAccom = db.Query<AccomodationDets>("Select * From Accomodation a inner join Facility_Accomodation fa on a.AccomodationID= fa.AccomodationID inner join Facility f on f.FacilityID = fa.FacilityID where fa.FacilityID=@0 ", facID);
+
+            return PartialView(accom);
+        }
+        public ActionResult AccomFacPartial(int? ServiceID)
+        {
+            int GeoTreeID = db.ExecuteScalar<int>("Select GeoTreeID From Accomodation where AccomodationID=@0 ", ServiceID);
+            int facID = db.ExecuteScalar<int>("Select FacilityID From Facility_Accomodation where AccomodationID=@0 ", ServiceID);
+            var Similar = db.Query<AccomodationDets>("Select * From Accomodation a inner join Facility_Accomodation fa on a.AccomodationID= fa.AccomodationID inner join Facility f on f.FacilityID = fa.FacilityID inner join GeoTree g on g.GeoTreeID = a.GeoTreeID where fa.FacilityID=@0", facID,GeoTreeID).ToList();
+            Similar.ForEach(a=>
+            {
+                a.pic = db.Fetch<PictureDets>("Select Top 1 * From Picture Where ServiceID=@0 and ServiceTypeID=@1 Order By NewID()", a.AccomodationID, (int)Speedbird.ServiceTypeEnum.Accomodation).ToList();
+                a.GeoName = db.First<string>("Select GeoName From GeoTree Where GeoTreeID= @0", a.GeoTreeID);
+            });
+            return PartialView(Similar);
+        }
+        public ActionResult InfoCarBikePartial(int? ServiceID, ServiceTypeEnum? st)
+        {
+            var CarBike = db.FirstOrDefault<CarBikeDets>("select * From CarBike  Where CarBikeID =@0", ServiceID);
+            CarBike.pic = db.Fetch<PictureDets>("Select * From Picture Where ServiceID=@0 and ServiceTypeID=@1 Order By NewID()", CarBike.CarBikeID, (int)ServiceTypeEnum.CarBike).ToList();
+            CarBike.GeoName = db.First<string>("Select GeoName From GeoTree  where GeoTreeID=@0", CarBike.GeoTreeID);
+
+            return PartialView(CarBike);
+        }
+
+        public ActionResult InfoPackagePartial(int? ServiceID, ServiceTypeEnum? st)
+        {
+            var Packages = db.FirstOrDefault<PackageDets>("select * From Package  Where PackageID =@0 and ServiceTypeID=@1", ServiceID, st);
+            Packages.Pic = db.Fetch<PictureDets>("Select * From Picture Where ServiceID=@0 and ServiceTypeID=@1 Order By NewID()", Packages.PackageID, st).ToList();
+            Packages.GeoName = db.First<string>("Select GeoName From GeoTree g,Package_GeoTree pg  where pg.PackageID=@0 and g.GeoTreeID = pg.GeoTreeID", Packages.PackageID);
+            Packages.Glang = db.Fetch<GuideLanguage>("Select * from GuideLanguage g  inner join Package_Language pl on pl.GuideLanguageID= g.GuideLanguageID inner join Package p on p.PackageID= pl.PackageID where pl.PackageID=@0",Packages.PackageID);
+            return PartialView(Packages);
+        }
+        public ActionResult InfoPackCatPartial(int? ServiceID)
+        {
+            int GeoTreeID = db.ExecuteScalar<int>("Select GeoTreeID From Package_GeoTree where PackageID=@0 ", ServiceID);
+
+            int CatID = db.ExecuteScalar<int>("Select CategoryID From Package_Category where PackageID=@0 ", ServiceID);
+            var Similar = db.Query<PackageDets>("Select * From Package p inner join Package_Category pc on p.PackageID= pc.PackageID inner join Category c on c.CategoryID = pc.CategoryID inner join Package_GeoTreeID pg on p.PackageID = pg.PackageID inner join GeoTree g on g.GeoTreeID = pg.GeoTreeID where pc.CategoryID=@0 and pg.GeoTreeID in(Select GeotreeId from GetChildGeos(@0)  ", CatID, GeoTreeID).ToList();
+            Similar.ForEach(a =>
+            {
+                a.Pic = db.Fetch<PictureDets>("Select Top 1 * From Picture Where ServiceID=@0 and ServiceTypeID=@1 Order By NewID()", a.PackageID, (int)Speedbird.ServiceTypeEnum.Packages).ToList();
+                a.GeoName = db.First<string>("Select GeoName From GeoTree g,Package_GeoTree pg  where pg.PackageID=@0 and g.GeoTreeID = pg.GeoTreeID", a.PackageID);
+            });
+            return PartialView(Similar);
+        }
+        public ActionResult InfoPackActPartial(int? ServiceID)
+        {
+            int GeoTreeID = db.ExecuteScalar<int>("Select GeoTreeID From Package_GeoTree where PackageID=@0 ", ServiceID);
+            int ActID = db.ExecuteScalar<int>("Select ActivityID From Package_Activity where PackageID=@0 ", ServiceID);
+            var Similar = db.Query<PackageDets>("Select * From Package p inner join Package_Activity pa on p.PackageID= pa.PackageID inner join Activity a on a.ActivityID = pa.ActivityID inner join Package_GeoTree pg on pg.PackageID = p.PackageID inner join GeoTree g on g.GeoTreeID = pg.GeoTreeID where pa.ActivityID   =@0 and pg.GeoTreeID in(Select GeotreeId from GetChildGeos(@0) ", ActID, GeoTreeID).ToList();
+            Similar.ForEach(a =>
+            {
+                a.GeoName = db.First<string>("Select GeoName From GeoTree g,Package_GeoTree pg  where pg.PackageID=@0 and g.GeoTreeID = pg.GeoTreeID", a.PackageID);
+                a.ActivityName = db.First<string>("Select ActivityName From Activity a,Package_Activity pa where pa.PackageID =@0 and a.ActivityID = pa.ActivityID");
+                a.PictureName = db.First<string>("Select Top 1 * From Picture Where ServiceID =@0 and ServiceTypeID =@1 Order By NewID()", a.PackageID, (int)Speedbird.ServiceTypeEnum.Packages);
+
+            });
+            return PartialView(Similar);
+        }
+        public ActionResult InfoPackAttractPartial(int? ServiceID)
+        {
+            int GeoTreeID =db.ExecuteScalar<int>("Select GeoTreeID From Package_GeoTree where PackageID=@0 ", ServiceID);
+
+            int ActID = db.ExecuteScalar<int>("Select AttractionID From Package_Attraction where PackageID=@0 ", ServiceID);
+            var Similar = db.Query<PackageDets>("Select Top 5 * From Package p inner join Package_Attraction pa on p.PackageID= pa.PackageID inner join Attraaction a on a.AttractionID = pa.AttractionID inner join Package_GeoTree pg on pg.PackageID = p.PackageID inner join GeoTree g on g.GeoTreeID = pg.GeoTreeID where pa.AttractionID=@0 and pg.GeoTreeID in(Select GeotreeId from GetChildGeos(@1)) and ServiceTypeID=@2 and p.PackageID !=(@3) Order By NewID()", ActID, GeoTreeID,(int)ServiceTypeEnum.Packages,ServiceID).ToList();
+            Similar.ForEach(a =>
+            {
+                a.GeoName = db.First<string>("Select GeoName From GeoTree g,Package_GeoTree pg  where pg.PackageID=@0 and g.GeoTreeID = pg.GeoTreeID", a.PackageID);
+                a.AttractionName = db.First<string>("Select AttractionName From Attraaction a,Package_Attraction pa where pa.PackageID =@0 and a.AttractionID = pa.AttractionID",a.PackageID);
+               a.PictureName = db.ExecuteScalar<string>("Select PictureName From Picture Where ServiceID =@0 and ServiceTypeID =@1 ", a.PackageID, (int)Speedbird.ServiceTypeEnum.Packages);
+
+            });
+            return PartialView("PackageAttractPartial",Similar);
+        }
+        public ActionResult GetPrice(int? ServiceID,int? st)
+        {
+            ViewBag.Price = db.First<decimal>("Select Top 1 Price from Prices p inner join OptionType ot on p.OptionTypeID = ot.OptionTypeID Where ServiceID=@0 and ot.ServiceTypeID=@1", ServiceID, st);
+
+            return PartialView();
         }
 
         public ActionResult Contact()
