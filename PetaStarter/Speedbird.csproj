@@ -219,6 +219,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Areas\SBBoss\Controllers\AttractionController.cs" />
     <Compile Include="Controllers\EAController.cs" />
+    <Compile Include="Controllers\CartController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Global.asax.cs">
@@ -313,7 +314,6 @@
     <Content Include="Scripts\i18n\vi.js" />
     <Content Include="Scripts\i18n\zh-CN.js" />
     <Content Include="Scripts\i18n\zh-TW.js" />
-    <Content Include="Scripts\imagesloaded.pkgd.min.js" />
     <Content Include="Scripts\jquery.masonry.min.js" />
     <Content Include="Content\themes\base\accordion.css" />
     <Content Include="Content\themes\base\all.css" />
@@ -592,6 +592,7 @@
     <Content Include="Views\Home\PackageAttractPartial.cshtml" />
     <Content Include="Views\Home\PackageCatPartial.cshtml" />
     <Content Include="Views\Home\GetPrice.cshtml" />
+    <Content Include="Views\Cart\Cart.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
