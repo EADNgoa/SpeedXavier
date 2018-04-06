@@ -218,6 +218,7 @@
     <Compile Include="Areas\SBBoss\SBBossAreaRegistration.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Areas\SBBoss\Controllers\AttractionController.cs" />
+    <Compile Include="Controllers\MiceController.cs" />
     <Compile Include="Controllers\EAController.cs" />
     <Compile Include="Controllers\CartController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -593,6 +594,8 @@
     <Content Include="Views\Home\PackageCatPartial.cshtml" />
     <Content Include="Views\Home\GetPrice.cshtml" />
     <Content Include="Views\Cart\Cart.cshtml" />
+    <Content Include="Views\Mice\Index.cshtml" />
+    <Content Include="Views\Cart\ThankYou.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

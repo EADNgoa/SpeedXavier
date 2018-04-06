@@ -13,7 +13,12 @@ namespace Speedbird.Controllers
          
             return View();
         }
+        public ActionResult ThankYou()
+        {
 
-      
+            return View();
+        }
+
+
     }
 }
