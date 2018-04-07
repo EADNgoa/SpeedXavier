@@ -89,6 +89,9 @@
                     Exclusion
                 </th>
                 }
+                 <th>
+                    Coupon Code
+                </th>
                     
                 <th></th>
             </tr>
@@ -115,25 +118,28 @@
                     @Html.DisplayFor(modelItem => item.Dificulty)
                 </td>
                 @if (ViewBag.sid == 1 && ViewBag.sid == 3)
-                {
+    {
 
+            <td>
+                @Html.DisplayFor(modelItem => item.GroupSize)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.GuideLanguageName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StartTime)
+
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Inclusion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Exclusion)
+            </td>
+}
                 <td>
-                    @Html.DisplayFor(modelItem => item.GroupSize)
+                    @Html.DisplayFor(modelItem => item.CouponCode)
                 </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.GuideLanguageName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.StartTime)
-
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Inclusion)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Exclusion)
-                    </td>
-                }
                 <td>
                     <a href="@Url.Action("Manage","Package", new { id = item.PackageID, sid=item.ServiceTypeID })"><i title="Edit" class="fas fa-edit fa-inverse h3 float-right DropShadow"></i></a>
                 </td>

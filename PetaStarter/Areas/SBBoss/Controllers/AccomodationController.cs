@@ -16,7 +16,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         public ActionResult Index(int? page ,string AN )
         {
             if (AN?.Length > 0) page = 1;
-            return View("Index", base.BaseIndex<Accomodation>(page, "AccomodationID, AccomName,substring(Description,1,80) as Description, lat,longt ", "Accomodation Where AccomName like '%" + AN + "%'"));
+            return View("Index", base.BaseIndex<Accomodation>(page, "AccomodationID, AccomName,substring(Description,1,80) as Description, lat,longt,CouponCode ", "Accomodation Where AccomName like '%" + AN + "%'"));
         }
 
 
@@ -37,7 +37,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
   
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Manage([Bind(Include = "AccomodationID,AccomName,Description,GeoTreeID,lat,longt")] Accomodation item)
+        public ActionResult Manage([Bind(Include = "AccomodationID,AccomName,Description,GeoTreeID,lat,longt,CouponCode")] Accomodation item)
         {            
             return base.BaseSave<Accomodation>(item, item.AccomodationID > 0);
         }
