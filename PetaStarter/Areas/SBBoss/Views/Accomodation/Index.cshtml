@@ -44,14 +44,16 @@
                 <th>
                     Description
                 </th>
-                
+
                 <th>
                     Latitude
                 </th>
                 <th>
                     Longitude
                 </th>
-                    
+                <th>
+                    Coupon Code
+                </th>
                 <th></th>
             </tr>
             @{int i = 1;}
@@ -67,12 +69,15 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Description)
                 </td>
-               
+
                 <td>
                     @Html.DisplayFor(modelItem => item.lat)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.longt)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CouponCode)
                 </td>
                 <td>
                     <a href="@Url.Action("Manage","Accomodation", new {id = item.AccomodationID })"><i title="Edit" class="fas fa-edit fa-inverse h3 float-right DropShadow"></i></a>

@@ -1,6 +1,13 @@
 ﻿<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 
 <style>
+    .btn{
+        width:120px !important;
+    }
+    #dp2{
+        width:400px;
+        height:50px;
+    }
     a{
         color:red
     }
@@ -365,15 +372,49 @@
                     <div class="row">
                         <div class="item-banners" style="color:#1d4d71;font-size:18px;">
                             <center>
-                                Do You Have a Coupon? <a>Click Here</a>
+                                Do You Have a Coupon? <a id="coup-click">Click Here</a>
                             </center>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="container" id="disc-div">                    
+                                <center>
+                                    <form>
+                                        @Html.Hidden("PreVal", 249)
+
+                                        <table>
+                                            <tr>
+                                                <td>
+                                                    <input id="dp2" type="text" class="form-control clickable " placeholder="Enter You Code Here. . .">
+                                                </td>
+                                                <td>
+                                                    <input type="button" class="form-control btn btn-success" value="Apply" id="coupsub" />
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </form>
+                                </center>                        
                         </div>
                     </div>
                 </div>
                 <div class="container-fluid">
                     <div class="row">
+                      
+                        @{ var tot = 249; var perc=0;}
                         <div class="item-banners" style="color:white;font-size:24px; background-color:#009ee0 !important; text-align:right;padding-right:20px;font-weight:bold;">
-                            <small>Total</small>  &nbsp;   Rs 249/-
+
+                            <small>Total</small> 
+                            <span id="totAmt">&nbsp;
+                            @if(perc != 0)
+                            {
+                                @Html.Action("SearchCoupon","Cart",new {tot=tot })
+                            }
+                            else
+                            {
+                                @(tot)
+                            }
+                          
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -570,3 +611,22 @@
         </div>
     </div>
 </div>
+<script>
+    $(document).ready(function () {
+        $("#disc-div").hide();
+        $("#coup-click").click(function () {
+            $("#disc-div").toggle();
+        });
+        $("#coupsub").click(function () {
+
+
+            $('#totAmt').html(" ");
+            $('#totAmt').load(
+                '@Url.Action("SearchCoupon", "Cart")',
+                {
+                    dc: $("#dp2").val()
+                }
+            );
+        });
+    });
+</script>
