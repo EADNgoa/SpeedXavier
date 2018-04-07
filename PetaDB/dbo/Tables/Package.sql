@@ -13,5 +13,6 @@
     [Inclusion] VARCHAR(MAX) NULL, 
     [Exclusion] VARCHAR(MAX) NULL, 
 	[Highlights] VARCHAR(MAX) NULL, 
+    [CouponCode] VARCHAR(50) NULL, 
     CONSTRAINT [FK_Package_GuideLanguage] FOREIGN KEY ([GuideLanguageID]) REFERENCES [GuideLanguage]([GuideLanguageID])
 )

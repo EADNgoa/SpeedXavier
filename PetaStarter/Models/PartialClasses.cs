@@ -61,6 +61,8 @@ namespace Speedbird
 
         public string PackageName { get; set; }
         public string Description { get; set; }
+        public string CouponCode { get; set; }
+
         public string GeoName { get; set; }
 
         public int Duration { get; set; }
