@@ -25,7 +25,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             if (sid == 2) { ViewBag.Title = "Cruises"; }
             if (sid == 3) { ViewBag.Title = "Sight Seeing"; }
          
-                var rec = db.Fetch<PackageDets>(" Select [PackageID],[CouponCode],[ServiceTypeID], [PackageName], Substring(Description,1,100) as Description, [Duration], substring([Itinerary],1,100) as Itinerary, [Dificulty] from Package Where PackageName like '%" + AN + "%' and ServiceTypeID =@0", sid).ToList();
+            var rec = db.Fetch<PackageDets>(" Select [PackageID],[CouponCode],[ServiceTypeID], [PackageName], Substring(Description,1,100) as Description, [Duration], substring([Itinerary],1,100) as Itinerary, [Dificulty] from Package Where PackageName like '%" + AN + "%' and ServiceTypeID =@0", sid).ToList();
 
             return View(rec.ToPagedList(pageNumber, pageSize));
 
@@ -34,25 +34,33 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
 
 
-        public ActionResult Manage(int? id, int? sid)
+        public ActionResult Manage(int? id, int? sid, int mode = 1, int EID = 0) //Mode 1=Details,2=Prices,3=images,4=validity
         {
-            ViewBag.GuideLanguageID = new SelectList(db.Fetch<GuideLanguage>("Select GuideLanguageID,GuideLanguageName from GuideLanguage"), "GuideLanguageID", "GuideLanguageName");
             ViewBag.sid = sid;
+            ViewBag.mode = mode;
+            ViewBag.EID = EID;
             if (sid == 1) ViewBag.Title = "Manage Package";
             if (sid == 2) ViewBag.Title = "Manage Cruise";
             if (sid == 3) ViewBag.Title = "Manage SightSeeing";
 
+            ViewBag.PackageName = db.ExecuteScalar<string>("Select PackageName from Package where PackageId=@0", id);
+            ViewBag.PackageId = id;
+            return View();
+        }
 
+        public ActionResult FetchDetails(int id, int sid)
+        {
             var pkg = base.BaseCreateEdit<Package>(id, "PackageID");
+            ViewBag.sid = sid;
             ViewBag.GeoId = db.Query<GeoTree>("Select * from GeoTree where GeoTreeId in (Select GeoTreeId from Package_GeoTree where PackageId=@0)", pkg?.PackageID ?? 0).Select(sl => new SelectListItem { Text = sl.GeoName, Value = sl.GeoTreeID.ToString(), Selected = true });
             ViewBag.Acts = db.Query<Activity>("Select ActivityId, ActivityName from Activity where ActivityId in (Select ActivityId from Package_Activity where PackageId=@0)", pkg?.PackageID ?? 0).Select(sl => new SelectListItem { Text = sl.ActivityName, Value = sl.ActivityID.ToString(), Selected = true });
             ViewBag.Cats = db.Query<Category>("Select CategoryId, CategoryName from Category where CategoryId in (Select CategoryId from Package_Category where PackageId=@0)", pkg?.PackageID ?? 0).Select(sl => new SelectListItem { Text = sl.CategoryName, Value = sl.CategoryID.ToString(), Selected = true });
             ViewBag.Atts = db.Query<Attraaction>("Select AttractionId, AttractionName from Attraaction where AttractionId in (Select AttractionId from Package_Attraction where PackageId=@0)", pkg?.PackageID ?? 0).Select(sl => new SelectListItem { Text = sl.AttractionName, Value = sl.AttractionID.ToString(), Selected = true });
             ViewBag.Lang = db.Query<GuideLanguage>("Select GuideLanguageId, GuideLanguageName from GuideLanguage where GuideLanguageId in (Select GuideLanguageId from Package_Language where PackageId=@0)", pkg?.PackageID ?? 0).Select(sl => new SelectListItem { Text = sl.GuideLanguageName, Value = sl.GuideLanguageID.ToString(), Selected = true });
-            return View(pkg);
+            return PartialView("Details", pkg);
         }
 
-
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Manage([Bind(Include = "PackageID,ServiceTypeID,PackageName,Description,Duration,Itinerary,Highlights,Dificulty,GroupSize,GuideLanguageID,StartTime,Inclusion,Exclusion,CouponCode")] Package item, System.Collections.Generic.List<int> GeoTreeID )
@@ -78,6 +86,27 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 }
             }
             return RedirectToAction("Index", new { sid = item.ServiceTypeID });
+        }
+
+        public ActionResult PackPrice(int? id,int? sid, int? EID)
+        {
+            ViewBag.PackageId = id;
+            ViewBag.sid = sid;
+            ViewBag.Pack = db.FirstOrDefault<Package>($"Select * From Package Where PackageID='{id}'");
+            ViewBag.Price = db.Fetch<PriceDets>($"Select * from Prices p inner join OptionType ot on ot.OptionTypeID = p.OptionTypeID where ServiceID= {id} and ServiceTypeID ='{(int)ServiceTypeEnum.Packages}'");
+            ViewBag.OptionTypeID = new SelectList(db.Fetch<OptionType>("Select OptionTypeID,OptionTypeName from OptionType where ServiceTypeID=@0", (int)ServiceTypeEnum.Packages), "OptionTypeID", "OptionTypeName");
+
+            return PartialView(base.BaseCreateEdit<Price>(EID, "PriceID"));
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult PackPrice([Bind(Include = "PriceID,ServiceID,OptionTypeID,WEF,_Price")] Price item,int sid)
+        {
+            base.BaseSave<Price>(item, item.PriceID > 0);
+            return RedirectToAction("Manage",new { id=item.ServiceID,  sid, mode=2});
+
         }
 
         public ActionResult CatManage(int? id)
@@ -222,24 +251,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
 
 
-        public ActionResult PackPrice(int? id, int? EID)
-        {
-            ViewBag.Pack = db.FirstOrDefault<Package>($"Select * From Package Where PackageID='{id}'");
-            ViewBag.Price = db.Fetch<PriceDets>($"Select * from Prices p inner join OptionType ot on ot.OptionTypeID = p.OptionTypeID where ServiceID= {id} and ServiceTypeID ='{(int)ServiceTypeEnum.Packages}'");
-            ViewBag.OptionTypeID = new SelectList(db.Fetch<OptionType>("Select OptionTypeID,OptionTypeName from OptionType where ServiceTypeID=@0", (int)ServiceTypeEnum.Packages), "OptionTypeID", "OptionTypeName");
-
-            return View(base.BaseCreateEdit<Price>(EID, "PriceID"));
-        }
-
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult PackPrice([Bind(Include = "PriceID,ServiceID,OptionTypeID,WEF,_Price")] Price item)
-        {
-            base.BaseSave<Price>(item, item.PriceID > 0);
-            return RedirectToAction("PackPrice");
-
-        }
+        
         public ActionResult Delete(int? PackID, int? ActID, int? pid, int? sid, int? AttractID, int? CatID, int? GuideID, int? stid)
         {
             if (ActID != null && PackID != null)

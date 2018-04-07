@@ -1,4 +1,4 @@
-﻿@model Speedbird.Package
+﻿
 
 
 <div class="card border rounded DropShadow">
@@ -9,12 +9,12 @@
     <div class="card-body">
         <h5>&nbsp;</h5>
 
-        @if (Model?.PackageID > 0)
-        {
-            <h1> @Html.DisplayFor(model => model.PackageName)</h1>
+       
+            <h1> @ViewBag.PackageName</h1>
+            @Html.Hidden("PackageId", (int)ViewBag.PackageId)
             <div class="btn-group-lg" role="group" aria-label="Basic example">
-                <button type="button" class="btn btn-secondary">Details</button>
-                <button type="button" class="btn btn-secondary">Price</button>
+                <button id="DetailsBtn" type="button" class="btn btn-secondary">Details</button>
+                <button id="PriceBtn" type="button" class="btn btn-secondary">Price</button>
                 <button type="button" class="btn btn-secondary">Images</button>
                 <button type="button" class="btn btn-secondary">Validity</button>
             </div>
@@ -54,146 +54,15 @@
 
 
             <hr />
-        }
+        
 
 
             <div id="TabContent">
-                @using (Html.BeginForm("Manage", "Package", FormMethod.Post))
-    {
-            @Html.AntiForgeryToken()
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            @Html.Hidden("ServiceTypeID", (int)ViewBag.sid)
+                @if (ViewBag.mode == 1)
+                { @Html.Action("FetchDetails", "Package", new { id = (int)ViewBag.PackageId, sid = (int)ViewBag.sid }) }
 
-if (Model?.PackageID > 0)
-{ @Html.HiddenFor(model => model.PackageID) }
-
-            <div class="form-row">
-                <div class="input-group col mb-3">
-                    <div class="input-group-prepend"><span class="input-group-text">Name</span></div>
-                    @Html.EditorFor(model => model.PackageName, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.PackageName, "", new { @class = "text-danger" })
-                </div>
-                <div class="input-group col mb-3">
-                    <div class="input-group-prepend"><span class="input-group-text">Duration</span></div>
-                    @Html.EditorFor(model => model.Duration, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Duration, "", new { @class = "text-danger" })
-                </div>
-                <div class="input-group col mb-3">
-                    <div class="input-group-prepend"><span class="input-group-text">Coupon Code</span></div>
-                    @Html.EditorFor(model => model.CouponCode, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.CouponCode, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-row">
-                <div class="input-group col mb-3">
-                    <div class="input-group-prepend"><span class="input-group-text">Difficutly</span></div>
-                    @Html.EditorFor(model => model.Dificulty, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Dificulty, "", new { @class = "text-danger" })
-                </div>
-                <div class="input-group col mb-3">
-                    <div class="input-group-prepend"><span class="input-group-text">Group size</span></div>
-                    @Html.EditorFor(model => model.GroupSize, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.GroupSize, "", new { @class = "text-danger" })
-                </div>
-                <div class="input-group col mb-3">
-                    <div class="input-group-prepend"><span class="input-group-text">Stops at</span></div>
-                    <select id="GeoTreeID" name="GeoTreeID" class="GeoSelect form-control" multiple="multiple">
-                        @foreach (var o in ViewBag.GeoId)
-                         {
-                            <option value="@o.Value" selected="selected">@o.Text</option>
-                         }
-                    </select>
-                </div>
-            </div>
-
-            <div class="form-row">
-                <div class="input-group col mb-3">
-                    <div class="input-group-prepend"><span class="input-group-text">Itinerary</span></div>
-                    @Html.TextAreaFor(model => model.Itinerary, 3, 43, htmlAttributes: new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.Itinerary, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="input-group col mb-3">
-                    <div class="input-group-prepend"><span class="input-group-text">Description</span></div>
-                    @Html.TextAreaFor(model => model.Description, 3, 43, htmlAttributes: new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="input-group col mb-3">
-                    <div class="input-group-prepend"><span class="input-group-text">Highlights</span></div>
-                    @Html.TextAreaFor(model => model.Highlights, 3, 43, htmlAttributes: new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.Highlights, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="input-group col mb-3">
-                    <div class="input-group-prepend"><span class="input-group-text">Start Time</span></div>
-                    @Html.TextAreaFor(model => model.StartTime, 3, 43, htmlAttributes: new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.StartTime, "", new { @class = "text-danger" })
-                </div>                
-            </div>
-            <div class="form-row">
-                <div class="input-group col mb-3">
-                    <div class="input-group-prepend"><span class="input-group-text">Inclusions</span></div>
-                    @Html.TextAreaFor(model => model.Inclusion, 3, 43, htmlAttributes: new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.Inclusion, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="input-group col mb-3">
-                    <div class="input-group-prepend"><span class="input-group-text">Exclusions</span></div>
-                    @Html.TextAreaFor(model => model.Exclusion, 3, 43, htmlAttributes: new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.Exclusion, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            
-            <div class="form-row">
-                <div class="input-group col mb-3">
-                    <div class="input-group-prepend"><span class="input-group-text">Activities</span></div>
-                    <select id="ActID" name="ActID" class="form-control sel2Lkup"  data-setu="ActSave" data-geturl="GetAct" multiple="multiple">
-                        @foreach (var o in ViewBag.Acts)
-                           { <option value="@o.Value" selected="selected">@o.Text</option> }
-                    </select>
-                </div>
-                <div class="input-group col mb-3">
-                    <div class="input-group-prepend"><span class="input-group-text">Categories</span></div>
-                    <select id="CatID" name="CatID" class="form-control sel2Lkup" data-setu="CatSave" multiple="multiple">
-                        @foreach (var o in ViewBag.Cats)
-                           { <option value="@o.Value" selected="selected">@o.Text</option> }
-                    </select>
-                </div>                
-            </div>
-
-            <div class="form-row">
-                <div class="input-group col mb-3">
-                    <div class="input-group-prepend"><span class="input-group-text">Languages</span></div>
-                    <select id="LanID" name="LanID" class="form-control sel2Lkup" data-setu="LanSave" multiple="multiple">
-                        @foreach (var o in ViewBag.Lang)
-                           { <option value="@o.Value" selected="selected">@o.Text</option> }
-                    </select>
-                </div>
-                <div class="input-group col mb-3">
-                    <div class="input-group-prepend"><span class="input-group-text">Attractions</span></div>
-                    <select id="AttID" name="AttID" class="form-control sel2Lkup" data-setu="AttSave" multiple="multiple">
-                        @foreach (var o in ViewBag.Atts)
-                           { <option value="@o.Value" selected="selected">@o.Text</option> }
-                    </select>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Save" class="btn btn-primary" />
-                </div>
-            </div>
-}
-
-
-
-
+                @if (ViewBag.mode == 2)
+                { @Html.Action("PackPrice", "Package", new { id = (int)ViewBag.PackageId, sid = (int)ViewBag.sid, EID = (int)ViewBag.EID }) }
             </div>
         <hr />
     </div>
@@ -203,73 +72,22 @@ if (Model?.PackageID > 0)
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }
+
 <script>
-    $(function(){
-        //Activities
-        $("#ActID").select2({
-            placeholder: "Type 3 letters to choose",
-            minimumInputLength: 3,
-
-            ajax: {
-                url: '@(Url.Action("GetAct", "Package"))',
-                dataType: 'json',
-                quietMillis: 250,
-                results: function (data, page) {
-                    return { results: data.data };
-                }
-            }
+    $(function () {
+        $('#DetailsBtn').click(function () {
+            $('#TabContent').load(
+                '@Url.Action("FetchDetails", new { id = (int)ViewBag.PackageId, sid = (int)ViewBag.sid })'
+            );
         });
+        $('#PriceBtn').click(function () {
+            var detFrm = $('detFrm');
+            if (detFrm != 'undefined')
+                detFrm.submit();
 
-
-        //Categories
-        $("#CatID").select2({
-            placeholder: "Type 3 letters to choose",
-            minimumInputLength: 3,
-
-            ajax: {
-                url: '@(Url.Action("GetCat", "Package"))',
-                dataType: 'json',
-                quietMillis: 250,
-                results: function (data, page) {
-                    return { results: data.data };
-                }
-            }
+            $('#TabContent').load(
+                '@Url.Action("PackPrice", new { id = (int)ViewBag.PackageId , sid = (int)ViewBag.sid })'
+            );
         });
-
-         //Attractions
-        $("#AttID").select2({
-            placeholder: "Type 3 letters to choose",
-            minimumInputLength: 3,
-
-            ajax: {
-                url: '@(Url.Action("GetAtt", "Package"))',
-                dataType: 'json',
-                quietMillis: 250,
-                results: function (data, page) {
-                    return { results: data.data };
-                }
-            }
-        });
-
-        //Language
-        $("#LanID").select2({
-            placeholder: "Type 3 letters to choose",
-            minimumInputLength: 3,
-
-            ajax: {
-                url: '@(Url.Action("GetLan", "Package"))',
-                dataType: 'json',
-                quietMillis: 250,
-                results: function (data, page) {
-                    return { results: data.data };
-                }
-            }
-        });
-
-        //Save Select2 data
-        $(".sel2Lkup").on('change', function (e) {
-            $.post('/SBBoss/Package/' + $(this).data('setu'), { PackageId: $('#PackageID').val(), ActIds: $(this).val() })
-        });
-
     });
 </script>

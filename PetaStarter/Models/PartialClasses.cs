@@ -88,9 +88,14 @@ namespace Speedbird
         public IEnumerable<CategoryDets>Cat { get; set; }
         public IEnumerable<PriceDets>Pric { get; set; }
         public IEnumerable<ActivityDets> Act { get; set; }
-
-
+        
     }
+
+    [MetadataType(typeof(PackageMetadata))]
+    public partial class Package
+    {
+    }
+
     public class ActivityDets
     {
         public int PackageID { get; set; }

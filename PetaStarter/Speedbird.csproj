@@ -257,6 +257,7 @@
     <Content Include="Content\css\select2.min.css" />
     <Content Include="Content\DN.css" />
     <Content Include="Content\EA.css" />
+    <Content Include="Content\jquery-te-1.4.0.css" />
     <Content Include="Content\jquery-ui-timepicker-addon.css" />
     <Content Include="Content\jquery-ui-timepicker-addon.min.css" />
     <Content Include="Content\PagedList.css" />
@@ -315,6 +316,7 @@
     <Content Include="Scripts\i18n\vi.js" />
     <Content Include="Scripts\i18n\zh-CN.js" />
     <Content Include="Scripts\i18n\zh-TW.js" />
+    <Content Include="Scripts\jquery-te-1.4.0.min.js" />
     <Content Include="Scripts\jquery.masonry.min.js" />
     <Content Include="Content\themes\base\accordion.css" />
     <Content Include="Content\themes\base\all.css" />
@@ -419,7 +421,7 @@
     <Content Include="Areas\SBBoss\Views\OptionType\Index.cshtml" />
     <Content Include="Areas\SBBoss\Views\OptionType\Manage.cshtml" />
     <Content Include="Areas\SBBoss\Views\Accomodation\Price.cshtml" />
-    <Content Include="Areas\SBBoss\Views\Package\ActManage.cshtml" />
+    <Content Include="Areas\SBBoss\Views\Package\Details.cshtml" />
     <Content Include="Areas\SBBoss\Views\Package\Index.cshtml" />
     <Content Include="Areas\SBBoss\Views\Package\Manage.cshtml" />
     <Content Include="Areas\SBBoss\Views\Package\PackPicture.cshtml" />
