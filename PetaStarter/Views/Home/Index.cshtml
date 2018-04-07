@@ -2,7 +2,7 @@
 <style>
 
     .im {
-        width: 100%;
+        width: 80%;
         height: auto;
         color: white;
         vertical-align: middle;
@@ -174,10 +174,10 @@
             <div class="row">
                 <div class="col-md-4">
                     <a href="~/Home/LoadService/?Goa=1">
-                        <img src="/Images/Goa 3.png" class=" im" alt="Goa" style="width:100%;">
+                        <img src="/Images/Goa 3.png" class=" im" alt="Goa">
                     </a>
                     <div class="text-block">
-                        <h4>Goa</h4>
+                        <h3>Goa</h3>
                         <p>Get Wet on our hot beaches</p>
                     </div>
                 </div>
@@ -186,7 +186,7 @@
                         <img src="/Images/India 3.png" class=" im" alt="India">
                     </a>
                     <div class="text-block">
-                        <h4>India</h4>
+                        <h3>India</h3>
                         <p>East Or West India is the Best</p>
                     </div>
                 </div>
@@ -195,9 +195,12 @@
                         <img src="/Images/International 3.png" class="im" alt="World">
                     </a>
                     <div class="text-block">
-                        <h4>Worldwide</h4>
+                        <h3>Worldwide</h3>
                         <p>Travel the world with Us </p>
                     </div>
+                        <select class="GeoSelect w-100 form-control-lg" placeholder="Where do you want to go?">
+                            <option value="0">Where do you want to go?</option>
+                        </select>                        
                 </div>
             </div>
         </div>
@@ -282,9 +285,19 @@
             isAnimated: true,
         });
     });
-    $('.carousel').carousel({
-        interval: 8000,
+    //$('.carousel').carousel({
+    //    interval: 8000,
 
+    //});
+
+    $(".GeoSelect").on('change', function (e) {
+        
+        DestValues = [];
+        var Dests = $('.GeoSelect').val();
+        for (var i = 0; i < Dests.length; i++) {
+            DestValues.push(Dests[i]);
+        }
+        window.location.href = "/Home/LoadPackages/?st=Packages&LocId=" + DestValues[0];
     });
 
 </script>

@@ -1,6 +1,7 @@
 ﻿using PagedList;
 using Speedbird.Controllers;
 using System;
+using System.Collections.Generic;
 //using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -23,11 +24,11 @@ namespace Speedbird.Areas.SBBoss.Controllers
             if (sid == 1) { ViewBag.Title = "Packages"; }
             if (sid == 2) { ViewBag.Title = "Cruises"; }
             if (sid == 3) { ViewBag.Title = "Sight Seeing"; }
-         
-                var rec = db.Fetch<PackageDets>(" Select [PackageID], [ServiceTypeID], [PackageName], Substring(Description,1,100) as Description, [Duration], substring([Itinerary],1,100) as Itinerary, [Dificulty] from Package Where PackageName like '%" + AN + "%' and ServiceTypeID =@0", sid).ToList();
 
-                return View(rec.ToPagedList(pageNumber, pageSize));
-      
+            var rec = db.Fetch<PackageDets>(" Select [PackageID], [ServiceTypeID], [PackageName], Substring(Description,1,100) as Description, [Duration], substring([Itinerary],1,100) as Itinerary, [Dificulty] from Package Where PackageName like '%" + AN + "%' and ServiceTypeID =@0", sid).ToList();
+
+            return View(rec.ToPagedList(pageNumber, pageSize));
+
 
         }
 
@@ -37,19 +38,24 @@ namespace Speedbird.Areas.SBBoss.Controllers
         {
             ViewBag.GuideLanguageID = new SelectList(db.Fetch<GuideLanguage>("Select GuideLanguageID,GuideLanguageName from GuideLanguage"), "GuideLanguageID", "GuideLanguageName");
             ViewBag.sid = sid;
-            if (sid == 1) ViewBag.Title = "Manage Packages";
-            if (sid == 2) ViewBag.Title = "Manage Cruises";
+            if (sid == 1) ViewBag.Title = "Manage Package";
+            if (sid == 2) ViewBag.Title = "Manage Cruise";
             if (sid == 3) ViewBag.Title = "Manage SightSeeing";
 
+
             var pkg = base.BaseCreateEdit<Package>(id, "PackageID");
-            ViewBag.GeoId = db.Query<GeoTree>("Select * from GeoTree where GeoTreeId in (Select GeoTreeId from Package_GeoTree where PackageId=@0)", pkg?.PackageID?? 0).Select(sl => new SelectListItem { Text = sl.GeoName, Value = sl.GeoTreeID.ToString() , Selected=true });
+            ViewBag.GeoId = db.Query<GeoTree>("Select * from GeoTree where GeoTreeId in (Select GeoTreeId from Package_GeoTree where PackageId=@0)", pkg?.PackageID ?? 0).Select(sl => new SelectListItem { Text = sl.GeoName, Value = sl.GeoTreeID.ToString(), Selected = true });
+            ViewBag.Acts = db.Query<Activity>("Select ActivityId, ActivityName from Activity where ActivityId in (Select ActivityId from Package_Activity where PackageId=@0)", pkg?.PackageID ?? 0).Select(sl => new SelectListItem { Text = sl.ActivityName, Value = sl.ActivityID.ToString(), Selected = true });
+            ViewBag.Cats = db.Query<Category>("Select CategoryId, CategoryName from Category where CategoryId in (Select CategoryId from Package_Category where PackageId=@0)", pkg?.PackageID ?? 0).Select(sl => new SelectListItem { Text = sl.CategoryName, Value = sl.CategoryID.ToString(), Selected = true });
+            ViewBag.Atts = db.Query<Attraaction>("Select AttractionId, AttractionName from Attraaction where AttractionId in (Select AttractionId from Package_Attraction where PackageId=@0)", pkg?.PackageID ?? 0).Select(sl => new SelectListItem { Text = sl.AttractionName, Value = sl.AttractionID.ToString(), Selected = true });
+            ViewBag.Lang = db.Query<GuideLanguage>("Select GuideLanguageId, GuideLanguageName from GuideLanguage where GuideLanguageId in (Select GuideLanguageId from Package_Language where PackageId=@0)", pkg?.PackageID ?? 0).Select(sl => new SelectListItem { Text = sl.GuideLanguageName, Value = sl.GuideLanguageID.ToString(), Selected = true });
             return View(pkg);
         }
 
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Manage([Bind(Include = "PackageID,ServiceTypeID,PackageName,Description,Duration,Itinerary,Highlights,Dificulty,GroupSize,GuideLanguageID,StartTime,Inclusion,Exclusion")] Package item, System.Collections.Generic.List<int> GeoTreeID )
+        public ActionResult Manage([Bind(Include = "PackageID,ServiceTypeID,PackageName,Description,Duration,Itinerary,Highlights,Dificulty,GroupSize,GuideLanguageID,StartTime,Inclusion,Exclusion")] Package item, System.Collections.Generic.List<int> GeoTreeID)
         {
             using (var transaction = db.GetTransaction())
             {
@@ -68,10 +74,10 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 } else
                 {
                     transaction.Dispose();
-                    return RedirectToAction("Manage", new { id=item.PackageID, sid = item.ServiceTypeID });
+                    return RedirectToAction("Manage", new { id = item.PackageID, sid = item.ServiceTypeID });
                 }
             }
-           return RedirectToAction("Index", new { sid = item.ServiceTypeID });
+            return RedirectToAction("Index", new { sid = item.ServiceTypeID });
         }
 
         public ActionResult CatManage(int? id)
@@ -152,6 +158,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             return RedirectToAction("LangManage");
         }
 
+        
         public ActionResult ActManage(int? id)
         {
             ViewBag.Pack = db.FirstOrDefault<Package>($"Select * From Package Where PackageID='{id}'");
@@ -271,6 +278,69 @@ namespace Speedbird.Areas.SBBoss.Controllers
             }
             return RedirectToAction("Manage");
         }
+
+        #region InLine form
+        //Activities
+        public JsonResult GetAct(string term)
+        {
+            var locs = db.Fetch<Activity>("Select ActivityId, ActivityName from Activity where ActivityName like '%" + term + "%'");
+            return Json(new { results = locs.Select(a => new { id = a.ActivityID, text = a.ActivityName }) }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public void ActSave(int PackageId, IEnumerable<int> ActIds)
+        {
+            db.Delete<Package_Activity>("Where PackageId=@0", PackageId);
+            foreach (var item in ActIds)
+                db.Insert(new Package_Activity { PackageID = PackageId, ActivityID = item });
+        }
+
+        //Categories
+        public JsonResult GetCat(string term)
+        {
+            var locs = db.Fetch<Category>("Select CategoryId, CategoryName from Category where CategoryName like '%" + term + "%'");
+            return Json(new { results = locs.Select(a => new { id = a.CategoryID, text = a.CategoryName }) }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public void CatSave(int PackageId, IEnumerable<int> ActIds)
+        {
+            db.Delete<Package_Category>("Where PackageId=@0", PackageId);
+            foreach (var item in ActIds)
+                db.Insert(new Package_Category { PackageID = PackageId, CategoryID = item });
+        }
+
+        //Attractions
+        public JsonResult GetAtt(string term)
+        {            
+            var locs = db.Fetch<Attraaction>("Select AttractionId, AttractionName from Attraaction where AttractionName like '%" + term + "%'");
+            return Json(new { results = locs.Select(a => new { id = a.AttractionID, text = a.AttractionName }) }, JsonRequestBehavior.AllowGet);            
+        }
+
+        [HttpPost]
+        public void AttSave(int PackageId, IEnumerable<int> ActIds)
+        {
+            db.Delete<Package_Attraction>("Where PackageId=@0", PackageId);
+            foreach (var item in ActIds)
+                db.Insert(new Package_Attraction { PackageID = PackageId, AttractionID= item });
+        }
+
+        //Language
+        public JsonResult GetLan(string term)
+        {
+            var locs = db.Fetch<GuideLanguage>("Select GuideLanguageId, GuideLanguageName from GuideLanguage where GuideLanguageName like '%" + term + "%'");
+            return Json(new { results = locs.Select(a => new { id = a.GuideLanguageID, text = a.GuideLanguageName }) }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public void LanSave(int PackageId, IEnumerable<int> ActIds)
+        {
+            db.Delete<Package_Language>("Where PackageId=@0", PackageId);
+            foreach (var item in ActIds)
+                db.Insert(new Package_Language { PackageId = PackageId, GuideLanguageId= item });
+        }
+        #endregion
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

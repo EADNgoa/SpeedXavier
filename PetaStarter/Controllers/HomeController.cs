@@ -67,7 +67,7 @@ namespace Speedbird.Controllers
             return View(cat);
         }
 
-        public ActionResult LoadPackages(ServiceTypeEnum? st,string Loc,int? CatID)
+        public ActionResult LoadPackages(ServiceTypeEnum? st,string Loc,int? CatID,int LocId=0)
         {
             ViewBag.st = st;
             
@@ -88,13 +88,17 @@ namespace Speedbird.Controllers
 
             ViewBag.TF = tf;
             ViewBag.nums = items;
-            var geoloc = db.FirstOrDefault<GeoTree>("Select * from GeoTree where GeoName = @0", Loc);
-            ViewBag.LocId = geoloc.GeoTreeID;
+
+            if (LocId==0)
+                ViewBag.LocId = db.FirstOrDefault<GeoTree>("Select * from GeoTree where GeoName = @0", Loc).GeoTreeID;
+            else 
+                ViewBag.LocId = LocId;
+
             if (st == ServiceTypeEnum.Packages || st == ServiceTypeEnum.SightSeeing)
             {
                 ViewBag.Cats = db.Fetch<Category>("Select * From Category");
                 ViewBag.Acts = db.Fetch<Activity>("Select * From Activity");
-                ViewBag.Attracts = db.Fetch<Attraaction>("Select Distinct a.* From Attraaction a inner join Package_Attraction pa on pa.AttractionID = a.AttractionID inner join Package p on p.PackageID =pa.PackageID inner join Package_GeoTree pg on pg.PackageID= p.PackageID where pg.GeoTreeID in(Select GeotreeId from GetChildGeos(@0))",geoloc.GeoTreeID);
+                ViewBag.Attracts = db.Fetch<Attraaction>("Select Distinct a.* From Attraaction a inner join Package_Attraction pa on pa.AttractionID = a.AttractionID inner join Package p on p.PackageID =pa.PackageID inner join Package_GeoTree pg on pg.PackageID= p.PackageID where pg.GeoTreeID in(Select GeotreeId from GetChildGeos(@0))",ViewBag.LocId);
 
             }
             if (st == ServiceTypeEnum.Accomodation)
@@ -103,6 +107,8 @@ namespace Speedbird.Controllers
             }
             return View();
         }
+
+
         public ActionResult PackagesPartialView(ServiceTypeEnum? st, IEnumerable<int> CatID, IEnumerable<int> ActID,int? Gsize,int? diff,int? dur,int? GuideLanguageID, IEnumerable<int> AttractID,IEnumerable<int> FacilityID,decimal? maxPrice,decimal? minPrice,int? NoPax,int? large,int? small,int? hasAc,int? HasCarrier,IEnumerable<int> DestIds)
         {
             
