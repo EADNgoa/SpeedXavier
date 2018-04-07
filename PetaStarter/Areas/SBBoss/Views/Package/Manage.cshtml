@@ -79,11 +79,9 @@ if (Model?.PackageID > 0)
                     @Html.ValidationMessageFor(model => model.Duration, "", new { @class = "text-danger" })
                 </div>
                 <div class="input-group col mb-3">
-                    <div class="input-group-prepend"><span class="input-group-text">Languages</span></div>
-                    <select id="LanID" name="LanID" class="form-control sel2Lkup" data-setu="LanSave" multiple="multiple">
-                        @foreach (var o in ViewBag.Lang)
-                           { <option value="@o.Value" selected="selected">@o.Text</option> }
-                    </select>
+                    <div class="input-group-prepend"><span class="input-group-text">Coupon Code</span></div>
+                    @Html.EditorFor(model => model.CouponCode, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.CouponCode, "", new { @class = "text-danger" })
                 </div>
             </div>
 
@@ -135,7 +133,7 @@ if (Model?.PackageID > 0)
                     <div class="input-group-prepend"><span class="input-group-text">Start Time</span></div>
                     @Html.TextAreaFor(model => model.StartTime, 3, 43, htmlAttributes: new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.StartTime, "", new { @class = "text-danger" })
-                </div>
+                </div>                
             </div>
             <div class="form-row">
                 <div class="input-group col mb-3">
@@ -166,6 +164,16 @@ if (Model?.PackageID > 0)
                         @foreach (var o in ViewBag.Cats)
                            { <option value="@o.Value" selected="selected">@o.Text</option> }
                     </select>
+                </div>                
+            </div>
+
+            <div class="form-row">
+                <div class="input-group col mb-3">
+                    <div class="input-group-prepend"><span class="input-group-text">Languages</span></div>
+                    <select id="LanID" name="LanID" class="form-control sel2Lkup" data-setu="LanSave" multiple="multiple">
+                        @foreach (var o in ViewBag.Lang)
+                           { <option value="@o.Value" selected="selected">@o.Text</option> }
+                    </select>
                 </div>
                 <div class="input-group col mb-3">
                     <div class="input-group-prepend"><span class="input-group-text">Attractions</span></div>
@@ -175,7 +183,6 @@ if (Model?.PackageID > 0)
                     </select>
                 </div>
             </div>
-
 
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
