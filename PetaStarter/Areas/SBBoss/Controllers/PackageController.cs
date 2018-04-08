@@ -63,7 +63,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Manage([Bind(Include = "PackageID,ServiceTypeID,PackageName,Description,Duration,Itinerary,Highlights,Dificulty,GroupSize,GuideLanguageID,StartTime,Inclusion,Exclusion,CouponCode")] Package item, System.Collections.Generic.List<int> GeoTreeID )
+        public bool  Manage([Bind(Include = "PackageID,ServiceTypeID,PackageName,Description,Duration,Itinerary,Highlights,Dificulty,GroupSize,GuideLanguageID,StartTime,Inclusion,Exclusion,CouponCode")] Package item, System.Collections.Generic.List<int> GeoTreeID )
         {
             using (var transaction = db.GetTransaction())
             {
@@ -79,13 +79,15 @@ namespace Speedbird.Areas.SBBoss.Controllers
                     });
 
                     transaction.Complete();
+                    return true;
                 } else
                 {
                     transaction.Dispose();
-                    return RedirectToAction("Manage", new { id = item.PackageID, sid = item.ServiceTypeID });
+                    return false;
+                    
                 }
             }
-            return RedirectToAction("Index", new { sid = item.ServiceTypeID });
+            
         }
 
         public ActionResult PackPrice(int? id,int? sid, int? EID)
@@ -106,8 +108,176 @@ namespace Speedbird.Areas.SBBoss.Controllers
         {
             base.BaseSave<Price>(item, item.PriceID > 0);
             return RedirectToAction("Manage",new { id=item.ServiceID,  sid, mode=2});
+        }
+
+
+        public ActionResult PackPicture(int? id, int sid)
+        {
+            ViewBag.PackageId = id;
+            
+            ViewBag.Pack = db.FirstOrDefault<Package>($"Select * From Package Where PackageID='{id}'");
+            ViewBag.Pics = db.Fetch<Picture>($"Select * From Picture where ServiceID='{id}' and ServiceTypeID='{sid}'");
+            base.BaseCreateEdit<Picture>(id, "PictureID");
+
+            PictureDets ci = new PictureDets() { };
+            return PartialView(ci);
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult PackPicture([Bind(Include = "PictureID,ServiceTypeID,PictureName,ServiceID,UploadedFile")] PictureDets pics)
+        {
+            Picture res = new Picture
+            {
+                PictureID = pics.PictureID,
+                ServiceID = pics.ServiceID,
+                ServiceTypeID = pics.ServiceTypeID
+            };
+
+            if (pics.UploadedFile != null)
+            {
+                string fn = pics.UploadedFile.FileName.Substring(pics.UploadedFile.FileName.LastIndexOf('\\') + 1);
+                fn = String.Concat(((ServiceTypeEnum)pics.ServiceTypeID).ToString(), "_", pics.ServiceID.ToString(), "_", fn);
+
+                string SavePath = System.IO.Path.Combine(Server.MapPath("~/Images"), fn);
+                pics.UploadedFile.SaveAs(SavePath);
+
+                res.PictureName = fn;
+            }
+
+            return base.BaseSave<Picture>(res, pics.PictureID > 0, "Manage", new { id = pics.ServiceID, sid = pics.ServiceTypeID, mode=3 });
 
         }
+        
+        //Now only for Picture Delete
+        public ActionResult Delete(int? PackID, int? ActID, int? pid, int? sid, int? AttractID, int? CatID, int? GuideID, int? stid)
+        {
+            if (ActID != null && PackID != null)
+            {
+                db.Execute($"Delete From Package_Activity Where PackageID={PackID} and ActivityID={ActID}");
+                return RedirectToAction("ActManage", new { id = PackID });
+
+            }
+            if (GuideID != null && PackID != null)
+            {
+                db.Execute($"Delete From Package_Language Where PackageID={PackID} and GuideLanguageID={GuideID}");
+                return RedirectToAction("LangManage", new { id = PackID });
+
+            }
+            if (AttractID != null && PackID != null)
+            {
+                db.Execute($"Delete From Package_Attraction Where PackageID={PackID} and AttractionID={AttractID}");
+                return RedirectToAction("AttractManage", new { id = PackID });
+
+            }
+            if (CatID != null && PackID != null)
+            {
+                db.Execute($"Delete From Package_Category Where PackageID={PackID} and CategoryID={CatID}");
+                return RedirectToAction("CatManage", new { id = PackID });
+
+            }
+            if (pid != null)
+            {
+                //First remove the old img (if exists)
+                string oldImg = db.Single<string>("Select PictureName from Picture where PictureId=@0", pid);
+                if (oldImg?.Length > 0) System.IO.File.Delete(System.IO.Path.Combine(Server.MapPath("~/Images"), oldImg));
+
+                db.Execute($"Delete From Picture Where PictureID={pid}");
+                return RedirectToAction("Manage", routeValues: new { id = sid, sid = stid.Value, mode = 3 });
+
+            }
+            return RedirectToAction("Manage");
+        }
+
+        public ActionResult PVManage(int? id, int? sid, int? EID)
+        {
+            ViewBag.Pack = db.FirstOrDefault<Package>($"Select * From Package Where PackageID='{id}'");
+            ViewBag.sid = sid;
+            ViewBag.Validity = db.Fetch<PackageValidity>($"Select * From PackageValidity where PackageID ='{id}'");
+            return PartialView(base.BaseCreateEdit<PackageValidity>(EID, "PVID"));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public void PVManage([Bind(Include = "PVID,PackageId,ValidFrom,ValidTo,")] PackageValidity item, int sid)
+        {
+            base.BaseSave<PackageValidity>(item, item.PVId > 0);
+        }
+
+        #region InLine form
+        //Activities
+        public JsonResult GetAct(string term)
+        {
+            var locs = db.Fetch<Activity>("Select ActivityId, ActivityName from Activity where ActivityName like '%" + term + "%'");
+            return Json(new { results = locs.Select(a => new { id = a.ActivityID, text = a.ActivityName }) }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public void ActSave(int PackageId, IEnumerable<int> ActIds)
+        {
+            db.Delete<Package_Activity>("Where PackageId=@0", PackageId);
+            foreach (var item in ActIds)
+                db.Insert(new Package_Activity { PackageID = PackageId, ActivityID = item });
+        }
+
+        //Categories
+        public JsonResult GetCat(string term)
+        {
+            var locs = db.Fetch<Category>("Select CategoryId, CategoryName from Category where CategoryName like '%" + term + "%'");
+            return Json(new { results = locs.Select(a => new { id = a.CategoryID, text = a.CategoryName }) }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public void CatSave(int PackageId, IEnumerable<int> ActIds)
+        {
+            db.Delete<Package_Category>("Where PackageId=@0", PackageId);
+            foreach (var item in ActIds)
+                db.Insert(new Package_Category { PackageID = PackageId, CategoryID = item });
+        }
+
+        //Attractions
+        public JsonResult GetAtt(string term)
+        {
+            var locs = db.Fetch<Attraaction>("Select AttractionId, AttractionName from Attraaction where AttractionName like '%" + term + "%'");
+            return Json(new { results = locs.Select(a => new { id = a.AttractionID, text = a.AttractionName }) }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public void AttSave(int PackageId, IEnumerable<int> ActIds)
+        {
+            db.Delete<Package_Attraction>("Where PackageId=@0", PackageId);
+            foreach (var item in ActIds)
+                db.Insert(new Package_Attraction { PackageID = PackageId, AttractionID = item });
+        }
+
+        //Language
+        public JsonResult GetLan(string term)
+        {
+            var locs = db.Fetch<GuideLanguage>("Select GuideLanguageId, GuideLanguageName from GuideLanguage where GuideLanguageName like '%" + term + "%'");
+            return Json(new { results = locs.Select(a => new { id = a.GuideLanguageID, text = a.GuideLanguageName }) }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public void LanSave(int PackageId, IEnumerable<int> ActIds)
+        {
+            db.Delete<Package_Language>("Where PackageId=@0", PackageId);
+            foreach (var item in ActIds)
+                db.Insert(new Package_Language { PackageId = PackageId, GuideLanguageId = item });
+        }
+        #endregion
+
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        //Below lies unused code.
 
         public ActionResult CatManage(int? id)
         {
@@ -128,25 +298,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             db.Insert(item);
             return RedirectToAction("CatManage");
         }
-
-        public ActionResult PVManage(int? id, int? EID)
-        {
-            ViewBag.Pack = db.FirstOrDefault<Package>($"Select * From Package Where PackageID='{id}'");
-
-            ViewBag.Validity = db.Fetch<PackageValidity>($"Select * From PackageValidity where PackageID ='{id}'");
-            return View(base.BaseCreateEdit<PackageValidity>(EID, "PVID"));
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult PVManage([Bind(Include = "PVID,PackageId,ValidFrom,ValidTo,")] PackageValidity item)
-        {
-            base.BaseSave<PackageValidity>(item, item.PVId > 0);
-            return RedirectToAction("PVManage");
-
-        }
-
-
+               
         public ActionResult AttractManage(int? id)
         {
             ViewBag.Pack = db.FirstOrDefault<Package>($"Select * From Package Where PackageID='{id}'");
@@ -208,158 +360,6 @@ namespace Speedbird.Areas.SBBoss.Controllers
             db.Insert(item);
             return RedirectToAction("ActManage");
         }
-        public ActionResult PackPicture(int? id, int stid)
-        {
-            ViewBag.Pack = db.FirstOrDefault<Package>($"Select * From Package Where PackageID='{id}'");
-            ViewBag.Pics = db.Fetch<Picture>($"Select * From Picture where ServiceID='{id}' and ServiceTypeID='{stid}'");
-            base.BaseCreateEdit<Picture>(id, "PictureID");
-
-            PictureDets ci = new PictureDets() { };
-            return View(ci);
-
-        }
-
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult PackPicture([Bind(Include = "PictureID,ServiceTypeID,PictureName,ServiceID,UploadedFile")] PictureDets pics)
-        {
-            Picture res = new Picture
-            {
-                PictureID = pics.PictureID,
-                ServiceID = pics.ServiceID,
-                ServiceTypeID = pics.ServiceTypeID
-            };
-
-            if (pics.UploadedFile != null)
-            {
-                string fn = pics.UploadedFile.FileName.Substring(pics.UploadedFile.FileName.LastIndexOf('\\') + 1);
-                fn = String.Concat( ((ServiceTypeEnum)pics.ServiceTypeID).ToString() ,"_", pics.ServiceID.ToString(), "_", fn);
-                
-                string SavePath = System.IO.Path.Combine(Server.MapPath("~/Images"), fn);
-                pics.UploadedFile.SaveAs(SavePath);
-
-                res.PictureName = fn;
-            }
-
-            return base.BaseSave<Picture>(res, pics.PictureID > 0,"PackPicture", new { id=pics.ServiceID, stid=pics.ServiceTypeID});           
-
-        }
-
-
-
-
-
-
         
-        public ActionResult Delete(int? PackID, int? ActID, int? pid, int? sid, int? AttractID, int? CatID, int? GuideID, int? stid)
-        {
-            if (ActID != null && PackID != null)
-            {
-                db.Execute($"Delete From Package_Activity Where PackageID={PackID} and ActivityID={ActID}");
-                return RedirectToAction("ActManage", new { id = PackID });
-
-            }
-            if (GuideID != null && PackID != null)
-            {
-                db.Execute($"Delete From Package_Language Where PackageID={PackID} and GuideLanguageID={GuideID}");
-                return RedirectToAction("LangManage", new { id = PackID });
-
-            }
-            if (AttractID != null && PackID != null)
-            {
-                db.Execute($"Delete From Package_Attraction Where PackageID={PackID} and AttractionID={AttractID}");
-                return RedirectToAction("AttractManage", new { id = PackID });
-
-            }
-            if (CatID != null && PackID != null)
-            {
-                db.Execute($"Delete From Package_Category Where PackageID={PackID} and CategoryID={CatID}");
-                return RedirectToAction("CatManage", new { id = PackID });
-
-            }
-            if (pid != null)
-            {
-                //First remove the old img (if exists)
-                string oldImg = db.Single<string>("Select PictureName from Picture where PictureId=@0", pid);
-                if (oldImg?.Length > 0) System.IO.File.Delete(System.IO.Path.Combine(Server.MapPath("~/Images"), oldImg));
-
-                db.Execute($"Delete From Picture Where PictureID={pid}");
-                return RedirectToAction("PackPicture", routeValues: new { id = sid, stid=stid.Value });
-
-            }
-            return RedirectToAction("Manage");
-        }
-
-        #region InLine form
-        //Activities
-        public JsonResult GetAct(string term)
-        {
-            var locs = db.Fetch<Activity>("Select ActivityId, ActivityName from Activity where ActivityName like '%" + term + "%'");
-            return Json(new { results = locs.Select(a => new { id = a.ActivityID, text = a.ActivityName }) }, JsonRequestBehavior.AllowGet);
-        }
-
-        [HttpPost]
-        public void ActSave(int PackageId, IEnumerable<int> ActIds)
-        {
-            db.Delete<Package_Activity>("Where PackageId=@0", PackageId);
-            foreach (var item in ActIds)
-                db.Insert(new Package_Activity { PackageID = PackageId, ActivityID = item });
-        }
-
-        //Categories
-        public JsonResult GetCat(string term)
-        {
-            var locs = db.Fetch<Category>("Select CategoryId, CategoryName from Category where CategoryName like '%" + term + "%'");
-            return Json(new { results = locs.Select(a => new { id = a.CategoryID, text = a.CategoryName }) }, JsonRequestBehavior.AllowGet);
-        }
-
-        [HttpPost]
-        public void CatSave(int PackageId, IEnumerable<int> ActIds)
-        {
-            db.Delete<Package_Category>("Where PackageId=@0", PackageId);
-            foreach (var item in ActIds)
-                db.Insert(new Package_Category { PackageID = PackageId, CategoryID = item });
-        }
-
-        //Attractions
-        public JsonResult GetAtt(string term)
-        {            
-            var locs = db.Fetch<Attraaction>("Select AttractionId, AttractionName from Attraaction where AttractionName like '%" + term + "%'");
-            return Json(new { results = locs.Select(a => new { id = a.AttractionID, text = a.AttractionName }) }, JsonRequestBehavior.AllowGet);            
-        }
-
-        [HttpPost]
-        public void AttSave(int PackageId, IEnumerable<int> ActIds)
-        {
-            db.Delete<Package_Attraction>("Where PackageId=@0", PackageId);
-            foreach (var item in ActIds)
-                db.Insert(new Package_Attraction { PackageID = PackageId, AttractionID= item });
-        }
-
-        //Language
-        public JsonResult GetLan(string term)
-        {
-            var locs = db.Fetch<GuideLanguage>("Select GuideLanguageId, GuideLanguageName from GuideLanguage where GuideLanguageName like '%" + term + "%'");
-            return Json(new { results = locs.Select(a => new { id = a.GuideLanguageID, text = a.GuideLanguageName }) }, JsonRequestBehavior.AllowGet);
-        }
-
-        [HttpPost]
-        public void LanSave(int PackageId, IEnumerable<int> ActIds)
-        {
-            db.Delete<Package_Language>("Where PackageId=@0", PackageId);
-            foreach (var item in ActIds)
-                db.Insert(new Package_Language { PackageId = PackageId, GuideLanguageId= item });
-        }
-        #endregion
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
     }
 }

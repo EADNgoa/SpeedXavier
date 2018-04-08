@@ -7,48 +7,6 @@
 
 
 
-<div class="card border rounded DropShadow">
-    <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
-        <span class="h5"> Details</span>
-        <a href="@Url.Action("Manage","Package",new {id=ViewBag.Pack.PackageID,sid=(int)ViewBag.Pack.ServiceTypeID})"><i class="fas fa-undo-alt fa-inverse h3 float-right DropShadow"></i></a>
-
-    </div>
-    <div class="card-body">
-        <h5 class="card-title">&nbsp;</h5>
-        <table class="table section-to-print " width="70%">
-            <tr>
-                @if (ViewBag.Pack.ServiceTypeID == 1)
-                {
-                <td>Package Name</td>
-                }
-                else if (ViewBag.Pack.ServiceTypeID == 2)
-                {
-                <td>Cruise Name</td>
-                }
-                else if (ViewBag.Pack.ServiceTypeID == 3)
-                {
-                <td>Sight Seeing</td>
-                }
-                <td>@ViewBag.Pack.PackageName</td>
-            </tr>
-
-            <tr>
-                <td>Duration</td>
-                <td>@ViewBag.Pack.Duration</td>
-            </tr>
-              @if (ViewBag.Pack.ServiceTypeID == 1)
-                {
-                 <tr>
-                <td>Group Size</td>
-                <td>@ViewBag.Pack.GroupSize</td>
-            </tr>
-                }
-          
-
-        </table>
-    </div>
-</div>
-
 
 <div class="card border rounded DropShadow">
     <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
@@ -68,6 +26,7 @@
 
                 @Html.Hidden("ServiceID", (int)ViewBag.Pack.PackageID)
                 @Html.Hidden("ServiceTypeID", (int)ViewBag.Pack.ServiceTypeID)
+                
 
 
                 <div class="form-group">
@@ -88,7 +47,7 @@
         
 
         <hr />
-        <table class="table section-to-print index-css" width="100%">
+        <table class="table table-sm section-to-print index-css" width="100%">
             <tr>
                 <th>Image</th>
                 

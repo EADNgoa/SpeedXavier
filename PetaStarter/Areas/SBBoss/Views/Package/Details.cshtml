@@ -210,4 +210,35 @@
 
         $("textarea").jqte();
     });
+
+    //GeoSelector
+         $(document).ready(function () {
+                function formatState(state) {
+                    if (!state.id) {
+                        return state.text;
+                    }
+                    var parts = state.text.split(",");
+                    return parts[0];
+
+                };
+
+
+
+                $(".GeoSelect").select2({
+                    placeholder: "Type 3 letters to choose",
+                    minimumInputLength: 3,
+                    templateSelection: formatState,
+
+                    ajax: {
+                        url: '@(Url.Action("GetLocations", "GeoTree"))',
+                        dataType: 'json',
+                        quietMillis: 250,
+                        results: function (data, page) {
+                            return { results: data.data };
+                        }
+                    }
+                });
+
+
+         });
 </script>

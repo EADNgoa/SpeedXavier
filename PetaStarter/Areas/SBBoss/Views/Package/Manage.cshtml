@@ -15,43 +15,20 @@
             <div class="btn-group-lg" role="group" aria-label="Basic example">
                 <button id="DetailsBtn" type="button" class="btn btn-secondary">Details</button>
                 <button id="PriceBtn" type="button" class="btn btn-secondary">Price</button>
-                <button type="button" class="btn btn-secondary">Images</button>
-                <button type="button" class="btn btn-secondary">Validity</button>
+                <button id="ImgBtn" type="button" class="btn btn-secondary">Images</button>
+                <button id="ValBtn" type="button" class="btn btn-secondary">Validity</button>
             </div>
 
-            @*<nav class="navbar navbar-expand-sm bg-light" role="navigation">
-                    <a class="navbar-brand" href="#">Details For this @ViewBag.Title: </a>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul class="navbar-nav mr-auto">
-                            <li class="nav-item">
-                                <a class="nav-link" href="~/SBBoss/Package/ActManage/@Model.PackageID">Activity</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="~/SBBoss/Package/AttractManage/@Model.PackageID">Attraction</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="~/SBBoss/Package/CatManage/@Model.PackageID">Category</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="~/SBBoss/Package/PackPrice/@Model.PackageID">Price</a>
-                            </li>
-                            <li class="nav-item">
+         
+                            @*<li class="nav-item">
                                 <a class="nav-link" href="~/SBBoss/Package/PackPicture/@Model.PackageID?stid=@Model.ServiceTypeID">Image</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="~/SBBoss/Package/LangManage/@Model.PackageID">Language</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="~/SBBoss/Package/PVManage/@Model.PackageID">Validity</a>
-                            </li>
-                        </ul>
-                    </div>
-                </nav>*@
-
+                                <a class="nav-link" href="~/SBBoss/Package/PVManage/@Model.PackageID">Validity</a>*@
+                      
 
             <hr />
         
@@ -63,6 +40,9 @@
 
                 @if (ViewBag.mode == 2)
                 { @Html.Action("PackPrice", "Package", new { id = (int)ViewBag.PackageId, sid = (int)ViewBag.sid, EID = (int)ViewBag.EID }) }
+
+                @if (ViewBag.mode == 3)
+                { @Html.Action("PackPicture", "Package", new { id = (int)ViewBag.PackageId, sid = (int)ViewBag.sid}) }
             </div>
         <hr />
     </div>
@@ -81,13 +61,74 @@
             );
         });
         $('#PriceBtn').click(function () {
-            var detFrm = $('detFrm');
-            if (detFrm != 'undefined')
-                detFrm.submit();
+            var detFrm = $('#detFrm');
 
-            $('#TabContent').load(
-                '@Url.Action("PackPrice", new { id = (int)ViewBag.PackageId , sid = (int)ViewBag.sid })'
-            );
+            //Save the details form if it exists else just move on.
+            if (typeof (detFrm[0]) == 'object') {
+
+                $.ajax({
+                    url: detFrm.action,
+                    type: 'post',
+                    data: $(detFrm).serialize()
+                }).done(function () {
+                    $('#TabContent').load(
+                        '@Url.Action("PackPrice", new { id = (int)ViewBag.PackageId , sid = (int)ViewBag.sid })'
+                    );
+
+                });
+
+            } else {
+                $('#TabContent').load(
+                        '@Url.Action("PackPrice", new { id = (int)ViewBag.PackageId , sid = (int)ViewBag.sid })'
+                    );
+            }
         });
+
+        $('#ImgBtn').click(function () {
+            var detFrm = $('#detFrm');
+            if (typeof (detFrm[0]) == 'object') {
+
+                $.ajax({
+                    url: detFrm.action,
+                    type: 'post',
+                    data: $(detFrm).serialize()
+                }).done(function () {
+                    $('#TabContent').load(
+                        '@Url.Action("PackPicture", new { id = (int)ViewBag.PackageId , sid = (int)ViewBag.sid })'
+                    );
+
+                });
+
+            } else {
+                $('#TabContent').load(
+                    '@Url.Action("PackPicture", new { id = (int)ViewBag.PackageId , sid = (int)ViewBag.sid })'
+                    );
+
+            }
+        });
+
+          $('#ValBtn').click(function () {
+            var detFrm = $('#detFrm');
+            if (typeof (detFrm[0]) == 'object') {
+
+                $.ajax({
+                    url: detFrm.action,
+                    type: 'post',
+                    data: $(detFrm).serialize()
+                }).done(function () {
+                    $('#TabContent').load(
+                        '@Url.Action("PVManage", new { id = (int)ViewBag.PackageId , sid = (int)ViewBag.sid })'
+                    );
+
+                });
+
+            } else {
+                $('#TabContent').load(
+                    '@Url.Action("PVManage", new { id = (int)ViewBag.PackageId , sid = (int)ViewBag.sid })'
+                    );
+
+            }
+        });
+
     });
 </script>
