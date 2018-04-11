@@ -4,7 +4,13 @@
 //For datatables
 <link rel="stylesheet" type="text/css" href="/Content/datatables.min.css" />
 <script type="text/javascript" src="/Scripts/datatables.min.js"></script>
-
+<style>
+    .dataTables_wrapper .dataTables_filter {
+        float: right;
+        text-align: right;
+        visibility: hidden;
+    }
+</style>
 <div class="card border rounded DropShadow">
     <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
         <span class="h5">Search</span>
@@ -41,12 +47,20 @@
                 <tr role="row">
                     <th><input type="text" class="form-control" placeholder="Filter Number"></th>
                     <th><input type="text" class="form-control" placeholder="Filter Name"></th>
+                    <th><input type="text" class="form-control" placeholder="Filter Locations"></th>
                     <th><input type="text" class="form-control" placeholder="Filter Duration"></th>
+                    <th><input type="text" class="form-control" placeholder="Filter Categories"></th>
+                    <th><input type="text" class="form-control" placeholder="Filter Suppliers"></th>
+                    <th><input type="text" class="form-control" placeholder="Filter Supplier Contracts"></th>
                 </tr>
-                <tr role="row">                    
+                <tr role="row">
                     <th scope="col">Auto No.</th>
                     <th scope="col">Name</th>
+                    <th scope="col" class="no-sort">Locations</th>
                     <th scope="col">Duration</th>
+                    <th scope="col" class="no-sort">Categories</th>
+                    <th scope="col" class="no-sort">Suppliers</th>
+                    <th scope="col" class="no-sort">Sup.Cont. No.</th>
                 </tr>
             </thead>
             <tbody></tbody>
@@ -182,8 +196,7 @@
 
 <script>
     $(function () {
-        var oTable = $('#PkgTbl').DataTable({
-            bFilter: false,
+        var oTable = $('#PkgTbl').DataTable({            
             serverSide: true,
             searching: true,
             ajax: {
@@ -201,13 +214,21 @@
             columns: [
                 { data: "PackageID" },
                 { data: "PackageName" },
-                { data: "Duration" }
-            ]
+                { data: "GeoName" },
+                { data: "Duration" },
+                { data: "CategoryName" },
+                { data: "SupplierNames" },
+                { data: "SupplierContractNos" }
+            ],
+            columnDefs: [{
+                targets: 'no-sort',
+                orderable: false
+            }]
         });
 
 
 
-        $("#PkgTbl thead th input[type=text]").on('keyup change', function () {
+        $("#PkgTbl thead th input[type=text]").on('change', function () {
             oTable.column($(this).parent().index() + ':visible')
                 .search(this.value)
                 .draw();

@@ -33,12 +33,61 @@ namespace Speedbird.Areas.SBBoss.Controllers
         [HttpPost]
         public JsonResult GetPkgList(DTParameters parameters)
         {
-            var columnSearch = parameters.Columns.Select(s => s.Search.Value).Take(PackageColumns.Count()).ToList();            
-            var sql = new PetaPoco.Sql($"Select * from Package {GetWhereWithOrClauseFromColumns(PackageColumns, columnSearch)} order by {parameters.SortOrder}" );
-            
-            var res = db.Query<Package>(sql).Skip(parameters.Start).Take(parameters.Length).ToList();
+            var columnSearch = parameters.Columns.Select(s => s.Search.Value).Take(PackageColumns.Count()).ToList();
 
-            var dataTableResult = new DTResult<Package>
+            //XMLPath uses nested queries so to avoid that we construct these 4 filters ourselves
+            string supname = "";
+            string geos = "";
+            string cats = "";
+            string conts ="";
+
+            if (columnSearch[2]?.Length > 0) {geos = columnSearch[2]; columnSearch[2] = null; }
+            if (columnSearch[4]?.Length > 0) {cats = columnSearch[4]; columnSearch[4] =null; }
+            if (columnSearch[6]?.Length > 0) { conts = columnSearch[6]; columnSearch[6] = null; }
+            if (columnSearch[5]?.Length > 0) { supname = columnSearch[5]; columnSearch[5] = null; }
+
+            var sql = new PetaPoco.Sql($"Select p.* from Package p" );
+            var fromsql= new PetaPoco.Sql();
+            var wheresql = new PetaPoco.Sql(" where 1=1 ");
+
+            if (geos.Length > 0)
+            {
+                fromsql.Append(", Geotree g, package_geotree pg");
+                wheresql.Append($" and p.packageId=pg.packageId and pg.geotreeid=g.geotreeid and geoname like '%{geos}%'");
+            }
+            if (cats.Length > 0)
+            {
+                fromsql.Append(", Category c, package_category pc");
+                wheresql.Append($" and p.packageId=pc.packageId and pc.categoryid=c.categoryid and categoryname like '%{cats}%'");
+            }
+            if (supname.Length > 0 || conts.Length>0)
+            {
+                fromsql.Append(", supplier s, package_supplier ps");
+                wheresql.Append($" and p.packageId=ps.packageId and ps.Supplierid=s.Supplierid ");
+
+                if (supname.Length > 0) wheresql.Append($" and Suppliername like '%{supname}%'");
+                if (conts.Length > 0) wheresql.Append($" and ContractNo like '%{conts}%'");
+            }
+            
+            wheresql.Append($"{GetWhereWithOrClauseFromColumns(PackageColumns, columnSearch)}");
+            sql.Append(fromsql);
+            sql.Append(wheresql);
+            sql.Append($"order by p.{parameters.SortOrder}"); 
+
+            try
+            {
+                var res = db.Query<PackageDets>(sql).Skip(parameters.Start).Take(parameters.Length).ToList();
+
+                res.ForEach(r =>
+                   {
+                       r.GeoName = String.Join(", ", db.Query<string>("Select GeoName from GeoTree g, package_Geotree pg where g.GeoTreeId=pg.GeoTreeid and pg.packageId=@0", r.PackageID));
+                       r.CategoryName = String.Join(", ", db.Query<string>("Select CategoryName from Category g, package_Category pg where g.CategoryId=pg.Categoryid and pg.packageId=@0", r.PackageID));
+                       r.SupplierNames = String.Join(", ", db.Query<string>("Select SupplierName from Supplier g, package_Supplier pg where g.SupplierId=pg.Supplierid and pg.packageId=@0", r.PackageID));
+                       r.SupplierContractNos = String.Join(", ", db.Query<string>("Select ContractNo from package_supplier where packageId=@0", r.PackageID));
+                   });
+
+
+            var dataTableResult = new DTResult<PackageDets>
             {
                 draw = parameters.Draw,
                 data = res,
@@ -46,13 +95,19 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 recordsTotal = res.Count()
             };
             return Json(dataTableResult, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
 
         private string GetWhereWithOrClauseFromColumns(string[] columnDefs, List<string> searchValues)
         {
             try
             {
-                var where = "where 1 = 1";
+                var where = " ";
                 var subQuery = "";
                 for (int i = 0; i < searchValues.Count; i++)
                 {
@@ -61,16 +116,16 @@ namespace Speedbird.Areas.SBBoss.Controllers
                         if (columnDefs[i].IndexOf("Date") > -1)
                         {
                             //Date search
-                            subQuery += columnDefs[i] + " = '%" + DateTime.Parse(searchValues[i]).ToString("yyyy-MM-dd") + "'" + " or ";
+                            subQuery += columnDefs[i] + " = '%" + DateTime.Parse(searchValues[i]).ToString("yyyy-MM-dd") + "'" + " and ";
                         }
                         else
                         {
                             //free text
-                            subQuery += columnDefs[i] + " like '%" + searchValues[i].Replace("'", "''") + "%'" + " or ";
+                            subQuery += columnDefs[i] + " like '%" + searchValues[i].Replace("'", "''") + "%'" + " and ";
                         }
                         if (i == searchValues.Count - 1)
                         {
-                            subQuery = subQuery.Remove(subQuery.LastIndexOf("or"), 2).Insert(subQuery.LastIndexOf("or"), "");
+                            subQuery = subQuery.Remove(subQuery.LastIndexOf("and"), 2).Insert(subQuery.LastIndexOf("and"), "");
                         }
                     }
                 }
@@ -79,8 +134,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
                     where += " and (" + subQuery + ")";
                 }
 
-                if(where.LastIndexOf("or )")>0)
-                    where = where.Replace("or )",")");
+                if(where.LastIndexOf("and )")>0)
+                    where = where.Replace("and )",")");
                 return where;
             }
             catch (Exception ex)
@@ -94,7 +149,11 @@ namespace Speedbird.Areas.SBBoss.Controllers
         {
             "PackageID",
             "PackageName",
-            "Duration"
+            "GeoName",
+            "Duration",
+            "CategoryName",
+            "SupplierNames",
+            "SupplierContractNos"
         };
 
         public ActionResult Manage(int? id, int? sid, int mode = 1, int EID = 0) //Mode 1=Details,2=Prices,3=images,4=validity

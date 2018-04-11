@@ -88,7 +88,8 @@ namespace Speedbird
         public IEnumerable<CategoryDets>Cat { get; set; }
         public IEnumerable<PriceDets>Pric { get; set; }
         public IEnumerable<ActivityDets> Act { get; set; }
-        
+        public string SupplierNames { get; set; }
+        public string SupplierContractNos { get; set; }
     }
 
     [MetadataType(typeof(PackageMetadata))]
