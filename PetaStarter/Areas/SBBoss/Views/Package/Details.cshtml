@@ -94,6 +94,36 @@
     </div>
 </div>
 
+
+<div class="form-row">
+    <div class="input-group col-3 mb-3">
+        <div class="input-group-prepend"><span class="input-group-text">Supplier</span></div>
+        <select id="SupID" name="SupID" class="form-control" data-setu="SupSave" data-geturl="GetSup" multiple="multiple">
+            @foreach (var o in ViewBag.Sups)
+    {
+        <option value="@o.Value" selected="selected">@o.Text</option>}
+        </select>
+    </div>
+    <div class="input-group col-3 mb-3">
+        <div class="input-group-prepend"><span class="input-group-text">Contracts</span></div>
+        <span id="ContID" name="ContID" class="form-control">
+            @foreach (var item in ViewBag.SupConts)
+        {
+            @item
+            @:,
+    }
+        </span>
+    </div>
+    <div class="input-group col mb-3">
+        <div class="input-group-prepend"><span class="input-group-text">Supplier Notes</span></div>
+        <div class="form-control" style="padding:0px !important">
+            @Html.TextAreaFor(model => model.SupplierNotepad, 3, 43, htmlAttributes: new { @class = "form-control" })
+        </div>
+    </div>
+</div>
+
+
+
 <div class="form-row">
     <div class="input-group col mb-3">
         <div class="input-group-prepend"><span class="input-group-text">Activities</span></div>
@@ -168,6 +198,7 @@
                 quietMillis: 250,
                 results: function (data, page) {
                     return { results: data.data };
+                    inp
                 }
             }
         });
@@ -202,11 +233,43 @@
             }
         });
 
+        //Supplier
+        $("#SupID").select2({
+            placeholder: "Type 3 letters to choose",
+            minimumInputLength: 3,
+
+            ajax: {
+                url: '@(Url.Action("GetSup", "Package"))',
+                dataType: 'json',
+                quietMillis: 250,
+                results: function (data, page) {
+                    return { results: data.data };
+                }
+            }
+        });
+
         //Save Select2 data
         $(".sel2Lkup").on('change', function (e) {
             $.post('/SBBoss/Package/' + $(this).data('setu'), { PackageId: $('#PackageID').val(), ActIds: $(this).val() })
         });
 
+        //Save Select2 Supplier Contract data
+        $("#SupID").on('select2:select', function (e) {
+            var contno = prompt("Please enter the contract number", "");
+            var oldConts = $('#ContID').html();
+            $('#ContID').html(oldConts + ',' + contno);
+
+            var conts = '';
+            $.post('/SBBoss/Package/' + $(this).data('setu'), { PackageId: $('#PackageID').val(), ActIds: $(this).val(), Conts: $('#ContID').html() });
+            
+        });
+
+        $("#SupID").on('select2:unselect', function (e) {
+            $.post('/SBBoss/Package/KillSup', { PackageId: $('#PackageID').val(), deadSup: e.params.data.id }, function (e) {
+                $('#ContID').html(e);
+            });
+            
+        });
 
         $("textarea").jqte();
     });

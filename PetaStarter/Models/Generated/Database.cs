@@ -1655,6 +1655,12 @@ namespace Speedbird
 
 
 
+
+
+		[Column] public string SupplierNotepad { get; set; }
+
+
+
 	}
 
     
@@ -1792,6 +1798,40 @@ namespace Speedbird
 
 
 		[Column] public int GuideLanguageId { get; set; }
+
+
+
+	}
+
+    
+
+	[TableName("dbo.Package_Supplier")]
+
+
+
+	[PrimaryKey("PackageID", AutoIncrement=false)]
+
+
+	[ExplicitColumns]
+
+    public partial class Package_Supplier  
+    {
+
+
+
+		[Column] public int PackageID { get; set; }
+
+
+
+
+
+		[Column] public int SupplierID { get; set; }
+
+
+
+
+
+		[Column] public string ContractNo { get; set; }
 
 
 
@@ -2134,6 +2174,36 @@ namespace Speedbird
 
 
 		[Column] public string CouponCode { get; set; }
+
+
+
+	}
+
+    
+
+	[TableName("dbo.Supplier")]
+
+
+
+	[PrimaryKey("SupplierID")]
+
+
+
+
+	[ExplicitColumns]
+
+    public partial class Supplier  
+    {
+
+
+
+		[Column] public int SupplierID { get; set; }
+
+
+
+
+
+		[Column] public string SupplierName { get; set; }
 
 
 

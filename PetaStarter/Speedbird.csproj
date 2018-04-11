@@ -213,6 +213,7 @@
     <Compile Include="Areas\SBBoss\Controllers\FacilityController.cs" />
     <Compile Include="Areas\SBBoss\Controllers\GuideLanguageController.cs" />
     <Compile Include="Areas\SBBoss\Controllers\UserRightsController.cs" />
+    <Compile Include="Areas\SBBoss\Models\DataTablesModels.cs" />
     <Compile Include="Areas\SBBoss\Models\ExistingFuncViewModels.cs" />
     <Compile Include="Areas\SBBoss\Models\ExistingUserViewModels.cs" />
     <Compile Include="Areas\SBBoss\SBBossAreaRegistration.cs" />
@@ -255,6 +256,7 @@
     <Content Include="Areas\SBBoss\Content\EAadmin.css" />
     <Content Include="Content\css\select2.css" />
     <Content Include="Content\css\select2.min.css" />
+    <Content Include="Content\datatables.min.css" />
     <Content Include="Content\DN.css" />
     <Content Include="Content\EA.css" />
     <Content Include="Content\jquery-te-1.4.0.css" />
@@ -262,6 +264,7 @@
     <Content Include="Content\jquery-ui-timepicker-addon.min.css" />
     <Content Include="Content\PagedList.css" />
     <Content Include="Custom\sidenav5.jpg" />
+    <Content Include="Scripts\datatables.min.css" />
     <Content Include="Scripts\i18n\af.js" />
     <Content Include="Scripts\i18n\ar.js" />
     <Content Include="Scripts\i18n\az.js" />

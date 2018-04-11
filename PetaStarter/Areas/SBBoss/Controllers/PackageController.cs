@@ -9,7 +9,7 @@ using System.Linq;
 using System.Net;
 //using System.Web;
 using System.Web.Mvc;
-
+using static PetaStarter.Areas.SBBoss.Models.DataTablesModels;
 
 namespace Speedbird.Areas.SBBoss.Controllers
 {
@@ -28,11 +28,74 @@ namespace Speedbird.Areas.SBBoss.Controllers
             var rec = db.Fetch<PackageDets>(" Select [PackageID],[CouponCode],[ServiceTypeID], [PackageName], Substring(Description,1,100) as Description, [Duration], substring([Itinerary],1,100) as Itinerary, [Dificulty] from Package Where PackageName like '%" + AN + "%' and ServiceTypeID =@0", sid).ToList();
 
             return View(rec.ToPagedList(pageNumber, pageSize));
-
-
         }
 
+        [HttpPost]
+        public JsonResult GetPkgList(DTParameters parameters)
+        {
+            var columnSearch = parameters.Columns.Select(s => s.Search.Value).Take(PackageColumns.Count()).ToList();            
+            var sql = new PetaPoco.Sql($"Select * from Package {GetWhereWithOrClauseFromColumns(PackageColumns, columnSearch)} order by {parameters.SortOrder}" );
+            
+            var res = db.Query<Package>(sql).Skip(parameters.Start).Take(parameters.Length).ToList();
 
+            var dataTableResult = new DTResult<Package>
+            {
+                draw = parameters.Draw,
+                data = res,
+                recordsFiltered = 10,
+                recordsTotal = res.Count()
+            };
+            return Json(dataTableResult, JsonRequestBehavior.AllowGet);
+        }
+
+        private string GetWhereWithOrClauseFromColumns(string[] columnDefs, List<string> searchValues)
+        {
+            try
+            {
+                var where = "where 1 = 1";
+                var subQuery = "";
+                for (int i = 0; i < searchValues.Count; i++)
+                {
+                    if (searchValues[i] != null)
+                    {
+                        if (columnDefs[i].IndexOf("Date") > -1)
+                        {
+                            //Date search
+                            subQuery += columnDefs[i] + " = '%" + DateTime.Parse(searchValues[i]).ToString("yyyy-MM-dd") + "'" + " or ";
+                        }
+                        else
+                        {
+                            //free text
+                            subQuery += columnDefs[i] + " like '%" + searchValues[i].Replace("'", "''") + "%'" + " or ";
+                        }
+                        if (i == searchValues.Count - 1)
+                        {
+                            subQuery = subQuery.Remove(subQuery.LastIndexOf("or"), 2).Insert(subQuery.LastIndexOf("or"), "");
+                        }
+                    }
+                }
+                if (subQuery.Trim() != "")
+                {
+                    where += " and (" + subQuery + ")";
+                }
+
+                if(where.LastIndexOf("or )")>0)
+                    where = where.Replace("or )",")");
+                return where;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
+        private string[] PackageColumns => new string[]
+        {
+            "PackageID",
+            "PackageName",
+            "Duration"
+        };
 
         public ActionResult Manage(int? id, int? sid, int mode = 1, int EID = 0) //Mode 1=Details,2=Prices,3=images,4=validity
         {
@@ -57,6 +120,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
             ViewBag.Cats = db.Query<Category>("Select CategoryId, CategoryName from Category where CategoryId in (Select CategoryId from Package_Category where PackageId=@0)", pkg?.PackageID ?? 0).Select(sl => new SelectListItem { Text = sl.CategoryName, Value = sl.CategoryID.ToString(), Selected = true });
             ViewBag.Atts = db.Query<Attraaction>("Select AttractionId, AttractionName from Attraaction where AttractionId in (Select AttractionId from Package_Attraction where PackageId=@0)", pkg?.PackageID ?? 0).Select(sl => new SelectListItem { Text = sl.AttractionName, Value = sl.AttractionID.ToString(), Selected = true });
             ViewBag.Lang = db.Query<GuideLanguage>("Select GuideLanguageId, GuideLanguageName from GuideLanguage where GuideLanguageId in (Select GuideLanguageId from Package_Language where PackageId=@0)", pkg?.PackageID ?? 0).Select(sl => new SelectListItem { Text = sl.GuideLanguageName, Value = sl.GuideLanguageID.ToString(), Selected = true });
+            ViewBag.Sups = db.Query<Supplier>("Select * from Supplier where SupplierId in (Select SupplierId from Package_Supplier where PackageId=@0)", pkg?.PackageID ?? 0).Select(sl => new SelectListItem { Text = sl.SupplierName, Value = sl.SupplierID.ToString(), Selected = true });
+            ViewBag.SupConts = db.Query<Package_Supplier>("Select * from Package_Supplier where PackageId=@0", pkg?.PackageID ?? 0).Select(sl => sl.ContractNo);
             return PartialView("Details", pkg);
         }
 
@@ -265,8 +330,43 @@ namespace Speedbird.Areas.SBBoss.Controllers
             foreach (var item in ActIds)
                 db.Insert(new Package_Language { PackageId = PackageId, GuideLanguageId = item });
         }
+
+        //Supplier
+        public JsonResult GetSup(string term)
+        {
+            var locs = db.Fetch<Supplier>("Select * from Supplier where SupplierName like '%" + term + "%'");
+            return Json(new { results = locs.Select(a => new { id = a.SupplierID, text = a.SupplierName}) }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public void SupSave(int PackageId, IEnumerable<int> ActIds, string Conts)
+        {
+
+            //Clean and split Contract nos
+            Conts= Conts.Replace("\n", "");
+            var SplitConts = Conts.Split(',');
+            var GoodConts = SplitConts.Where(c => c.Trim().Length > 1).Select(c=>c.Trim()).ToArray();
+
+            //handle deletions
+            //var oldRecs = db.Query<Package_Supplier>("Where PackageId=@0", PackageId);
+            //var bestRecs = oldRecs.Where(r => !ActIds.Contains(r.SupplierID));
+
+            db.Delete<Package_Supplier>("Where PackageId=@0", PackageId);
+
+            int i = 0;
+            foreach (var item in ActIds)
+            {
+                db.Insert(new Package_Supplier { PackageID = PackageId, SupplierID = item, ContractNo = GoodConts[i] });
+                i++;
+            }
+        }
         #endregion
 
+        public string KillSup(int PackageId, int deadSup)
+        {
+            db.Delete<Package_Supplier>("Where packageId=@0 and SupplierId=@1",PackageId,deadSup);
+            return String.Join(",", db.Query<Package_Supplier>("Where packageId=@0", PackageId).Select(s=>s.ContractNo));
+        }
 
         protected override void Dispose(bool disposing)
         {
