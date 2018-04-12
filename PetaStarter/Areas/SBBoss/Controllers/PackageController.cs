@@ -9,7 +9,7 @@ using System.Linq;
 using System.Net;
 //using System.Web;
 using System.Web.Mvc;
-
+using static PetaStarter.Areas.SBBoss.Models.DataTablesModels;
 
 namespace Speedbird.Areas.SBBoss.Controllers
 {
@@ -17,22 +17,141 @@ namespace Speedbird.Areas.SBBoss.Controllers
     {
         public ActionResult Index(int? page, string AN, int? sid)
         {
-            if (AN?.Length > 0) page = 1;
+        
             ViewBag.sid = sid;
-            int pageSize = 10;
-            int pageNumber = (page ?? 1);
+        
             if (sid == 1) { ViewBag.Title = "Packages"; }
             if (sid == 2) { ViewBag.Title = "Cruises"; }
             if (sid == 3) { ViewBag.Title = "Sight Seeing"; }
-         
-            var rec = db.Fetch<PackageDets>(" Select [PackageID],[CouponCode],[ServiceTypeID], [PackageName], Substring(Description,1,100) as Description, [Duration], substring([Itinerary],1,100) as Itinerary, [Dificulty] from Package Where PackageName like '%" + AN + "%' and ServiceTypeID =@0", sid).ToList();
-
-            return View(rec.ToPagedList(pageNumber, pageSize));
-
-
+            
+            return View();
         }
 
+        [HttpPost]
+        public JsonResult GetPkgList(DTParameters parameters, int sid)
+        {
+            var columnSearch = parameters.Columns.Select(s => s.Search.Value).Take(PackageColumns.Count()).ToList();
 
+            //XMLPath uses nested queries so to avoid that we construct these 4 filters ourselves
+            string supname = "";
+            string geos = "";
+            string cats = "";
+            string conts ="";
+
+            if (columnSearch[2]?.Length > 0) {geos = columnSearch[2]; columnSearch[2] = null; }
+            if (columnSearch[4]?.Length > 0) {cats = columnSearch[4]; columnSearch[4] =null; }
+            if (columnSearch[6]?.Length > 0) { conts = columnSearch[6]; columnSearch[6] = null; }
+            if (columnSearch[5]?.Length > 0) { supname = columnSearch[5]; columnSearch[5] = null; }
+
+            var sql = new PetaPoco.Sql($"Select distinct p.* from Package p" );
+            var fromsql= new PetaPoco.Sql();
+            var wheresql = new PetaPoco.Sql($" where ServiceTypeId={sid} ");
+
+            if (geos.Length > 0)
+            {
+                fromsql.Append(", Geotree g, package_geotree pg");
+                wheresql.Append($" and p.packageId=pg.packageId and pg.geotreeid=g.geotreeid and geoname like '%{geos}%'");
+            }
+            if (cats.Length > 0)
+            {
+                fromsql.Append(", Category c, package_category pc");
+                wheresql.Append($" and p.packageId=pc.packageId and pc.categoryid=c.categoryid and categoryname like '%{cats}%'");
+            }
+            if (supname.Length > 0 || conts.Length>0)
+            {
+                fromsql.Append(", supplier s, package_supplier ps");
+                wheresql.Append($" and p.packageId=ps.packageId and ps.Supplierid=s.Supplierid ");
+
+                if (supname.Length > 0) wheresql.Append($" and Suppliername like '%{supname}%'");
+                if (conts.Length > 0) wheresql.Append($" and ContractNo like '%{conts}%'");
+            }
+            
+            wheresql.Append($"{GetWhereWithOrClauseFromColumns(PackageColumns, columnSearch)}");
+            sql.Append(fromsql);
+            sql.Append(wheresql);
+            sql.Append($"order by p.{parameters.SortOrder}"); 
+
+            try
+            {
+                var res = db.Query<PackageDets>(sql).Skip(parameters.Start).Take(parameters.Length).ToList();
+
+                res.ForEach(r =>
+                   {
+                       r.GeoName = String.Join(", ", db.Query<string>("Select GeoName from GeoTree g, package_Geotree pg where g.GeoTreeId=pg.GeoTreeid and pg.packageId=@0", r.PackageID));
+                       r.CategoryName = String.Join(", ", db.Query<string>("Select CategoryName from Category g, package_Category pg where g.CategoryId=pg.Categoryid and pg.packageId=@0", r.PackageID));
+                       r.SupplierNames = String.Join(", ", db.Query<string>("Select SupplierName from Supplier g, package_Supplier pg where g.SupplierId=pg.Supplierid and pg.packageId=@0", r.PackageID));
+                       r.SupplierContractNos = String.Join(", ", db.Query<string>("Select ContractNo from package_supplier where packageId=@0", r.PackageID));
+                   });
+
+
+            var dataTableResult = new DTResult<PackageDets>
+            {
+                draw = parameters.Draw,
+                data = res,
+                recordsFiltered = 10,
+                recordsTotal = res.Count()
+            };
+            return Json(dataTableResult, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
+        private string GetWhereWithOrClauseFromColumns(string[] columnDefs, List<string> searchValues)
+        {
+            try
+            {
+                var where = " ";
+                var subQuery = "";
+                for (int i = 0; i < searchValues.Count; i++)
+                {
+                    if (searchValues[i] != null)
+                    {
+                        if (columnDefs[i].IndexOf("Date") > -1)
+                        {
+                            //Date search
+                            subQuery += columnDefs[i] + " = '%" + DateTime.Parse(searchValues[i]).ToString("yyyy-MM-dd") + "'" + " and ";
+                        }
+                        else
+                        {
+                            //free text
+                            subQuery += columnDefs[i] + " like '%" + searchValues[i].Replace("'", "''") + "%'" + " and ";
+                        }
+                        if (i == searchValues.Count - 1)
+                        {
+                            subQuery = subQuery.Remove(subQuery.LastIndexOf("and"), 2).Insert(subQuery.LastIndexOf("and"), "");
+                        }
+                    }
+                }
+                if (subQuery.Trim() != "")
+                {
+                    where += " and (" + subQuery + ")";
+                }
+
+                if(where.LastIndexOf("and )")>0)
+                    where = where.Replace("and )",")");
+                return where;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
+        private string[] PackageColumns => new string[]
+        {
+            "PackageID",
+            "PackageName",
+            "GeoName",
+            "Duration",
+            "CategoryName",
+            "SupplierNames",
+            "SupplierContractNos"
+        };
 
         public ActionResult Manage(int? id, int? sid, int mode = 1, int EID = 0) //Mode 1=Details,2=Prices,3=images,4=validity
         {
@@ -57,6 +176,9 @@ namespace Speedbird.Areas.SBBoss.Controllers
             ViewBag.Cats = db.Query<Category>("Select CategoryId, CategoryName from Category where CategoryId in (Select CategoryId from Package_Category where PackageId=@0)", pkg?.PackageID ?? 0).Select(sl => new SelectListItem { Text = sl.CategoryName, Value = sl.CategoryID.ToString(), Selected = true });
             ViewBag.Atts = db.Query<Attraaction>("Select AttractionId, AttractionName from Attraaction where AttractionId in (Select AttractionId from Package_Attraction where PackageId=@0)", pkg?.PackageID ?? 0).Select(sl => new SelectListItem { Text = sl.AttractionName, Value = sl.AttractionID.ToString(), Selected = true });
             ViewBag.Lang = db.Query<GuideLanguage>("Select GuideLanguageId, GuideLanguageName from GuideLanguage where GuideLanguageId in (Select GuideLanguageId from Package_Language where PackageId=@0)", pkg?.PackageID ?? 0).Select(sl => new SelectListItem { Text = sl.GuideLanguageName, Value = sl.GuideLanguageID.ToString(), Selected = true });
+            ViewBag.Atrs = db.Query<Attribute>("Select AttributeId, AttributeText from Attribute where AttributeId in (Select AttributeId from Package_Attribute where PackageId=@0)", pkg?.PackageID ?? 0).Select(sl => new SelectListItem { Text = sl.AttributeText, Value = sl.AttributeId.ToString(), Selected = true });
+            ViewBag.Sups = db.Query<Supplier>("Select * from Supplier where SupplierId in (Select SupplierId from Package_Supplier where PackageId=@0)", pkg?.PackageID ?? 0).Select(sl => new SelectListItem { Text = sl.SupplierName, Value = sl.SupplierID.ToString(), Selected = true });
+            ViewBag.SupConts = db.Query<Package_Supplier>("Select * from Package_Supplier where PackageId=@0", pkg?.PackageID ?? 0).Select(sl => sl.ContractNo);
             return PartialView("Details", pkg);
         }
 
@@ -265,8 +387,57 @@ namespace Speedbird.Areas.SBBoss.Controllers
             foreach (var item in ActIds)
                 db.Insert(new Package_Language { PackageId = PackageId, GuideLanguageId = item });
         }
+
+        //Attributes
+        public JsonResult GetAtr(string term)
+        {
+            var locs = db.Fetch<Attribute>("Select AttributeId, AttributeText from Attribute where AttributeText like '%" + term + "%'");
+            return Json(new { results = locs.Select(a => new { id = a.AttributeId, text = a.AttributeText }) }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public void AtrSave(int PackageId, IEnumerable<int> ActIds)
+        {
+            db.Delete<Package_Attribute>("Where PackageId=@0", PackageId);
+            foreach (var item in ActIds)
+                db.Insert(new Package_Attribute { PackageID = PackageId, AttributeID = item });
+        }
+        //Supplier
+        public JsonResult GetSup(string term)
+        {
+            var locs = db.Fetch<Supplier>("Select * from Supplier where SupplierName like '%" + term + "%'");
+            return Json(new { results = locs.Select(a => new { id = a.SupplierID, text = a.SupplierName}) }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public void SupSave(int PackageId, IEnumerable<int> ActIds, string Conts)
+        {
+
+            //Clean and split Contract nos
+            Conts= Conts.Replace("\n", "");
+            var SplitConts = Conts.Split(',');
+            var GoodConts = SplitConts.Where(c => c.Trim().Length > 1).Select(c=>c.Trim()).ToArray();
+
+            //handle deletions
+            //var oldRecs = db.Query<Package_Supplier>("Where PackageId=@0", PackageId);
+            //var bestRecs = oldRecs.Where(r => !ActIds.Contains(r.SupplierID));
+
+            db.Delete<Package_Supplier>("Where PackageId=@0", PackageId);
+
+            int i = 0;
+            foreach (var item in ActIds)
+            {
+                db.Insert(new Package_Supplier { PackageID = PackageId, SupplierID = item, ContractNo = GoodConts[i] });
+                i++;
+            }
+        }
         #endregion
 
+        public string KillSup(int PackageId, int deadSup)
+        {
+            db.Delete<Package_Supplier>("Where packageId=@0 and SupplierId=@1",PackageId,deadSup);
+            return String.Join(",", db.Query<Package_Supplier>("Where packageId=@0", PackageId).Select(s=>s.ContractNo));
+        }
 
         protected override void Dispose(bool disposing)
         {
