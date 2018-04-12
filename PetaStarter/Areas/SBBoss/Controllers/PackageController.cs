@@ -17,21 +17,18 @@ namespace Speedbird.Areas.SBBoss.Controllers
     {
         public ActionResult Index(int? page, string AN, int? sid)
         {
-            if (AN?.Length > 0) page = 1;
+        
             ViewBag.sid = sid;
-            int pageSize = 10;
-            int pageNumber = (page ?? 1);
+        
             if (sid == 1) { ViewBag.Title = "Packages"; }
             if (sid == 2) { ViewBag.Title = "Cruises"; }
             if (sid == 3) { ViewBag.Title = "Sight Seeing"; }
-         
-            var rec = db.Fetch<PackageDets>(" Select [PackageID],[CouponCode],[ServiceTypeID], [PackageName], Substring(Description,1,100) as Description, [Duration], substring([Itinerary],1,100) as Itinerary, [Dificulty] from Package Where PackageName like '%" + AN + "%' and ServiceTypeID =@0", sid).ToList();
-
-            return View(rec.ToPagedList(pageNumber, pageSize));
+            
+            return View();
         }
 
         [HttpPost]
-        public JsonResult GetPkgList(DTParameters parameters)
+        public JsonResult GetPkgList(DTParameters parameters, int sid)
         {
             var columnSearch = parameters.Columns.Select(s => s.Search.Value).Take(PackageColumns.Count()).ToList();
 
@@ -46,9 +43,9 @@ namespace Speedbird.Areas.SBBoss.Controllers
             if (columnSearch[6]?.Length > 0) { conts = columnSearch[6]; columnSearch[6] = null; }
             if (columnSearch[5]?.Length > 0) { supname = columnSearch[5]; columnSearch[5] = null; }
 
-            var sql = new PetaPoco.Sql($"Select p.* from Package p" );
+            var sql = new PetaPoco.Sql($"Select distinct p.* from Package p" );
             var fromsql= new PetaPoco.Sql();
-            var wheresql = new PetaPoco.Sql(" where 1=1 ");
+            var wheresql = new PetaPoco.Sql($" where ServiceTypeId={sid} ");
 
             if (geos.Length > 0)
             {
@@ -179,6 +176,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             ViewBag.Cats = db.Query<Category>("Select CategoryId, CategoryName from Category where CategoryId in (Select CategoryId from Package_Category where PackageId=@0)", pkg?.PackageID ?? 0).Select(sl => new SelectListItem { Text = sl.CategoryName, Value = sl.CategoryID.ToString(), Selected = true });
             ViewBag.Atts = db.Query<Attraaction>("Select AttractionId, AttractionName from Attraaction where AttractionId in (Select AttractionId from Package_Attraction where PackageId=@0)", pkg?.PackageID ?? 0).Select(sl => new SelectListItem { Text = sl.AttractionName, Value = sl.AttractionID.ToString(), Selected = true });
             ViewBag.Lang = db.Query<GuideLanguage>("Select GuideLanguageId, GuideLanguageName from GuideLanguage where GuideLanguageId in (Select GuideLanguageId from Package_Language where PackageId=@0)", pkg?.PackageID ?? 0).Select(sl => new SelectListItem { Text = sl.GuideLanguageName, Value = sl.GuideLanguageID.ToString(), Selected = true });
+            ViewBag.Atrs = db.Query<Attribute>("Select AttributeId, AttributeText from Attribute where AttributeId in (Select AttributeId from Package_Attribute where PackageId=@0)", pkg?.PackageID ?? 0).Select(sl => new SelectListItem { Text = sl.AttributeText, Value = sl.AttributeId.ToString(), Selected = true });
             ViewBag.Sups = db.Query<Supplier>("Select * from Supplier where SupplierId in (Select SupplierId from Package_Supplier where PackageId=@0)", pkg?.PackageID ?? 0).Select(sl => new SelectListItem { Text = sl.SupplierName, Value = sl.SupplierID.ToString(), Selected = true });
             ViewBag.SupConts = db.Query<Package_Supplier>("Select * from Package_Supplier where PackageId=@0", pkg?.PackageID ?? 0).Select(sl => sl.ContractNo);
             return PartialView("Details", pkg);
@@ -390,6 +388,20 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 db.Insert(new Package_Language { PackageId = PackageId, GuideLanguageId = item });
         }
 
+        //Attributes
+        public JsonResult GetAtr(string term)
+        {
+            var locs = db.Fetch<Attribute>("Select AttributeId, AttributeText from Attribute where AttributeText like '%" + term + "%'");
+            return Json(new { results = locs.Select(a => new { id = a.AttributeId, text = a.AttributeText }) }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public void AtrSave(int PackageId, IEnumerable<int> ActIds)
+        {
+            db.Delete<Package_Attribute>("Where PackageId=@0", PackageId);
+            foreach (var item in ActIds)
+                db.Insert(new Package_Attribute { PackageID = PackageId, AttributeID = item });
+        }
         //Supplier
         public JsonResult GetSup(string term)
         {

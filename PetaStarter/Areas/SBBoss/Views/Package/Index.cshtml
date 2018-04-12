@@ -1,6 +1,4 @@
-﻿@model PagedList.IPagedList<Speedbird.PackageDets>
-@using PagedList.Mvc;
-
+﻿
 //For datatables
 <link rel="stylesheet" type="text/css" href="/Content/datatables.min.css" />
 <script type="text/javascript" src="/Scripts/datatables.min.js"></script>
@@ -11,28 +9,6 @@
         visibility: hidden;
     }
 </style>
-<div class="card border rounded DropShadow">
-    <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
-        <span class="h5">Search</span>
-    </div>
-    <div class="card-body">
-        <h5 class="card-title">&nbsp;</h5>
-        @using (Html.BeginForm("Index", "Package", FormMethod.Get))
-        {
-            <div class="row d-print-none">
-                <table>
-                    <tr style="text-align:center">
-                        <td>&nbsp;Name:</td>
-                        <td> @Html.TextBox("AN", ViewBag.CurrentFilter as string, new { @class = "form-control" })</td>
-                        <td><input type="submit" value="Search" class="btn btn-primary" /></td>
-                    </tr>
-                </table>
-
-            </div>
-        }
-    </div>
-</div>
-
 
 <div class="card border rounded DropShadow">
     <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
@@ -52,6 +28,7 @@
                     <th><input type="text" class="form-control" placeholder="Filter Categories"></th>
                     <th><input type="text" class="form-control" placeholder="Filter Suppliers"></th>
                     <th><input type="text" class="form-control" placeholder="Filter Supplier Contracts"></th>
+                    <th width="5%"></th>
                 </tr>
                 <tr role="row">
                     <th scope="col">Auto No.</th>
@@ -61,133 +38,11 @@
                     <th scope="col" class="no-sort">Categories</th>
                     <th scope="col" class="no-sort">Suppliers</th>
                     <th scope="col" class="no-sort">Sup.Cont. No.</th>
+                    <th width="5%"></th>
                 </tr>
             </thead>
             <tbody></tbody>
         </table>
-        
-        
-        
-        <hr/>
-        <table class="table">
-            <tr>
-                <th>Sr No</th>
-                <th>
-                    @if (ViewBag.sid == 1)
-                    {
-                        @:Package Name
-                    }
-                    @if (ViewBag.sid == 2)
-                    {
-                        @:Cruise Name
-                    }
-                    @if (ViewBag.sid == 3)
-                    {
-                        @:Sight Seeing
-                    }
-
-                </th>
-                <th>
-                    Description
-                </th>
-                <th>
-                    Duration
-                </th>
-                <th>
-                    Itinerary
-                </th>
-                <th>
-                    @if (ViewBag.sid == 2)
-                    {
-                        @:Star Rating
-                    }
-                    else
-                    {
-                        @:Dificulty
-                    }
-
-                </th>
-                @if (ViewBag.sid == 1 && ViewBag.sid == 3)
-                {
-                    <th>
-                        GroupSize
-                    </th>
-                    <th>
-                        Guide Langugae
-                    </th>
-                    <th>
-                        Start Time
-                    </th>
-                    <th>
-                        Inclusion
-                    </th>
-                    <th>
-                        Exclusion
-                    </th>
-                }
-                <th>
-                    Coupon Code
-                </th>
-
-                <th></th>
-            </tr>
-            @{int i = 1;}
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @i
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.PackageName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Description)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Duration)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Itinerary)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Dificulty)
-                    </td>
-                    @if (ViewBag.sid == 1 && ViewBag.sid == 3)
-                    {
-
-                        <td>
-                            @Html.DisplayFor(modelItem => item.GroupSize)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.GuideLanguageName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.StartTime)
-
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Inclusion)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Exclusion)
-                        </td>
-                    }
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CouponCode)
-                    </td>
-                    <td>
-                        <a href="@Url.Action("Manage","Package", new { id = item.PackageID, sid=item.ServiceTypeID })"><i title="Edit" class="fas fa-edit fa-inverse h3 float-right DropShadow"></i></a>
-                    </td>
-                </tr>
-                i++;
-            }
-
-        </table>
-        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
-
-        @Html.PagedListPager(Model, page => Url.Action("Index",
-             new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
 
     </div>
 </div>
@@ -201,7 +56,7 @@
             searching: true,
             ajax: {
                 "type": "POST",
-                "url": '@Url.Action("GetPkgList",new {sid=1 })',
+                "url": '@Url.Action("GetPkgList",new {sid=(int)ViewBag.sid })',
                 "contentType": 'application/json; charset=utf-8',
                 'data': function (data) {
                     return data = JSON.stringify(data);
@@ -221,6 +76,15 @@
                 { data: "SupplierContractNos" }
             ],
             columnDefs: [{
+                'targets': 7,
+                'searchable': false,
+                'orderable': false,
+                'bSortable': false,
+                'render': function (data, type, full, meta) {
+                    return '<a href="/SBBoss/package/manage/' + full.PackageID + '?sid=' + full.ServiceTypeID + '"><i class="fas fa-edit fa-inverse h3 float-right DropShadow"></i></a> &nbsp;';
+                }
+            },
+            {
                 targets: 'no-sort',
                 orderable: false
             }]

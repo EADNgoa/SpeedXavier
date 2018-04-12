@@ -274,11 +274,9 @@ namespace Speedbird
         public string ServiceDescription { get; set; }
         public string ServiceGeoName { get; set; }
         public string ServicePic { get; set; }
+        public IEnumerable<Attribute> Attributes { get; set; }
 
-
-
-
-    }
+}
     public enum ServiceTypeEnum
     {
         Accomodation,

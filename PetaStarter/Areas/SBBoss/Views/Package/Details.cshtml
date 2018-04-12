@@ -134,6 +134,14 @@
         </select>
     </div>
     <div class="input-group col mb-3">
+        <div class="input-group-prepend"><span class="input-group-text">Attributes</span></div>
+        <select id="AtrID" name="AtrID" class="form-control sel2Lkup" data-setu="AtrSave" data-geturl="GetAtr" multiple="multiple">
+            @foreach (var o in ViewBag.Atrs)
+            {
+                <option value="@o.Value" selected="selected">@o.Text</option>}
+        </select>
+    </div>
+    <div class="input-group col mb-3">
         <div class="input-group-prepend"><span class="input-group-text">Categories</span></div>
         <select id="CatID" name="CatID" class="form-control sel2Lkup" data-setu="CatSave" multiple="multiple">
             @foreach (var o in ViewBag.Cats)
@@ -233,6 +241,21 @@
             }
         });
 
+        //Attributes
+        $("#AtrID").select2({
+            placeholder: "Type 3 letters to choose",
+            minimumInputLength: 3,
+
+            ajax: {
+                url: '@(Url.Action("GetAtr", "Package"))',
+                dataType: 'json',
+                quietMillis: 250,
+                results: function (data, page) {
+                    return { results: data.data };
+                }
+            }
+        });
+
         //Supplier
         $("#SupID").select2({
             placeholder: "Type 3 letters to choose",
@@ -261,14 +284,14 @@
 
             var conts = '';
             $.post('/SBBoss/Package/' + $(this).data('setu'), { PackageId: $('#PackageID').val(), ActIds: $(this).val(), Conts: $('#ContID').html() });
-            
+
         });
 
         $("#SupID").on('select2:unselect', function (e) {
             $.post('/SBBoss/Package/KillSup', { PackageId: $('#PackageID').val(), deadSup: e.params.data.id }, function (e) {
                 $('#ContID').html(e);
             });
-            
+
         });
 
         $("textarea").jqte();
