@@ -87,84 +87,88 @@
 
                 </div>
                 <div class="DetailBlock" style="padding:30px;min-height:0;">
+
                     <div class="row">
-                        <table class="table">
-                            <tr>
-                                <td class="desc d-lg-table-cell" colspan="2">
-                                    <i style="font-size:24px" class="fa">&#xf072;</i>
-                                    Package Details
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    Start Time
-                                </td>
-                                <td>
-                                    @Model.StartTime
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    Duration
-                                </td>
-                                <td>
-                                    @Model.Duration
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    Difficuty
-                                </td>
-                                <td>
-                                    @Model.Dificulty
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    Group Size
-                                </td>
-                                <td>
-                                    @Model.GroupSize
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    Guide Languages
-                                </td>
-                                <td>                               
-                                    @Model.Glang                                    
-                                </td>
-                            </tr>
-
-
-                            <tr>
-                                <td>
-                                    Itinerary
-                                </td>
-                                <td>
-                                    @Model.Itinerary
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    Inclusions
-                                </td>
-                                <td>
-                                    @Model.Inclusion
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    Exclusions
-                                </td>
-                                <td>
-                                    @Model.Exclusion
-                                </td>
-                            </tr>
-
-
-                        </table>
+                        <div class="row desc d-lg-table-cell" style="padding:30px;">
+                            <i style="font-size:24px" class="fa">&#xf072;</i>
+                            Package Details
+                        </div>
                     </div>
+                    
+                    <div class="row">
+                        <div class="col-2">
+                            Start Time
+                        </div>
+                        <div class="col-10">
+                            @Html.Raw(Model.StartTime)
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-2">
+                            Duration
+                        </div>
+                        <div class="col-10">
+                            @Html.Raw(Model.Duration)
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-2">
+                            Difficulty
+                        </div>
+                        <div class="col-10">
+                            @Model.Dificulty
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-2">
+                            Group Size
+                        </div>
+                        <div class="col-10">
+                            @Model.GroupSize
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-2">
+                            Guide Languages
+                        </div>
+                        <div class="col-10">
+                            @Model.Glang
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-2">
+                            Itinerary
+                        </div>
+                        <div class="col-10">
+                            @Html.Raw(Model.Itinerary)
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-2">
+                            Inclusions
+                        </div>
+                        <div class="col-10">
+                            @Html.Raw(Model.Inclusion)
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-2">
+                            Exclusions
+                        </div>
+                        <div class="col-10">
+                            @Html.Raw(Model.Exclusion)
+                        </div>
+                    </div>
+                    <hr />
+                    
+                </div>
 
                 </div>
             </div>

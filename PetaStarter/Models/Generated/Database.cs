@@ -198,7 +198,49 @@ namespace Speedbird
 		[Column] public string Description { get; set; }
 	}
     
-	[TableName("dbo.BookedCustomer")]
+	[TableName("dbo.Attribute")]
+
+
+
+	[PrimaryKey("AttributeId")]
+
+
+
+
+	[ExplicitColumns]
+
+    public partial class Attribute  
+    {
+
+
+
+		[Column] public int AttributeId { get; set; }
+
+
+
+
+
+		[Column] public string AttributeText { get; set; }
+
+
+
+
+
+		[Column] public string fatext { get; set; }
+
+
+
+
+
+		[Column] public string Color { get; set; }
+
+
+
+	}
+
+    
+
+\	[TableName("dbo.BookedCustomer")]
 	[PrimaryKey("BCID")]
 	[ExplicitColumns]
     public partial class BookedCustomer  
@@ -451,6 +493,16 @@ namespace Speedbird
 		[Column] public string Exclusion { get; set; }
 		[Column] public string Highlights { get; set; }
 		[Column] public string CouponCode { get; set; }
+\
+
+
+
+
+
+		[Column] public string SupplierNotepad { get; set; }
+
+
+
 	}
     
 	[TableName("dbo.Package_Activity")]
@@ -471,6 +523,35 @@ namespace Speedbird
 		[Column] public int AttractionID { get; set; }
 	}
     
+
+	[TableName("dbo.Package_Attribute")]
+
+
+
+	[PrimaryKey("PackageID", AutoIncrement=false)]
+
+
+	[ExplicitColumns]
+
+    public partial class Package_Attribute  
+    {
+
+
+
+		[Column] public int PackageID { get; set; }
+
+
+
+
+
+		[Column] public int AttributeID { get; set; }
+
+
+
+	}
+
+    
+
 	[TableName("dbo.Package_Category")]
 	[PrimaryKey("PackageID", AutoIncrement=false)]
 	[ExplicitColumns]
@@ -497,7 +578,41 @@ namespace Speedbird
 		[Column] public int PackageId { get; set; }
 		[Column] public int GuideLanguageId { get; set; }
 	}
+
+	[TableName("dbo.Package_Supplier")]
+
+
+
+	[PrimaryKey("PackageID", AutoIncrement=false)]
+
+
+	[ExplicitColumns]
+
+    public partial class Package_Supplier  
+    {
+
+
+
+		[Column] public int PackageID { get; set; }
+
+
+
+
+
+		[Column] public int SupplierID { get; set; }
+
+
+
+
+
+		[Column] public string ContractNo { get; set; }
+
+
+
+	}
+
     
+
 	[TableName("dbo.PackageValidity")]
 	[PrimaryKey("PVId")]
 	[ExplicitColumns]
@@ -599,6 +714,37 @@ namespace Speedbird
 		[Column] public string CouponCode { get; set; }
 	}
     
+
+	[TableName("dbo.Supplier")]
+
+
+
+	[PrimaryKey("SupplierID")]
+
+
+
+
+	[ExplicitColumns]
+
+    public partial class Supplier  
+    {
+
+
+
+		[Column] public int SupplierID { get; set; }
+
+
+
+
+
+		[Column] public string SupplierName { get; set; }
+
+
+
+	}
+
+    
+
 	[TableName("dbo.Taxes")]
 	[PrimaryKey("TaxId")]
 	[ExplicitColumns]

@@ -258,10 +258,12 @@ namespace Speedbird.Controllers
                 {
                     p.Pic = db.Fetch<PictureDets>("Select Top 1 * From Picture Where ServiceID=@0 and ServiceTypeID=@1 Order By NewID()", p.PackageID, p.ServiceTypeID).ToList();
                     p.GeoName = db.First<string>("Select GeoName From GeoTree g,Package_GeoTree pg  where pg.PackageID=@0 and g.GeoTreeID = pg.GeoTreeID",p.PackageID );
-                    apc.Add(new AccomPackCarBike {ServiceDescription=p.Description.Substring(0,100)+"...",ServiceGeoName=p.GeoName,ServiceID=p.PackageID,ServiceName=p.PackageName,ServicePic=(p.Pic.Count()>0)?p.Pic.FirstOrDefault().PictureName  :""});
+                    apc.Add(new AccomPackCarBike {ServiceDescription=p.Description.Substring(0,100)+"...",ServiceGeoName=p.GeoName,ServiceID=p.PackageID,ServiceName=p.PackageName,ServicePic=(p.Pic.Count()>0)?p.Pic.FirstOrDefault().PictureName  :"",
+                    Attributes =db.Fetch<Attribute>("Select * from Attribute a, Package_attribute pa where a.attributeID=pa.attributeID and pa.packageID=@0",p.PackageID) });
 
                 });
 
+                //Move this outside the servicetype if block when Attributes are done for non-pkg types
 
             }
             return PartialView(apc);

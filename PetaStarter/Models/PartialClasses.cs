@@ -88,9 +88,15 @@ namespace Speedbird
         public IEnumerable<CategoryDets>Cat { get; set; }
         public IEnumerable<PriceDets>Pric { get; set; }
         public IEnumerable<ActivityDets> Act { get; set; }
-
-
+        public string SupplierNames { get; set; }
+        public string SupplierContractNos { get; set; }
     }
+
+    [MetadataType(typeof(PackageMetadata))]
+    public partial class Package
+    {
+    }
+
     public class ActivityDets
     {
         public int PackageID { get; set; }
@@ -271,6 +277,7 @@ namespace Speedbird
         public string ServiceDescription { get; set; }
         public string ServiceGeoName { get; set; }
         public string ServicePic { get; set; }
+        public IEnumerable<Attribute> Attributes { get; set; }
 
     }
 
@@ -294,7 +301,7 @@ namespace Speedbird
 
     }
 
-    public enum ServiceTypeEnum
+   public enum ServiceTypeEnum
     {
         Accomodation,
         Packages,
