@@ -10,5 +10,6 @@
     [CheckOut] DATETIME NULL, 
     [NoOfGuest] INT NULL, 
     [OrigPrice] DECIMAL(18, 2) NULL, 
+    [CouponCode] VARCHAR(MAX) NULL, 
     CONSTRAINT [FK_Cart_AspNetUsers] FOREIGN KEY ([Id]) REFERENCES [AspNetUsers]([Id])
 )

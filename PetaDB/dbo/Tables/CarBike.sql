@@ -10,5 +10,6 @@
     [HasAc] BIT NULL, 
     [HasCarrier] BIT NULL, 
     [InclHelmet] BIT NULL, 
+    [CouponCode] VARCHAR(50) NULL, 
     CONSTRAINT [FK_CarBike_ToGeotree] FOREIGN KEY ([GeoTreeId]) REFERENCES [GeoTree]([GeoTreeId])
 )

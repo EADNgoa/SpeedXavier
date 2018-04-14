@@ -1,4 +1,5 @@
-﻿<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+﻿@model IEnumerable<CartDets>
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 
 <style>
     .btn{
@@ -15,6 +16,7 @@
     ul,p{
         margin-left:50px;
     }
+
     /*reused*/
     .block-sb-info {
         background-color: #eeeeec;
@@ -333,9 +335,13 @@
                     <div class="card-body" id="card-body">
 
                         <div class="container-fluid">
+                            @{ decimal total = 0; }
+                            @foreach (var item in Model)
+                            {
+                                @Html.Hidden("CartID",item.CartID)
                             <div class="row">
                                 <div class="col-md-5">
-                                    <img src="/Images/World.jpg" style="width:100%;height:auto; margin: 16px 0 0 0; border-top: 1px solid #00afec;" />
+                                    <img src="/Images/@item.Pic" style="width:100%;height:330px; margin: 16px 0 0 0; border-top: 1px solid #00afec;" />
 
                                 </div>
                                 <div class="col-md-7">
@@ -343,13 +349,28 @@
                                     <table class="table table-light">
                                         <tbody>
                                             <tr>
-                                                <th class="heading" colspan="4">Walking Tour of Florence</th>
+                                                <th class="heading" colspan="4">@item.ServiceName</th>
 
                                             </tr>
-                                            <tr><th>Date</th><td>11/21/2018</td><td>&nbsp;</td></tr>
-                                            <tr><th>Time</th><td>12.30</td><td colspan="2" class="price"><i class="fa fa-users " style="font-size:48px;"></i> <small style="color:#333">5</small></td></tr>
-                                            <tr><th>Language</th><td>French</td><td colspan="2" class="price">Rs 249/-</td></tr>
-                                            <tr><th>Confirmation</th><td>French</td><td>&nbsp;</td></tr>
+                                            <tr><th>Check In</th><td>@item.CheckIn</td><td>&nbsp;</td></tr>
+                                            <tr><th>Check Out</th><td>@item.CheckOut</td><td colspan="2" class="price"><i class="fa fa-users " style="font-size:48px;"></i> <small style="color:#333">5</small></td></tr>
+                                            <tr>
+                                                @if (item.ServiceTypeID == (int)ServiceTypeEnum.Packages || item.ServiceTypeID == (int)ServiceTypeEnum.SightSeeing)
+                                                {
+                                                 <th>Language</th>
+
+                                                    foreach (var l in item.lang)
+                                                    {
+                                                <td>@l.GuideLanguageName </td>}
+                                                }
+                                                else
+                                                {
+                                                <td>&nbsp;</td><td>&nbsp;</td>
+                                                }
+                                                @{ total += item.OrigPrice;}
+                                                <td colspan="2" class="price">Rs @item.OrigPrice/-</td>
+                                            </tr>
+                                            <tr><th>Confirmation</th><td>Quick</td><td>&nbsp;</td></tr>
                                         </tbody>
 
 
@@ -360,11 +381,17 @@
 
                                 <div class="item-banners">
                                     <center>
-                                        <button class="w3-button w3-padding-small">Wish List</button>
-                                        <button class="w3-button w3-padding-small">Remove From List</button>
+                                             @using (Html.BeginForm("Delete", "Cart", FormMethod.Post))
+                                  {
+                                 <button class="w3-button w3-padding-small" type="submit">Wish List</button>
+                                 @Html.Hidden("id",item.CartID);
+                                    <button class="w3-button w3-padding-small" type="submit">Remove From List</button>
+                                  }
                                     </center>
+                                   
                                 </div>
                             </div>
+                            }
                         </div>
                     </div>
                 </div>
@@ -372,7 +399,15 @@
                     <div class="row">
                         <div class="item-banners" style="color:#1d4d71;font-size:18px;">
                             <center>
-                                Do You Have a Coupon? <a id="coup-click">Click Here</a>
+                               @if (Model.Any(a=>a.CouponCode!=null))
+                               {
+                                   @:<p style="color:green" id="applied">*Coupon Successfully Applied</p>
+                               }
+                               else
+                               {
+                                <a id="coup-click"> Do You Have a Coupon? Click Here</a>
+
+                               }
                             </center>
                         </div>
                     </div>
@@ -380,7 +415,7 @@
                         <div class="container" id="disc-div">                    
                                 <center>
                                     <form>
-                                        @Html.Hidden("PreVal", 249)
+                                       
 
                                         <table>
                                             <tr>
@@ -400,20 +435,19 @@
                 <div class="container-fluid">
                     <div class="row">
                       
-                        @{ var tot = 249; var perc=0;}
+                  
                         <div class="item-banners" style="color:white;font-size:24px; background-color:#009ee0 !important; text-align:right;padding-right:20px;font-weight:bold;">
+                            <small>Total</small>
+                            <span id="totAmt"> 
+                                @if(ViewBag.Amt != null)
+                                {
+                                    @(ViewBag.Amt)
+                                }
+                                else
+                                {
+                                    @(total)
+                                }
 
-                            <small>Total</small> 
-                            <span id="totAmt">&nbsp;
-                            @if(perc != 0)
-                            {
-                                @Html.Action("SearchCoupon","Cart",new {tot=tot })
-                            }
-                            else
-                            {
-                                @(tot)
-                            }
-                          
                             </span>
                         </div>
                     </div>
@@ -617,14 +651,23 @@
         $("#coup-click").click(function () {
             $("#disc-div").toggle();
         });
+        CartID = [];
+     
         $("#coupsub").click(function () {
+            $("#disc-div").hide();
 
+            $('#totAmt').html("");
+            $('#coup-click').html("<p style='color:green'>*Coupon Successfully Applied</p>");
 
-            $('#totAmt').html(" ");
+         
+
+             
+
             $('#totAmt').load(
                 '@Url.Action("SearchCoupon", "Cart")',
                 {
-                    dc: $("#dp2").val()
+                    dc: $("#dp2").val(),
+                    tot: $("#Tot").val()
                 }
             );
         });

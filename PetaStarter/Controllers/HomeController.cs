@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -270,6 +271,22 @@ namespace Speedbird.Controllers
 
         public ActionResult InfoPage(int? ServiceID, ServiceTypeEnum? st)
         {
+            var CartItems = db.Query<CartDets>("Select * from Cart c Where Id= @0", (string)User.Identity.GetUserId()).ToList();
+
+            bool exec = true;
+            CartItems.ForEach(c=>
+            {
+                if (exec == true)
+                {
+                    var cid = db.ExecuteScalar<int>("Select CustomerID From BookedCustomer where CartID=@0", c.CartID);
+                    if (cid != 0)
+                    {
+                        exec = false;
+                        ViewBag.CustRec = db.First<Customer>("Select * from Customer where CustomerID=@0", cid) ?? null;
+                    }
+                }
+            });
+           
             ViewBag.ST = st;
             ViewBag.ServiceID = ServiceID;
             List<SelectListItem> items = new List<SelectListItem>();
@@ -357,7 +374,7 @@ namespace Speedbird.Controllers
             {
                 a.GeoName = db.First<string>("Select GeoName From GeoTree g,Package_GeoTree pg  where pg.PackageID=@0 and g.GeoTreeID = pg.GeoTreeID", a.PackageID);
                 a.AttractionName = db.First<string>("Select AttractionName From Attraaction a,Package_Attraction pa where pa.PackageID =@0 and a.AttractionID = pa.AttractionID",a.PackageID);
-               a.PictureName = db.ExecuteScalar<string>("Select PictureName From Picture Where ServiceID =@0 and ServiceTypeID =@1 ", a.PackageID, (int)Speedbird.ServiceTypeEnum.Packages);
+                a.PictureName = db.ExecuteScalar<string>("Select PictureName From Picture Where ServiceID =@0 and ServiceTypeID =@1 ", a.PackageID, (int)Speedbird.ServiceTypeEnum.Packages);
 
             });
             return PartialView("PackageAttractPartial",Similar);

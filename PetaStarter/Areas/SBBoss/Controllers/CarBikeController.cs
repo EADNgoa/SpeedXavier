@@ -17,7 +17,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         public ActionResult Index(int? page, string AN)
         {
             if (AN?.Length > 0) page = 1;
-            return View("Index", base.BaseIndex<CarBikeDets>(page, " [CarBikeID], [CarBikeName], GeoName as GeoTreeName, c.GeoTreeId, Substring(Description,1,100) as Description, [NoPax], [NoSmallBags], [NoLargeBags], [HasAc], [HasCarrier], [InclHelmet] ", "CarBike c inner join GeoTree g on c.GeoTreeID = g.GeoTreeID Where CarBikeName like '%" + AN + "%'"));
+            return View("Index", base.BaseIndex<CarBikeDets>(page, " [CarBikeID],[CouponCode], [CarBikeName], GeoName as GeoTreeName, c.GeoTreeId, Substring(Description,1,100) as Description, [NoPax], [NoSmallBags], [NoLargeBags], [HasAc], [HasCarrier], [InclHelmet] ", "CarBike c inner join GeoTree g on c.GeoTreeID = g.GeoTreeID Where CarBikeName like '%" + AN + "%'"));
         }
 
 
@@ -35,7 +35,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Manage([Bind(Include = "CarBikeID,CarBikeName,GeoTreeID,Description,NoPax,NoSmallBags,NoLargeBags,HasAc,HasCarrier,InclHelmet")] CarBike item)
+        public ActionResult Manage([Bind(Include = "CarBikeID,CouponCode,CarBikeName,GeoTreeID,Description,NoPax,NoSmallBags,NoLargeBags,HasAc,HasCarrier,InclHelmet")] CarBike item)
         {
             return base.BaseSave<CarBike>(item, item.CarBikeID > 0);
         }
