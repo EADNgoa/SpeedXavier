@@ -66,46 +66,52 @@
                 <th>
                     Helmet
                 </th>
+                <th>
+                    Coupon Code
+                </th>
                 <th></th>
             </tr>
             @{int i = 1;}
             @foreach (var item in Model)
             {
-                <tr>
-                    <td>
-                        @i
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CarBikeName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.GeoTreeName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Description)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.NoPax)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.NoSmallBags)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.NoLargeBags)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.HasAc)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.HasCarrier)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.InclHelmet)
-                    </td>
-                    <td>
-                        <a href="@Url.Action("Manage","CarBike", new {id = item.CarBikeID })"><i title="Edit" class="fas fa-edit fa-inverse h3 float-right DropShadow"></i></a>
-                    </td>
-                </tr>
+            <tr>
+                <td>
+                    @i
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CarBikeName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.GeoTreeName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NoPax)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NoSmallBags)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NoLargeBags)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HasAc)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HasCarrier)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.InclHelmet)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CouponCode)
+                </td>
+                <td>
+                    <a href="@Url.Action("Manage","CarBike", new {id = item.CarBikeID })"><i title="Edit" class="fas fa-edit fa-inverse h3 float-right DropShadow"></i></a>
+                </td>
+            </tr>
                 i++;
             }
 

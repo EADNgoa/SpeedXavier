@@ -308,56 +308,96 @@
                 <div style="background-color:#428bca;">
                     <h2 class="block-title" style="color:white">Book This Experience</h2>
                 </div>
-                <div class="form-group">
-                    <div class="col-12"><input id="dp1" type="date" class="form-control clickable input-md" placeholder="&#xf133;  Check-In"></div>
+                @using (Html.BeginForm("AddToCart", "Cart", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+            @Html.AntiForgeryToken()
+            @Html.Hidden("ServiceTypeID", (int)ViewBag.ST)
+            @Html.Hidden("ServiceID", (int)ViewBag.ServiceID)
+
+            <div class="form-group">
+                <div class="col-12"><input id="dp1" name="CheckIn" type="date" class="form-control clickable input-md" placeholder="&#xf133;  Check-In"></div>
+            </div>
+            <div class="form-group">
+                <div class="col-12"><input id="dp2" type="date" name="CheckOut" class="form-control clickable input-md" placeholder="&#xf133;  Check-Out"></div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-12">
+                    @Html.DropDownList("nums", ViewBag.nums as IEnumerable<SelectListItem>, "Select No Of People", new { @class = "form-control nopax" })
                 </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-12">
+                    <input type="number" name="Qty" placeholder="&#xf2c0  Quantity" class="form-control" />
+                </div>
+            </div>
+            <fieldset>
+                <div style="background-color:#428bca;">
+                    <h2 class="block-title" style="color:white">Customer Details</h2>
+                </div>
+                @if (ViewBag.CustRec != null)
+                {
+                    @Html.Hidden("CustomerID", (int)ViewBag.CustRec.CustomerID)
+            <div class="form-group">
+                <div class="col-md-12">
+                    <input type="text" name="fname" value="@ViewBag.CustRec.FName" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-12">
+                    <input type="text" name="sname" value="@ViewBag.CustRec.SName" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-12">
+                    <input type="text" name="email" value="@ViewBag.CustRec.Email" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-12">
+                    <input type="text" name="phno" value="@ViewBag.CustRec.Phone" class="form-control" />
+                </div>
+            </div>
+
+
+                }
+                else
+                {
                 <div class="form-group">
-                    <div class="col-12"><input id="dp2" type="date" class="form-control clickable input-md" placeholder="&#xf133;  Check-Out"></div>
+                    <div class="col-md-12">
+                        <input type="text" name="fname" placeholder="&#xf2c0  First Name" class="form-control" />
+                    </div>
                 </div>
                 <div class="form-group">
                     <div class="col-md-12">
-                        @Html.DropDownList("nums", ViewBag.nums as IEnumerable<SelectListItem>, "Select No Of People", new { @class = "form-control nopax" })
+                        <input type="text" name="sname" placeholder="&#xf2c0  Sur Name" class="form-control" />
                     </div>
                 </div>
-                <fieldset>
-                    <div style="background-color:#428bca;">
-                        <h2 class="block-title" style="color:white">Customer Details</h2>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-12">
-                            <input type="text" name="fname" placeholder="&#xf2c0  First Name" class="form-control" />
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-12">
-                            <input type="text" name="sname" placeholder="&#xf2c0  Sur Name" class="form-control" />
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-12">
-                            <input type="text" name="email" placeholder="&#xf003 Your Email..." class="form-control" />
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-12">
-                            <input type="text" name="phno" placeholder="&#xf2a0 Mobile No..." class="form-control" />
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-12">
-                            <input type="File" name="Idpicture" class="form-control" placeholder="ID Proof" />
-                        </div>
-                    </div>
-                </fieldset>
-
                 <div class="form-group">
                     <div class="col-md-12">
-                        @Html.TextArea("Query", null, new { @class = "form-control", placeholder = "Entery Your Query Here...." })
+                        <input type="text" name="email" placeholder="&#xf003 Your Email..." class="form-control" />
                     </div>
                 </div>
-                <button class="btn btn-success">Submit Query</button>
-                <button class="btn btn-success">Add To Cart</button>
-
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <input type="text" name="phno" placeholder="&#xf2a0 Mobile No..." class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <input type="File" name="UploadedFile" class="form-control" placeholder="ID Proof" />
+                    </div>
+                </div>
+                }
+            </fieldset>
+                
+            <div class="form-group">
+                <div class="col-md-12">
+                    @Html.TextArea("Query", null, new { @class = "form-control", placeholder = "Entery Your Query Here...." })
+                </div>
+            </div>
+            <button class="btn btn-success">Submit Query</button>
+            <button class="btn btn-success">Add To Cart</button>
+}
             </center>
         </div>
         <br />
