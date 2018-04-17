@@ -271,8 +271,9 @@ namespace Speedbird.Controllers
 
         }
 
-        public ActionResult InfoPage(int? ServiceID, ServiceTypeEnum? st)
+        public ActionResult InfoPage(int? ServiceID, ServiceTypeEnum? st, string Comment)
         {
+            if (Comment != null) db.Insert(new Review {_Review=Comment,UserID=User.Identity.GetUserId(),ServiceID=ServiceID,ServiceTypeID=(int)st,ReviewDate=DateTime.Now,IsVisible=true });
             var CartItems = db.Query<CartDets>("Select * from Cart c Where Id= @0", (string)User.Identity.GetUserId()).ToList();
 
             bool exec = true;
@@ -288,16 +289,25 @@ namespace Speedbird.Controllers
                     }
                 }
             });
-           
+            string chk = db.ExecuteScalar<string>("Select b.UserID From Booking b inner join BookingDetail bd on bd.BookingID =b.BookingID Where b.UserID=@0 and bd.ServiceID=@1 and bd.ServiceTypeID=@2",User.Identity.GetUserId(),ServiceID,st);
+            if(chk != null)
+            {
+                ViewBag.checkBooking = chk;
+            }
+            var reviews = db.Query<ReviewDets>("Select * from Review r inner join AspNetUsers anu on anu.Id=r.UserID where ServiceID=@0 and ServiceTypeID=@1 and IsVisible = @2",ServiceID,(int)st,true).ToList();
+            reviews.ForEach(r=>
+            {
+                r.Replies = db.Query<ReviewRepDets>("Select * from ReviewReplies rr inner join AspNetUsers anu on anu.Id=rr.UserID where ReviewID= @0 and IsVisible =@1", r.ReviewID,true).ToList();
+            });
             ViewBag.ST = st;
             ViewBag.ServiceID = ServiceID;
             List<SelectListItem> items = new List<SelectListItem>();
-            for (int i = 1; i <= 10; i++)
+            for (int i=1;i<=10;i++)
             {
-                items.Add(new SelectListItem { Text = "" + i, Value = "" + i });
+                items.Add(new SelectListItem { Text = ""+i, Value = "" + i });
             }
             ViewBag.nums = items;
-            return View();
+            return View(reviews);
         }
         public ActionResult InfoAccomPartial(int? ServiceID, ServiceTypeEnum? st)
         {
@@ -306,7 +316,6 @@ namespace Speedbird.Controllers
             accom.GeoName = db.First<string>("Select GeoName From GeoTree  where GeoTreeID=@0", accom.GeoTreeID);
             int facID = db.ExecuteScalar<int>("Select FacilityID From Facility_Accomodation where AccomodationID=@0 ",accom.AccomodationID);
             ViewBag.SimilarAccom = db.Query<AccomodationDets>("Select * From Accomodation a inner join Facility_Accomodation fa on a.AccomodationID= fa.AccomodationID inner join Facility f on f.FacilityID = fa.FacilityID where fa.FacilityID=@0 ", facID);
-
             return PartialView(accom);
         }
         public ActionResult AccomFacPartial(int? ServiceID)

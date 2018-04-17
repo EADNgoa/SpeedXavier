@@ -453,6 +453,8 @@
                     </div>
                 </div>
                 <div class="container-fluid">
+                      @using (Html.BeginForm("BookCartItems", "Cart", FormMethod.Post))
+                      {
                     <div class="row">
                         <div class="item-banners" style="color:white; background-color:#009ee0 !important; text-align:left;padding-right:20px;font-weight:normal;">
                             <div class="title">BILLING INFORMATION</div>
@@ -598,8 +600,23 @@
                             </tr>
 
                         </table>
-                        <div id="total-block"><div class="price" style="margin-right:200px !important;    font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">Rs 249/-</div><br /><br /><button id="paybtn">CLICK TO PAY</button></div>
-                    </div>
+                      
+                        <div id="total-block"><div class="price" style=" padding-right:250px!important;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">
+                              @if (ViewBag.Amt != null)
+                              {
+                                    @(ViewBag.Amt)
+                              }
+                              else
+                              {
+                                    @(total)
+                              }
+                             </div>
+                        <br /><br />
+                        <button id="paybtn" type="submit">CLICK TO PAY</button>
+                        </div>
+                        
+                    </div>   
+                      }
                 </div>
                 <br />
                 <br />
@@ -620,9 +637,9 @@
 
         <div class="block-sb-info" style="margin-top:52px">
             <h3>Not Sure? Contact Us!</h3>
-
-            <button id="paybtn" style="margin-left:50px;margin-bottom:10px;margin-top:20px;">START A LIVE CHAT</button>
-
+            <form action="/Cart/BookCartItems">
+                <button id="paybtn" style="margin-left:50px;margin-bottom:10px;margin-top:20px;">START A LIVE CHAT</button>
+            </form>
             <br />
             <div class="row">
 

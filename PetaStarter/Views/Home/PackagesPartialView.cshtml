@@ -21,13 +21,14 @@ else
     <img class="card-img-top" src="/Images/ComingSoon.png" alt="Card image cap">
 }
     <div class="card-body">
-        @foreach (var a in item.Attributes)
-        {
-            @: <span style="font-size:0.7em; color:white; background-color: @a.Color; ">
-            @:    <i class="fas fa-@a.fatext"></i>&nbsp;@a.AttributeText
-            @: </span>&nbsp;
+        @if (item.Attributes != null) { 
+            foreach (var a in item.Attributes)
+            {
+                @: <span style="font-size:0.7em; color:white; background-color: @a.Color; ">
+                @:    <i class="fas fa-@a.fatext"></i>&nbsp;@a.AttributeText
+                @: </span>&nbsp;
+            }
         }
-        
         <div class="FloatBadge">
             @item.ServiceGeoName
         </div>
