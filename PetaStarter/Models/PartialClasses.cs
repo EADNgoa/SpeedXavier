@@ -81,6 +81,7 @@ namespace Speedbird
         public string AttractionName { get; set; }
         public string ActivityName { get; set; }
         public string CategoryName { get; set; }
+        public decimal price { get; set; }
 
         public IEnumerable<PictureDets> Pic { get; set; }
         public string Glang { get; set; }
@@ -137,6 +138,7 @@ namespace Speedbird
         public string GeoName { get; set; }
         public string GeoTreeName { get; set; }
                 public string CarBikeName { get; set; }
+        public decimal price { get; set; }
 
         public string CouponCode { get; set; }
         public string Description { get; set; }
@@ -287,6 +289,8 @@ namespace Speedbird
         public int ServiceID { get; set; }
         public string Id { get; set; }
         public int ServiceTypeID { get; set; }
+        public int OptionTypeID { get; set; }
+
         public int Qty { get; set; }
         public DateTime CheckIn { get; set; }
         public DateTime CheckOut { get; set; }
@@ -300,8 +304,20 @@ namespace Speedbird
 
 
     }
+    public class ReviewDets
+    {
+        public int ReviewID { get; set; }
+        public int ServiceID { get; set; }
+        public string UserID { get; set; }
+        public string UserName { get; set; }
+        public int ServiceTypeID { get; set; }
+        public DateTime ReviewDate { get; set; }
+        public string Review { get; set; }
+        public bool IsVisible { get; set; }
+        public IEnumerable<ReviewRepDets> Replies { get; set; }
+    }
 
-   public enum ServiceTypeEnum
+    public enum ServiceTypeEnum
     {
         Accomodation,
         Packages,
