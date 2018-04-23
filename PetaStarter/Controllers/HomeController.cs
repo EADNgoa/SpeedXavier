@@ -125,7 +125,7 @@ namespace Speedbird.Controllers
             if (st == ServiceTypeEnum.Accomodation)
             {
                 ViewBag.ServiceTitle = "Accomodations";
-                MainSql = new PetaPoco.Sql("Select Distinct a.AccomodationID as ServiceId,a.AccomName as ServiceName,substring(a.description,0,100) as ServiceDescription, g.geoName as ServiceGeoName, pr.price ");
+                MainSql = new PetaPoco.Sql("Select a.AccomodationID as ServiceId,@0 as ServiceTypeId, a.AccomName as ServiceName,substring(a.description,0,100) +'...' as ServiceDescription, g.geoName as ServiceGeoName, min(pr.price) as price ", (int) ServiceTypeEnum.Accomodation);
                 FromSql = new PetaPoco.Sql("from Accomodation a, GeoTree g,Prices pr,OptionType ot");
                 WhereSql = new PetaPoco.Sql($"where a.geoTreeId=g.GeoTreeId and a.GeoTreeID in (SELECT GeoTreeID FROM STRING_SPLIT('{Dests}', ',') CROSS APPLY dbo.GetChildGeos(value))");
                 WhereSql.Append("and a.AccomodationID = pr.ServiceID and ot.OptionTypeID = pr.OptionTypeID and ot.ServiceTypeID=@0 " +
@@ -142,22 +142,16 @@ namespace Speedbird.Controllers
              
                 MainSql.Append(FromSql);
                 MainSql.Append(WhereSql);
+                MainSql.Append(" Group by c.AccomodationID, c.AccomName, [Description], g.geoName  ");
                 var accom = db.Query<AccomodationDets>(MainSql);
                 accom = accom.OrderBy(a => a.AccomName);
                 
-                //accom.ForEach(a=>
-                //{
-                //    a.pic = db.Fetch<PictureDets>("Select Top 1 * From Picture Where ServiceID=@0 and ServiceTypeID=@1 Order By NewID()", a.AccomodationID,(int)Speedbird.ServiceTypeEnum.Accomodation).ToList();
-                //    a.GeoName = db.First<string>("Select GeoName From GeoTree Where GeoTreeID= @0",a.GeoTreeID);
-                //    apc.Add(new AccomPackCarBike { ServiceTypeID= (int)ServiceTypeEnum.Accomodation, ServiceDescription = a.Description.Substring(0,Math.Min(100,a.Description.Length)) + "...", ServiceGeoName = a.GeoName, ServiceID =a.AccomodationID, ServiceName = a.AccomName, ServicePic = (a.pic.Count() > 0) ? a.pic.FirstOrDefault().PictureName : "" });
-
-                //});
-
+                
             }
             if (st == ServiceTypeEnum.CarBike)
             {
                 ViewBag.ServiceTitle = "Car And Bikes Rental";
-                MainSql = new PetaPoco.Sql("Select [CarBikeID] as ServiceId, [CarBikeName] as ServiceName, g.geoName as ServiceGeoName, substring(description,0,100) as ServiceDescription,pr.price  ");
+                MainSql = new PetaPoco.Sql("Select [CarBikeID] as ServiceId, [CarBikeName] as ServiceName,@0 as ServiceTypeId g.geoName as ServiceGeoName, substring(description,0,100) +'...' as ServiceDescription,min(pr.price) as price ", (int) ServiceTypeEnum.CarBike);
                 FromSql = new PetaPoco.Sql("From CarBike c, geotree a,Prices pr,OptionType ot");
                 WhereSql = new PetaPoco.Sql($"where c.geotreeId=g.geotreeId and c.GeoTreeID in (SELECT GeoTreeID FROM STRING_SPLIT('{Dests}', ',') CROSS APPLY dbo.GetChildGeos(value))");
                 WhereSql.Append("and c.CarBikeID = pr.ServiceID and ot.OptionTypeID = pr.OptionTypeID and ot.ServiceTypeID=@0 " +
@@ -189,15 +183,7 @@ namespace Speedbird.Controllers
                 }
                 MainSql.Append(FromSql);
                 MainSql.Append(WhereSql);
-                //var carBike = db.Query<CarBikeDets>(MainSql).ToList();
-                //carBike.ForEach(c =>
-                //{
-                //    c.GeoName = db.First<string>("Select GeoName From GeoTree Where GeoTreeID= @0", c.GeoTreeID);
-
-                //    c.pic= db.Fetch<PictureDets>("Select Top 1 * From Picture Where ServiceID=@0 and ServiceTypeID=@1 Order By NewID()", c.CarBikeID, (int)ServiceTypeEnum.CarBike).ToList();
-                //    apc.Add(new AccomPackCarBike { ServiceTypeID = (int)ServiceTypeEnum.CarBike, ServiceDescription = c.Description.Substring(0, Math.Min(100, c.Description.Length)) + "...", ServiceGeoName = c.GeoName, ServiceID = c.CarBikeID, ServiceName = c.CarBikeName, ServicePic = (c.pic.Count() > 0) ? c.pic.FirstOrDefault().PictureName : ""});
-
-                //});
+                MainSql.Append(" Group by c.CarBikeID, c.CarBikeName, [Description], g.geoName  ");
 
             }
             if (st == ServiceTypeEnum.Packages || st == ServiceTypeEnum.SightSeeing || st == ServiceTypeEnum.Cruise)
@@ -205,10 +191,10 @@ namespace Speedbird.Controllers
                 ViewBag.ServiceTitle = "Our Best Tours And Excursions";
 
 
-                MainSql = new PetaPoco.Sql("Select Distinct p.PackageID as ServiceId,p.ServiceTypeID ,p.PackageName as ServiceName,substring(description,0,100) as ServiceDescription, pr.price ");
-                FromSql = new PetaPoco.Sql("from Package p,Prices pri,OptionType ot");
+                MainSql = new PetaPoco.Sql("Select p.PackageID as ServiceId,p.ServiceTypeID ,p.PackageName as ServiceName,substring(description,0,100) +'...' as ServiceDescription, min(pr.price) as price");
+                FromSql = new PetaPoco.Sql("from Package p,Prices pr,OptionType ot");
                 WhereSql = new PetaPoco.Sql("where p.ServiceTypeID=@0", (int)st);
-                WhereSql.Append(" and p.PackageID = pri.ServiceID and ot.OptionTypeID = pri.OptionTypeID  and pri.PriceID = (select top 1 PriceID from Prices where p.PackageID = Prices.ServiceID and ot.OptionTypeID = Prices.OptionTypeID  and Prices.WEF<GetDate() order by Prices.WEF desc) ");
+                WhereSql.Append(" and p.PackageID = pr.ServiceID and ot.OptionTypeID = pr.OptionTypeID  and pr.PriceID = (select top 1 PriceID from Prices where p.PackageID = Prices.ServiceID and ot.OptionTypeID = Prices.OptionTypeID  and Prices.WEF<GetDate() order by Prices.WEF desc) ");
                 if (maxPrice!=null && minPrice != null)
                 {
                     WhereSql.Append(" and Price Between @0 and @1 ", minPrice,maxPrice);
@@ -254,27 +240,18 @@ namespace Speedbird.Controllers
 
                 MainSql.Append(FromSql);
                 MainSql.Append(WhereSql);
-                //var pack = db.Query<PackageDets>(MainSql).ToList();
-
-                //pack.ForEach(p =>
-                //{
-                //    p.Pic = db.Fetch<PictureDets>("Select Top 1 * From Picture Where ServiceID=@0 and ServiceTypeID=@1 Order By NewID()", p.PackageID, p.ServiceTypeID).ToList();
-                //    p.GeoName = db.First<string>("Select GeoName From GeoTree g,Package_GeoTree pg  where pg.PackageID=@0 and g.GeoTreeID = pg.GeoTreeID",p.PackageID );
-                //    apc.Add(new AccomPackCarBike {ServiceTypeID=(int)st, ServiceDescription=p.Description.Substring(0,100)+"...",ServiceGeoName=p.GeoName,ServiceID=p.PackageID,ServiceName=p.PackageName,ServicePic=(p.Pic.Count()>0)?p.Pic.FirstOrDefault().PictureName  :"",
-                //    Attributes =db.Fetch<Attribute>("Select * from Attribute a, Package_attribute pa where a.attributeID=pa.attributeID and pa.packageID=@0",p.PackageID) });
-
-                //});
-                                
+                MainSql.Append(" Group by p.PackageID, p.ServiceTypeID,p.PackageName, [Description] ");
             }
 
-            MainSql.Append(" order by price");
-            var apc = db.Query<AccomPackCarBike>(MainSql);
+            MainSql.Append(" order by min(pr.price)");
+            var apc = db.Fetch<AccomPackCarBike>(MainSql);
 
             foreach (var i in apc)
             {
                 i.ServicePic = db.FirstOrDefault<PictureDets>("Select Top 1 * From Picture Where ServiceID=@0 and ServiceTypeID=@1", i.ServiceID, i.ServiceTypeID)?.PictureName ?? "";
-                if (i.ServiceGeoName == "") i.ServiceGeoName = db.First<string>("Select GeoName From GeoTree g,Package_GeoTree pg  where pg.PackageID=@0 and g.GeoTreeID = pg.GeoTreeID", i.ServiceID);
-                i.Attributes = db.Fetch<Attribute>("Select * from Attribute a, Package_attribute pa where a.attributeID=pa.attributeID and pa.packageID=@0 and pa.serviceTyoeId=@1", i.ServiceID, i.ServiceTypeID);
+                if (string.IsNullOrWhiteSpace(i.ServiceGeoName)) i.ServiceGeoName = db.First<string>("Select GeoName From GeoTree g,Package_GeoTree pg  where pg.PackageID=@0 and g.GeoTreeID = pg.GeoTreeID", i.ServiceID);
+                i.Attributes = db.Fetch<Attribute>("Select * from Attribute a, Package_attribute pa where a.attributeID=pa.attributeID and pa.packageID=@0 and pa.serviceTypeId=@1", i.ServiceID, i.ServiceTypeID);
+                i.Icons = db.Fetch<string>("select IconPath from Icons where ServiceId=@0 and ServiceTypeId=@1", i.ServiceID, i.ServiceTypeID);
             }
             
             return PartialView(apc);
