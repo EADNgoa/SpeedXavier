@@ -134,17 +134,17 @@
         </select>
     </div>
     <div class="input-group col mb-3">
-        <div class="input-group-prepend"><span class="input-group-text">Attributes</span></div>
-        <select id="AtrID" name="AtrID" class="form-control sel2Lkup" data-setu="AtrSave" data-geturl="GetAtr" multiple="multiple">
-            @foreach (var o in ViewBag.Atrs)
+        <div class="input-group-prepend"><span class="input-group-text">Categories</span></div>
+        <select id="CatID" name="CatID" class="form-control sel2Lkup" data-setu="CatSave" multiple="multiple">
+            @foreach (var o in ViewBag.Cats)
             {
                 <option value="@o.Value" selected="selected">@o.Text</option>}
         </select>
     </div>
     <div class="input-group col mb-3">
-        <div class="input-group-prepend"><span class="input-group-text">Categories</span></div>
-        <select id="CatID" name="CatID" class="form-control sel2Lkup" data-setu="CatSave" multiple="multiple">
-            @foreach (var o in ViewBag.Cats)
+        <div class="input-group-prepend"><span class="input-group-text">Attributes</span></div>
+        <select id="AtrID" name="AtrID" class="form-control sel2Lkup" data-setu="AtrSave" data-geturl="GetAtr" multiple="multiple">
+            @foreach (var o in ViewBag.Atrs)
             {
                 <option value="@o.Value" selected="selected">@o.Text</option>}
         </select>
@@ -165,6 +165,14 @@
         <select id="AttID" name="AttID" class="form-control sel2Lkup" data-setu="AttSave" multiple="multiple">
             @foreach (var o in ViewBag.Atts)
             {
+                <option value="@o.Value" selected="selected">  @o.Text</option>}
+        </select>
+    </div>
+    <div class="input-group col mb-3">
+        <div class="input-group-prepend"><span class="input-group-text">Icons</span></div>
+        <select id="IcnID" name="IcnID" class="form-control" data-setu="IcnSave" multiple="multiple">            
+            @foreach (var o in ViewBag.Icns)
+            {
                 <option value="@o.Value" selected="selected">@o.Text</option>}
         </select>
     </div>
@@ -179,6 +187,35 @@
 
 <script>
     $(function(){
+
+        //Icons
+        function setupIcons(data) {
+            if (!data.id) { return data.text; }
+            var $result = $(
+                '<span><img height="32px;" src="/Icons/' + data.text +'" /> ' + data.text + '</span>'
+            );
+            return $result;
+        };
+
+        $("#IcnID").select2({
+            templateResult: setupIcons,
+            templateSelection: setupIcons,
+
+            ajax: {
+                url: '@(Url.Action("GetIcn", "Package"))',
+                dataType: 'json',
+                quietMillis: 250,
+                results: function (data, page) {
+                    return { results: data.data };
+                }
+            }
+        });
+
+        //Save Icon data
+        $("#IcnID").on('change', function (e) {
+            $.post('/SBBoss/Package/IcnSave', { PackageId: $('#PackageID').val(), IcnNames: $(this).val(), ServiceTypeId: $('#ServiceTypeID').val() })
+        });
+
         //Activities
         $("#ActID").select2({
             placeholder: "Type 3 letters to choose",
@@ -312,7 +349,6 @@
 
                 $(".GeoSelect").select2({
                     placeholder: "Type 3 letters to choose",
-                    minimumInputLength: 3,
                     templateSelection: formatState,
 
                     ajax: {

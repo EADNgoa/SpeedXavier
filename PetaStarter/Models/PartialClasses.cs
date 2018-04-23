@@ -90,6 +90,10 @@ namespace Speedbird
         public IEnumerable<ActivityDets> Act { get; set; }
         public string SupplierNames { get; set; }
         public string SupplierContractNos { get; set; }
+
+        public DateTime EndDate { get; set; }
+        public string EndDateStr { get { return $"{EndDate:yyyy/MM/dd}"; } }
+        public int Daysleft { get { return (EndDate - DateTime.Now).Days; } }
     }
 
     [MetadataType(typeof(PackageMetadata))]
@@ -273,10 +277,12 @@ namespace Speedbird
     public class AccomPackCarBike
     {
         public int ServiceID { get; set; }
+        public int ServiceTypeID { get; set; }
         public string ServiceName { get; set; }
         public string ServiceDescription { get; set; }
         public string ServiceGeoName { get; set; }
         public string ServicePic { get; set; }
+        public decimal Price { get; set; }
         public IEnumerable<Attribute> Attributes { get; set; }
 
     }

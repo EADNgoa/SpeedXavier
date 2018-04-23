@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
+using System.IO;
 using System.Net;
 //using System.Web;
 using System.Web.Mvc;
@@ -37,13 +38,15 @@ namespace Speedbird.Areas.SBBoss.Controllers
             string geos = "";
             string cats = "";
             string conts ="";
+            int daysl = 0;
 
             if (columnSearch[2]?.Length > 0) {geos = columnSearch[2]; columnSearch[2] = null; }
             if (columnSearch[4]?.Length > 0) {cats = columnSearch[4]; columnSearch[4] =null; }
             if (columnSearch[6]?.Length > 0) { conts = columnSearch[6]; columnSearch[6] = null; }
             if (columnSearch[5]?.Length > 0) { supname = columnSearch[5]; columnSearch[5] = null; }
+            if (columnSearch[8]?.Length > 0) { int.TryParse(columnSearch[8], out daysl); columnSearch[8] = null; }
 
-            var sql = new PetaPoco.Sql($"Select distinct p.* from Package p" );
+            var sql = new PetaPoco.Sql($"Select distinct p.*, (select max(v.ValidTo) from PackageValidity v where v.PackageId=p.PackageID) as EndDate from Package p" );
             var fromsql= new PetaPoco.Sql();
             var wheresql = new PetaPoco.Sql($" where ServiceTypeId={sid} ");
 
@@ -65,6 +68,11 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 if (supname.Length > 0) wheresql.Append($" and Suppliername like '%{supname}%'");
                 if (conts.Length > 0) wheresql.Append($" and ContractNo like '%{conts}%'");
             }
+            if (daysl>0)
+            {
+                wheresql.Append($" and datediff(day,GETDATE(), v.ValidTo) <{daysl} ");
+            }
+
             
             wheresql.Append($"{GetWhereWithOrClauseFromColumns(PackageColumns, columnSearch)}");
             sql.Append(fromsql);
@@ -80,7 +88,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                        r.GeoName = String.Join(", ", db.Query<string>("Select GeoName from GeoTree g, package_Geotree pg where g.GeoTreeId=pg.GeoTreeid and pg.packageId=@0", r.PackageID));
                        r.CategoryName = String.Join(", ", db.Query<string>("Select CategoryName from Category g, package_Category pg where g.CategoryId=pg.Categoryid and pg.packageId=@0", r.PackageID));
                        r.SupplierNames = String.Join(", ", db.Query<string>("Select SupplierName from Supplier g, package_Supplier pg where g.SupplierId=pg.Supplierid and pg.packageId=@0", r.PackageID));
-                       r.SupplierContractNos = String.Join(", ", db.Query<string>("Select ContractNo from package_supplier where packageId=@0", r.PackageID));
+                       r.SupplierContractNos = String.Join(", ", db.Query<string>("Select ContractNo from package_supplier where packageId=@0", r.PackageID));                       
                    });
 
 
@@ -150,7 +158,9 @@ namespace Speedbird.Areas.SBBoss.Controllers
             "Duration",
             "CategoryName",
             "SupplierNames",
-            "SupplierContractNos"
+            "SupplierContractNos",
+            "EndDateStr",
+            "Daysleft"
         };
 
         public ActionResult Manage(int? id, int? sid, int mode = 1, int EID = 0) //Mode 1=Details,2=Prices,3=images,4=validity
@@ -179,6 +189,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             ViewBag.Atrs = db.Query<Attribute>("Select AttributeId, AttributeText from Attribute where AttributeId in (Select AttributeId from Package_Attribute where PackageId=@0)", pkg?.PackageID ?? 0).Select(sl => new SelectListItem { Text = sl.AttributeText, Value = sl.AttributeId.ToString(), Selected = true });
             ViewBag.Sups = db.Query<Supplier>("Select * from Supplier where SupplierId in (Select SupplierId from Package_Supplier where PackageId=@0)", pkg?.PackageID ?? 0).Select(sl => new SelectListItem { Text = sl.SupplierName, Value = sl.SupplierID.ToString(), Selected = true });
             ViewBag.SupConts = db.Query<Package_Supplier>("Select * from Package_Supplier where PackageId=@0", pkg?.PackageID ?? 0).Select(sl => sl.ContractNo);
+            ViewBag.Icns = db.Query<Icon>("Select IconPath from Icons where ServiceTypeId=@0 and ServiceId=@1 ",sid, pkg?.PackageID ?? 0).Select(sl => new SelectListItem { Text = sl.IconPath, Value = sl.IconPath, Selected = true });
             return PartialView("Details", pkg);
         }
 
@@ -400,8 +411,32 @@ namespace Speedbird.Areas.SBBoss.Controllers
         {
             db.Delete<Package_Attribute>("Where PackageId=@0", PackageId);
             foreach (var item in ActIds)
-                db.Insert(new Package_Attribute { PackageID = PackageId, AttributeID = item });
+                db.Insert(new Package_Attribute { PackageID = PackageId, AttributeID = item, ServiceTypeId = (int) ServiceTypeEnum.Packages  });
         }
+
+        //Icons
+        public JsonResult GetIcn()
+        {   
+                var i = Directory.EnumerateFiles(Server.MapPath("~/Icons"), "*.png").Select(f => f.Substring(f.LastIndexOf("\\")+1));
+                return Json(new { results = i.Select(a => new { id = a, text = a }) }, JsonRequestBehavior.AllowGet);         
+        }
+
+        [HttpPost]
+        public void IcnSave(int PackageId, IEnumerable<string> IcnNames, int ServiceTypeId)
+        {
+            db.Delete<Icon>("Where ServiceId=@0 and ServiceTypeId=@1", PackageId, ServiceTypeId);
+            try
+            {
+                foreach (var item in IcnNames)
+                    db.Insert(poco: new Icon { ServiceId = PackageId, IconPath = item, ServiceTypeId = ServiceTypeId });
+            }
+            catch (Exception e)
+            {
+
+                throw e;
+            }
+        }
+
         //Supplier
         public JsonResult GetSup(string term)
         {
