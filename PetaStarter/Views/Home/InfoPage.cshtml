@@ -3,6 +3,7 @@
     <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/Content/css/blueimp-gallery.min.css"> 
 </head>
 <style>
     /*small change*/
@@ -71,8 +72,7 @@
 
     /*Specific*/
     .DetailBlock, .DescriptionBlock {
-        padding: 50px;
-        margin-left: 30px;
+        padding: 50px;        
         min-height: 450px;
         margin-bottom: 20px;
         width: 100%;
@@ -80,8 +80,7 @@
 
     .DetailBlock {
         background: #f4f3ea;
-        margin-right: 50px;
-        margin-left: 60px;
+
     }
 
     .DescriptionBlock {
@@ -280,162 +279,165 @@
     </nav>
 </div>
 <br />
-<br />
-<br />
 
-@if (ViewBag.ST == ServiceTypeEnum.Accomodation)
-{
-    @Html.Action("InfoAccomPartial", "Home", new { ServiceID = ViewBag.ServiceID, st = ViewBag.ST })
-}
-@if (ViewBag.ST == ServiceTypeEnum.CarBike)
-{
-    @Html.Action("InfoCarBikePartial", "Home", new { ServiceID = ViewBag.ServiceID, st = ViewBag.ST })
-}
-@if (ViewBag.ST == ServiceTypeEnum.Packages || ViewBag.ST == ServiceTypeEnum.SightSeeing || ViewBag.ST == ServiceTypeEnum.Cruise)
-{
-    @Html.Action("InfoPackagePartial", "Home", new { ServiceID = ViewBag.ServiceID, st = ViewBag.ST })
-}
-<div class="col-md-4">
-    <br />
-    <br />
-    <br />
-    <div class="addcart">
-        <div class="container">
-            <center>
-                <div class="col-md-12">
-                    @Html.Action("GetPrice", "Home", new { ServiceID = ViewBag.ServiceID, st = ViewBag.ST })
-                </div>
-                <div style="background-color:#428bca;">
-                    <h2 class="block-title" style="color:white">Book This Experience</h2>
-                </div>
-                @using (Html.BeginForm("AddToCart", "Cart", FormMethod.Post, new { enctype = "multipart/form-data" }))
-    {
-            @Html.AntiForgeryToken()
-            @Html.Hidden("ServiceTypeID", (int)ViewBag.ST)
-            @Html.Hidden("ServiceID", (int)ViewBag.ServiceID)
-
-            <div class="form-group">
-                <div class="col-12"><input id="dp1" name="CheckIn" type="date" class="form-control clickable input-md" placeholder="&#xf133;  Check-In"></div>
-            </div>
-            <div class="form-group">
-                <div class="col-12"><input id="dp2" type="date" name="CheckOut" class="form-control clickable input-md" placeholder="&#xf133;  Check-Out"></div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-12">
-                    @Html.DropDownList("nums", ViewBag.nums as IEnumerable<SelectListItem>, "Select No Of People", new { @class = "form-control nopax" })
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-12">
-                    <input type="number" name="Qty" placeholder="&#xf2c0  Quantity" class="form-control" />
-                </div>
-            </div>
-            <fieldset>
-                <div style="background-color:#428bca;">
-                    <h2 class="block-title" style="color:white">Customer Details</h2>
-                </div>
-                @if (ViewBag.CustRec != null)
-                {
-                    @Html.Hidden("CustomerID", (int)ViewBag.CustRec.CustomerID)
-            <div class="form-group">
-                <div class="col-md-12">
-                    <input type="text" name="fname" value="@ViewBag.CustRec.FName" class="form-control" />
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-12">
-                    <input type="text" name="sname" value="@ViewBag.CustRec.SName" class="form-control" />
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-12">
-                    <input type="text" name="email" value="@ViewBag.CustRec.Email" class="form-control" />
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-12">
-                    <input type="text" name="phno" value="@ViewBag.CustRec.Phone" class="form-control" />
-                </div>
-            </div>
-
-
-                }
-                else
-                {
-                <div class="form-group">
-                    <div class="col-md-12">
-                        <input type="text" name="fname" placeholder="&#xf2c0  First Name" class="form-control" />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-md-12">
-                        <input type="text" name="sname" placeholder="&#xf2c0  Sur Name" class="form-control" />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-md-12">
-                        <input type="text" name="email" placeholder="&#xf003 Your Email..." class="form-control" />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-md-12">
-                        <input type="text" name="phno" placeholder="&#xf2a0 Mobile No..." class="form-control" />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-md-12">
-                        <input type="File" name="UploadedFile" class="form-control" placeholder="ID Proof" />
-                    </div>
-                </div>
-                }
-            </fieldset>
-                
-            <div class="form-group">
-                <div class="col-md-12">
-                    @Html.TextArea("Query", null, new { @class = "form-control", placeholder = "Entery Your Query Here...." })
-                </div>
-            </div>
-            <button class="btn btn-success">Submit Query</button>
-            <button class="btn btn-success">Add To Cart</button>
-}
-            </center>
-        </div>
-        <br />
-
+<div class="container-fluid">
+    <div class="row">
+        <img src="/Images/Goa.jpg" width="100%" height="400px;" />
     </div>
     <br />
-    <hr class="sbhr" />
+    <br />
+    <br />
+    <div class="row">
+        @if (ViewBag.ST == ServiceTypeEnum.Accomodation)
+        {
+            @Html.Action("InfoAccomPartial", "Home", new { ServiceID = ViewBag.ServiceID, st = ViewBag.ST })
+        }
+        @if (ViewBag.ST == ServiceTypeEnum.CarBike)
+        {
+            @Html.Action("InfoCarBikePartial", "Home", new { ServiceID = ViewBag.ServiceID, st = ViewBag.ST })
+        }
+        @if (ViewBag.ST == ServiceTypeEnum.Packages || ViewBag.ST == ServiceTypeEnum.SightSeeing || ViewBag.ST == ServiceTypeEnum.Cruise)
+        {
+            @Html.Action("InfoPackagePartial", "Home", new { ServiceID = ViewBag.ServiceID, st = ViewBag.ST })
+        }
+        <div class="col-4">
+            <br />
+            <br />
+            <br />
+            <div class="addcart">
+                <div class="container">
+                    <center>
+                        <div class="col-md-12">
+                            @Html.Action("GetPrice", "Home", new { ServiceID = ViewBag.ServiceID, st = ViewBag.ST })
+                        </div>
+                        <div style="background-color:#428bca;">
+                            <h2 class="block-title" style="color:white">Book This Experience</h2>
+                        </div>
+                        @using (Html.BeginForm("AddToCart", "Cart", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.Hidden("ServiceTypeID", (int)ViewBag.ST)
+                            @Html.Hidden("ServiceID", (int)ViewBag.ServiceID)
 
-    <div class="block-sb-info">
+                            <div class="form-group">
+                                <div class="col-12"><input id="dp1" name="CheckIn" type="date" class="form-control clickable input-md" placeholder="&#xf133;  Check-In"></div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-12"><input id="dp2" type="date" name="CheckOut" class="form-control clickable input-md" placeholder="&#xf133;  Check-Out"></div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    @Html.DropDownList("nums", ViewBag.nums as IEnumerable<SelectListItem>, "Select No Of People", new { @class = "form-control nopax" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <input type="number" name="Qty" placeholder="&#xf2c0  Quantity" class="form-control" />
+                                </div>
+                            </div>
+                            <fieldset>
+                                <div style="background-color:#428bca;">
+                                    <h2 class="block-title" style="color:white">Customer Details</h2>
+                                </div>
+                                @if (ViewBag.CustRec != null)
+                                {
+                                    @Html.Hidden("CustomerID", (int)ViewBag.CustRec.CustomerID)
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <input type="text" name="fname" value="@ViewBag.CustRec.FName" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <input type="text" name="sname" value="@ViewBag.CustRec.SName" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <input type="text" name="email" value="@ViewBag.CustRec.Email" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <input type="text" name="phno" value="@ViewBag.CustRec.Phone" class="form-control" />
+                                        </div>
+                                    </div>
 
-        <div class="container  ">
-            <h3>Why Speed Bird?</h3>
-            <ul class="tck">
-                <li>
-                    <i class="fa fa-check" style="font-size:48px;color:green"></i>
-                    We Personally vet our offers
-                </li>
-                <li>
-                    <i class="fa fa-check" style="font-size:48px;color:green"></i>
-                    We use only professional operators
-                </li>
-                <li>
-                    <i class="fa fa-check" style="font-size:48px;color:green"></i>
-                    Our prices are transparent 100%
-                </li>
-            </ul>
+
+                                }
+                                else
+                                {
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <input type="text" name="fname" placeholder="&#xf2c0  First Name" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <input type="text" name="sname" placeholder="&#xf2c0  Sur Name" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <input type="text" name="email" placeholder="&#xf003 Your Email..." class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <input type="text" name="phno" placeholder="&#xf2a0 Mobile No..." class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <input type="File" name="UploadedFile" class="form-control" placeholder="ID Proof" />
+                                        </div>
+                                    </div>
+                                }
+                            </fieldset>
+
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    @Html.TextArea("Query", null, new { @class = "form-control", placeholder = "Entery Your Query Here...." })
+                                </div>
+                            </div>
+                            <button class="btn btn-success">Submit Query</button>
+                            <button class="btn btn-success">Add To Cart</button>
+                        }
+                    </center>
+                </div>
+                <br />
+
+            </div>
+            <br />
+            <hr class="sbhr" />
+
+            <div class="block-sb-info">
+
+                <div class="container  ">
+                    <h3>Why Speed Bird?</h3>
+                    <ul class="tck">
+                        <li>
+                            <i class="fa fa-check" style="font-size:48px;color:green"></i>
+                            We Personally vet our offers
+                        </li>
+                        <li>
+                            <i class="fa fa-check" style="font-size:48px;color:green"></i>
+                            We use only professional operators
+                        </li>
+                        <li>
+                            <i class="fa fa-check" style="font-size:48px;color:green"></i>
+                            Our prices are transparent 100%
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
+            <hr class="sbhr" />
 
         </div>
     </div>
-    <hr class="sbhr" />
-    @*@if (ViewBag.ST == ServiceTypeEnum.Packages || ViewBag.ST == ServiceTypeEnum.SightSeeing || ViewBag.ST == ServiceTypeEnum.Cruise)
-    {
-        @Html.Action("InfoPackAttractPartial", "Home", new { ServiceID = ViewBag.ServiceID, st = ViewBag.ST })
+</div>
 
-    }*@
-</div>
-</div>
-</div>
 
 <script>
     var $container2 = $('#Container2');
@@ -447,4 +449,15 @@
             isAnimated: true,
         });
     });
+</script>
+<script src="/Scripts/blueimp/blueimp-gallery.min.js"></script>
+<script>
+    document.getElementById('links').onclick = function (event) {
+        event = event || window.event;
+        var target = event.target || event.srcElement,
+            link = target.src ? target.parentNode : target,
+            options = { index: link, event: event },
+            links = this.getElementsByTagName('a');
+        blueimp.Gallery(links, options);
+    };
 </script>

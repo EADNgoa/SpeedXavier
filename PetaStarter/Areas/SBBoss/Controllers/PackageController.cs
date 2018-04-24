@@ -45,10 +45,11 @@ namespace Speedbird.Areas.SBBoss.Controllers
             if (columnSearch[6]?.Length > 0) { conts = columnSearch[6]; columnSearch[6] = null; }
             if (columnSearch[5]?.Length > 0) { supname = columnSearch[5]; columnSearch[5] = null; }
             if (columnSearch[8]?.Length > 0) { int.TryParse(columnSearch[8], out daysl); columnSearch[8] = null; }
+            string sortOrder = parameters.SortOrder.Replace("EndDateStr", "ValidTo");
 
-            var sql = new PetaPoco.Sql($"Select distinct p.*, (select max(v.ValidTo) from PackageValidity v where v.PackageId=p.PackageID) as EndDate from Package p" );
+            var sql = new PetaPoco.Sql($"Select distinct p.*,ValidTo, (select max(v.ValidTo) from PackageValidity v where v.PackageId=p.PackageID) as EndDate from Package p , PackageValidity v" );
             var fromsql= new PetaPoco.Sql();
-            var wheresql = new PetaPoco.Sql($" where ServiceTypeId={sid} ");
+            var wheresql = new PetaPoco.Sql($" where ServiceTypeId={sid} and v.PackageId=p.PackageID  and v.PVId=(select max(PVId) from PackageValidity where PackageId=p.PackageID)");
 
             if (geos.Length > 0)
             {
@@ -77,7 +78,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             wheresql.Append($"{GetWhereWithOrClauseFromColumns(PackageColumns, columnSearch)}");
             sql.Append(fromsql);
             sql.Append(wheresql);
-            sql.Append($"order by p.{parameters.SortOrder}"); 
+            sql.Append($"order by {sortOrder}"); 
 
             try
             {

@@ -92,7 +92,7 @@ namespace Speedbird
         public string SupplierContractNos { get; set; }
 
         public DateTime EndDate { get; set; }
-        public string EndDateStr { get { return $"{EndDate:yyyy/MM/dd}"; } }
+        public string EndDateStr { get { return $"{EndDate:dd MMM yyyy}"; } }
         public int Daysleft { get { return (EndDate - DateTime.Now).Days; } }
     }
 

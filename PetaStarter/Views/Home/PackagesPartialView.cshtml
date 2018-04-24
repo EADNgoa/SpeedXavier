@@ -2,12 +2,13 @@
 <link href="https://fonts.googleapis.com/css?family=Quattrocento+Sans" rel="stylesheet">
 <style>
     .price {
-        right: 5px;
-        bottom: -1px;
+        left: 5px;
+        bottom: 12px;
         font-family: 'Quattrocento Sans', sans-serif;
         color: rgb(17,73,109);
         font-size: 19.7px;
         font-weight: 700;
+        display:block;
     }
     .currency {
         font-size:12.7px;
@@ -19,6 +20,8 @@
 
     .icons {
         bottom: 3px;
+        left: 85px;
+        display: block;
     }
 </style>
 
@@ -55,17 +58,17 @@
                     <h5 class="card-title">@item.ServiceName</h5>
                     <p class="card-text">@item.ServiceDescription</p>
 
-                    <span class="icons position-absolute" >
-                    @foreach (var a in item.Icons)
-                    {
-                        @:    <img src="/Icons/@a" height="43px;" />
-                    }
+                    <span class="icons position-absolute">
+                        @foreach (var a in item.Icons)
+                        {
+                            @:    <img src="/Icons/@a" height="43px;" />
+                        }
                     </span>&nbsp;
 
-                    <p class="position-absolute price">
-                        <span class="currency"> Rs.</span> @($"{item.Price:#,##0/-}")
+                    <span class="position-absolute price">
+                        <span class="currency"> Rs.</span> @($"{item.Price:#,##0}")
                         <span class="under d-block mx-auto">per person</span>
-                    </p>
+                    </span>
 
                 </div>
 
