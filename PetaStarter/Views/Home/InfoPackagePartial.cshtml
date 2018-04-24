@@ -1,7 +1,7 @@
 ﻿
 @model  Speedbird.PackageDets
 
-<div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+@*<div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
     <div class="carousel-inner">
 
        
@@ -34,13 +34,13 @@
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
         <span class="sr-only">Next</span>
     </a>
-</div>
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-md-8">
-            <div class="row">
+</div>*@
+
+    
+        <div class="col-8">
+            
                 <h2 style="margin-left:60px;">@Model.PackageName</h2>
-                <br />
+                <br /> 
                 <div class="DetailBlock">
                     <div class="row">
                         <table class="table">
@@ -51,7 +51,7 @@
                             </tr>                            
                             <tr>
                                 <td style="color:#11496d;">
-                                    @Model.Highlights
+                                    @Html.Raw(Model.Highlights)                                    
                                 </td>
                             </tr>
                         </table>
@@ -67,16 +67,7 @@
                                     Description
                                 </td>
                             </tr>
-                            @*<tr>
-                                <td>
-                                    <div class="card bg-dark text-white" id="descimgcard" >
-                                        <img class="card-img" src="/Images/@Model.Pic.Last().PictureName" alt="Card image" style="width:100%;height:300px; ">
-                                        <div class="card-img-overlay">
-                                            @Model.GeoName
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>*@
+                          
                             <tr>
                                 <td>
                                     @Model.Description
@@ -86,6 +77,27 @@
                     </div>
 
                 </div>
+
+                <div id="blueimp-gallery" class="blueimp-gallery">
+                    <div class="slides"></div>
+                    <h3 class="title"></h3>
+                    <a class="prev" style="color:wheat">‹</a>
+                    <a class="next" style="color:white">›</a>
+                    <a class="close" style="color:wheat">×</a>
+                    <a class="play-pause"></a>
+                    <ol class="indicator"></ol>
+                </div>
+                <div id="links">
+                    @foreach (var item in Model.Pic)
+                    {
+                        <a href="/Images/@item.PictureName" title="@Model.PackageName">
+                            <img height="200px;" src="/Images/@item.PictureName" alt="@Model.PackageName">
+                        </a>
+                    }                    
+                </div>
+            <br />
+            <hr />
+            <br />
                 <div class="DetailBlock" style="padding:30px;min-height:0;">
 
                     <div class="row">
@@ -170,13 +182,6 @@
                     
                 </div>
 
-                </div>
+                
             </div>
-            <br />
-            <br />
-            <div class="row">
-                &nbsp;
-            </div> 
-        </div>
-       
-
+            

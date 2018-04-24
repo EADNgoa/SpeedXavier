@@ -1,59 +1,95 @@
 ﻿@model  List<Speedbird.AccomPackCarBike>
+<link href="https://fonts.googleapis.com/css?family=Quattrocento+Sans" rel="stylesheet">
+<style>
+    .price {
+        left: 5px;
+        bottom: 12px;
+        font-family: 'Quattrocento Sans', sans-serif;
+        color: rgb(17,73,109);
+        font-size: 19.7px;
+        font-weight: 700;
+        display:block;
+    }
+    .currency {
+        font-size:12.7px;
+    }
+    .under {
+        font-size: 9.7px;
+        line-height:8px;
+    }
 
+    .icons {
+        bottom: 3px;
+        left: 85px;
+        display: block;
+    }
+</style>
 
 <h2>@ViewBag.ServiceTitle</h2>
 <div id="ResContainer">
 
 
 
-       @foreach (var item in Model)
-        {
-
-           <a href="/Home/InfoPage/?st=@ViewBag.st&&ServiceID=@item.ServiceID">
-
-    <div class="card ServiceTypes" style="width: 18rem;">
-        @if (item.ServicePic != "")
+    @foreach (var item in Model)
     {
-        <img class="card-img-top" src="/Images/@item.ServicePic" alt="Card image cap">
-}
-else
-{
-    <img class="card-img-top" src="/Images/ComingSoon.png" alt="Card image cap">
-}
-    <div class="card-body">
-        @if (item.Attributes != null) { 
-            foreach (var a in item.Attributes)
-            {
-                @: <span style="font-size:0.7em; color:white; background-color: @a.Color; ">
-                @:    <i class="fas fa-@a.fatext"></i>&nbsp;@a.AttributeText
-                @: </span>&nbsp;
-            }
-        }
-        <div class="FloatBadge">
-            @item.ServiceGeoName
-        </div>
-        <h5 class="card-title">@item.ServiceName</h5>
-        <p class="card-text">@item.ServiceDescription</p>
+
+        <a href="/Home/InfoPage/?st=@ViewBag.st&&ServiceID=@item.ServiceID">
 
 
-    </div>
+            <div class="card ServiceTypes" style="width: 18rem;">
+                @if (item.ServicePic != "")
+                {
+                    <img class="card-img-top" src="/Images/@item.ServicePic" alt="Card image cap">
+                }
+                else
+                {
+                    <img class="card-img-top" src="/Images/ComingSoon.png" alt="Card image cap">
+                }
+                <div class="card-body">
+                    @foreach (var a in item.Attributes)
+                    {
+                        @: <span style="font-size:0.7em; color:white; background-color: @a.Color; ">
+                        @:    <i class="fas fa-@a.fatext"></i>&nbsp;@a.AttributeText
+                        @: </span>&nbsp;
+                    }
+
+                    <div class="FloatBadge">
+                        @item.ServiceGeoName
+                    </div>
+                    <h5 class="card-title">@item.ServiceName</h5>
+                    <p class="card-text">@item.ServiceDescription</p>
+
+                    <span class="icons position-absolute">
+                        @foreach (var a in item.Icons)
+                        {
+                            @:    <img src="/Icons/@a" height="43px;" />
+                        }
+                    </span>&nbsp;
+
+                    <span class="position-absolute price">
+                        <span class="currency"> Rs.</span> @($"{item.Price:#,##0}")
+                        <span class="under d-block mx-auto">per person</span>
+                    </span>
+
+                </div>
+
 
 
             </div>
-          </a>
-        }
-   
+        </a>
+    }
+
 </div>
 
 
 <script>
-    
+
     //$container.imagesLoaded(function () {
     $('#ResContainer').masonry({
-            itemSelector: '.ServiceTypes',
-            columnWidth: 150,
-            isAnimated: true,
-        });
+        itemSelector: '.ServiceTypes',
+        columnWidth: 150,
+        isAnimated: true,
+    });
     //});
 
 </script>

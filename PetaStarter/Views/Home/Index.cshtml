@@ -119,8 +119,8 @@
     .card-img-top {
         height: 280px;
     }
-    
-    #Container,#Container3, #Container2 {
+
+    #Container, #Container3, #Container2 {
         margin: 0 auto;
     }
 
@@ -145,7 +145,7 @@
     <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
 </head>
 
-<br/>
+<br />
 <div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
     <div class="carousel-inner" role="listbox">
 
@@ -210,52 +210,52 @@
 
         </div>
     </div>
-    
-        <div class="row ">
-            <div class="col-md-2 high" style="background-color:dodgerblue">
 
-            </div>
-            <div class="col-md-2 high" style="background-color:grey">
+    <div class="row ">
+        <div class="col-md-2 high" style="background-color:dodgerblue">
 
-            </div>
-            <div class="col-md-2 high" style="background-color:deepskyblue">
-
-            </div>
-            <div class="col-md-2 high" style="background-color:red">
-
-            </div>
-            <div class="col-md-2 high" style="background-color:blue">
-
-            </div>
-            <div class="col-md-2 high" style="background-color:greenyellow">
-
-            </div>
         </div>
-    
-</div>
+        <div class="col-md-2 high" style="background-color:grey">
 
-@*<div class="container-fluid">
-    <h2>Categories</h2>
-    <div id="Container2">
-        <center>
-            @foreach (var item in Model)
-            {
-                <div class="card Package">
-                    <img class="card-img-top" src="/Images/@item.pack.FirstOrDefault()?.PictureName" alt="Card image cap">
+        </div>
+        <div class="col-md-2 high" style="background-color:deepskyblue">
 
-                    <div class="card-block">
-                        <h4 class="card-title">@item.CategoryName</h4>
-                    </div>
-                </div>
-            }
-        </center>
+        </div>
+        <div class="col-md-2 high" style="background-color:red">
+
+        </div>
+        <div class="col-md-2 high" style="background-color:blue">
+
+        </div>
+        <div class="col-md-2 high" style="background-color:greenyellow">
+
+        </div>
     </div>
 
 </div>
-<div class="container-fluid">
-        @Html.Action("IndexActPartial", "Home", new { st = ViewBag.st, Loc = ViewBag.loc })
 
-</div>*@
+@*<div class="container-fluid">
+        <h2>Categories</h2>
+        <div id="Container2">
+            <center>
+                @foreach (var item in Model)
+                {
+                    <div class="card Package">
+                        <img class="card-img-top" src="/Images/@item.pack.FirstOrDefault()?.PictureName" alt="Card image cap">
+
+                        <div class="card-block">
+                            <h4 class="card-title">@item.CategoryName</h4>
+                        </div>
+                    </div>
+                }
+            </center>
+        </div>
+
+    </div>
+    <div class="container-fluid">
+            @Html.Action("IndexActPartial", "Home", new { st = ViewBag.st, Loc = ViewBag.loc })
+
+    </div>*@
 
 
 
@@ -296,7 +296,7 @@
     //});
 
     $(".GeoSelect").on('change', function (e) {
-        
+
         DestValues = [];
         var Dests = $('.GeoSelect').val();
         for (var i = 0; i < Dests.length; i++) {
@@ -305,4 +305,20 @@
         window.location.href = "/Home/LoadPackages/?st=Packages&LocId=" + DestValues[0];
     });
 
+
 </script>
+
+
+<!--Start of Tawk.to Script-->
+<script type="text/javascript">
+    var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+    (function () {
+        var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+        s1.async = true;
+        s1.src = 'https://embed.tawk.to/5adb3b885f7cdf4f05332e2a/default';
+        s1.charset = 'UTF-8';
+        s1.setAttribute('crossorigin', '*');
+        s0.parentNode.insertBefore(s1, s0);
+    })();
+</script>
+<!--End of Tawk.to Script-->
