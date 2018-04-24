@@ -594,18 +594,51 @@ namespace Speedbird
     
 
 	[TableName("dbo.Attribute")]
+
+
+
 	[PrimaryKey("AttributeId")]
+
+
+
+
 	[ExplicitColumns]
+
     public partial class Attribute  
     {
+
+
+
 		[Column] public int AttributeId { get; set; }
+
+
+
+
+
 		[Column] public string AttributeText { get; set; }
+
+
+
+
+
 		[Column] public string fatext { get; set; }
+
+
+
+
+
 		[Column] public string Color { get; set; }
+
+
+
 	}
+
     
 
 	[TableName("dbo.BookedCustomer")]
+
+
+
 	[PrimaryKey("BCID")]
 
 
@@ -1720,7 +1753,6 @@ namespace Speedbird
 
 
 
-
 		[Column] public string SupplierNotepad { get; set; }
 
 
@@ -2021,7 +2053,6 @@ namespace Speedbird
 
     
 
-
 	[TableName("dbo.PriceInclusions")]
 
 
@@ -2066,16 +2097,17 @@ namespace Speedbird
 
 
 
-
 	}
-    
 
+    
 
 	[TableName("dbo.Prices")]
 
 
 
 	[PrimaryKey("PriceID")]
+
+
 
 
 	[ExplicitColumns]
@@ -2182,6 +2214,41 @@ namespace Speedbird
 	}
 
     
+
+	[TableName("dbo.ReviewReplies")]
+
+
+
+	[PrimaryKey("ReviewReplyID")]
+
+
+
+
+	[ExplicitColumns]
+
+    public partial class ReviewReply  
+    {
+
+
+
+		[Column] public int ReviewReplyID { get; set; }
+
+
+
+
+
+		[Column] public int? ReviewID { get; set; }
+
+
+
+
+
+		[Column] public string UserID { get; set; }
+
+
+
+
+
 		[Column] public DateTime? ReviewDate { get; set; }
 
 
@@ -2243,15 +2310,37 @@ namespace Speedbird
 	}
 
     
+
 	[TableName("dbo.Supplier")]
+
+
+
 	[PrimaryKey("SupplierID")]
+
+
+
+
 	[ExplicitColumns]
+
     public partial class Supplier  
     {
+
+
+
 		[Column] public int SupplierID { get; set; }
+
+
+
+
+
 		[Column] public string SupplierName { get; set; }
+
+
+
 	}
+
     
+
 	[TableName("dbo.Taxes")]
 
 
