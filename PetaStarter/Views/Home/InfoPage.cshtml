@@ -1,4 +1,5 @@
-﻿<head>
+﻿@model IEnumerable<ReviewDets>
+<head>
     <script src="/Scripts/jquery.masonry.min.js"></script>
     <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -6,6 +7,15 @@
     <link rel="stylesheet" href="/Content/css/blueimp-gallery.min.css"> 
 </head>
 <style>
+    .media-body {
+        zoom: 1.1;
+    }
+    .comment-section{
+        margin-left:40px;
+    }
+    .media{
+        zoom:1.1;
+    }
     /*small change*/
     .carousel {
         width: 100% !important;
@@ -274,7 +284,7 @@
 
     <nav class="breadcrumb ml-5">
         <span class="breadcrumb-item" href="#">&nbsp; &nbsp; </span>
-        <a class="breadcrumb-item" href="@Request.UrlReferrer.AbsoluteUri">Home</a>      
+        <a class="breadcrumb-item" href="@Request.UrlReferrer.AbsoluteUri">Home</a>
         @*<a class="breadcrumb-item" href="Request.Url.AbsoluteUri">@ViewBag.Loc</a>*@
     </nav>
 </div>
@@ -287,6 +297,7 @@
     <br />
     <br />
     <br />
+
     <div class="row">
         @if (ViewBag.ST == ServiceTypeEnum.Accomodation)
         {
@@ -436,7 +447,22 @@
 
         </div>
     </div>
+
 </div>
+<div class="comment-section">
+    <div class="container-fluid">
+        <h2>Comments</h2>
+        @if (ViewBag.checkBooking != null)
+        {
+         using (Html.BeginForm("InfoPage", "Home", FormMethod.Post))
+         {
+        <div class="form-group">
+            <div class="col-md-10">
+                @Html.Hidden("ServiceID", (int)ViewBag.ServiceID)
+                @Html.Hidden("st", (int)ViewBag.ST)
+
+                @Html.TextArea("Comment", new { htmlAttributes = new { @class = "form-control" } })
+                <button class="btn btn-success " style="width:180px;height:50px;float:right" type="submit">Submit</button>
 
 
 <script>
