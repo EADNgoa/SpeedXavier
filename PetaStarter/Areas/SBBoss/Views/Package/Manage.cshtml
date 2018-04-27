@@ -8,8 +8,8 @@
     </div>
     <div class="card-body">
         <h5>&nbsp;</h5>
-
-       
+        @if (ViewBag.PackageId != null)
+        {
             <h1> @ViewBag.PackageName</h1>
             @Html.Hidden("PackageId", (int)ViewBag.PackageId)
             <div class="btn-group-lg" role="group" aria-label="Basic example">
@@ -19,7 +19,11 @@
                 <button id="ValBtn" type="button" class="btn btn-secondary">Validity</button>
             </div>
 
-         
+        }
+        else
+        {
+            ViewBag.PackageId = 0;
+        }
             <hr />
         
 

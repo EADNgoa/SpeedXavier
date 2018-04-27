@@ -442,10 +442,8 @@
     <Content Include="Areas\SBBoss\Views\Accomodation\Index.cshtml" />
     <Content Include="Areas\SBBoss\Views\Accomodation\Manage.cshtml" />
     <Content Include="Areas\SBBoss\Views\Accomodation\FacManage.cshtml" />
-    <Content Include="Areas\SBBoss\Views\Accomodation\Picture.cshtml" />
     <Content Include="Areas\SBBoss\Views\OptionType\Index.cshtml" />
     <Content Include="Areas\SBBoss\Views\OptionType\Manage.cshtml" />
-    <Content Include="Areas\SBBoss\Views\Accomodation\Price.cshtml" />
     <Content Include="Areas\SBBoss\Views\Package\Details.cshtml" />
     <Content Include="Areas\SBBoss\Views\Package\Index.cshtml" />
     <Content Include="Areas\SBBoss\Views\Package\Manage.cshtml" />
@@ -457,7 +455,6 @@
     <Content Include="Areas\SBBoss\Views\Shared\DisplayTemplates\Decimal.cshtml" />
     <Content Include="Areas\SBBoss\Views\CarBike\Index.cshtml" />
     <Content Include="Areas\SBBoss\Views\CarBike\Manage.cshtml" />
-    <Content Include="Areas\SBBoss\Views\CarBike\CarPicture.cshtml" />
     <Content Include="Areas\SBBoss\Views\Package\LangManage.cshtml" />
     <Content Include="Areas\SBBoss\Views\MiceVisa\Mice.cshtml" />
     <Content Include="Areas\SBBoss\Views\MiceVisa\Visa.cshtml" />
@@ -484,6 +481,11 @@
     <Content Include="Content\css\blueimp-gallery.min.css.map" />
     <Content Include="Scripts\blueimp\blueimp-gallery.min.js.map" />
     <Content Include="Scripts\blueimp\jquery.blueimp-gallery.min.js.map" />
+    <Content Include="Areas\SBBoss\Views\Accomodation\Details.cshtml" />
+    <Content Include="Areas\SBBoss\Views\Accomodation\Price.cshtml" />
+    <Content Include="Areas\SBBoss\Views\Accomodation\Picture.cshtml" />
+    <Content Include="Areas\SBBoss\Views\CarBike\Details.cshtml" />
+    <Content Include="Areas\SBBoss\Views\CarBike\CarPicture.cshtml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\i18n\jquery-ui-timepicker-addon-i18n.js" />
     <Content Include="Scripts\i18n\jquery-ui-timepicker-addon-i18n.min.js" />

@@ -1,0 +1,207 @@
+﻿@model Speedbird.Accomodation
+<style>
+
+    #map {
+        height: 350px;
+        width: 100%;
+    }
+</style>
+@using (Html.BeginForm("Manage", "Accomodation", FormMethod.Post, new { id = "detFrm" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    if (Model?.AccomodationID > 0)
+    { @Html.HiddenFor(model => model.AccomodationID) }
+
+<div class="form-row">
+    <div class="input-group col mb-3">
+        <div class="input-group-prepend"><span class="input-group-text">Name</span></div>
+        @Html.EditorFor(model => model.AccomName, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.AccomName, "", new { @class = "text-danger" })
+    </div>
+    <div class="input-group col mb-3">
+        <div class="input-group-prepend"><span class="input-group-text">Coupon Code</span></div>
+        @Html.EditorFor(model => model.CouponCode, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.CouponCode, "", new { @class = "text-danger" })
+    </div>
+</div>
+<div class="form-row">
+    <div class="input-group col mb-3">
+        <div class="input-group-prepend"><span class="input-group-text">Select Location</span></div>
+        <div class="form-control" style="padding:0px !important">
+            <div id="map" width="80%"></div>
+        </div>
+    </div>
+</div>
+<div class="form-row">
+    <div class="input-group col mb-3">
+        <div class="input-group-prepend"><span class="input-group-text">Lattitude</span></div>
+        @Html.EditorFor(model => model.lat, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.lat, "", new { @class = "text-danger" })
+    </div>
+    <div class="input-group col mb-3">
+        <div class="input-group-prepend"><span class="input-group-text">Longtitude</span></div>
+        @Html.EditorFor(model => model.longt, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.longt, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+<div class="form-row">
+    <div class="input-group col mb-3">
+        <div class="input-group-prepend"><span class="input-group-text">Description</span></div>
+        <div class="form-control" style="padding:0px !important">@Html.TextAreaFor(model => model.Description, 3, 43, htmlAttributes: new { @class = "form-control" })</div>
+        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+    </div>
+</div>
+<div class="form-row">
+    <div class="input-group col mb-3">
+        <div class="input-group-prepend"><span class="input-group-text">Stops at</span></div>
+        <select id="GeoTreeID" name="GeoTreeID" style="width:80%;" class="GeoSelect">
+            @foreach (var o in ViewBag.GeoId)
+            {
+                <option value="@o.Value">@o.Text</option>
+            }
+        </select>
+    </div>
+    @if (Model?.AccomodationID>0)
+    {
+    <div class="input-group col mb-3">
+        <div class="input-group-prepend"><span class="input-group-text">Facilities</span></div>
+        <select id="FacID" name="FacID" class="form-control sel2Lkup" data-setu="FacSave" multiple="multiple">
+            @foreach (var o in ViewBag.FaciityID)
+            {
+                <option value="@o.Value" selected="selected">  @o.Text</option>}
+        </select>
+    </div>
+    }
+</div>
+
+
+
+<div class="form-group">
+    <div class="col-md-offset-2 col-md-10">
+        <input type="submit" value="Save" class="btn btn-primary" />
+    </div>
+</div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+<script>
+    var markersArray = [];
+
+    function initMap() {
+        var myLatLng = { lat: parseFloat($('#lat').val()), lng: parseFloat($('#longt').val()) };
+        var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 10,
+            center: myLatLng
+        });
+
+
+        var marker = new google.maps.Marker({
+            position: myLatLng,
+            map: map,
+            title: 'Set Location!'
+        });
+
+        markersArray.push(marker);
+
+        map.addListener('click', function (e) {
+            placeMarkerAndPanTo(e.latLng, map);
+        });
+
+    }
+
+
+    function clearOverlays() {
+        for (var i = 0; i < markersArray.length; i++) {
+            markersArray[i].setMap(null);
+        }
+        markersArray.length = 0;
+    }
+
+    function placeMarkerAndPanTo(latLng, map) {
+        clearOverlays();
+
+        var marker = new google.maps.Marker({
+            position: latLng,
+            map: map
+        });
+        markersArray.push(marker);
+        map.panTo(latLng);
+        $('#longt').val(latLng.lng);
+        $('#lat').val(latLng.lat);
+    }
+
+
+
+
+
+</script>
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAC6Yyjmk9tLMPEe6ID2rmzwcYPCHKYrZU&callback=initMap">
+</script>
+
+<script>
+    $(function () {
+
+
+
+
+
+        $("#FacID").select2({
+            placeholder: "Type 3 letters to choose",
+            minimumInputLength: 3,
+
+            ajax: {
+                url: '@(Url.Action("GetFac", "Accomodation"))',
+                dataType: 'json',
+                quietMillis: 250,
+                results: function (data, page) {
+                    return { results: data.data };
+                }
+            }
+        });
+
+
+        //Save Select2 data
+        $(".sel2Lkup").on('change', function (e) {
+            $.post('/SBBoss/Accomodation/' + $(this).data('setu'), { AccomodationID: $('#AccomodationID').val(), FacIDs: $(this).val() })
+        });
+    });
+
+
+        //GeoSelector
+        $(document).ready(function () {
+            function formatState(state) {
+                if (!state.id) {
+                    return state.text;
+                }
+                var parts = state.text.split(",");
+                return parts[0];
+
+            };
+
+
+
+            $(".GeoSelect").select2({
+                placeholder: "Type 3 letters to choose",
+                templateSelection: formatState,
+
+                ajax: {
+                    url: '@(Url.Action("GetLocations", "GeoTree"))',
+                    dataType: 'json',
+                    quietMillis: 250,
+                    results: function (data, page) {
+                        return { results: data.data };
+                    }
+                }
+            });
+
+
+        });
+
+
+</script>
