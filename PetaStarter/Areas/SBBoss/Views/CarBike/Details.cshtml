@@ -1,0 +1,129 @@
+﻿@model Speedbird.CarBike
+<style>
+
+    #map {
+        height: 350px;
+        width: 100%;
+    }
+</style>
+@using (Html.BeginForm("Manage", "CarBike", FormMethod.Post, new { id = "detFrm" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    if (Model?.CarBikeID > 0)
+    { @Html.HiddenFor(model => model.CarBikeID) }
+
+<div class="form-row">
+    <div class="input-group col mb-3">
+        <div class="input-group-prepend"><span class="input-group-text">Name</span></div>
+        @Html.EditorFor(model => model.CarBikeName, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.CarBikeName, "", new { @class = "text-danger" })
+    </div>
+    <div class="input-group col mb-3">
+        <div class="input-group-prepend"><span class="input-group-text">No of Pax</span></div>
+        @Html.EditorFor(model => model.NoPax, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.NoPax, "", new { @class = "text-danger" })
+    </div>
+</div>
+<div class="form-row">
+    <div class="input-group col mb-3">
+        <div class="input-group-prepend"><span class="input-group-text">Description</span></div>
+        <div class="form-control" style="padding:0px !important">@Html.TextAreaFor(model => model.Description, 3, 43, htmlAttributes: new { @class = "form-control" })</div>
+        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+    </div>
+</div>
+<div class="form-row">
+    <div class="input-group col mb-3">
+        <div class="input-group-prepend"><span class="input-group-text">No of Small Bags</span></div>
+        @Html.EditorFor(model => model.NoSmallBags, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.NoSmallBags, "", new { @class = "text-danger" })
+    </div>
+    <div class="input-group col mb-3">
+        <div class="input-group-prepend"><span class="input-group-text">No of Large Bags</span></div>
+        @Html.EditorFor(model => model.NoLargeBags, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.NoLargeBags, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+<div class="form-row">
+    <div class="input-group col mb-3">
+        <div class="input-group-prepend"><span class="input-group-text">Has Ac ?</span></div>
+        @Html.EditorFor(model => model.HasAc, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.HasAc, "", new { @class = "text-danger" })
+    </div>
+    <div class="input-group col mb-3">
+        <div class="input-group-prepend"><span class="input-group-text">Has Carrier</span></div>
+        @Html.EditorFor(model => model.HasCarrier, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.HasCarrier, "", new { @class = "text-danger" })
+    </div>
+</div>
+<div class="form-row">
+    <div class="input-group col mb-3">
+        <div class="input-group-prepend"><span class="input-group-text">Include Helmet ?</span></div>
+        @Html.EditorFor(model => model.InclHelmet, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.InclHelmet, "", new { @class = "text-danger" })
+    </div>
+    <div class="input-group col mb-3">
+        <div class="input-group-prepend"><span class="input-group-text">Coupon Code</span></div>
+        @Html.EditorFor(model => model.CouponCode, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.CouponCode, "", new { @class = "text-danger" })
+    </div>
+</div>
+<div class="form-row">
+    <div class="input-group col mb-3">
+        <div class="input-group-prepend"><span class="input-group-text">Stops at</span></div>
+        <select id="GeoTreeID" name="GeoTreeID" style="width:80%;" class="GeoSelect">
+            @foreach (var o in ViewBag.GeoId)
+            {
+                <option value="@o.Value">@o.Text</option>
+            }
+        </select>
+    </div>
+
+</div>
+
+
+
+<div class="form-group">
+    <div class="col-md-offset-2 col-md-10">
+        <input type="submit" value="Save" class="btn btn-primary" />
+    </div>
+</div>
+}
+
+
+<script>
+
+         //GeoSelector
+        $(document).ready(function () {
+            function formatState(state) {
+                if (!state.id) {
+                    return state.text;
+                }
+                var parts = state.text.split(",");
+                return parts[0];
+
+            };
+
+
+
+            $(".GeoSelect").select2({
+                placeholder: "Type 3 letters to choose",
+                templateSelection: formatState,
+
+                ajax: {
+                    url: '@(Url.Action("GetLocations", "GeoTree"))',
+                    dataType: 'json',
+                    quietMillis: 250,
+                    results: function (data, page) {
+                        return { results: data.data };
+                    }
+                }
+            });
+
+
+        });
+
+
+</script>

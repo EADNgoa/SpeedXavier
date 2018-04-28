@@ -1,124 +1,46 @@
-﻿@model Speedbird.Accomodation
+﻿
 
-@{
-    ViewBag.Title = "Manage Accomodation";
-}
-<style>
 
-    #map {
-        height: 350px;
-        width: 80%;
-    }
-
-</style>
 <div class="card border rounded DropShadow">
     <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
         <span class="h3">@ViewBag.Title</span>
-        <a href="@Url.Action("Index","Accomodation")"><i class="fas fa-undo-alt fa-inverse h3 float-right DropShadow"></i></a>
+        <a href="@Url.Action("Index","Accomodation",new { sid= ViewBag.sid})"><i class="fas fa-undo-alt fa-inverse h3 float-right DropShadow"></i></a>
     </div>
     <div class="card-body">
         <h5>&nbsp;</h5>
 
-        @using (Html.BeginForm())
+        @if (@ViewBag.AccomName != null)
         {
-            @Html.AntiForgeryToken()
-
-        <div class="form-horizontal">
-
-            <hr />
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            @if (Model?.AccomodationID > 0)
-    {
-        @Html.HiddenFor(model => model.AccomodationID)
-
-        <nav class="navbar navbar-expand-sm bg-light" role="navigation">
-            <a class="navbar-brand" href="#">Details For this Accomodation: </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="~/SBBoss/Accomodation/FacManage/@Model.AccomodationID">Facility</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="~/SBBoss/Accomodation/Picture/@Model.AccomodationID">Images</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="~/SBBoss/Accomodation/Price/@Model.AccomodationID">Price</a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
+        <h1> @ViewBag.PackageName</h1>
+        @Html.Hidden("AccomodationID", (int)ViewBag.AccomodationID)
+             <div class="btn-group-lg" role="group" aria-label="Basic example">
+            <button id="DetailsBtn" type="button" class="btn btn-secondary">Details</button>
+            <button id="PriceBtn" type="button" class="btn btn-secondary">Price</button>
+            <button id="ImgBtn" type="button" class="btn btn-secondary">Images</button>
+        </div>
+        }
+        else
+        {
+            ViewBag.AccomodationID = 0;
+        }
+       
 
 
         <hr />
-}
 
-            <div class="form-group">
-                @Html.LabelFor(model => model.AccomName, "Accomodation Name", htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.AccomName, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.AccomName, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(model => model.GeoTreeID, "Location", htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    <select id="GeoTreeID" name="GeoTreeID" style="width:280px;" class="GeoSelect">
-                        @foreach (var o in ViewBag.GeoId)
-                {
-                    <option value="@o.Value">@o.Text</option>
-        }
-                    </select>
-                    @Html.ValidationMessageFor(model => model.GeoTreeID, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(model => model.Description, "Description", htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.TextAreaFor(model => model.Description, 3, 43, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="control-label col-md-2">Click to set Location</label>
-                <div class="col-md-10">
-                    <div id="map" width="80%"></div>
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(model => model.lat, "Latitude", htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.lat, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.lat, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(model => model.longt, "Longitude", htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.longt, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.longt, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(model => model.CouponCode, "Coupon Code", htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.CouponCode, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.CouponCode, "", new { @class = "text-danger" })
-                </div>
-            </div>
 
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Save" class="btn btn-primary" />
-                </div>
-            </div>
+
+        <div id="TabContent">
+            @if (ViewBag.mode == 1)
+            {@Html.Action("FetchDetails", "Accomodation", new { id = (int)ViewBag.AccomodationID })}
+
+            @if (ViewBag.mode == 2)
+            {@Html.Action("Price", "Accomodation", new { id = (int)ViewBag.AccomodationID, EID = (int)ViewBag.EID })}
+
+            @if (ViewBag.mode == 3)
+            {@Html.Action("Picture", "Accomodation", new { id = (int)ViewBag.AccomodationID })}
         </div>
-        }
-
-
+        <hr />
     </div>
 </div>
 
@@ -128,56 +50,53 @@
 }
 
 <script>
-    var markersArray = [];
+    $(function () {
+        $('#DetailsBtn').click(function () {
+            $('#TabContent').load(
+                '@Url.Action("FetchDetails", new { id = (int)ViewBag.AccomodationID})'
+            );
+        });
+        $('#PriceBtn').click(function () {
+            var detFrm = $('#detFrm');
 
-    function initMap() {
-        var myLatLng = { lat: parseFloat($('#lat').val()), lng: parseFloat($('#longt').val()) };        
-        var map = new google.maps.Map(document.getElementById('map'), {
-            zoom: 10,
-            center: myLatLng
+            //Save the details form if it exists else just move on.
+
+                $.ajax({
+                    type: 'post',
+                    data: $(detFrm).serialize()
+                }).done(function () {
+                    $('#TabContent').load(
+                        '@Url.Action("Price", new { id = (int)ViewBag.AccomodationID })'
+                    );
+
+                });
+
+         
+        });
+
+        $('#ImgBtn').click(function () {
+            var detFrm = $('#detFrm');
+            if (typeof (detFrm[0]) == 'object') {
+
+                $.ajax({
+                    url: detFrm.action,
+                    type: 'post',
+                    data: $(detFrm).serialize()
+                }).done(function () {
+                    $('#TabContent').load(
+                        '@Url.Action("Picture", new { id = (int)ViewBag.AccomodationID })'
+                    );
+
+                });
+
+            } else {
+                $('#TabContent').load(
+                    '@Url.Action("Picture", new { id = (int)ViewBag.AccomodationID })'
+                    );
+
+            }
         });
 
 
-        var marker = new google.maps.Marker({
-            position: myLatLng,
-            map: map,
-            title: 'Set Location!'
-        });
-
-        markersArray.push(marker);
-
-        map.addListener('click', function (e) {
-            placeMarkerAndPanTo(e.latLng, map);
-        });
-
-    }
-
-
-    function clearOverlays() {
-        for (var i = 0; i < markersArray.length; i++) {
-            markersArray[i].setMap(null);
-        }
-        markersArray.length = 0;
-    }
-
-    function placeMarkerAndPanTo(latLng, map) {
-        clearOverlays();
-
-        var marker = new google.maps.Marker({
-            position: latLng,
-            map: map
-        });
-        markersArray.push(marker);
-        map.panTo(latLng);
-        $('#longt').val(latLng.lng);
-        $('#lat').val(latLng.lat);
-    }
-
-
-
-
-
-</script>
-<script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAC6Yyjmk9tLMPEe6ID2rmzwcYPCHKYrZU&callback=initMap">
+    });
 </script>

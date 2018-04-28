@@ -6,33 +6,6 @@
 
 
 
-<div class="card border rounded DropShadow">
-    <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
-        <span class="h5">Accomomdation Details</span>
-        <a href="@Url.Action("Manage","Accomodation",new {id=ViewBag.Accom.AccomodationID })"><i class="fas fa-undo-alt fa-inverse h3 float-right DropShadow"></i></a>
-
-    </div>
-    <div class="card-body">
-        <h5 class="card-title">&nbsp;</h5>
-        <table class="table section-to-print " width="70%">
-            <tr>
-                <td>Accomodation Name</td>
-                <td>@ViewBag.Accom.AccomName</td>
-            </tr>
-
-            <tr>
-                <td>Latitude</td>
-                <td>@ViewBag.Accom.lat</td>
-            </tr>
-            <tr>
-                <td>Longitude</td>
-                <td>@ViewBag.Accom.longt</td>
-            </tr>
-       
-        </table>
-    </div>
-</div>
-
 
 <div class="card border rounded DropShadow">
     <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
@@ -47,47 +20,36 @@
 
             <div class="form-horizontal ">
 
-                <hr />
+                
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-                @Html.Hidden("ServiceID", (int)ViewBag.Accom.AccomodationID)
-                @if (Model?.PriceID > 0)
-                {
-                    @Html.HiddenFor(model => model.PriceID)
-                }
-            <div class="form-group">
-                @Html.Label("Option Type", htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.DropDownList("OptionTypeID", null, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.OptionTypeID, "", new { @class = "text-danger" })
+                @Html.Hidden("ServiceID", (int)ViewBag.pack.AccomodationID)
+                @Html.Hidden("sid", (int)ViewBag.sid)
+
+                @if(Model?.PriceID!=null)
+                    { @Html.Hidden("PriceID", (int)Model.PriceID)}
+
+                
+                <div class="form-row">
+                    <div class="input-group col mb-3">
+                        <div class="input-group-prepend"><span class="input-group-text">Option Type</span></div>
+                        @Html.DropDownList("OptionTypeID", null, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.OptionTypeID, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="input-group col mb-3">
+                        <div class="input-group-prepend"><span class="input-group-text">With Effect From</span></div>
+                        @Html.EditorFor(model => model.WEF, new { htmlAttributes = new { @type = "date", @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.WEF, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="input-group col mb-3">
+                        <div class="input-group-prepend"><span class="input-group-text">Price</span></div>
+                        @Html.EditorFor(model => model._Price, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model._Price, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="input-group col mb-3">                        
+                        <input type="submit" value="Save" class="btn btn-primary" />                        
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(model => model.WEF, "With Effect From", htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.WEF, new { htmlAttributes = new { @type = "date", @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.WEF, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(model => model._Price, "Weekday Price", htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model._Price, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model._Price, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(model => model.WeekendPrice, "Weekend Price", htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.WeekendPrice, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.WeekendPrice, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Save" class="btn btn-primary" />
-                </div>
-            </div>
             </div>
     }
         </div>
@@ -95,12 +57,11 @@
         
 
         <hr />
-        <table class="table section-to-print index-css" width="100%">
+        <table class="table table-sm section-to-print index-css" width="100%">
             <tr>
                 <th>Option Type</th>
                 <th>With Effect From</th>
-                <th>Weekday Price</th>
-                <th>Weekend Price</th>
+                <th>Price</th>
                 <th class="section-to-Not-print"></th>
             </tr>
         @foreach(var item in(IEnumerable<Speedbird.PriceDets>) ViewBag.Price)
@@ -110,19 +71,13 @@
                     @item.OptionTypeName
                 </td>
                 <td>
-                    @($"{item.WEF:dd/MMM/yyyy}")
+                    @($"{item.WEF:dd/MMM/yyyy}")                    
                 </td>
                 <td>
                     @item.Price
                 </td>
                 <td>
-                    @item.WeekendPrice
-                </td>
-                <td>
-                    <a href="@Url.Action("Price","Accomodation",new {id= ViewBag.Accom.AccomodationID , EID=item.PriceID })"><i title="Edit" class="fas fa-edit fa-inverse h3 float-right DropShadow"></i></a>
-                </td>
-                <td>
-                    <a href="@Url.Action("PriceInclusions","Accomodation",new {id=item.PriceID })"><i title="Inclusions" class="fas fa-plus-circle fa-inverse h3 float-right DropShadow"></i></a>
+                    <a href="@Url.Action("Manage","Accomodation",new {id = (int?)ViewBag.PackageId, sid = (int?)ViewBag.sid, mode=2, EID=item.PriceID })">Edit</a>
                 </td>
             </tr>
         }

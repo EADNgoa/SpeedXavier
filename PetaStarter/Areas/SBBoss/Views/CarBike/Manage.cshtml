@@ -1,138 +1,46 @@
-﻿@model Speedbird.CarBike
+﻿
 
-@{
-    ViewBag.Title = "Manage Car/Bike";
-}
 
 <div class="card border rounded DropShadow">
     <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
         <span class="h3">@ViewBag.Title</span>
-        <a href="@Url.Action("Index","CarBike")"><i class="fas fa-undo-alt fa-inverse h3 float-right DropShadow"></i></a>
+        <a href="@Url.Action("Index","CarBike",new { sid= ViewBag.sid})"><i class="fas fa-undo-alt fa-inverse h3 float-right DropShadow"></i></a>
     </div>
     <div class="card-body">
         <h5>&nbsp;</h5>
 
-        @using (Html.BeginForm())
+        @if (@ViewBag.CarBikeName != null)
         {
-            @Html.AntiForgeryToken()
+        <h1> @ViewBag.CarBikeName</h1>
+        @Html.Hidden("CarBikeID", (int)ViewBag.CarBikeID)
+             <div class="btn-group-lg" role="group" aria-label="Basic example">
+            <button id="DetailsBtn" type="button" class="btn btn-secondary">Details</button>
+            <button id="PriceBtn" type="button" class="btn btn-secondary">Price</button>
+            <button id="ImgBtn" type="button" class="btn btn-secondary">Images</button>
+        </div>
+        }
+        else
+        {
+            ViewBag.CarBikeID = 0;
+        }
+       
 
-        <div class="form-horizontal">
-
-            <hr />
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            @if (Model?.CarBikeID > 0)
-    {
-        @Html.HiddenFor(model => model.CarBikeID)
-
-
-        <nav class="navbar navbar-expand-sm bg-light" role="navigation">
-            <a class="navbar-brand" href="#">Details For this Vehicle: </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="~/SBBoss/CarBike/CarPicture/@Model.CarBikeID">Images</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="~/SBBoss/CarBike/Price/@Model.CarBikeID">Price</a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
 
         <hr />
 
-}
 
-            <div class="form-group">
-                @Html.LabelFor(model => model.CarBikeName, "Car/Bike Name", htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.CarBikeName, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.CarBikeName, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(model => model.GeoTreeId, "Location", htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    <select id="GeoTreeID" name="GeoTreeID" style="width:280px;" class="GeoSelect">
-                        @foreach (var o in ViewBag.GeoId)
-                {
-                    <option value="@o.Value">@o.Text</option>
-        }
-                    </select>
-                    @Html.ValidationMessageFor(model => model.GeoTreeId, "", new { @class = "text-danger" })
-                </div>
-            </div>
 
-            <div class="form-group">
-                @Html.LabelFor(model => model.Description, "Description", htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.TextAreaFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
-                </div>
-            </div>
+        <div id="TabContent">
+            @if (ViewBag.mode == 1)
+            {@Html.Action("FetchDetails", "CarBike", new { id = (int)ViewBag.CarBikeID })}
 
-            <div class="form-group">
-                @Html.LabelFor(model => model.NoPax, "No Pax", htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.NoPax, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.NoPax, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(model => model.NoSmallBags, "No Of Small Bags", htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.NoSmallBags, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.NoSmallBags, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(model => model.NoLargeBags, "No Of Large Bags", htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.NoLargeBags, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.NoLargeBags, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(model => model.HasAc, "Ac", htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.HasAc, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.HasAc, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(model => model.HasCarrier, "Carrier", htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.HasCarrier, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.HasCarrier, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(model => model.InclHelmet, "Helmet", htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.InclHelmet, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.InclHelmet, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(model => model.CouponCode, "Coupon Code", htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.CouponCode, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.CouponCode, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Save" class="btn btn-primary" />
-                </div>
-            </div>
+            @if (ViewBag.mode == 2)
+            {@Html.Action("Price", "CarBike", new { id = (int)ViewBag.CarBikeID, EID = (int)ViewBag.EID })}
+
+            @if (ViewBag.mode == 3)
+            {@Html.Action("CarPicture", "CarBike", new { id = (int)ViewBag.CarBikeID })}
         </div>
-        }
-        
-
+        <hr />
     </div>
 </div>
 
@@ -140,3 +48,55 @@
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }
+
+<script>
+    $(function () {
+        $('#DetailsBtn').click(function () {
+            $('#TabContent').load(
+                '@Url.Action("FetchDetails", new { id = (int)ViewBag.CarBikeID })'
+            );
+        });
+        $('#PriceBtn').click(function () {
+            var detFrm = $('#detFrm');
+
+            //Save the details form if it exists else just move on.
+
+                $.ajax({
+                    type: 'post',
+                    data: $(detFrm).serialize()
+                }).done(function () {
+                    $('#TabContent').load(
+                        '@Url.Action("Price", new { id = (int)ViewBag.CarBikeID })'
+                    );
+
+                });
+
+         
+        });
+
+        $('#ImgBtn').click(function () {
+            var detFrm = $('#detFrm');
+            if (typeof (detFrm[0]) == 'object') {
+
+                $.ajax({
+                    url: detFrm.action,
+                    type: 'post',
+                    data: $(detFrm).serialize()
+                }).done(function () {
+                    $('#TabContent').load(
+                        '@Url.Action("CarPicture", new { id = (int)ViewBag.CarBikeID })'
+                    );
+
+                });
+
+            } else {
+                $('#TabContent').load(
+                    '@Url.Action("CarPicture", new { id = (int)ViewBag.CarBikeID })'
+                    );
+
+            }
+        });
+
+
+    });
+</script>

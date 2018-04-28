@@ -1,128 +1,119 @@
-﻿@model PagedList.IPagedList<Speedbird.CarBikeDets>
-
-@using PagedList.Mvc;
-@{
-    ViewBag.Title = "Cars and Bikes";
-}
-
-
-<div class="card border rounded DropShadow">
-    <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
-        <span class="h5">Search</span>
-    </div>
-    <div class="card-body">
-        <h5 class="card-title">&nbsp;</h5>
-        @using (Html.BeginForm("Index", "CarBike", FormMethod.Get))
-        {
-            <div class="row d-print-none">
-                <table>
-                    <tr style="text-align:center">
-                        <td>&nbsp;Car/Bike Name:</td>
-                        <td> @Html.TextBox("AN", ViewBag.CurrentFilter as string, new { @class = "form-control" })</td>
-                        <td><input type="submit" value="Search" class="btn btn-primary" /></td>
-                    </tr>
-                </table>
-
-            </div>
-        }
-    </div>
-</div>
-
+﻿//For datatables
+<link rel="stylesheet" type="text/css" href="/Content/datatables.min.css" />
+<script type="text/javascript" src="/Scripts/datatables.min.js"></script>
+<style>
+    .dataTables_wrapper .dataTables_filter {
+        float: right;
+        text-align: right;
+        visibility: hidden;
+    }
+</style>
 
 <div class="card border rounded DropShadow">
     <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
-        <span class="h3">@ViewBag.Title</span>
+        <span class="h3">Car / Bike</span>
         <a href="@Url.Action("Manage","CarBike")"><i class="fas fa-plus-circle fa-inverse h3 float-right DropShadow"></i></a>
     </div>
     <div class="card-body">
         <h5>&nbsp;</h5>
-        <table class="table">
-            <tr>
-                <th>Sr No</th>
-                <th>
-                    Car/Bike Name
-                </th>
-                <th>
-                    Location
-                </th>
-                <th>
-                    Description
-                </th>
-                <th>
-                    No Pax
-                </th>
-                <th>
-                    No Of Small Bags
-                </th>
-                <th>
-                    No Of Large Bags
-                </th>
-                <th>
-                    Ac
-                </th>
-                <th>
-                    Carrier
-                </th>
-                <th>
-                    Helmet
-                </th>
-                <th>
-                    Coupon Code
-                </th>
-                <th></th>
-            </tr>
-            @{int i = 1;}
-            @foreach (var item in Model)
-            {
-            <tr>
-                <td>
-                    @i
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CarBikeName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.GeoTreeName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Description)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.NoPax)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.NoSmallBags)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.NoLargeBags)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.HasAc)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.HasCarrier)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.InclHelmet)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CouponCode)
-                </td>
-                <td>
-                    <a href="@Url.Action("Manage","CarBike", new {id = item.CarBikeID })"><i title="Edit" class="fas fa-edit fa-inverse h3 float-right DropShadow"></i></a>
-                </td>
-            </tr>
-                i++;
-            }
 
+        <table id="CarTbl" class="table table-sm table-striped">
+            <thead class="thead-light">
+                <tr role="row">
+                    <th><input type="text" class="form-control" placeholder="N#"></th>
+                    <th><input type="text" class="form-control" placeholder="Filter Name"></th>
+                    <th><input type="text" class="form-control" placeholder="Filter Location"></th>
+                    <th></th>
+                    <th><input type="text" class="form-control" placeholder="Filter No Pax"></th>
+                    <th><input type="text" class="form-control" placeholder="Filter No Small Bags"></th>
+                    <th><input type="text" class="form-control" placeholder="Filter No Large Bags"></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+
+                    <th width="5%"></th>
+                </tr>
+                <tr role="row">
+                    <th scope="col" width="10px">No.</th>
+                    <th scope="col">Name</th>
+                    <th scope="col" class="no-sort">Location</th>
+                    <th scope="col">Description</th>
+                    <th scope="col" class="no-sort">No of Pax</th>
+                    <th scope="col">No Small Bags</th>
+                    <th scope="col">No Large Bags</th>
+                    <th scope="col">Has Ac</th>
+                    <th scope="col">Has Carrier</th>
+                    <th scope="col">Incl Helmet</th>
+
+                    <th width="5%"></th>
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
         </table>
-        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
-
-        @Html.PagedListPager(Model, page => Url.Action("Index",
-                       new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
 
     </div>
 </div>
 
 
 
+<script>
+    $(function () {
+        var oTable = $('#CarTbl').DataTable({
+            serverSide: true,
+            searching: true,
+            ajax: {
+                "type": "POST",
+                "url": '@Url.Action("GetCarBikeList")',
+                "contentType": 'application/json; charset=utf-8',
+                'data': function (data) {
+                    return data = JSON.stringify(data);
+                }
+            },
+            processing: true,
+            paging: true,
+            pagingType: "full_numbers",
+            deferRender: true,
+            columns: [
+                { data: "CarBikeID" },
+                { data: "CarBikeName" },
+                { data: "GeoName" },
+                { data: "Description" },
+                { data: "NoPax" },
+                { data: "NoSmallBags" },
+                { data: "NoLargeBags" },
+                { data: "HasAc" },
+                { data: "HasCarrier" },
+                { data: "InclHelmet" },
+
+
+
+            ],
+            columnDefs: [{
+                'targets': 10,
+                'searchable': false,
+                'orderable': false,
+                'bSortable': false,
+                'render': function (data, type, full, meta) {
+                    return '<a href="/SBBoss/CarBike/manage/' + full.CarBikeID +'"><i class="fas fa-edit fa-inverse h3 float-right DropShadow"></i></a> &nbsp;';
+                }
+            },
+            {
+                targets: 'no-sort',
+                orderable: false
+            }]
+        });
+
+
+
+        $("#CarTbl thead th input[type=text]").on('change', function () {
+            oTable.column($(this).parent().index() + ':visible')
+                .search(this.value)
+                .draw();
+        });
+
+    })
+
+
+</script>

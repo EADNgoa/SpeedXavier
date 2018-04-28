@@ -1,5 +1,6 @@
 ﻿using Speedbird.Controllers;
 using System;
+using System.Collections.Generic;
 //using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -7,42 +8,243 @@ using System.Linq;
 using System.Net;
 //using System.Web;
 using System.Web.Mvc;
-
+using static PetaStarter.Areas.SBBoss.Models.DataTablesModels;
 
 namespace Speedbird.Areas.SBBoss.Controllers
 {
     public class AccomodationController : EAController
     {
-        public ActionResult Index(int? page ,string AN )
+        public ActionResult Index(int? page, string AN)
         {
-            if (AN?.Length > 0) page = 1;
-            return View("Index", base.BaseIndex<Accomodation>(page, "AccomodationID, AccomName,substring(Description,1,80) as Description, lat,longt,CouponCode ", "Accomodation Where AccomName like '%" + AN + "%'"));
+
+           
+
+         ViewBag.Title = "Accomodation"; 
+        
+
+            return View();
         }
 
-
-
-        public ActionResult Manage(int? id)
+        [HttpPost]
+        public JsonResult GetAccomList(DTParameters parameters)
         {
-            var newAcc = base.BaseCreateEdit<Accomodation>(id, "AccomodationID");
-            if (!id.HasValue) //Create mode
+            var columnSearch = parameters.Columns.Select(s => s.Search.Value).Take(AccomColumns.Count()).ToList();
+
+            //XMLPath uses nested queries so to avoid that we construct these 4 filters ourselves
+            string geos = "";
+            string fac = "";
+
+            if (columnSearch[2]?.Length > 0) { geos = columnSearch[2]; columnSearch[2] = null; }
+
+            if (columnSearch[4]?.Length > 0) { fac = columnSearch[4]; columnSearch[4] = null; }
+
+            var sql = new PetaPoco.Sql($"Select distinct a.*,Substring(Description,1,100) as Description from Accomodation a");
+            var fromsql = new PetaPoco.Sql();
+            var wheresql = new PetaPoco.Sql("where a.AccomodationID >0 ");
+
+            if (geos.Length > 0)
             {
-                newAcc = new Accomodation();
-                newAcc.lat = "15.498626410761135";
-                newAcc.longt = "73.82881432771683";
+                fromsql.Append(", Geotree g");
+                wheresql.Append($"and  g.GeoTreeID=a.GeoTreeID and geoname like '%{geos}%'");
             }
-            ViewBag.GeoId = db.Query<GeoTree>("Select * from GeoTree where GeoTreeId=@0",newAcc.GeoTreeID??0).Select(sl => new SelectListItem { Text = sl.GeoName, Value = sl.GeoTreeID.ToString() });
-            return View(newAcc);
+            if (fac.Length > 0)
+            {
+                fromsql.Append(", Facility f,Facility_Accomodation fa");
+                wheresql.Append($" and f.FacilityID=fa.FacilityID and a.AccomodationID = fa.AccomodationID and FacilityName like '%{fac}%'");
+            }
+
+            wheresql.Append($"{GetWhereWithOrClauseFromColumns(AccomColumns, columnSearch)}");
+            sql.Append(fromsql);
+            sql.Append(wheresql);
+
+            try
+            {
+                var res = db.Query<AccomodationDets>(sql).Skip(parameters.Start).Take(parameters.Length).ToList();
+
+                res.ForEach(r =>
+                {
+                    r.GeoName = String.Join(", ", db.Query<string>("Select GeoName from GeoTree where GeoTreeID=@0", r.GeoTreeID));
+                    r.FacilityName= String.Join(", ", db.Query<string>("Select FacilityName from Facility f, Facility_Accomodation fa where f.FacilityID=fa.FacilityID and fa.AccomodationID=@0", r.AccomodationID));
+                });
+
+
+                var dataTableResult = new DTResult<AccomodationDets>
+                {
+                    draw = parameters.Draw,
+                    data = res,
+                    recordsFiltered = 10,
+                    recordsTotal = res.Count()
+                };
+                return Json(dataTableResult, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
 
-  
+        private string GetWhereWithOrClauseFromColumns(string[] columnDefs, List<string> searchValues)
+        {
+            try
+            {
+                var where = " ";
+                var subQuery = "";
+                for (int i = 0; i < searchValues.Count; i++)
+                {
+                    if (searchValues[i] != null)
+                    {
+                        if (columnDefs[i].IndexOf("Date") > -1)
+                        {
+                            //Date search
+                            subQuery += columnDefs[i] + " = '%" + DateTime.Parse(searchValues[i]).ToString("yyyy-MM-dd") + "'" + " and ";
+                        }
+                        else
+                        {
+                            //free text
+                            subQuery += columnDefs[i] + " like '%" + searchValues[i].Replace("'", "''") + "%'" + " and ";
+                        }
+                        if (i == searchValues.Count - 1)
+                        {
+                            subQuery = subQuery.Remove(subQuery.LastIndexOf("and"), 2).Insert(subQuery.LastIndexOf("and"), "");
+                        }
+                    }
+                }
+                if (subQuery.Trim() != "")
+                {
+                    where += " and (" + subQuery + ")";
+                }
+
+                if (where.LastIndexOf("and )") > 0)
+                    where = where.Replace("and )", ")");
+                return where;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
+        private string[] AccomColumns => new string[]
+        {
+            "AccomodationID",
+            "AccomName",
+            "GeoName",
+            "Description",
+            "FacilityName",
+            "Lat",
+            "longt"
+        
+           
+        };
+
+
+
+
+
+        public ActionResult Manage(int? id, int? sid, int mode = 1, int EID = 0) //Mode 1=Details,2=Prices,3=images,4=validity
+        {
+            ViewBag.sid = sid;
+            ViewBag.mode = mode;
+            ViewBag.EID = EID;          
+            ViewBag.AccomName = db.ExecuteScalar<string>("Select AccomName from Accomodation where AccomodationID=@0", id);
+            ViewBag.AccomodationID = id;
+            return View();
+        }
+
+        public ActionResult FetchDetails(int? id)
+        {
+            var accom = base.BaseCreateEdit<Accomodation>(id, "AccomodationID");
+            ViewBag.GeoId = db.Query<GeoTree>("Select * from GeoTree where GeoTreeId in (Select GeoTreeId from Package_GeoTree where PackageId=@0)", accom?.AccomodationID ?? 0).Select(sl => new SelectListItem { Text = sl.GeoName, Value = sl.GeoTreeID.ToString(), Selected = true });
+            ViewBag.FaciityID = db.Query<Facility>("Select FacilityID, FacilityName from Facility where FacilityID in (Select FacilityID from Facility_Accomodation where FacilityID=@0)", accom?.AccomodationID ?? 0).Select(sl => new SelectListItem { Text = sl.FacilityName, Value = sl.FacilityID.ToString(), Selected = true });
+           
+            return PartialView("Details", accom);
+        }
+       
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Manage([Bind(Include = "AccomodationID,AccomName,Description,GeoTreeID,lat,longt,CouponCode")] Accomodation item)
-        {            
-            return base.BaseSave<Accomodation>(item, item.AccomodationID > 0);
+        public bool Manage([Bind(Include = "AccomodationID,AccomName,Description,GeoTreeID,Lat,Longt,CouponCode")] Accomodation item)
+        {
+            using (var transaction = db.GetTransaction())
+            {
+                if (ModelState.IsValid)
+                {
+                    var r = (item.AccomodationID > 0) ? db.Update(item) : db.Insert(item);
+                    transaction.Complete();
+                    return true;
+                }
+                else
+                {
+                    transaction.Dispose();
+                    return false;
+
+                }
+            }
+
         }
 
-        public ActionResult FacManage(int? id)
+        public ActionResult Price(int? id, int? EID)
+        {
+            ViewBag.PackageId = id;
+            ViewBag.sid = ServiceTypeEnum.Accomodation;
+            ViewBag.Pack = db.FirstOrDefault<Accomodation>($"Select * From Accomodation Where AccomodationID='{id}'");
+            ViewBag.Price = db.Fetch<PriceDets>($"Select * from Prices p inner join OptionType ot on ot.OptionTypeID = p.OptionTypeID where ServiceID= {id} and ServiceTypeID ='{(int)ServiceTypeEnum.Accomodation}'");
+            ViewBag.OptionTypeID = new SelectList(db.Fetch<OptionType>("Select OptionTypeID,OptionTypeName from OptionType where ServiceTypeID=@0", (int)ServiceTypeEnum.Accomodation), "OptionTypeID", "OptionTypeName");
+
+            return PartialView(base.BaseCreateEdit<Price>(EID, "PriceID"));
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Price([Bind(Include = "PriceID,ServiceID,OptionTypeID,WEF,_Price")] Price item, int sid)
+        {
+            base.BaseSave<Price>(item, item.PriceID > 0);
+            return RedirectToAction("Manage", new { id = item.ServiceID, sid, mode = 2 });
+        }
+
+
+        public ActionResult Picture(int? id)
+        {
+            ViewBag.ServiceTypeID = ServiceTypeEnum.Accomodation;
+
+            ViewBag.Pack = db.FirstOrDefault<Accomodation>($"Select * From Accomodation Where AccomodationID={id}");
+            ViewBag.Pics = db.Fetch<Picture>($"Select * From Picture where ServiceID='{id}' and ServiceTypeID='{(int)ServiceTypeEnum.Accomodation}'");
+            base.BaseCreateEdit<Picture>(id, "PictureID");
+
+            PictureDets ci = new PictureDets() { };
+            return PartialView(ci);
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Picture([Bind(Include = "PictureID,ServiceTypeID,PictureName,ServiceID,UploadedFile")] PictureDets pics)
+        {
+            Picture res = new Picture
+            {
+                PictureID = pics.PictureID,
+                ServiceID = pics.ServiceID,
+                ServiceTypeID = pics.ServiceTypeID
+            };
+
+            if (pics.UploadedFile != null)
+            {
+                string fn = pics.UploadedFile.FileName.Substring(pics.UploadedFile.FileName.LastIndexOf('\\') + 1);
+                fn = String.Concat(((ServiceTypeEnum)pics.ServiceTypeID).ToString(), "_", pics.ServiceID.ToString(), "_", fn);
+
+                string SavePath = System.IO.Path.Combine(Server.MapPath("~/Images"), fn);
+                pics.UploadedFile.SaveAs(SavePath);
+
+                res.PictureName = fn;
+            }
+
+            return base.BaseSave<Picture>(res, pics.PictureID > 0, "Manage", new { id = pics.ServiceID, sid = pics.ServiceTypeID, mode = 3 });
+
+        }
+
+               public ActionResult FacManage(int? id)
         {
             ViewBag.Accom = db.FirstOrDefault<Accomodation>($"Select * From Accomodation Where AccomodationID='{id}'");
             ViewBag.FacilityID = new SelectList(db.Fetch<Facility>("Select FacilityID,FacilityName from Facility"), "FacilityID", "FacilityName");
@@ -62,45 +264,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             db.Insert(item);
             return RedirectToAction("FacManage");
         }
-        public ActionResult Picture(int? id)
-        {
-
-            ViewBag.Accom = db.FirstOrDefault<Accomodation>($"Select * From Accomodation Where AccomodationID='{id}'");
-            ViewBag.Pics = db.Fetch<Picture>($"Select * From Picture where ServiceID='{id}' and ServiceTypeID='{(int)ServiceTypeEnum.Accomodation}'");
-            base.BaseCreateEdit<Picture>(id, "PictureID");
-       
-                PictureDets ci = new PictureDets() { };
-                return View(ci);
-            
-
-        }
-
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Picture([Bind(Include = "PictureID,ServiceTypeID,PictureName,ServiceID,UploadedFile")] PictureDets pics)
-        {          
-                    Picture res = new Picture
-                    {
-                        PictureID=pics.PictureID,
-                        ServiceID=pics.ServiceID,
-                        ServiceTypeID=pics.ServiceTypeID
-                        
-                    };
-
-                    if (pics.UploadedFile != null)
-                    {
-                        string fn = pics.UploadedFile.FileName.Substring(pics.UploadedFile.FileName.LastIndexOf('\\') + 1);
-                        fn =  String.Concat("Acc_",  pics.ServiceID.ToString(),"_",  fn);
-                        string SavePath = System.IO.Path.Combine(Server.MapPath("~/Images"), fn);
-                        pics.UploadedFile.SaveAs(SavePath);                
-
-                        res.PictureName = fn;
-                    }
-                  
-                    return base.BaseSave<Picture>(res, pics.PictureID > 0,"Picture",new { pics.ServiceID});
-        }
-
+        
 
 
 
@@ -119,28 +283,26 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 if (oldImg?.Length > 0) System.IO.File.Delete(System.IO.Path.Combine(Server.MapPath("~/Images"), oldImg));
 
                 db.Execute($"Delete From Picture Where PictureID={pid}");
-                return RedirectToAction("Picture", new { id = sid });
+                return RedirectToAction("Manage", routeValues: new { id = sid, sid = ServiceTypeEnum.Accomodation, mode = 3 });
+
 
             }
             return RedirectToAction("Manage");
         }
-
-        public ActionResult Price(int? id,int? EID)
+        public JsonResult GetFac(string term)
         {
-            ViewBag.Accom = db.FirstOrDefault<Accomodation>($"Select * From Accomodation Where AccomodationID='{id}'");
-            ViewBag.Price = db.Fetch<PriceDets>($"Select * from Prices p inner join OptionType ot on ot.OptionTypeID = p.OptionTypeID where ServiceID= '{id}' and ot.ServiceTypeID ='{(int)ServiceTypeEnum.Accomodation}'");
-            ViewBag.OptionTypeID = new SelectList(db.Fetch<OptionType>("Select OptionTypeID,OptionTypeName from OptionType where ServiceTypeID=@0",(int)ServiceTypeEnum.Accomodation), "OptionTypeID", "OptionTypeName");
-
-            return View(base.BaseCreateEdit<Price>(EID, "PriceID"));
+            var locs = db.Fetch<Facility>("Select FacilityID, FacilityName from Facility where FacilityName like '%" + term + "%'");
+            return Json(new { results = locs.Select(a => new { id = a.FacilityID, text = a.FacilityName }) }, JsonRequestBehavior.AllowGet);
         }
-
-
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Price([Bind(Include = "PriceID,ServiceID,OptionTypeID,WEF,_Price,WeekendPrice")] Price item)
+        public void FacSave(int AccomodationID, IEnumerable<int> FacIDs)
         {
-             return base.BaseSave<Price>(item, item.PriceID > 0, "Price", new { id = item.ServiceID});
+            db.Delete<Facility_Accomodation>("Where AccomodationID=@0", AccomodationID);
+            foreach (var item in FacIDs)
+                db.Insert(new Facility_Accomodation { AccomodationID = AccomodationID, FacilityID = item });
         }
+
+  
 
         public ActionResult PriceInclusions(int? id, int? EID)
         {            
