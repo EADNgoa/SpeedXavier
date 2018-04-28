@@ -4,36 +4,39 @@
 <div class="card border rounded DropShadow">
     <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
         <span class="h3">@ViewBag.Title</span>
-        <a href="@Url.Action("Index","Package",new { sid= ViewBag.sid})"><i class="fas fa-undo-alt fa-inverse h3 float-right DropShadow"></i></a>
+        <a title="Close without saving" href="@Url.Action("Index","Package",new { sid= ViewBag.sid})"><i class="fas fa-times fa-inverse h3 float-right DropShadow" ></i></a>        
     </div>
     <div class="card-body">
         <h5>&nbsp;</h5>
 
-       
-            <h1> @ViewBag.PackageName</h1>
+
+        <h1> @ViewBag.PackageName</h1>
+        @if (ViewBag.PackageId != null)
+        {
             @Html.Hidden("PackageId", (int)ViewBag.PackageId)
+
             <div class="btn-group-lg" role="group" aria-label="Basic example">
                 <button id="DetailsBtn" type="button" class="btn btn-secondary">Details</button>
                 <button id="PriceBtn" type="button" class="btn btn-secondary">Price</button>
                 <button id="ImgBtn" type="button" class="btn btn-secondary">Images</button>
                 <button id="ValBtn" type="button" class="btn btn-secondary">Validity</button>
             </div>
+        }
 
-         
-            <hr />
-        
+        <hr />
 
 
-            <div id="TabContent">
-                @if (ViewBag.mode == 1)
-                { @Html.Action("FetchDetails", "Package", new { id = (int)ViewBag.PackageId, sid = (int)ViewBag.sid }) }
 
-                @if (ViewBag.mode == 2)
-                { @Html.Action("PackPrice", "Package", new { id = (int)ViewBag.PackageId, sid = (int)ViewBag.sid, EID = (int)ViewBag.EID }) }
+        <div id="TabContent">
+            @if (ViewBag.mode == 1)
+            {@Html.Action("FetchDetails", "Package", new { id = (int?)ViewBag.PackageId, sid = (int)ViewBag.sid })}
 
-                @if (ViewBag.mode == 3)
-                { @Html.Action("PackPicture", "Package", new { id = (int)ViewBag.PackageId, sid = (int)ViewBag.sid}) }
-            </div>
+            @if (ViewBag.mode == 2)
+            {@Html.Action("PackPrice", "Package", new { id = (int)ViewBag.PackageId, sid = (int)ViewBag.sid, EID = (int)ViewBag.EID })}
+
+            @if (ViewBag.mode == 3)
+            {@Html.Action("PackPicture", "Package", new { id = (int)ViewBag.PackageId, sid = (int)ViewBag.sid })}
+        </div>
         <hr />
     </div>
 </div>
@@ -43,8 +46,29 @@
     @Scripts.Render("~/bundles/jqueryval")
 }
 
+@if (ViewBag.PackageId != null)
+{
 <script>
     $(function () {
+
+        //Submit form
+        $('#SaveDetails').click(function () {
+            var detFrm = $('#detFrm');
+
+            //Save the details form if it exists else just move on.
+            if (typeof (detFrm[0]) == 'object') {
+                $.ajax({
+                    url: detFrm.action,
+                    type: 'post',
+                    data: $(detFrm).serialize(),
+                    success: function () {
+                        window.location.assign('@Url.Action("Index", new { sid = (int)ViewBag.sid })');
+                    }
+                });
+            }
+        });
+
+
         $('#DetailsBtn').click(function () {
             $('#TabContent').load(
                 '@Url.Action("FetchDetails", new { id = (int)ViewBag.PackageId, sid = (int)ViewBag.sid })'
@@ -62,14 +86,14 @@
                     data: $(detFrm).serialize()
                 }).done(function () {
                     $('#TabContent').load(
-                        '@Url.Action("PackPrice", new { id = (int)ViewBag.PackageId , sid = (int)ViewBag.sid })'
+                        '@Url.Action("PackPrice", new { id = (int)ViewBag.PackageId, sid = (int)ViewBag.sid })'
                     );
 
                 });
 
             } else {
                 $('#TabContent').load(
-                        '@Url.Action("PackPrice", new { id = (int)ViewBag.PackageId , sid = (int)ViewBag.sid })'
+                        '@Url.Action("PackPrice", new { id = (int)ViewBag.PackageId, sid = (int)ViewBag.sid })'
                     );
             }
         });
@@ -84,14 +108,14 @@
                     data: $(detFrm).serialize()
                 }).done(function () {
                     $('#TabContent').load(
-                        '@Url.Action("PackPicture", new { id = (int)ViewBag.PackageId , sid = (int)ViewBag.sid })'
+                        '@Url.Action("PackPicture", new { id = (int)ViewBag.PackageId, sid = (int)ViewBag.sid })'
                     );
 
                 });
 
             } else {
                 $('#TabContent').load(
-                    '@Url.Action("PackPicture", new { id = (int)ViewBag.PackageId , sid = (int)ViewBag.sid })'
+                    '@Url.Action("PackPicture", new { id = (int)ViewBag.PackageId, sid = (int)ViewBag.sid })'
                     );
 
             }
@@ -107,14 +131,14 @@
                     data: $(detFrm).serialize()
                 }).done(function () {
                     $('#TabContent').load(
-                        '@Url.Action("PVManage", new { id = (int)ViewBag.PackageId , sid = (int)ViewBag.sid })'
+                        '@Url.Action("PVManage", new { id = (int)ViewBag.PackageId, sid = (int)ViewBag.sid })'
                     );
 
                 });
 
             } else {
                 $('#TabContent').load(
-                    '@Url.Action("PVManage", new { id = (int)ViewBag.PackageId , sid = (int)ViewBag.sid })'
+                    '@Url.Action("PVManage", new { id = (int)ViewBag.PackageId, sid = (int)ViewBag.sid })'
                     );
 
             }
@@ -122,3 +146,4 @@
 
     });
 </script>
+}
