@@ -47,9 +47,10 @@ namespace Speedbird.Areas.SBBoss.Controllers
             if (columnSearch[8]?.Length > 0) { int.TryParse(columnSearch[8], out daysl); columnSearch[8] = null; }
             string sortOrder = parameters.SortOrder.Replace("EndDateStr", "ValidTo");
 
-            var sql = new PetaPoco.Sql($"Select distinct p.*,ValidTo, (select max(v.ValidTo) from PackageValidity v where v.PackageId=p.PackageID) as EndDate from Package p , PackageValidity v" );
+            var sql = new PetaPoco.Sql($"Select distinct p.*,ValidTo, (select max(v.ValidTo) from PackageValidity v where v.PackageId=p.PackageID) as EndDate " +
+                $"from Package p Left Join PackageValidity v on v.PackageId=p.PackageID  and v.PVId=(select max(PVId) from PackageValidity where PackageId=p.PackageID)" );
             var fromsql= new PetaPoco.Sql();
-            var wheresql = new PetaPoco.Sql($" where ServiceTypeId={sid} and v.PackageId=p.PackageID  and v.PVId=(select max(PVId) from PackageValidity where PackageId=p.PackageID)");
+            var wheresql = new PetaPoco.Sql($" where ServiceTypeId={sid} ");
 
             if (geos.Length > 0)
             {
@@ -178,26 +179,30 @@ namespace Speedbird.Areas.SBBoss.Controllers
             return View();
         }
 
-        public ActionResult FetchDetails(int id, int sid)
+        public ActionResult FetchDetails(int? id, int sid)
         {
-            var pkg = base.BaseCreateEdit<Package>(id, "PackageID");
             ViewBag.sid = sid;
-            ViewBag.GeoId = db.Query<GeoTree>("Select * from GeoTree where GeoTreeId in (Select GeoTreeId from Package_GeoTree where PackageId=@0)", pkg?.PackageID ?? 0).Select(sl => new SelectListItem { Text = sl.GeoName, Value = sl.GeoTreeID.ToString(), Selected = true });
-            ViewBag.Acts = db.Query<Activity>("Select ActivityId, ActivityName from Activity where ActivityId in (Select ActivityId from Package_Activity where PackageId=@0)", pkg?.PackageID ?? 0).Select(sl => new SelectListItem { Text = sl.ActivityName, Value = sl.ActivityID.ToString(), Selected = true });
-            ViewBag.Cats = db.Query<Category>("Select CategoryId, CategoryName from Category where CategoryId in (Select CategoryId from Package_Category where PackageId=@0)", pkg?.PackageID ?? 0).Select(sl => new SelectListItem { Text = sl.CategoryName, Value = sl.CategoryID.ToString(), Selected = true });
-            ViewBag.Atts = db.Query<Attraaction>("Select AttractionId, AttractionName from Attraaction where AttractionId in (Select AttractionId from Package_Attraction where PackageId=@0)", pkg?.PackageID ?? 0).Select(sl => new SelectListItem { Text = sl.AttractionName, Value = sl.AttractionID.ToString(), Selected = true });
-            ViewBag.Lang = db.Query<GuideLanguage>("Select GuideLanguageId, GuideLanguageName from GuideLanguage where GuideLanguageId in (Select GuideLanguageId from Package_Language where PackageId=@0)", pkg?.PackageID ?? 0).Select(sl => new SelectListItem { Text = sl.GuideLanguageName, Value = sl.GuideLanguageID.ToString(), Selected = true });
-            ViewBag.Atrs = db.Query<Attribute>("Select AttributeId, AttributeText from Attribute where AttributeId in (Select AttributeId from Package_Attribute where PackageId=@0)", pkg?.PackageID ?? 0).Select(sl => new SelectListItem { Text = sl.AttributeText, Value = sl.AttributeId.ToString(), Selected = true });
-            ViewBag.Sups = db.Query<Supplier>("Select * from Supplier where SupplierId in (Select SupplierId from Package_Supplier where PackageId=@0)", pkg?.PackageID ?? 0).Select(sl => new SelectListItem { Text = sl.SupplierName, Value = sl.SupplierID.ToString(), Selected = true });
-            ViewBag.SupConts = db.Query<Package_Supplier>("Select * from Package_Supplier where PackageId=@0", pkg?.PackageID ?? 0).Select(sl => sl.ContractNo);
-            ViewBag.Icns = db.Query<Icon>("Select IconPath from Icons where ServiceTypeId=@0 and ServiceId=@1 ",sid, pkg?.PackageID ?? 0).Select(sl => new SelectListItem { Text = sl.IconPath, Value = sl.IconPath, Selected = true });
-            return PartialView("Details", pkg);
+            if (id.HasValue)
+            {
+                var pkg = base.BaseCreateEdit<Package>(id, "PackageID");
+                ViewBag.GeoId = db.Query<GeoTree>("Select * from GeoTree where GeoTreeId in (Select GeoTreeId from Package_GeoTree where PackageId=@0)", pkg?.PackageID ?? 0).Select(sl => new SelectListItem { Text = sl.GeoName, Value = sl.GeoTreeID.ToString(), Selected = true });
+                ViewBag.Acts = db.Query<Activity>("Select ActivityId, ActivityName from Activity where ActivityId in (Select ActivityId from Package_Activity where PackageId=@0)", pkg?.PackageID ?? 0).Select(sl => new SelectListItem { Text = sl.ActivityName, Value = sl.ActivityID.ToString(), Selected = true });
+                ViewBag.Cats = db.Query<Category>("Select CategoryId, CategoryName from Category where CategoryId in (Select CategoryId from Package_Category where PackageId=@0)", pkg?.PackageID ?? 0).Select(sl => new SelectListItem { Text = sl.CategoryName, Value = sl.CategoryID.ToString(), Selected = true });
+                ViewBag.Atts = db.Query<Attraaction>("Select AttractionId, AttractionName from Attraaction where AttractionId in (Select AttractionId from Package_Attraction where PackageId=@0)", pkg?.PackageID ?? 0).Select(sl => new SelectListItem { Text = sl.AttractionName, Value = sl.AttractionID.ToString(), Selected = true });
+                ViewBag.Lang = db.Query<GuideLanguage>("Select GuideLanguageId, GuideLanguageName from GuideLanguage where GuideLanguageId in (Select GuideLanguageId from Package_Language where PackageId=@0)", pkg?.PackageID ?? 0).Select(sl => new SelectListItem { Text = sl.GuideLanguageName, Value = sl.GuideLanguageID.ToString(), Selected = true });
+                ViewBag.Atrs = db.Query<Attribute>("Select AttributeId, AttributeText from Attribute where AttributeId in (Select AttributeId from Package_Attribute where PackageId=@0)", pkg?.PackageID ?? 0).Select(sl => new SelectListItem { Text = sl.AttributeText, Value = sl.AttributeId.ToString(), Selected = true });
+                ViewBag.Sups = db.Query<Supplier>("Select * from Supplier where SupplierId in (Select SupplierId from Package_Supplier where PackageId=@0)", pkg?.PackageID ?? 0).Select(sl => new SelectListItem { Text = sl.SupplierName, Value = sl.SupplierID.ToString(), Selected = true });
+                ViewBag.SupConts = db.Query<Package_Supplier>("Select * from Package_Supplier where PackageId=@0", pkg?.PackageID ?? 0).Select(sl => sl.ContractNo);
+                ViewBag.Icns = db.Query<Icon>("Select IconPath from Icons where ServiceTypeId=@0 and ServiceId=@1 ",sid, pkg?.PackageID ?? 0).Select(sl => new SelectListItem { Text = sl.IconPath, Value = sl.IconPath, Selected = true });
+                return PartialView("Details", pkg);
+            }
+            return PartialView("Details", new Package());
         }
 
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public bool  Manage([Bind(Include = "PackageID,ServiceTypeID,PackageName,Description,Duration,Itinerary,Highlights,Dificulty,GroupSize,GuideLanguageID,StartTime,Inclusion,Exclusion,CouponCode")] Package item, System.Collections.Generic.List<int> GeoTreeID )
+        public ActionResult  Manage([Bind(Include = "PackageID,ServiceTypeID,PackageName,Description,Duration,Itinerary,Highlights,Dificulty,GroupSize,GuideLanguageID,StartTime,Inclusion,Exclusion,CouponCode")] Package item, System.Collections.Generic.List<int> GeoTreeID )
         {
             using (var transaction = db.GetTransaction())
             {
@@ -213,12 +218,12 @@ namespace Speedbird.Areas.SBBoss.Controllers
                     });
 
                     transaction.Complete();
-                    return true;
+                    return new JsonResult { Data = true };
                 } else
                 {
                     transaction.Dispose();
-                    return false;
-                    
+                    return new JsonResult { Data = false };
+
                 }
             }
             

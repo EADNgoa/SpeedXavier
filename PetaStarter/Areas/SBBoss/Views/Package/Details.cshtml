@@ -41,10 +41,13 @@
     <div class="input-group col mb-3">
         <div class="input-group-prepend"><span class="input-group-text">Stops at</span></div>
         <select id="GeoTreeID" name="GeoTreeID" class="GeoSelect form-control" multiple="multiple">
-            @foreach (var o in ViewBag.GeoId)
-            {
+           @if (ViewBag.GeoId != null)
+           {
+               foreach (var o in ViewBag.GeoId)
+               {
                 <option value="@o.Value" selected="selected">@o.Text</option>
-            }
+               }
+           }
         </select>
     </div>
 </div>
@@ -99,19 +102,26 @@
     <div class="input-group col-3 mb-3">
         <div class="input-group-prepend"><span class="input-group-text">Supplier</span></div>
         <select id="SupID" name="SupID" class="form-control" data-setu="SupSave" data-geturl="GetSup" multiple="multiple">
-            @foreach (var o in ViewBag.Sups)
-    {
-        <option value="@o.Value" selected="selected">@o.Text</option>}
+            @if (ViewBag.Sups!= null)
+            {
+                foreach (var o in ViewBag.Sups)
+                {
+                <option value="@o.Value" selected="selected">@o.Text</option>
+                }
+            }
         </select>
     </div>
     <div class="input-group col-3 mb-3">
         <div class="input-group-prepend"><span class="input-group-text">Contracts</span></div>
         <span id="ContID" name="ContID" class="form-control">
-            @foreach (var item in ViewBag.SupConts)
-        {
-            @item
-            @:,
-    }
+            @if (ViewBag.SupConts!= null)
+            {
+                foreach (var item in ViewBag.SupConts)
+                {
+                    @item
+                    @:,
+                }
+            }
         </span>
     </div>
     <div class="input-group col mb-3">
@@ -128,25 +138,37 @@
     <div class="input-group col mb-3">
         <div class="input-group-prepend"><span class="input-group-text">Activities</span></div>
         <select id="ActID" name="ActID" class="form-control sel2Lkup" data-setu="ActSave" data-geturl="GetAct" multiple="multiple">
-            @foreach (var o in ViewBag.Acts)
+            @if (ViewBag.Acts!= null)
             {
-                <option value="@o.Value" selected="selected">@o.Text</option>}
+                foreach (var o in ViewBag.Acts)
+                {
+                    <option value="@o.Value" selected="selected">@o.Text</option>
+                }
+            }
         </select>
     </div>
     <div class="input-group col mb-3">
         <div class="input-group-prepend"><span class="input-group-text">Categories</span></div>
         <select id="CatID" name="CatID" class="form-control sel2Lkup" data-setu="CatSave" multiple="multiple">
-            @foreach (var o in ViewBag.Cats)
+            @if (ViewBag.Cats!= null)
             {
-                <option value="@o.Value" selected="selected">@o.Text</option>}
+                foreach (var o in ViewBag.Cats)
+                {
+                    <option value="@o.Value" selected="selected">@o.Text</option>
+                }
+            }
         </select>
     </div>
     <div class="input-group col mb-3">
         <div class="input-group-prepend"><span class="input-group-text">Attributes</span></div>
         <select id="AtrID" name="AtrID" class="form-control sel2Lkup" data-setu="AtrSave" data-geturl="GetAtr" multiple="multiple">
-            @foreach (var o in ViewBag.Atrs)
+            @if (ViewBag.GeoId != null)
             {
-                <option value="@o.Value" selected="selected">@o.Text</option>}
+                foreach (var o in ViewBag.Atrs)
+                {
+                <option value="@o.Value" selected="selected">@o.Text</option>
+                }
+            }
         </select>
     </div>
 </div>
@@ -155,38 +177,52 @@
     <div class="input-group col mb-3">
         <div class="input-group-prepend"><span class="input-group-text">Languages</span></div>
         <select id="LanID" name="LanID" class="form-control sel2Lkup" data-setu="LanSave" multiple="multiple">
-            @foreach (var o in ViewBag.Lang)
+            @if (ViewBag.GeoId != null)
             {
-                <option value="@o.Value" selected="selected">@o.Text</option>}
+                foreach (var o in ViewBag.Lang)
+                {
+                <option value="@o.Value" selected="selected">@o.Text</option>
+                }
+            }
         </select>
     </div>
     <div class="input-group col mb-3">
         <div class="input-group-prepend"><span class="input-group-text">Attractions</span></div>
         <select id="AttID" name="AttID" class="form-control sel2Lkup" data-setu="AttSave" multiple="multiple">
-            @foreach (var o in ViewBag.Atts)
+            @if (ViewBag.GeoId != null)
             {
-                <option value="@o.Value" selected="selected">  @o.Text</option>}
+                foreach (var o in ViewBag.Atts)
+                {
+                <option value="@o.Value" selected="selected">  @o.Text</option>
+                }
+            }
         </select>
     </div>
     <div class="input-group col mb-3">
         <div class="input-group-prepend"><span class="input-group-text">Icons</span></div>
         <select id="IcnID" name="IcnID" class="form-control" data-setu="IcnSave" multiple="multiple">            
-            @foreach (var o in ViewBag.Icns)
+            @if (ViewBag.GeoId != null)
             {
-                <option value="@o.Value" selected="selected">@o.Text</option>}
+                foreach (var o in ViewBag.Icns)
+                {
+                <option value="@o.Value" selected="selected">@o.Text</option>
+                }
+            }
         </select>
     </div>
 </div>
 
 <div class="form-group">
     <div class="col-md-offset-2 col-md-10">
-        <input type="submit" value="Save" class="btn btn-primary" />
+        <button id="SaveDetails" class="btn btn-primary">Save</button>
+        @*<input type="submit" value="Save" class="btn btn-primary" />*@
     </div>
 </div>
 }
 
 <script>
     $(function(){
+               
 
         //Icons
         function setupIcons(data) {
