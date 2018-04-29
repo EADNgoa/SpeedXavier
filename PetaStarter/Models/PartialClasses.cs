@@ -102,6 +102,16 @@ namespace Speedbird
     {
     }
 
+    [MetadataType(typeof(AccomodationMetadata))]
+    public partial class Accomodation
+    {
+    }
+
+    [MetadataType(typeof(CarBikeMetadata))]
+    public partial class CarBike
+    {
+    }
+
     public class ActivityDets
     {
         public int PackageID { get; set; }
