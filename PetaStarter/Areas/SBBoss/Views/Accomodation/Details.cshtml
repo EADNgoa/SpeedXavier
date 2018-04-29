@@ -56,8 +56,8 @@
 </div>
 <div class="form-row">
     <div class="input-group col mb-3">
-        <div class="input-group-prepend"><span class="input-group-text">Stops at</span></div>
-        <select id="GeoTreeID" name="GeoTreeID" style="width:80%;" class="GeoSelect">
+        <div class="input-group-prepend"><span class="input-group-text">Location</span></div>
+        <select id="GeoTreeID" name="GeoTreeID" class="form-control GeoSelect" >
             @foreach (var o in ViewBag.GeoId)
             {
                 <option value="@o.Value">@o.Text</option>
@@ -76,15 +76,12 @@
     </div>
     }
 </div>
-
-
-
+}
 <div class="form-group">
     <div class="col-md-offset-2 col-md-10">
-        <input type="submit" value="Save" class="btn btn-primary" />
+        <Button id="SaveDetails"class="btn btn-primary" >Save</Button>
     </div>
 </div>
-}
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

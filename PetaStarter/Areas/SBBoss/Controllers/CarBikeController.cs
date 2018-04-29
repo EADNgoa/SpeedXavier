@@ -149,7 +149,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         public ActionResult FetchDetails(int? id)
         {
             var accom = base.BaseCreateEdit<CarBike>(id, "CarBikeID");
-            ViewBag.GeoId = db.Query<GeoTree>("Select * from GeoTree where GeoTreeId in (Select GeoTreeId from Package_GeoTree where PackageId=@0)", accom?.CarBikeID ?? 0).Select(sl => new SelectListItem { Text = sl.GeoName, Value = sl.GeoTreeID.ToString(), Selected = true });
+            ViewBag.GeoId = db.Query<GeoTree>("Select * from GeoTree where GeoTreeId = (Select GeoTreeId from CarBike where CarBikeId=@0)", accom?.CarBikeID ?? 0).Select(sl => new SelectListItem { Text = sl.GeoName, Value = sl.GeoTreeID.ToString(), Selected = true });
             return PartialView("Details", accom);
         }
 
@@ -189,10 +189,10 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Price([Bind(Include = "PriceID,ServiceID,OptionTypeID,WEF,_Price")] Price item, int sid)
+        public ActionResult Price([Bind(Include = "PriceID,ServiceID,OptionTypeID,WEF,_Price")] Price item)
         {
             base.BaseSave<Price>(item, item.PriceID > 0);
-            return RedirectToAction("Manage", new { id = item.ServiceID, sid, mode = 2 });
+            return RedirectToAction("Manage", new { id = item.ServiceID, mode = 2 });
         }
 
 

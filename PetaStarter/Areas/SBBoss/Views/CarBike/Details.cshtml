@@ -72,8 +72,8 @@
 </div>
 <div class="form-row">
     <div class="input-group col mb-3">
-        <div class="input-group-prepend"><span class="input-group-text">Stops at</span></div>
-        <select id="GeoTreeID" name="GeoTreeID" style="width:80%;" class="GeoSelect">
+        <div class="input-group-prepend"><span class="input-group-text">Location</span></div>
+        <select id="GeoTreeID" name="GeoTreeID" class="form-control GeoSelect">
             @foreach (var o in ViewBag.GeoId)
             {
                 <option value="@o.Value">@o.Text</option>
@@ -83,20 +83,36 @@
 
 </div>
 
-
-
+}
 <div class="form-group">
     <div class="col-md-offset-2 col-md-10">
-        <input type="submit" value="Save" class="btn btn-primary" />
+        <button id="SaveDetails" class="btn btn-primary" >Save</Button>
     </div>
 </div>
-}
 
 
 <script>
 
-         //GeoSelector
         $(document).ready(function () {
+
+        //Submit form
+        $('#SaveDetails').click(function () {
+            var detFrm = $('#detFrm');
+
+            //Save the details form if it exists else just move on.
+            if (typeof (detFrm[0]) == 'object') {
+                $.ajax({
+                    url: detFrm.action,
+                    type: 'post',
+                    data: $(detFrm).serialize(),
+                    success: function () {
+                        window.location.assign('@Url.Action("Index")');
+                    }
+                });
+            }
+        });
+
+
             function formatState(state) {
                 if (!state.id) {
                     return state.text;
@@ -108,6 +124,7 @@
 
 
 
+            //GeoSelector
             $(".GeoSelect").select2({
                 placeholder: "Type 3 letters to choose",
                 templateSelection: formatState,
@@ -121,6 +138,8 @@
                     }
                 }
             });
+
+            $("textarea").jqte();
 
 
         });

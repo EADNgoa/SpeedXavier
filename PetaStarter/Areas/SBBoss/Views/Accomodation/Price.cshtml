@@ -38,7 +38,7 @@
                     </div>
                     <div class="input-group col mb-3">
                         <div class="input-group-prepend"><span class="input-group-text">With Effect From</span></div>
-                        @Html.EditorFor(model => model.WEF, new { htmlAttributes = new { @type = "date", @class = "form-control" } })
+                        @Html.EditorFor(model => model.WEF, new { htmlAttributes = new { @type = "text", @class = "form-control eadate" } })
                         @Html.ValidationMessageFor(model => model.WEF, "", new { @class = "text-danger" })
                     </div>
                     <div class="input-group col mb-3">
@@ -90,3 +90,19 @@
     @section Scripts {
         @Scripts.Render("~/bundles/jqueryval")
     }
+
+<script>
+    $(function () {
+        //DateTime picker
+        $('.eadate').datepicker({
+            dateFormat: "dd-M-yy",
+            showButtonPanel: true,
+            changeMonth: true,
+            changeYear: true
+        }).attr('type', 'text').attr('autocomplete', 'off');
+
+        //Disable the browsers default date picker
+        jQuery.validator.methods["date"] = function (value, element) { return true; }
+
+    })
+</script>
