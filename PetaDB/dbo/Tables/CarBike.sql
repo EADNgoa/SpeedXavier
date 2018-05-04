@@ -7,9 +7,9 @@
     [NoPax] INT NULL, 
     [NoSmallBags] INT NULL, 
     [NoLargeBags] INT NULL, 
-    [HasAc] BIT NULL, 
-    [HasCarrier] BIT NULL, 
-    [InclHelmet] BIT NULL, 
+    [HasAc] BIT NOT NULL DEFAULT 0, 
+    [HasCarrier] BIT NOT NULL DEFAULT 0, 
+    [InclHelmet] BIT NOT NULL DEFAULT 0, 
     [CouponCode] VARCHAR(50) NULL, 
     CONSTRAINT [FK_CarBike_ToGeotree] FOREIGN KEY ([GeoTreeId]) REFERENCES [GeoTree]([GeoTreeId])
 )
