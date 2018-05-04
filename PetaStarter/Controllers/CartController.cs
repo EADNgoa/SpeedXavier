@@ -33,33 +33,39 @@ namespace Speedbird.Controllers
             });
             return View(CartItems);
         }
+       
+
+      
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult AddToCart(int? ServiceID,int? ServiceTypeID,System.Web.HttpPostedFileBase UploadedFile,DateTime? CheckIn, DateTime? CheckOut,int? nums,int? Qty,string fname,string sname,string email,string phno,int? CustomerID)
+        public ActionResult AddToCart(int? ServiceID,int? ServiceTypeID,System.Web.HttpPostedFileBase UploadedFile,DateTime? CheckIn, DateTime? CheckOut,int? nums,int? Qty,string fname,string sname,string email,string phno,int? CustomerID,string chckbtn,string Query)
         {
-            Cart item = new Cart();
-            if (ServiceTypeID == (int)ServiceTypeEnum.Accomodation)
+            if (chckbtn == "Cart")
             {
-                var getItem = db.FirstOrDefault<AccomodationDets>("Select * From Accomodation where AccomodationID=@0", ServiceID);
-                getItem.price = db.FirstOrDefault<decimal>("Select Top 1 Price from Prices p inner join OptionType ot on p.OptionTypeID = ot.OptionTypeID Where ServiceID=@0 and ot.ServiceTypeID=@1 and WEF<GetDate() order by WEF desc", ServiceID, ServiceTypeID);
-                item = new Cart { Id = User.Identity.GetUserId(), ServiceID = ServiceID, Qty = Qty, CheckIn = CheckIn, CheckOut = CheckOut, NoOfGuest = nums, OrigPrice = getItem.price, ServiceTypeID = ServiceTypeID };
-                db.Insert(item);
-            }
-            if (ServiceTypeID == (int)ServiceTypeEnum.Packages)
-            {
-                var getItem = db.FirstOrDefault<PackageDets>("Select * From Package where PackageID=@0", ServiceID);
-                getItem.price = db.FirstOrDefault<decimal>("Select Top 1 Price from Prices p inner join OptionType ot on p.OptionTypeID = ot.OptionTypeID Where ServiceID=@0 and ot.ServiceTypeID=@1 and WEF<GetDate() order by WEF desc", ServiceID, ServiceTypeID);
-                 item = new Cart { Id = User.Identity.GetUserId(), ServiceID = ServiceID, Qty = Qty, CheckIn = CheckIn, CheckOut = CheckOut, NoOfGuest = nums, OrigPrice = getItem.price, ServiceTypeID = ServiceTypeID };
-                db.Insert(item);
-            }
-            if (ServiceTypeID == (int)ServiceTypeEnum.CarBike)
-            {
-                var getItem = db.FirstOrDefault<CarBikeDets>("Select * From CarBike where CarbikeID=@0", ServiceID);
-                getItem.price = db.FirstOrDefault<decimal>("Select Top 1 Price from Prices p inner join OptionType ot on p.OptionTypeID = ot.OptionTypeID Where ServiceID=@0 and ot.ServiceTypeID=@1 and WEF<GetDate() order by WEF desc", ServiceID, ServiceTypeID);
-                 item = new Cart { Id = User.Identity.GetUserId(), ServiceID = ServiceID, Qty = Qty, CheckIn = CheckIn, CheckOut = CheckOut, NoOfGuest = nums, OrigPrice = getItem.price, ServiceTypeID = ServiceTypeID };
-                db.Insert(item);
-            }
-           
+
+                Cart item = new Cart();
+                if (ServiceTypeID == (int)ServiceTypeEnum.Accomodation)
+                {
+                    var getItem = db.FirstOrDefault<AccomodationDets>("Select * From Accomodation where AccomodationID=@0", ServiceID);
+                    getItem.price = db.FirstOrDefault<decimal>("Select Top 1 Price from Prices p inner join OptionType ot on p.OptionTypeID = ot.OptionTypeID Where ServiceID=@0 and ot.ServiceTypeID=@1 and WEF<GetDate() order by WEF desc", ServiceID, ServiceTypeID);
+                    item = new Cart { Id = User.Identity.GetUserId(), ServiceID = ServiceID, Qty = Qty, CheckIn = CheckIn, CheckOut = CheckOut, NoOfGuest = nums, OrigPrice = getItem.price, ServiceTypeID = ServiceTypeID };
+                    db.Insert(item);
+                }
+                if (ServiceTypeID == (int)ServiceTypeEnum.Packages)
+                {
+                    var getItem = db.FirstOrDefault<PackageDets>("Select * From Package where PackageID=@0", ServiceID);
+                    getItem.price = db.FirstOrDefault<decimal>("Select Top 1 Price from Prices p inner join OptionType ot on p.OptionTypeID = ot.OptionTypeID Where ServiceID=@0 and ot.ServiceTypeID=@1 and WEF<GetDate() order by WEF desc", ServiceID, ServiceTypeID);
+                    item = new Cart { Id = User.Identity.GetUserId(), ServiceID = ServiceID, Qty = Qty, CheckIn = CheckIn, CheckOut = CheckOut, NoOfGuest = nums, OrigPrice = getItem.price, ServiceTypeID = ServiceTypeID };
+                    db.Insert(item);
+                }
+                if (ServiceTypeID == (int)ServiceTypeEnum.CarBike)
+                {
+                    var getItem = db.FirstOrDefault<CarBikeDets>("Select * From CarBike where CarbikeID=@0", ServiceID);
+                    getItem.price = db.FirstOrDefault<decimal>("Select Top 1 Price from Prices p inner join OptionType ot on p.OptionTypeID = ot.OptionTypeID Where ServiceID=@0 and ot.ServiceTypeID=@1 and WEF<GetDate() order by WEF desc", ServiceID, ServiceTypeID);
+                    item = new Cart { Id = User.Identity.GetUserId(), ServiceID = ServiceID, Qty = Qty, CheckIn = CheckIn, CheckOut = CheckOut, NoOfGuest = nums, OrigPrice = getItem.price, ServiceTypeID = ServiceTypeID };
+                    db.Insert(item);
+                }
+
                 if (CustomerID == null)
                 {
                     var cust = new Customer { FName = fname, SName = sname, Email = email, Phone = phno };
@@ -81,8 +87,27 @@ namespace Speedbird.Controllers
                 {
                     db.Execute($"Update Customer Set FName='{fname}',SName='{sname}',Phone={phno} where CustomerID={CustomerID}");
                 }
-                return RedirectToAction("Cart");
-           
+            }
+            if (chckbtn == "Query")
+            {
+
+                if (Query != null)
+                {
+                    var cust = new CustomerQuery { FName = fname, SName = sname, Email = email, Phone = phno,_Query=Query,ServiceID=ServiceID,ServiceTypeID=ServiceTypeID ,CheckIn=CheckIn,CheckOut=CheckOut,NoPax=nums,Qty=Qty,Tdate=DateTime.Now
+                    };
+
+                    if (UploadedFile != null)
+                    {
+                        string fn = UploadedFile.FileName.Substring(UploadedFile.FileName.LastIndexOf('\\') + 1);
+                        fn = String.Concat(((ServiceTypeEnum)ServiceTypeID).ToString(), "_", ServiceID.ToString(), "_", fn);
+                        string SavePath = System.IO.Path.Combine(Server.MapPath("~/Images"), fn);
+                        UploadedFile.SaveAs(SavePath);
+                        cust.IdPicture = fn;
+                    }
+                    db.Insert(cust);
+                }
+            }
+                return RedirectToAction("Cart");       
         }
 
         private string SaveImage(Sql sql, string v, int customerID, HttpPostedFileBase uploadedFile)

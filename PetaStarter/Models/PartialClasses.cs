@@ -17,6 +17,15 @@ namespace Speedbird
     {
     }
 
+    public partial class CustomerQuery
+    {
+        public string Instr { get { return $"{CheckIn:dd MMM yyyy, hh:mm}"; } }
+        public string Outstr { get { return $"{CheckOut:dd MMM yyyy, hh:mm}"; } }
+        public string Tostr { get { return $"{Tdate:dd MMM yyyy}"; } }
+
+
+    }
+
     [MetadataType(typeof(DiscountCouponMetadata))]
     public partial class DiscountCoupon
     {

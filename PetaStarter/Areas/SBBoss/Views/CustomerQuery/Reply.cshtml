@@ -1,0 +1,118 @@
+﻿@model Speedbird.CustQueryReply
+
+@{
+    ViewBag.Title = "Manage Reply";
+}
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/holder/2.4.1/holder.js"></script>
+
+<div class="card border rounded DropShadow">
+    <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
+        <span class="h3">@ViewBag.Title</span>
+        <a href="@Url.Action("Index","CustomerQuery")"><i class="fas fa-undo-alt fa-inverse h3 float-right DropShadow"></i></a>
+    </div>
+    <div class="card-body">
+        <h5>&nbsp;</h5>
+
+        @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @if (Model?.CustQueryReplyID > 0)
+    {
+        @Html.HiddenFor(model => model.CustomerQueryID)
+}
+            @Html.Hidden("CustomerQueryID", (int)ViewBag.cqid);
+            <div class="form-row">
+                <div class="container">
+                    <center>
+                        @if (ViewBag.sid == (int)Speedbird.ServiceTypeEnum.Accomodation)
+                {
+                    <a href="/SBBoss/Accomodation/Manage/@ViewBag.ServiceID"> Click here to view Service</a>
+        }
+                        @if (ViewBag.sid == (int)Speedbird.ServiceTypeEnum.Packages)
+                {
+                    <a href="/SBBoss/Package/Manage/@ViewBag.ServiceID?sid=@ViewBag.sid"> Click here to view Service</a>
+        }
+                        @if (ViewBag.sid == (int)Speedbird.ServiceTypeEnum.Accomodation)
+                {
+                    <a href="/SBBoss/CarBike/Manage/@ViewBag.ServiceID"> Click here to view Service</a>
+        }
+                    </center>
+                </div>
+            </div>
+            @Html.Hidden("str", (int)ViewBag.sid);
+            @Html.Hidden("ServiceIDr", (int)ViewBag.ServiceID);
+
+
+            <div class="form-group">
+
+                @Html.LabelFor(model => model.Reply, "Reply", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-9">
+                    @Html.TextAreaFor(model => model.Reply, 6, 65, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Reply, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <br />
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-5">
+                    <input type="submit" value="Save" class="btn btn-primary" style="width:98px;height:50px;" />
+
+                </div>
+                <div class="col-md-5">
+                </div>
+            </div>
+        </div>
+}
+        <br />
+        <div style="padding: 20px 20% 0 20%; ">
+            <div class="chat_list">
+              
+                <ul class="list-group">
+                   
+                    @foreach (var item in (IEnumerable<Speedbird.CustQueryReply>)ViewBag.Chat)
+                    {
+                    <li class="list-group-item">
+                        <div class="pull-left hidden-xs">
+                            <div>
+                                <img class="img-circle" title="User1" alt="User1" data-src="holder.js/40x40/lava">
+                            </div>
+                        </div>
+                        <small class="pull-right text-muted">@item.ReplyDate.Value.Date.ToString("dd-MM-yyyy") at @item.ReplyDate.Value.TimeOfDay.ToString()</small>
+                        <div>
+                            <small class="list-group-item-heading text-muted text-primary">Admin</small>
+                            <p class="list-group-item-text">
+                                @item.Reply
+                            </p>
+                        </div>
+                        <div>
+                            <a href="@Url.Action("Reply","CustomerQuery", new {EID = item.CustQueryReplyID })"><i title="Edit" class="fas fa-edit fa-inverse h3 float-right DropShadow"></i></a>
+
+                        </div>
+                    </li>
+                    
+                    }
+                </ul>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+<script>
+   $( function(){
+       $("textarea").jqte();
+    });
+</script>
