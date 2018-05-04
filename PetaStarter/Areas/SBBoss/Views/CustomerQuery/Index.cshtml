@@ -1,0 +1,127 @@
+﻿//For datatables
+<link rel="stylesheet" type="text/css" href="/Content/datatables.min.css" />
+<script type="text/javascript" src="/Scripts/datatables.min.js"></script>
+<link rel="stylesheet" type="text/css" href="cdn.datatables.net/plug-ins/1.10.16/sorting/datetime-moment.js" />
+
+
+<style>
+    .dataTables_wrapper .dataTables_filter {
+        float: right;
+        text-align: right;
+        visibility: hidden;
+    }
+</style>
+
+<div class="card border rounded DropShadow">
+    <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
+        <span class="h3">Customer Queries</span>
+    </div>
+    <div class="card-body">
+        <h5>&nbsp;</h5>
+
+        <table id="CTbl" class="table table-sm table-striped">
+            <thead class="thead-light">
+                <tr role="row">
+                    <th><input type="text" class="form-control" placeholder="N#"></th>
+                    <th><input type="date" class="form-control" placeholder="Filter Date"></th>
+
+                    <th><input type="text" class="form-control" placeholder="Filter FirstName"></th>
+                    <th><input type="text" class="form-control" placeholder="Filter SurName"></th>
+                    <th><input type="text" class="form-control" placeholder="Filter Email"></th>
+
+                    <th><input type="text" class="form-control" placeholder="Filter Phone"></th>
+                    <th><input type="text" class="form-control" placeholder="Filter Query"></th>
+                    <th><input type="date" class="form-control" placeholder="Filter Check In"></th>
+                    <th><input type="date" class="form-control" placeholder="Filter Check Out"></th>
+                    <th><input type="text" class="form-control" placeholder="Filter No Pax"></th>
+                    <th><input type="text" class="form-control" placeholder="Filter Qty"></th>
+
+
+                    <th width="5%"></th>
+                </tr>
+                <tr role="row">
+                    <th scope="col">No.</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">First Name</th>
+                    <th scope="col">Sur Name</th>
+                    <th scope="col" class="no-sort">Email</th>
+                    <th scope="col">Phone</th>
+                    <th scope="col">Query</th>
+                    <th scope="col">CheckIn</th>
+                    <th scope="col">CheckOut</th>
+                    <th scope="col">No Pax</th>
+                    <th scope="col" class="no-sort">Qty</th>
+
+
+
+                    <th width="5%"></th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+    </div>
+</div>
+
+
+
+<script>
+    $(function () {
+        var oTable = $('#CTbl').DataTable({
+            serverSide: true,
+            searching: true,
+            ajax: {
+                "type": "POST",
+                "url": '@Url.Action("GetCustomerQueries")',
+                "contentType": 'application/json; charset=utf-8',
+                'data': function (data) {
+                    return data = JSON.stringify(data);
+                }
+            },
+            processing: true,
+            paging: true,
+            pagingType: "full_numbers",
+            deferRender: true,
+          
+            columns: [
+                { data: "CustomerQueryID" },
+                { data: "Tostr" },
+                { data: "FName" },
+                { data: "SName" },
+                { data: "Email" },
+                { data: "Phone" },
+                { data: "_Query" },
+                { data: "Instr" },
+                { data: "Outstr" },
+                { data: "NoPax" },
+                { data: "Qty" },
+
+
+            ],
+            columnDefs: [{
+                'targets': 11,
+                'searchable': false,
+                'orderable': false,
+                'bSortable': false,
+                'render': function (data, type, full, meta) {
+                    return '<a href="/SBBoss/CustomerQuery/Reply/' + full.CustomerQueryID + '?ServiceID=' + full.ServiceID + '&&st=' + full.ServiceTypeID + '"><i class="fas fa-edit fa-inverse h3 float-right DropShadow"></i></a> &nbsp;';
+                }
+            },
+            {
+                targets: 'no-sort',
+                orderable: false
+            }]
+        });
+
+
+
+        $("#CTbl thead th input[type=text]").on('change', function () {
+            oTable.column($(this).parent().index() + ':visible')
+                .search(this.value)
+                .draw();
+        });
+
+    })
+    
+
+</script>
