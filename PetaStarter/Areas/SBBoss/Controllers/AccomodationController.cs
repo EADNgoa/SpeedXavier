@@ -155,10 +155,17 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
         public ActionResult FetchDetails(int? id)
         {
-            var accom = base.BaseCreateEdit<Accomodation>(id, "AccomodationID");
+            var accom = base.BaseCreateEdit<Accomodation>(id, "AccomodationID")??new Accomodation();
             ViewBag.GeoId = db.Query<GeoTree>("Select * from GeoTree where GeoTreeId = (Select GeoTreeId from Accomodation where AccomodationId=@0)", accom?.AccomodationID ?? 0).Select(sl => new SelectListItem { Text = sl.GeoName, Value = sl.GeoTreeID.ToString(), Selected = true });
             ViewBag.FaciityID = db.Query<Facility>("Select FacilityID, FacilityName from Facility where FacilityID in (Select FacilityID from Facility_Accomodation where FacilityID=@0)", accom?.AccomodationID ?? 0).Select(sl => new SelectListItem { Text = sl.FacilityName, Value = sl.FacilityID.ToString(), Selected = true });
            
+            //init lat lang
+            if (id.Value ==0)
+            {
+                accom.lat = "15.499539572611416";
+                accom.longt = "73.82869418361702";
+            }
+
             return PartialView("Details", accom);
         }
        

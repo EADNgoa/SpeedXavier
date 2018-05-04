@@ -276,7 +276,6 @@
     <Content Include="Content\jquery-ui-timepicker-addon.css" />
     <Content Include="Content\jquery-ui-timepicker-addon.min.css" />
     <Content Include="Content\PagedList.css" />
-    <Content Include="Custom\sidenav5.jpg" />
     <Content Include="Scripts\blueimp\blueimp-gallery-fullscreen.js" />
     <Content Include="Scripts\blueimp\blueimp-gallery-indicator.js" />
     <Content Include="Scripts\blueimp\blueimp-gallery-video.js" />
