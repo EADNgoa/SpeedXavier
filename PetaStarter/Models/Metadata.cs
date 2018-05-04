@@ -7,6 +7,7 @@ using System.Web.Mvc;
 
 namespace Speedbird
 {
+  
     public class CustomerMetadata
     {
         [Display(Name = "Name")]

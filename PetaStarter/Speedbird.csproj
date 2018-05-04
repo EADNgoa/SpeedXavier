@@ -197,6 +197,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Areas\SBBoss\Controllers\AttributeController.cs" />
+    <Compile Include="Areas\SBBoss\Controllers\CustomerQueryController.cs" />
     <Compile Include="Areas\SBBoss\Controllers\TaxController.cs" />
     <Compile Include="Areas\SBBoss\Controllers\GeoTreeController.cs" />
     <Compile Include="Areas\SBBoss\Controllers\EAController.cs" />
@@ -486,6 +487,9 @@
     <Content Include="Areas\SBBoss\Views\Accomodation\Picture.cshtml" />
     <Content Include="Areas\SBBoss\Views\CarBike\Details.cshtml" />
     <Content Include="Areas\SBBoss\Views\CarBike\CarPicture.cshtml" />
+    <Content Include="Areas\SBBoss\Views\CustomerQuery\Index.cshtml" />
+    <Content Include="Areas\SBBoss\Views\CustomerQuery\Price.cshtml" />
+    <Content Include="Areas\SBBoss\Views\CustomerQuery\Reply.cshtml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\i18n\jquery-ui-timepicker-addon-i18n.js" />
     <Content Include="Scripts\i18n\jquery-ui-timepicker-addon-i18n.min.js" />

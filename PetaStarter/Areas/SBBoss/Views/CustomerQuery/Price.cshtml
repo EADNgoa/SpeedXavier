@@ -1,0 +1,108 @@
+﻿@model Speedbird.Price
+
+@{
+    ViewBag.Title = $"Manage Price";
+}
+
+
+
+
+<div class="card border rounded DropShadow">
+    <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
+        <span class="h3">@ViewBag.Title</span>
+    </div>
+    <div class="card-body">
+        <h5>&nbsp;</h5>
+        <div class="section-to-Not-print">
+            @using (Html.BeginForm("Price", "CarBike", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-horizontal ">
+
+
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                    @Html.Hidden("ServiceID", (int)ViewBag.CarBikeID)
+                    
+
+                    @if (Model?.PriceID != null)
+                    {@Html.Hidden("PriceID", (int)Model.PriceID)}
+
+
+                    <div class="form-row">
+                        <div class="input-group col mb-3">
+                            <div class="input-group-prepend"><span class="input-group-text">Option Type</span></div>
+                            @Html.DropDownList("OptionTypeID", null, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.OptionTypeID, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="input-group col mb-3">
+                            <div class="input-group-prepend"><span class="input-group-text">With Effect From</span></div>
+                            @Html.EditorFor(model => model.WEF, new { htmlAttributes = new { @type = "text", @class = "eadate form-control" } })
+                            @Html.ValidationMessageFor(model => model.WEF, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="input-group col mb-3">
+                            <div class="input-group-prepend"><span class="input-group-text">Price</span></div>
+                            @Html.EditorFor(model => model._Price, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model._Price, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="input-group col mb-3">
+                            <input type="submit" value="Save" class="btn btn-primary" />
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <br />
+
+
+        <hr />
+        <table class="table table-sm section-to-print index-css" width="100%">
+            <tr>
+                <th>Option Type</th>
+                <th>With Effect From</th>
+                <th>Price</th>
+                <th class="section-to-Not-print"></th>
+            </tr>
+            @foreach (var item in (IEnumerable<Speedbird.PriceDets>)ViewBag.Price)
+            {
+                <tr>
+                    <td>
+                        @item.OptionTypeName
+                    </td>
+                    <td>
+                        @($"{item.WEF:dd/MMM/yyyy}")
+                    </td>
+                    <td>
+                        @item.Price
+                    </td>
+                    <td>
+                        <a href="@Url.Action("Manage","CarBike",new {id = (int?)ViewBag.CarBikeID, mode=2, EID=item.PriceID })">Edit</a>
+                    </td>
+                </tr>
+            }
+
+        </table>
+
+
+    </div>
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+<script>
+    $(function () {
+        //DateTime picker
+        $('.eadate').datepicker({
+            dateFormat: "dd-M-yy",
+            showButtonPanel: true,
+            changeMonth: true,
+            changeYear: true
+        }).attr('type', 'text').attr('autocomplete', 'off');
+
+        //Disable the browsers default date picker
+        jQuery.validator.methods["date"] = function (value, element) { return true; }
+
+    })
+</script>

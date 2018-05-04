@@ -315,4 +315,25 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="IconId" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="f2ec3ec7-5547-4a10-89ff-85adb4757be8" ChangeDateTime="05/04/2018 01:53:46">
+    <Property Name="ElementName" Value="[dbo].[CustQueryReply].[ReviewReplyID]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[CustQueryReply]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="CustQueryReplyID" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="22256e49-cfc2-4c8c-a6ba-fef552b1e2f7" ChangeDateTime="05/04/2018 01:54:04">
+    <Property Name="ElementName" Value="[dbo].[CustQueryReply].[ReviewID]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[CustQueryReply]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="CustomerQueryID" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="8248fe67-4862-4854-ac57-7438b9d19ac2" ChangeDateTime="05/04/2018 01:54:25">
+    <Property Name="ElementName" Value="[dbo].[CustQueryReply].[ReviewDate]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[CustQueryReply]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="ReplyDate" />
+  </Operation>
 </Operations>
