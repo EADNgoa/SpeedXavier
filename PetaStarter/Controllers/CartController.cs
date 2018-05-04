@@ -38,7 +38,7 @@ namespace Speedbird.Controllers
       
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult AddToCart(int? ServiceID,int? ServiceTypeID,System.Web.HttpPostedFileBase UploadedFile,DateTime? CheckIn, DateTime? CheckOut,int? nums,int? Qty,string fname,string sname,string email,string phno,int? CustomerID,string chckbtn,string Query)
+        public ActionResult AddToCart(int? ServiceID,int? ServiceTypeID,System.Web.HttpPostedFileBase UploadedFile,DateTime? CheckIn, DateTime? CheckOut,int? nums,int? Qty,string fname,string sname,string email,string phno,int? CustomerID,string chckbtn,string Query, string Gtime, int? Glang)
         {
             if (chckbtn == "Cart")
             {
@@ -87,14 +87,14 @@ namespace Speedbird.Controllers
                 {
                     db.Execute($"Update Customer Set FName='{fname}',SName='{sname}',Phone={phno} where CustomerID={CustomerID}");
                 }
+                return RedirectToAction("Cart");       
             }
             if (chckbtn == "Query")
             {
 
                 if (Query != null)
                 {
-                    var cust = new CustomerQuery { FName = fname, SName = sname, Email = email, Phone = phno,_Query=Query,ServiceID=ServiceID,ServiceTypeID=ServiceTypeID ,CheckIn=CheckIn,CheckOut=CheckOut,NoPax=nums,Qty=Qty,Tdate=DateTime.Now
-                    };
+                    var cust = new CustomerQuery { FName = fname, SName = sname, Email = email, Phone = phno,_Query=Query,ServiceID=ServiceID,ServiceTypeID=ServiceTypeID ,CheckIn=CheckIn,CheckOut=CheckOut,NoPax=nums,Qty=Qty,Tdate=DateTime.Now, Glang=Glang, Gtime=Gtime};
 
                     if (UploadedFile != null)
                     {
@@ -107,7 +107,7 @@ namespace Speedbird.Controllers
                     db.Insert(cust);
                 }
             }
-                return RedirectToAction("Cart");       
+                return RedirectToAction("Index", "Home");
         }
 
         private string SaveImage(Sql sql, string v, int customerID, HttpPostedFileBase uploadedFile)

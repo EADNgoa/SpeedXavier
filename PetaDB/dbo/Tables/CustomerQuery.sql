@@ -13,6 +13,8 @@
     [CheckOut] DATETIME NULL, 
     [NoPax] INT NULL, 
     [Qty] INT NULL, 
-    [Tdate] DATETIME NULL
+    [Tdate] DATETIME NULL, 
+    [Glang] INT NULL, 
+    [Gtime] VARCHAR(10) NULL
 
 )
