@@ -140,7 +140,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 ViewBag.sid = (int)st;
              }
             ViewBag.ServiceID = ServiceID;
-
+            ViewBag.Dets = db.FirstOrDefault<CustomerQuery>("Select * from CustomerQuery Where CustomerQueryID=@0",id);
             ViewBag.Chat = db.Fetch<CustQueryReply>($"Select * from CustQueryReply Where CustomerQueryID = {id} Order By CustomerQueryID Desc");
             return View(base.BaseCreateEdit<CustQueryReply>(EID, "CustQueryReplyID"));
         }
