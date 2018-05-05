@@ -93,7 +93,8 @@ namespace Speedbird
         public decimal price { get; set; }
 
         public IEnumerable<PictureDets> Pic { get; set; }
-        public string Glang { get; set; }
+        public IEnumerable<GuideLanguage> Glang { get; set; }
+        public IEnumerable<string> Gtime { get; set; }
 
         public IEnumerable<CategoryDets>Cat { get; set; }
         public IEnumerable<PriceDets>Pric { get; set; }

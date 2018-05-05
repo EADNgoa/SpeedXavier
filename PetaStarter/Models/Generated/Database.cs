@@ -1172,37 +1172,161 @@ namespace Speedbird
 	}
 
     
+
 	[TableName("dbo.CustomerQuery")]
+
+
+
 	[PrimaryKey("CustomerQueryID")]
+
+
+
+
 	[ExplicitColumns]
+
     public partial class CustomerQuery  
     {
+
+
+
 		[Column] public int CustomerQueryID { get; set; }
+
+
+
+
+
 		[Column] public string FName { get; set; }
+
+
+
+
+
 		[Column] public string SName { get; set; }
+
+
+
+
+
 		[Column] public string Email { get; set; }
+
+
+
+
+
 		[Column] public string Phone { get; set; }
+
+
+
+
+
 		[Column] public string IdPicture { get; set; }
+
+
+
+
+
 		[Column("Query")] public string _Query { get; set; }
+
+
+
+
+
 		[Column] public int? ServiceID { get; set; }
+
+
+
+
+
 		[Column] public int? ServiceTypeID { get; set; }
+
+
+
+
+
 		[Column] public DateTime? CheckIn { get; set; }
+
+
+
+
+
 		[Column] public DateTime? CheckOut { get; set; }
+
+
+
+
+
 		[Column] public int? NoPax { get; set; }
+
+
+
+
+
 		[Column] public int? Qty { get; set; }
+
+
+
+
+
 		[Column] public DateTime? Tdate { get; set; }
+
+
+
+
+
+		[Column] public int? Glang { get; set; }
+
+
+
+
+
+		[Column] public string Gtime { get; set; }
+
+
+
 	}
+
     
+
 	[TableName("dbo.CustQueryReply")]
+
+
+
 	[PrimaryKey("CustQueryReplyID")]
+
+
+
+
 	[ExplicitColumns]
+
     public partial class CustQueryReply  
     {
+
+
+
 		[Column] public int CustQueryReplyID { get; set; }
+
+
+
+
+
 		[Column] public int? CustomerQueryID { get; set; }
+
+
+
+
+
 		[Column] public DateTime? ReplyDate { get; set; }
+
+
+
+
+
 		[Column] public string Reply { get; set; }
+
+
+
 	}
+
     
 
 	[TableName("dbo.DiscountCoupon")]
