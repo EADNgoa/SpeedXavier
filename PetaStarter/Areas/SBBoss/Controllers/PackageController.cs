@@ -47,10 +47,10 @@ namespace Speedbird.Areas.SBBoss.Controllers
             if (columnSearch[8]?.Length > 0) { int.TryParse(columnSearch[8], out daysl); columnSearch[8] = null; }
             string sortOrder = parameters.SortOrder.Replace("EndDateStr", "ValidTo");
 
-            var sql = new PetaPoco.Sql($"Select distinct p.*,ValidTo, (select max(v.ValidTo) from PackageValidity v where v.PackageId=p.PackageID) as EndDate " +
-                $"from Package p Left Join PackageValidity v on v.PackageId=p.PackageID  and v.PVId=(select max(PVId) from PackageValidity where PackageId=p.PackageID)" );
+            var sql = new PetaPoco.Sql($"Select distinct p.*,ValidTo, (select max(v.ValidTo) from PackageValidity v where v.ServiceID=p.PackageID) as EndDate " +
+                $"from Package p Left Join PackageValidity v on v.ServiceID=p.PackageID  and v.PVId=(select max(PVId) from PackageValidity where PackageId=p.PackageID)" );
             var fromsql= new PetaPoco.Sql();
-            var wheresql = new PetaPoco.Sql($" where ServiceTypeId={sid} ");
+            var wheresql = new PetaPoco.Sql($" where p.ServiceTypeId={sid} ");
 
             if (geos.Length > 0)
             {
@@ -332,14 +332,14 @@ namespace Speedbird.Areas.SBBoss.Controllers
         public ActionResult PVManage(int? id, int? sid, int? EID)
         {
             ViewBag.Pack = db.FirstOrDefault<Package>($"Select * From Package Where PackageID='{id}'");
-            ViewBag.sid = sid;
-            ViewBag.Validity = db.Fetch<PackageValidity>($"Select * From PackageValidity where PackageID ='{id}'");
+            ViewBag.sid = ServiceTypeEnum.Packages;
+            ViewBag.Validity = db.Fetch<PackageValidity>($"Select * From PackageValidity where ServiceID ='{id}'");
             return PartialView(base.BaseCreateEdit<PackageValidity>(EID, "PVID"));
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public void PVManage([Bind(Include = "PVID,PackageId,ValidFrom,ValidTo,")] PackageValidity item, int sid)
+        public void PVManage([Bind(Include = "PVID,ValidFrom,ValidTo,ServiceID,ServiceTypeID")] PackageValidity item)
         {
             base.BaseSave<PackageValidity>(item, item.PVId > 0);
         }
@@ -468,7 +468,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             int i = 0;
             foreach (var item in ActIds)
             {
-                db.Insert(new Package_Supplier { PackageID = PackageId, SupplierID = item, ContractNo = GoodConts[i] });
+                db.Insert(new Package_Supplier { PackageID = PackageId, SupplierID = item,ServiceTypeID=(int)ServiceTypeEnum.Packages, ContractNo = GoodConts[i] });
                 i++;
             }
         }

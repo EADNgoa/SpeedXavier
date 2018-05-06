@@ -7,5 +7,6 @@
     [lat] VARCHAR(50) NULL, 
     [longt] VARCHAR(50) NULL, 
     [CouponCode] VARCHAR(50) NULL, 
+    [SupplierNotepad] VARCHAR(MAX) NULL, 
     CONSTRAINT [FK_Accomodation_GeoTree] FOREIGN KEY ([GeoTreeID]) REFERENCES [GeoTree]([GeoTreeID])
 )

@@ -40,7 +40,7 @@ namespace Speedbird.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult AddToCart(int? ServiceID,int? ServiceTypeID,System.Web.HttpPostedFileBase UploadedFile,DateTime? CheckIn, DateTime? CheckOut,int? nums,int? Qty,string fname,string sname,string email,string phno,int? CustomerID,string chckbtn,string Query, string Gtime, int? Glang)
         {
-            if (chckbtn == "Cart")
+            if (chckbtn == "cart")
             {
 
                 Cart item = new Cart();

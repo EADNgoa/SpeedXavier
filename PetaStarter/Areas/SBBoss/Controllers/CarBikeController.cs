@@ -130,6 +130,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             "HasAc",
             "HasCarrier",
             "InclHelmet",
+            "IsBike"
 
         };
 
@@ -150,12 +151,14 @@ namespace Speedbird.Areas.SBBoss.Controllers
         {
             var accom = base.BaseCreateEdit<CarBike>(id, "CarBikeID");
             ViewBag.GeoId = db.Query<GeoTree>("Select * from GeoTree where GeoTreeId = (Select GeoTreeId from CarBike where CarBikeId=@0)", accom?.CarBikeID ?? 0).Select(sl => new SelectListItem { Text = sl.GeoName, Value = sl.GeoTreeID.ToString(), Selected = true });
+            ViewBag.Sups = db.Query<Supplier>("Select * from Supplier where SupplierId in (Select SupplierId from Package_Supplier where PackageId=@0)", accom?.CarBikeID ?? 0).Select(sl => new SelectListItem { Text = sl.SupplierName, Value = sl.SupplierID.ToString(), Selected = true });
+            ViewBag.SupConts = db.Query<Package_Supplier>("Select * from Package_Supplier where PackageId=@0", accom?.CarBikeID ?? 0).Select(sl => sl.ContractNo);
             return PartialView("Details", accom);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public bool Manage([Bind(Include = "CarBikeID,CouponCode,CarBikeName,GeoTreeID,Description,NoPax,NoSmallBags,NoLargeBags,HasAc,HasCarrier,InclHelmet")] CarBike item)
+        public bool Manage([Bind(Include = "CarBikeID,CouponCode,CarBikeName,GeoTreeID,Description,NoPax,NoSmallBags,NoLargeBags,HasAc,HasCarrier,InclHelmet,SupplierNotepad,IsBike")] CarBike item)
         {
             using (var transaction = db.GetTransaction())
             {
@@ -235,7 +238,20 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
         }
 
+        public ActionResult PVManage(int? id, int? sid, int? EID)
+        {
+            ViewBag.Pack = db.FirstOrDefault<CarBike>($"Select * From CarBike Where CarBikeID={id}");
+            ViewBag.sid = ServiceTypeEnum.CarBike;
+            ViewBag.Validity = db.Fetch<PackageValidity>($"Select * From PackageValidity where ServiceID ='{id}'");
+            return PartialView(base.BaseCreateEdit<PackageValidity>(EID, "PVID"));
+        }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public void PVManage([Bind(Include = "PVID,ValidFrom,ValidTo,ServiceID,ServiceTypeID")] PackageValidity item)
+        {
+            base.BaseSave<PackageValidity>(item, item.PVId > 0);
+        }
 
 
         public ActionResult Delete(int? stid, int? pid, int? sid)
@@ -255,7 +271,41 @@ namespace Speedbird.Areas.SBBoss.Controllers
             return RedirectToAction("Manage");
         }
 
+        public JsonResult GetSup(string term)
+        {
+            var locs = db.Fetch<Supplier>("Select * from Supplier where SupplierName like '%" + term + "%'");
+            return Json(new { results = locs.Select(a => new { id = a.SupplierID, text = a.SupplierName }) }, JsonRequestBehavior.AllowGet);
+        }
 
+        [HttpPost]
+        public void SupSave(int PackageId, IEnumerable<int> ActIds, string Conts)
+        {
+
+            //Clean and split Contract nos
+            Conts = Conts.Replace("\n", "");
+            var SplitConts = Conts.Split(',');
+            var GoodConts = SplitConts.Where(c => c.Trim().Length > 1).Select(c => c.Trim()).ToArray();
+
+            //handle deletions
+            //var oldRecs = db.Query<Package_Supplier>("Where PackageId=@0", PackageId);
+            //var bestRecs = oldRecs.Where(r => !ActIds.Contains(r.SupplierID));
+
+            db.Delete<Package_Supplier>("Where PackageId=@0", PackageId);
+
+            int i = 0;
+            foreach (var item in ActIds)
+            {
+                db.Insert(new Package_Supplier { PackageID = PackageId, SupplierID = item, ServiceTypeID = (int)ServiceTypeEnum.CarBike, ContractNo = GoodConts[i] });
+                i++;
+            }
+        }
+
+
+        public string KillSup(int PackageId, int deadSup)
+        {
+            db.Delete<Package_Supplier>("Where packageId=@0 and SupplierId=@1", PackageId, deadSup);
+            return String.Join(",", db.Query<Package_Supplier>("Where packageId=@0", PackageId).Select(s => s.ContractNo));
+        }
 
 
 
