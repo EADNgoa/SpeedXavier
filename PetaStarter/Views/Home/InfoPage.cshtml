@@ -4,17 +4,19 @@
     <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="/Content/css/blueimp-gallery.min.css"> 
+    <link rel="stylesheet" href="/Content/css/blueimp-gallery.min.css">
 </head>
 <style>
     .media-body {
         zoom: 1.1;
     }
-    .comment-section{
-        margin-left:40px;
+
+    .comment-section {
+        margin-left: 40px;
     }
-    .media{
-        zoom:1.1;
+
+    .media {
+        zoom: 1.1;
     }
     /*small change*/
     .carousel {
@@ -82,7 +84,7 @@
 
     /*Specific*/
     .DetailBlock, .DescriptionBlock {
-        padding: 50px;        
+        padding: 50px;
         min-height: 50px;
         margin-bottom: 20px;
         width: 100%;
@@ -90,7 +92,6 @@
 
     .DetailBlock {
         background: #f4f3ea;
-
     }
 
     .DescriptionBlock {
@@ -341,7 +342,7 @@
                                     @Html.DropDownList("nums", ViewBag.nums as IEnumerable<SelectListItem>, "Select No Of People", new { @class = "form-control nopax" })
                                 </div>
                             </div>
-                            if(((int)ViewBag.ST) == (int) ServiceTypeEnum.Packages || ((int)ViewBag.ST) == (int)ServiceTypeEnum.Cruise || ((int)ViewBag.ST) == (int)ServiceTypeEnum.SightSeeing )
+                            if (((int)ViewBag.ST) == (int)ServiceTypeEnum.Packages || ((int)ViewBag.ST) == (int)ServiceTypeEnum.Cruise || ((int)ViewBag.ST) == (int)ServiceTypeEnum.SightSeeing)
                             {
                                 <div class="form-group">
                                     <div class="col-md-12">
@@ -385,7 +386,7 @@
                                         <div class="col-md-12">
                                             <input type="text" name="phno" value="@ViewBag.CustRec.Phone" class="form-control" />
                                         </div>
-                                    </div>                                    
+                                    </div>
 
                                 }
                                 else
@@ -461,7 +462,38 @@
     </div>
 
 </div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col">
+            <h1>Reviews</h1>
+            @foreach (var item in Model)
+            {
+                <div class="media">
+                    <div class="media-left">
+                        <img src="/Images/talk.png" class="media-object" style="width:45px">
+                    </div>
+                    <div class="media-body">
+                        <h4 class="media-heading">@item.UserName <small><i>Posted on @item.ReviewDate</i></small></h4>
+                        <p>@item.Review</p>
+                        @foreach (var r in item.Replies)
+                        {
+                            <div class="media">
+                                <div class="media-left">
+                                    <img src="/Images/talk.png" class="media-object" style="width:45px">
+                                </div>
+                                <div class="media-body">
+                                    <h4 class="media-heading">@r.UserName <small><i>Posted on @item.ReviewDate</i></small></h4>
+                                    <p>@r.Reply</p>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
 
+        </div>
+    </div>
+</div>
 
 <script>
     var $container2 = $('#Container2');

@@ -285,7 +285,7 @@ namespace Speedbird.Controllers
             var reviews = db.Query<ReviewDets>("Select * from Review r inner join AspNetUsers anu on anu.Id=r.UserID where ServiceID=@0 and ServiceTypeID=@1 and IsVisible = @2",ServiceID,(int)st,true).ToList();
             reviews.ForEach(r=>
             {
-                r.Replies = db.Query<ReviewRepDets>("Select * from ReviewReplies rr inner join AspNetUsers anu on anu.Id=rr.UserID where ReviewID= @0 and IsVisible =@1", r.ReviewID,true).ToList();
+                r.Replies = db.Query<ReviewRepDets>("Select * from ReviewReplies rr where ReviewID= @0 and IsVisible =@1", r.ReviewID,true).ToList();
             });
             ViewBag.ST = st;
             ViewBag.ServiceID = ServiceID;
