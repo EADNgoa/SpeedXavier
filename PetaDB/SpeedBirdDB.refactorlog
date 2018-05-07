@@ -336,4 +336,25 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="ReplyDate" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="d302dfd9-b492-4b8a-aebd-7a1798c65fc9" ChangeDateTime="05/05/2018 09:42:41">
+    <Property Name="ElementName" Value="[dbo].[PackageValidity].[PackageId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[PackageValidity]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="ServiceID" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="9d097630-e97c-4167-b87d-0a1c98e4bc17" ChangeDateTime="05/06/2018 08:18:12">
+    <Property Name="ElementName" Value="[dbo].[Package_Supplier].[PackageID]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Package_Supplier]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="ServiceID" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="85295397-a40a-47ef-a6aa-806b6351ea54" ChangeDateTime="05/06/2018 08:19:05">
+    <Property Name="ElementName" Value="[dbo].[Package_Supplier].[ServiceID]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Package_Supplier]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="PackageID" />
+  </Operation>
 </Operations>

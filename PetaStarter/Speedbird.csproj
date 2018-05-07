@@ -492,7 +492,12 @@
     <Content Include="Areas\SBBoss\Views\CustomerQuery\Index.cshtml" />
     <Content Include="Areas\SBBoss\Views\CustomerQuery\Price.cshtml" />
     <Content Include="Areas\SBBoss\Views\CustomerQuery\Reply.cshtml" />
-    <Content Include="Content\themes\fontawesome-stars.less" />
+
+
+
+    <Content Include="Areas\SBBoss\Views\Accomodation\PVManage.cshtml" />
+    <Content Include="Areas\SBBoss\Views\CarBike\PVManage.cshtml" />
+
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\i18n\jquery-ui-timepicker-addon-i18n.js" />
     <Content Include="Scripts\i18n\jquery-ui-timepicker-addon-i18n.min.js" />

@@ -18,7 +18,7 @@
 
 
 /*
-	// Tweak Schema
+	// Tweak Schemaint sid
 	tables["tablename"].Ignore = true;							// To ignore a table
 	tables["tablename"].ClassName = "newname";					// To change the class name of a table
 	tables["tablename"]["columnname"].Ignore = true;			// To ignore a column
