@@ -170,6 +170,8 @@ namespace Speedbird
         public int NoSmallBags { get; set; }
         public int NoLargeBags { get; set; }
         public bool HasAc { get; set; }
+        public bool IsBike { get; set; }
+
         public bool HasCarrier { get; set; }
         public bool InclHelmet { get; set; }
         public int ServiceID { get; set; }

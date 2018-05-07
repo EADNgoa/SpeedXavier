@@ -1,7 +1,7 @@
 ﻿@model Speedbird.PackageValidity
 
 @{
-    ViewBag.Title = $"Manage Package Validity";
+    ViewBag.Title = $"Manage Car/Bike Validity";
 }
 
 
@@ -12,7 +12,7 @@
     <div class="card-body">
         <h5>&nbsp;</h5>
         <div class="section-to-Not-print">
-       @using (Html.BeginForm("PVManage", "Package", FormMethod.Post, new { id = "vpFrm" }))
+       @using (Html.BeginForm("PVManage", "CarBike", FormMethod.Post, new { id = "vpFrm" }))
        {
             @Html.AntiForgeryToken()
 
@@ -21,7 +21,7 @@
                 <hr />
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-                @Html.Hidden("ServiceID", (int)ViewBag.Pack.PackageID)
+                @Html.Hidden("ServiceID", (int)ViewBag.Pack.CarBikeID)
                 @Html.Hidden("ServiceTypeID", (int)ViewBag.sid)
 
                  @if (Model?.PVId > 0)

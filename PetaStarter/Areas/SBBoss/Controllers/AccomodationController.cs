@@ -147,7 +147,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
         {
             ViewBag.sid = sid;
             ViewBag.mode = mode;
-            ViewBag.EID = EID;          
+            ViewBag.EID = EID;
+            
             ViewBag.AccomName = db.ExecuteScalar<string>("Select AccomName from Accomodation where AccomodationID=@0", id);
             ViewBag.AccomodationID = id;
             return View();
@@ -158,7 +159,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
             var accom = base.BaseCreateEdit<Accomodation>(id, "AccomodationID")??new Accomodation();
             ViewBag.GeoId = db.Query<GeoTree>("Select * from GeoTree where GeoTreeId = (Select GeoTreeId from Accomodation where AccomodationId=@0)", accom?.AccomodationID ?? 0).Select(sl => new SelectListItem { Text = sl.GeoName, Value = sl.GeoTreeID.ToString(), Selected = true });
             ViewBag.FaciityID = db.Query<Facility>("Select FacilityID, FacilityName from Facility where FacilityID in (Select FacilityID from Facility_Accomodation where FacilityID=@0)", accom?.AccomodationID ?? 0).Select(sl => new SelectListItem { Text = sl.FacilityName, Value = sl.FacilityID.ToString(), Selected = true });
-           
+            ViewBag.Sups = db.Query<Supplier>("Select * from Supplier where SupplierId in (Select SupplierId from Package_Supplier where PackageId=@0)", accom?.AccomodationID ?? 0).Select(sl => new SelectListItem { Text = sl.SupplierName, Value = sl.SupplierID.ToString(), Selected = true });
+            ViewBag.SupConts = db.Query<Package_Supplier>("Select * from Package_Supplier where PackageId=@0", accom?.AccomodationID ?? 0).Select(sl => sl.ContractNo);
             //init lat lang
             if (id.Value ==0)
             {
@@ -171,7 +173,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
        
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public bool Manage([Bind(Include = "AccomodationID,AccomName,Description,GeoTreeID,Lat,Longt,CouponCode")] Accomodation item)
+        public bool Manage([Bind(Include = "AccomodationID,AccomName,Description,GeoTreeID,Lat,Longt,CouponCode,SupplierNotepad")] Accomodation item)
         {
             using (var transaction = db.GetTransaction())
             {
@@ -327,7 +329,56 @@ namespace Speedbird.Areas.SBBoss.Controllers
         {
             return base.BaseSave<PriceInclusion>(item, item.PriceInclusionId > 0, "PriceInclusions", new { id = item.PriceId});
         }
+        public ActionResult PVManage(int? id, int? sid, int? EID)
+        {
+            ViewBag.Pack = db.FirstOrDefault<Accomodation>($"Select * From Accomodation Where AccomodationID={id}");
+            ViewBag.sid = ServiceTypeEnum.Accomodation;
+            ViewBag.Validity = db.Fetch<PackageValidity>($"Select * From PackageValidity where ServiceID ='{id}'");
+            return PartialView(base.BaseCreateEdit<PackageValidity>(EID, "PVID"));
+        }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public void PVManage([Bind(Include = "PVID,ValidFrom,ValidTo,ServiceID,ServiceTypeID")] PackageValidity item)
+        {
+            base.BaseSave<PackageValidity>(item, item.PVId > 0);
+        }
+        //Supplier
+        public JsonResult GetSup(string term)
+        {
+            var locs = db.Fetch<Supplier>("Select * from Supplier where SupplierName like '%" + term + "%'");
+            return Json(new { results = locs.Select(a => new { id = a.SupplierID, text = a.SupplierName }) }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public void SupSave(int PackageId, IEnumerable<int> ActIds, string Conts)
+        {
+
+            //Clean and split Contract nos
+            Conts = Conts.Replace("\n", "");
+            var SplitConts = Conts.Split(',');
+            var GoodConts = SplitConts.Where(c => c.Trim().Length > 1).Select(c => c.Trim()).ToArray();
+
+            //handle deletions
+            //var oldRecs = db.Query<Package_Supplier>("Where PackageId=@0", PackageId);
+            //var bestRecs = oldRecs.Where(r => !ActIds.Contains(r.SupplierID));
+
+            db.Delete<Package_Supplier>("Where PackageId=@0", PackageId);
+
+            int i = 0;
+            foreach (var item in ActIds)
+            {
+                db.Insert(new Package_Supplier { PackageID = PackageId, SupplierID = item, ServiceTypeID = (int)ServiceTypeEnum.Accomodation, ContractNo = GoodConts[i] });
+                i++;
+            }
+        }
+
+
+        public string KillSup(int PackageId, int deadSup)
+        {
+            db.Delete<Package_Supplier>("Where packageId=@0 and SupplierId=@1", PackageId, deadSup);
+            return String.Join(",", db.Query<Package_Supplier>("Where packageId=@0", PackageId).Select(s => s.ContractNo));
+        }
         protected override void Dispose(bool disposing)
         {
             if (disposing)

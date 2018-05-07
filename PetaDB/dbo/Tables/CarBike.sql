@@ -11,5 +11,7 @@
     [HasCarrier] BIT NOT NULL DEFAULT 0, 
     [InclHelmet] BIT NOT NULL DEFAULT 0, 
     [CouponCode] VARCHAR(50) NULL, 
+    [IsBike] BIT NULL, 
+    [SupplierNotepad] VARCHAR(MAX) NULL, 
     CONSTRAINT [FK_CarBike_ToGeotree] FOREIGN KEY ([GeoTreeId]) REFERENCES [GeoTree]([GeoTreeId])
 )
