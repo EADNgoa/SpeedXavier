@@ -5,6 +5,7 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/Content/css/blueimp-gallery.min.css">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
 </head>
 <style>
     .media-body {
@@ -462,58 +463,152 @@
     </div>
 
 </div>
-<div class="container-fluid">
-    <div class="row">
-        <div class="col">
-            <h1>Reviews</h1>
-            @foreach (var item in Model)
+<div class="comment-section">
+
+    <div class="container-fluid">
+
+        <h2>Comments</h2>
+
+        @if (ViewBag.checkBooking != null)
+
+        {
+
+            using (Html.BeginForm("InfoPage", "Home", FormMethod.Post))
+
             {
-                <div class="media">
-                    <div class="media-left">
-                        <img src="/Images/talk.png" class="media-object" style="width:45px">
+
+                <div class="form-group">
+
+                    <div class="col-md-10">
+
+                        @Html.Hidden("ServiceID", (int)ViewBag.ServiceID)
+
+                        @Html.Hidden("st", (int)ViewBag.ST)
+
+
+
+                        @Html.TextArea("Comment", new { htmlAttributes = new { @class = "form-control" } })
+                        <select id="example">
+                            <option value=""></option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+
+                        <button class="btn btn-success " style="width:180px;height:50px;float:right" type="submit">Submit</button>
+
+
+
                     </div>
-                    <div class="media-body">
-                        <h4 class="media-heading">@item.UserName <small><i>Posted on @item.ReviewDate</i></small></h4>
-                        <p>@item.Review</p>
-                        @foreach (var r in item.Replies)
-                        {
-                            <div class="media">
-                                <div class="media-left">
-                                    <img src="/Images/talk.png" class="media-object" style="width:45px">
-                                </div>
-                                <div class="media-body">
-                                    <h4 class="media-heading">@r.UserName <small><i>Posted on @item.ReviewDate</i></small></h4>
-                                    <p>@r.Reply</p>
-                                </div>
-                            </div>
-                        }
-                    </div>
+
                 </div>
+
             }
 
-        </div>
+        }
+
+        <br />
+
+        @foreach (var item in Model)
+
+        {
+
+            <div class="media">
+
+                <div class="media-left">
+
+                    <img src="/Images/talk.png" class="media-object" style="width:45px">
+
+                </div>
+
+                <div class="media-body">
+
+                    <h4 class="media-heading">@item.UserName <small><i>Posted on @item.ReviewDate</i></small></h4>
+
+                    <p>@item.Review</p>
+
+                    @foreach (var r in item.Replies)
+
+                    {
+
+                        <div class="media">
+
+                            <div class="media-left">
+
+                                <img src="/Images/talk.png" class="media-object" style="width:45px">
+
+                            </div>
+
+                            <div class="media-body">
+
+                                <h4 class="media-heading">@r.UserName <small><i>Posted on @item.ReviewDate</i></small></h4>
+
+                                <p>@r.Reply</p>
+
+                            </div>
+
+                        </div>
+
+                    }
+
+                </div>
+
+            </div>
+
+        }
+
     </div>
+
+
+
 </div>
 
+
+
 <script>
-    var $container2 = $('#Container2');
-    $container2.imagesLoaded(function () {
-        $container2.masonry({
-            itemSelector: '.Package',
-            columnWidth: 10,
-            isFitWidth: true,
-            isAnimated: true,
-        });
-    });
+                    var $container2 = $('#Container2');
+                    $container2.imagesLoaded(function () {
+                        $container2.masonry({
+                            itemSelector: '.Package',
+                            columnWidth: 10,
+                            isFitWidth: true,
+                            isAnimated: true,
+                        });
+                    });
+</script>
+<script src="~/Scripts/jquery-bar-rating/jquery.barrating.min.js"></script>
+
+<script type="text/javascript">
+                   $(function() {
+                      $('#example').barrating({
+                        theme: 'fontawesome-stars'
+                      });
+                   });
 </script>
 <script src="/Scripts/blueimp/blueimp-gallery.min.js"></script>
 <script>
-    document.getElementById('links').onclick = function (event) {
-        event = event || window.event;
-        var target = event.target || event.srcElement,
-            link = target.src ? target.parentNode : target,
-            options = { index: link, event: event },
-            links = this.getElementsByTagName('a');
-        blueimp.Gallery(links, options);
-    };
+                    document.getElementById('links').onclick = function (event) {
+                        event = event || window.event;
+                        var target = event.target || event.srcElement,
+                            link = target.src ? target.parentNode : target,
+                            options = { index: link, event: event },
+                            links = this.getElementsByTagName('a');
+                        blueimp.Gallery(links, options);
+                    };
+
+                    //$('#example1').barrating('show', {
+                    //    theme: 'my-awesome-theme',
+                    //    onSelect: function (value, text, event) {
+                    //        if (typeof (event) !== 'undefined') {
+                    //            // rating was selected by a user
+                    //            console.log(event.target);
+                    //        } else {
+                    //            // rating was selected programmatically
+                    //            // by calling `set` method
+                    //        }
+                    //    }
+                    //});
+
 </script>
