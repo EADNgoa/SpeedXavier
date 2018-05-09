@@ -25,13 +25,22 @@ namespace Speedbird
 
 
     }
-    public partial class LeaveEntitlementDets
+    public  class LeaveEntitlementDets
     {
         public int LeaveEntitlementID { get; set; }
         public int LeaveYear { get; set; }
         public int LeaveDays { get; set; }
-
         public string LeaveTypeName { get; set; }
+    }
+    public  class LeaveApplicationDets
+    {
+        public int LeaveApplicationID { get; set; }
+        public DateTime ApplicationDate { get; set; }
+        public string UserID { get; set; }
+        public string LeaveTypeName { get; set; }
+        public DateTime LeaveStartDate { get; set; }
+        public int NoOfDays { get; set; }
+        public string BookingStatusName { get; set; }
     }
 
     [MetadataType(typeof(DiscountCouponMetadata))]
