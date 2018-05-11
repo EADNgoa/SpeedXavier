@@ -14,6 +14,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
     public class LeaveEntitlementController : EAController
     {
         // GET: Clients
+        [EAAuthorize(FunctionName = "Leave Entitlement", Writable = false)]
         public ActionResult Index(int? page, string AN)
         {
             if (AN?.Length > 0) page = 1;
@@ -24,6 +25,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
 
         // GET: Clients/Create
+        [EAAuthorize(FunctionName = "Leave Entitlement", Writable = true)]
         public ActionResult Manage(int? id)
         {
             ViewBag.LeaveTypeID = new SelectList(db.Fetch<LeaveType>("Select LeaveTypeID,LeaveTypeName from LeaveType"), "LeaveTypeID", "LeaveTypeName");
@@ -35,6 +37,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [EAAuthorize(FunctionName = "Leave Entitlement", Writable = true)]
         public ActionResult Manage([Bind(Include = "LeaveEntitlementID,LeaveYear,LeaveTypeID,LeaveDays")] LeaveEntitlement item)
         {
             return base.BaseSave<LeaveEntitlement>(item, item.LeaveEntitlementID > 0);

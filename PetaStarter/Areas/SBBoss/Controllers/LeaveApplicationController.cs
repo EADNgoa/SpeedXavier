@@ -15,12 +15,14 @@ namespace Speedbird.Areas.SBBoss.Controllers
 {
     public class LeaveApplicationController : EAController
     {
+        [EAAuthorize(FunctionName = "Leave Application", Writable = false)]
         public ActionResult Index(int? page, DateTime? AN)
         {
             page = 1;
             return View("Index", base.BaseIndex<LeaveApplicationDets>(page, " * ", $"LeaveApplications la inner join LeaveType lt on lt.LeaveTypeID=la.LeaveTypeID inner join BookingStatus bs on la.StatusID =bs.BookingStatusID Where ApplicationDate like '%" + AN + "%'"));
         }
 
+        [EAAuthorize(FunctionName = "Leave Application", Writable = true)]
         public ActionResult Manage(int? id)
         {
             ViewBag.LeaveTypeID = new SelectList(db.Fetch<LeaveType>("Select LeaveTypeID,LeaveTypeName from LeaveType"), "LeaveTypeID", "LeaveTypeName");
@@ -32,6 +34,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [EAAuthorize(FunctionName = "Leave Application", Writable = true)]
         public ActionResult Manage([Bind(Include = "LeaveApplicationID,ApplicationDate,UserID,LeaveTypeID,LeaveStartDate,NoOfDays,StatusID,StatusBy,StatusDate")] LeaveApplication item)
         {
             item.UserID = User.Identity.GetUserId();
@@ -47,6 +50,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             ViewBag.LeaveTypeID = new SelectList(db.Fetch<LeaveType>("Select LeaveTypeID,LeaveTypeName from LeaveType"), "LeaveTypeID", "LeaveTypeName",item.LeaveTypeID);
             return View();
         }
+        [EAAuthorize(FunctionName = "LeaveApprove", Writable = true)]
         public ActionResult ConfirmOrCancel(int? page, DateTime? AN,int? Approve, int? Reject)
         {
             page = 1;
