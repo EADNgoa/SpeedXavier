@@ -196,9 +196,15 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+
+    <Compile Include="Areas\SBBoss\Controllers\LeaveApplicationController.cs" />
+    <Compile Include="Areas\SBBoss\Controllers\LeaveTypeController.cs" />
+
     <Compile Include="Areas\SBBoss\Controllers\HolidayController.cs" />
+
     <Compile Include="Areas\SBBoss\Controllers\AttributeController.cs" />
     <Compile Include="Areas\SBBoss\Controllers\CustomerQueryController.cs" />
+    <Compile Include="Areas\SBBoss\Controllers\LeaveEntitlementController.cs" />
     <Compile Include="Areas\SBBoss\Controllers\TaxController.cs" />
     <Compile Include="Areas\SBBoss\Controllers\GeoTreeController.cs" />
     <Compile Include="Areas\SBBoss\Controllers\EAController.cs" />
@@ -495,8 +501,18 @@
     <Content Include="Areas\SBBoss\Views\CustomerQuery\Reply.cshtml" />
     <Content Include="Areas\SBBoss\Views\Accomodation\PVManage.cshtml" />
     <Content Include="Areas\SBBoss\Views\CarBike\PVManage.cshtml" />
+
+    <Content Include="Areas\SBBoss\Views\LeaveType\Index.cshtml" />
+    <Content Include="Areas\SBBoss\Views\LeaveType\Manage.cshtml" />
+    <Content Include="Areas\SBBoss\Views\LeaveEntitlement\Index.cshtml" />
+    <Content Include="Areas\SBBoss\Views\LeaveEntitlement\Manage.cshtml" />
+    <Content Include="Areas\SBBoss\Views\LeaveApplication\Index.cshtml" />
+    <Content Include="Areas\SBBoss\Views\LeaveApplication\Manage.cshtml" />
+    <Content Include="Areas\SBBoss\Views\LeaveApplication\ConfirmOrCancel.cshtml" />
+
     <Content Include="Areas\SBBoss\Views\Holiday\Index.cshtml" />
     <Content Include="Areas\SBBoss\Views\Holiday\Manage.cshtml" />
+
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\i18n\jquery-ui-timepicker-addon-i18n.js" />
     <Content Include="Scripts\i18n\jquery-ui-timepicker-addon-i18n.min.js" />

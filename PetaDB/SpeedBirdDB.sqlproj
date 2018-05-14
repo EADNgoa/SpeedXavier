@@ -121,8 +121,15 @@
     <Build Include="dbo\Tables\Icons.sql" />
     <Build Include="dbo\Tables\CustomerQuery.sql" />
     <Build Include="dbo\Tables\CustQueryReply.sql" />
+
+    <Build Include="dbo\Tables\LeaveApplications.sql" />
+    <Build Include="dbo\Tables\LeaveType.sql" />
+    <Build Include="dbo\Tables\LeaveEntitlement.sql" />
+    <Build Include="dbo\Tables\LeaveBalance.sql" />
+
     <Build Include="dbo\Tables\Holidays.sql" />
     <Build Include="dbo\PostDeployment.sql" />
+
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="SpeedBirdDB.refactorlog" />
