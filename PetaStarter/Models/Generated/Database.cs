@@ -447,6 +447,16 @@ namespace Speedbird
 		[Column] public string GuideLanguageName { get; set; }
 	}
     
+	[TableName("dbo.Holidays")]
+	[PrimaryKey("HolidayID")]
+	[ExplicitColumns]
+    public partial class Holiday  
+    {
+		[Column] public int HolidayID { get; set; }
+		[Column] public DateTime? HDate { get; set; }
+		[Column] public string HolidayName { get; set; }
+	}
+    
 	[TableName("dbo.Icons")]
 	[PrimaryKey("IconId")]
 	[ExplicitColumns]
@@ -464,6 +474,55 @@ namespace Speedbird
     public partial class LateBreak  
     {
 		[Column] public int LateBreakID { get; set; }
+	}
+    
+	[TableName("dbo.LeaveApplications")]
+	[PrimaryKey("LeaveApplicationID")]
+	[ExplicitColumns]
+    public partial class LeaveApplication  
+    {
+		[Column] public int LeaveApplicationID { get; set; }
+		[Column] public DateTime? ApplicationDate { get; set; }
+		[Column] public string UserID { get; set; }
+		[Column] public int? LeaveTypeID { get; set; }
+		[Column] public DateTime? LeaveStartDate { get; set; }
+		[Column] public int? NoOfDays { get; set; }
+		[Column] public int? StatusID { get; set; }
+		[Column] public string StatusBy { get; set; }
+		[Column] public DateTime? StatusDate { get; set; }
+	}
+    
+	[TableName("dbo.LeaveBalance")]
+	[PrimaryKey("LeaveBalanceID")]
+	[ExplicitColumns]
+    public partial class LeaveBalance  
+    {
+		[Column] public int LeaveBalanceID { get; set; }
+		[Column] public string UserID { get; set; }
+		[Column] public int LeaveTypeID { get; set; }
+		[Column] public int LeaveYear { get; set; }
+		[Column] public decimal? LeaveDays { get; set; }
+		[Column] public int? Attendance { get; set; }
+	}
+    
+	[TableName("dbo.LeaveEntitlement")]
+	[PrimaryKey("LeaveEntitlementID")]
+	[ExplicitColumns]
+    public partial class LeaveEntitlement  
+    {
+		[Column] public int LeaveEntitlementID { get; set; }
+		[Column] public int LeaveYear { get; set; }
+		[Column] public int LeaveTypeID { get; set; }
+		[Column] public decimal? LeaveDays { get; set; }
+	}
+    
+	[TableName("dbo.LeaveType")]
+	[PrimaryKey("LeaveTypeID")]
+	[ExplicitColumns]
+    public partial class LeaveType  
+    {
+		[Column] public int LeaveTypeID { get; set; }
+		[Column] public string LeaveTypeName { get; set; }
 	}
     
 	[TableName("dbo.MiceDetails")]
