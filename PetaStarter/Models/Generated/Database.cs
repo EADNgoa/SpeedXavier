@@ -447,6 +447,16 @@ namespace Speedbird
 		[Column] public string GuideLanguageName { get; set; }
 	}
     
+	[TableName("dbo.Holidays")]
+	[PrimaryKey("HolidayID")]
+	[ExplicitColumns]
+    public partial class Holiday  
+    {
+		[Column] public int HolidayID { get; set; }
+		[Column] public DateTime? HDate { get; set; }
+		[Column] public string HolidayName { get; set; }
+	}
+    
 	[TableName("dbo.Icons")]
 	[PrimaryKey("IconId")]
 	[ExplicitColumns]

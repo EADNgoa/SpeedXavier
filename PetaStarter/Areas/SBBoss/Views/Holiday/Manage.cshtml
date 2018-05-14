@@ -1,0 +1,56 @@
+﻿@model Speedbird.Holiday
+
+@{
+    ViewBag.Title = "Manage Holiday";
+}
+
+<div class="card border rounded DropShadow">
+    <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
+        <span class="h3">@ViewBag.Title</span>
+        <a href="@Url.Action("Index","Activity")"><i class="fas fa-undo-alt fa-inverse h3 float-right DropShadow"></i></a>
+    </div>
+    <div class="card-body">
+        <h5>&nbsp;</h5>
+
+        @using (Html.BeginForm("Manage", "Holiday", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @if (Model?.HolidayID > 0)
+    {
+        @Html.HiddenFor(model => model.HolidayID)
+}
+
+            <div class="form-row">
+                <div class="input-group col mb-3">
+                    <div class="input-group-prepend"><span class="input-group-text">Date</span></div>
+                    @Html.EditorFor(model => model.HDate, new { htmlAttributes = new { @class = "form-control",@type="date" } })
+                    @Html.ValidationMessageFor(model => model.HDate, "", new { @class = "text-danger" })
+                </div>
+                <div class="input-group col mb-3">
+                    <div class="input-group-prepend"><span class="input-group-text">Holiday Name</span></div>
+                    @Html.EditorFor(model => model.HolidayName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.HolidayName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            </div>
+        </div>
+        }
+        
+
+    </div>
+</div>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
