@@ -24,7 +24,11 @@
     @Scripts.Render("~/bundles/jquerydtpicker")
     @Scripts.Render("~/fa5")
 
-
+    <script>
+        $(function () {
+            $.fn.select2.defaults.set("theme", "bootstrap");
+        })
+    </script>
 
     <div class="container-fluid">
         <div class="row">

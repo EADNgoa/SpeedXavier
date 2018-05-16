@@ -72,19 +72,25 @@ namespace Speedbird
         [AllowHtml]
         public string Exclusion { get; set; }
         [AllowHtml]
-        public string Highlights { get; set; }        
+        public string Highlights { get; set; }
+        [AllowHtml]
+        public string SupplierNotepad { get; set; }
     }
 
     public class AccomodationMetadata
     {
         [AllowHtml]
         public string Description { get; set; }
+        [AllowHtml]
+        public string SupplierNotepad { get; set; }
     }
 
     public class CarBikeMetadata
     {
         [AllowHtml]
         public string Description { get; set; }
+        [AllowHtml]
+        public string SupplierNotepad { get; set; }
     }
 
     //public class EmpTypeMetadata

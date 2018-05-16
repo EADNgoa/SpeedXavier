@@ -242,7 +242,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         {
             ViewBag.Pack = db.FirstOrDefault<CarBike>($"Select * From CarBike Where CarBikeID={id}");
             ViewBag.sid = ServiceTypeEnum.CarBike;
-            ViewBag.Validity = db.Fetch<PackageValidity>($"Select * From PackageValidity where ServiceID ='{id}'");
+            ViewBag.Validity = db.Fetch<PackageValidity>($"Select * From PackageValidity where ServiceID =@0 and ServiceTypeId=@1",id,(int)ServiceTypeEnum.CarBike);
             return PartialView(base.BaseCreateEdit<PackageValidity>(EID, "PVID"));
         }
 
@@ -301,10 +301,10 @@ namespace Speedbird.Areas.SBBoss.Controllers
         }
 
 
-        public string KillSup(int PackageId, int deadSup)
+        public string KillSup(int CarBikeID, int deadSup)
         {
-            db.Delete<Package_Supplier>("Where packageId=@0 and SupplierId=@1", PackageId, deadSup);
-            return String.Join(",", db.Query<Package_Supplier>("Where packageId=@0", PackageId).Select(s => s.ContractNo));
+            db.Delete<Package_Supplier>("Where packageId=@0 and SupplierId=@1 and ServiceTypeId=@2", CarBikeID, deadSup, (int)ServiceTypeEnum.CarBike);
+            return String.Join(",", db.Query<Package_Supplier>("Where packageId=@0 and ServiceTypeId=@1", CarBikeID, (int)ServiceTypeEnum.CarBike).Select(s => s.ContractNo));
         }
 
 
