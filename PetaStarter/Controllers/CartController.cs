@@ -51,7 +51,7 @@ namespace Speedbird.Controllers
                     item = new Cart { Id = User.Identity.GetUserId(), ServiceID = ServiceID, Qty = Qty, CheckIn = CheckIn, CheckOut = CheckOut, NoOfGuest = nums, OrigPrice = getItem.price, ServiceTypeID = ServiceTypeID };
                     db.Insert(item);
                 }
-                if (ServiceTypeID == (int)ServiceTypeEnum.Packages)
+                if (ServiceTypeID == (int)ServiceTypeEnum.Packages || ServiceTypeID == (int)ServiceTypeEnum.Cruise || ServiceTypeID == (int)ServiceTypeEnum.SightSeeing)
                 {
                     var getItem = db.FirstOrDefault<PackageDets>("Select * From Package where PackageID=@0", ServiceID);
                     getItem.price = db.FirstOrDefault<decimal>("Select Top 1 Price from Prices p inner join OptionType ot on p.OptionTypeID = ot.OptionTypeID Where ServiceID=@0 and ot.ServiceTypeID=@1 and WEF<GetDate() order by WEF desc", ServiceID, ServiceTypeID);
@@ -94,7 +94,21 @@ namespace Speedbird.Controllers
 
                 if (Query != null)
                 {
-                    var cust = new CustomerQuery { FName = fname, SName = sname, Email = email, Phone = phno,_Query=Query,ServiceID=ServiceID,ServiceTypeID=ServiceTypeID ,CheckIn=CheckIn,CheckOut=CheckOut,NoPax=nums,Qty=Qty,Tdate=DateTime.Now, Glang=Glang, Gtime=Gtime};
+                    string ServiceName = "";
+                    if (ServiceTypeID == (int)ServiceTypeEnum.Accomodation)
+                    {
+                        ServiceName = db.FirstOrDefault<AccomodationDets>("Select * From Accomodation where AccomodationID=@0", ServiceID).AccomName;
+                    }
+                    if (ServiceTypeID == (int)ServiceTypeEnum.Packages || ServiceTypeID == (int)ServiceTypeEnum.Cruise || ServiceTypeID == (int)ServiceTypeEnum.SightSeeing)
+                    {
+                        ServiceName= db.FirstOrDefault<PackageDets>("Select * From Package where PackageID=@0", ServiceID).PackageName;
+                    }
+                    if (ServiceTypeID == (int)ServiceTypeEnum.CarBike)
+                    {
+                        ServiceName= db.FirstOrDefault<CarBikeDets>("Select * From CarBike where CarbikeID=@0", ServiceID).CarBikeName;
+                    }
+
+                    var cust = new CustomerQuery { FName = fname, SName = sname, Email = email, Phone = phno,_Query=Query,ServiceID=ServiceID,ServiceTypeID=ServiceTypeID ,CheckIn=CheckIn,CheckOut=CheckOut,NoPax=nums,Qty=Qty,Tdate=DateTime.Now, Glang=Glang, Gtime=Gtime,ServiceName=ServiceName};
 
                     if (UploadedFile != null)
                     {

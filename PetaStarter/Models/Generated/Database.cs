@@ -1301,6 +1301,12 @@ namespace Speedbird
 
 
 
+
+
+		[Column] public string ServiceName { get; set; }
+
+
+
 	}
 
     

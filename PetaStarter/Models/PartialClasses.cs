@@ -22,6 +22,8 @@ namespace Speedbird
         public string Instr { get { return $"{CheckIn:dd MMM yyyy, hh:mm}"; } }
         public string Outstr { get { return $"{CheckOut:dd MMM yyyy, hh:mm}"; } }
         public string Tostr { get { return $"{Tdate:dd MMM yyyy}"; } }
+        public string CustName { get { return FName + ' ' + SName;  } }        
+        public string ServiceTypeName { get { return ((ServiceTypeEnum)ServiceTypeID).ToString();  } }
 
 
     }
@@ -364,6 +366,7 @@ namespace Speedbird
         public IEnumerable<ReviewRepDets> Replies { get; set; }
     }
 
+  
     public enum ServiceTypeEnum
     {
         Accomodation,
