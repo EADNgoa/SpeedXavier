@@ -85,9 +85,10 @@
 
     /*Specific*/
     .DetailBlock, .DescriptionBlock {
-        padding: 50px;
+        padding-left: 15px;
+        padding-right:15px;
         min-height: 50px;
-        margin-bottom: 20px;
+        
         width: 100%;
     }
 
@@ -96,7 +97,7 @@
     }
 
     .DescriptionBlock {
-        background: white;
+        background: white;        
     }
 
 
@@ -278,6 +279,15 @@
         width: 248px;
         height: 150px;
     }
+    .EASearchImg {
+        position: relative;
+        top: -40px;
+        left:-30px;
+        z-index: 30;
+        min-width: 103%;
+        border: 7px solid grey;
+        border-radius: 3px;
+    }
 </style>
 
 <hr style="padding-bottom:0;margin-bottom:0;padding-top:2px;margin-top:0;line-height: 1.428571429;" />
@@ -300,7 +310,7 @@
     <br />
     <br />
 
-    <div class="row">
+    <div class="row justify-content-center">
         @if (ViewBag.ST == ServiceTypeEnum.Accomodation)
         {
             @Html.Action("InfoAccomPartial", "Home", new { ServiceID = ViewBag.ServiceID, st = ViewBag.ST })
@@ -313,19 +323,18 @@
         {
             @Html.Action("InfoPackagePartial", "Home", new { ServiceID = ViewBag.ServiceID, st = ViewBag.ST })
         }
-        <div class="col-4">
-            <br />
-            <br />
-            <br />
+        <div class="col-3" style="position:relative; top:-230px;">
+            
             <div class="addcart">
+            <img src="/Images/book.png" class="EASearchImg" />
                 <div class="container">
                     <center>
                         <div class="col-md-12">
                             @Html.Action("GetPrice", "Home", new { ServiceID = ViewBag.ServiceID, st = ViewBag.ST })
                         </div>
-                        <div style="background-color:#428bca;">
+                        @*<div style="background-color:#428bca;">
                             <h2 class="block-title" style="color:white">Book This Experience</h2>
-                        </div>
+                        </div>*@
                         @using (Html.BeginForm("AddToCart", "Cart", FormMethod.Post, new { enctype = "multipart/form-data" }))
                         {
                             @Html.AntiForgeryToken()
@@ -439,7 +448,7 @@
             <div class="block-sb-info">
 
                 <div class="container  ">
-                    <h3>Why Speed Bird?</h3>
+                    <h3>Why SpeedBird?</h3>
                     <ul class="tck">
                         <li>
                             <i class="fa fa-check" style="font-size:48px;color:green"></i>

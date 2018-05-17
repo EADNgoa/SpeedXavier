@@ -95,13 +95,12 @@ namespace Speedbird
         public string Itinerary { get; set; }
         public int Dificulty { get; set; }
         public int GroupSize { get; set; }
-        public int GuideLanguageID { get; set; }
+        public IEnumerable<GuideLanguage> GuideLanguages { get; set; }
         public string StartTime { get; set; }
         public string Inclusion { get; set; }
         public string Exclusion { get; set; }
         public string Highlights { get; set; }
-
-        public string GuideLanguageName { get; set; }
+                
         public int ServiceID { get; set; }
         public string PictureName { get; set; }
         public string AttractionName { get; set; }

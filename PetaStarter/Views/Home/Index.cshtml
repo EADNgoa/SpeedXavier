@@ -2,7 +2,7 @@
 <style>
 
     .im {
-        width: 80%;
+        width: 89%;
         height: auto;
         color: white;
         vertical-align: middle;
@@ -53,7 +53,10 @@
 
     .carousel {
         width: 100% !important;
-        bottom: 30px;
+        position:relative;
+        opacity:0.99;
+        z-index:1;
+        height:800px !important;
     }
 
     .img-fluid {
@@ -138,18 +141,42 @@
         color: white;
         background-color: black;
     }
+    .EAtalk {
+        position: absolute;
+        top: 80px;
+        right:450px;
+        z-index:100;
+        height:180px;
+        -webkit-filter: drop-shadow(12px 12px 25px rgba(0,0,0,0.5));
+        filter: drop-shadow(5px 5px 5px #222);
+        -ms-filter: "progid:DXImageTransform.Microsoft.Dropshadow(OffX=12, OffY=12, Color='#444')";
+        filter: "progid:DXImageTransform.Microsoft.Dropshadow(OffX=12, OffY=12, Color='#444')";
+    
+    }
+
+    .select2-selection--single {
+        height:58px !important;
+        border-radius: 50px !important;
+    }
+
+    .select2-selection__rendered {
+        margin-top:10px;
+        color:#444;
+        font-size:25px;
+        height:3em;
+    }
 </style>
 <head>
     <link href="https://fonts.googleapis.com/css?family=Niconne" rel="stylesheet">
     <script src="/Scripts/jquery.masonry.min.js"></script>
     <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
 </head>
-
+<img src="/Images/talk.png" class="EAtalk" />
 <br />
 <div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
     <div class="carousel-inner" role="listbox">
-
-        <div class="carousel-item active">
+        <img src="/Images/c3.jpg" alt="First slide" style="width:100%;">
+        @*<div class="carousel-item active">
             <img class="d-block img-fluid" src="/Images/c1.jpg" alt="First slide">
         </div>
         <div class="carousel-item">
@@ -163,12 +190,12 @@
         </div>
         <div class="carousel-item">
             <img class="d-block img-fluid" src="/Images/c5.jpg" alt="Third slide">
-        </div>
+        </div>*@
 
 
         <div class="carousel-caption d-none d-md-block">
             <center>
-                <h1 class="item-1">How Can We Help?</h1>
+                <h1 class="item-1">How can we help?</h1>
             </center>
             <br />
             <div class="row">
@@ -202,16 +229,16 @@
 
             </div>
             <br />
-            <div class="row justify-content-center" style="height:50px;">
-                <select class="GeoSelect w-80 h-75 col-5" placeholder="Where do you want to go?">
-                    <option value="0" style="font-size:3em;">Where do you want to go?</option>
+            <div class="row justify-content-center" >
+                <select class="GeoSelect col-4" placeholder="Search for your tour here">
+                    <option value="0" style="font-size:3em;">Search for your tour here</option>
                 </select>
             </div>
 
         </div>
     </div>
 
-    <div class="row ">
+    @*<div class="row ">
         <div class="col-md-2 high" style="background-color:dodgerblue">
 
         </div>
@@ -230,7 +257,7 @@
         <div class="col-md-2 high" style="background-color:greenyellow">
 
         </div>
-    </div>
+    </div>*@
 
 </div>
 
