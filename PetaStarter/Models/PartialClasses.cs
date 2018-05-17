@@ -89,7 +89,8 @@ namespace Speedbird
         public string Description { get; set; }
         public string CouponCode { get; set; }
 
-        public string GeoName { get; set; }
+        public String GeoName { get; set; }
+        public IEnumerable<String> GeoNames { get; set; }
 
         public int Duration { get; set; }
         public string Itinerary { get; set; }
@@ -100,7 +101,8 @@ namespace Speedbird
         public string Inclusion { get; set; }
         public string Exclusion { get; set; }
         public string Highlights { get; set; }
-                
+        public string MeetAndInfo { get; set; }
+
         public int ServiceID { get; set; }
         public string PictureName { get; set; }
         public string AttractionName { get; set; }

@@ -68,7 +68,7 @@
                         @item.ServiceGeoName
                     </div>
                     <h5 class="card-title">@item.ServiceName</h5>
-                    <p class="card-text">@item.ServiceDescription</p>
+                    <p class="card-text">@Html.Raw(item.ServiceDescription)</p>
 
                     <span class="icons position-absolute">
                         @foreach (var a in item.Icons)

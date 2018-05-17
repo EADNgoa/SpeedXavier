@@ -15,7 +15,7 @@
 
 
     .card {
-        /*width: 210px !important;*/
+        width: 170px !important;
         box-shadow: 0 3px 5px rgba(50,50,50,.6);
         position: relative;
         overflow: hidden;
@@ -29,7 +29,7 @@
     }
 
     .card-img-top {
-        height: 280px;
+        height: 180px;
     }
 
     #Container, #Container2 {
@@ -41,6 +41,7 @@
         padding-top: 8px;
         background-color: #428bca;
         font-size: 18px;
+        font-weight:700;
         text-align: center;
     }
 
@@ -149,9 +150,9 @@
                    <a href="/Home/LoadPackages/?st=@Speedbird.ServiceTypeEnum.Accomodation&&loc=@ViewBag.Loc">
                        <div class="card ServiceTypes" style="width: 20rem;">
                            <img class="card-img-top" src="/Images/@ViewBag.Accomodation.PictureName" alt="Card image cap">
-                           <div class="FloatBadge">
+                           @*<div class="FloatBadge">
                                @ViewBag.Loc
-                           </div>
+                           </div>*@
                            <div class="card-block">
                                <h4 class="card-title">Accomodation</h4>
                            </div>
@@ -161,9 +162,9 @@
                        <div class="card ServiceTypes" style="width: 20rem;">
                            <img class="card-img-top" src="/Images/@ViewBag.Package.PictureName" alt="Card image cap">
                            <div class="card-block">
-                               <div class="FloatBadge">
+                               @*<div class="FloatBadge">
                                    @ViewBag.Loc
-                               </div>
+                               </div>*@
                                <h4 class="card-title">Packages</h4>
                            </div>
                        </div>
@@ -172,9 +173,9 @@
 
                        <div class="card ServiceTypes" style="width: 20rem;">
                            <img class="card-img-top" src="/Images/@ViewBag.CarBike.PictureName" alt="Card image cap">
-                           <div class="FloatBadge">
+                           @*<div class="FloatBadge">
                                @ViewBag.Loc
-                           </div>
+                           </div>*@
                            <div class="card-block">
                                <h4 class="card-title">Car / Bike Rentals</h4>
                            </div>
@@ -184,9 +185,9 @@
 
                        <div class="card ServiceTypes" style="width: 20rem;">
                            <img class="card-img-top" src="/Images/@ViewBag.CarBike.PictureName" alt="Card image cap">
-                           <div class="FloatBadge">
+                           @*<div class="FloatBadge">
                                @ViewBag.Loc
-                           </div>
+                           </div>*@
                            <div class="card-block">
                                <h4 class="card-title">Taxi Hire</h4>
                            </div>
@@ -198,9 +199,9 @@
 
                <div class="card ServiceTypes" style="width: 20rem;">
                    <img class="card-img-top" src="/Images/@ViewBag.SightSeeing.PictureName" alt="Card image cap">
-                   <div class="FloatBadge">
+                   @*<div class="FloatBadge">
                        @ViewBag.Loc
-                   </div>
+                   </div>*@
                    <div class="card-block">
                        <h4 class="card-title">Sight Seeing</h4>
                    </div>
@@ -212,9 +213,9 @@ if (ViewBag.loc == "International")
 
                <div class="card ServiceTypes" style="width: 20rem;">
                    <img class="card-img-top" src="/Images/@ViewBag.Cruise.PictureName" alt="Card image cap">
-                   <div class="FloatBadge">
+                   @*<div class="FloatBadge">
                        @ViewBag.Loc
-                   </div>
+                   </div>*@
                    <div class="card-block">
                        <h4 class="card-title">Cruise</h4>
                    </div>
@@ -252,7 +253,7 @@ if (ViewBag.loc == "International")
     $container.imagesLoaded(function () {
         $container.masonry({
             itemSelector: '.ServiceTypes',
-            columnWidth: 200,
+            columnWidth: 100,
             isFitWidth: true,
             isAnimated: true,
         });
@@ -261,7 +262,7 @@ if (ViewBag.loc == "International")
     $container2.imagesLoaded(function () {
         $container2.masonry({
             itemSelector: '.Package',
-            columnWidth: 200,
+            columnWidth: 100,
             isFitWidth: true,
             isAnimated: true,
         });

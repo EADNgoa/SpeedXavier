@@ -6,7 +6,7 @@
     }
     .EAUpMovedDiv {
         position:relative;
-        top:-243px;
+        top:-248px;
     }
 
     .EATitle {
@@ -35,7 +35,7 @@
             <div class="EATranspHeader">
                 <h1 class="EATitle">@Model.PackageName</h1>
                 <div class="FloatBadge">
-                    @Model.GeoName
+                    @Model.GeoNames.First()
                 </div>
                 <hr style="background-color:white; border:1px solid white; margin:3px;"/>
                 @foreach(var i in ViewBag.Icns)
@@ -138,6 +138,15 @@
                             @Model.GroupSize 
                         </div>
                     </div>
+                    <div class="row" style="margin-top:10px;">
+                        <div class="col-12"><b>Locations Visited: </b>
+                        @foreach (var item in Model.GeoNames)
+                        {
+                            @item
+                            @: |
+                        }
+                        </div>
+                    </div>
                     <hr />
                     
                     <div class="row">
@@ -148,24 +157,38 @@
                             @Html.Raw(Model.Itinerary)
                         </div>
                     </div>
-                    
+                    <hr />
                     <div class="row">
-                        <div class="col-12" style="color: darkblue; font-weight:700">
-                            Inclusions
+                        <div class="col-6">
+                            <div class="row">
+                                <div class="col-12" style="color: darkblue; font-weight:700">
+                                    Inclusions
+                                </div>
+                                <div class="col-12">
+                                    @Html.Raw(Model.Inclusion)
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12" style="color: darkblue; font-weight:700">
+                                    Exclusions
+                                </div>
+                                <div class="col-12">
+                                    @Html.Raw(Model.Exclusion)
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-12">
-                            @Html.Raw(Model.Inclusion)
-                        </div>
-                    </div>                    
-                    <div class="row">
-                        <div class="col-12" style="color: darkblue; font-weight:700">                            
-                            Exclusions
-                        </div>
-                        <div class="col-12">
-                            @Html.Raw(Model.Exclusion)
+                        <div class="col-6">
+                            <div class="row" style="border:2px dashed #523907;border-radius:7px; background-color:rgba(82, 57, 7, 0.1)">                                
+                                <div class="col-12">
+                                    @Html.Raw(Model.MeetAndInfo)
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <hr />
+                    
+
+                    ==============
+                    
                     
                 </div>
 

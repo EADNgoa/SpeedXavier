@@ -74,6 +74,8 @@ namespace Speedbird
         [AllowHtml]
         public string Highlights { get; set; }
         [AllowHtml]
+        public string MeetAndInfo { get; set; }
+        [AllowHtml]
         public string SupplierNotepad { get; set; }
     }
 

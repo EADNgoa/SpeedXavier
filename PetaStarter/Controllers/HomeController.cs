@@ -338,7 +338,7 @@ namespace Speedbird.Controllers
         {
             var Packages = db.FirstOrDefault<PackageDets>("select * From Package  Where PackageID =@0 and ServiceTypeID=@1", ServiceID, st);
             Packages.Pic = db.Fetch<PictureDets>("Select * From Picture Where ServiceID=@0 and ServiceTypeID=@1 Order By NewID()", Packages.PackageID, st).ToList();
-            Packages.GeoName = db.First<string>("Select GeoName From GeoTree g,Package_GeoTree pg  where pg.PackageID=@0 and g.GeoTreeID = pg.GeoTreeID", Packages.PackageID);
+            Packages.GeoNames = db.Fetch<string>("Select GeoName From GeoTree g,Package_GeoTree pg  where pg.PackageID=@0 and g.GeoTreeID = pg.GeoTreeID", Packages.PackageID);
             Packages.GuideLanguages = db.Fetch<GuideLanguage>("Select g.* from GuideLanguage g inner join Package_Language pl on pl.GuideLanguageID= g.GuideLanguageID where pl.PackageID=@0", ServiceID.Value);
             ViewBag.Icns = db.Query<string>("Select Iconpath from Icons where ServiceTypeId=@0 and ServiceId=@1 ", st, ServiceID);
             

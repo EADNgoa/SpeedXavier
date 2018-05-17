@@ -202,7 +202,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult  Manage([Bind(Include = "PackageID,ServiceTypeID,PackageName,Description,Duration,Itinerary,Highlights,Dificulty,GroupSize,GuideLanguageID,StartTime,Inclusion,Exclusion,CouponCode")] Package item, System.Collections.Generic.List<int> GeoTreeID )
+        public ActionResult  Manage([Bind(Include = "PackageID,ServiceTypeID,PackageName,Description,Duration,Itinerary,Highlights,Dificulty,GroupSize,GuideLanguageID,StartTime,Inclusion,Exclusion,CouponCode, MeetAndInfo")] Package item, System.Collections.Generic.List<int> GeoTreeID )
         {
             using (var transaction = db.GetTransaction())
             {

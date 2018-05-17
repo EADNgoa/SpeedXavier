@@ -2165,6 +2165,12 @@ namespace Speedbird
 
 
 
+
+
+		[Column] public string MeetAndInfo { get; set; }
+
+
+
 	}
 
     
