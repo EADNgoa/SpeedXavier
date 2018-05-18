@@ -1,0 +1,141 @@
+﻿@model Speedbird.ServiceRequest
+<style>
+
+    #map {
+        height: 350px;
+        width: 100%;
+    }
+</style>
+@using (Html.BeginForm("Manage", "SR", FormMethod.Post, new { id = "detFrm" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.Hidden("CustID")
+    if (Model?.SRID > 0)
+    { @Html.HiddenFor(model => model.SRID) }
+
+<div class="form-row">
+    <div class="input-group col mb-3">
+        <div class="input-group-prepend"><span class="input-group-text">Customer Name</span></div>
+
+        @if (ViewBag.Cust != null)
+        {
+            @Html.HiddenFor(model => model.CustID)
+
+            <input type="text" id="FName" name="FName" style="color:black;" data-autocomplete-idholder="#CustID" value=" @ViewBag.Cust.FName @ViewBag.Cust.SName " data-autocombo-url="@Url.Action("AutoCompleteCust")" class="form-control disabled" />
+        }
+        else
+        {
+            <input type="text" id="FName" name="FName" style="color:black;" data-autocomplete-idholder="#CustID" value="" data-autocombo-url="@Url.Action("AutoCompleteCust")" class="form-control" />
+
+        }
+        @Html.ValidationMessageFor(model => model.CustID, "", new { @class = "text-danger" })
+    </div>
+    <div class="input-group col mb-3">
+        <div class="input-group-prepend"><span class="input-group-text">Enquiry Source</span></div>
+        @Html.EditorFor(model => model.EnquirySource, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.EnquirySource, "", new { @class = "text-danger" })
+    </div>
+</div>
+<div class="form-row">
+    <div class="input-group col-md-3">
+        <div class="input-group-prepend"><span class="input-group-text">Status</span></div>
+        @Html.DropDownList("SRStatusID", null, new { htmlAttributes = new { @type = "text", @class = "eadate form-control" } })
+        @Html.ValidationMessageFor(model => model.SRStatusID, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="input-group col ">
+        <input type="submit" value="Save" class="btn btn-primary" />
+    </div>
+</div>
+
+
+    }
+    <script>
+
+        $(document).ready(function () {
+
+        //Submit form
+        $('#SaveDetails').click(function () {
+            var detFrm = $('#detFrm');
+
+            //Save the details form if it exists else just move on.
+            if (typeof (detFrm[0]) == 'object') {
+                $.ajax({
+                    url: detFrm.action,
+                    type: 'post',
+                    data: $(detFrm).serialize(),
+                    success: function () {
+                        window.location.assign('@Url.Action("Index")');
+                    }
+                });
+            }
+        });
+
+
+            function formatState(state) {
+                if (!state.id) {
+                    return state.text;
+                }
+                var parts = state.text.split(",");
+                return parts[0];
+
+            };
+
+             //Supplier
+        $("#SupID").select2({
+            placeholder: "Type 3 letters to choose",
+            minimumInputLength: 3,
+
+            ajax: {
+                url: '@(Url.Action("GetSup", "Package"))',
+                dataType: 'json',
+                quietMillis: 250,
+                results: function (data, page) {
+                    return { results: data.data };
+                }
+            }
+        });
+
+
+
+        //Save Select2 Supplier Contract data
+        $("#SupID").on('select2:select', function (e) {
+            var contno = prompt("Please enter the contract number", "");
+            var oldConts = $('#ContID').html();
+            $('#ContID').html(oldConts + ',' + contno);
+
+            var conts = '';
+            $.post('/SBBoss/CarBike/' + $(this).data('setu'), { PackageId: $('#CarBikeID').val(), ActIds: $(this).val(), Conts: $('#ContID').html() });
+
+        });
+
+        $("#SupID").on('select2:unselect', function (e) {
+            $.post('/SBBoss/CarBike/KillSup', { PackageId: $('#PackageID').val(), deadSup: e.params.data.id }, function (e) {
+                $('#ContID').html(e);
+            });
+
+        });
+
+            //GeoSelector
+            $(".GeoSelect").select2({
+                placeholder: "Type 3 letters to choose",
+                templateSelection: formatState,
+
+                ajax: {
+                    url: '@(Url.Action("GetLocations", "GeoTree"))',
+                    dataType: 'json',
+                    quietMillis: 250,
+                    results: function (data, page) {
+                        return { results: data.data };
+                    }
+                }
+            });
+
+            $("textarea").jqte();
+
+
+        });
+
+
+    </script>

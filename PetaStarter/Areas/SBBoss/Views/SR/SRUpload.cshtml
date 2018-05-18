@@ -1,0 +1,84 @@
+﻿@model Speedbird.SRuploadDets
+
+@{
+    ViewBag.Title = $"Manage Images";
+}
+
+
+
+
+
+<div class="card border rounded DropShadow">
+    <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
+        <span class="h3">@ViewBag.Title</span>
+    </div>
+    <div class="card-body">
+        <h5>&nbsp;</h5>
+        <div class="section-to-Not-print">
+       @using (Html.BeginForm("SRUpload", "SR", FormMethod.Post, new { enctype = "multipart/form-data" }))
+       {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal ">
+
+                <hr />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                @Html.Hidden("SRID", (int)ViewBag.SRs.SRID)
+
+
+                <div class="form-group">
+                    @Html.Label("Upload Name", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        <input type="Text" name="UploadName" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Label("Upload Image", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        <input type="file" name="UploadedFile" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Save" class="btn btn-primary" />
+                    </div>
+                </div>
+            </div>
+    }
+        </div>
+       <br />
+        
+
+        <hr />
+        <table class="table table-sm section-to-print index-css" width="100%">
+            <tr>
+                <th>Name</th>
+                <th>Image</th>
+                
+
+                <th class="section-to-Not-print"></th>
+            </tr>
+        @foreach(var item in ViewBag.Pics)
+        {
+            <tr>
+                <td>
+                    @item.UploadName
+                </td>
+                <td>
+                   <img src="/Images/@item.Path" />
+                </td>
+                <td>
+                    <a href="@Url.Action("Delete","SR",new {pid=item.SRUID , id=item.SRID})">Delete</a>
+                </td>
+            </tr>
+        }
+          
+        </table>
+   
+   
+    </div>
+    </div>
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }

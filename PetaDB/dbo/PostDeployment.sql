@@ -1,4 +1,4 @@
-﻿
+﻿/*
 IF NOT EXISTS (SELECT * FROM UserFunctions)
 BEGIN
 	SET IDENTITY_INSERT [dbo].[UserFunctions] ON
@@ -14,6 +14,5 @@ BEGIN
 
 	SET IDENTITY_INSERT [dbo].[UserFunctions] OFF
 END
-
-
+*/
 	
