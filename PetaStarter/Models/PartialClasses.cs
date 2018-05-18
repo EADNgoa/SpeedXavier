@@ -68,6 +68,7 @@ namespace Speedbird
        public HttpPostedFileBase UploadedFile { get; set; }
     }
 
+
     public class PriceDets
     {
         public int PriceID { get; set; }
@@ -252,6 +253,7 @@ namespace Speedbird
         public string IdPicture { get; set; }
 
     }
+
     public class AgentDiscDets
     {
         public int AgentDiscountID { get; set; }
@@ -363,6 +365,38 @@ namespace Speedbird
         public IEnumerable<ReviewRepDets> Replies { get; set; }
     }
 
+    public class ServiceRequestDets
+    {
+        public int SRID { get; set; }
+        public int CustomerID { get; set; }
+        public int SRstatusID { get; set; }
+        public int EmpID { get; set; }
+        public int AgentID { get; set; }
+        public string FName { get; set; }
+        public string SName { get; set; }
+        public string Phone { get; set; }
+        public string Email { get; set; }
+        public string AgentName { get; set; }
+        public string EnquirySource { get; set; }
+    }
+    public class SRuploadDets
+    {
+        public int SRUID { get; set; }
+        public int SRID { get; set; }
+        public int Path { get; set; }
+        public string UploadName { get; set; }
+        public HttpPostedFileBase UploadedFile { get; set; }
+    }
+    public class SRlogsDets
+    {
+        public int SRLID { get; set; }
+        public int SRDID { get; set; }
+        public DateTime LogDateTime { get; set; }
+        public string UserName { get; set; }
+        public bool Type { get; set; }
+        public string Event { get; set; }
+
+    }
     public enum ServiceTypeEnum
     {
         Accomodation,
@@ -386,6 +420,13 @@ namespace Speedbird
         Admin,
         Agent,
         Guest
+    }
+    public enum SRStatusEnum
+    {
+        Request,
+        Booked,
+        Completed,
+        Cancelled
     }
 
     public class EAAuthorizeAttribute : AuthorizeAttribute

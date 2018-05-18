@@ -1,0 +1,179 @@
+﻿@model Speedbird.SRdetail
+
+@{
+    ViewBag.Title = $"Manage Services";
+}
+
+
+
+
+<div class="card border rounded DropShadow">
+    <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
+        <span class="h3">@ViewBag.Title</span>
+    </div>
+    <div class="card-body">
+        <h5>&nbsp;</h5>
+        <div class="section-to-Not-print">
+            @using (Html.BeginForm("SRdetails", "SR", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+
+            <div class="form-horizontal ">
+
+
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                @Html.Hidden("SRID", (int)ViewBag.SRID)
+                @Html.HiddenFor(model => model.SupplierID)
+
+                @if (Model?.SRDID != null)
+    {@Html.Hidden("SRDID", (int)Model.SRDID)}
+
+
+                <div class="form-row">
+                    <div class="input-group col mb-3">
+                        <div class="input-group-prepend"><span class="input-group-text">From Date</span></div>
+                        @Html.EditorFor(model => model.Fdate, new { htmlAttributes = new { @type = "text", @class = "eadate form-control" } })
+                        @Html.ValidationMessageFor(model => model.Fdate, "", new { @class = "text-danger" })
+
+                    </div>
+                    <div class="input-group col mb-3">
+                        <div class="input-group-prepend"><span class="input-group-text">To Date</span></div>
+                        @Html.EditorFor(model => model.Tdate, new { htmlAttributes = new { @type = "text", @class = "eadate form-control" } })
+                        @Html.ValidationMessageFor(model => model.Tdate, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="input-group col mb-3">
+                        <div class="input-group-prepend"><span class="input-group-text">Supplier</span></div>
+                        <input type="text" id="SupplierName" name="SupplierName" style="color:black;" data-autocomplete-idholder="#SupplierID" value="" data-autocombo-url="@Url.Action("AutoCompleteSup")" class="form-control" />
+                        @Html.ValidationMessageFor(model => model.SupplierID, "", new { @class = "text-danger" })
+                    </div>
+
+                </div>
+                <div class="form-row">
+                    <div class="input-group col mb-3">
+                        <div class="input-group-prepend"><span class="input-group-text">From Location</span></div>
+                        @Html.EditorFor(model => model.FromLoc, new { htmlAttributes = new { @type = "text", @class = " form-control" } })
+                        @Html.ValidationMessageFor(model => model.FromLoc, "", new { @class = "text-danger" })
+
+                    </div>
+                    <div class="input-group col mb-3">
+                        <div class="input-group-prepend"><span class="input-group-text">To Location</span></div>
+                        @Html.EditorFor(model => model.ToLoc, new { htmlAttributes = new { @type = "text", @class = " form-control" } })
+                        @Html.ValidationMessageFor(model => model.ToLoc, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="input-group col mb-3">
+                        <div class="input-group-prepend"><span class="input-group-text">Service Type</span></div>
+                        @Html.DropDownList("ServiceTypeID", null, new { htmlAttributes = new { @type = "text", @class = "eadate form-control" } })
+                        @Html.ValidationMessageFor(model => model.ToLoc, "", new { @class = "text-danger" })
+                    </div>
+
+                 
+                </div>
+                <div class="form-row">
+
+                    <div class="input-group col mb-3">
+                        <div class="input-group-prepend"><span class="input-group-text">Cost</span></div>
+                        @Html.EditorFor(model => model.Cost, new { htmlAttributes = new { @type = "text", @class = " form-control" } })
+                        @Html.ValidationMessageFor(model => model.Cost, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="input-group col mb-3">
+                        <div class="input-group-prepend"><span class="input-group-text">Sell Price</span></div>
+                        @Html.EditorFor(model => model.SellPrice, new { htmlAttributes = new { @type = "text", @class = " form-control" } })
+                        @Html.ValidationMessageFor(model => model.SellPrice, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="input-group col mb-3">
+                        <input type="submit" value="Save" class="btn btn-primary" />
+                    </div>
+                </div>
+            </div>
+            }
+        </div>
+        <br />
+
+
+        <hr />
+        <table class="table table-sm section-to-print index-css" width="100%">
+            <tr>
+                <th>Service Type</th>
+                <th>From Location</th>
+                <th>To Location</th>
+                <th>From Date</th>
+                <th>To Date</th>
+                <th>Suplier</th>
+                <th>Cost</th>
+                <th>Sell Price</th>
+                <th class="section-to-Not-print"></th>
+            </tr>
+            @foreach (var item in (IEnumerable<Speedbird.SRdetail>)ViewBag.SRDets)
+            {
+            <tr>
+                <td>
+                    @((Speedbird.ServiceTypeEnum)item.ServiceTypeID)
+                </td>
+
+                <td>
+                    @item.FromLoc
+                </td>
+                <td>
+                    @item.ToLoc
+                </td>
+                <td>
+                    @($"{item.Fdate:dd/MMM/yyyy}")
+                </td>
+                <td>
+                    @($"{item.Tdate:dd/MMM/yyyy}")
+                </td>
+                <td>
+                    @item.SupplierID
+                </td>
+                <td>
+                    @item.Cost
+                </td>
+                <td>
+                    @item.SellPrice
+                </td>
+                <td>
+                    <a href="@Url.Action("Manage","SR",new {id = (int?)ViewBag.SRID, mode=2, EID=item.SRDID })">Edit</a>
+                </td>
+            </tr>
+            }
+
+        </table>
+
+
+    </div>
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+<script>
+    $(function () {
+        //DateTime picker
+        $('.eadate').datepicker({
+            dateFormat: "dd-M-yy",
+            showButtonPanel: true,
+            changeMonth: true,
+            changeYear: true
+        }).attr('type', 'text').attr('autocomplete', 'off');
+
+        //Disable the browsers default date picker
+        jQuery.validator.methods["date"] = function (value, element) { return true; }
+
+
+        $(document).ready(function () {
+            $('*[data-autocombo-url]')
+                .each(function () {
+                    $(this).autocomplete({
+                        source: $(this).data("autocombo-url"),
+                        minLenght: 3,
+                        delay: 500,
+                        select: function (event, ui) {
+                            $($(this).data("autocomplete-idholder")).val(ui.item.id);
+                        }
+                    });
+                });
+        });
+
+    })
+</script>

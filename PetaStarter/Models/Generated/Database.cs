@@ -210,6 +210,16 @@ namespace Speedbird
 		[Column] public string Color { get; set; }
 	}
     
+	[TableName("dbo.Banks")]
+	[PrimaryKey("BankID", AutoIncrement=false)]
+	[ExplicitColumns]
+    public partial class Bank  
+    {
+		[Column] public int BankID { get; set; }
+		[Column] public string BankName { get; set; }
+		[Column] public string Address { get; set; }
+	}
+    
 	[TableName("dbo.BookedCustomer")]
 	[PrimaryKey("BCID")]
 	[ExplicitColumns]
@@ -686,6 +696,17 @@ namespace Speedbird
 		[Column] public decimal? WeekendPrice { get; set; }
 	}
     
+	[TableName("dbo.Rating")]
+	[PrimaryKey("RatingID")]
+	[ExplicitColumns]
+    public partial class Rating  
+    {
+		[Column] public int RatingID { get; set; }
+		[Column] public int? Value { get; set; }
+		[Column] public int? SRDID { get; set; }
+		[Column] public string Note { get; set; }
+	}
+    
 	[TableName("dbo.Receipt")]
 	[PrimaryKey("ReceiptID")]
 	[ExplicitColumns]
@@ -700,6 +721,17 @@ namespace Speedbird
 		[Column] public string DrawnOn { get; set; }
 		[Column] public string RoomNo { get; set; }
 		[Column] public int? BillNo { get; set; }
+	}
+    
+	[TableName("dbo.Reminders")]
+	[PrimaryKey("ReminderID")]
+	[ExplicitColumns]
+    public partial class Reminder  
+    {
+		[Column] public int ReminderID { get; set; }
+		[Column] public int? SRDID { get; set; }
+		[Column("Reminder")] public DateTime? _Reminder { get; set; }
+		[Column] public string Note { get; set; }
 	}
     
 	[TableName("dbo.Review")]
@@ -738,6 +770,75 @@ namespace Speedbird
 		[Column] public int? ServiceID { get; set; }
 		[Column] public int? ServiceTypeID { get; set; }
 		[Column] public string CouponCode { get; set; }
+	}
+    
+	[TableName("dbo.ServiceRequest")]
+	[PrimaryKey("SRID")]
+	[ExplicitColumns]
+    public partial class ServiceRequest  
+    {
+		[Column] public int SRID { get; set; }
+		[Column] public int? CustID { get; set; }
+		[Column] public int? SRStatusID { get; set; }
+		[Column] public string EmpID { get; set; }
+		[Column] public string EnquirySource { get; set; }
+		[Column] public int? AgentID { get; set; }
+	}
+    
+	[TableName("dbo.SRdetails")]
+	[PrimaryKey("SRDID")]
+	[ExplicitColumns]
+    public partial class SRdetail  
+    {
+		[Column] public int SRDID { get; set; }
+		[Column] public int? SRID { get; set; }
+		[Column] public int? ServiceTypeID { get; set; }
+		[Column] public string FromLoc { get; set; }
+		[Column] public string ToLoc { get; set; }
+		[Column] public DateTime? Fdate { get; set; }
+		[Column] public DateTime? Tdate { get; set; }
+		[Column] public int? SupplierID { get; set; }
+		[Column] public decimal? Cost { get; set; }
+		[Column] public decimal? SellPrice { get; set; }
+		[Column] public string PNRno { get; set; }
+		[Column] public string TicketNo { get; set; }
+	}
+    
+	[TableName("dbo.SRlogs")]
+	[PrimaryKey("SRLID")]
+	[ExplicitColumns]
+    public partial class SRlog  
+    {
+		[Column] public int SRLID { get; set; }
+		[Column] public int? SRDID { get; set; }
+		[Column] public DateTime? LogDateTime { get; set; }
+		[Column] public string UserID { get; set; }
+		[Column] public bool? Type { get; set; }
+		[Column] public string Event { get; set; }
+	}
+    
+	[TableName("dbo.SRReciepts")]
+	[PrimaryKey("RecieptID")]
+	[ExplicitColumns]
+    public partial class SRReciept  
+    {
+		[Column] public int RecieptID { get; set; }
+		[Column] public int? SRID { get; set; }
+		[Column] public DateTime? RecieptDate { get; set; }
+		[Column] public decimal? Amount { get; set; }
+		[Column] public string PayMode { get; set; }
+		[Column] public int? BankID { get; set; }
+	}
+    
+	[TableName("dbo.SRUploads")]
+	[PrimaryKey("SRUID")]
+	[ExplicitColumns]
+    public partial class SRUpload  
+    {
+		[Column] public int SRUID { get; set; }
+		[Column] public int? SRID { get; set; }
+		[Column] public string Path { get; set; }
+		[Column] public string UploadName { get; set; }
 	}
     
 	[TableName("dbo.Supplier")]

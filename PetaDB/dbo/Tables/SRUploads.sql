@@ -1,0 +1,9 @@
+﻿CREATE TABLE [dbo].[SRUploads]
+(
+	[SRUID] INT NOT NULL PRIMARY KEY IDENTITY, 
+    [SRID] INT NULL, 
+    [Path] VARCHAR(50) NULL, 
+    [UploadName] VARCHAR(50) NULL,
+	CONSTRAINT [FK_SRUploads_ToSR] FOREIGN KEY ([SRID]) REFERENCES [ServiceRequest]([SRID]), 
+
+)
