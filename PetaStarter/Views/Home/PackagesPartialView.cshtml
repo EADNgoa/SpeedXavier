@@ -23,9 +23,20 @@
         left: 85px;
         display: block;
     }
+    .EATitleFont {
+        font-family: 'Quattrocento Sans', sans-serif;
+        color: #11496d;
+        font-size: 3.6em;
+        font-weight: normal;
+        line-height: 50px;
+        margin-bottom: 15px;
+        margin-top: 15px;
+        display: block;
+    }
+    
 </style>
 
-<h2>@ViewBag.ServiceTitle</h2>
+<h2 class="EATitleFont">@ViewBag.ServiceTitle</h2>
 <div id="ResContainer">
 
 
@@ -57,7 +68,7 @@
                         @item.ServiceGeoName
                     </div>
                     <h5 class="card-title">@item.ServiceName</h5>
-                    <p class="card-text">@item.ServiceDescription</p>
+                    <p class="card-text">@Html.Raw(item.ServiceDescription)</p>
 
                     <span class="icons position-absolute">
                         @foreach (var a in item.Icons)

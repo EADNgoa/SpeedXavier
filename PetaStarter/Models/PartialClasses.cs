@@ -22,6 +22,8 @@ namespace Speedbird
         public string Instr { get { return $"{CheckIn:dd MMM yyyy, hh:mm}"; } }
         public string Outstr { get { return $"{CheckOut:dd MMM yyyy, hh:mm}"; } }
         public string Tostr { get { return $"{Tdate:dd MMM yyyy}"; } }
+        public string CustName { get { return FName + ' ' + SName;  } }        
+        public string ServiceTypeName { get { return ((ServiceTypeEnum)ServiceTypeID).ToString();  } }
 
 
     }
@@ -89,19 +91,20 @@ namespace Speedbird
         public string Description { get; set; }
         public string CouponCode { get; set; }
 
-        public string GeoName { get; set; }
+        public String GeoName { get; set; }
+        public IEnumerable<String> GeoNames { get; set; }
 
         public int Duration { get; set; }
         public string Itinerary { get; set; }
         public int Dificulty { get; set; }
         public int GroupSize { get; set; }
-        public int GuideLanguageID { get; set; }
+        public IEnumerable<GuideLanguage> GuideLanguages { get; set; }
         public string StartTime { get; set; }
         public string Inclusion { get; set; }
         public string Exclusion { get; set; }
         public string Highlights { get; set; }
+        public string MeetAndInfo { get; set; }
 
-        public string GuideLanguageName { get; set; }
         public int ServiceID { get; set; }
         public string PictureName { get; set; }
         public string AttractionName { get; set; }
@@ -363,6 +366,7 @@ namespace Speedbird
         public IEnumerable<ReviewRepDets> Replies { get; set; }
     }
 
+  
     public enum ServiceTypeEnum
     {
         Accomodation,

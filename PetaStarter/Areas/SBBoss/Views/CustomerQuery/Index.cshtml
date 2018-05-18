@@ -24,33 +24,31 @@
                 <tr role="row">
                     <th><input type="text" class="form-control" placeholder="N#"></th>
                     <th><input type="date" class="form-control" placeholder="Filter Date"></th>
-
-                    <th><input type="text" class="form-control" placeholder="Filter FirstName"></th>
-                    <th><input type="text" class="form-control" placeholder="Filter SurName"></th>
-                    <th><input type="text" class="form-control" placeholder="Filter Email"></th>
+                    <th><input type="text" class="form-control" placeholder="Customer"></th>
+                    <th><input type="text" class="form-control" placeholder="Service"></th>
+                    <th><input type="text" class="form-control" placeholder="Type"></th>
+                    <th><input type="text" class="form-control" placeholder="Email"></th>
 
                     <th><input type="text" class="form-control" placeholder="Filter Phone"></th>
                     <th><input type="text" class="form-control" placeholder="Filter Query"></th>
-                    <th><input type="date" class="form-control" placeholder="Filter Check In"></th>
-                    <th><input type="date" class="form-control" placeholder="Filter Check Out"></th>
+                    <th><input type="date" class="form-control" placeholder="Filter Check In"></th>                    
                     <th><input type="text" class="form-control" placeholder="Filter No Pax"></th>
                     <th><input type="text" class="form-control" placeholder="Filter Qty"></th>
-
 
                     <th width="5%"></th>
                 </tr>
                 <tr role="row">
                     <th scope="col">No.</th>
-                    <th scope="col">Date</th>
-                    <th scope="col">First Name</th>
-                    <th scope="col">Sur Name</th>
-                    <th scope="col" class="no-sort">Email</th>
+                    <th scope="col">Qry Dt</th>
+                    <th scope="col">Customer</th>
+                    <th scope="col">Service</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Email</th>
                     <th scope="col">Phone</th>
-                    <th scope="col">Query</th>
-                    <th scope="col">CheckIn</th>
-                    <th scope="col">CheckOut</th>
+                    <th scope="col" class="no-sort">Query</th>
+                    <th scope="col">CheckIn</th>                    
                     <th scope="col">No Pax</th>
-                    <th scope="col" class="no-sort">Qty</th>
+                    <th scope="col">Qty</th>
 
 
 
@@ -86,13 +84,13 @@
             columns: [
                 { data: "CustomerQueryID" },
                 { data: "Tostr" },
-                { data: "FName" },
-                { data: "SName" },
+                { data: "CustName" },
+                { data: "ServiceName" },
+                { data: "ServiceTypeName" },
                 { data: "Email" },
                 { data: "Phone" },
                 { data: "_Query" },
-                { data: "Instr" },
-                { data: "Outstr" },
+                { data: "Instr" },                
                 { data: "NoPax" },
                 { data: "Qty" },
 

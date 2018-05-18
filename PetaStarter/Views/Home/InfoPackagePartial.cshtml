@@ -1,12 +1,57 @@
-﻿
+﻿<style>
+    .EATranspHeader {
+        background-color: rgba(0, 0, 0, 0.5);
+        color: white;
+        padding-left:15px;
+    }
+    .EAUpMovedDiv {
+        position:relative;
+        top:-248px;
+    }
+
+    .EATitle {
+        font-family: "Merriweather Sans", serif;
+        font-size: 36px;
+        font-weight:700;
+        letter-spacing:-1px;
+        line-height: 44px;
+        padding-top: 51px;
+        margin-bottom:5px;
+        font-variant:small-caps;
+    }
+
+    .EAIconText {
+        font-variant: small-caps;
+        font-family: "Merriweather Sans", serif;
+        color: white;
+        font-size: 18px;
+    }
+</style>
 @model  Speedbird.PackageDets
 
 
     
-        <div class="col-8">
-            
-                <h2 style="margin-left:60px;">@Model.PackageName</h2>
-                <br /> 
+        <div class="col-5 EAUpMovedDiv">
+            <div class="EATranspHeader">
+                <h1 class="EATitle">@Model.PackageName</h1>
+                <div class="FloatBadge">
+                    @Model.GeoNames.First()
+                </div>
+                <hr style="background-color:white; border:1px solid white; margin:3px;"/>
+                @foreach(var i in ViewBag.Icns)
+                {
+                    <img src="/Icons/@i" height="43px;" />
+                    <span class="EAIconText">@i.Substring(0, i.IndexOf('.'))</span>
+                }
+                <hr style="background-color:white; border:1px solid white;margin:3px;"/>
+                LANGUAGES:
+                @foreach (var item in Model.GuideLanguages)
+                {
+                    @item.GuideLanguageName
+                    @: |
+                }
+            </div>
+                
                 <div class="DetailBlock">
                     <div class="row">
                         <table class="table">
@@ -63,11 +108,11 @@
                 </div>
             <br />
             <hr />
-            <br />
-                <div class="DetailBlock" style="padding:30px;min-height:0;">
+            
+                <div class="DetailBlock" style="min-height:0;">
 
                     <div class="row">
-                        <div class="row desc d-lg-table-cell" style="padding:30px;">
+                        <div class="row desc d-lg-table-cell" style="padding-left:30px;margin-left:0px;">
                             <i style="font-size:24px" class="fa">&#xf072;</i>
                             Package Details
                         </div>
@@ -75,59 +120,75 @@
                     
                     <div class="row">
                         <div class="col-2">
-                            Start Time
+                            <b>Start Time:</b>
                         </div>
-                        <div class="col-10">
+                        <div class="col-4">
                             @Html.Raw(Model.StartTime)
                         </div>
+                        <div class="col-2">
+                            <b>Duration:</b>
+                        </div>
+                        <div class="col-1">
+                            @Html.Raw(Model.Duration) h
+                        </div>
+                        <div class="col-2">
+                            <b>Group Size:</b>
+                        </div>
+                        <div class="col-1">
+                            @Model.GroupSize 
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top:10px;">
+                        <div class="col-12"><b>Locations Visited: </b>
+                        @foreach (var item in Model.GeoNames)
+                        {
+                            @item
+                            @: |
+                        }
+                        </div>
                     </div>
                     <hr />
+                    
                     <div class="row">
-                        <div class="col-2">
-                            Duration
-                        </div>
-                        <div class="col-10">
-                            @Html.Raw(Model.Duration)
-                        </div>
-                    </div>
-                   
-                    <hr />
-                    <div class="row">
-                        <div class="col-2">
-                            Group Size
-                        </div>
-                        <div class="col-10">
-                            @Model.GroupSize
-                        </div>
-                    </div>                    
-                    <hr />
-                    <div class="row">
-                        <div class="col-2">
+                        <div class="col-12" style="color: darkblue; font-weight:700">                            
                             Itinerary
                         </div>
-                        <div class="col-10">
+                        <div class="col-12">
                             @Html.Raw(Model.Itinerary)
                         </div>
                     </div>
                     <hr />
                     <div class="row">
-                        <div class="col-2">
-                            Inclusions
+                        <div class="col-6">
+                            <div class="row">
+                                <div class="col-12" style="color: darkblue; font-weight:700">
+                                    Inclusions
+                                </div>
+                                <div class="col-12">
+                                    @Html.Raw(Model.Inclusion)
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12" style="color: darkblue; font-weight:700">
+                                    Exclusions
+                                </div>
+                                <div class="col-12">
+                                    @Html.Raw(Model.Exclusion)
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-10">
-                            @Html.Raw(Model.Inclusion)
+                        <div class="col-6">
+                            <div class="row" style="border:2px dashed #523907;border-radius:7px; background-color:rgba(82, 57, 7, 0.1)">                                
+                                <div class="col-12">
+                                    @Html.Raw(Model.MeetAndInfo)
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <hr />
-                    <div class="row">
-                        <div class="col-2">
-                            Exclusions
-                        </div>
-                        <div class="col-10">
-                            @Html.Raw(Model.Exclusion)
-                        </div>
-                    </div>
-                    <hr />
+                    
+
+                    ==============
+                    
                     
                 </div>
 

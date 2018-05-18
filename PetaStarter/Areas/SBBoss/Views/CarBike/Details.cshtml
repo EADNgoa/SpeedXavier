@@ -5,7 +5,10 @@
         height: 350px;
         width: 100%;
     }
+
+
 </style>
+
 @using (Html.BeginForm("Manage", "CarBike", FormMethod.Post, new { id = "detFrm" }))
 {
     @Html.AntiForgeryToken()
@@ -29,7 +32,7 @@
 <div class="form-row">
     <div class="input-group col mb-3">
         <div class="input-group-prepend"><span class="input-group-text">Location</span></div>
-        <select id="GeoTreeID" name="GeoTreeID" class="form-control GeoSelect">
+        <select id="GeoTreeID" name="GeoTreeID" class="form-control GeoSelect input-group.input-group-lg">
             @foreach (var o in ViewBag.GeoId)
             {
                 <option value="@o.Value">@o.Text</option>
@@ -146,7 +149,7 @@ if (Model?.CarBikeID > 0)
 <script>
 
         $(document).ready(function () {
-
+                    
         //Submit form
         $('#SaveDetails').click(function () {
             var detFrm = $('#detFrm');
@@ -178,6 +181,7 @@ if (Model?.CarBikeID > 0)
         $("#SupID").select2({
             placeholder: "Type 3 letters to choose",
             minimumInputLength: 3,
+            theme: "bootstrap",
 
             ajax: {
                 url: '@(Url.Action("GetSup", "Package"))',
@@ -203,7 +207,7 @@ if (Model?.CarBikeID > 0)
         });
 
         $("#SupID").on('select2:unselect', function (e) {
-            $.post('/SBBoss/CarBike/KillSup', { PackageId: $('#PackageID').val(), deadSup: e.params.data.id }, function (e) {
+            $.post('/SBBoss/CarBike/KillSup', { CarBikeID: $('#CarBikeID').val(), deadSup: e.params.data.id }, function (e) {
                 $('#ContID').html(e);
             });
 
@@ -213,7 +217,7 @@ if (Model?.CarBikeID > 0)
             $(".GeoSelect").select2({
                 placeholder: "Type 3 letters to choose",
                 templateSelection: formatState,
-
+                theme: "bootstrap",
                 ajax: {
                     url: '@(Url.Action("GetLocations", "GeoTree"))',
                     dataType: 'json',

@@ -333,7 +333,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         {
             ViewBag.Pack = db.FirstOrDefault<Accomodation>($"Select * From Accomodation Where AccomodationID={id}");
             ViewBag.sid = ServiceTypeEnum.Accomodation;
-            ViewBag.Validity = db.Fetch<PackageValidity>($"Select * From PackageValidity where ServiceID ='{id}'");
+            ViewBag.Validity = db.Fetch<PackageValidity>($"Select * From PackageValidity where ServiceID =@0 and ServiceTypeId=@1", id,(int)ServiceTypeEnum.Accomodation);
             return PartialView(base.BaseCreateEdit<PackageValidity>(EID, "PVID"));
         }
 
@@ -374,10 +374,10 @@ namespace Speedbird.Areas.SBBoss.Controllers
         }
 
 
-        public string KillSup(int PackageId, int deadSup)
+        public string KillSup(int AccomodationID, int deadSup)
         {
-            db.Delete<Package_Supplier>("Where packageId=@0 and SupplierId=@1", PackageId, deadSup);
-            return String.Join(",", db.Query<Package_Supplier>("Where packageId=@0", PackageId).Select(s => s.ContractNo));
+            db.Delete<Package_Supplier>("Where packageId=@0 and SupplierId=@1 and ServiceTypeId=@2", AccomodationID, deadSup, (int)ServiceTypeEnum.Accomodation);
+            return String.Join(",", db.Query<Package_Supplier>("Where packageId=@0 and ServiceTypeId=@1", AccomodationID, (int)ServiceTypeEnum.Accomodation).Select(s => s.ContractNo));
         }
         protected override void Dispose(bool disposing)
         {
