@@ -196,7 +196,9 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+
     <Compile Include="Areas\SBBoss\Controllers\SRController.cs" />
+
     <Compile Include="Areas\SBBoss\Controllers\LeaveApplicationController.cs" />
     <Compile Include="Areas\SBBoss\Controllers\LeaveTypeController.cs" />
     <Compile Include="Areas\SBBoss\Controllers\HolidayController.cs" />
@@ -281,6 +283,7 @@
     <Content Include="Content\jquery-ui-timepicker-addon.css" />
     <Content Include="Content\jquery-ui-timepicker-addon.min.css" />
     <Content Include="Content\PagedList.css" />
+    <Content Include="Content\select2-bootstrap.css" />
     <Content Include="Scripts\blueimp\blueimp-gallery-fullscreen.js" />
     <Content Include="Scripts\blueimp\blueimp-gallery-indicator.js" />
     <Content Include="Scripts\blueimp\blueimp-gallery-video.js" />
@@ -508,6 +511,7 @@
     <Content Include="Areas\SBBoss\Views\LeaveApplication\ConfirmOrCancel.cshtml" />
     <Content Include="Areas\SBBoss\Views\Holiday\Index.cshtml" />
     <Content Include="Areas\SBBoss\Views\Holiday\Manage.cshtml" />
+
     <Content Include="Areas\SBBoss\Views\SR\SRUpload.cshtml" />
     <Content Include="Areas\SBBoss\Views\SR\Details.cshtml" />
     <Content Include="Areas\SBBoss\Views\SR\Index.cshtml" />
@@ -515,6 +519,12 @@
     <Content Include="Areas\SBBoss\Views\SR\SRdetails.cshtml" />
     <Content Include="Areas\SBBoss\Views\SR\Reciepts.cshtml" />
     <Content Include="Areas\SBBoss\Views\SR\SRlogs.cshtml" />
+
+    <Content Include="Content\select2-bootstrap.scss" />
+    <Content Include="Content\select2-bootstrap.less" />
+    <Content Include="Content\select2-bootstrap-build.scss" />
+    <Content Include="Content\select2-bootstrap-build.less" />
+
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\i18n\jquery-ui-timepicker-addon-i18n.js" />
     <Content Include="Scripts\i18n\jquery-ui-timepicker-addon-i18n.min.js" />

@@ -24,7 +24,7 @@
             <center>
                 <br />
                 <br />
-                <h3>Customer Details</h3>
+                <h3>Query Details for @((Speedbird.ServiceTypeEnum)ViewBag.Dets.ServiceTypeID) : @ViewBag.Dets.ServiceName</h3>
 
                 <table class="table table-light">
 
@@ -64,10 +64,15 @@
                         <td>@ViewBag.Dets.CheckOut</td>
                     </tr>
                     <tr>
-                        <td colspan="1" rowspan="3"><img src="/Images/@ViewBag.Dets.IdPicture" width="350" style=" box-shadow: 0 3px 5px rgba(50,50,50,0.4);" /></td>
+                        <td colspan="1" rowspan="3">
+                        @if (ViewBag.Dets.IdPicture != null)
+                        {
+                            <img src="/Images/@ViewBag.Dets.IdPicture" width="350" style=" box-shadow: 0 3px 5px rgba(50,50,50,0.4);" />
+                        }
+                        </td>
 
 
-                        <td colspan="3" rowspan="3">@ViewBag.Dets._Query</td>
+                        <td colspan="3" rowspan="3"><b>@ViewBag.Dets._Query</b></td>
                     </tr>
                 </table>
             </center>    
@@ -90,7 +95,7 @@
                     <center>
                         @if (ViewBag.sid == (int)Speedbird.ServiceTypeEnum.Accomodation)
                         {
-                        <a href="/SBBoss/Accomodation/Manage/@ViewBag.ServiceID"> Click here to view Service</a>
+                        <a href="/SBBoss/Accomodation/Manage/@ViewBag.ServiceID"> Click here to view the details of @ViewBag.Dets.ServiceName</a>
                          }
                         @if (ViewBag.sid == (int)Speedbird.ServiceTypeEnum.Packages)
                         {

@@ -15,5 +15,6 @@
 	[Highlights] VARCHAR(MAX) NULL, 
     [CouponCode] VARCHAR(50) NULL,     
     [SupplierNotepad] VARCHAR(MAX) NULL, 
+    [MeetAndInfo] VARCHAR(MAX) NULL, 
     CONSTRAINT [FK_Package_GuideLanguage] FOREIGN KEY ([GuideLanguageID]) REFERENCES [GuideLanguage]([GuideLanguageID])
 )

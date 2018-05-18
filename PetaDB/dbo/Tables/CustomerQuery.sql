@@ -15,6 +15,6 @@
     [Qty] INT NULL, 
     [Tdate] DATETIME NULL, 
     [Glang] INT NULL, 
-    [Gtime] VARCHAR(10) NULL
-
+    [Gtime] VARCHAR(10) NULL,
+	[ServiceName] VARCHAR(100) NULL,
 )

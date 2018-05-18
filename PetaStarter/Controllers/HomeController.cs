@@ -299,8 +299,9 @@ namespace Speedbird.Controllers
             if(((int)ViewBag.ST) == (int)ServiceTypeEnum.Packages || ((int)ViewBag.ST) == (int)ServiceTypeEnum.Cruise || ((int)ViewBag.ST) == (int)ServiceTypeEnum.SightSeeing)
             {
                 var Packages = db.FirstOrDefault<string>("select StartTime From Package  Where PackageID =@0 and ServiceTypeID=@1", ServiceID, st);
-                ViewBag.Glang = db.Fetch<GuideLanguage>("Select g.* from GuideLanguage g  inner join Package_Language pl on pl.GuideLanguageID= g.GuideLanguageID inner join Package p on p.PackageID= pl.PackageID where pl.PackageID=@0", ServiceID.Value).Select(a => new SelectListItem { Text=a.GuideLanguageName, Value=a.GuideLanguageID.ToString()});
+                ViewBag.Glang = db.Fetch<GuideLanguage>("Select g.* from GuideLanguage g  inner join Package_Language pl on pl.GuideLanguageID= g.GuideLanguageID where pl.PackageID=@0", ServiceID.Value).Select(a => new SelectListItem { Text=a.GuideLanguageName, Value=a.GuideLanguageID.ToString()});
                 ViewBag.Gtime = Packages.Split(',').Select(a => new SelectListItem { Text=a,Value=a } );
+                //ViewBag.SLoc = db.First<GeoTree>("Select * from GeoTree g, Package_Geotree pg where g.GeotreeId=pg.geotreeId and pg.packageId=@0", ServiceID).GeoName;
             }
 
             ViewBag.HeadPic = db.FirstOrDefault<Picture>("Select top 1 * from Picture where ServiceId=@0 and ServiceTypeId=@1", ServiceID, st)?? new Picture { PictureName="Goa" };
@@ -337,7 +338,9 @@ namespace Speedbird.Controllers
         {
             var Packages = db.FirstOrDefault<PackageDets>("select * From Package  Where PackageID =@0 and ServiceTypeID=@1", ServiceID, st);
             Packages.Pic = db.Fetch<PictureDets>("Select * From Picture Where ServiceID=@0 and ServiceTypeID=@1 Order By NewID()", Packages.PackageID, st).ToList();
-            Packages.GeoName = db.First<string>("Select GeoName From GeoTree g,Package_GeoTree pg  where pg.PackageID=@0 and g.GeoTreeID = pg.GeoTreeID", Packages.PackageID);
+            Packages.GeoNames = db.Fetch<string>("Select GeoName From GeoTree g,Package_GeoTree pg  where pg.PackageID=@0 and g.GeoTreeID = pg.GeoTreeID", Packages.PackageID);
+            Packages.GuideLanguages = db.Fetch<GuideLanguage>("Select g.* from GuideLanguage g inner join Package_Language pl on pl.GuideLanguageID= g.GuideLanguageID where pl.PackageID=@0", ServiceID.Value);
+            ViewBag.Icns = db.Query<string>("Select Iconpath from Icons where ServiceTypeId=@0 and ServiceId=@1 ", st, ServiceID);
             
             return PartialView(Packages);
         }

@@ -34,7 +34,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
 
 
-            var sql = new PetaPoco.Sql($"Select distinct c.*,Substring(Query,1,100) as Query from CustomerQuery c");
+            var sql = new PetaPoco.Sql($"Select distinct c.CustomerQueryID,ServiceId, ServiceName, Email, Phone, Substring(Query,1,100) + '...' as Query, FName, SName, CheckIn, Tdate, ServiceTypeId, NoPax, Qty from CustomerQuery c");
             var fromsql = new PetaPoco.Sql();
             var wheresql = new PetaPoco.Sql("where c.CustomerQueryID >0");
 
@@ -47,8 +47,6 @@ namespace Speedbird.Areas.SBBoss.Controllers
             try
             {
                 var res = db.Query<CustomerQuery>(sql).Skip(parameters.Start).Take(parameters.Length).ToList();
-
-                
 
 
                 var dataTableResult = new DTResult<CustomerQuery>
@@ -114,17 +112,15 @@ namespace Speedbird.Areas.SBBoss.Controllers
         {
             "CustomerQueryID",
             "Tostr",
-            "FName",
-            "SName",
+            "CustName",            
+            "ServiceName",
+            "ServiceTypeName",
             "Email",
             "Phone",
             "Query",       
-            "Instr",
-            "Outstr",
+            "Instr",            
             "NoPax",
             "Qty",
-            "ServiceID",
-            "ServiceTypeID"
         };
 
 

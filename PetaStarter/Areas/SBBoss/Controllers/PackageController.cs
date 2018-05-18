@@ -202,7 +202,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult  Manage([Bind(Include = "PackageID,ServiceTypeID,PackageName,Description,Duration,Itinerary,Highlights,Dificulty,GroupSize,GuideLanguageID,StartTime,Inclusion,Exclusion,CouponCode")] Package item, System.Collections.Generic.List<int> GeoTreeID )
+        public ActionResult  Manage([Bind(Include = "PackageID,ServiceTypeID,PackageName,Description,Duration,Itinerary,Highlights,Dificulty,GroupSize,GuideLanguageID,StartTime,Inclusion,Exclusion,CouponCode, MeetAndInfo")] Package item, System.Collections.Generic.List<int> GeoTreeID )
         {
             using (var transaction = db.GetTransaction())
             {
@@ -332,8 +332,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
         public ActionResult PVManage(int? id, int? sid, int? EID)
         {
             ViewBag.Pack = db.FirstOrDefault<Package>($"Select * From Package Where PackageID='{id}'");
-            ViewBag.sid = ServiceTypeEnum.Packages;
-            ViewBag.Validity = db.Fetch<PackageValidity>($"Select * From PackageValidity where ServiceID ='{id}'");
+            ViewBag.sid = sid;
+            ViewBag.Validity = db.Fetch<PackageValidity>($"Select * From PackageValidity where ServiceID =@0 and ServiceTypeId=@1", id, sid);
             return PartialView(base.BaseCreateEdit<PackageValidity>(EID, "PVID"));
         }
 

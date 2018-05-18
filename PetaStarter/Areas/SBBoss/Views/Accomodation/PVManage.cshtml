@@ -130,7 +130,7 @@
                 data: $(vpFrm).serialize()
             }).done(function () {
                 $('#TabContent').load(
-                    '@Url.Action("PVManage")' + '?sid=' + $('#sid').val()
+                    '@Url.Action("PVManage")' + '?sid=' + $('#ServiceTypeID').val()
 
                 );
 

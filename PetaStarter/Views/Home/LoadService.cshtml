@@ -15,7 +15,7 @@
 
 
     .card {
-        /*width: 210px !important;*/
+        width: 170px !important;
         box-shadow: 0 3px 5px rgba(50,50,50,.6);
         position: relative;
         overflow: hidden;
@@ -29,7 +29,7 @@
     }
 
     .card-img-top {
-        height: 280px;
+        height: 180px;
     }
 
     #Container, #Container2 {
@@ -41,6 +41,7 @@
         padding-top: 8px;
         background-color: #428bca;
         font-size: 18px;
+        font-weight:700;
         text-align: center;
     }
 
@@ -83,7 +84,6 @@
 
 
     .HeroTitle {
-
         font-size: 140px;
         font-family: "Quattrocento Sans",sans-serif;
         font-weight: 300;
@@ -94,6 +94,7 @@
         top: 300px;
         left: 90px;
     }
+
     .money {
         font-size: 30px;
         font-weight: bold;
@@ -112,22 +113,22 @@
     <script src="/Scripts/jquery.masonry.min.js"></script>
     <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
 
-    
+
 </head>
 
 <hr style="padding-bottom:0;margin-bottom:0;padding-top:2px;margin-top:0;line-height: 1.428571429;" />
 
-<div class="row">
-    
-    <nav class="breadcrumb ml-5">
-        <span class="breadcrumb-item" href="#">&nbsp; &nbsp; </span>
-        <a class="breadcrumb-item" href="@Request.UrlReferrer.AbsoluteUri">Home</a>
-        <a class="breadcrumb-item" href="@Request.Url.AbsoluteUri">@ViewBag.Loc</a>
-    </nav>
-</div>
+@*<div class="row">
+
+        <nav class="breadcrumb ml-5">
+            <span class="breadcrumb-item" href="#">&nbsp; &nbsp; </span>
+            <a class="breadcrumb-item" href="@Request.UrlReferrer.AbsoluteUri">Home</a>
+            <a class="breadcrumb-item" href="@Request.Url.AbsoluteUri">@ViewBag.Loc</a>
+        </nav>
+    </div>*@
 
 
-<br />
+
 
 <center>
     <img src="/Images/page1pic.jpg" alt="Goa" style="width:auto;min-width:100%; height:400px;margin:0; background-color: lightgrey;">
@@ -135,96 +136,97 @@
 <h1 class="HeroTitle">@ViewBag.Loc</h1>
 
 <div class="container-fluid">
-
-    <center>
-        <h3>
-            Best Tours and Excursions in @ViewBag.Loc
-        </h3>
-    </center>
-
-
-    <div id="Container">
+    <div class="row justify-content-center">
+       <div class="col-10">
         <center>
-            <a href="/Home/LoadPackages/?st=@Speedbird.ServiceTypeEnum.Accomodation&&loc=@ViewBag.Loc">
-                <div class="card ServiceTypes" style="width: 20rem;">
-                    <img class="card-img-top" src="/Images/@ViewBag.Accomodation.PictureName" alt="Card image cap">
-                    <div class="FloatBadge">
-                        @ViewBag.Loc
-                    </div>
-                    <div class="card-block">
-                        <h4 class="card-title">Accomodation</h4>
-                    </div>
-                </div>
-            </a>
-            <a href="/Home/LoadPackages/?st=@Speedbird.ServiceTypeEnum.Packages&&loc=@ViewBag.Loc">
-                <div class="card ServiceTypes" style="width: 20rem;">
-                    <img class="card-img-top" src="/Images/@ViewBag.Package.PictureName" alt="Card image cap">
-                    <div class="card-block">
-                        <div class="FloatBadge">
-                            @ViewBag.Loc
-                        </div>
-                        <h4 class="card-title">Packages</h4>
-                    </div>
-                </div>
-            </a>
-            <a href="/Home/LoadPackages/?st=@Speedbird.ServiceTypeEnum.CarBike&&loc=@ViewBag.Loc">
-
-                <div class="card ServiceTypes" style="width: 20rem;">
-                    <img class="card-img-top" src="/Images/@ViewBag.CarBike.PictureName" alt="Card image cap">
-                    <div class="FloatBadge">
-                        @ViewBag.Loc
-                    </div>
-                    <div class="card-block">
-                        <h4 class="card-title">Car / Bike Rentals</h4>
-                    </div>
-                </div>
-            </a>
-            <a href="#">
-
-                <div class="card ServiceTypes" style="width: 20rem;">
-                    <img class="card-img-top" src="/Images/@ViewBag.CarBike.PictureName" alt="Card image cap">
-                    <div class="FloatBadge">
-                        @ViewBag.Loc
-                    </div>
-                    <div class="card-block">
-                        <h4 class="card-title">Taxi Hire</h4>
-                    </div>
-                </div>
-            </a>
-            @if (ViewBag.loc != "Goa")
-            {
-                <a href="/Home/LoadPackages/?st=@Speedbird.ServiceTypeEnum.SightSeeing&&loc=@ViewBag.Loc">
-
-                    <div class="card ServiceTypes" style="width: 20rem;">
-                        <img class="card-img-top" src="/Images/@ViewBag.SightSeeing.PictureName" alt="Card image cap">
-                        <div class="FloatBadge">
-                            @ViewBag.Loc
-                        </div>
-                        <div class="card-block">
-                            <h4 class="card-title">Sight Seeing</h4>
-                        </div>
-                    </div>
-                </a>
-                if (ViewBag.loc == "International")
-                {
-                    <a href="/Home/LoadPackages/?st=@Speedbird.ServiceTypeEnum.Cruise&&loc=@ViewBag.Loc">
-
-                        <div class="card ServiceTypes" style="width: 20rem;">
-                            <img class="card-img-top" src="/Images/@ViewBag.Cruise.PictureName" alt="Card image cap">
-                            <div class="FloatBadge">
-                                @ViewBag.Loc
-                            </div>
-                            <div class="card-block">
-                                <h4 class="card-title">Cruise</h4>
-                            </div>
-                        </div>
-                    </a>
-                }
-            }
-
+            <h3>
+                Best Tours and Excursions in @ViewBag.Loc
+            </h3>
         </center>
 
 
+           <div id="Container">
+               <center>
+                   <a href="/Home/LoadPackages/?st=@Speedbird.ServiceTypeEnum.Accomodation&&loc=@ViewBag.Loc">
+                       <div class="card ServiceTypes" style="width: 20rem;">
+                           <img class="card-img-top" src="/Images/@ViewBag.Accomodation.PictureName" alt="Card image cap">
+                           @*<div class="FloatBadge">
+                               @ViewBag.Loc
+                           </div>*@
+                           <div class="card-block">
+                               <h4 class="card-title">Accomodation</h4>
+                           </div>
+                       </div>
+                   </a>
+                   <a href="/Home/LoadPackages/?st=@Speedbird.ServiceTypeEnum.Packages&&loc=@ViewBag.Loc">
+                       <div class="card ServiceTypes" style="width: 20rem;">
+                           <img class="card-img-top" src="/Images/@ViewBag.Package.PictureName" alt="Card image cap">
+                           <div class="card-block">
+                               @*<div class="FloatBadge">
+                                   @ViewBag.Loc
+                               </div>*@
+                               <h4 class="card-title">Packages</h4>
+                           </div>
+                       </div>
+                   </a>
+                   <a href="/Home/LoadPackages/?st=@Speedbird.ServiceTypeEnum.CarBike&&loc=@ViewBag.Loc">
+
+                       <div class="card ServiceTypes" style="width: 20rem;">
+                           <img class="card-img-top" src="/Images/@ViewBag.CarBike.PictureName" alt="Card image cap">
+                           @*<div class="FloatBadge">
+                               @ViewBag.Loc
+                           </div>*@
+                           <div class="card-block">
+                               <h4 class="card-title">Car / Bike Rentals</h4>
+                           </div>
+                       </div>
+                   </a>
+                   <a href="#">
+
+                       <div class="card ServiceTypes" style="width: 20rem;">
+                           <img class="card-img-top" src="/Images/@ViewBag.CarBike.PictureName" alt="Card image cap">
+                           @*<div class="FloatBadge">
+                               @ViewBag.Loc
+                           </div>*@
+                           <div class="card-block">
+                               <h4 class="card-title">Taxi Hire</h4>
+                           </div>
+                       </div>
+                   </a>
+                   @if (ViewBag.loc != "Goa")
+        {
+           <a href="/Home/LoadPackages/?st=@Speedbird.ServiceTypeEnum.SightSeeing&&loc=@ViewBag.Loc">
+
+               <div class="card ServiceTypes" style="width: 20rem;">
+                   <img class="card-img-top" src="/Images/@ViewBag.SightSeeing.PictureName" alt="Card image cap">
+                   @*<div class="FloatBadge">
+                       @ViewBag.Loc
+                   </div>*@
+                   <div class="card-block">
+                       <h4 class="card-title">Sight Seeing</h4>
+                   </div>
+               </div>
+           </a>
+if (ViewBag.loc == "International")
+{
+           <a href="/Home/LoadPackages/?st=@Speedbird.ServiceTypeEnum.Cruise&&loc=@ViewBag.Loc">
+
+               <div class="card ServiceTypes" style="width: 20rem;">
+                   <img class="card-img-top" src="/Images/@ViewBag.Cruise.PictureName" alt="Card image cap">
+                   @*<div class="FloatBadge">
+                       @ViewBag.Loc
+                   </div>*@
+                   <div class="card-block">
+                       <h4 class="card-title">Cruise</h4>
+                   </div>
+               </div>
+           </a>
+}
+}
+
+               </center>
+           </div>
+        </div>
     </div>
 
     @*<h2>Package Categories</h2>
@@ -251,7 +253,7 @@
     $container.imagesLoaded(function () {
         $container.masonry({
             itemSelector: '.ServiceTypes',
-            columnWidth: 200,
+            columnWidth: 100,
             isFitWidth: true,
             isAnimated: true,
         });
@@ -260,7 +262,7 @@
     $container2.imagesLoaded(function () {
         $container2.masonry({
             itemSelector: '.Package',
-            columnWidth: 200,
+            columnWidth: 100,
             isFitWidth: true,
             isAnimated: true,
         });
