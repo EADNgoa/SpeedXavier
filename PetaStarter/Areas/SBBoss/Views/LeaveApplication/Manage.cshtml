@@ -4,6 +4,8 @@
     ViewBag.Title = "Manage Leave Applicaton";
 }
 
+
+
 <div class="card border rounded DropShadow">
     <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
         <span class="h3">@ViewBag.Title</span>
@@ -12,41 +14,50 @@
     <div class="card-body">
         <h5>&nbsp;</h5>
 
-
-        @using (Html.BeginForm("Manage", "LeaveApplication", FormMethod.Post, new { id = "detFrm" }))
+        @if (ViewBag.InsufficientLeave != null)
         {
+            <div class="alert alert-danger" role="alert">
+                @ViewBag.InsufficientLeave            
+            </div>
+        }
+        @using (Html.BeginForm("Manage", "LeaveApplication", FormMethod.Post, new { id = "detFrm" }))
+    {
         @Html.AntiForgeryToken()
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            
+    if (Model?.LeaveApplicationID > 0)
+    {
+        @Html.HiddenFor(model => model.LeaveApplicationID)
+}
 
-        <div class="form-row">
-            <div class="input-group col mb-3">
-                <div class="input-group-prepend"><span class="input-group-text">Start Date</span></div>
-                @Html.EditorFor(model => model.LeaveStartDate, new { htmlAttributes = new { @class = "form-control", @type="date" } })
-                @Html.ValidationMessageFor(model => model.LeaveStartDate, "", new { @class = "text-danger" })
-            </div>
-         
-            <div class="input-group col mb-3">
-                <div class="input-group-prepend"><span class="input-group-text">No Of Days</span></div>
-                @Html.EditorFor(model => model.NoOfDays, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.NoOfDays, "", new { @class = "text-danger" })
-            </div>
-        </div>
-        <div class="form-row">
-            <div class="input-group col mb-3">
-                <div class="input-group-prepend"><span class="input-group-text">Type</span></div>
-                @Html.DropDownList("LeaveTypeID", ViewBag.LeaveTypeID as IEnumerable<SelectListItem>, new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.LeaveTypeID, "", new { @class = "text-danger" })
-            </div>
-        </div>
-  
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <Button id="SaveDetails" class="btn btn-primary">Save</Button>
-            </div>
+    <div class="form-row">
+        <div class="input-group col mb-3">
+            <div class="input-group-prepend"><span class="input-group-text">Start Date</span></div>
+            @Html.EditorFor(model => model.LeaveStartDate, new { htmlAttributes = new { @class = "form-control", @type = "date" } })
+            @Html.ValidationMessageFor(model => model.LeaveStartDate, "", new { @class = "text-danger" })
         </div>
 
-        }
+        <div class="input-group col mb-3">
+            <div class="input-group-prepend"><span class="input-group-text">No Of Days</span></div>
+            @Html.EditorFor(model => model.NoOfDays, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.NoOfDays, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="input-group col mb-3">
+            <div class="input-group-prepend"><span class="input-group-text">Type</span></div>
+            @Html.DropDownListFor(model => model.LeaveTypeID, null, new { @class = "form-control" })
+            @*@Html.DropDownListFor("LeaveTypeID", ViewBag.LeaveTypeID as IEnumerable<SelectListItem>, new { @class = "form-control" })*@
+            @Html.ValidationMessageFor(model => model.LeaveTypeID, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <Button id="SaveDetails" class="btn btn-primary">Save</Button>
+        </div>
+    </div>
+
+}
     </div>
 </div>
 

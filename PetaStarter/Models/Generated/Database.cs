@@ -1753,7 +1753,7 @@ namespace Speedbird
 
 
 
-		[Column] public int? NoOfDays { get; set; }
+		[Column] public decimal? NoOfDays { get; set; }
 
 
 

@@ -512,6 +512,7 @@
     <Content Include="Content\select2-bootstrap.less" />
     <Content Include="Content\select2-bootstrap-build.scss" />
     <Content Include="Content\select2-bootstrap-build.less" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\i18n\jquery-ui-timepicker-addon-i18n.js" />
     <Content Include="Scripts\i18n\jquery-ui-timepicker-addon-i18n.min.js" />

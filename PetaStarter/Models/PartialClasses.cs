@@ -41,8 +41,8 @@ namespace Speedbird
         public string UserID { get; set; }
         public string LeaveTypeName { get; set; }
         public DateTime LeaveStartDate { get; set; }
-        public int NoOfDays { get; set; }
-        public string BookingStatusName { get; set; }
+        public decimal NoOfDays { get; set; }
+        public int StatusID { get; set; }
     }
 
     [MetadataType(typeof(DiscountCouponMetadata))]
@@ -390,6 +390,13 @@ namespace Speedbird
         Admin,
         Agent,
         Guest
+    }
+
+    public enum LeaveApplicationStatusEnum
+    {
+        Pending,
+        Approved,
+        Rejected
     }
 
     public class EAAuthorizeAttribute : AuthorizeAttribute

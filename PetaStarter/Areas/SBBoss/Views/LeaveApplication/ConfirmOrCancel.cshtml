@@ -82,9 +82,9 @@
                     @Html.DisplayFor(modelItem => item.NoOfDays)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.BookingStatusName)
+                    @((Speedbird.LeaveApplicationStatusEnum)item.StatusID)
                 </td>
-                @if (item.BookingStatusName == "Processing")
+                @if (item.StatusID== (int)Speedbird.LeaveApplicationStatusEnum.Pending)
                 {
                 <td>
                     @Html.ActionLink("Approve", "ConfirmOrCancel", new { Approve = item.LeaveApplicationID })
