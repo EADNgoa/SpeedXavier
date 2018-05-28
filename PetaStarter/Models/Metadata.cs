@@ -8,32 +8,7 @@ using System.Web.Mvc;
 namespace Speedbird
 {
   
-    public class CustomerMetadata
-    {
-        [Display(Name = "Name")]
-        [Required]
-        [StringLength(150, MinimumLength = 3)]
-        public string Name;
 
-        [Display(Name = "Address")]
-        [Required]
-        [StringLength(350, MinimumLength = 3)]
-        public string Address;
-
-        [Display(Name = "Passport No.")]        
-        [StringLength(20, MinimumLength = 3)]
-        public string PassportNo;
-
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd-MMM-yyyy}", ApplyFormatInEditMode = true)]
-        [Display(Name = "Passport Issued ON")]        
-        public DateTime DateIssue;
-
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd-MMM-yyyy}", ApplyFormatInEditMode = true)]
-        [Display(Name = "Passport Expiry ON")]
-        public DateTime DateExpiry;
-    }
 
     public class DiscountCouponMetadata
     {

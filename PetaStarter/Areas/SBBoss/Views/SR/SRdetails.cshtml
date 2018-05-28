@@ -1,0 +1,310 @@
+﻿@model Speedbird.SRdetail
+
+@{
+    ViewBag.Title = $"Manage Services";
+}
+
+<link rel="stylesheet" type="text/css" href="/Content/datatables.min.css" />
+<script type="text/javascript" src="/Scripts/datatables.min.js"></script>
+
+
+<div class="card border rounded DropShadow">
+    <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
+        <span class="h3">@ViewBag.Title</span>
+    </div>
+    <div class="card-body">
+        <h5>&nbsp;</h5>
+        <div class="section-to-Not-print">
+            @using (Html.BeginForm("SRdetails", "SR", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal ">
+
+
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                @Html.Hidden("SRID", (int)ViewBag.SRID)
+                @Html.HiddenFor(model => model.SupplierID)
+
+                @if (Model?.SRDID != null)
+            {@Html.Hidden("SRDID", (int)Model.SRDID)}
+
+
+                <div class="form-row">
+                    <div class="input-group col mb-3">
+                        <div class="input-group-prepend"><span class="input-group-text">Service Type</span></div>
+                        @Html.DropDownList("ServiceTypeID", null, htmlAttributes: new { @type = "text", @class = "eadate form-control" })
+                        @Html.ValidationMessageFor(model => model.ToLoc, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="input-group col mb-3">
+                        <div class="input-group-prepend"><span class="input-group-text">From Date</span></div>
+                        @Html.EditorFor(model => model.Fdate, new { htmlAttributes = new { @type = "text", @class = "eadate form-control" } })
+                        @Html.ValidationMessageFor(model => model.Fdate, "", new { @class = "text-danger" })
+
+                    </div>
+                    <div class="input-group col mb-3">
+                        <div class="input-group-prepend"><span class="input-group-text">To Date</span></div>
+                        @Html.EditorFor(model => model.Tdate, new { htmlAttributes = new { @type = "text", @class = "eadate form-control" } })
+                        @Html.ValidationMessageFor(model => model.Tdate, "", new { @class = "text-danger" })
+                    </div>
+
+
+                </div>
+                <div class="form-row">
+                    <div class="input-group col mb-3">
+                        <div class="input-group-prepend"><span class="input-group-text">From Location</span></div>
+                        @Html.EditorFor(model => model.FromLoc, new { htmlAttributes = new { @type = "text", @class = " form-control" } })
+                        @Html.ValidationMessageFor(model => model.FromLoc, "", new { @class = "text-danger" })
+
+                    </div>
+                    <div class="input-group col mb-3">
+                        <div class="input-group-prepend"><span class="input-group-text">To Location</span></div>
+                        @Html.EditorFor(model => model.ToLoc, new { htmlAttributes = new { @type = "text", @class = " form-control" } })
+                        @Html.ValidationMessageFor(model => model.ToLoc, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="input-group col mb-3">
+                        <div class="input-group-prepend"><span class="input-group-text">Supplier</span></div>
+                        <input type="text" id="SupplierName" name="SupplierName" style="color:black;" data-autocomplete-idholder="#SupplierID" value="" data-autocombo-url="@Url.Action("AutoCompleteSup")" class="form-control" />
+                        @Html.ValidationMessageFor(model => model.SupplierID, "", new { @class = "text-danger" })
+                    </div>
+
+                </div>
+                @*Accomodation*@
+                <div class="form-row AcType">
+                    <div class="input-group col mb-3">
+                        <div class="input-group-prepend"><span class="input-group-text">Accomodation</span></div>
+                        @Html.EditorFor(model => model.FromLoc, new { htmlAttributes = new { @type = "text", @class = " form-control" } })
+                        @Html.ValidationMessageFor(model => model.FromLoc, "", new { @class = "text-danger" })
+
+                    </div>
+                    <div class=" input-group col mb-3">
+                        <div class="input-group-prepend"><span class="input-group-text">Car/Bike</span></div>
+                        @Html.EditorFor(model => model.ToLoc, new { htmlAttributes = new { @type = "text", @class = " form-control" } })
+                        @Html.ValidationMessageFor(model => model.ToLoc, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="PType input-group col mb-3">
+                        <div class="input-group-prepend"><span class="input-group-text">Packages</span></div>
+                        @Html.EditorFor(model => model.ToLoc, new { htmlAttributes = new { @type = "text", @class = "PType form-control" } })
+                        @Html.ValidationMessageFor(model => model.ToLoc, "", new { @class = "text-danger" })
+                    </div>
+
+                </div>
+                @*Sample Form-row*@
+                <div class="form-row">
+                    <div class="SSType input-group col mb-3">
+                        <div class="input-group-prepend"><span class="input-group-text">Sight seeing</span></div>
+                        @Html.EditorFor(model => model.FromLoc, new { htmlAttributes = new { @type = "text", @class = " form-control" } })
+                        @Html.ValidationMessageFor(model => model.FromLoc, "", new { @class = "text-danger" })
+
+                    </div>
+                    <div class=" CType input-group col mb-3">
+                        <div class="input-group-prepend"><span class="input-group-text">Cruise</span></div>
+                        @Html.EditorFor(model => model.ToLoc, new { htmlAttributes = new { @type = "text", @class = " form-control" } })
+                        @Html.ValidationMessageFor(model => model.ToLoc, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="CType input-group col mb-3">
+                        <div class="input-group-prepend"><span class="input-group-text">Cruise</span></div>
+                        @Html.EditorFor(model => model.ToLoc, new { htmlAttributes = new { @type = "text", @class = " form-control" } })
+                        @Html.ValidationMessageFor(model => model.ToLoc, "", new { @class = "text-danger" })
+                    </div>
+
+
+                </div>
+                <div class="form-row">
+
+                    <div class="input-group col mb-3">
+                        <div class="input-group-prepend"><span class="input-group-text">Cost</span></div>
+                        @Html.EditorFor(model => model.Cost, new { htmlAttributes = new { @type = "text", @class = " form-control" } })
+                        @Html.ValidationMessageFor(model => model.Cost, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="input-group col mb-3">
+                        <div class="input-group-prepend"><span class="input-group-text">Sell Price</span></div>
+                        @Html.EditorFor(model => model.SellPrice, new { htmlAttributes = new { @type = "text", @class = " form-control" } })
+                        @Html.ValidationMessageFor(model => model.SellPrice, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="input-group col mb-3">
+                        <input type="submit" value="Save" class="btn btn-primary" />
+                    </div>
+                </div>
+            </div>
+    }
+        </div>
+        <br />
+
+
+        <hr />
+        <table id="SRDetTbl" class="table table-sm table-striped">
+            <thead class="thead-light">
+                <tr role="row">
+                    <th><input type="text" class="form-control" placeholder="Filter Request No"></th>
+
+                    <th></th>
+
+                    <th><input type="text" class="form-control" placeholder="Filter From Loc"></th>
+
+                    <th><input type="text" class="form-control" placeholder="Filter To Loc"></th>
+                    <th><input type="text" class="form-control" placeholder="Filter From Date"></th>
+                    <th><input type="text" class="form-control" placeholder="Filter To Date"></th>
+
+                    <th><input type="text" class="form-control" placeholder="Filter Supplier"></th>
+                    <th><input type="text" class="form-control" placeholder="Filter Cost Price"></th>
+                    <th><input type="text" class="form-control" placeholder="Filter Sell Price"></th>
+
+
+                    <th width="5%"></th>
+                </tr>
+                <tr role="row">
+                    <th scope="col"> Request No</th>
+
+                    <th scope="col"> Service Type</th>
+
+                    <th scope="col">From Location</th>
+                    <th scope="col">To Location</th>
+                    <th scope="col">From Date</th>
+                    <th scope="col">To Date</th>
+                    <th scope="col">Supplier</th>
+                    <th scope="col">Cost Price</th>
+                    <th scope="col">Sell Price</th>
+
+
+                    <th width="5%"></th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+
+
+    </div>
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+<script>
+
+
+
+    $(function () {
+        $('.AcType').hide();
+        $('.PType').hide();
+        $('.CBType').hide();
+        $('.CType').hide();
+        $('.SSType').hide();
+
+        $('#ServiceTypeID').on('change', function () {
+            var value = $(this).val();
+            if (value == "0") {
+                $('.AcType').show()
+            }
+            else
+            {
+                $('.AcType').hide()
+            }
+            if (value == "1") {
+                $('.PType').show()
+            }
+            else {
+                $('.PType').hide()
+            }
+            if (value == "2") {
+                $('.CType').show()
+            }
+            else {
+                $('.CType').hide()
+            }
+            if (value == "3") {
+                $('.SSType').show()
+            }
+            else {
+                $('.SSType').hide()
+            }
+            if (value == "4") {
+                $('.CBType').show()
+            }
+            else {
+                $('.CBType').hide()
+            }
+        });
+        //DateTime picker
+        $('.eadate').datepicker({
+            dateFormat: "dd-M-yy",
+            showButtonPanel: true,
+            changeMonth: true,
+            changeYear: true
+        }).attr('type', 'text').attr('autocomplete', 'off');
+
+        //Disable the browsers default date picker
+        jQuery.validator.methods["date"] = function (value, element) { return true; }
+
+
+        $(document).ready(function () {
+            $('*[data-autocombo-url]')
+                .each(function () {
+                    $(this).autocomplete({
+                        source: $(this).data("autocombo-url"),
+                        minLenght: 3,
+                        delay: 500,
+                        select: function (event, ui) {
+                            $($(this).data("autocomplete-idholder")).val(ui.item.id);
+                        }
+                    });
+                });
+        });
+
+    })
+
+
+        var oTable = $('#SRDetTbl').DataTable({
+            serverSide: true,
+            searching: true,
+            ajax: {
+                "type": "POST",
+                "url": '@Url.Action("GetSRDetList/"+ViewBag.SRID)',
+                "contentType": 'application/json; charset=utf-8',
+                'data': function (data) {
+                    return data = JSON.stringify(data);
+                }
+            },
+            processing: true,
+            deferRender: true,
+            columns: [
+                { data: "SRID" },
+                { data: "ServiceTypeName" },
+                { data: "FromLoc" },
+                { data: "ToLoc" },
+                { data: "tstr" },
+                { data: "fstr" },
+                { data: "SupplierID" },
+                { data: "Cost" },
+                { data: "SellPrice" },
+
+
+
+            ],
+            columnDefs: [{
+                'targets': 9,
+                'searchable': false,
+                'orderable': false,
+                'bSortable': false,
+                'render': function (data, type, full, meta) {
+                    return '<a href="/SBBoss/SR/SRdetails/'+ full.SRDID +'"><i class="fas fa-edit fa-inverse h3 float-right DropShadow"></i></a> &nbsp;';
+                }
+            },
+            {
+                targets: 'no-sort',
+                orderable: false
+            }]
+        });
+
+
+
+        $("#SRDetTbl thead th input[type=text]").on('change', function () {
+            oTable.column($(this).parent().index() + ':visible')
+                .search(this.value)
+                .draw();
+        });
+</script>

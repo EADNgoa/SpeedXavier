@@ -12,11 +12,15 @@ using Microsoft.AspNet.Identity;
 
 namespace Speedbird
 {
-    [MetadataType(typeof(CustomerMetadata))]
-    public partial class Customer
+    
+    public partial class SRdetail
     {
-    }
+        public string tstr { get { return $"{Tdate:dd MMM yyyy}"; } }
+        public string fstr { get { return $"{Fdate:dd MMM yyyy}"; } }
+        public string ServiceTypeName { get { return ((ServiceTypeEnum)ServiceTypeID).ToString(); } }
 
+
+    }
     public partial class CustomerQuery
     {
         public string Instr { get { return $"{CheckIn:dd MMM yyyy, hh:mm}"; } }
@@ -69,6 +73,7 @@ namespace Speedbird
        public string PictureName { get; set; }
        public HttpPostedFileBase UploadedFile { get; set; }
     }
+
 
     public class PriceDets
     {
@@ -255,6 +260,7 @@ namespace Speedbird
         public string IdPicture { get; set; }
 
     }
+
     public class AgentDiscDets
     {
         public int AgentDiscountID { get; set; }
@@ -366,7 +372,41 @@ namespace Speedbird
         public IEnumerable<ReviewRepDets> Replies { get; set; }
     }
 
-  
+
+    public class ServiceRequestDets
+    {
+        public int SRID { get; set; }
+        public int CustomerID { get; set; }
+        public int SRstatusID { get; set; }
+        public string EmpID { get; set; }
+        public string AgentID { get; set; }
+        public string FName { get; set; }
+        public string SName { get; set; }
+        public string Phone { get; set; }
+        public string Email { get; set; }
+        public string AgentName { get; set; }
+        public int EnquirySource { get; set; }
+
+    }
+    public class SRuploadDets
+    {
+        public int SRUID { get; set; }
+        public int SRID { get; set; }
+        public int Path { get; set; }
+        public string UploadName { get; set; }
+        public HttpPostedFileBase UploadedFile { get; set; }
+    }
+    public class SRlogsDets
+    {
+        public int SRLID { get; set; }
+        public int SRDID { get; set; }
+        public DateTime LogDateTime { get; set; }
+        public string UserName { get; set; }
+        public bool Type { get; set; }
+        public string Event { get; set; }
+
+    }
+
     public enum ServiceTypeEnum
     {
         Accomodation,
@@ -390,6 +430,20 @@ namespace Speedbird
         Admin,
         Agent,
         Guest
+    }
+    public enum EnquirySourceEnum
+    {
+        Web,
+        WalkIn,
+        Word_Of_Mouth,
+        PrintMedia
+    }
+    public enum SRStatusEnum
+    {
+        Request,
+        Booked,
+        Completed,
+        Cancelled
     }
 
     public enum LeaveApplicationStatusEnum

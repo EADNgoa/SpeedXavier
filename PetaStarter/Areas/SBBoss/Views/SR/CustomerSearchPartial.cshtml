@@ -1,0 +1,72 @@
+﻿@model IEnumerable<Speedbird.CustomerDets>
+<style>
+    .table{
+        width:100%;
+        min-width:100% !important;
+    }
+</style>
+@if (Model != null)
+{
+    <div>
+        <br />
+        <table class="table table-sm table-striped">
+            <thead class="bg-primary">
+                <tr>
+                    <th>
+
+                    </th>
+                    <th>
+                        First Name
+                    </th>
+                    <th>
+                        Sur Name
+                    </th>
+                    <th>
+                        Mobile
+                    </th>
+                    <th>
+                        Email
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <input type="radio" value=@item.CustomerID name="CID" />
+                        </td>
+                        <td>
+                            @item.FName
+                        </td>
+                        <td>
+                            @item.SName
+                        </td>
+                        <td>
+                            @item.Phone
+                        </td>
+                        <td></td>
+                    </tr>
+
+
+
+                }
+               
+
+            </tbody>
+        </table>
+    </div>
+
+}
+<script>
+    $(document).ready(function () {
+        $("input[type='radio']").on('change', function () {
+            var selectedValue = $("input[name='CID']:checked").val();
+            if (selectedValue) {
+                $("#CID").val(selectedValue);
+            }
+        });
+
+    });
+   </script>

@@ -1,0 +1,109 @@
+﻿@model Speedbird.SRlog
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Service Request Logs";
+}
+
+
+
+<div class="card border rounded DropShadow">
+    <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
+        <span class="h3">@ViewBag.Title</span>
+    </div>
+    <div class="card-body">
+        <h5>&nbsp;</h5>
+        <div class="section-to-Not-print">
+            @using (Html.BeginForm("SRLogs", "SR", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal ">
+
+
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                @Html.Hidden("SRID", (int)ViewBag.SRs.SRID)
+
+                @if (Model?.SRLID != null)
+               {@Html.Hidden("SRLID", (int)Model.SRLID)}
+
+
+                <div class="form-row">
+                    <div class="input-group col mb-3">
+                        <div class="input-group-prepend"><span class="input-group-text">Requests</span></div>
+                        <div class="form-control" style="padding:0px !important">@Html.TextArea("Event", null, htmlAttributes: new { @class = "form-control" })</div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="input-group col mb-3">
+                        <input type="submit" value="Save" class="btn btn-primary" />
+                    </div>
+                </div>
+
+            </div>
+    }
+        </div>
+        <table class="table">
+            <tr>
+                <th>Sr No</th>
+                <th>
+                    Request No
+                </th>
+                <th>
+                    Log Date/Time
+                </th>
+                <th>
+                    User
+                </th>
+                <th>
+                    Is System ?
+                </th>
+                <th>
+                    Event
+                </th>
+
+                <th></th>
+            </tr>
+            @{int i = 1;}
+            @foreach (var item in (IEnumerable<Speedbird.SRlogsDets>) ViewBag.SRLogdets)
+        {
+            <tr>
+                <td>
+                    @i
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SRDID)
+                </td>
+                <td>
+                    @($"{item.LogDateTime:dd/MMM/yyyy hh:mm}")
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserName)
+
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Type)
+
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Event)
+
+                </td>
+                <td>
+                    <a href="@Url.Action("SRLogs","SR", new {id = item.SRLID })"></a>
+                </td>
+            </tr>
+        i++;
+    }
+
+        </table>
+      
+
+    </div>
+</div>
+
+
+
+
+
