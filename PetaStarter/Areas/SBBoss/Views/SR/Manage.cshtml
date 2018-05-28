@@ -14,7 +14,11 @@
         @Html.Hidden("SRID", (int)ViewBag.SRID)
         <div class="btn-group-lg" role="group" aria-label="Basic example">
             <button id="DetailsBtn" type="button" class="btn btn-secondary">Details</button>
-            <button id="SRBtn" type="button" class="btn btn-secondary">Details 2</button>
+            <button id="NoteBtn" type="button" class="btn btn-secondary">Notepad</button>
+
+            <button id="SRBtn" type="button" class="btn btn-secondary">Services</button>
+            <button id="CustBtn" type="button" class="btn btn-secondary">Customers</button>
+
             <button id="ImgBtn" type="button" class="btn btn-secondary">Images</button>
             <button id="RecptBtn" type="button" class="btn btn-secondary">Reciepts</button>
         </div>
@@ -33,13 +37,17 @@
         <div id="TabContent">
             @if (ViewBag.mode == 1)
     {@Html.Action("FetchDetails", "SR", new { id = (int)ViewBag.SRID })}
-
             @if (ViewBag.mode == 2)
-    {@Html.Action("SRdetails", "SR", new { id = (int)ViewBag.SRID, EID = (int)ViewBag.EID })}
+    {@Html.Action("SRLogs", "SR", new { id = (int)ViewBag.SRID })}
 
             @if (ViewBag.mode == 3)
-    {@Html.Action("SRUpload", "SR", new { id = (int)ViewBag.SRID })}
+    {@Html.Action("SRdetails", "SR", new { id = (int)ViewBag.SRID, EID = (int)ViewBag.EID })}
+
             @if (ViewBag.mode == 4)
+    {@Html.Action("SRCustomers", "SR", new { id = (int)ViewBag.SRID })}
+            @if (ViewBag.mode == 5)
+    {@Html.Action("SRUpload", "SR", new { id = (int)ViewBag.SRID })}
+            @if (ViewBag.mode == 6)
     {@Html.Action("Reciepts", "SR", new { id = (int)ViewBag.SRID })}
         </div>
         <hr />
@@ -98,7 +106,50 @@
 
             }
         });
+          $('#CustBtn').click(function () {
+            var detFrm = $('#detFrm');
+            if (typeof (detFrm[0]) == 'object') {
 
+                $.ajax({
+                    url: detFrm.action,
+                    type: 'post',
+                    data: $(detFrm).serialize()
+                }).done(function () {
+                    $('#TabContent').load(
+                        '@Url.Action("SRCustomers", new { id = (int)ViewBag.SRID })'
+                    );
+
+                });
+
+            } else {
+                $('#TabContent').load(
+                    '@Url.Action("SRCustomers", new { id = (int)ViewBag.SRID })'
+                    );
+
+            }
+        });
+         $('#NoteBtn').click(function () {
+            var detFrm = $('#detFrm');
+            if (typeof (detFrm[0]) == 'object') {
+
+                $.ajax({
+                    url: detFrm.action,
+                    type: 'post',
+                    data: $(detFrm).serialize()
+                }).done(function () {
+                    $('#TabContent').load(
+                        '@Url.Action("SRLogs", new { id = (int)ViewBag.SRID })'
+                    );
+
+                });
+
+            } else {
+                $('#TabContent').load(
+                    '@Url.Action("SRLogs", new { id = (int)ViewBag.SRID })'
+                    );
+
+            }
+        });
         $('#RecptBtn').click(function () {
             var detFrm = $('#detFrm');
             if (typeof (detFrm[0]) == 'object') {

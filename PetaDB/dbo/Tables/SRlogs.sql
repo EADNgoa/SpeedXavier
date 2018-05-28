@@ -6,7 +6,10 @@
     [UserID] NVARCHAR(128) NULL, 
     [Type] BIT NULL, 
     [Event] VARCHAR(MAX) NULL, 
+    [SRID] INT NULL, 
     CONSTRAINT [FK_SRlogs_ToSrdets] FOREIGN KEY ([SRDID]) REFERENCES [SRdetails]([SRDID]),
+	    CONSTRAINT [FK_SRlogs_SR] FOREIGN KEY ([SRID]) REFERENCES [ServiceRequest]([SRID]),
+
 	CONSTRAINT [FK_SRlogs_ToUser] FOREIGN KEY ([UserID]) REFERENCES [AspNetUsers]([Id])
 
 )

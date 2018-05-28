@@ -434,4 +434,11 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="BankID" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="0dc30d95-d0bd-4f4a-99c0-ae47129f1636" ChangeDateTime="05/22/2018 09:41:41">
+    <Property Name="ElementName" Value="[dbo].[SR_Cust].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[SR_Cust]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="ServiceRequestID" />
+  </Operation>
 </Operations>
