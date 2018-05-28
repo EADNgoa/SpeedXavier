@@ -497,7 +497,10 @@ namespace Speedbird
 		[Column] public string UserID { get; set; }
 		[Column] public int? LeaveTypeID { get; set; }
 		[Column] public DateTime? LeaveStartDate { get; set; }
-		[Column] public int? NoOfDays { get; set; }
+
+
+		[Column] public decimal? NoOfDays { get; set; }
+
 		[Column] public int? StatusID { get; set; }
 		[Column] public string StatusBy { get; set; }
 		[Column] public DateTime? StatusDate { get; set; }

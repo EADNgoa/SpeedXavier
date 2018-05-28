@@ -4,12 +4,11 @@
     [UserID]             NVARCHAR (128) NULL,
     [LeaveTypeID]        INT            NULL,
     [LeaveStartDate]     DATE           NULL,
-    [NoOfDays]           INT            NULL,
+    [NoOfDays]           DECIMAL(5, 2)            NULL,
     [StatusID]           INT            NULL,
     [StatusBy]           NVARCHAR (128) NULL,
     [StatusDate]         DATE           NULL,
     PRIMARY KEY CLUSTERED ([LeaveApplicationID] ASC),
-    CONSTRAINT [FK_LeaveApplication_LeaveType] FOREIGN KEY ([LeaveTypeID]) REFERENCES [dbo].[LeaveType] ([LeaveTypeID]),
-    CONSTRAINT [FK_LeaveApplication_Status] FOREIGN KEY ([StatusID]) REFERENCES [dbo].[BookingStatus] ([BookingStatusID])
+    CONSTRAINT [FK_LeaveApplication_LeaveType] FOREIGN KEY ([LeaveTypeID]) REFERENCES [dbo].[LeaveType] ([LeaveTypeID])
 );
 

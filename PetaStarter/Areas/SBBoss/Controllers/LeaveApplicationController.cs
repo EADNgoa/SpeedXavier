@@ -19,7 +19,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         public ActionResult Index(int? page, DateTime? AN)
         {
             page = 1;
-            return View("Index", base.BaseIndex<LeaveApplicationDets>(page, " * ", $"LeaveApplications la inner join LeaveType lt on lt.LeaveTypeID=la.LeaveTypeID inner join BookingStatus bs on la.StatusID =bs.BookingStatusID Where ApplicationDate like '%" + AN + "%'"));
+            return View("Index", base.BaseIndex<LeaveApplicationDets>(page, " * ", $"LeaveApplications la inner join LeaveType lt on lt.LeaveTypeID=la.LeaveTypeID Where ApplicationDate like '%" + AN + "%'"));
         }
 
         [EAAuthorize(FunctionName = "Leave Application", Writable = true)]
@@ -44,8 +44,11 @@ namespace Speedbird.Areas.SBBoss.Controllers
             if(balance<=DaysAlowed)
             {
                 item.ApplicationDate = DateTime.Now;
-                item.StatusID = 1;
+                item.StatusID = (int) LeaveApplicationStatusEnum.Pending;
                 return base.BaseSave<LeaveApplication>(item, item.LeaveApplicationID > 0);
+            } else
+            {
+                ViewBag.InsufficientLeave = $"Sorry you have only {DaysAlowed} total leave days of this type and you have previously already used {LeaveBal} days.";
             }
             ViewBag.LeaveTypeID = new SelectList(db.Fetch<LeaveType>("Select LeaveTypeID,LeaveTypeName from LeaveType"), "LeaveTypeID", "LeaveTypeName",item.LeaveTypeID);
             return View();
@@ -64,7 +67,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             }
             if (Approve != null)
             {            
-                ExistingRec.StatusID = 2;
+                ExistingRec.StatusID = (int)LeaveApplicationStatusEnum.Approved;
                 var Bal = db.FirstOrDefault<LeaveBalance>("Select * from LeaveBalance Where LeaveTypeID=@0 and LeaveYear=@1 and UserID=@2",ExistingRec.LeaveTypeID,ExistingRec.ApplicationDate.Value.Year,ExistingRec.UserID);
                 if (Bal == null)
                 {
@@ -78,11 +81,11 @@ namespace Speedbird.Areas.SBBoss.Controllers
             }
             if (Reject != null)
             {
-                ExistingRec.StatusID = 3;
+                ExistingRec.StatusID = (int)LeaveApplicationStatusEnum.Rejected;
 
             }
             db.Update(ExistingRec);
-            return View("ConfirmOrCancel", base.BaseIndex<LeaveApplicationDets>(page, " * ", $"LeaveApplications la inner join LeaveType lt on lt.LeaveTypeID=la.LeaveTypeID inner join BookingStatus bs on la.StatusID =bs.BookingStatusID Where ApplicationDate like '%" + AN + "%'"));
+            return View("ConfirmOrCancel", base.BaseIndex<LeaveApplicationDets>(page, " * ", $"LeaveApplications la inner join LeaveType lt on lt.LeaveTypeID=la.LeaveTypeID Where ApplicationDate like '%" + AN + "%'"));
         }
 
         protected override void Dispose(bool disposing)
