@@ -80,6 +80,7 @@
                 { data: "Phone" },
                 { data: "Email" },
                 { data: "EnquirySource" },
+                { data: "AgentName" },
                 { data: "SRStatusID" }
 
             ],
@@ -89,7 +90,7 @@
                 'orderable': false,
                 'bSortable': false,
                 'render': function (data, type, full, meta) {
-                    return '<a href="/SBBoss/SR/manage/' + full.SRID +'"><i class="fas fa-edit fa-inverse h3 float-right DropShadow"></i></a> &nbsp;';
+                    return '<a href="/SBBoss/SR/manage/'+ full.SRID +'"><i class="fas fa-edit fa-inverse h3 float-right DropShadow"></i></a> &nbsp;';
                 }
             },
             {

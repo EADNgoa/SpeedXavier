@@ -12,11 +12,15 @@ using Microsoft.AspNet.Identity;
 
 namespace Speedbird
 {
-    [MetadataType(typeof(CustomerMetadata))]
-    public partial class Customer
+    
+    public partial class SRdetail
     {
-    }
+        public string tstr { get { return $"{Tdate:dd MMM yyyy}"; } }
+        public string fstr { get { return $"{Fdate:dd MMM yyyy}"; } }
+        public string ServiceTypeName { get { return ((ServiceTypeEnum)ServiceTypeID).ToString(); } }
 
+
+    }
     public partial class CustomerQuery
     {
         public string Instr { get { return $"{CheckIn:dd MMM yyyy, hh:mm}"; } }
@@ -374,14 +378,15 @@ namespace Speedbird
         public int SRID { get; set; }
         public int CustomerID { get; set; }
         public int SRstatusID { get; set; }
-        public int EmpID { get; set; }
-        public int AgentID { get; set; }
+        public string EmpID { get; set; }
+        public string AgentID { get; set; }
         public string FName { get; set; }
         public string SName { get; set; }
         public string Phone { get; set; }
         public string Email { get; set; }
         public string AgentName { get; set; }
-        public string EnquirySource { get; set; }
+        public int EnquirySource { get; set; }
+
     }
     public class SRuploadDets
     {
@@ -425,6 +430,13 @@ namespace Speedbird
         Admin,
         Agent,
         Guest
+    }
+    public enum EnquirySourceEnum
+    {
+        Web,
+        WalkIn,
+        Word_Of_Mouth,
+        PrintMedia
     }
     public enum SRStatusEnum
     {
