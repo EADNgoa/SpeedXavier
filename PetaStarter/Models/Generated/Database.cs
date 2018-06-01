@@ -497,10 +497,7 @@ namespace Speedbird
 		[Column] public string UserID { get; set; }
 		[Column] public int? LeaveTypeID { get; set; }
 		[Column] public DateTime? LeaveStartDate { get; set; }
-
-
 		[Column] public decimal? NoOfDays { get; set; }
-
 		[Column] public int? StatusID { get; set; }
 		[Column] public string StatusBy { get; set; }
 		[Column] public DateTime? StatusDate { get; set; }
@@ -787,8 +784,10 @@ namespace Speedbird
 		[Column] public int? SRStatusID { get; set; }
 		[Column] public string EmpID { get; set; }
 		[Column] public int? EnquirySource { get; set; }
+		[Column] public int? BookingTypeID { get; set; }
 		[Column] public string AgentID { get; set; }
 		[Column] public int? ServiceTypeID { get; set; }
+		[Column] public DateTime? TDate { get; set; }
 	}
     
 	[TableName("dbo.SR_Cust")]
@@ -842,7 +841,7 @@ namespace Speedbird
 		[Column] public int? SRID { get; set; }
 		[Column] public DateTime? RecieptDate { get; set; }
 		[Column] public decimal? Amount { get; set; }
-		[Column] public string PayMode { get; set; }
+		[Column] public int? PayMode { get; set; }
 		[Column] public int? BankID { get; set; }
 	}
     

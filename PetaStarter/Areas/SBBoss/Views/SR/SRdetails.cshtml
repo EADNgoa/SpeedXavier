@@ -5,15 +5,26 @@
 }
 
 <link rel="stylesheet" type="text/css" href="/Content/datatables.min.css" />
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" />
+<style>
+    td.details-control {
+        background: url('../resources/details_open.png') no-repeat center center;
+        cursor: pointer;
+    }
+
+    tr.shown td.details-control {
+        background: url('../resources/details_close.png') no-repeat center center;
+    }
+</style>
 <script type="text/javascript" src="/Scripts/datatables.min.js"></script>
+<div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
+    <span class="h3">@ViewBag.Title</span>
+    <a href="@Url.Action("Index","SR",new { sid= ViewBag.sid})"><i class="fas fa-undo-alt fa-inverse h3 float-right DropShadow"></i></a>
+</div>
 
+    @Html.Action("GetSRInfo", "SR", new { id = ViewBag.SRID, mode = ViewBag.mode })
 
-<div class="card border rounded DropShadow">
-    <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
-        <span class="h3">@ViewBag.Title</span>
-    </div>
-    <div class="card-body">
-        <h5>&nbsp;</h5>
         <div class="section-to-Not-print">
             @using (Html.BeginForm("SRdetails", "SR", FormMethod.Post))
         {
@@ -139,6 +150,7 @@
         <table id="SRDetTbl" class="table table-sm table-striped">
             <thead class="thead-light">
                 <tr role="row">
+                    <th>Dets</th>
                     <th><input type="text" class="form-control" placeholder="Filter Request No"></th>
 
                     <th></th>
@@ -157,6 +169,7 @@
                     <th width="5%"></th>
                 </tr>
                 <tr role="row">
+                    <th></th>
                     <th scope="col"> Request No</th>
 
                     <th scope="col"> Service Type</th>
@@ -178,8 +191,7 @@
 
 
 
-    </div>
-</div>
+
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }
@@ -272,6 +284,12 @@
             processing: true,
             deferRender: true,
             columns: [
+                {
+                    "className": 'details-control',
+                    "orderable": false,
+                    "data": null,
+                    "defaultContent": ''
+                },
                 { data: "SRID" },
                 { data: "ServiceTypeName" },
                 { data: "FromLoc" },
@@ -307,4 +325,22 @@
                 .search(this.value)
                 .draw();
         });
+
+        function format(d) {
+            // `d` is the original data object for the row
+            return
+            if (d.ServiceTypeID == 0) {
+                '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
+
+                    '<tr>' +
+                    '<td>Extension number:</td>' +
+                    '<td>' + d.extn + '</td>' +
+                    '</tr>' +
+                    '<tr>' +
+                    '<td>Extra info:</td>' +
+                    '<td>And any further details here (images etc)...</td>' +
+                    '</tr>' +
+                    '</table>';
+            }
+        }
 </script>

@@ -1,0 +1,47 @@
+﻿@model  Speedbird.ServiceRequestDets
+<style>
+    .table {
+        width: 100%;
+    }
+</style>
+@if (Model != null)
+{
+    <table class="table table-active">
+        <tr>
+            <th>
+                Auto ID
+            </th>
+            <th>
+                Status
+            </th>
+            <th>
+                Employee Name
+            </th>
+            <th>
+                Agent Name
+            </th>
+            <th>
+                Request Source
+            </th>
+        </tr>
+        <tr>
+            <td>
+                @Model.SRID
+            </td>
+            <td>
+                @((Speedbird.SRStatusEnum) Model.SRStatusID)
+            </td>
+            <td>
+                @Model.UserName
+            </td>
+            <td>
+                @Model.AgentName
+            </td>
+            <td>
+                @((Speedbird.EnquirySourceEnum)Model.EnquirySource)
+            </td>
+        </tr>
+    </table>
+
+}
+

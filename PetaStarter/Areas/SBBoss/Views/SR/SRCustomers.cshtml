@@ -6,7 +6,12 @@
         width: 100%;
     }
 </style>
-@using (Html.BeginForm("SRCustomers", "SR", FormMethod.Post, new { id = "detFrm" }))
+<div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
+    <span class="h3">@ViewBag.Title</span>
+    <a href="@Url.Action("Index","SR",new { sid= ViewBag.sid})"><i class="fas fa-undo-alt fa-inverse h3 float-right DropShadow"></i></a>
+</div>
+
+@using (Html.BeginForm("SRCustomers", "SR", FormMethod.Post, new { id = "" }))
 {
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -36,7 +41,7 @@
     <div class="input-group col mb-3">
         <input type="submit" value="Save" class="btn btn-primary" />
     </div>
-    
+
 </div>
 }
 <div class="row">
@@ -93,7 +98,7 @@
 
             </div>
         </div>
-       
+
 
     </div>
     <div class="col-4">
@@ -147,7 +152,8 @@
     {
         <table class="table table-striped ">
             <tr>
-            <th colspan="6" class="bg-success"><center><Big>Registered Customers</Big></center></th></tr>
+                <th colspan="6" class="bg-success"><center><Big>Registered Customers</Big></center></th>
+            </tr>
             <tr class="">
                 <th>Sr No</th>
                 <th>
@@ -200,14 +206,18 @@
 
 <script>
     $(document).ready(function () {
-        $('#FName').keyup(function () {
+        $("#FName,#SName,#Phone,#Email").keyup(function () {
 
-            var nm = $(this).val();
-            if (nm.length == 5) {
+            var fname = $('#FName').val();
+            var sname = $('#SName').val();
+            var phone = $('#Phone').val();
+            var email = $('#Email').val();
+
+            if (fname.length == 3 || sname.length == 3 || phone.length == 3 || email.length == 5) {
                 $('#ExistingCust').html("");
-                $('#ExistingCust').load("/SBBoss/SR/ExistingCustRec?Ph=" + nm);
+                $('#ExistingCust').load("/SBBoss/SR/ExistingCustRec?fn=" + fname + "&&sn=" + sname + "&&ph=" + phone + "&&em=" + email);
             }
-
+            $("textarea").jqte();
         })
     });
 </script>
