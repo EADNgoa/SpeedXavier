@@ -32,7 +32,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             string AgentName = "";
 
             if (columnSearch[2]?.Length > 0) { CustName = columnSearch[2]; columnSearch[2] = null; }
-            if (columnSearch[2]?.Length > 0) { AgentName = columnSearch[2]; columnSearch[2] = null; }
+            if (columnSearch[6]?.Length > 0) { AgentName = columnSearch[6]; columnSearch[6] = null; }
 
 
 
@@ -57,7 +57,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 res.ForEach(r =>
                 {
                     r.FName = db.ExecuteScalar<string>("Select FName from Customer c inner join SR_Cust sc on c.CustomerID=sc.CustomerID inner join ServiceRequest sr on sr.SRID = sc.ServiceRequestID Where sc.ServiceRequestID = @0", r.SRID);
-                    r.FName = db.ExecuteScalar<string>("Select SName from Customer c inner join SR_Cust sc on c.CustomerID=sc.CustomerID inner join ServiceRequest sr on sr.SRID = sc.ServiceRequestID Where sc.ServiceRequestID = @0", r.SRID);
+                    r.SName = db.ExecuteScalar<string>("Select SName from Customer c inner join SR_Cust sc on c.CustomerID=sc.CustomerID inner join ServiceRequest sr on sr.SRID = sc.ServiceRequestID Where sc.ServiceRequestID = @0", r.SRID);
                     r.Phone = db.ExecuteScalar<string>("Select Phone from Customer c inner join SR_Cust sc on c.CustomerID=sc.CustomerID inner join ServiceRequest sr on sr.SRID = sc.ServiceRequestID Where sc.ServiceRequestID = @0", r.SRID);
                     r.Email = db.ExecuteScalar<string>("Select Email from Customer c inner join SR_Cust sc on c.CustomerID=sc.CustomerID inner join ServiceRequest sr on sr.SRID = sc.ServiceRequestID Where sc.ServiceRequestID = @0", r.SRID);
 
@@ -91,12 +91,12 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
 
             var sql = new PetaPoco.Sql($"Select * from SRdetails where SRID=@0",id);
-            var fromsql = new PetaPoco.Sql();
+            //var fromsql = new PetaPoco.Sql();
             var wheresql = new PetaPoco.Sql();
 
 
             wheresql.Append($"{GetWhereWithOrClauseFromColumns(SRDetColumns, columnSearch)}");
-            sql.Append(fromsql);
+            //sql.Append(fromsql);
             sql.Append(wheresql);
 
             try
@@ -166,11 +166,11 @@ namespace Speedbird.Areas.SBBoss.Controllers
             "SRID",
             "FName",
             "SName",
-            "Email",
             "Phone",
-            "SRStatusID",
-            "AgentName",
+            "Email",
             "EnquirySouce",
+            "AgentName",
+            "SRStatusID"
         };
         private string[] SRDetColumns => new string[]
        {
@@ -222,13 +222,14 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public bool Manage([Bind(Include = "SRID,CustID,SRStatusID,EmpID,EnquirySource,AgentID")] ServiceRequest item,string Event,int? CID,string FName,string SName,string Email,string Phone)
+        public bool Manage([Bind(Include = "SRID,CustID,SRStatusID,EmpID,EnquirySource,AgentID, ServiceTypeID")] ServiceRequest item, string Event, int? CID,string FName,string SName,string Email,string Phone)
         {
             using (var transaction = db.GetTransaction())
             {
                 if (ModelState.IsValid)
                 {
                     item.EmpID = User.Identity.GetUserId();
+                    if (item.SRStatusID == null) item.SRStatusID = (int)SRStatusEnum.Request;
                     var r = (item.SRID > 0) ? db.Update(item) : db.Insert(item);
                     if (CID != null)
                     {

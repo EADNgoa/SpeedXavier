@@ -34,12 +34,12 @@
     <div class="input-group col mb-3">
         <div class="input-group-prepend"><span class="input-group-text">Enquiry Source</span></div>
         @Html.DropDownList("EnquirySource", null, htmlAttributes: new { @type = "text", @class = " form-control" })
-        @Html.ValidationMessageFor(model => model.SRStatusID, "", new { @class = "text-danger" })
+        @Html.ValidationMessageFor(model => model.EnquirySource, "", new { @class = "text-danger" })
     </div>
     <div class="input-group col mb-3">
         <div class="input-group-prepend"><span class="input-group-text">ServiceType</span></div>
         @Html.DropDownList("ServiceTypeID", null, htmlAttributes: new { @type = "text", @class = " form-control" })
-        @Html.ValidationMessageFor(model => model.SRStatusID, "", new { @class = "text-danger" })
+        @Html.ValidationMessageFor(model => model.ServiceTypeID, "", new { @class = "text-danger" })
     </div>
 
    
@@ -162,16 +162,16 @@
         });
 
 
-            function formatState(state) {
-                if (!state.id) {
-                    return state.text;
-                }
-                var parts = state.text.split(",");
-                return parts[0];
+            //function formatState(state) {
+            //    if (!state.id) {
+            //        return state.text;
+            //    }
+            //    var parts = state.text.split(",");
+            //    return parts[0];
 
-            };
+            //};
 
-             //Supplier
+             @*//Supplier
         $("#SupID").select2({
             placeholder: "Type 3 letters to choose",
             minimumInputLength: 3,
@@ -184,29 +184,29 @@
                     return { results: data.data };
                 }
             }
-        });
+        });*@
 
 
 
-        //Save Select2 Supplier Contract data
-        $("#SupID").on('select2:select', function (e) {
-            var contno = prompt("Please enter the contract number", "");
-            var oldConts = $('#ContID').html();
-            $('#ContID').html(oldConts + ',' + contno);
+        ////Save Select2 Supplier Contract data
+        //$("#SupID").on('select2:select', function (e) {
+        //    var contno = prompt("Please enter the contract number", "");
+        //    var oldConts = $('#ContID').html();
+        //    $('#ContID').html(oldConts + ',' + contno);
 
-            var conts = '';
-            $.post('/SBBoss/CarBike/' + $(this).data('setu'), { PackageId: $('#CarBikeID').val(), ActIds: $(this).val(), Conts: $('#ContID').html() });
+        //    var conts = '';
+        //    $.post('/SBBoss/CarBike/' + $(this).data('setu'), { PackageId: $('#CarBikeID').val(), ActIds: $(this).val(), Conts: $('#ContID').html() });
 
-        });
+        //});
 
-        $("#SupID").on('select2:unselect', function (e) {
-            $.post('/SBBoss/CarBike/KillSup', { PackageId: $('#PackageID').val(), deadSup: e.params.data.id }, function (e) {
-                $('#ContID').html(e);
-            });
+        //$("#SupID").on('select2:unselect', function (e) {
+        //    $.post('/SBBoss/CarBike/KillSup', { PackageId: $('#PackageID').val(), deadSup: e.params.data.id }, function (e) {
+        //        $('#ContID').html(e);
+        //    });
 
-        });
+        //});
 
-            //GeoSelector
+            @*//GeoSelector
             $(".GeoSelect").select2({
                 placeholder: "Type 3 letters to choose",
                 templateSelection: formatState,
@@ -221,7 +221,7 @@
                 }
             });
 
-            $("textarea").jqte();
+            $("textarea").jqte();*@
 
 
         });
