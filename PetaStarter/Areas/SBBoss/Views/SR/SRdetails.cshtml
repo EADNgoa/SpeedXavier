@@ -4,20 +4,20 @@
     ViewBag.Title = $"Manage Services";
 }
 
-<link rel="stylesheet" type="text/css" href="/Content/datatables.min.css" />
-
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" />
 <style>
+
+    /*for Datatables*/
     td.details-control {
-        background: url('../resources/details_open.png') no-repeat center center;
+        background: url('/Content/DataTables/DataTables-1.10.16/images/details_open.png') no-repeat center center;
         cursor: pointer;
     }
 
     tr.shown td.details-control {
-        background: url('../resources/details_close.png') no-repeat center center;
+        background: url('/Content/DataTables/DataTables-1.10.16/images/details_close.png') no-repeat center center;
     }
+    /*End for Datatables*/
 </style>
-<script type="text/javascript" src="/Scripts/datatables.min.js"></script>
+
 <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
     <span class="h3">@ViewBag.Title</span>
     <a href="@Url.Action("Index","SR",new { sid= ViewBag.sid})"><i class="fas fa-undo-alt fa-inverse h3 float-right DropShadow"></i></a>
@@ -152,28 +152,20 @@
                 <tr role="row">
                     <th>Dets</th>
                     <th><input type="text" class="form-control" placeholder="Filter Request No"></th>
-
                     <th></th>
-
                     <th><input type="text" class="form-control" placeholder="Filter From Loc"></th>
-
                     <th><input type="text" class="form-control" placeholder="Filter To Loc"></th>
                     <th><input type="text" class="form-control" placeholder="Filter From Date"></th>
                     <th><input type="text" class="form-control" placeholder="Filter To Date"></th>
-
                     <th><input type="text" class="form-control" placeholder="Filter Supplier"></th>
                     <th><input type="text" class="form-control" placeholder="Filter Cost Price"></th>
                     <th><input type="text" class="form-control" placeholder="Filter Sell Price"></th>
-
-
                     <th width="5%"></th>
                 </tr>
                 <tr role="row">
                     <th></th>
                     <th scope="col"> Request No</th>
-
                     <th scope="col"> Service Type</th>
-
                     <th scope="col">From Location</th>
                     <th scope="col">To Location</th>
                     <th scope="col">From Date</th>
@@ -181,8 +173,6 @@
                     <th scope="col">Supplier</th>
                     <th scope="col">Cost Price</th>
                     <th scope="col">Sell Price</th>
-
-
                     <th width="5%"></th>
                 </tr>
             </thead>
@@ -195,7 +185,7 @@
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }
-
+<script type="text/javascript" src="~/Content/DataTables/datatables.min.js"></script>
 <script>
 
 
@@ -241,6 +231,7 @@
                 $('.CBType').hide()
             }
         });
+
         //DateTime picker
         $('.eadate').datepicker({
             dateFormat: "dd-M-yy",
@@ -267,10 +258,11 @@
                 });
         });
 
-    })
 
 
-        var oTable = $('#SRDetTbl').DataTable({
+
+
+         var oTable = $('#SRDetTbl').DataTable({
             serverSide: true,
             searching: true,
             ajax: {
@@ -294,17 +286,14 @@
                 { data: "ServiceTypeName" },
                 { data: "FromLoc" },
                 { data: "ToLoc" },
-                { data: "tstr" },
                 { data: "fstr" },
+                { data: "tstr" },
                 { data: "SupplierID" },
                 { data: "Cost" },
                 { data: "SellPrice" },
-
-
-
             ],
             columnDefs: [{
-                'targets': 9,
+                'targets': 10,
                 'searchable': false,
                 'orderable': false,
                 'bSortable': false,
@@ -328,10 +317,7 @@
 
         function format(d) {
             // `d` is the original data object for the row
-            return
-            if (d.ServiceTypeID == 0) {
-                '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
-
+            return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
                     '<tr>' +
                     '<td>Extension number:</td>' +
                     '<td>' + d.extn + '</td>' +
@@ -341,6 +327,30 @@
                     '<td>And any further details here (images etc)...</td>' +
                     '</tr>' +
                     '</table>';
-            }
         }
+        
+
+
+        // Add event listener for opening and closing details
+        $('#SRDetTbl tbody').on('click', 'td.details-control', function () {
+            var tr = $(this).closest('tr');
+            var row = oTable.row(tr);
+
+            if (row.child.isShown()) {
+                // This row is already open - close it
+                row.child.hide();
+                tr.removeClass('shown');
+            }
+            else {
+                // Open this row
+                row.child(format(row.data())).show();
+                tr.addClass('shown');
+            }
+        });
+
+
+    })
+
+
+
 </script>
