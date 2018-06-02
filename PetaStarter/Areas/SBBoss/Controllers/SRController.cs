@@ -35,7 +35,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             string AgentName = "";
 
             if (columnSearch[2]?.Length > 0) { CustName = columnSearch[2]; columnSearch[2] = null; }
-            if (columnSearch[2]?.Length > 0) { AgentName = columnSearch[2]; columnSearch[2] = null; }
+            if (columnSearch[6]?.Length > 0) { AgentName = columnSearch[6]; columnSearch[6] = null; }
 
 
 
@@ -93,14 +93,14 @@ namespace Speedbird.Areas.SBBoss.Controllers
             //XMLPath uses nested queries so to avoid that we construct these 4 filters ourselves
 
 
-
             var sql = new PetaPoco.Sql($"Select * from SRdetails where SRID=@0", id);
             var fromsql = new PetaPoco.Sql();
+
             var wheresql = new PetaPoco.Sql();
 
 
             wheresql.Append($"{GetWhereWithOrClauseFromColumns(SRDetColumns, columnSearch)}");
-            sql.Append(fromsql);
+            //sql.Append(fromsql);
             sql.Append(wheresql);
 
             try
@@ -172,11 +172,17 @@ namespace Speedbird.Areas.SBBoss.Controllers
             "DT",
             "FName",
             "SName",
-            "Email",
             "Phone",
+
             "Status",
             "AgentName",
             "Src",
+
+            "Email",
+            "EnquirySouce",
+            "AgentName",
+            "SRStatusID"
+
         };
         private string[] SRDetColumns => new string[]
        {
@@ -259,15 +265,20 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+
         [EAAuthorize(FunctionName = "Service Requests", Writable = true)]
         public bool Manage([Bind(Include = "SRID,CustID,SRStatusID,EmpID,BookingTypeID,EnquirySource,AgentID,TDate")] ServiceRequest item, string Event, int? CID, string FName, string SName, string Email, string Phone)
+
         {
             using (var transaction = db.GetTransaction())
             {
                 if (ModelState.IsValid)
                 {
+
                    item.EmpID = User.Identity.GetUserId();
                     item.TDate = DateTime.Now;
+                    if (item.SRStatusID == null) item.SRStatusID = (int)SRStatusEnum.Request;
+
                     var r = (item.SRID > 0) ? db.Update(item) : db.Insert(item);
                     if (CID != null)
                     {

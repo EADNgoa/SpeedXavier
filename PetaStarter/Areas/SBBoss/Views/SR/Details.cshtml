@@ -47,12 +47,12 @@
     <div class="input-group col mb-3">
         <div class="input-group-prepend"><span class="input-group-text">Enquiry Source</span></div>
         @Html.DropDownList("EnquirySource", null, htmlAttributes: new { @type = "text", @class = " form-control" })
-        @Html.ValidationMessageFor(model => model.SRStatusID, "", new { @class = "text-danger" })
+        @Html.ValidationMessageFor(model => model.EnquirySource, "", new { @class = "text-danger" })
     </div>
     <div class="input-group col mb-3">
         <div class="input-group-prepend"><span class="input-group-text">ServiceType</span></div>
         @Html.DropDownList("ServiceTypeID", null, htmlAttributes: new { @type = "text", @class = " form-control" })
-        @Html.ValidationMessageFor(model => model.SRStatusID, "", new { @class = "text-danger" })
+        @Html.ValidationMessageFor(model => model.ServiceTypeID, "", new { @class = "text-danger" })
     </div>
 
 
@@ -156,6 +156,95 @@ if (Model?.SRID == null)
     <input type="submit" value="Save" class="btn btn-primary" />
 </div>
 }
+
+<script>
+
+        $(document).ready(function () {
+
+        //Submit form
+        $('#SaveDetails').click(function () {
+            var detFrm = $('#detFrm');
+
+            //Save the details form if it exists else just move on.
+            if (typeof (detFrm[0]) == 'object') {
+                $.ajax({
+                    url: detFrm.action,
+                    type: 'post',
+                    data: $(detFrm).serialize(),
+                    success: function () {
+                        window.location.assign('@Url.Action("Index")');
+                    }
+                });
+            }
+        });
+
+
+            //function formatState(state) {
+            //    if (!state.id) {
+            //        return state.text;
+            //    }
+            //    var parts = state.text.split(",");
+            //    return parts[0];
+
+            //};
+
+             @*//Supplier
+        $("#SupID").select2({
+            placeholder: "Type 3 letters to choose",
+            minimumInputLength: 3,
+
+            ajax: {
+                url: '@(Url.Action("GetSup", "Package"))',
+                dataType: 'json',
+                quietMillis: 250,
+                results: function (data, page) {
+                    return { results: data.data };
+                }
+            }
+        });*@
+
+
+
+        ////Save Select2 Supplier Contract data
+        //$("#SupID").on('select2:select', function (e) {
+        //    var contno = prompt("Please enter the contract number", "");
+        //    var oldConts = $('#ContID').html();
+        //    $('#ContID').html(oldConts + ',' + contno);
+
+        //    var conts = '';
+        //    $.post('/SBBoss/CarBike/' + $(this).data('setu'), { PackageId: $('#CarBikeID').val(), ActIds: $(this).val(), Conts: $('#ContID').html() });
+
+        //});
+
+        //$("#SupID").on('select2:unselect', function (e) {
+        //    $.post('/SBBoss/CarBike/KillSup', { PackageId: $('#PackageID').val(), deadSup: e.params.data.id }, function (e) {
+        //        $('#ContID').html(e);
+        //    });
+
+        //});
+
+            @*//GeoSelector
+            $(".GeoSelect").select2({
+                placeholder: "Type 3 letters to choose",
+                templateSelection: formatState,
+
+                ajax: {
+                    url: '@(Url.Action("GetLocations", "GeoTree"))',
+                    dataType: 'json',
+                    quietMillis: 250,
+                    results: function (data, page) {
+                        return { results: data.data };
+                    }
+                }
+            });
+
+            $("textarea").jqte();*@
+
+
+        });
+
+
+</script>
 
 <script>
     $(document).ready(function () {
