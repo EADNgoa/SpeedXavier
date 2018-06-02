@@ -1785,15 +1785,7 @@ namespace Speedbird
 
 		[Column] public DateTime? LeaveStartDate { get; set; }
 
-
-
-
-
 		[Column] public decimal? NoOfDays { get; set; }
-
-
-
-
 
 		[Column] public int? StatusID { get; set; }
 
@@ -2905,9 +2897,7 @@ namespace Speedbird
 
 		[Column] public int? EnquirySource { get; set; }
 
-
-
-
+		[Column] public int? BookingTypeID { get; set; }
 
 		[Column] public string AgentID { get; set; }
 
@@ -2917,7 +2907,7 @@ namespace Speedbird
 
 		[Column] public int? ServiceTypeID { get; set; }
 
-
+		[Column] public DateTime? TDate { get; set; }
 
 	}
 
@@ -3137,15 +3127,7 @@ namespace Speedbird
 
 		[Column] public decimal? Amount { get; set; }
 
-
-
-
-
-		[Column] public string PayMode { get; set; }
-
-
-
-
+		[Column] public int? PayMode { get; set; }
 
 		[Column] public int? BankID { get; set; }
 

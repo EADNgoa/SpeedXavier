@@ -5,101 +5,95 @@
 }
 
 
-
-
-<div class="card border rounded DropShadow">
-    <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
-        <span class="h3">@ViewBag.Title</span>
-    </div>
-    <div class="card-body">
-        <h5>&nbsp;</h5>
-        <div class="section-to-Not-print">
-            @using (Html.BeginForm("Reciepts", "SR", FormMethod.Post))
-            {
-                @Html.AntiForgeryToken()
-
-            <div class="form-horizontal ">
-
-
-                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
-                @Html.Hidden("SRID", (int)ViewBag.SRs.SRID)
-
-                @if (Model?.RecieptID != null)
-    {@Html.Hidden("RecieptID", (int)Model.RecieptID)}
-
-
-                <div class="form-row">
-
-                    <div class="input-group col mb-3">
-                        <div class="input-group-prepend"><span class="input-group-text">Date</span></div>
-                        @Html.EditorFor(model => model.RecieptDate, new { htmlAttributes = new { @type = "text", @class = "eadate form-control" } })
-                        @Html.ValidationMessageFor(model => model.RecieptDate, "", new { @class = "text-danger" })
-                    </div>
-                    <div class="input-group col mb-3">
-                        <div class="input-group-prepend"><span class="input-group-text">Select Bank</span></div>
-                        @Html.DropDownList("BankID", null, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })
-                    </div>
-                    <div class="input-group col mb-3">
-                        <div class="input-group-prepend"><span class="input-group-text">Amount</span></div>
-                        @Html.EditorFor(model => model.Amount, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })
-                    </div>
-
-                </div>
-                <div class="form-row">
-                    <div class="input-group col-3 mb-3">
-                        <div class="input-group-prepend"><span class="input-group-text">Payment mode</span></div>
-                        <select name="PayMode">
-                            <option value="CC">CC</option>
-                            <option value="Cash">Cash</option>
-                            <option value="Internet">Internet</option>
-                        </select>
-                        @Html.ValidationMessageFor(model => model.PayMode, "", new { @class = "text-danger" })
-                    </div>
-                    <div class="input-group col mb-3">
-                        <input type="submit" value="Save" class="btn btn-primary" />
-                    </div>
-                </div>
-              
-            </div>
-            }
-        </div>
-        <br />
-
-
-        <hr />
-        <table class="table table-sm section-to-print index-css" width="100%">
-            <tr>
-                <th>Date </th>
-                <th>Pay Mode</th>
-                <th>Amount</th>
-
-                <th class="section-to-Not-print"></th>
-            </tr>
-            @foreach (var item in (IEnumerable<Speedbird.SRReciept>)ViewBag.Reciepts)
-             {
-                <tr>
-                    <td>
-                        @($"{item.RecieptDate:dd/MMM/yyyy}")
-                    </td>
-                    <td>
-                        @item.PayMode
-                    </td>
-                    <td>
-                        @item.Amount
-                    </td>
-                    <td>
-                        <a href="@Url.Action("Manage","SR",new {id = (int?)ViewBag.SRID, mode=4, EID=item.RecieptID })">Edit</a>
-                    </td>
-                </tr>
-            }
-
-        </table>
-
-    </div>
+<div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
+    <span class="h3">@ViewBag.Title</span>
+    <a href="@Url.Action("Index","SR",new { sid= ViewBag.sid})"><i class="fas fa-undo-alt fa-inverse h3 float-right DropShadow"></i></a>
 </div>
+
+@Html.Action("GetSRInfo", "SR", new { id = ViewBag.SRs.SRID, mode = ViewBag.mode })
+
+<div class="section-to-Not-print">
+
+    @using (Html.BeginForm("Reciepts", "SR", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal ">
+
+
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            @Html.Hidden("SRID", (int)ViewBag.SRs.SRID)
+
+            @if (Model?.RecieptID != null)
+            {@Html.Hidden("RecieptID", (int)Model.RecieptID)}
+
+
+            <div class="form-row">
+
+                <div class="input-group col mb-3">
+                    <div class="input-group-prepend"><span class="input-group-text">Date</span></div>
+                    @Html.EditorFor(model => model.RecieptDate, new { htmlAttributes = new { @type = "text", @class = "eadate form-control" } })
+                    @Html.ValidationMessageFor(model => model.RecieptDate, "", new { @class = "text-danger" })
+                </div>
+                <div class="input-group col mb-3">
+                    <div class="input-group-prepend"><span class="input-group-text">Select Bank</span></div>
+                    @Html.DropDownList("BankID", null, htmlAttributes:  new { @type = "text", @class = "form-control" } )
+                    @Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })
+                </div>
+                <div class="input-group col mb-3">
+                    <div class="input-group-prepend"><span class="input-group-text">Amount</span></div>
+                    @Html.EditorFor(model => model.Amount, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })
+                </div>
+
+            </div>
+            <div class="form-row">
+                <div class="input-group col mb-3">
+                    <div class="input-group-prepend"><span class="input-group-text">Pay Mode</span></div>
+                    @Html.DropDownList("PayMode", null, htmlAttributes: new { @type = "text", @class = " form-control" })
+                    @Html.ValidationMessageFor(model => model.PayMode, "", new { @class = "text-danger" })
+                </div>
+                <div class="input-group col mb-3">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            </div>
+
+        </div>
+    }
+</div>
+<br />
+
+
+<hr />
+<table class="table table-sm section-to-print index-css" width="100%">
+    <tr>
+        <th>Date </th>
+        <th>Pay Mode</th>
+        <th>Amount</th>
+
+        <th class="section-to-Not-print"></th>
+    </tr>
+    @foreach (var item in (IEnumerable<Speedbird.SRReciept>)ViewBag.Reciepts)
+    {
+        <tr>
+            <td>
+                @($"{item.RecieptDate:dd/MMM/yyyy}")
+            </td>
+            <td>
+                @((Speedbird.PayModeEnum)item.PayMode)
+            </td>
+            <td>
+                @item.Amount
+            </td>
+            <td>
+                <a href="@Url.Action("Manage","SR",new {id = (int?)ViewBag.SRID, mode=4, EID=item.RecieptID })">Edit</a>
+            </td>
+        </tr>
+    }
+
+</table>
+
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }

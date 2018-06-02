@@ -1,0 +1,23 @@
+﻿@model Speedbird.Accomodation
+
+    <fieldset @ViewBag.IsReadOnly>
+    <div class="form-row">
+        <div class="input-group col mb-3 ">
+            <div class="input-group-prepend"><span class="input-group-text">Hotel Name</span></div>
+            @Html.EditorFor(model => model.AccomName, new { htmlAttributes = new { @type = "text", @class = "form-control disabled" } })
+            @Html.ValidationMessageFor(model => model.AccomName, "", new { @class = "text-danger" })
+        </div>
+        <div class="input-group col mb-3" >
+            <div class="input-group-prepend"><span class="input-group-text">Coupon</span></div>
+            @Html.EditorFor(model => model.CouponCode, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.CouponCode, "", new { @class = "text-danger" })
+
+        </div>
+        <div class="input-group col mb-3">
+            <div class="input-group-prepend"><span class="input-group-text">To Date</span></div>
+            @Html.EditorFor(model => model.lat, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.lat, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    </fieldset>
+

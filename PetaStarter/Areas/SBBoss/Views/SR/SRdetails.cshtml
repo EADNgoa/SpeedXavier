@@ -4,16 +4,27 @@
     ViewBag.Title = $"Manage Services";
 }
 
-<link rel="stylesheet" type="text/css" href="/Content/datatables.min.css" />
-<script type="text/javascript" src="/Scripts/datatables.min.js"></script>
+<style>
 
+    /*for Datatables*/
+    td.details-control {
+        background: url('/Content/DataTables/DataTables-1.10.16/images/details_open.png') no-repeat center center;
+        cursor: pointer;
+    }
 
-<div class="card border rounded DropShadow">
-    <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
-        <span class="h3">@ViewBag.Title</span>
-    </div>
-    <div class="card-body">
-        <h5>&nbsp;</h5>
+    tr.shown td.details-control {
+        background: url('/Content/DataTables/DataTables-1.10.16/images/details_close.png') no-repeat center center;
+    }
+    /*End for Datatables*/
+</style>
+
+<div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
+    <span class="h3">@ViewBag.Title</span>
+    <a href="@Url.Action("Index","SR",new { sid= ViewBag.sid})"><i class="fas fa-undo-alt fa-inverse h3 float-right DropShadow"></i></a>
+</div>
+
+    @Html.Action("GetSRInfo", "SR", new { id = ViewBag.SRID, mode = ViewBag.mode })
+
         <div class="section-to-Not-print">
             @using (Html.BeginForm("SRdetails", "SR", FormMethod.Post))
         {
@@ -28,13 +39,13 @@
                 @Html.HiddenFor(model => model.SupplierID)
 
                 @if (Model?.SRDID != null)
-            {@Html.Hidden("SRDID", (int)Model.SRDID)}
+    {@Html.Hidden("SRDID", (int)Model.SRDID)}
 
 
                 <div class="form-row">
                     <div class="input-group col mb-3">
                         <div class="input-group-prepend"><span class="input-group-text">Service Type</span></div>
-                        @Html.DropDownList("ServiceTypeID", null, htmlAttributes: new { @type = "text", @class = "eadate form-control" })
+                        @Html.DropDownList("ServiceTypeID", null, htmlAttributes: new { @type = "text", @class = "form-control" })
                         @Html.ValidationMessageFor(model => model.ToLoc, "", new { @class = "text-danger" })
                     </div>
                     <div class="input-group col mb-3">
@@ -71,48 +82,10 @@
                     </div>
 
                 </div>
-                @*Accomodation*@
-                <div class="form-row AcType">
-                    <div class="input-group col mb-3">
-                        <div class="input-group-prepend"><span class="input-group-text">Accomodation</span></div>
-                        @Html.EditorFor(model => model.FromLoc, new { htmlAttributes = new { @type = "text", @class = " form-control" } })
-                        @Html.ValidationMessageFor(model => model.FromLoc, "", new { @class = "text-danger" })
-
-                    </div>
-                    <div class=" input-group col mb-3">
-                        <div class="input-group-prepend"><span class="input-group-text">Car/Bike</span></div>
-                        @Html.EditorFor(model => model.ToLoc, new { htmlAttributes = new { @type = "text", @class = " form-control" } })
-                        @Html.ValidationMessageFor(model => model.ToLoc, "", new { @class = "text-danger" })
-                    </div>
-
-                    <div class="PType input-group col mb-3">
-                        <div class="input-group-prepend"><span class="input-group-text">Packages</span></div>
-                        @Html.EditorFor(model => model.ToLoc, new { htmlAttributes = new { @type = "text", @class = "PType form-control" } })
-                        @Html.ValidationMessageFor(model => model.ToLoc, "", new { @class = "text-danger" })
-                    </div>
-
-                </div>
                 @*Sample Form-row*@
-                <div class="form-row">
-                    <div class="SSType input-group col mb-3">
-                        <div class="input-group-prepend"><span class="input-group-text">Sight seeing</span></div>
-                        @Html.EditorFor(model => model.FromLoc, new { htmlAttributes = new { @type = "text", @class = " form-control" } })
-                        @Html.ValidationMessageFor(model => model.FromLoc, "", new { @class = "text-danger" })
-
-                    </div>
-                    <div class=" CType input-group col mb-3">
-                        <div class="input-group-prepend"><span class="input-group-text">Cruise</span></div>
-                        @Html.EditorFor(model => model.ToLoc, new { htmlAttributes = new { @type = "text", @class = " form-control" } })
-                        @Html.ValidationMessageFor(model => model.ToLoc, "", new { @class = "text-danger" })
-                    </div>
-                    <div class="CType input-group col mb-3">
-                        <div class="input-group-prepend"><span class="input-group-text">Cruise</span></div>
-                        @Html.EditorFor(model => model.ToLoc, new { htmlAttributes = new { @type = "text", @class = " form-control" } })
-                        @Html.ValidationMessageFor(model => model.ToLoc, "", new { @class = "text-danger" })
-                    </div>
-
-
-                </div>
+                    <div id="placeholderEditDiv"></div>
+                @*Sample Form-row*@
+   
                 <div class="form-row">
 
                     <div class="input-group col mb-3">
@@ -139,28 +112,22 @@
         <table id="SRDetTbl" class="table table-sm table-striped">
             <thead class="thead-light">
                 <tr role="row">
+                    <th>Dets</th>
                     <th><input type="text" class="form-control" placeholder="Filter Request No"></th>
-
                     <th></th>
-
                     <th><input type="text" class="form-control" placeholder="Filter From Loc"></th>
-
                     <th><input type="text" class="form-control" placeholder="Filter To Loc"></th>
                     <th><input type="text" class="form-control" placeholder="Filter From Date"></th>
                     <th><input type="text" class="form-control" placeholder="Filter To Date"></th>
-
                     <th><input type="text" class="form-control" placeholder="Filter Supplier"></th>
                     <th><input type="text" class="form-control" placeholder="Filter Cost Price"></th>
                     <th><input type="text" class="form-control" placeholder="Filter Sell Price"></th>
-
-
                     <th width="5%"></th>
                 </tr>
                 <tr role="row">
+                    <th></th>
                     <th scope="col"> Request No</th>
-
                     <th scope="col"> Service Type</th>
-
                     <th scope="col">From Location</th>
                     <th scope="col">To Location</th>
                     <th scope="col">From Date</th>
@@ -168,67 +135,34 @@
                     <th scope="col">Supplier</th>
                     <th scope="col">Cost Price</th>
                     <th scope="col">Sell Price</th>
-
-
                     <th width="5%"></th>
                 </tr>
             </thead>
             <tbody></tbody>
         </table>
 
-
-
-    </div>
+<div class="invisible">
+    <div id="placeholderDiv"></div>
 </div>
+
+
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }
-
+<script type="text/javascript" src="~/Content/DataTables/datatables.min.js"></script>
 <script>
 
 
 
     $(function () {
-        $('.AcType').hide();
-        $('.PType').hide();
-        $('.CBType').hide();
-        $('.CType').hide();
-        $('.SSType').hide();
 
+        //Load the dynamic fields based on first Service type automatically
+        $('#placeholderEditDiv').load('@Url.Action("FetchSTpartial", "SR")', { id: null, ServiceTypeId: $('#ServiceTypeID').val(), IsReadOnly: false });
+        //Then on change of the dropDown load the dynamic fields based on the selected Service type 
         $('#ServiceTypeID').on('change', function () {
-            var value = $(this).val();
-            if (value == "0") {
-                $('.AcType').show()
-            }
-            else
-            {
-                $('.AcType').hide()
-            }
-            if (value == "1") {
-                $('.PType').show()
-            }
-            else {
-                $('.PType').hide()
-            }
-            if (value == "2") {
-                $('.CType').show()
-            }
-            else {
-                $('.CType').hide()
-            }
-            if (value == "3") {
-                $('.SSType').show()
-            }
-            else {
-                $('.SSType').hide()
-            }
-            if (value == "4") {
-                $('.CBType').show()
-            }
-            else {
-                $('.CBType').hide()
-            }
+            $('#placeholderEditDiv').load('@Url.Action("FetchSTpartial", "SR")', { id: null, ServiceTypeId: $(this).val(), IsReadOnly: false });
         });
+
         //DateTime picker
         $('.eadate').datepicker({
             dateFormat: "dd-M-yy",
@@ -255,10 +189,11 @@
                 });
         });
 
-    })
 
 
-        var oTable = $('#SRDetTbl').DataTable({
+
+
+         var oTable = $('#SRDetTbl').DataTable({
             serverSide: true,
             searching: true,
             ajax: {
@@ -272,21 +207,24 @@
             processing: true,
             deferRender: true,
             columns: [
+                {
+                    "className": 'details-control',
+                    "orderable": false,
+                    "data": null,
+                    "defaultContent": ''
+                },
                 { data: "SRID" },
                 { data: "ServiceTypeName" },
                 { data: "FromLoc" },
                 { data: "ToLoc" },
-                { data: "tstr" },
                 { data: "fstr" },
+                { data: "tstr" },
                 { data: "SupplierID" },
                 { data: "Cost" },
                 { data: "SellPrice" },
-
-
-
             ],
             columnDefs: [{
-                'targets': 9,
+                'targets': 10,
                 'searchable': false,
                 'orderable': false,
                 'bSortable': false,
@@ -307,4 +245,33 @@
                 .search(this.value)
                 .draw();
         });
+
+
+        // Add event listener for opening and closing details
+        $('#SRDetTbl tbody').on('click', 'td.details-control', function () {
+            var tr = $(this).closest('tr');
+            var row = oTable.row(tr);
+
+            if (row.child.isShown()) {
+                // This row is already open - close it
+                row.child.hide();
+                tr.removeClass('shown');
+            }
+            else {
+
+                // Open this row
+                $('#placeholderDiv').load('@Url.Action("FetchSTpartial", "SR")', { id: row.data().SRDID, ServiceTypeId: row.data().ServiceTypeID, IsReadOnly: true }, function () {
+                    row.child($('#placeholderDiv').html()).show();
+                    $('#placeholderDiv').html();
+                    tr.addClass('shown');
+                });
+
+            }
+        });
+
+
+    })
+
+
+
 </script>

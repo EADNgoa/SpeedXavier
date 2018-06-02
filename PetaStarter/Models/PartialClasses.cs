@@ -377,7 +377,12 @@ namespace Speedbird
     {
         public int SRID { get; set; }
         public int CustomerID { get; set; }
-        public int SRstatusID { get; set; }
+        public int SRStatusID { get; set; }
+        public string Status { get { return ((SRStatusEnum)SRStatusID).ToString(); } }
+        public DateTime TDate { get; set; }
+
+        public string DT { get { return $"{TDate:dd MMM yyyy,HH:MM}"; } }
+
         public string EmpID { get; set; }
         public string AgentID { get; set; }
         public string FName { get; set; }
@@ -385,6 +390,9 @@ namespace Speedbird
         public string Phone { get; set; }
         public string Email { get; set; }
         public string AgentName { get; set; }
+        public string UserName { get; set; }
+        public string Src { get { return ((EnquirySourceEnum)EnquirySource).ToString(); } }
+
         public int EnquirySource { get; set; }
 
     }
@@ -414,6 +422,8 @@ namespace Speedbird
         Cruise,
         SightSeeing,
         CarBike,
+        Insurance,
+        Visa
     }
 
     public enum MealPlanEnum
@@ -431,12 +441,21 @@ namespace Speedbird
         Agent,
         Guest
     }
+    public enum BookingTypeEnum
+    {
+        Agent,
+        Coporate,
+        Online,
+        Pax
+
+    }
+
     public enum EnquirySourceEnum
     {
         Web,
-        WalkIn,
+        Walk_In,
         Word_Of_Mouth,
-        PrintMedia
+        Print_Media
     }
     public enum SRStatusEnum
     {
@@ -445,7 +464,12 @@ namespace Speedbird
         Completed,
         Cancelled
     }
-
+    public enum PayModeEnum
+    {
+        Cash,
+        CC,
+        Internet
+    }
     public enum LeaveApplicationStatusEnum
     {
         Pending,

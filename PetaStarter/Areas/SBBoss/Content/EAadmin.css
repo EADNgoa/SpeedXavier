@@ -121,3 +121,13 @@ li {
     padding: 5px 15px 10px 30px;
 }
 
+/*for Datatables*/
+td.details-control {
+    background: url('/Content/DataTables/DataTables-1.10.16/images/details_open.png') no-repeat center center;
+    cursor: pointer;
+}
+
+tr.shown td.details-control {
+    background: url('/Content/DataTables/DataTables-1.10.16/images/details_close.png') no-repeat center center;
+}
+/*End for Datatables*/

@@ -1,0 +1,18 @@
+﻿@model Speedbird.Package
+<fieldset @ViewBag.IsReadOnly>
+    <div class="form-row">
+        <div class="input-group col mb-3 disabled">
+            <div class="input-group-prepend"><span class="input-group-text">Package Name</span></div>
+            @Html.EditorFor(model => model.PackageName, new { htmlAttributes = new { @type = "text", @class = "form-control " } })
+            @Html.ValidationMessageFor(model => model.PackageName, "", new { @class = "text-danger" })
+        </div>
+        <div class="input-group col mb-3">
+            <div class="input-group-prepend"><span class="input-group-text">Start Time</span></div>
+            @Html.EditorFor(model => model.StartTime, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.StartTime, "", new { @class = "text-danger" })
+
+        </div>
+
+
+    </div>
+</fieldset>
