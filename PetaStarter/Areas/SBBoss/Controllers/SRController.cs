@@ -500,6 +500,32 @@ namespace Speedbird.Areas.SBBoss.Controllers
             return Json(filteredItems, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult FetchSTpartial(int id, int ServiceTypeId, bool IsReadOnly)
+        {
+            if (IsReadOnly)
+                ViewBag.IsReadOnly = "disabled";
+            
+            switch ((ServiceTypeEnum)ServiceTypeId)
+            {
+                case ServiceTypeEnum.Accomodation:                    
+                    return PartialView($"_{((ServiceTypeEnum)ServiceTypeId).ToString()}", db.SingleOrDefault<Accomodation>(id));                    
+                case ServiceTypeEnum.Packages:                    
+                    return PartialView($"_{((ServiceTypeEnum)ServiceTypeId).ToString()}", db.SingleOrDefault<Package>(id));
+                //case ServiceTypeEnum.Cruise:
+                //    break;
+                //case ServiceTypeEnum.SightSeeing:
+                //    break;
+                //case ServiceTypeEnum.CarBike:
+                //    break;
+                //case ServiceTypeEnum.Insurance:
+                //    break;
+                //case ServiceTypeEnum.Visa:
+                //    break;
+                default:
+                    return PartialView("_NotFound");
+            }
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

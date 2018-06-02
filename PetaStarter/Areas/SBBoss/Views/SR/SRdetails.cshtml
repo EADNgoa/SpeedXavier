@@ -45,7 +45,7 @@
                 <div class="form-row">
                     <div class="input-group col mb-3">
                         <div class="input-group-prepend"><span class="input-group-text">Service Type</span></div>
-                        @Html.DropDownList("ServiceTypeID", null, htmlAttributes: new { @type = "text", @class = "eadate form-control" })
+                        @Html.DropDownList("ServiceTypeID", null, htmlAttributes: new { @type = "text", @class = "form-control" })
                         @Html.ValidationMessageFor(model => model.ToLoc, "", new { @class = "text-danger" })
                     </div>
                     <div class="input-group col mb-3">
@@ -179,7 +179,9 @@
             <tbody></tbody>
         </table>
 
-
+<div class="invisible">
+    <div id="placeholderDiv"></div>
+</div>
 
 
 @section Scripts {
@@ -315,21 +317,6 @@
                 .draw();
         });
 
-        function format(d) {
-            // `d` is the original data object for the row
-            return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
-                    '<tr>' +
-                    '<td>Extension number:</td>' +
-                    '<td>' + d.extn + '</td>' +
-                    '</tr>' +
-                    '<tr>' +
-                    '<td>Extra info:</td>' +
-                    '<td>And any further details here (images etc)...</td>' +
-                    '</tr>' +
-                    '</table>';
-        }
-        
-
 
         // Add event listener for opening and closing details
         $('#SRDetTbl tbody').on('click', 'td.details-control', function () {
@@ -342,9 +329,14 @@
                 tr.removeClass('shown');
             }
             else {
+
                 // Open this row
-                row.child(format(row.data())).show();
-                tr.addClass('shown');
+                $('#placeholderDiv').load('@Url.Action("FetchSTpartial", "SR")', { id: row.data().SRDID, ServiceTypeId: row.data().ServiceTypeID, IsReadOnly: true }, function () {
+                    row.child($('#placeholderDiv').html()).show();
+                    $('#placeholderDiv').html();
+                    tr.addClass('shown');
+                });
+                                                
             }
         });
 
