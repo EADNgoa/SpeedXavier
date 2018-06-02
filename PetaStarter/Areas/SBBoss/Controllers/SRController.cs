@@ -500,7 +500,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             return Json(filteredItems, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult FetchSTpartial(int id, int ServiceTypeId, bool IsReadOnly)
+        public ActionResult FetchSTpartial(int? id, int ServiceTypeId, bool IsReadOnly)
         {
             if (IsReadOnly)
                 ViewBag.IsReadOnly = "disabled";

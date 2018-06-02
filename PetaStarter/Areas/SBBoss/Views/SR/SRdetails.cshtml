@@ -39,7 +39,7 @@
                 @Html.HiddenFor(model => model.SupplierID)
 
                 @if (Model?.SRDID != null)
-            {@Html.Hidden("SRDID", (int)Model.SRDID)}
+    {@Html.Hidden("SRDID", (int)Model.SRDID)}
 
 
                 <div class="form-row">
@@ -82,48 +82,10 @@
                     </div>
 
                 </div>
-                @*Accomodation*@
-                <div class="form-row AcType">
-                    <div class="input-group col mb-3">
-                        <div class="input-group-prepend"><span class="input-group-text">Accomodation</span></div>
-                        @Html.EditorFor(model => model.FromLoc, new { htmlAttributes = new { @type = "text", @class = " form-control" } })
-                        @Html.ValidationMessageFor(model => model.FromLoc, "", new { @class = "text-danger" })
-
-                    </div>
-                    <div class=" input-group col mb-3">
-                        <div class="input-group-prepend"><span class="input-group-text">Car/Bike</span></div>
-                        @Html.EditorFor(model => model.ToLoc, new { htmlAttributes = new { @type = "text", @class = " form-control" } })
-                        @Html.ValidationMessageFor(model => model.ToLoc, "", new { @class = "text-danger" })
-                    </div>
-
-                    <div class="PType input-group col mb-3">
-                        <div class="input-group-prepend"><span class="input-group-text">Packages</span></div>
-                        @Html.EditorFor(model => model.ToLoc, new { htmlAttributes = new { @type = "text", @class = "PType form-control" } })
-                        @Html.ValidationMessageFor(model => model.ToLoc, "", new { @class = "text-danger" })
-                    </div>
-
-                </div>
                 @*Sample Form-row*@
-                <div class="form-row">
-                    <div class="SSType input-group col mb-3">
-                        <div class="input-group-prepend"><span class="input-group-text">Sight seeing</span></div>
-                        @Html.EditorFor(model => model.FromLoc, new { htmlAttributes = new { @type = "text", @class = " form-control" } })
-                        @Html.ValidationMessageFor(model => model.FromLoc, "", new { @class = "text-danger" })
-
-                    </div>
-                    <div class=" CType input-group col mb-3">
-                        <div class="input-group-prepend"><span class="input-group-text">Cruise</span></div>
-                        @Html.EditorFor(model => model.ToLoc, new { htmlAttributes = new { @type = "text", @class = " form-control" } })
-                        @Html.ValidationMessageFor(model => model.ToLoc, "", new { @class = "text-danger" })
-                    </div>
-                    <div class="CType input-group col mb-3">
-                        <div class="input-group-prepend"><span class="input-group-text">Cruise</span></div>
-                        @Html.EditorFor(model => model.ToLoc, new { htmlAttributes = new { @type = "text", @class = " form-control" } })
-                        @Html.ValidationMessageFor(model => model.ToLoc, "", new { @class = "text-danger" })
-                    </div>
-
-
-                </div>
+                    <div id="placeholderEditDiv"></div>
+                @*Sample Form-row*@
+   
                 <div class="form-row">
 
                     <div class="input-group col mb-3">
@@ -193,45 +155,12 @@
 
 
     $(function () {
-        $('.AcType').hide();
-        $('.PType').hide();
-        $('.CBType').hide();
-        $('.CType').hide();
-        $('.SSType').hide();
 
+        //Load the dynamic fields based on first Service type automatically
+        $('#placeholderEditDiv').load('@Url.Action("FetchSTpartial", "SR")', { id: null, ServiceTypeId: $('#ServiceTypeID').val(), IsReadOnly: false });
+        //Then on change of the dropDown load the dynamic fields based on the selected Service type 
         $('#ServiceTypeID').on('change', function () {
-            var value = $(this).val();
-            if (value == "0") {
-                $('.AcType').show()
-            }
-            else
-            {
-                $('.AcType').hide()
-            }
-            if (value == "1") {
-                $('.PType').show()
-            }
-            else {
-                $('.PType').hide()
-            }
-            if (value == "2") {
-                $('.CType').show()
-            }
-            else {
-                $('.CType').hide()
-            }
-            if (value == "3") {
-                $('.SSType').show()
-            }
-            else {
-                $('.SSType').hide()
-            }
-            if (value == "4") {
-                $('.CBType').show()
-            }
-            else {
-                $('.CBType').hide()
-            }
+            $('#placeholderEditDiv').load('@Url.Action("FetchSTpartial", "SR")', { id: null, ServiceTypeId: $(this).val(), IsReadOnly: false });
         });
 
         //DateTime picker
@@ -336,7 +265,7 @@
                     $('#placeholderDiv').html();
                     tr.addClass('shown');
                 });
-                                                
+
             }
         });
 
