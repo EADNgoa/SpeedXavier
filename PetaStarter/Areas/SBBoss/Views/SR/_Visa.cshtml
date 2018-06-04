@@ -1,0 +1,77 @@
+﻿@model Speedbird.SRdetail
+<fieldset @ViewBag.IsReadOnly>
+    <div class="form-row">
+        <div class="input-group col mb-3">
+            <div class="input-group-prepend"><span class="input-group-text">Nationality</span></div>
+            @Html.EditorFor(model => model.PNRno, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.PNRno, "", new { @class = "text-danger" })
+
+        </div>
+        <div class="input-group col mb-3">
+            <div class="input-group-prepend"><span class="input-group-text">Duration</span></div>
+            @Html.EditorFor(model => model.ChildNo, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.ChildNo, "", new { @class = "text-danger" })
+
+        </div>
+        <div class="input-group col mb-3">
+            <div class="input-group-prepend"><span class="input-group-text">Purpose Of Visit</span></div>
+            @Html.EditorFor(model => model.Model, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Model, "", new { @class = "text-danger" })
+
+        </div>
+        <div class="input-group col mb-3">
+            <div class="input-group-prepend"><span class="input-group-text">Passport No</span></div>
+            @Html.EditorFor(model => model.TicketNo, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.TicketNo, "", new { @class = "text-danger" })
+
+        </div>
+
+    </div>
+    <div class="form-row">
+  
+        <div class="input-group col mb-3">
+            <div class="input-group-prepend"><span class="input-group-text">Date Of Issue</span></div>
+            @Html.EditorFor(model => model.DateOfIssue, new { htmlAttributes = new { @type = "date", @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.DateOfIssue, "", new { @class = "text-danger" })
+
+        </div>
+        <div class="input-group col mb-3">
+            <div class="input-group-prepend"><span class="input-group-text">Place Of Issue</span></div>
+            @Html.EditorFor(model => model.Heritage, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Heritage, "", new { @class = "text-danger" })
+
+        </div>
+        <div class="input-group col mb-3">
+            <div class="input-group-prepend"><span class="input-group-text">Date Of Expiry</span></div>
+            @Html.EditorFor(model => model.Tdate, new { htmlAttributes = new { @type = "date", @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Tdate, "", new { @class = "text-danger" })
+
+        </div>
+
+    </div>
+</fieldset>
+<script>
+    $(function () {
+        //DateTime picker
+        $('input[type=date]').datetimepicker({
+            dateFormat: "dd-MM-yy",
+            showButtonPanel: true,
+            changeMonth: true,
+            changeYear: true,
+            timeFormat: "hh:mm"
+
+        }).attr('type', 'text').attr('autocomplete', 'off');
+
+        //Disable the browsers default date picker
+        $('input[type=time]').timepicker({
+            showButtonPanel: true,
+            timeFormat: "hh:mm"
+
+        }).attr('type', 'text').attr('autocomplete', 'off');
+
+        //Disable the browsers default date picker
+        jQuery.validator.methods["date"] = function (value, element) { return true; }
+
+    });
+  
+</script>

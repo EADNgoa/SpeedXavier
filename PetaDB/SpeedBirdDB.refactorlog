@@ -441,11 +441,69 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="ServiceRequestID" />
   </Operation>
+
   <Operation Name="Rename Refactor" Key="bc5f7d79-b4ca-48ea-bc83-79646dd10a22" ChangeDateTime="06/03/2018 13:51:02">
     <Property Name="ElementName" Value="[dbo].[UserLogRec].[Id]" />
     <Property Name="ElementType" Value="SqlSimpleColumn" />
     <Property Name="ParentElementName" Value="[dbo].[UserLogRec]" />
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="UserLogID" />
+
+  <Operation Name="Rename Refactor" Key="96c5a4d0-1f59-487d-b691-f65b1fc2ada4" ChangeDateTime="06/02/2018 11:05:22">
+    <Property Name="ElementName" Value="[dbo].[SRdetails].[Checkin]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[SRdetails]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="CheckIn" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="3a5b7364-618d-41af-a81f-2973704fb8e2" ChangeDateTime="06/02/2018 14:50:49">
+    <Property Name="ElementName" Value="[dbo].[SRdetails].[ServiceTypeID]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[SRdetails]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="CarType" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="bd700f47-93fb-41ec-b61a-649d320c5736" ChangeDateTime="06/02/2018 14:50:57">
+    <Property Name="ElementName" Value="[dbo].[SRdetails].[ServiceTypeID]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[SRdetails]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Model" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="6cdb71e1-9e94-4741-bab9-01caef4eac3a" ChangeDateTime="06/02/2018 17:25:15">
+    <Property Name="ElementName" Value="[dbo].[SRdetails].[Model]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[SRdetails]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="CouponCode" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="db8ee29b-b3fe-414d-bff7-72cc91e38fc9" ChangeDateTime="06/03/2018 05:46:34">
+    <Property Name="ElementName" Value="[dbo].[SRdetails].[ApartType]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[SRdetails]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="RoomType" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="03ae94dd-fe57-4f6b-9307-da601a460e61" ChangeDateTime="06/03/2018 05:52:35">
+    <Property Name="ElementName" Value="[dbo].[SRdetails].[CheckIn]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[SRdetails]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="HasAc" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="f8efc5a9-a5ff-4c8c-bd93-72660fe23dfe" ChangeDateTime="06/03/2018 05:52:59">
+    <Property Name="ElementName" Value="[dbo].[SRdetails].[CheckOut]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[SRdetails]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="HasCarrier" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="3db8f970-d847-4ad0-bbf9-5d43c0ff6b30" ChangeDateTime="06/03/2018 06:28:49">
+    <Property Name="ElementName" Value="[dbo].[SRdetails].[CouponCode]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[SRdetails]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Airline" />
+
   </Operation>
 </Operations>

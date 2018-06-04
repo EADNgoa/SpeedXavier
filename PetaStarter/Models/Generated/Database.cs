@@ -662,6 +662,7 @@ namespace Speedbird
 		[Column] public int? ServiceTypeID { get; set; }
 	}
     
+
 	[TableName("dbo.PettyCash")]
 	[PrimaryKey("CashInHandRegID")]
 	[ExplicitColumns]
@@ -675,7 +676,7 @@ namespace Speedbird
 		[Column] public decimal? CashToDeclareEnd { get; set; }
 		[Column] public string Remarks { get; set; }
 	}
-    
+
 	[TableName("dbo.Picture")]
 	[PrimaryKey("PictureID")]
 	[ExplicitColumns]
@@ -821,6 +822,12 @@ namespace Speedbird
 		[Column] public int SRDID { get; set; }
 		[Column] public int? SRID { get; set; }
 		[Column] public int? ServiceTypeID { get; set; }
+
+		[Column] public int? CarType { get; set; }
+		[Column] public string CouponCode { get; set; }
+		[Column] public string Airline { get; set; }
+		[Column] public string Model { get; set; }
+
 		[Column] public string FromLoc { get; set; }
 		[Column] public string ToLoc { get; set; }
 		[Column] public DateTime? Fdate { get; set; }
@@ -830,6 +837,19 @@ namespace Speedbird
 		[Column] public decimal? SellPrice { get; set; }
 		[Column] public string PNRno { get; set; }
 		[Column] public string TicketNo { get; set; }
+
+		[Column] public int? ChildNo { get; set; }
+		[Column] public int? AdultNo { get; set; }
+		[Column] public int? infantNo { get; set; }
+		[Column] public string RoomType { get; set; }
+		[Column] public string City { get; set; }
+		[Column] public string Heritage { get; set; }
+		[Column] public bool? HasAc { get; set; }
+		[Column] public bool? HasCarrier { get; set; }
+		[Column] public int? GuideLanguageID { get; set; }
+		[Column] public DateTime? DateOfIssue { get; set; }
+		[Column] public string ContractNo { get; set; }
+
 	}
     
 	[TableName("dbo.SRlogs")]
@@ -910,6 +930,7 @@ namespace Speedbird
 		[Column] public int GroupID { get; set; }
 	}
     
+
 	[TableName("dbo.UserLogRec")]
 	[PrimaryKey("UserLogID")]
 	[ExplicitColumns]
@@ -920,7 +941,7 @@ namespace Speedbird
 		[Column] public DateTime? LogIn { get; set; }
 		[Column] public DateTime? LogOut { get; set; }
 	}
-    
+
 	[TableName("dbo.Visa")]
 	[PrimaryKey("VisaID")]
 	[ExplicitColumns]
