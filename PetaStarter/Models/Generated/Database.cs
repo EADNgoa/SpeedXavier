@@ -662,6 +662,21 @@ namespace Speedbird
 		[Column] public int? ServiceTypeID { get; set; }
 	}
     
+
+	[TableName("dbo.PettyCash")]
+	[PrimaryKey("CashInHandRegID")]
+	[ExplicitColumns]
+    public partial class PettyCash  
+    {
+		[Column] public int CashInHandRegID { get; set; }
+		[Column] public DateTime? Tdate { get; set; }
+		[Column] public string NameAndDesg { get; set; }
+		[Column] public decimal? CashToDeclareStart { get; set; }
+		[Column] public string DetailsOfCashExp { get; set; }
+		[Column] public decimal? CashToDeclareEnd { get; set; }
+		[Column] public string Remarks { get; set; }
+	}
+
 	[TableName("dbo.Picture")]
 	[PrimaryKey("PictureID")]
 	[ExplicitColumns]
@@ -807,10 +822,12 @@ namespace Speedbird
 		[Column] public int SRDID { get; set; }
 		[Column] public int? SRID { get; set; }
 		[Column] public int? ServiceTypeID { get; set; }
+
 		[Column] public int? CarType { get; set; }
 		[Column] public string CouponCode { get; set; }
 		[Column] public string Airline { get; set; }
 		[Column] public string Model { get; set; }
+
 		[Column] public string FromLoc { get; set; }
 		[Column] public string ToLoc { get; set; }
 		[Column] public DateTime? Fdate { get; set; }
@@ -820,6 +837,7 @@ namespace Speedbird
 		[Column] public decimal? SellPrice { get; set; }
 		[Column] public string PNRno { get; set; }
 		[Column] public string TicketNo { get; set; }
+
 		[Column] public int? ChildNo { get; set; }
 		[Column] public int? AdultNo { get; set; }
 		[Column] public int? infantNo { get; set; }
@@ -831,6 +849,7 @@ namespace Speedbird
 		[Column] public int? GuideLanguageID { get; set; }
 		[Column] public DateTime? DateOfIssue { get; set; }
 		[Column] public string ContractNo { get; set; }
+
 	}
     
 	[TableName("dbo.SRlogs")]
@@ -911,6 +930,18 @@ namespace Speedbird
 		[Column] public int GroupID { get; set; }
 	}
     
+
+	[TableName("dbo.UserLogRec")]
+	[PrimaryKey("UserLogID")]
+	[ExplicitColumns]
+    public partial class UserLogRec  
+    {
+		[Column] public int UserLogID { get; set; }
+		[Column] public string UserID { get; set; }
+		[Column] public DateTime? LogIn { get; set; }
+		[Column] public DateTime? LogOut { get; set; }
+	}
+
 	[TableName("dbo.Visa")]
 	[PrimaryKey("VisaID")]
 	[ExplicitColumns]

@@ -196,6 +196,8 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Areas\SBBoss\Controllers\PettyCashController.cs" />
+    <Compile Include="Areas\SBBoss\Controllers\LogController.cs" />
     <Compile Include="Areas\SBBoss\Controllers\SRController.cs" />
     <Compile Include="Areas\SBBoss\Controllers\LeaveApplicationController.cs" />
     <Compile Include="Areas\SBBoss\Controllers\LeaveTypeController.cs" />
@@ -649,12 +651,20 @@
     <Content Include="Areas\SBBoss\Views\SR\_Accomodation.cshtml" />
     <Content Include="Areas\SBBoss\Views\SR\_SightSeeing.cshtml" />
     <Content Include="Areas\SBBoss\Views\SR\_NotFound.cshtml" />
+
+    <Content Include="Areas\SBBoss\Views\Log\Index.cshtml" />
+    <Content Include="Areas\SBBoss\Views\Log\Manage.cshtml" />
+    <Content Include="Areas\SBBoss\Views\Log\BossIndex.cshtml" />
+    <Content Include="Areas\SBBoss\Views\PettyCash\Index.cshtml" />
+    <Content Include="Areas\SBBoss\Views\PettyCash\Manage.cshtml" />
+
     <Content Include="Areas\SBBoss\Views\SR\_CarBike.cshtml" />
     <Content Include="Areas\SBBoss\Views\SR\_Packages.cshtml" />
     <Content Include="Areas\SBBoss\Views\SR\_Cruises.cshtml" />
     <Content Include="Areas\SBBoss\Views\SR\_Flight.cshtml" />
     <Content Include="Areas\SBBoss\Views\SR\_Insurance.cshtml" />
     <Content Include="Areas\SBBoss\Views\SR\_Visa.cshtml" />
+
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Areas\SBBoss\Views\SR\CustomerSearchPartial.cshtml" />
     <Content Include="Areas\SBBoss\Views\SR\SRCustomers.cshtml" />

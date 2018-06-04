@@ -441,6 +441,14 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="ServiceRequestID" />
   </Operation>
+
+  <Operation Name="Rename Refactor" Key="bc5f7d79-b4ca-48ea-bc83-79646dd10a22" ChangeDateTime="06/03/2018 13:51:02">
+    <Property Name="ElementName" Value="[dbo].[UserLogRec].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[UserLogRec]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="UserLogID" />
+
   <Operation Name="Rename Refactor" Key="96c5a4d0-1f59-487d-b691-f65b1fc2ada4" ChangeDateTime="06/02/2018 11:05:22">
     <Property Name="ElementName" Value="[dbo].[SRdetails].[Checkin]" />
     <Property Name="ElementType" Value="SqlSimpleColumn" />
@@ -496,5 +504,6 @@
     <Property Name="ParentElementName" Value="[dbo].[SRdetails]" />
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="Airline" />
+
   </Operation>
 </Operations>

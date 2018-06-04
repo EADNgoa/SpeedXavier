@@ -2,6 +2,7 @@
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Speedbird.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -75,9 +76,16 @@ namespace Speedbird.Controllers
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
             var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+           
             switch (result)
             {
                 case SignInStatus.Success:
+                    string uid = db.ExecuteScalar<string>("Select Id From AspNetUsers Where Email = @0",model.Email);
+                    var CheckUser = db.FirstOrDefault<UserLogRec>("Select * From UserLogRec Where UserID=@0 and Cast(LogIn as DATE)=@1",uid,DateTime.Now.Date);
+                    if(CheckUser==null)
+                    {
+                        db.Insert(new UserLogRec { LogIn = DateTime.Now, UserID = uid });
+                    }
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
@@ -494,7 +502,10 @@ namespace Speedbird.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult LogOff()
         {
+            var CheckUser = db.FirstOrDefault<UserLogRec>("Select * From UserLogRec Where UserID=@0 and Cast(LogIn as Date)=@1", User.Identity.GetUserId(), DateTime.Now.Date);
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            CheckUser.LogOut = DateTime.Now;
+            if (CheckUser != null) db.Update(CheckUser);
             return RedirectToAction("Index", "Home");
         }
 
