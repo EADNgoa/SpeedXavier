@@ -93,7 +93,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             //XMLPath uses nested queries so to avoid that we construct these 4 filters ourselves
 
 
-            var sql = new PetaPoco.Sql($"Select * from SRdetails where SRID=@0", id);
+            var sql = new PetaPoco.Sql($"Select * from SRdetails sd inner join Supplier s on s.SupplierID =sd.SupplierID where SRID=@0", id);
             var fromsql = new PetaPoco.Sql();
 
             var wheresql = new PetaPoco.Sql();
@@ -190,9 +190,10 @@ namespace Speedbird.Areas.SBBoss.Controllers
             "ServiceTypeName",
             "FromLoc",
             "ToLoc",
-            "tstr",
+            "ContractNo",
+            "CouponCode",
             "fstr",
-            "Supplier",
+            "SupplierName",
             "Cost",
             "SellPrice"
        };
@@ -324,24 +325,21 @@ namespace Speedbird.Areas.SBBoss.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [EAAuthorize(FunctionName = "Service Requests", Writable = true)]
-        public ActionResult SRdetails([Bind(Include = "SRDID,SRID,ServiceTypeID,FromLoc,ToLoc,Fdate,Tdate,SupplierID,Cost,SellPrice,PNRno,TicketNo")] SRdetail item)
+        public ActionResult SRdetails([Bind(Include = "SRDID,SRID,ServiceTypeID,FromLoc,ToLoc,Fdate,Tdate,SupplierID,Cost,SellPrice,PNRno,TicketNo,Heritage,ChildNo,AdultNo,InfantNo,RoomType,CouponCode,City,Airline,DateOfIssue,ContractNo,GuideLanguageID,SSType,CarType,Model")] SRdetail item,string Event)
         {
             using (var transaction = db.GetTransaction())
             {
 
                 try
                 {
-                    string Action = "";
-                    if (item.SRDID > 0)
+                    bool tf = false;
+                    if (Event == "")
                     {
-                         Action = "This record has been Edited";
-                    }
-                    else
-                    {
-                        Action = $"Added {(ServiceTypeEnum)item.ServiceTypeID} Service";
+                        Event = $"Added {((ServiceTypeEnum)item.ServiceTypeID)} Service ";
+                        tf = true;
                     }
                     base.BaseSave<SRdetail>(item, item.SRDID > 0);
-                    var r= db.Insert(new SRlog { SRDID = item.SRDID, LogDateTime = DateTime.Now, UserID = User.Identity.GetUserId(), Type = true, Event = Action,SRID=item.SRID });
+                    var r= db.Insert(new SRlog { SRDID = item.SRDID, LogDateTime = DateTime.Now, UserID = User.Identity.GetUserId(), Type = tf, Event = Event,SRID=item.SRID });
                     transaction.Complete();
                 }
                 catch (Exception ex)
@@ -513,18 +511,33 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
         public ActionResult FetchSTpartial(int? id, int ServiceTypeId, bool IsReadOnly)
         {
+            ViewBag.GuideLanguageID = db.Fetch<GuideLanguage>("Select * from GuideLanguage").Select(v => new SelectListItem { Text = v.GuideLanguageName, Value = v.GuideLanguageID.ToString() }).ToList();
+            ViewBag.CarType = Enum.GetValues(typeof(CarTypeEnum)).Cast<CarTypeEnum>().Select(v => new SelectListItem { Text = v.ToString(), Value = ((int)v).ToString() }).ToList();
+
             if (IsReadOnly)
                 ViewBag.IsReadOnly = "disabled";
-            
+
             switch ((ServiceTypeEnum)ServiceTypeId)
             {
                 case ServiceTypeEnum.Accomodation:                    
-                    return PartialView($"_{((ServiceTypeEnum)ServiceTypeId).ToString()}", db.SingleOrDefault<Accomodation>(id));                    
-                case ServiceTypeEnum.Packages:                    
-                    return PartialView($"_{((ServiceTypeEnum)ServiceTypeId).ToString()}", db.SingleOrDefault<Package>(id));
+                    return PartialView($"_{((ServiceTypeEnum)ServiceTypeId).ToString()}", db.SingleOrDefault<SRdetail>(id));                    
+                case ServiceTypeEnum.SightSeeing:                    
+                    return PartialView($"_{((ServiceTypeEnum)ServiceTypeId).ToString()}", db.SingleOrDefault<SRdetail>(id));
+                case ServiceTypeEnum.CarBike:
+                    return PartialView($"_{((ServiceTypeEnum)ServiceTypeId).ToString()}", db.SingleOrDefault<SRdetail>(id));
+                case ServiceTypeEnum.Cruise:
+                    return PartialView($"_{((ServiceTypeEnum)ServiceTypeId).ToString()}", db.SingleOrDefault<SRdetail>(id));
+                case ServiceTypeEnum.Packages:
+                    return PartialView($"_{((ServiceTypeEnum)ServiceTypeId).ToString()}", db.SingleOrDefault<SRdetail>(id));
+                case ServiceTypeEnum.Insurance:
+                    return PartialView($"_{((ServiceTypeEnum)ServiceTypeId).ToString()}", db.SingleOrDefault<SRdetail>(id));
+                case ServiceTypeEnum.Visa:
+                    return PartialView($"_{((ServiceTypeEnum)ServiceTypeId).ToString()}", db.SingleOrDefault<SRdetail>(id));
+                case ServiceTypeEnum.Flight:
+                    return PartialView($"_{((ServiceTypeEnum)ServiceTypeId).ToString()}", db.SingleOrDefault<SRdetail>(id));
                 //case ServiceTypeEnum.Cruise:
                 //    break;
-                //case ServiceTypeEnum.SightSeeing:
+                //case ServiceTypeEnum.Package:
                 //    break;
                 //case ServiceTypeEnum.CarBike:
                 //    break;

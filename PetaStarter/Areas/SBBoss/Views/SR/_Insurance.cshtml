@@ -1,0 +1,58 @@
+﻿@model Speedbird.SRdetail
+<fieldset @ViewBag.IsReadOnly>
+    <div class="form-row">
+        <div class="input-group col mb-3">
+            <div class="input-group-prepend"><span class="input-group-text">Type</span></div>
+            @Html.EditorFor(model => model.Airline, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Airline, "", new { @class = "text-danger" })
+
+        </div>
+        <div class="input-group col mb-3">
+            <div class="input-group-prepend"><span class="input-group-text">Age</span></div>
+            @Html.EditorFor(model => model.infantNo, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.infantNo, "", new { @class = "text-danger" })
+
+        </div>
+        <div class="input-group col mb-3">
+            <div class="input-group-prepend"><span class="input-group-text">Policy No</span></div>
+            @Html.EditorFor(model => model.City, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.City, "", new { @class = "text-danger" })
+
+        </div>
+       
+
+    </div>
+    <div class="form-row">
+        <div class="input-group col-4 mb-3">
+            <div class="input-group-prepend"><span class="input-group-text">Valid Till</span></div>
+            @Html.EditorFor(model => model.Tdate, new { htmlAttributes = new { @type = "date", @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Tdate, "", new { @class = "text-danger" })
+
+        </div>
+    </div>
+</fieldset>
+<script>
+    $(function () {
+        //DateTime picker
+        $('input[type=date]').datetimepicker({
+            dateFormat: "dd-MM-yy",
+            showButtonPanel: true,
+            changeMonth: true,
+            changeYear: true,
+            timeFormat: "hh:mm"
+
+        }).attr('type', 'text').attr('autocomplete', 'off');
+
+        $('input[type=time]').timepicker({
+            showButtonPanel: true,
+            timeFormat: "hh:mm"
+
+        }).attr('type', 'text').attr('autocomplete', 'off');
+
+        //Disable the browsers default date picker
+        jQuery.validator.methods["date"] = function (value, element) { return true; }
+    });
+ 
+
+   
+</script>

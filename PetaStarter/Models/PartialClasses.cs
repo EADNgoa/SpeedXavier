@@ -15,10 +15,11 @@ namespace Speedbird
     
     public partial class SRdetail
     {
-        public string tstr { get { return $"{Tdate:dd MMM yyyy}"; } }
-        public string fstr { get { return $"{Fdate:dd MMM yyyy}"; } }
+        public string tstr { get { return $"{Tdate:dd MMM yyyy,hh:mm}"; } }
+        public string fstr { get { return $"{Fdate:dd MMM yyyy,hh:mm}"; } }
         public string ServiceTypeName { get { return ((ServiceTypeEnum)ServiceTypeID).ToString(); } }
 
+        public string SupplierName { get; set; }
 
     }
     public partial class CustomerQuery
@@ -423,6 +424,7 @@ namespace Speedbird
         SightSeeing,
         CarBike,
         Insurance,
+        Flight,
         Visa
     }
 
@@ -469,6 +471,18 @@ namespace Speedbird
         Cash,
         CC,
         Internet
+    }
+  
+    public enum SSTypeEnum
+    {
+        Private,
+        General
+    }
+    public enum CarTypeEnum
+    {
+        Small,
+        Medium,
+        Big
     }
     public enum LeaveApplicationStatusEnum
     {
