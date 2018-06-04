@@ -441,4 +441,11 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="ServiceRequestID" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="bc5f7d79-b4ca-48ea-bc83-79646dd10a22" ChangeDateTime="06/03/2018 13:51:02">
+    <Property Name="ElementName" Value="[dbo].[UserLogRec].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[UserLogRec]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="UserLogID" />
+  </Operation>
 </Operations>
