@@ -179,68 +179,6 @@ if (Model?.SRID == null)
         });
 
 
-            //function formatState(state) {
-            //    if (!state.id) {
-            //        return state.text;
-            //    }
-            //    var parts = state.text.split(",");
-            //    return parts[0];
-
-            //};
-
-             @*//Supplier
-        $("#SupID").select2({
-            placeholder: "Type 3 letters to choose",
-            minimumInputLength: 3,
-
-            ajax: {
-                url: '@(Url.Action("GetSup", "Package"))',
-                dataType: 'json',
-                quietMillis: 250,
-                results: function (data, page) {
-                    return { results: data.data };
-                }
-            }
-        });*@
-
-
-
-        ////Save Select2 Supplier Contract data
-        //$("#SupID").on('select2:select', function (e) {
-        //    var contno = prompt("Please enter the contract number", "");
-        //    var oldConts = $('#ContID').html();
-        //    $('#ContID').html(oldConts + ',' + contno);
-
-        //    var conts = '';
-        //    $.post('/SBBoss/CarBike/' + $(this).data('setu'), { PackageId: $('#CarBikeID').val(), ActIds: $(this).val(), Conts: $('#ContID').html() });
-
-        //});
-
-        //$("#SupID").on('select2:unselect', function (e) {
-        //    $.post('/SBBoss/CarBike/KillSup', { PackageId: $('#PackageID').val(), deadSup: e.params.data.id }, function (e) {
-        //        $('#ContID').html(e);
-        //    });
-
-        //});
-
-            @*//GeoSelector
-            $(".GeoSelect").select2({
-                placeholder: "Type 3 letters to choose",
-                templateSelection: formatState,
-
-                ajax: {
-                    url: '@(Url.Action("GetLocations", "GeoTree"))',
-                    dataType: 'json',
-                    quietMillis: 250,
-                    results: function (data, page) {
-                        return { results: data.data };
-                    }
-                }
-            });
-
-            $("textarea").jqte();*@
-
-
         });
 
 

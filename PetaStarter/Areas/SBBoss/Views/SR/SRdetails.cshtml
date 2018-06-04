@@ -23,123 +23,123 @@
     <a href="@Url.Action("Index","SR",new { sid= ViewBag.sid})"><i class="fas fa-undo-alt fa-inverse h3 float-right DropShadow"></i></a>
 </div>
 
-    @Html.Action("GetSRInfo", "SR", new { id = ViewBag.SRID, mode = ViewBag.mode })
+@Html.Action("GetSRInfo", "SR", new { id = ViewBag.SRID, mode = ViewBag.mode })
 
-        <div class="section-to-Not-print">
-            @using (Html.BeginForm("SRdetails", "SR", FormMethod.Post))
-        {
-            @Html.AntiForgeryToken()
+<div class="section-to-Not-print">
+    @using (Html.BeginForm("SRdetails", "SR", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
 
-            <div class="form-horizontal ">
-
-
-                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
-                @Html.Hidden("SRID", (int)ViewBag.SRID)
-                @Html.HiddenFor(model => model.SupplierID)
-
-                @if (Model?.SRDID != null)
-               {@Html.Hidden("SRDID", (int)Model.SRDID)}
-
-                
-                    <div class="form-row">
-                        <div class="input-group col mb-3">
-                            <div class="input-group-prepend"><span class="input-group-text">Notes</span></div>
-                            <div class="form-control" style="padding:0px !important">@Html.TextArea("Event", null, htmlAttributes: new { @class = "form-control" })</div>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="input-group col mb-3">
-                            <div class="input-group-prepend"><span class="input-group-text">Service Type</span></div>
-                            @Html.DropDownList("ServiceTypeID", null, htmlAttributes: new { @type = "text", @class = "form-control" })
-                            @Html.ValidationMessageFor(model => model.ServiceTypeID, "", new { @class = "text-danger" })
-                        </div>
-                        
-                        <div class="input-group col mb-3">
-                            <div class="input-group-prepend"><span class="input-group-text">From Location</span></div>
-                            @Html.EditorFor(model => model.FromLoc, new { htmlAttributes = new { @type = "text", @class = " form-control" } })
-                            @Html.ValidationMessageFor(model => model.FromLoc, "", new { @class = "text-danger" })
-                        </div>
-                        <div class="input-group col mb-3">
-                            <div class="input-group-prepend"><span class="input-group-text">Supplier</span></div>
-                            <input type="text" id="SupplierName" name="SupplierName" style="color:black;" data-autocomplete-idholder="#SupplierID" value="" data-autocombo-url="@Url.Action("AutoCompleteSup")" class="form-control" />
-                            @Html.ValidationMessageFor(model => model.SupplierID, "", new { @class = "text-danger" })
-                        </div>      
-                    </div>
-                    <div class="form-row">
-
-                        <div class="input-group col mb-3">
-                            <div class="input-group-prepend"><span class="input-group-text">Contract No</span></div>
-                            @Html.EditorFor(model => model.ContractNo, new { htmlAttributes = new { @type = "text", @class = " form-control" } })
-                            @Html.ValidationMessageFor(model => model.ContractNo, "", new { @class = "text-danger" })
-                        </div>
-                        <div class="input-group col mb-3">
-                            <div class="input-group-prepend"><span class="input-group-text">Cost Price</span></div>
-                            @Html.EditorFor(model => model.Cost, new { htmlAttributes = new { @type = "text", @class = " form-control" } })
-                            @Html.ValidationMessageFor(model => model.Cost, "", new { @class = "text-danger" })
-                        </div>
-                        <div class="input-group col mb-3">
-                            <div class="input-group-prepend"><span class="input-group-text">Sell Price</span></div>
-                            @Html.EditorFor(model => model.SellPrice, new { htmlAttributes = new { @type = "text", @class = " form-control" } })
-                            @Html.ValidationMessageFor(model => model.SellPrice, "", new { @class = "text-danger" })
-                        </div>
-                        <div class="input-group col mb-3">
-                            <div class="input-group-prepend"><span class="input-group-text">From Date</span></div>
-                            @Html.EditorFor(model => model.Fdate, new { htmlAttributes = new { @type = "date", @class = " form-control" } })
-                            @Html.ValidationMessageFor(model => model.Fdate, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-                
-                @*Sample Form-row*@
-                <div id="placeholderEditDiv"></div>
-                @*Sample Form-row*@
-
-                <div class="form-row">
+        <div class="form-horizontal ">
 
 
-                    <div class="input-group col mb-3">
-                        <input type="submit" value="Save" class="btn btn-primary" />
-                    </div>
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            @Html.Hidden("SRID", (int)ViewBag.SRID)
+            @Html.HiddenFor(model => model.SupplierID)
+
+            @if (Model?.SRDID != null)
+            {@Html.Hidden("SRDID", (int)Model.SRDID)}
+
+
+            <div class="form-row">
+                <div class="input-group col mb-3">
+                    <div class="input-group-prepend"><span class="input-group-text">Notes</span></div>
+                    <div class="form-control" style="padding:0px !important">@Html.TextArea("Event", null, htmlAttributes: new { @class = "form-control" })</div>
                 </div>
             </div>
-    }
+            <div class="form-row">
+                <div class="input-group col mb-3">
+                    <div class="input-group-prepend"><span class="input-group-text">Service Type</span></div>
+                    @Html.DropDownList("ServiceTypeID", null, htmlAttributes: new { @type = "text", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.ServiceTypeID, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="input-group col mb-3">
+                    <div class="input-group-prepend">@Html.LabelFor(model => model.FromLoc, new { @class = "input-group-text", @id = @Html.IdFor(m => m.FromLoc) + "_lbl" })</div>
+                    @Html.EditorFor(model => model.FromLoc, new { htmlAttributes = new { @type = "text", @class = " form-control" } })
+                    @Html.ValidationMessageFor(model => model.FromLoc, "", new { @class = "text-danger" })
+                </div>
+                <div class="input-group col mb-3">
+                    <div class="input-group-prepend"><span class="input-group-text">Supplier</span></div>
+                    <input type="text" id="SupplierName" name="SupplierName" style="color:black;" data-autocomplete-idholder="#SupplierID" value="" data-autocombo-url="@Url.Action("AutoCompleteSup")" class="form-control" />
+                    @Html.ValidationMessageFor(model => model.SupplierID, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-row">
+
+                <div class="input-group col mb-3">
+                    <div class="input-group-prepend"><span class="input-group-text">Contract No</span></div>
+                    @Html.EditorFor(model => model.ContractNo, new { htmlAttributes = new { @type = "text", @class = " form-control" } })
+                    @Html.ValidationMessageFor(model => model.ContractNo, "", new { @class = "text-danger" })
+                </div>
+                <div class="input-group col mb-3">
+                    <div class="input-group-prepend"><span class="input-group-text">Cost Price</span></div>
+                    @Html.EditorFor(model => model.Cost, new { htmlAttributes = new { @type = "text", @class = " form-control" } })
+                    @Html.ValidationMessageFor(model => model.Cost, "", new { @class = "text-danger" })
+                </div>
+                <div class="input-group col mb-3">
+                    <div class="input-group-prepend"><span class="input-group-text">Sell Price</span></div>
+                    @Html.EditorFor(model => model.SellPrice, new { htmlAttributes = new { @type = "text", @class = " form-control" } })
+                    @Html.ValidationMessageFor(model => model.SellPrice, "", new { @class = "text-danger" })
+                </div>
+                <div class="input-group col mb-3">
+                    <div class="input-group-prepend">@Html.LabelFor(model => model.Fdate, new {@class="input-group-text", @id = @Html.IdFor(m => m.Fdate)+"_lbl" })</div>
+                    @Html.EditorFor(model => model.Fdate, new { htmlAttributes = new { @type = "date", @class = " form-control" } })
+                    @Html.ValidationMessageFor(model => model.Fdate, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            @*Dynamic Form-rows based on Selected Service Type*@
+            <div id="placeholderEditDiv"></div>
+            @*Dynamic Form-rows based on Selected Service Type*@
+
+            <div class="form-row">
+
+
+                <div class="input-group col mb-3">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            </div>
         </div>
-        <br />
+    }
+</div>
+<br />
 
 
-        <hr />
-        <table id="SRDetTbl" class="table table-sm table-striped">
-            <thead class="thead-light">
-                <tr role="row">
-                    <th>Dets</th>
-                    <th><input type="text" class="form-control" placeholder="Filter Request No"></th>
-                    <th></th>
-                    <th><input type="date" class="form-control" placeholder="Filter Date"></th>
+<hr />
+<table id="SRDetTbl" class="table table-sm table-striped">
+    <thead class="thead-light">
+        <tr role="row">
+            <th>Dets</th>
+            <th><input type="text" class="form-control" placeholder="Filter Request No"></th>
+            <th></th>
+            <th><input type="date" class="form-control" placeholder="Filter Date"></th>
 
-                    <th><input type="text" class="form-control" placeholder="Filter Supplier"></th>
-                    <th><input type="text" class="form-control" placeholder="Filter Contract No"></th>
-                    <th><input type="text" class="form-control" placeholder="Filter Coupon Code"></th>
+            <th><input type="text" class="form-control" placeholder="Filter Supplier"></th>
+            <th><input type="text" class="form-control" placeholder="Filter Contract No"></th>
+            <th><input type="text" class="form-control" placeholder="Filter Coupon Code"></th>
 
-                    <th><input type="text" class="form-control" placeholder="Filter Cost Price"></th>
-                    <th><input type="text" class="form-control" placeholder="Filter Sell Price"></th>
-                    <th width="5%"></th>
-                </tr>
-                <tr role="row">
-                    <th></th>
-                    <th scope="col"> Request No</th>
-                    <th scope="col"> Service Type</th>
-                    <th scope="col"> Date</th>
+            <th><input type="text" class="form-control" placeholder="Filter Cost Price"></th>
+            <th><input type="text" class="form-control" placeholder="Filter Sell Price"></th>
+            <th width="5%"></th>
+        </tr>
+        <tr role="row">
+            <th></th>
+            <th scope="col"> Request No</th>
+            <th scope="col"> Service Type</th>
+            <th scope="col"> Date</th>
 
-                    <th scope="col">Supplier</th>
-                    <th scope="col">Contract No</th>
-                    <th scope="col">Coupon Code</th>
-                    <th scope="col">Cost Price</th>
-                    <th scope="col">Sell Price</th>
-                    <th width="5%"></th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
+            <th scope="col">Supplier</th>
+            <th scope="col">Contract No</th>
+            <th scope="col">Coupon Code</th>
+            <th scope="col">Cost Price</th>
+            <th scope="col">Sell Price</th>
+            <th width="5%"></th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
 
 <div class="invisible">
     <div id="placeholderDiv"></div>
@@ -156,11 +156,30 @@
 
     $(function () {
 
+        var setDynLabels = function (sid) {
+            
+            //Set the labels of the common form fields based on the selected Service Type
+            $.post('@Url.Action("FetchSTlabels", "SR")', { CommonLabel: '@Html.DisplayNameFor(model => model.FromLoc)', ServiceTypeId: sid }, function (data) {
+                $('#@Html.DisplayNameFor(model =>model.FromLoc)' + '_lbl').html(data);
+            });
+
+            $.post('@Url.Action("FetchSTlabels", "SR")', { CommonLabel: '@Html.DisplayNameFor(model => model.Fdate)', ServiceTypeId: sid }, function (data) {
+                $('#@Html.DisplayNameFor(model =>model.Fdate)' + '_lbl').html(data);
+            });
+
+        };
+
         //Load the dynamic fields based on first Service type automatically
-        $('#placeholderEditDiv').load('@Url.Action("FetchSTpartial", "SR")', { id: null, ServiceTypeId: $('#ServiceTypeID').val(), IsReadOnly: false });
-        //Then on change of the dropDown load the dynamic fields based on the selected Service type 
+        $('#placeholderEditDiv').load('@Url.Action("FetchSTpartial", "SR")', { ServiceTypeId: $('#ServiceTypeID').val(), IsReadOnly: false }, setDynLabels($('#ServiceTypeID').val()));
+
+        //Then on change of the dropDown load the dynamic fields based on the selected Service type
         $('#ServiceTypeID').on('change', function () {
-            $('#placeholderEditDiv').load('@Url.Action("FetchSTpartial", "SR")', { id: null, ServiceTypeId: $(this).val(), IsReadOnly: false });
+            var sid = $(this).val();
+            debugger;
+
+            //Load the Dynamic Fields of the Form based on the selected Service Type
+            $('#placeholderEditDiv').load('@Url.Action("FetchSTpartial", "SR")', { ServiceTypeId: sid, IsReadOnly: false });
+            setDynLabels(sid);
         });
 
         //DateTime picker

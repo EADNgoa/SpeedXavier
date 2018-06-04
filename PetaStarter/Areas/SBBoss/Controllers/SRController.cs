@@ -509,6 +509,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
             return Json(filteredItems, JsonRequestBehavior.AllowGet);
         }
 
+
+        [HttpPost]        
         public ActionResult FetchSTpartial(int? id, int ServiceTypeId, bool IsReadOnly)
         {
             ViewBag.GuideLanguageID = db.Fetch<GuideLanguage>("Select * from GuideLanguage").Select(v => new SelectListItem { Text = v.GuideLanguageName, Value = v.GuideLanguageID.ToString() }).ToList();
@@ -519,9 +521,9 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
             switch ((ServiceTypeEnum)ServiceTypeId)
             {
-                case ServiceTypeEnum.Accomodation:                    
-                    return PartialView($"_{((ServiceTypeEnum)ServiceTypeId).ToString()}", db.SingleOrDefault<SRdetail>(id));                    
-                case ServiceTypeEnum.SightSeeing:                    
+                case ServiceTypeEnum.Accomodation:
+                    return PartialView($"_{((ServiceTypeEnum)ServiceTypeId).ToString()}", db.SingleOrDefault<SRdetail>(id));
+                case ServiceTypeEnum.SightSeeing:
                     return PartialView($"_{((ServiceTypeEnum)ServiceTypeId).ToString()}", db.SingleOrDefault<SRdetail>(id));
                 case ServiceTypeEnum.CarBike:
                     return PartialView($"_{((ServiceTypeEnum)ServiceTypeId).ToString()}", db.SingleOrDefault<SRdetail>(id));
@@ -535,20 +537,80 @@ namespace Speedbird.Areas.SBBoss.Controllers
                     return PartialView($"_{((ServiceTypeEnum)ServiceTypeId).ToString()}", db.SingleOrDefault<SRdetail>(id));
                 case ServiceTypeEnum.Flight:
                     return PartialView($"_{((ServiceTypeEnum)ServiceTypeId).ToString()}", db.SingleOrDefault<SRdetail>(id));
-                //case ServiceTypeEnum.Cruise:
-                //    break;
-                //case ServiceTypeEnum.Package:
-                //    break;
-                //case ServiceTypeEnum.CarBike:
-                //    break;
-                //case ServiceTypeEnum.Insurance:
-                //    break;
-                //case ServiceTypeEnum.Visa:
-                //    break;
                 default:
                     return PartialView("_NotFound");
             }
         }
+
+        [HttpPost]        
+        public string FetchSTlabels(string CommonLabel, int ServiceTypeId)
+        {
+
+            Dictionary<string, string> Accomodation = new Dictionary<string, string>()
+            {
+                {"Fdate","From Date" },
+                {"FromLoc","Address" }
+            };
+
+            Dictionary<string, string> SightSeeing = new Dictionary<string, string>()
+            {
+                {"Fdate","Pickup Date and Time" },
+                {"FromLoc","Pickup Address" }
+            };
+
+            Dictionary<string, string> Packages = new Dictionary<string, string>()
+            {
+                {"Fdate","Start Date" },
+                {"FromLoc","Start Location" }
+            };
+
+            Dictionary<string, string> CarBike = new Dictionary<string, string>()
+            {
+                {"Fdate","From Date" },
+                {"FromLoc","Pickup Address" }
+            };
+
+            Dictionary<string, string> Cruise = new Dictionary<string, string>()
+            {
+                {"Fdate","From Date" },
+                {"FromLoc","Port of Boarding" }
+            };
+
+            Dictionary<string, string> Flight = new Dictionary<string, string>()
+            {
+                {"Fdate","Departure Date and Time" },
+                {"FromLoc","Departure Airport" }
+            };
+
+            Dictionary<string, string> Visa = new Dictionary<string, string>()
+            {
+                {"Fdate","Start Date" },
+                {"FromLoc","Destination Country" }
+            };
+
+            Dictionary<string, string> Insurance = new Dictionary<string, string>()
+            {
+                {"Fdate","Valid From" },
+                {"FromLoc","Destination Country" }                
+            };
+
+            Dictionary<string, Dictionary<string, string>> dynLabels = new Dictionary<string, Dictionary<string, string>>()
+            {
+                { (ServiceTypeEnum.Accomodation).ToString(), Accomodation},
+                { (ServiceTypeEnum.SightSeeing).ToString(), SightSeeing},
+                { (ServiceTypeEnum.Packages).ToString(), Packages},
+                { (ServiceTypeEnum.CarBike).ToString(), CarBike},
+                { (ServiceTypeEnum.Cruise).ToString(), Cruise},
+                { (ServiceTypeEnum.Flight).ToString(), Flight},
+                { (ServiceTypeEnum.Visa).ToString(), Visa},
+                { (ServiceTypeEnum.Insurance).ToString(), Insurance}
+            };
+
+            
+            return dynLabels[((ServiceTypeEnum)ServiceTypeId).ToString()][CommonLabel]; 
+
+        }
+
 
         protected override void Dispose(bool disposing)
         {
