@@ -197,6 +197,7 @@ namespace Speedbird
         public int NoLargeBags { get; set; }
         public bool HasAc { get; set; }
         public bool IsBike { get; set; }
+        public bool SelfOwned { get; set; }
 
         public bool HasCarrier { get; set; }
         public bool InclHelmet { get; set; }
@@ -318,6 +319,7 @@ namespace Speedbird
         public string longt { get; set; }
         public int ServiceID { get; set; }
         public decimal price { get; set; }
+        public bool SelfOwned { get; set; }
 
         public string PictureName { get; set; }
         public IEnumerable<PriceDets> Pric { get; set; }

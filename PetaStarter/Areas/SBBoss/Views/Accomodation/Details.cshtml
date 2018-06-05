@@ -21,6 +21,11 @@
         @Html.ValidationMessageFor(model => model.AccomName, "", new { @class = "text-danger" })
     </div>
     <div class="input-group col mb-3">
+        <div class="input-group-prepend"><span class="input-group-text">Self Owned</span></div>
+        @Html.EditorFor(model => model.SelfOwned, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.SelfOwned, "", new { @class = "text-danger" })
+    </div>
+    <div class="input-group col mb-3">
         <div class="input-group-prepend"><span class="input-group-text">Coupon Code</span></div>
         @Html.EditorFor(model => model.CouponCode, new { htmlAttributes = new { @class = "form-control" } })
         @Html.ValidationMessageFor(model => model.CouponCode, "", new { @class = "text-danger" })
