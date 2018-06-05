@@ -13,5 +13,6 @@
     [CouponCode] VARCHAR(50) NULL, 
     [IsBike] BIT NOT NULL, 
     [SupplierNotepad] VARCHAR(MAX) NULL, 
+    [SelfOwned] BIT NULL, 
     CONSTRAINT [FK_CarBike_ToGeotree] FOREIGN KEY ([GeoTreeId]) REFERENCES [GeoTree]([GeoTreeId])
 )

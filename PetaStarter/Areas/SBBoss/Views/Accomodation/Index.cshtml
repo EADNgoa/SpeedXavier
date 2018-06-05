@@ -16,6 +16,8 @@
                     <th><input type="text" class="form-control" placeholder="Filter Facilities"></th>
                     <th></th>
                     <th></th>
+                    <th></th>
+
                     <th width="5%"></th>
                 </tr>
                 <tr role="row">
@@ -26,6 +28,7 @@
                     <th scope="col" class="no-sort">Facilities</th>
                     <th scope="col">Latitude</th>
                     <th scope="col">longitude</th>
+                    <th scope="col">Self Owned</th>
 
                     <th width="5%"></th>
                 </tr>
@@ -62,10 +65,12 @@
                 { data: "Description" },
                 { data: "FacilityName" },
                 { data: "Lat" },
-                { data: "longt" }
+                { data: "longt" },
+                { data: "SelfOwned" }
+
             ],
             columnDefs: [{
-                'targets': 7,
+                'targets': 8,
                 'searchable': false,
                 'orderable': false,
                 'bSortable': false,

@@ -134,9 +134,11 @@ namespace Speedbird.Areas.SBBoss.Controllers
             "Description",
             "FacilityName",
             "Lat",
-            "longt"
-        
-           
+            "longt",
+            "SelfOwned"
+
+
+
         };
 
 
@@ -173,7 +175,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
        
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public bool Manage([Bind(Include = "AccomodationID,AccomName,Description,GeoTreeID,Lat,Longt,CouponCode,SupplierNotepad")] Accomodation item)
+        public bool Manage([Bind(Include = "AccomodationID,AccomName,Description,GeoTreeID,Lat,Longt,CouponCode,SupplierNotepad,SelfOwned")] Accomodation item)
         {
             using (var transaction = db.GetTransaction())
             {

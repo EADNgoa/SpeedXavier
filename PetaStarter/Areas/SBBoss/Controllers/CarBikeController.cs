@@ -130,7 +130,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
             "HasAc",
             "HasCarrier",
             "InclHelmet",
-            "IsBike"
+            "IsBike",
+            "SelfOwned"
 
         };
 
@@ -158,7 +159,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public bool Manage([Bind(Include = "CarBikeID,CouponCode,CarBikeName,GeoTreeID,Description,NoPax,NoSmallBags,NoLargeBags,HasAc,HasCarrier,InclHelmet,SupplierNotepad,IsBike")] CarBike item)
+        public bool Manage([Bind(Include = "CarBikeID,CouponCode,CarBikeName,GeoTreeID,Description,NoPax,NoSmallBags,NoLargeBags,HasAc,HasCarrier,InclHelmet,SupplierNotepad,IsBike,SelfOwned")] CarBike item)
         {
             using (var transaction = db.GetTransaction())
             {

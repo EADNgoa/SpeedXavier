@@ -24,6 +24,11 @@
         @Html.ValidationMessageFor(model => model.CarBikeName, "", new { @class = "text-danger" })
     </div>
     <div class="input-group col mb-3">
+        <div class="input-group-prepend"><span class="input-group-text">Self Owned</span></div>
+        @Html.EditorFor(model => model.SelfOwned, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.SelfOwned, "", new { @class = "text-danger" })
+    </div>
+    <div class="input-group col mb-3">
         <div class="input-group-prepend"><span class="input-group-text">No of Pax</span></div>
         @Html.EditorFor(model => model.NoPax, new { htmlAttributes = new { @class = "form-control" } })
         @Html.ValidationMessageFor(model => model.NoPax, "", new { @class = "text-danger" })
