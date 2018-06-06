@@ -1,4 +1,5 @@
-﻿using PagedList;
+﻿using Microsoft.AspNet.Identity;
+using PagedList;
 using Speedbird.Controllers;
 using System;
 //using System.Collections.Generic;
@@ -18,14 +19,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
         [EAAuthorize(FunctionName = "Petty Cash", Writable = false)]
         public ActionResult Index(int? page, DateTime? dt)
         {
-            var rec = db.Query<PettyCash>("Select * From PettyCash").ToList();
-            if (dt != null)
-            {
-                rec = rec.Where(u => u.Tdate.Value.Date == dt).ToList();
-            }
-            int pageSize = 10;
-            int pageNumber = (page ?? 1);
-            return View(rec.ToPagedList(pageNumber, pageSize));
+            page = 1;
+            return View("Index", base.BaseIndex<PettyCash>(page, " * ", "PettyCash Where Tdate Like '%" + dt + "%'"));
         }
 
 
@@ -47,6 +42,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
         [EAAuthorize(FunctionName = "Petty Cash", Writable = false)]
         public ActionResult Manage([Bind(Include = "CashInHandRegID,Tdate,NameAndDesg,CashToDeclareStart,CashToDeclareEnd,DetailsOfCashExp,Remarks")] PettyCash item)
         {
+            string UN = db.ExecuteScalar<string>("Select UserName From AspNetUsers where Id=@0",User.Identity.GetUserId());
+            item.NameAndDesg = UN;
             item.Tdate = DateTime.Now;
             return base.BaseSave<PettyCash>(item, item.CashInHandRegID > 0);
         }

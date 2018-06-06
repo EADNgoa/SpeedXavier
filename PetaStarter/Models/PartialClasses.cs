@@ -12,7 +12,14 @@ using Microsoft.AspNet.Identity;
 
 namespace Speedbird
 {
-    
+    public class UserLogRecDets
+    {
+        public int UserLogID { get; set; }
+        public string UserID { get; set; }
+        public DateTime LogIn { get; set; }
+        public DateTime LogOut { get; set; }
+        public string UserName { get; set; }
+    }
     public partial class SRdetail
     {
         public string tstr { get { return $"{Tdate:dd MMM yyyy,hh:mm}"; } }

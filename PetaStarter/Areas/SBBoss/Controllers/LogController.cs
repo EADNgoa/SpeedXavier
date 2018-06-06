@@ -19,26 +19,15 @@ namespace Speedbird.Areas.SBBoss.Controllers
         [EAAuthorize(FunctionName = "LogDetails", Writable = false)]
         public ActionResult Index(int? page ,DateTime? dt )
         {
-            var rec = db.Query<UserLogRec>("Select * From UserLogRec Where UserID=@0",User.Identity.GetUserId()).ToList();
-            if (dt != null)
-            {
-                rec = rec.Where(u=>u.LogIn.Value.Date==dt).ToList();
-            }
-            int pageSize = 10;
-            int pageNumber = (page ?? 1);
-            return View(rec.ToPagedList(pageNumber, pageSize));
+            page = 1;
+            return View("Index", base.BaseIndex<UserLogRec>(page, " * ", $"UserLogRec Where UserID='{User.Identity.GetUserId()}' and Cast(LogIn as Date) like '%" + dt + "%'"));
         }
         [EAAuthorize(FunctionName = "BossLogDetails", Writable = false)]
         public ActionResult BossIndex(int? page, DateTime? dt)
         {
-            var rec = db.Query<UserLogRec>("Select * From UserLogRec Where UserID=@0", User.Identity.GetUserId()).ToList();
-            if (dt != null)
-            {
-                rec = rec.Where(u => u.LogIn.Value.Date == dt).ToList();
-            }
-            int pageSize = 10;
-            int pageNumber = (page ?? 1);
-            return View(rec.ToPagedList(pageNumber, pageSize));
+            page = 1;
+            return View("BossIndex", base.BaseIndex<UserLogRecDets>(page, " * ", $"UserLogRec u inner join AspNetUsers anu on u.UserID = anu.Id  Where Cast(LogIn as Date)='{DateTime.Now.Date}' and Cast(LogIn as Date) like '%" + dt + "%'"));
+
         }
 
 

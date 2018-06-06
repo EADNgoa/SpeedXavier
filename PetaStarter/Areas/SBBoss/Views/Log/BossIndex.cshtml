@@ -1,4 +1,4 @@
-﻿@model PagedList.IPagedList<Speedbird.UserLogRec>
+﻿@model PagedList.IPagedList<Speedbird.UserLogRecDets>
 
 @using PagedList.Mvc;
 @{
@@ -41,6 +41,10 @@
                 <th>
                    Date
                 </th>
+
+                <th>
+                    Name
+                </th>
                 <th>Log In Time</th>
                 <th>Log Out Times</th>
                 <th></th>
@@ -54,6 +58,9 @@
                 </td>
                 <td>
                     @($"{item.LogIn:dd/MMM/yyyy}")
+                </td>
+                <td>
+                    @item.UserName
                 </td>
                 <td>
                     @($"{item.LogIn:hh:mm}")
