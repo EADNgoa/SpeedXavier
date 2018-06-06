@@ -538,6 +538,20 @@ namespace Speedbird
 		[Column] public string LeaveTypeName { get; set; }
 	}
     
+	[TableName("dbo.MICE")]
+	[PrimaryKey("MiceID")]
+	[ExplicitColumns]
+    public partial class MOUSE  
+    {
+		[Column] public int MiceID { get; set; }
+		[Column] public string GuestName { get; set; }
+		[Column] public DateTime? TDate { get; set; }
+		[Column] public string Phone { get; set; }
+		[Column] public string Email { get; set; }
+		[Column] public string AgentName { get; set; }
+		[Column] public string Detail { get; set; }
+	}
+    
 	[TableName("dbo.MiceDetails")]
 	[PrimaryKey("MiceID")]
 	[ExplicitColumns]
@@ -723,22 +737,6 @@ namespace Speedbird
 		[Column] public int? Value { get; set; }
 		[Column] public int? SRDID { get; set; }
 		[Column] public string Note { get; set; }
-	}
-    
-	[TableName("dbo.Receipt")]
-	[PrimaryKey("ReceiptID")]
-	[ExplicitColumns]
-    public partial class Receipt  
-    {
-		[Column] public int ReceiptID { get; set; }
-		[Column] public DateTime? TDate { get; set; }
-		[Column] public string Name { get; set; }
-		[Column] public decimal? Amount { get; set; }
-		[Column] public string ChequeNo { get; set; }
-		[Column] public DateTime? ChqDate { get; set; }
-		[Column] public string DrawnOn { get; set; }
-		[Column] public string RoomNo { get; set; }
-		[Column] public int? BillNo { get; set; }
 	}
     
 	[TableName("dbo.Reminders")]
@@ -959,19 +957,5 @@ namespace Speedbird
 		[Column] public string FlagPicture { get; set; }
 		[Column] public string EmbassyAddress { get; set; }
 		[Column] public string Details { get; set; }
-	}
-    
-	[TableName("dbo.Voucher")]
-	[PrimaryKey("VoucherID")]
-	[ExplicitColumns]
-    public partial class Voucher  
-    {
-		[Column] public int VoucherID { get; set; }
-		[Column] public DateTime? TDate { get; set; }
-		[Column] public string PayTo { get; set; }
-		[Column] public decimal? Amount { get; set; }
-		[Column] public string OnAccountOf { get; set; }
-		[Column] public string ChequeNo { get; set; }
-		[Column] public string DrawnOn { get; set; }
 	}
 }
