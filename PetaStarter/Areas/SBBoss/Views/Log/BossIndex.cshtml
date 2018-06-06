@@ -1,0 +1,82 @@
+﻿@model PagedList.IPagedList<Speedbird.UserLogRec>
+
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Details Of Log";
+}
+
+
+<div class="card border rounded DropShadow">
+    <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
+        <span class="h5">Search</span>
+    </div>
+    <div class="card-body">
+        <h5 class="card-title">&nbsp;</h5>
+        @using (Html.BeginForm("Index", "Log", FormMethod.Get))
+        {
+            <div class="row d-print-none">
+                <table>
+                    <tr style="text-align:center">
+                        <td>&nbsp;Date:</td>
+                        <td> @Html.TextBox("dt", ViewBag.CurrentFilter as string, new {@type="date", @class = "form-control" })</td>
+                        <td><input type="submit" value="Search" class="btn btn-primary" /></td>
+                    </tr>
+                </table>
+
+            </div>
+        }
+    </div>
+</div>
+
+
+<div class="card border rounded DropShadow">
+    <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
+        <span class="h3">@ViewBag.Title</span>
+    </div>
+    <div class="card-body">
+        <h5>&nbsp;</h5>
+        <table class="table">
+            <tr>
+                <th>Sr No</th>
+                <th>
+                   Date
+                </th>
+                <th>Log In Time</th>
+                <th>Log Out Times</th>
+                <th></th>
+            </tr>
+            @{int i = 1;}
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td>
+                    @i
+                </td>
+                <td>
+                    @($"{item.LogIn:dd/MMM/yyyy}")
+                </td>
+                <td>
+                    @($"{item.LogIn:hh:mm}")
+                </td>
+                <td>
+                    @($"{item.LogOut:hh:mm}")
+                </td>
+                <td>
+                    <a href="@Url.Action("Manage","Log", new {id = item.UserLogID })"><i title="Edit" class="fas fa-edit fa-inverse h3 float-right DropShadow"></i></a>
+                </td>
+
+            </tr>
+                i++;
+            }
+
+        </table>
+        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+        @Html.PagedListPager(Model, page => Url.Action("Index",
+                  new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+
+    </div>
+</div>
+
+
+
