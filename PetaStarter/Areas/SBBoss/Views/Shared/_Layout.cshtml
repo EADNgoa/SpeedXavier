@@ -161,14 +161,26 @@
             //DateTime picker
             $('input[type=date]').datepicker({
                 dateFormat: "dd-M-yy",
-                showButtonPanel: true,
-                changeMonth: true,
-                changeYear: true,
-            }).attr('type', 'text').attr('autocomplete', 'off');
+            showButtonPanel: true,
+            changeMonth: true,
+            changeYear: true,
+            timeFormat: "hh:mm"
+
+        }).attr('type', 'text').attr('autocomplete', 'off');
 
             //Disable the browsers default date picker
             jQuery.validator.methods["date"] = function (value, element) { return true; }
         });
+
+        $('.eadatetime').datetimepicker({
+            dateFormat: "dd-MM-yy",
+            showButtonPanel: true,
+            changeMonth: true,
+            changeYear: true,
+            timeFormat: "hh:mm"
+
+        });
+
 
         //GeoSelector
          $(document).ready(function () {

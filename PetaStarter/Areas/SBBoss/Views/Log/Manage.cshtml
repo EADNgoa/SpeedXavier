@@ -34,14 +34,14 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.LogIn, "Log In", htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.EditorFor(model => model.LogIn, new { htmlAttributes = new { @type = "text", @class = "eadate form-control" } })
+                    @Html.EditorFor(model => model.LogIn, new { htmlAttributes = new { @type = "text", @class = "eadatetime form-control" } })
                     @Html.ValidationMessageFor(model => model.LogIn, "", new { @class = "text-danger" })
                 </div>
             </div>
             <div class="form-group">
                 @Html.LabelFor(model => model.LogOut, "Log Out", htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.EditorFor(model => model.LogOut, new { htmlAttributes = new { @type = "text", @class = "eadate form-control" } })
+                    @Html.EditorFor(model => model.LogOut, new { htmlAttributes = new { @type = "text", @class = "eadatetime form-control" } })
                     @Html.ValidationMessageFor(model => model.LogOut, "", new { @class = "text-danger" })
                 </div>
             </div>
