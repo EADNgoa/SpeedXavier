@@ -1,7 +1,7 @@
 ﻿@model Speedbird.ServiceCommision
 
 @{
-    ViewBag.Title = "Manage Service Commision";
+    ViewBag.Title = "Manage ServiceType Commision";
 }
 
 <div class="card border rounded DropShadow">
@@ -28,7 +28,7 @@
 }
 
             <div class="form-group">
-                @Html.LabelFor(model => model.ServiceName, "Service Name", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.LabelFor(model => model.ServiceName, "ServiceType Name", htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
                     @Html.EditorFor(model => model.ServiceName, new { htmlAttributes = new { @class = "form-control", @Disabled = "Disabled" } })
                     @Html.ValidationMessageFor(model => model.ServiceName, "", new { @class = "text-danger" })
