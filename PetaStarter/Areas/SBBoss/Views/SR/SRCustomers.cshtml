@@ -53,7 +53,7 @@
                     <thead class="bg-primary">
                         <tr>
                             <th>
-
+                                Sr No
                             </th>
                             <th>
                                 First Name
@@ -62,7 +62,7 @@
                                 Sur Name
                             </th>
                             <th>
-                                Mobile
+                                Phone
                             </th>
                             <th>
                                 Email
@@ -163,10 +163,12 @@
                     Sur Name
                 </th>
                 <th>
-                    Email
-                </th>
-                <th>
                     Phone
+                </th>
+
+
+                <th>
+                    Email
                 </th>
 
                 <th></th>
@@ -174,27 +176,30 @@
             @{int i = 1;}
             @foreach (var item in (List<Speedbird.Customer>)ViewBag.Custs)
             {
-                <tr>
-                    <td>
-                        @i
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.FName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.SName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Email)
+            <tr>
+                <td>
+                    @i
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SName)
+                </td>
 
-                    </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Phone)
 
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Phone)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
 
-                    </td>
-                    <td></td>
-                </tr>
+                </td>
+
+                <td>
+               @Html.ActionLink("Delete", "SRCustomers", new { cid = item.CustomerID, id = ViewBag.SRID},new {@Class="delcust" })
+                </td>
+            </tr>
                 i++;
             }
 
@@ -218,6 +223,8 @@
                 $('#ExistingCust').load("/SBBoss/SR/ExistingCustRec?fn=" + fname + "&&sn=" + sname + "&&ph=" + phone + "&&em=" + email);
             }
             $("textarea").jqte();
-        })
+        });
+
     });
+
 </script>
