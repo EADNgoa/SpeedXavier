@@ -12,6 +12,34 @@ using Microsoft.AspNet.Identity;
 
 namespace Speedbird
 {
+    public class BankAccountDets
+    {
+        public int BankAccountID { get; set; }
+        public DateTime TDate { get; set; }
+        public decimal AmountIn { get; set; }
+        public decimal AmountOut { get; set; }
+        public int SRID { get; set; }
+        public int TransNo { get; set; }
+        public string UserID { get; set; }
+        public string SupplierName { get; set; }
+        public string UserName { get; set; }
+        public string Comment { get; set; }
+        public string BankName { get; set; }
+
+    }
+    public class OwnCarTripDets
+    {
+        public int OwnCarTripID { get; set; }
+        public int CarBikeID { get; set; }
+        public int DriverID { get; set; }
+        public DateTime TripStart { get; set; }
+        public int StartKms { get; set; }
+        public int EndKms { get; set; }
+        public string CarBikeName { get; set; }
+        public string DriverName { get; set; }
+
+
+    }
     public class UserLogRecDets
     {
         public int UserLogID { get; set; }
@@ -152,6 +180,12 @@ namespace Speedbird
 
     [MetadataType(typeof(CarBikeMetadata))]
     public partial class CarBike
+    {
+    }
+
+
+    [MetadataType(typeof(AssetBillMetadatta))]
+    public partial class OwnAssetBill
     {
     }
 

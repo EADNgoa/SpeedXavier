@@ -1,0 +1,99 @@
+﻿@model PagedList.IPagedList<Speedbird.OwnAssetBill>
+
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Asset Bills";
+}
+
+
+<div class="card border rounded DropShadow">
+    <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
+        <span class="h5">Search</span>
+    </div>
+    <div class="card-body">
+        <h5 class="card-title">&nbsp;</h5>
+        @using (Html.BeginForm("Index", "AssetBill", FormMethod.Get))
+        {
+            <div class="row d-print-none">
+                <table>
+                    <tr style="text-align:center">
+                        <td>&nbsp;Bill Date:</td>
+                        <td> @Html.TextBox("AN", ViewBag.CurrentFilter as string, new {@type="date", @class = "form-control" })</td>
+                        <td><input type="submit" value="Search" class="btn btn-primary" /></td>
+                    </tr>
+                </table>
+
+            </div>
+        }
+    </div>
+</div>
+
+
+<div class="card border rounded DropShadow">
+    <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
+        <span class="h3">@ViewBag.Title</span>
+        <a href="@Url.Action("Manage","AssetBill")"><i class="fas fa-plus-circle fa-inverse h3 float-right DropShadow"></i></a>
+    </div>
+    <div class="card-body">
+        <h5>&nbsp;</h5>
+        <table class="table">
+            <tr>
+                <th>Sr No</th>
+                <th>
+                   Service Type
+                </th>
+                <th>
+                    Service ID
+                </th>
+                <th>
+                    Bill Date
+                </th>
+                <th>
+                    Bill No
+                </th>
+                <th>
+                    Amount
+                </th>
+                
+                <th></th>
+            </tr>
+            @{int i = 1;}
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td>
+                    @i
+                </td>
+                <td>
+                    @((Speedbird.ServiceTypeEnum)item.ServiceTypeID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ServiceID)
+                </td>
+                <td>
+                    @($"{item.BillDate:dd/mm/yyyy}")
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BillNo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Amount)
+                </td>
+                <td>
+                    <a href="@Url.Action("Manage","AssetBill", new {id = item.OwnAssetBillID })"><i title="Edit" class="fas fa-edit fa-inverse h3 float-right DropShadow"></i></a>
+                </td>
+            </tr>
+                i++;
+            }
+
+        </table>
+        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+        @Html.PagedListPager(Model, page => Url.Action("Index",
+                  new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+
+    </div>
+</div>
+
+
+

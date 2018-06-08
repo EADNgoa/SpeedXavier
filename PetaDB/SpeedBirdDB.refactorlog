@@ -490,4 +490,46 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="ServiceID" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="93135b52-8067-4753-8515-74b15bef7fee" ChangeDateTime="06/07/2018 10:20:45">
+    <Property Name="ElementName" Value="[dbo].[Driver].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Driver]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="DriverID" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="ae85e28c-bdd0-4ed2-8192-611428a592f0" ChangeDateTime="06/07/2018 10:23:18">
+    <Property Name="ElementName" Value="[dbo].[OwnCarTrip].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[OwnCarTrip]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="OwnCarTripID" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="216992b7-debb-434a-820b-6bd890ba0282" ChangeDateTime="06/07/2018 10:52:03">
+    <Property Name="ElementName" Value="[dbo].[OwnCarTrip].[StratKms]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[OwnCarTrip]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="StartKms" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="5464a96d-e3c1-4a75-94fd-5c54d44e2c81" ChangeDateTime="06/07/2018 11:23:36">
+    <Property Name="ElementName" Value="[dbo].[OwnAssetBill].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[OwnAssetBill]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="OwnAssetBillID" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="8130cb3d-0e93-4c82-99ad-d59662c681f2" ChangeDateTime="06/07/2018 11:25:22">
+    <Property Name="ElementName" Value="[dbo].[OwnAssetBill].[OwnAssetBillID]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[OwnAssetBill]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="ServiceTypeID" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="96323651-6dc5-493c-a5ab-e3be470c2844" ChangeDateTime="06/07/2018 12:18:36">
+    <Property Name="ElementName" Value="[dbo].[BankAccount].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[BankAccount]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="BankAccountID" />
+  </Operation>
 </Operations>

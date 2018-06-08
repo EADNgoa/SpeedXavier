@@ -196,6 +196,10 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Areas\SBBoss\Controllers\AssetBillController.cs" />
+    <Compile Include="Areas\SBBoss\Controllers\BanksController.cs" />
+    <Compile Include="Areas\SBBoss\Controllers\TripController.cs" />
+    <Compile Include="Areas\SBBoss\Controllers\DriverController.cs" />
     <Compile Include="Areas\SBBoss\Controllers\ServiceCommisionController.cs" />
     <Compile Include="Areas\SBBoss\Controllers\PettyCashController.cs" />
     <Compile Include="Areas\SBBoss\Controllers\LogController.cs" />
@@ -665,6 +669,15 @@
     <Content Include="Areas\SBBoss\Views\SR\_Visa.cshtml" />
     <Content Include="Areas\SBBoss\Views\ServiceCommision\Index.cshtml" />
     <Content Include="Areas\SBBoss\Views\ServiceCommision\Manage.cshtml" />
+    <Content Include="Areas\SBBoss\Views\Driver\Index.cshtml" />
+    <Content Include="Areas\SBBoss\Views\Driver\Manage.cshtml" />
+    <Content Include="Areas\SBBoss\Views\Trip\Index.cshtml" />
+    <Content Include="Areas\SBBoss\Views\Trip\Manage.cshtml" />
+    <Content Include="Areas\SBBoss\Views\AssetBill\Index.cshtml" />
+    <Content Include="Areas\SBBoss\Views\AssetBill\Manage.cshtml" />
+    <Content Include="Areas\SBBoss\Views\Banks\Index.cshtml" />
+    <Content Include="Areas\SBBoss\Views\Banks\Manage.cshtml" />
+    <Content Include="Areas\SBBoss\Views\Banks\BankAccount.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Areas\SBBoss\Views\SR\CustomerSearchPartial.cshtml" />
     <Content Include="Areas\SBBoss\Views\SR\SRCustomers.cshtml" />
