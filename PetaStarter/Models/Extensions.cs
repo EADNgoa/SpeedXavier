@@ -146,15 +146,6 @@ namespace Speedbird
             }
         }
 
-        public static string RealDate { get; set; }
-        public static string AppVD { get; set; }
-        public static string GetTitle(string Mame)
-        {
-            int st = Mame.IndexOf("_", 8);
-            int nd = Mame.IndexOf("_", ++st);
-            return Mame.Substring(st, nd - st);
-             
-        }
 
         public static IEnumerable<System.Web.Mvc.SelectListItem> MonthList()
         {

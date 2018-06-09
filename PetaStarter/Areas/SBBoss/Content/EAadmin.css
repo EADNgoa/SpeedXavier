@@ -131,3 +131,7 @@ tr.shown td.details-control {
     background: url('/Content/DataTables/DataTables-1.10.16/images/details_close.png') no-repeat center center;
 }
 /*End for Datatables*/
+
+.qItem {
+    font-size:18px;
+}
