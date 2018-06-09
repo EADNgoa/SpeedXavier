@@ -251,7 +251,7 @@
                 'orderable': false,
                 'bSortable': false,
                 'render': function (data, type, full, meta) {
-                    return '<a href="/SBBoss/SR/SRdetails/'+ full.SRDID +'"><i class="fas fa-edit fa-inverse h3 float-right DropShadow"></i></a> &nbsp;';
+                    return '<a href="/SBBoss/SR/Manage?id='+ full.SRID +'&&mode='+3+'&&EID='+full.SRDID+'"><i class="fas fa-edit fa-inverse h3 float-right DropShadow"></i></a> &nbsp;';
                 }
             },
             {

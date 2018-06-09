@@ -211,6 +211,23 @@ namespace Speedbird
 		[Column] public string Color { get; set; }
 	}
     
+	[TableName("dbo.BankAccount")]
+	[PrimaryKey("BankAccountID")]
+	[ExplicitColumns]
+    public partial class BankAccount  
+    {
+		[Column] public int BankAccountID { get; set; }
+		[Column] public DateTime? TDate { get; set; }
+		[Column] public decimal? AmountIn { get; set; }
+		[Column] public decimal? AmountOut { get; set; }
+		[Column] public string SRID { get; set; }
+		[Column] public string TransNo { get; set; }
+		[Column] public string UserID { get; set; }
+		[Column] public int? SupplierID { get; set; }
+		[Column] public string Comment { get; set; }
+		[Column] public int? BankID { get; set; }
+	}
+    
 	[TableName("dbo.Banks")]
 	[PrimaryKey("BankID")]
 	[ExplicitColumns]
@@ -402,6 +419,19 @@ namespace Speedbird
 		[Column] public decimal? Perc { get; set; }
 	}
     
+	[TableName("dbo.Driver")]
+	[PrimaryKey("DriverID")]
+	[ExplicitColumns]
+    public partial class Driver  
+    {
+		[Column] public int DriverID { get; set; }
+		[Column] public string DriverName { get; set; }
+		[Column] public string Phone { get; set; }
+		[Column] public string Address { get; set; }
+		[Column] public string EmerContactName { get; set; }
+		[Column] public string EmerContactNo { get; set; }
+	}
+    
 	[TableName("dbo.Facility")]
 	[PrimaryKey("FacilityID")]
 	[ExplicitColumns]
@@ -538,20 +568,6 @@ namespace Speedbird
 		[Column] public string LeaveTypeName { get; set; }
 	}
     
-	[TableName("dbo.MICE")]
-	[PrimaryKey("MiceID")]
-	[ExplicitColumns]
-    public partial class MOUSE  
-    {
-		[Column] public int MiceID { get; set; }
-		[Column] public string GuestName { get; set; }
-		[Column] public DateTime? TDate { get; set; }
-		[Column] public string Phone { get; set; }
-		[Column] public string Email { get; set; }
-		[Column] public string AgentName { get; set; }
-		[Column] public string Detail { get; set; }
-	}
-    
 	[TableName("dbo.MiceDetails")]
 	[PrimaryKey("MiceID")]
 	[ExplicitColumns]
@@ -575,6 +591,33 @@ namespace Speedbird
 		[Column] public int OptionTypeID { get; set; }
 		[Column] public string OptionTypeName { get; set; }
 		[Column] public int? ServiceTypeID { get; set; }
+	}
+    
+	[TableName("dbo.OwnAssetBill")]
+	[PrimaryKey("OwnAssetBillID")]
+	[ExplicitColumns]
+    public partial class OwnAssetBill  
+    {
+		[Column] public int OwnAssetBillID { get; set; }
+		[Column] public int? ServiceTypeID { get; set; }
+		[Column] public int? ServiceID { get; set; }
+		[Column] public DateTime? BillDate { get; set; }
+		[Column] public string BillNo { get; set; }
+		[Column] public decimal? Amount { get; set; }
+		[Column] public string BillImage { get; set; }
+	}
+    
+	[TableName("dbo.OwnCarTrip")]
+	[PrimaryKey("OwnCarTripID")]
+	[ExplicitColumns]
+    public partial class OwnCarTrip  
+    {
+		[Column] public int OwnCarTripID { get; set; }
+		[Column] public int? CarBikeID { get; set; }
+		[Column] public int? DriverID { get; set; }
+		[Column] public DateTime? TripStart { get; set; }
+		[Column] public int? StartKms { get; set; }
+		[Column] public int? EndKms { get; set; }
 	}
     
 	[TableName("dbo.Package")]
@@ -737,6 +780,22 @@ namespace Speedbird
 		[Column] public int? Value { get; set; }
 		[Column] public int? SRDID { get; set; }
 		[Column] public string Note { get; set; }
+	}
+    
+	[TableName("dbo.Receipt")]
+	[PrimaryKey("ReceiptID")]
+	[ExplicitColumns]
+    public partial class Receipt  
+    {
+		[Column] public int ReceiptID { get; set; }
+		[Column] public DateTime? TDate { get; set; }
+		[Column] public string Name { get; set; }
+		[Column] public decimal? Amount { get; set; }
+		[Column] public string ChequeNo { get; set; }
+		[Column] public DateTime? ChqDate { get; set; }
+		[Column] public string DrawnOn { get; set; }
+		[Column] public string RoomNo { get; set; }
+		[Column] public int? BillNo { get; set; }
 	}
     
 	[TableName("dbo.Reminders")]
@@ -957,5 +1016,19 @@ namespace Speedbird
 		[Column] public string FlagPicture { get; set; }
 		[Column] public string EmbassyAddress { get; set; }
 		[Column] public string Details { get; set; }
+	}
+    
+	[TableName("dbo.Voucher")]
+	[PrimaryKey("VoucherID")]
+	[ExplicitColumns]
+    public partial class Voucher  
+    {
+		[Column] public int VoucherID { get; set; }
+		[Column] public DateTime? TDate { get; set; }
+		[Column] public string PayTo { get; set; }
+		[Column] public decimal? Amount { get; set; }
+		[Column] public string OnAccountOf { get; set; }
+		[Column] public string ChequeNo { get; set; }
+		[Column] public string DrawnOn { get; set; }
 	}
 }
