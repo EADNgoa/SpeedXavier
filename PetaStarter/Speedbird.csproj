@@ -669,6 +669,9 @@
     <Content Include="Areas\SBBoss\Views\SR\_Visa.cshtml" />
     <Content Include="Areas\SBBoss\Views\ServiceCommision\Index.cshtml" />
     <Content Include="Areas\SBBoss\Views\ServiceCommision\Manage.cshtml" />
+
+    <Content Include="Areas\SBBoss\Views\Shared\_Queue.cshtml" />
+
     <Content Include="Areas\SBBoss\Views\Driver\Index.cshtml" />
     <Content Include="Areas\SBBoss\Views\Driver\Manage.cshtml" />
     <Content Include="Areas\SBBoss\Views\Trip\Index.cshtml" />
@@ -678,6 +681,7 @@
     <Content Include="Areas\SBBoss\Views\Banks\Index.cshtml" />
     <Content Include="Areas\SBBoss\Views\Banks\Manage.cshtml" />
     <Content Include="Areas\SBBoss\Views\Banks\BankAccount.cshtml" />
+
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Areas\SBBoss\Views\SR\CustomerSearchPartial.cshtml" />
     <Content Include="Areas\SBBoss\Views\SR\SRCustomers.cshtml" />
