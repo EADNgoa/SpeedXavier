@@ -1,0 +1,198 @@
+﻿@model Speedbird.BankAccount
+
+@{
+    ViewBag.Title = $"Manage Bank Accounts Details";
+}
+
+
+<div class="card border rounded DropShadow">
+    <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
+        <span class="h3">@ViewBag.Title</span>
+    </div>
+    <div class="card-body">
+        <h5>&nbsp;</h5>
+
+
+        <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
+            <span class="h3">@ViewBag.Title</span>
+            <a href="@Url.Action("Index","Bank")"><i class="fas fa-undo-alt fa-inverse h3 float-right DropShadow"></i></a>
+        </div>
+
+
+        <div class="section-to-Not-print">
+
+            @using (Html.BeginForm("BankAccount", "Banks", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal ">
+
+                @Html.HiddenFor(model => model.UserID)
+                @Html.HiddenFor(model => model.SupplierID)
+
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                @Html.Hidden("BankID", (int)ViewBag.BankID)
+
+                @if (Model?.BankAccountID != null)
+    {@Html.Hidden("BankAccountID", (int)Model.BankAccountID)}
+
+
+                <div class="form-row">
+
+
+                    <div class="input-group col mb-3">
+                        <div class="input-group-prepend"><span class="input-group-text">Transaction No</span></div>
+                        @Html.EditorFor(model => model.TransNo, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.TransNo, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="input-group col mb-3">
+                        <div class="input-group-prepend"><span class="input-group-text">Supplier</span></div>
+                        @if (Model?.BankAccountID > 0)
+                        {
+                              <input type="text" id="SupplierName" name="SupplierName" style="color:black;" data-autocomplete-idholder="#SupplierID" value="@ViewBag.SupplierName" data-autocombo-url="@Url.Action("AutoCompleteSup")" class="form-control" />
+                        }
+                        else
+                        {
+                             <input type="text" id="SupplierName" name="SupplierName" style="color:black;" data-autocomplete-idholder="#SupplierID" value="" data-autocombo-url="@Url.Action("AutoCompleteSup")" class="form-control" />
+
+                        }
+                        @Html.ValidationMessageFor(model => model.SupplierID, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="input-group col mb-3">
+                        <div class="input-group-prepend"><span class="input-group-text">Agent</span></div>
+                         @if (Model?.BankAccountID > 0)
+                         {
+                               <input type="text" id="UserName" name="UserName" style="color:black;" data-autocomplete-idholder="#UserID" value="@ViewBag.UserName" data-autocombo-url="@Url.Action("AutoCompleteAgent")" class="form-control" />
+                         }
+                         else
+                         {
+                               <input type="text" id="UserName" name="UserName" style="color:black;" data-autocomplete-idholder="#UserID" value="" data-autocombo-url="@Url.Action("AutoCompleteAgent")" class="form-control" />
+
+                         }
+                        @Html.ValidationMessageFor(model => model.UserID, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="input-group col mb-3">
+                        <div class="input-group-prepend"><span class="input-group-text">Comment</span></div>
+                        @Html.EditorFor(model => model.Comment, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Comment, "", new { @class = "text-danger" })
+                    </div>
+
+                </div>
+                <div class="form-row">
+                    <div class="input-group col mb-3">
+                        <div class="input-group-prepend"><span class="input-group-text">Service Request No</span></div>
+                        @Html.EditorFor(model => model.SRID, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.SRID, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="input-group col mb-3">
+                        <div class="input-group-prepend"><span class="input-group-text">Amount In</span></div>
+                        @Html.EditorFor(model => model.AmountIn, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.AmountIn, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="input-group col mb-3">
+                        <div class="input-group-prepend"><span class="input-group-text">Amount Out</span></div>
+                        @Html.EditorFor(model => model.AmountOut, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.AmountOut, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="input-group col mb-3">
+                        <input type="submit" value="Save" class="btn btn-primary" />
+                    </div>
+                </div>
+
+            </div>
+    }
+        </div>
+        <br />
+
+
+        <hr />
+        <table class="table table-sm section-to-print index-css" width="100%">
+            <tr>
+                <th>Date </th>
+                <th>Transaction No</th>
+                <th>Bank Name</th>
+                <th>Supplier Name</th>
+                <th>Agent Name</th>
+                <th>Service Request No</th>
+                <th>Amount In</th>
+                <th>Amount Out</th>
+                <th>Comment</th>
+
+                <th class="section-to-Not-print"></th>
+            </tr>
+            @foreach (var item in (IEnumerable<Speedbird.BankAccountDets>)ViewBag.BA)
+        {
+            <tr>
+                <td>
+                    @($"{item.TDate:dd/MMM/yyyy,HH:MM}")
+                </td>
+                <td>
+                    @item.TransNo
+                </td>
+                <td>
+                    @item.BankName
+                </td>
+                <td>
+                    @item.SupplierName
+                </td>
+                <td>
+                    @item.UserName
+                </td>
+
+                <td>
+                    @item.SRID
+                </td>
+                <td>
+                    @item.AmountIn
+                </td>
+                <td>
+                    @item.AmountOut
+                </td>
+                <td>
+                    @item.Comment
+                </td>
+                <td>
+                    <a href="@Url.Action("BankAccount","Banks",new { EID=item.BankAccountID })">Edit</a>
+                </td>
+            </tr>
+    }
+
+        </table>
+
+    </div>
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+<script>
+    $(function () {
+        //DateTime picker
+        $('.eadate').datepicker({
+            dateFormat: "dd-M-yy",
+            showButtonPanel: true,
+            changeMonth: true,
+            changeYear: true
+        }).attr('type', 'text').attr('autocomplete', 'off');
+
+        //Disable the browsers default date picker
+        jQuery.validator.methods["date"] = function (value, element) { return true; }
+
+
+        $(document).ready(function () {
+            $('*[data-autocombo-url]')
+                .each(function () {
+                    $(this).autocomplete({
+                        source: $(this).data("autocombo-url"),
+                        minLenght: 3,
+                        delay: 500,
+                        select: function (event, ui) {
+                            $($(this).data("autocomplete-idholder")).val(ui.item.id);
+                        }
+                    });
+                });
+        });
+    })
+
+</script>

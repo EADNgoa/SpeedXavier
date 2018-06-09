@@ -62,10 +62,20 @@
 
                             <li><a href="~/SBBoss/Holiday"><span style="display:block;"><i class="fas fa-angle-double-right"></i> Holidays</span></a></li>
                             <li><a href="~/SBBoss/ServiceCommision"><span style="display:block;"><i class="fas fa-angle-double-right"></i> Service Commision</span></a></li>
+                            <li><a href="~/SBBoss/Driver"><span style="display:block;"><i class="fas fa-angle-double-right"></i> Driver</span></a></li>
 
 
 
                         </ul>
+                    </li>
+                    <li class="nav-item">
+                        <i class="fas fa-motorcycle fa-inverse"></i><a class="nav-link" href="~/SBBoss/Banks">Accounts</a>
+                    </li>
+                    <li class="nav-item">
+                        <i class="fas fa-motorcycle fa-inverse"></i><a class="nav-link" href="~/SBBoss/AssetBill">Assets</a>
+                    </li>
+                    <li class="nav-item">
+                        <i class="fas fa-home fa-inverse"></i><a class="nav-link" href="~/SBBoss/Trip">Car Trip Details</a>
                     </li>
                     <li class="nav-item">
                         <i class="fas fa-home fa-inverse"></i><a class="nav-link" href="~/SBBoss/LeaveApplication">Leave Application</a>
@@ -102,6 +112,7 @@
                     <li class="nav-item">
                         <i class="fas fa-motorcycle fa-inverse"></i><a class="nav-link" href="~/SBBoss/CarBike">Car/Bike</a>
                     </li>
+
                     <li class="nav-item">
                         <i class="fas fa-motorcycle fa-inverse"></i><a class="nav-link" href="~/SBBoss/SR">SR</a>
                     </li>
@@ -181,7 +192,14 @@
             timeFormat: "hh:mm"
 
         });
+        $('.eadate').datepicker({
+            dateFormat: "dd-MM-yy",
+            showButtonPanel: true,
+            changeMonth: true,
+            changeYear: true,
+          
 
+        });
 
         //GeoSelector
          $(document).ready(function () {

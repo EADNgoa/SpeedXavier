@@ -70,6 +70,14 @@ namespace Speedbird
         public string SupplierNotepad { get; set; }
     }
 
+  public class AssetBillMetadatta
+    {
+
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd-MMM-yyyy}", ApplyFormatInEditMode = true)]
+        public DateTime BillDate;
+    }
+
     //public class EmpTypeMetadata
     //{
     //    [Display(Name = "Employee Type")]

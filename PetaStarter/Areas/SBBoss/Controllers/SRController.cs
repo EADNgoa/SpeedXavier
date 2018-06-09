@@ -317,7 +317,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             ViewBag.SRs = db.FirstOrDefault<ServiceRequestDets>("Select * From ServiceRequest sr inner join Customer c on c.CustomerID=sr.CustID Where SRID=@0", id);
             ViewBag.SRDets = db.Fetch<SRdetail>("Select * from SRdetails where SRID =@0", id);
             ViewBag.ServiceTypeID = Enum.GetValues(typeof(ServiceTypeEnum)).Cast<ServiceTypeEnum>().Select(v => new SelectListItem { Text = v.ToString(), Value = ((int)v).ToString() }).ToList();
-
+        
             return PartialView(base.BaseCreateEdit<SRdetail>(EID, "SRDID"));
         }
 
@@ -391,8 +391,13 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
         }
         [EAAuthorize(FunctionName = "Service Requests", Writable = true)]
-        public ActionResult SRCustomers(int? id, int? sid, int? EID)
+        public ActionResult SRCustomers(int? id, int? sid, int? EID,int? cid)
         {
+            if(id!=null && cid != null)
+            {
+                db.Execute($"Delete From SR_Cust where ServiceRequestID ={id} and CustomerID={cid}");
+                return RedirectToAction("Manage" ,new {id,mode=4 });
+            }
             var rec = base.BaseCreateEdit<Customer>(EID, "CustomerID");
             ViewBag.SRID = id;
             ViewBag.Title = "Manage Customers";
@@ -429,6 +434,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             return RedirectToAction("Manage", new { id = (int)SRID, mode = 4 });
 
         }
+
         [EAAuthorize(FunctionName = "Service Requests", Writable = true)]
         public ActionResult Reciepts(int? id, int? sid, int? EID)
         {
@@ -461,7 +467,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             ViewBag.Title = "Service Reauest Logs";
 
             ViewBag.SRs = db.FirstOrDefault<ServiceRequestDets>("Select * From ServiceRequest Where SRID=@0", id);
-            ViewBag.SRLogDets = db.Fetch<SRlogsDets>($"Select * From SRLogs sl inner join AspNetUsers anu on sl.UserID = anu.Id where SRID ='{id}'");
+            ViewBag.SRLogDets = db.Fetch<SRlogsDets>($"Select * From SRLogs sl inner join AspNetUsers anu on sl.UserID = anu.Id where SRID ='{id}' ORDER By SRLID Desc");
             return PartialView(rec);
         }
 
