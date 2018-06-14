@@ -1,5 +1,8 @@
-﻿
-
+﻿<style>
+    .actions {
+        width: 200px !important;
+    }
+</style>
 <div class="card border rounded DropShadow">
     <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
         <span class="h3">Service Requests</span>
@@ -10,6 +13,13 @@
 
         <table id="SRTbl" class="table table-sm table-striped">
             <thead class="thead-light">
+                <tr role="row">
+                    <th class="bg-success" scope="col" width="10px">Paid</th>
+                    <th class="bg-primary" scope="col">Unpaid</th>
+                    <th class="bg-warning" scope="col">Part-Paid</th>
+                    <th class="bg-secondary" scope="col">Canceled</th>
+
+                </tr>
                 <tr role="row">
                     <th><input type="text" class="form-control" placeholder="N#"></th>
                     <th><input type="date" class="form-control" placeholder="Filter Date"></th>
@@ -40,9 +50,7 @@
                     <th width="5%"></th>
                 </tr>
             </thead>
-            <tbody>
-
-            </tbody>
+            <tbody></tbody>
         </table>
 
     </div>
@@ -53,9 +61,11 @@
 <script>
     $(function () {
         var oTable = $('#SRTbl').DataTable({
+
             serverSide: true,
             searching: true,
             ajax: {
+                context: this,
                 "type": "POST",
                 "url": '@Url.Action("GetSRList")',
                 "contentType": 'application/json; charset=utf-8',
@@ -63,6 +73,7 @@
                     return data = JSON.stringify(data);
                 }
             },
+
             processing: true,
             paging: true,
             pagingType: "full_numbers",
@@ -76,24 +87,61 @@
                 { data: "Email" },
                 { data: "Src" },
                 { data: "AgentName" },
-                { data: "Status" }
+                { data: "Status" },
+
+                { data: "TotSA" },
+                { data: "AccAmt" },
+
 
             ],
-            columnDefs: [{
-                'targets': 9,
-                'searchable': false,
-                'orderable': false,
-                'bSortable': false,
-                'render': function (data, type, full, meta) {
-                    return '<a href="/SBBoss/SR/manage/'+ full.SRID +'"><i class="fas fa-edit fa-inverse h3 float-right DropShadow"></i></a> &nbsp;';
-                }
-            },
-            {
+            columnDefs: [
+                {
+
+                    'targets': 9,
+                    'searchable': false,
+                    'orderable': false,
+                    'bSortable': false,
+                    'render': function (data, type, full, meta,row) {
+
+
+                        if (full.SRStatusID == 3) {
+                            return '<a href="/SBBoss/SR/manage/' + full.SRID + '"><i class="fas bg-secondary fa-edit fa-inverse h3 float-right DropShadow"></i></a>';
+                        }
+                        else {
+                            if (full.AccAmt >= full.TotSA) {
+                            return '<a href="/SBBoss/SR/manage/' + full.SRID + '"><i class="fas bg-success fa-edit fa-inverse h3 float-right DropShadow"></i></a>';
+                            }
+                            if (full.AccAmt >= 1 && full.AccAmt <= full.TotSA) {
+                                return '<a href="/SBBoss/SR/manage/' + full.SRID + '"><i class="fas bg-warning fa-edit fa-inverse h3 float-right DropShadow"></i></a>';
+                            }
+                            if (full.AccAmt == 0) {
+                                return '<a href="/SBBoss/SR/manage/' + full.SRID + '"><i class="fas bg-primary fa-edit fa-inverse h3 float-right DropShadow"></i></a>';
+                            }
+                        }
+
+
+
+
+
+
+                    },
+
+
+                },
+                {
+                    'targets': 10,
+                    'visible': false,
+                    'searchable': false,
+
+                },
+
+
+                {
                 targets: 'no-sort',
                 orderable: false
-            }]
-        });
+                }]
 
+        });
 
 
         $("#SRTbl thead th input[type=text]").on('change', function () {

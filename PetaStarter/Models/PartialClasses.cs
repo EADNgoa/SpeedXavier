@@ -16,7 +16,7 @@ namespace Speedbird
     {
         public int BankAccountID { get; set; }
         public DateTime TDate { get; set; }
-        public decimal AmountIn { get; set; }
+        public decimal? AmountIn { get; set; }
         public decimal AmountOut { get; set; }
         public int SRID { get; set; }
         public int TransNo { get; set; }
@@ -53,6 +53,47 @@ namespace Speedbird
         public string tstr { get { return $"{Tdate:dd MMM yyyy,hh:mm}"; } }
         public string fstr { get { return $"{Fdate:dd MMM yyyy,hh:mm}"; } }
         public string ServiceTypeName { get { return ((ServiceTypeEnum)ServiceTypeID).ToString(); } }
+
+
+    }
+    public partial class SRdetailDets
+    {
+        public int SRDID { get; set; }
+        public int SRID { get; set; }
+        public int ServiceTypeID { get; set; }
+        public int CarType { get; set; }
+        public string CouponCode { get; set; }
+        public string Airline { get; set; }
+        public string Model { get; set; }
+        public string FromLoc { get; set; }
+        public string ToLoc { get; set; }
+        public DateTime Fdate { get; set; }
+        public DateTime Tdate { get; set; }
+        public int SupplierID { get; set; }
+        public decimal Cost { get; set; }
+        public decimal SellPrice { get; set; }
+        public string PNRno { get; set; }
+        public string TicketNo { get; set; }
+        public int ChildNo { get; set; }
+        public int AdultNo { get; set; }
+        public int InfantNo { get; set; }
+        public string RoomType { get; set; }
+        public string City { get; set; }
+        public string Heritage { get; set; }
+        public bool HasAC { get; set; }
+        public bool HasCarrier { get; set; }
+        public int GuideLanguageID { get; set; }
+        public DateTime DateOfIssue { get; set; }
+        public string ContractNo { get; set; }
+        public string GuideLanguageName { get; set; }
+
+
+
+
+
+
+
+
 
         public string SupplierName { get; set; }
 
@@ -426,6 +467,8 @@ namespace Speedbird
         public DateTime TDate { get; set; }
 
         public string DT { get { return $"{TDate:dd MMM yyyy,HH:MM}"; } }
+        public decimal? TotSA { get; set; }
+        public decimal? AccAmt { get; set; }
 
         public string EmpID { get; set; }
         public string AgentID { get; set; }
@@ -504,10 +547,16 @@ namespace Speedbird
     }
     public enum SRStatusEnum
     {
-        Request,
+        New,
+        Reminder,
+        NoAction,
+        Request,    
         Booked,
         Completed,
         Cancelled
+      
+
+
     }
     public enum PayModeEnum
     {
