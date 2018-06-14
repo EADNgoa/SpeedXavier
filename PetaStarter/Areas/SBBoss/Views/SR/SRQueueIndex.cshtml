@@ -1,0 +1,85 @@
+﻿@model PagedList.IPagedList<Speedbird.ServiceRequestDets>
+
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Service Request Queue";
+}
+
+
+
+
+
+<div class="card border rounded DropShadow">
+    <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
+        <span class="h3">@ViewBag.Title</span>
+    </div>
+    <div class="card-body">
+        <h5>&nbsp;</h5>
+        <table class="table">
+            <tr>
+                <th scope="col" width="10px">No.</th>
+                <th scope="col">Date/Time</th>
+                <th scope="col">Name</th>
+                <th scope="col">Sur Name</th>
+                <th scope="col">Phone</th>
+                <th scope="col">Email</th>
+                <th scope="col">Enquiry Source</th>
+                <th scope="col">Agent Name</th>
+                <th scope="col">Status</th>
+
+                <th width="5%"></th>
+                <th></th>
+            </tr>
+            @{int i = 1;}
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td>
+                    @i
+                </td>
+                <td>
+                    @($"{item.TDate:dd/MMM/yyyy}")
+
+                </td>
+                <td>
+                    @item.FName
+                </td>
+                <td>
+                    @item.SName
+                </td>
+                <td>
+                    @item.Phone
+                </td>
+                <td>
+                    @item.Email
+                </td>
+                <td>
+                    @((Speedbird.EnquirySourceEnum)item.EnquirySource)
+                </td>
+                <td>
+                    @item.AgentName
+                </td>
+                <td>
+                    @((Speedbird.SRStatusEnum)item.SRStatusID)
+                </td>
+                <td>
+                    <a href="@Url.Action("Manage","SR", new {id = item.SRID })"><i title="Edit" class="fas fa-edit fa-inverse h3 float-right DropShadow"></i></a>
+                </td>
+                <td>
+                    <a href="@Url.Action("Reminder","SR", new {id = item.SRID })">No Action</a>
+                </td>
+            </tr>
+                i++;
+            }
+
+        </table>
+        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+        @Html.PagedListPager(Model, page => Url.Action("Index",
+                       new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+
+    </div>
+</div>
+
+
+
