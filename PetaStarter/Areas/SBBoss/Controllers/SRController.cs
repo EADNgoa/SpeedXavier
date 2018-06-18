@@ -688,6 +688,25 @@ namespace Speedbird.Areas.SBBoss.Controllers
             }
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public bool RemindAt(int SRID, DateTime remindAtDt)
+        {
+            try
+            {
+                var res = db.Execute("Update ServiceRequest set RemindAt=@0 where SRID=@1", remindAtDt, SRID);
+                var sta = db.Execute("Update ServiceRequest set SRStatusId=@0 where SRID=@1", (int)SRStatusEnum.NoAction, SRID);
+
+                return true;
+
+            }
+            catch (Exception ex)
+            {
+                return false;
+                throw ex;
+            }
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

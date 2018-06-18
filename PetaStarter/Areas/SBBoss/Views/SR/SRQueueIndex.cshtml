@@ -57,7 +57,9 @@
                     <a href="@Url.Action("Manage","SR", new {id = item.SRID })"><i title="Edit" class="fas fa-edit fa-inverse h3 float-right DropShadow"></i></a>
                 </td>
                 <td>
-                    @Html.TextBox("AN", ViewBag.CurrentFilter as string, new { @type = "datetime", @class = "form-control" })
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#RemindDateModal" data-srid="@item.SRID">
+                        Remind Later
+                    </button>
                 </td>
                 <td>
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#IgnoreReasonModal" data-srid="@item.SRID">
@@ -79,11 +81,11 @@
 
 
 
-<div class="modal fade" id="IgnoreReasonModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="IgnoreReasonModal" tabindex="-1" role="dialog" aria-labelledby="IgnoreReasonLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="IgnoreReasonModalLabel">Explain why this Service Request should be ignored.</h5>
+                <h5 class="modal-title" id="IgnoreReasonModalLabel">Explain why this should be ignored.</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -100,25 +102,54 @@
             }
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button id="SaveDetails" type="button" class="btn btn-primary" data-dismiss="modal">Save changes</button>
+                    <button id="SaveReason" type="button" class="btn btn-primary" data-dismiss="modal">Save</button>
                 </div>
 
         </div>
     </div>
 </div>
+<div class="modal fade" id="RemindDateModal" tabindex="-1" role="dialog" aria-labelledby="RemindDateLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="RemindDateModalLabel">When do you want to be reminded?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            @using (Html.BeginForm("RemindAt", "SR", FormMethod.Post, new { id = "RemindAtFrm" }))
+            {
+
+                @Html.AntiForgeryToken()
+                <input type="hidden" id="SRID" name="SRID" />
+                <div class="modal-body">
+                    @Html.Editor("remindAtDt", new { htmlAttributes = new { @type = "text", @class = "eadatetime form-control" } })
+                </div>
+            }
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button id="SaveReminder" type="button" class="btn btn-primary" data-dismiss="modal">Set Reminder</button>
+            </div>
+
+        </div>
+    </div>
+</div>
 <script>
+    //Ignore Reason
     $('#IgnoreReasonModal').on('shown.bs.modal', function (event) {
 
-        var button = $(event.relatedTarget) // Button that triggered the modal
-          var recipient = button.data('srid') // Extract info from data-* attributes
+        var button = $(event.relatedTarget); // Button that triggered the modal
+        var recipient = button.data('srid'); // Extract info from data-* attributes
 
-          var modal = $(this)
-          modal.find('#SRID').val(recipient)
+        var modal = $(this);
+        modal.find('#SRID').val(recipient);
+        modal.find('#IgnoreReason').focus();
     })
 
-     $('#SaveDetails').click(function () {
+     $('#SaveReason').click(function () {
             var detFrm = $('#IgReasonFrm');
-         
+
             //Save the details form if it exists else just move on.
             if (typeof (detFrm[0]) == 'object') {
                 $.ajax({
@@ -130,7 +161,32 @@
                     }
                 });
             }
-        });
+     });
 
+    //Set Reminder
+     $('#RemindDateModal').on('shown.bs.modal', function (event) {
 
+            var button = $(event.relatedTarget); // Button that triggered the modal
+            var recipient = button.data('srid'); // Extract info from data-* attributes
+
+            var modal = $(this);
+            modal.find('#SRID').val(recipient);
+            modal.find('#remindAtDt').focus();
+    })
+
+        $('#SaveReminder').click(function () {
+            var detFrm = $('#RemindAtFrm');
+
+            //Save the details form if it exists else just move on.
+            if (typeof (detFrm[0]) == 'object') {
+                $.ajax({
+                    url: '@Url.Action("RemindAt", "SR")',
+                    type: 'post',
+                    data: $(detFrm).serialize(),
+                    success: function () {
+                        window.location.assign('@Url.Action("SRQueueIndex", new { st = (int)ViewBag.ServiceRequestTypeId })');
+                    }
+                });
+            }
+     });
 </script>

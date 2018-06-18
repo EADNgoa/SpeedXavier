@@ -871,6 +871,7 @@ namespace Speedbird
 		[Column] public int? ServiceTypeID { get; set; }
 		[Column] public DateTime? TDate { get; set; }
 		[Column] public string IgnoreReason { get; set; }
+		[Column] public DateTime? RemindAt { get; set; }
 	}
     
 	[TableName("dbo.SR_Cust")]
