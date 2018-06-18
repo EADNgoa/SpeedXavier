@@ -26,12 +26,9 @@ namespace Speedbird.Areas.SBBoss.Controllers
             /// <param name="TableWithWhere">from, join, where and group</param>
             /// <returns></returns>
             protected IPagedList<T> BaseIndex<T>(int? page, string FieldList, string TableWithWhere)
-            {
+            {                
+                var res = db.Query<T>($"Select {FieldList} from {TableWithWhere}");
                 
-var res = db.Query<T>($"Select {FieldList} from {TableWithWhere}");
-                //var res= FieldList?.Length>0 ? db.Query<T>($"Select {FieldList} from {TableWithWhere}") : db.Query<T>($"Select * from {TableWithWhere}");
-
-                //int pageSize = db.Fetch<int>("Select top 1 RowsPerPage from Config").FirstOrDefault();
                 int pageSize = 10;
                 int pageNumber = (page ?? 1);
                 return res.ToPagedList(pageNumber, pageSize);

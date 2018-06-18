@@ -50,8 +50,8 @@ namespace Speedbird
     }
     public partial class SRdetail
     {
-        public string tstr { get { return $"{Tdate:dd MMM yyyy,hh:mm}"; } }
-        public string fstr { get { return $"{Fdate:dd MMM yyyy,hh:mm}"; } }
+        public string tstr { get { return $"{Tdate:dd MMM yyyy hh:mm}"; } }
+        public string fstr { get { return $"{Fdate:dd MMM yyyy hh:mm}"; } }
         public string ServiceTypeName { get { return ((ServiceTypeEnum)ServiceTypeID).ToString(); } }
 
 
@@ -86,22 +86,13 @@ namespace Speedbird
         public DateTime DateOfIssue { get; set; }
         public string ContractNo { get; set; }
         public string GuideLanguageName { get; set; }
-
-
-
-
-
-
-
-
-
         public string SupplierName { get; set; }
 
     }
     public partial class CustomerQuery
     {
-        public string Instr { get { return $"{CheckIn:dd MMM yyyy, hh:mm}"; } }
-        public string Outstr { get { return $"{CheckOut:dd MMM yyyy, hh:mm}"; } }
+        public string Instr { get { return $"{CheckIn:dd MMM yyyy hh:mm}"; } }
+        public string Outstr { get { return $"{CheckOut:dd MMM yyyy hh:mm}"; } }
         public string Tostr { get { return $"{Tdate:dd MMM yyyy}"; } }
         public string CustName { get { return FName + ' ' + SName;  } }        
         public string ServiceTypeName { get { return ((ServiceTypeEnum)ServiceTypeID).ToString();  } }
@@ -466,7 +457,7 @@ namespace Speedbird
         public string Status { get { return ((SRStatusEnum)SRStatusID).ToString(); } }
         public DateTime TDate { get; set; }
 
-        public string DT { get { return $"{TDate:dd MMM yyyy,HH:MM}"; } }
+        public string DT { get { return $"{TDate:dd MMM yyyy HH:MM}"; } }
         public decimal? TotSA { get; set; }
         public decimal? AccAmt { get; set; }
 
@@ -500,6 +491,12 @@ namespace Speedbird
         public bool Type { get; set; }
         public string Event { get; set; }
 
+    }
+
+    public class Queue
+    {
+        public int ServiceTypeId { get; set; }
+        public int Count { get; set; }
     }
 
     public enum ServiceTypeEnum

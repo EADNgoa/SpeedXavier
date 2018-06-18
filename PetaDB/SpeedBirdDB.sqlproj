@@ -126,7 +126,7 @@
     <Build Include="dbo\Tables\LeaveEntitlement.sql" />
     <Build Include="dbo\Tables\LeaveBalance.sql" />
     <Build Include="dbo\Tables\Holidays.sql" />
-    <Build Include="dbo\PostDeployment.sql" />
+    <PostDeploy Include="dbo\PostDeployment.sql" />
     <Build Include="dbo\Tables\ServiceRequest.sql" />
     <Build Include="dbo\Tables\SRdetails.sql" />
     <Build Include="dbo\Tables\SRUploads.sql" />
