@@ -497,7 +497,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
             ViewBag.BankID = db.Query<Bank>("Select * from Banks", rec?.BankID ?? 0).Select(sl => new SelectListItem { Text = sl.BankName, Value = sl.BankID.ToString(), Selected = true });
             ViewBag.SRs = db.FirstOrDefault<ServiceRequestDets>("Select * From ServiceRequest Where SRID=@0", id);
-            ViewBag.Reciepts = db.Fetch<SRReciept>($"Select * From SRReciepts where SRID ='{id}'");
+            ViewBag.Reciepts = db.Fetch<BankAccount>($"Select * From BankAccount where SRID ='{id}'");
             return PartialView(rec);
         }
 

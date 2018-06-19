@@ -78,6 +78,13 @@ namespace Speedbird
         public DateTime BillDate;
     }
 
+    public class BankAccountMetadata
+    {
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd-MMM-yyyy}", ApplyFormatInEditMode = true)]
+        public DateTime TDate;
+    }
+
     //public class EmpTypeMetadata
     //{
     //    [Display(Name = "Employee Type")]

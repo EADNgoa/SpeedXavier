@@ -1,7 +1,7 @@
 ﻿CREATE TABLE [dbo].[BankAccount]
 (
 	[BankAccountID] INT NOT NULL PRIMARY KEY IDENTITY, 
-    [TDate] DATETIME NULL, 
+    [TDate]         DATE        NULL,
     [AmountIn] DECIMAL(10, 2) NULL, 
     [AmountOut] DECIMAL(10, 2) NULL, 
     [SRID] NCHAR(10) NULL, 

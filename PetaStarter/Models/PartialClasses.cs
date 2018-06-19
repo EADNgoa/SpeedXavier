@@ -17,16 +17,16 @@ namespace Speedbird
         public int BankAccountID { get; set; }
         public DateTime TDate { get; set; }
         public decimal? AmountIn { get; set; }
-        public decimal AmountOut { get; set; }
+        public decimal? AmountOut { get; set; }
         public int SRID { get; set; }
-        public int TransNo { get; set; }
+        public string TransNo { get; set; }
         public string UserID { get; set; }
         public string SupplierName { get; set; }
         public string UserName { get; set; }
         public string Comment { get; set; }
-        public string BankName { get; set; }
-
     }
+
+
     public class OwnCarTripDets
     {
         public int OwnCarTripID { get; set; }
@@ -221,6 +221,10 @@ namespace Speedbird
     {
     }
 
+    [MetadataType(typeof(BankAccountMetadata))]
+    public partial class BankAccount
+    {
+    }
     public class ActivityDets
     {
         public int PackageID { get; set; }

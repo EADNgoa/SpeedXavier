@@ -236,6 +236,7 @@ namespace Speedbird
 		[Column] public int BankID { get; set; }
 		[Column] public string BankName { get; set; }
 		[Column] public string Address { get; set; }
+		[Column] public string AccNo { get; set; }
 	}
     
 	[TableName("dbo.BookedCustomer")]

@@ -42,6 +42,7 @@
                 <th>
                     Bank Name
                 </th>
+                <th>Acc. No.</th>
         
                 <th></th>
                 <th>
@@ -57,12 +58,14 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.BankName)
                 </td>
-            
+                <th>
+                    @Html.DisplayFor(modelItem => item.AccNo)
+                </th>            
                 <td>
                     <a href="@Url.Action("Manage","Banks", new {id = item.BankID })"><i title="Edit" class="fas fa-edit fa-inverse h3 float-right DropShadow"></i></a>
                 </td>
                 <td>
-                    @Html.ActionLink("Bank Account","BankAccount", new {id = item.BankID })
+                    @Html.ActionLink("Transactions","BankAccount", new {id = item.BankID })
                    
 
                 </td>

@@ -1,4 +1,5 @@
-﻿using Speedbird.Controllers;
+﻿using Microsoft.AspNet.Identity;
+using Speedbird.Controllers;
 using System;
 //using System.Collections.Generic;
 using System.Data;
@@ -38,7 +39,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [EAAuthorize(FunctionName = "Bank Details", Writable = true)]
-        public ActionResult Manage([Bind(Include = "BankID,BankName")] Bank item)
+        public ActionResult Manage([Bind(Include = "BankID,BankName,AccNo, Address")] Bank item)
         {
             return base.BaseSave<Bank>(item, item.BankID > 0);
         }
@@ -46,16 +47,19 @@ namespace Speedbird.Areas.SBBoss.Controllers
         [EAAuthorize(FunctionName = "Bank Details", Writable = true)]
         public ActionResult BankAccount(int? id,  int? EID)
         {
-            var rec = base.BaseCreateEdit<BankAccount>(EID, "BankAccountID");
+            var rec = base.BaseCreateEdit<BankAccount>(EID, "BankAccountID")??new BankAccount { BankID = id, TDate= DateTime.Today.Date }; //default to todays date
+
             ViewBag.BankID = id;
+            ViewBag.BankRec = BaseCreateEdit<Bank>(id, "BankID");
             if (EID != null)
             {
                 ViewBag.UserName = db.ExecuteScalar<string>("Select UserName From AspNetUsers Where Id=@0",rec.UserID);
                 ViewBag.SupplierName = db.ExecuteScalar<string>("Select SupplierName From Supplier Where SupplierID=@0", rec.SupplierID);
 
             }
-            ViewBag.Banks = db.FirstOrDefault<Bank>("Select * From Banks Where BankID=@0", id);
-            ViewBag.BA = db.Fetch<BankAccountDets>($"Select * From BankAccount ba inner join AspNetUsers anu on anu.Id=ba.UserID inner join Supplier s on s.SupplierID = ba.SupplierID inner join Banks bs on bs.BankID = ba.BankID where ba.BankID ='{id}'");
+            
+            ViewBag.BA = db.Fetch<BankAccountDets>($"Select ba.BankAccountID,ba.TDate,AmountIn,AmountOut,SRID,TransNo,UserID, s.SupplierName,anu.UserName,Comment From BankAccount ba " +
+                $" left join AspNetUsers anu on anu.Id=ba.UserID left join Supplier s on s.SupplierID = ba.SupplierID where ba.BankID ='{id}'");
             return View(rec);
         }
 
@@ -63,8 +67,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         [ValidateAntiForgeryToken]
         [EAAuthorize(FunctionName = "Bank Details", Writable = true)]
         public ActionResult BankAccount([Bind(Include = "BankAccountID,TDate,AmountIn,AmountOut,SRID,TransNo,UserID,SupplierID,Comment,BankID")] BankAccount item)
-        {
-            item.TDate = DateTime.Now;
+        {   
             base.BaseSave<BankAccount>(item, item.BankAccountID > 0);
             return RedirectToAction("BankAccount", new { id = item.BankID});
 
