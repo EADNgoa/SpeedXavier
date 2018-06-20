@@ -14,6 +14,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
     public class DriverController : EAController
     {
         // GET: Clients
+        [EAAuthorize(FunctionName = "Driver", Writable = false)]
+
         public ActionResult Index(int? page ,string AN )
         {
             if (AN?.Length > 0) page = 1;
@@ -23,6 +25,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
 
         // GET: Clients/Create
+        [EAAuthorize(FunctionName = "Driver", Writable = true)]
+
         public ActionResult Manage(int? id)
         {
            // ViewBag.UnitID = new SelectList(db.Fetch<Unit>("Select UnitID,UnitName from Units"), "UnitID", "UnitName");
@@ -35,6 +39,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [EAAuthorize(FunctionName = "Driver", Writable = true)]
         public ActionResult Manage([Bind(Include = "DriverID,DriverName,Phone,Address,EmerContactName,EmerContactNo")] Driver item)
         {
             return base.BaseSave<Driver>(item, item.DriverID > 0);

@@ -14,18 +14,22 @@ namespace Speedbird.Areas.SBBoss.Controllers
 {
     public class CarBikeController : EAController
     {
+        [EAAuthorize(FunctionName = "Car & Bike", Writable = false)]
+
         public ActionResult Index(int? page, string AN)
         {
 
-           
 
-         ViewBag.Title = "Accomodation"; 
-        
+
+            ViewBag.Title = "Accomodation";
+
 
             return View();
         }
 
         [HttpPost]
+        [EAAuthorize(FunctionName = "Car & Bike", Writable = false)]
+
         public JsonResult GetCarBikeList(DTParameters parameters)
         {
             var columnSearch = parameters.Columns.Select(s => s.Search.Value).Take(CarBikeColumns.Count()).ToList();
@@ -45,7 +49,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 fromsql.Append(", Geotree g");
                 wheresql.Append($"and  g.GeoTreeID=a.GeoTreeID and geoname like '%{geos}%'");
             }
-          
+
             wheresql.Append($"{GetWhereWithOrClauseFromColumns(CarBikeColumns, columnSearch)}");
             sql.Append(fromsql);
             sql.Append(wheresql);
@@ -75,6 +79,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 throw ex;
             }
         }
+        [EAAuthorize(FunctionName = "Car & Bike", Writable = false)]
 
         private string GetWhereWithOrClauseFromColumns(string[] columnDefs, List<string> searchValues)
         {
@@ -137,6 +142,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
 
 
+        [EAAuthorize(FunctionName = "Car & Bike", Writable = true)]
 
         public ActionResult Manage(int? id, int? sid, int mode = 1, int EID = 0) //Mode 1=Details,2=Prices,3=images,4=validity
         {
@@ -147,6 +153,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             ViewBag.CarBikeID = id;
             return View();
         }
+        [EAAuthorize(FunctionName = "Car & Bike", Writable = true)]
 
         public ActionResult FetchDetails(int? id)
         {
@@ -159,6 +166,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [EAAuthorize(FunctionName = "Car & Bike", Writable = true)]
+
         public bool Manage([Bind(Include = "CarBikeID,CouponCode,CarBikeName,GeoTreeID,Description,NoPax,NoSmallBags,NoLargeBags,HasAc,HasCarrier,InclHelmet,SupplierNotepad,IsBike,SelfOwned")] CarBike item)
         {
             using (var transaction = db.GetTransaction())
@@ -178,6 +187,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             }
 
         }
+        [EAAuthorize(FunctionName = "Car & Bike", Writable = true)]
 
         public ActionResult Price(int? id, int? EID)
         {
@@ -193,12 +203,15 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [EAAuthorize(FunctionName = "Car & Bike", Writable = true)]
+
         public ActionResult Price([Bind(Include = "PriceID,ServiceID,OptionTypeID,WEF,_Price")] Price item)
         {
             base.BaseSave<Price>(item, item.PriceID > 0);
             return RedirectToAction("Manage", new { id = item.ServiceID, mode = 2 });
         }
 
+        [EAAuthorize(FunctionName = "Car & Bike", Writable = true)]
 
         public ActionResult CarPicture(int? id)
         {
@@ -215,6 +228,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [EAAuthorize(FunctionName = "Car & Bike", Writable = true)]
+
         public ActionResult CarPicture([Bind(Include = "PictureID,ServiceTypeID,PictureName,ServiceID,UploadedFile")] PictureDets pics)
         {
             Picture res = new Picture
@@ -238,23 +253,24 @@ namespace Speedbird.Areas.SBBoss.Controllers
             return base.BaseSave<Picture>(res, pics.PictureID > 0, "Manage", new { id = pics.ServiceID, sid = pics.ServiceTypeID, mode = 3 });
 
         }
-
+        [EAAuthorize(FunctionName = "Car & Bike", Writable = true)]
         public ActionResult PVManage(int? id, int? sid, int? EID)
         {
             ViewBag.Pack = db.FirstOrDefault<CarBike>($"Select * From CarBike Where CarBikeID={id}");
             ViewBag.sid = ServiceTypeEnum.CarBike;
-            ViewBag.Validity = db.Fetch<PackageValidity>($"Select * From PackageValidity where ServiceID =@0 and ServiceTypeId=@1",id,(int)ServiceTypeEnum.CarBike);
+            ViewBag.Validity = db.Fetch<PackageValidity>($"Select * From PackageValidity where ServiceID =@0 and ServiceTypeId=@1", id, (int)ServiceTypeEnum.CarBike);
             return PartialView(base.BaseCreateEdit<PackageValidity>(EID, "PVID"));
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [EAAuthorize(FunctionName = "Car & Bike", Writable = true)]
         public void PVManage([Bind(Include = "PVID,ValidFrom,ValidTo,ServiceID,ServiceTypeID")] PackageValidity item)
         {
             base.BaseSave<PackageValidity>(item, item.PVId > 0);
         }
 
-
+        [EAAuthorize(FunctionName = "Car & Bike", Writable = true)]
         public ActionResult Delete(int? stid, int? pid, int? sid)
         {
           
@@ -271,6 +287,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             }
             return RedirectToAction("Manage");
         }
+        [EAAuthorize(FunctionName = "Car & Bike", Writable = true)]
 
         public JsonResult GetSup(string term)
         {
@@ -279,6 +296,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
         }
 
         [HttpPost]
+        [EAAuthorize(FunctionName = "Car & Bike", Writable = true)]
+
         public void SupSave(int PackageId, IEnumerable<int> ActIds, string Conts)
         {
 
@@ -301,6 +320,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             }
         }
 
+        [EAAuthorize(FunctionName = "Car & Bike", Writable = true)]
 
         public string KillSup(int CarBikeID, int deadSup)
         {

@@ -14,18 +14,20 @@ namespace Speedbird.Areas.SBBoss.Controllers
 {
     public class AccomodationController : EAController
     {
+        [EAAuthorize(FunctionName = "Accomodation", Writable = false)]
         public ActionResult Index(int? page, string AN)
         {
 
-           
 
-         ViewBag.Title = "Accomodation"; 
-        
+
+            ViewBag.Title = "Accomodation";
+
 
             return View();
         }
 
         [HttpPost]
+        [EAAuthorize(FunctionName = "Accomodation", Writable = false)]
         public JsonResult GetAccomList(DTParameters parameters)
         {
             var columnSearch = parameters.Columns.Select(s => s.Search.Value).Take(AccomColumns.Count()).ToList();
@@ -64,7 +66,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 res.ForEach(r =>
                 {
                     r.GeoName = String.Join(", ", db.Query<string>("Select GeoName from GeoTree where GeoTreeID=@0", r.GeoTreeID));
-                    r.FacilityName= String.Join(", ", db.Query<string>("Select FacilityName from Facility f, Facility_Accomodation fa where f.FacilityID=fa.FacilityID and fa.AccomodationID=@0", r.AccomodationID));
+                    r.FacilityName = String.Join(", ", db.Query<string>("Select FacilityName from Facility f, Facility_Accomodation fa where f.FacilityID=fa.FacilityID and fa.AccomodationID=@0", r.AccomodationID));
                 });
 
 
@@ -83,7 +85,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 throw ex;
             }
         }
-
+        [EAAuthorize(FunctionName = "Accomodation", Writable = false)]
         private string GetWhereWithOrClauseFromColumns(string[] columnDefs, List<string> searchValues)
         {
             try
@@ -144,27 +146,27 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
 
 
-
+        [EAAuthorize(FunctionName = "Accomodation", Writable = true)]
         public ActionResult Manage(int? id, int? sid, int mode = 1, int EID = 0) //Mode 1=Details,2=Prices,3=images,4=validity
         {
             ViewBag.sid = sid;
             ViewBag.mode = mode;
             ViewBag.EID = EID;
-            
+
             ViewBag.AccomName = db.ExecuteScalar<string>("Select AccomName from Accomodation where AccomodationID=@0", id);
             ViewBag.AccomodationID = id;
             return View();
         }
-
+        [EAAuthorize(FunctionName = "Accomodation", Writable = true)]
         public ActionResult FetchDetails(int? id)
         {
-            var accom = base.BaseCreateEdit<Accomodation>(id, "AccomodationID")??new Accomodation();
+            var accom = base.BaseCreateEdit<Accomodation>(id, "AccomodationID") ?? new Accomodation();
             ViewBag.GeoId = db.Query<GeoTree>("Select * from GeoTree where GeoTreeId = (Select GeoTreeId from Accomodation where AccomodationId=@0)", accom?.AccomodationID ?? 0).Select(sl => new SelectListItem { Text = sl.GeoName, Value = sl.GeoTreeID.ToString(), Selected = true });
             ViewBag.FaciityID = db.Query<Facility>("Select FacilityID, FacilityName from Facility where FacilityID in (Select FacilityID from Facility_Accomodation where FacilityID=@0)", accom?.AccomodationID ?? 0).Select(sl => new SelectListItem { Text = sl.FacilityName, Value = sl.FacilityID.ToString(), Selected = true });
             ViewBag.Sups = db.Query<Supplier>("Select * from Supplier where SupplierId in (Select SupplierId from Package_Supplier where PackageId=@0)", accom?.AccomodationID ?? 0).Select(sl => new SelectListItem { Text = sl.SupplierName, Value = sl.SupplierID.ToString(), Selected = true });
             ViewBag.SupConts = db.Query<Package_Supplier>("Select * from Package_Supplier where PackageId=@0", accom?.AccomodationID ?? 0).Select(sl => sl.ContractNo);
             //init lat lang
-            if (id.Value ==0)
+            if (id.Value == 0)
             {
                 accom.lat = "15.499539572611416";
                 accom.longt = "73.82869418361702";
@@ -172,9 +174,10 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
             return PartialView("Details", accom);
         }
-       
+
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [EAAuthorize(FunctionName = "Accomodation", Writable = true)]
         public bool Manage([Bind(Include = "AccomodationID,AccomName,Description,GeoTreeID,Lat,Longt,CouponCode,SupplierNotepad,SelfOwned")] Accomodation item)
         {
             using (var transaction = db.GetTransaction())
@@ -194,7 +197,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             }
 
         }
-
+        [EAAuthorize(FunctionName = "Accomodation", Writable = true)]
         public ActionResult Price(int? id, int? EID)
         {
             ViewBag.PackageId = id;
@@ -209,6 +212,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [EAAuthorize(FunctionName = "Accomodation", Writable = true)]
         public ActionResult Price([Bind(Include = "PriceID,ServiceID,OptionTypeID,WEF,_Price")] Price item, int sid)
         {
             base.BaseSave<Price>(item, item.PriceID > 0);
@@ -216,6 +220,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         }
 
 
+        [EAAuthorize(FunctionName = "Accomodation", Writable = true)]
         public ActionResult Picture(int? id)
         {
             ViewBag.ServiceTypeID = ServiceTypeEnum.Accomodation;
@@ -231,6 +236,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [EAAuthorize(FunctionName = "Accomodation", Writable = true)]
         public ActionResult Picture([Bind(Include = "PictureID,ServiceTypeID,PictureName,ServiceID,UploadedFile")] PictureDets pics)
         {
             Picture res = new Picture
@@ -267,6 +273,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [EAAuthorize(FunctionName = "Accomodation", Writable = true)]
         public ActionResult FacManage(FormCollection fm)
         {
             int fid = int.Parse(fm["FacilityID"]);
@@ -275,10 +282,10 @@ namespace Speedbird.Areas.SBBoss.Controllers
             db.Insert(item);
             return RedirectToAction("FacManage");
         }
-        
 
 
 
+        [EAAuthorize(FunctionName = "Accomodation", Writable = true)]
         public ActionResult Delete(int? aid,int? fid,int?pid ,int? sid)
         {
             if (aid != null && fid != null)
@@ -300,12 +307,14 @@ namespace Speedbird.Areas.SBBoss.Controllers
             }
             return RedirectToAction("Manage");
         }
+        [EAAuthorize(FunctionName = "Accomodation", Writable = true)]
         public JsonResult GetFac(string term)
         {
             var locs = db.Fetch<Facility>("Select FacilityID, FacilityName from Facility where FacilityName like '%" + term + "%'");
             return Json(new { results = locs.Select(a => new { id = a.FacilityID, text = a.FacilityName }) }, JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
+        [EAAuthorize(FunctionName = "Accomodation", Writable = true)]
         public void FacSave(int AccomodationID, IEnumerable<int> FacIDs)
         {
             db.Delete<Facility_Accomodation>("Where AccomodationID=@0", AccomodationID);
@@ -313,8 +322,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 db.Insert(new Facility_Accomodation { AccomodationID = AccomodationID, FacilityID = item });
         }
 
-  
 
+        [EAAuthorize(FunctionName = "Accomodation", Writable = true)]
         public ActionResult PriceInclusions(int? id, int? EID)
         {            
             ViewBag.Price = db.Single<PriceDets>($"Select * from Prices p inner join OptionType ot on ot.OptionTypeID = p.OptionTypeID where PriceID= @0 ",id);
@@ -327,6 +336,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [EAAuthorize(FunctionName = "Accomodation", Writable = true)]
         public ActionResult PriceInclusions([Bind(Include = "PriceInclusionId, PriceID,Amount,Description,MealPlanId")] PriceInclusion item)
         {
             return base.BaseSave<PriceInclusion>(item, item.PriceInclusionId > 0, "PriceInclusions", new { id = item.PriceId});
@@ -341,6 +351,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [EAAuthorize(FunctionName = "Accomodation", Writable = true)]
         public void PVManage([Bind(Include = "PVID,ValidFrom,ValidTo,ServiceID,ServiceTypeID")] PackageValidity item)
         {
             base.BaseSave<PackageValidity>(item, item.PVId > 0);
@@ -353,6 +364,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         }
 
         [HttpPost]
+        [EAAuthorize(FunctionName = "Accomodation", Writable = true)]
         public void SupSave(int PackageId, IEnumerable<int> ActIds, string Conts)
         {
 
@@ -375,7 +387,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             }
         }
 
-
+        [EAAuthorize(FunctionName = "Accomodation", Writable = true)]
         public string KillSup(int AccomodationID, int deadSup)
         {
             db.Delete<Package_Supplier>("Where packageId=@0 and SupplierId=@1 and ServiceTypeId=@2", AccomodationID, deadSup, (int)ServiceTypeEnum.Accomodation);

@@ -14,6 +14,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
 {
     public class CustomerQueryController : EAController
     {
+        [EAAuthorize(FunctionName = "Customer Query", Writable = false)]
+
         public ActionResult Index(int? page, string AN)
         {
 
@@ -26,6 +28,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
         }
 
         [HttpPost]
+        [EAAuthorize(FunctionName = "Customer Query", Writable = false)]
+
         public JsonResult GetCustomerQueries(DTParameters parameters)
         {
             var columnSearch = parameters.Columns.Select(s => s.Search.Value).Take(CustomerColumns.Count()).ToList();
@@ -65,6 +69,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 throw ex;
             }
         }
+        [EAAuthorize(FunctionName = "Customer Query", Writable = false)]
 
         private string GetWhereWithOrClauseFromColumns(string[] columnDefs, List<string> searchValues)
         {
@@ -126,6 +131,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
 
 
+        [EAAuthorize(FunctionName = "Customer Query", Writable = true)]
 
         public ActionResult Reply(int? id, int? ServiceID, ServiceTypeEnum? st, int? EID)
         {
@@ -146,6 +152,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [EAAuthorize(FunctionName = "Customer Query", Writable = true)]
+
         public ActionResult Reply([Bind(Include = "CustQueryReplyID,CustomerQueryID,ReplyDate,Reply")] CustQueryReply item,ServiceTypeEnum? str,int? ServiceIDr)
         {
             item.ReplyDate = DateTime.Now;

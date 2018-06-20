@@ -14,6 +14,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
     public class TaxController : EAController
     {
         // GET: Clients
+        [EAAuthorize(FunctionName = "Tax", Writable = false)]
+
         public ActionResult Index(int? page ,string AN )
         {
             if (AN?.Length > 0) page = 1;
@@ -23,6 +25,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
 
         // GET: Clients/Create
+        [EAAuthorize(FunctionName = "Tax", Writable = true)]
+
         public ActionResult Manage(int? id)
         {   
             ViewBag.ServiceTypeId = Enum.GetValues(typeof(ServiceTypeEnum)).Cast<ServiceTypeEnum>()
@@ -35,6 +39,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [EAAuthorize(FunctionName = "Tax", Writable = true)]
+
         public ActionResult Manage([Bind(Include = "TaxID,TaxName, ServiceTypeId,WEF,Percentage")] Tax item)
         {
             return base.BaseSave<Tax>(item, item.TaxId > 0);

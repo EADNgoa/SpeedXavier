@@ -15,6 +15,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
     public class ReviewController : EAController
     {
         // GET: Clients
+        [EAAuthorize(FunctionName = "Review", Writable = true)]
+
         public ActionResult Index(int? page ,DateTime? AN,int? hide,int? show)
         {
             if (hide != null) db.Execute($"Update Review set IsVisible='{false}' where ReviewID={hide}");
@@ -22,6 +24,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
             if (AN != null) page = 1;
             return View("Index", base.BaseIndex<Speedbird.Review>(page, " * ","Review where ReviewDate like '%" + AN + "%'"));
         }
+        [EAAuthorize(FunctionName = "Review", Writable = true)]
+
         public ActionResult Reply(int? id,int? EID)
         {
             // ViewBag.UnitID = new SelectList(db.Fetch<Unit>("Select UnitID,UnitName from Units"), "UnitID", "UnitName");
@@ -35,6 +39,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [EAAuthorize(FunctionName = "Review", Writable = true)]
+
         public ActionResult Reply([Bind(Include = "ReviewReplyID,ReviewID,UserID,ReviewDate,Reply,IsVisible")] ReviewReply item)
         {
             item.UserID = User.Identity.GetUserId();

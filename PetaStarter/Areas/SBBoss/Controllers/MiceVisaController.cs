@@ -14,17 +14,22 @@ namespace Speedbird.Areas.SBBoss.Controllers
     public class MiceVisaController : EAController
     {
         // GET: Clients
+        [EAAuthorize(FunctionName = "Mice", Writable = true)]
+
         public ActionResult Mice(int? page ,string AN,int? Id )
         {
             if (Id != null) db.Execute($"Update MiceDetails Set IsRead='{true}' Where MiceID='{Id}'");
             if (AN?.Length > 0) page = 1;
             return View("Mice", base.BaseIndex<MiceDetail>(page, " * ","MiceDetails Where GuestName like '%" + AN + "%'"));
         }
+        [EAAuthorize(FunctionName = "Visa", Writable = false)]
+
         public ActionResult Visa(int? page, string AN)
         {
             if (AN?.Length > 0) page = 1;
             return View("Visa", base.BaseIndex<Visa>(page, " * ", "Visa Where VisaCountry like '%" + AN + "%'"));
         }
+        [EAAuthorize(FunctionName = "Visa", Writable = true)]
 
         public ActionResult Manage(int? id)
         {
@@ -53,6 +58,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [EAAuthorize(FunctionName = "Visa", Writable = true)]
+
         public ActionResult Manage([Bind(Include = "VisaID,VisaCountry,FlagPicture,EmbassyAddress,Details,UploadedFile1,UploadedFile2")] VisaDets rec)
         {
 

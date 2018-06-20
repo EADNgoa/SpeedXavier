@@ -14,6 +14,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
     public class OptionTypeController : EAController
     {
         // GET: Clients
+        [EAAuthorize(FunctionName = "Option Type", Writable = false)]
+
         public ActionResult Index(int? page ,string AN )
         {
             if (AN?.Length > 0) page = 1;
@@ -23,6 +25,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
 
         // GET: Clients/Create
+        [EAAuthorize(FunctionName = "Option Type", Writable = true)]
+
         public ActionResult Manage(int? id)
         {
             // ViewBag.UnitID = new SelectList(db.Fetch<Unit>("Select UnitID,UnitName from Units"), "UnitID", "UnitName");
@@ -36,6 +40,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [EAAuthorize(FunctionName = "Option Type", Writable = true)]
+
         public ActionResult Manage([Bind(Include = "OptionTypeID,OptionTypeName,ServiceTypeID")] OptionType item,ServiceTypeEnum? ServiceType)
         {
             item.ServiceTypeID = (int)ServiceType;

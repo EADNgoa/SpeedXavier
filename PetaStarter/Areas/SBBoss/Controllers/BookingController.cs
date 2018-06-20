@@ -14,7 +14,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
 {
     public class BookingController : EAController
     {
-        // GET: Clients
+        // GET: 
+        [EAAuthorize(FunctionName = "Booking", Writable = true)]
         public ActionResult Index(int? page ,int? AN ,int? confirm,int? cancel)
         {
             if (AN !=null) page = 1;
