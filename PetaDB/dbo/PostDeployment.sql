@@ -1,4 +1,4 @@
-﻿/*
+﻿
 IF NOT EXISTS (SELECT * FROM UserFunctions)
 BEGIN
 	SET IDENTITY_INSERT [dbo].[UserFunctions] ON
@@ -6,19 +6,19 @@ BEGIN
 	INSERT INTO [dbo].[UserFunctions] ([FunctionID], [FunctionName], [Module]) VALUES (1002, N'Holiday', N'Masters')
     INSERT INTO [dbo].[UserFunctions] ([FunctionID], [FunctionName], [Module]) VALUES (1003, N'Leave Type', N'Masters')
     INSERT INTO [dbo].[UserFunctions] ([FunctionID], [FunctionName], [Module]) VALUES (1004, N'Leave Entitlement', N'Masters')
-	    INSERT INTO [dbo].[UserFunctions] ([FunctionID], [FunctionName], [Module]) VALUES (1005, N'LeaveApprove', N'Masters')
-		    INSERT INTO [dbo].[UserFunctions] ([FunctionID], [FunctionName], [Module]) VALUES (1006, N'Leave Application', N'Leave Application')
-					    INSERT INTO [dbo].[UserFunctions] ([FunctionID], [FunctionName], [Module]) VALUES (2002, N'Service Requests', N'Service Requests')
-											    INSERT INTO [dbo].[UserFunctions] ([FunctionID], [FunctionName], [Module]) VALUES (3005, N'BossLogDetails', N'Boss Log Details')
-																	    INSERT INTO [dbo].[UserFunctions] ([FunctionID], [FunctionName], [Module]) VALUES (4002, N'Petty Cash', N'Petty Cash')
+	INSERT INTO [dbo].[UserFunctions] ([FunctionID], [FunctionName], [Module]) VALUES (1005, N'LeaveApprove', N'Masters')
+	INSERT INTO [dbo].[UserFunctions] ([FunctionID], [FunctionName], [Module]) VALUES (1006, N'Leave Application', N'Leave Application')
+	INSERT INTO [dbo].[UserFunctions] ([FunctionID], [FunctionName], [Module]) VALUES (2002, N'Service Requests', N'Service Requests')
+	INSERT INTO [dbo].[UserFunctions] ([FunctionID], [FunctionName], [Module]) VALUES (3005, N'BossLogDetails', N'Boss Log Details')
+	INSERT INTO [dbo].[UserFunctions] ([FunctionID], [FunctionName], [Module]) VALUES (4002, N'Petty Cash', N'Petty Cash')
 
 
 
 
 	SET IDENTITY_INSERT [dbo].[UserFunctions] OFF
 END
-*/
-	/*
+
+
 IF NOT EXISTS (SELECT * FROM ServiceCommision)
 BEGIN
 	SET IDENTITY_INSERT [dbo].[ServiceCommison] ON
@@ -39,4 +39,3 @@ BEGIN
 
 	SET IDENTITY_INSERT [dbo].[ServiceCommison] OFF
 END
-*/

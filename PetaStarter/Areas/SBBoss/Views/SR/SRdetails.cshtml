@@ -175,7 +175,7 @@
         //Then on change of the dropDown load the dynamic fields based on the selected Service type
         $('#ServiceTypeID').on('change', function () {
             var sid = $(this).val();
-            debugger;
+            
 
             //Load the Dynamic Fields of the Form based on the selected Service Type
             $('#placeholderEditDiv').load('@Url.Action("FetchSTpartial", "SR")', { ServiceTypeId: sid, IsReadOnly: false });

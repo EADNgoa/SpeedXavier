@@ -69,25 +69,31 @@
 <table class="table table-sm section-to-print index-css" width="100%">
     <tr>
         <th>Date </th>
-        <th>Pay Mode</th>
-        <th>Amount</th>
+        <th>Trans No.</th>
+        <th>Comment</th>
+        <th>Amount In</th>
+        <th>Amount Out</th>
 
         <th class="section-to-Not-print"></th>
     </tr>
-    @foreach (var item in (IEnumerable<Speedbird.SRReciept>)ViewBag.Reciepts)
+    @foreach (var item in (IEnumerable<Speedbird.BankAccount>)ViewBag.Reciepts)
     {
         <tr>
             <td>
-                @($"{item.RecieptDate:dd/MMM/yyyy}")
+                @($"{item.TDate:dd/MMM/yyyy}")
             </td>
             <td>
-                @((Speedbird.PayModeEnum)item.PayMode)
+                @item.TransNo
             </td>
             <td>
-                @item.Amount
+                @item.Comment
             </td>
             <td>
-                <a href="@Url.Action("Manage","SR",new {id = (int?)ViewBag.SRID, mode=5, EID=item.RecieptID })">Edit</a>
+                @item.AmountIn
+            </td>
+            <td>@item.AmountOut</td>
+            <td>
+                <a href="@Url.Action("Manage","SR",new {id = (int?)ViewBag.SRID, mode=5, EID=item.BankAccountID })">Edit</a>
             </td>
         </tr>
     }

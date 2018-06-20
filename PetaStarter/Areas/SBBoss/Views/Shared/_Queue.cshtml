@@ -1,4 +1,4 @@
-﻿@model Speedbird.ServiceRequest
+﻿@model IEnumerable<Speedbird.Queue>
 <style>
     .alert {
         padding-bottom:0px;
@@ -7,64 +7,16 @@
 
 <br />
 <div class="row alert alert-primary alert-dismissible fade show" role="alert" style="position:absolute; top:15px;left:80px; border:3px groove #ffffec">
-    <a href="/SBBoss/SR/SRQueueIndex/?st=@Speedbird.ServiceTypeEnum.Accomodation">
-        <div class="col-sm-auto">
-            <div class="qItem alert alert-warning text-center">
-                Accomodation <span class="badge badge-dark">@ViewBag.CountAccom</span>
+    @foreach (var item in Model)
+    {
+        <a href="/SBBoss/SR/SRQueueIndex/?st=@item.ServiceTypeId">
+            <div class="col-sm-auto">
+                <div class="qItem alert alert-warning text-center">
+                    <span class="h4">@((Speedbird.ServiceTypeEnum)@item.ServiceTypeId)  <span class="badge badge-danger">@item.Count</span> </span>
+                </div>
             </div>
-        </div>
-    </a>
-    <a href="/SBBoss/SR/SRQueueIndex/?st=@Speedbird.ServiceTypeEnum.Packages">
-
-        <div class="col-sm-auto">
-            <div class="qItem alert alert-warning text-center">
-                Package <span class="badge badge-dark">@ViewBag.CountPack</span>
-            </div>
-        </div>
-    </a>
-    <a href="/SBBoss/SR/SRQueueIndex/?st=@Speedbird.ServiceTypeEnum.Visa">
-        <div class="col-sm-auto">
-            <div class="qItem alert alert-warning text-center">
-                Visa <span class="badge badge-dark">@ViewBag.CountVisa</span>
-            </div>
-        </div>
-    </a>
-    <a href="/SBBoss/SR/SRQueueIndex/?st=@Speedbird.ServiceTypeEnum.CarBike">
-        <div class="col-sm-auto">
-            <div class="qItem alert alert-warning text-center">
-                Car/Bike <span class="badge badge-dark">@ViewBag.CountCB</span>
-            </div>
-        </div>
-    </a>
-    <a href="/SBBoss/SR/SRQueueIndex/?st=@Speedbird.ServiceTypeEnum.SightSeeing">
-        <div class="col-sm-auto">
-            <div class="qItem alert alert-warning text-center">
-                Sight Seeing <span class="badge badge-dark">@ViewBag.CountSS</span>
-            </div>
-        </div>
-    </a>
-    <a href="/SBBoss/SR/SRQueueIndex/?st=@Speedbird.ServiceTypeEnum.Flight">
-        <div class="col-sm-auto">
-            <div class="qItem alert alert-warning text-center">
-                Flight <span class="badge badge-dark">@ViewBag.CountFlight</span>
-            </div>
-        </div>
-    </a>
-
-    <a href="/SBBoss/SR/SRQueueIndex/?st=@Speedbird.ServiceTypeEnum.Cruise">
-        <div class="col-sm-auto">
-            <div class="qItem alert alert-warning text-center">
-                Cruise <span class="badge badge-dark">@ViewBag.CountCruise</span>
-            </div>
-        </div>
-    </a>
-    <a href="/SBBoss/SR/SRQueueIndex/?st=@Speedbird.ServiceTypeEnum.Insurance">
-        <div class="col-sm-auto">
-            <div class="qItem alert alert-warning text-center">
-                Insurance <span class="badge badge-dark">@ViewBag.CountInsurance</span>
-            </div>
-        </div>
         </a>
+    }
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
         </button>

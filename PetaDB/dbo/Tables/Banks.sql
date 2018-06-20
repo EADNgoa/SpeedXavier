@@ -2,5 +2,6 @@
 (
 	[BankID] INT NOT NULL PRIMARY KEY IDENTITY, 
     [BankName] VARCHAR(50) NULL, 
-    [Address] VARCHAR(150) NULL
+    [Address] VARCHAR(150) NULL,
+	[AccNo] VARCHAR(100) NULL
 )

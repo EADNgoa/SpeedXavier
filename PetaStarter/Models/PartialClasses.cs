@@ -17,16 +17,16 @@ namespace Speedbird
         public int BankAccountID { get; set; }
         public DateTime TDate { get; set; }
         public decimal? AmountIn { get; set; }
-        public decimal AmountOut { get; set; }
+        public decimal? AmountOut { get; set; }
         public int SRID { get; set; }
-        public int TransNo { get; set; }
+        public string TransNo { get; set; }
         public string UserID { get; set; }
         public string SupplierName { get; set; }
         public string UserName { get; set; }
         public string Comment { get; set; }
-        public string BankName { get; set; }
-
     }
+
+
     public class OwnCarTripDets
     {
         public int OwnCarTripID { get; set; }
@@ -50,8 +50,8 @@ namespace Speedbird
     }
     public partial class SRdetail
     {
-        public string tstr { get { return $"{Tdate:dd MMM yyyy,hh:mm}"; } }
-        public string fstr { get { return $"{Fdate:dd MMM yyyy,hh:mm}"; } }
+        public string tstr { get { return $"{Tdate:dd MMM yyyy hh:mm}"; } }
+        public string fstr { get { return $"{Fdate:dd MMM yyyy hh:mm}"; } }
         public string ServiceTypeName { get { return ((ServiceTypeEnum)ServiceTypeID).ToString(); } }
 
 
@@ -86,22 +86,13 @@ namespace Speedbird
         public DateTime DateOfIssue { get; set; }
         public string ContractNo { get; set; }
         public string GuideLanguageName { get; set; }
-
-
-
-
-
-
-
-
-
         public string SupplierName { get; set; }
 
     }
     public partial class CustomerQuery
     {
-        public string Instr { get { return $"{CheckIn:dd MMM yyyy, hh:mm}"; } }
-        public string Outstr { get { return $"{CheckOut:dd MMM yyyy, hh:mm}"; } }
+        public string Instr { get { return $"{CheckIn:dd MMM yyyy hh:mm}"; } }
+        public string Outstr { get { return $"{CheckOut:dd MMM yyyy hh:mm}"; } }
         public string Tostr { get { return $"{Tdate:dd MMM yyyy}"; } }
         public string CustName { get { return FName + ' ' + SName;  } }        
         public string ServiceTypeName { get { return ((ServiceTypeEnum)ServiceTypeID).ToString();  } }
@@ -230,6 +221,10 @@ namespace Speedbird
     {
     }
 
+    [MetadataType(typeof(BankAccountMetadata))]
+    public partial class BankAccount
+    {
+    }
     public class ActivityDets
     {
         public int PackageID { get; set; }
@@ -466,7 +461,7 @@ namespace Speedbird
         public string Status { get { return ((SRStatusEnum)SRStatusID).ToString(); } }
         public DateTime TDate { get; set; }
 
-        public string DT { get { return $"{TDate:dd MMM yyyy,HH:MM}"; } }
+        public string DT { get { return $"{TDate:dd MMM yyyy HH:MM}"; } }
         public decimal? TotSA { get; set; }
         public decimal? AccAmt { get; set; }
 
@@ -481,6 +476,7 @@ namespace Speedbird
         public string Src { get { return ((EnquirySourceEnum)EnquirySource).ToString(); } }
 
         public int EnquirySource { get; set; }
+        public string Request { get; set; }
 
     }
     public class SRuploadDets
@@ -500,6 +496,12 @@ namespace Speedbird
         public bool Type { get; set; }
         public string Event { get; set; }
 
+    }
+
+    public class Queue
+    {
+        public int ServiceTypeId { get; set; }
+        public int Count { get; set; }
     }
 
     public enum ServiceTypeEnum
