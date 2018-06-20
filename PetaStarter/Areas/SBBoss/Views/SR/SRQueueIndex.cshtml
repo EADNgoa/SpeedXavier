@@ -15,15 +15,13 @@
         <table class="table">
             <tr>                
                 <th scope="col">Date/Time</th>
-                <th scope="col">Name</th>
-                <th scope="col">Sur Name</th>
+                <th scope="col">Name</th>                
                 <th scope="col">Phone</th>
-                <th scope="col">Email</th>
-                <th scope="col">Enquiry Source</th>
-                <th scope="col">Agent Name</th>
-                <th width="5%">Open</th>
+                <th scope="col">Requirement</th>
+                
                 <th>Remind</th>
                 <th>Ignore</th>
+                <th width="5%">Make Shell</th>
             </tr>
             
             @foreach (var item in Model)
@@ -31,31 +29,19 @@
             <tr>
             
                 <td>
-                    @($"{item.TDate:dd/MM/yy hh:mm}")
-
+                    @item.DT
                 </td>
                 <td>
-                    @item.FName
-                </td>
-                <td>
-                    @item.SName
-                </td>
+                    @item.FName @item.SName
+                </td>                
                 <td>
                     @item.Phone
                 </td>
                 <td>
-                    @item.Email
+                    @item.Request
                 </td>
-                <td>
-                    @((Speedbird.EnquirySourceEnum)item.EnquirySource)
-                </td>
-                <td>
-                    @item.AgentName
-                </td>
+                
 
-                <td>
-                    <a href="@Url.Action("Manage","SR", new {id = item.SRID })"><i title="Edit" class="fas fa-edit fa-inverse h3 float-right DropShadow"></i></a>
-                </td>
                 <td>
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#RemindDateModal" data-srid="@item.SRID">
                         Remind Later
@@ -65,6 +51,9 @@
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#IgnoreReasonModal" data-srid="@item.SRID">
                         No Action
                     </button>
+                </td>
+                <td>
+                    <a href="@Url.Action("Manage","SR", new {id = item.SRID })"><i title="Edit" class="fas fa-edit fa-inverse h3 float-right DropShadow"></i></a>
                 </td>
             </tr>
                 

@@ -5,7 +5,7 @@
 </style>
 <div class="card border rounded DropShadow">
     <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
-        <span class="h3">Service Requests</span>
+        <span class="h3">Booking Folders</span>
         <a href="@Url.Action("Manage","SR")"><i class="fas fa-plus-circle fa-inverse h3 float-right DropShadow"></i></a>
     </div>
     <div class="card-body">
@@ -15,7 +15,7 @@
             <thead class="thead-light">
                 <tr role="row">
                     <th class="bg-success text-white text-center" scope="col" width="10px">Paid</th>
-                    <th class="bg-info text-white text-center" scope="col">Not paid</th>
+                    <th class="bg-danger text-white text-center" scope="col">Not paid</th>
                     <th class="bg-warning text-center" scope="col">Part-Paid</th>
                     <th class="bg-secondary text-white text-center" scope="col">Canceled</th>
 
@@ -115,7 +115,7 @@
                                 return '<a href="/SBBoss/SR/manage/' + full.SRID + '"><i class="fas bg-warning fa-edit fa-inverse h3 float-right DropShadow"></i></a>';
                             }
                             if (full.AccAmt == 0) {
-                                return '<a href="/SBBoss/SR/manage/' + full.SRID + '"><i class="fas bg-info fa-edit fa-inverse h3 float-right DropShadow"></i></a>';
+                                return '<a href="/SBBoss/SR/manage/' + full.SRID + '"><i class="fas bg-danger fa-edit fa-inverse h3 float-right DropShadow"></i></a>';
                             }
                         }
 

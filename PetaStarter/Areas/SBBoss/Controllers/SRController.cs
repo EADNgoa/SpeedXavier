@@ -38,7 +38,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
         {
             page = 1;
             ViewBag.ServiceRequestTypeId = st;
-            return View("SRQueueIndex", base.BaseIndex<ServiceRequestDets>(page, " * ", $"ServiceRequest sr inner join SR_Cust sc on sr.SRID = sc.ServiceRequestID inner join Customer c on c.CustomerID = sc.CustomerID  where ServiceTypeID={(int)st} and SRStatusID ={(int)SRStatusEnum.New}"));
+            return View("SRQueueIndex", base.BaseIndex<ServiceRequestDets>(page, " TDate, event as request,FName, SName, Phone  ", $"ServiceRequest sr inner join SR_Cust sc on sr.SRID = sc.ServiceRequestID " +
+                $"inner join Customer c on c.CustomerID = sc.CustomerID inner join SRlogs l on sr.SRID=l.SRID where ServiceTypeID={(int)st} and SRStatusID ={(int)SRStatusEnum.New}"));
         }
 
 
@@ -344,7 +345,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                         db.Insert(new SR_Cust { ServiceRequestID = item.SRID, CustomerID = cust.CustomerID });
 
                     }
-                    if (item.SRID > 0)
+                    if (Event.Length == 0)
                     {
                         Event = "User has Edited the Field";
                     }

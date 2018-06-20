@@ -476,6 +476,7 @@ namespace Speedbird
         public string Src { get { return ((EnquirySourceEnum)EnquirySource).ToString(); } }
 
         public int EnquirySource { get; set; }
+        public string Request { get; set; }
 
     }
     public class SRuploadDets
