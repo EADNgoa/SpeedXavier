@@ -37,6 +37,9 @@ namespace Speedbird
                       "~/Content/EA.css"));
             bundles.Add(new StyleBundle("~/SBBoss/Content/EAcss").Include(
                       "~/Areas/SBBoss/Content/EAadmin.css"));
+            bundles.Add(new StyleBundle("~/Content/fa5").Include(
+                   "~/Content/css/fontawesome-all.css"));
+
 
 
             bundles.Add(new ScriptBundle("~/bundles/jquerydtpicker").Include(
@@ -49,10 +52,7 @@ namespace Speedbird
                     "~/Content/select2-bootstrap.css",
                     "~/Content/jquery-te-1.4.0.css"));
 
-            bundles.Add(new ScriptBundle("~/fa5").Include(
-                      "~/fa5/svg-with-js/js/fa-solid.js",
-                      "~/fa5/svg-with-js/js/fontawesome.js"));
-
+         
             BundleTable.EnableOptimizations = false;
         }
     }

@@ -10,7 +10,8 @@
     @Styles.Render("~/Content/css")
     @Styles.Render("~/Content/dtpic")
     @Styles.Render("~/SBBoss/Content/EAcss")
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    @Styles.Render("~/Content/fa5")
+    @*<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">*@
     <link rel="stylesheet" type="text/css" href="~/Content/DataTables/datatables.min.css" />
 
 
@@ -22,13 +23,14 @@
     @Scripts.Render("~/bundles/jqueryui")
 
     @Scripts.Render("~/bundles/jquerydtpicker")
-    @Scripts.Render("~/fa5")
     <script type="text/javascript" src="~/Content/DataTables/datatables.min.js"></script>
     <script>
         $(function () {
             $.fn.select2.defaults.set("theme", "bootstrap");
         })
     </script>
+
+    
 
     <div class="container-fluid">
         <div class="row">
@@ -41,97 +43,89 @@
                 <ul class="nav flex-column small side-nav DropShadow" id="navVert">
                     <li height="70px;"><br /><br /><br /><hr /></li>
                     <li class="nav-item">
-                        <a href="#" data-toggle="collapse" data-target="#submenu-1"><span style="display:block;"><i class="fas fa-magic fa-inverse"></i> Masters<i class="fas fa-angle-down float-right"></i></span></a>
-                        <ul id="submenu-1" class="collapse">
-                            <li><a href="~/SBBoss/Activity"><span style="display:block;"><i class="fas fa-angle-double-right"></i> Activity</span></a></li>
-                            <li><a href="~/SBBoss/Attraction"><span style="display:block;"><i class="fas fa-angle-double-right"></i> Attraction</span></a></li>
-                            <li><a href="~/SBBoss/Attribute"><span style="display:block;"><i class="fas fa-angle-double-right"></i> Attribute</span></a></li>
-                            <li><a href="~/SBBoss/GeoTree"><span style="display:block;"><i class="fas fa-angle-double-right"></i> GeoTree</span></a></li>
-                            <li><a href="~/SBBoss/GuideLanguage"><span style="display:block;"><i class="fas fa-angle-double-right"></i> Guide Language</span></a></li>
-                            <li><a href="~/SBBoss/Facility"><span style="display:block;"><i class="fas fa-angle-double-right"></i> Facility</span></a></li>
-                            <li><a href="~/SBBoss/Tax"><span style="display:block;"><i class="fas fa-angle-double-right"></i> Taxes</span></a></li>
-                            <li><a href="~/SBBoss/Coupon"><span style="display:block;"><i class="fas fa-angle-double-right"></i> Coupons</span></a></li>
-                            <li><a href="~/SBBoss/BookingStatus"><span style="display:block;"><i class="fas fa-angle-double-right"></i> Booking Status</span></a></li>
-                            <li><a href="~/SBBoss/Category"><span style="display:block;"><i class="fas fa-angle-double-right"></i> Category</span></a></li>
-                            <li><a href="~/SBBoss/OptionType"><span style="display:block;"><i class="fas fa-angle-double-right"></i> Option Type</span></a></li>
-                            <li><a href="~/SBBoss/UserRights/AddFuncGroups"><span style="display:block;"><i class="fas fa-angle-double-right"></i> Add Function Groups</span></a></li>
-                            <li><a href="~/SBBoss/UserRights/AddUserGroups"><span style="display:block;"><i class="fas fa-angle-double-right"></i> Add User Groups</span></a></li>
-
-                            <li><a href="~/SBBoss/LeaveType"><span style="display:block;"><i class="fas fa-angle-double-right"></i> Leave Type</span></a></li>
-                            <li><a href="~/SBBoss/LeaveEntitlement"><span style="display:block;"><i class="fas fa-angle-double-right"></i> Leave Entitlement</span></a></li>
-
-                            <li><a href="~/SBBoss/Holiday"><span style="display:block;"><i class="fas fa-angle-double-right"></i> Holidays</span></a></li>
-                            <li><a href="~/SBBoss/ServiceCommision"><span style="display:block;"><i class="fas fa-angle-double-right"></i> Service Commision</span></a></li>
-                            <li><a href="~/SBBoss/Driver"><span style="display:block;"><i class="fas fa-angle-double-right"></i> Driver</span></a></li>
-
-
+                        <a href="#" data-toggle="collapse" data-target="#submenu-book"><span style="display:block; "><i class="fas fa-book" ></i> Bookings  <i class="float-right fas fa-angle-down"></i></span></a>
+                        <ul id="submenu-book" class="collapse">
+                            <li class="nav-item"><i class="fas fa-question-circle fa-inverse"></i></i><a class="nav-link" href="~/SBBoss/CustomerQuery">Customer Queries</a></li>
+                            <li class="nav-item"><i class="fas fa-motorcycle fa-inverse"></i><a class="nav-link" href="~/SBBoss/SR/Manage">Enquiry</a></li>
+                            <li class="nav-item"><i class="fab fa-btc fa-inverse"></i><a class="nav-link" href="~/SBBoss/SR">Bookings</a></li>
+                            <li class="nav-item"><i class="fas fa-newspaper fa-inverse"></i><a class="nav-link" href="~/SBBoss/MiceVisa/Mice">Mice</a></li>
+                            <li class="nav-item"><i class="fas fa-calendar-alt fa-inverse"></i><a class="nav-link" href="~/SBBoss/Booking/Index">Web Bookings</a></li>
+                            <li class="nav-item"><i class="fas fa-chart-line fa-inverse"></i><a class="nav-link" href="~/SBBoss/Review/Index">Reviews</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" data-toggle="collapse" data-target="#submenu-fin"><span style="display:block;"><i class="fas fa-dollar-sign fa-inverse"></i> Finance<i class="fas fa-angle-down float-right"></i></span></a>
+                        <ul id="submenu-fin" class="collapse">                            
+                            <li><i class="far fa-money-bill-alt fa-inverse"></i><a class="nav-link" href="~/SBBoss/Tax">Taxes</a></li>
+                            <li><i class="fas fa-motorcycle fa-inverse"></i><a class="nav-link" href="~/SBBoss/Banks">Accounts</a></li>
+                            <li class="nav-item"><i class="fas fa-home fa-inverse"></i><a class="nav-link" href="~/SBBoss/PettyCash">Petty Cash</a></li>
 
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <i class="fas fa-motorcycle fa-inverse"></i><a class="nav-link" href="~/SBBoss/Banks">Accounts</a>
+                        <a href="#" data-toggle="collapse" data-target="#submenu-emp"><span style="display:block;"><i class="fas fa-male fa-inverse"></i> Employees<i class="fas fa-angle-down float-right"></i></span></a>
+                        <ul id="submenu-emp" class="collapse">
+                            <li class="nav-item"><i class="far fa-calendar-times"></i><a class="nav-link" href="~/SBBoss/LeaveApplication">Leave Application</a></li>
+                            <li class="nav-item"><i class="fas fa-newspaper fa-inverse"></i><a class="nav-link" href="~/SBBoss/Log">Log Details</a></li>
+                            <li class="nav-item"><i class="fab fa-avianex fa-inverse"></i><a class="nav-link" href="~/SBBoss/Holiday">Holidays</a></li>
+                            <li class="nav-item"><i class="fas fa-align-center "></i><a class="nav-link" href="~/SBBoss/LeaveType">Leave Type</a></li>
+                            <li class="nav-item"><i class="fab fa-black-tie "></i><a class="nav-link" href="~/SBBoss/LeaveEntitlement">Leave Entitlement</a></li>                            
+                            <li class="nav-item"><i class="fas fa-calendar-check fa-inverse"></i><a class="nav-link" href="~/SBBoss/LeaveApplication/ConfirmOrCancel">Leave Approval</a></li>
+                            <li class="nav-item"><i class="far fa-clock fa-inverse"></i><a class="nav-link" href="~/SBBoss/Log/BossIndex">Correct Log Details</a></li>
+                            <li><a href="~/SBBoss/ServiceCommision"><span style="display:block;"><i class="fab fa-cuttlefish"></i> Service Commision</span></a></li>
+                            <li><a href="~/SBBoss/UserRights/AddFuncGroups"><span style="display:block;"><i class="fas fa-code-branch"></i> Add Function Groups</span></a></li>
+                            <li><a href="~/SBBoss/UserRights/AddUserGroups"><span style="display:block;"><i class="fas fa-users"></i> Add User Groups</span></a></li>
+                        </ul>
                     </li>
                     <li class="nav-item">
-                        <i class="fas fa-motorcycle fa-inverse"></i><a class="nav-link" href="~/SBBoss/AssetBill">Assets</a>
+                        <a href="#" data-toggle="collapse" data-target="#submenu-serv"><span style="display:block;"><i class="fas fa-magic fa-inverse"></i> Services<i class="fas fa-angle-down float-right"></i></span></a>
+                        <ul id="submenu-serv" class="collapse">
+                            <li class="nav-item"><i class="fas fa-home fa-inverse"></i><a class="nav-link" href="~/SBBoss/Accomodation">Accomodation</a></li>
+                            <li class="nav-item"><i class="fas fa-calendar-plus fa-inverse"></i><a class="nav-link " href="~/SBBoss/Package?sid=@((int)Speedbird.ServiceTypeEnum.Packages)">Package</a></li>
+                            <li class="nav-item"><i class="fas fa-ship fa-inverse"></i><a class="nav-link " href="~/SBBoss/Package?sid=@((int)Speedbird.ServiceTypeEnum.Cruise)">Cruise</a></li>
+                            <li class="nav-item"><i class="fas fa-bus fa-inverse"></i><a class="nav-link " href="~/SBBoss/Package?sid=@((int)Speedbird.ServiceTypeEnum.SightSeeing)">Sight Seeing</a></li>
+                            <li class="nav-item"><i class="fas fa-motorcycle fa-inverse"></i><a class="nav-link" href="~/SBBoss/CarBike">Car/Bike</a></li>
+
+                        </ul>
                     </li>
                     <li class="nav-item">
-                        <i class="fas fa-home fa-inverse"></i><a class="nav-link" href="~/SBBoss/Trip">Car Trip Details</a>
+                        <a href="#" data-toggle="collapse" data-target="#submenu-cont"><span style="display:block;"><i class="fas fa-cogs fa-inverse"></i> Setup<i class="fas fa-angle-down float-right"></i></span></a>
+                        <ul id="submenu-cont" class="collapse">
+                            <li class="nav-item"><i class="fas fa-taxi fa-inverse"></i><a class="nav-link" href="~/SBBoss/Driver"> Driver</a></li>
+                            <li class="nav-item"><i class="fas fa-address-book fa-inverse"></i><a class="nav-link" href="~/SBBoss/Coupon/Agents"> Agent Discount</a></li>
+                            <li class="nav-item"><i class="far fa-user fa-inverse"></i><a class="nav-link" href="~/"> Supplier</a></li>
+                            <li class="nav-item"><i class="fab fa-accusoft fa-inverse"></i><a class="nav-link" href="~/SBBoss/Coupon"> Coupons</a></li>
+                            <li class="nav-item"><i class="fab fa-cc-visa fa-inverse"></i><a class="nav-link" href="~/SBBoss/MiceVisa/Visa"> Visa</a></li>                            
+                        </ul>
                     </li>
                     <li class="nav-item">
-                        <i class="fas fa-home fa-inverse"></i><a class="nav-link" href="~/SBBoss/LeaveApplication">Leave Application</a>
+                        <a href="#" data-toggle="collapse" data-target="#submenu-1"><span style="display:block;"><i class="fab fa-monero fa-inverse"></i> Masters<i class="fas fa-angle-down float-right"></i></span></a>
+                        <ul id="submenu-1" class="collapse">
+                            <li><a href="~/SBBoss/GeoTree"><span style="display:block;"><i class="fas fa-angle-double-right"></i> GeoTree</span></a></li>
+                            <li><a href="~/SBBoss/Activity"><span style="display:block;"><i class="fas fa-angle-double-right"></i> Activity</span></a></li>
+                            <li><a href="~/SBBoss/Attraction"><span style="display:block;"><i class="fas fa-angle-double-right"></i> Attraction</span></a></li>
+                            <li><a href="~/SBBoss/Attribute"><span style="display:block;"><i class="fas fa-angle-double-right"></i> Attribute</span></a></li>
+                            <li><a href="~/SBBoss/GuideLanguage"><span style="display:block;"><i class="fas fa-angle-double-right"></i> Guide Language</span></a></li>
+                            <li><a href="~/SBBoss/Facility"><span style="display:block;"><i class="fas fa-angle-double-right"></i> Facility</span></a></li>
+                            <li><a href="~/SBBoss/BookingStatus"><span style="display:block;"><i class="fas fa-angle-double-right"></i> Booking Status</span></a></li>
+                            <li><a href="~/SBBoss/Category"><span style="display:block;"><i class="fas fa-angle-double-right"></i> Category</span></a></li>
+                            <li><a href="~/SBBoss/OptionType"><span style="display:block;"><i class="fas fa-angle-double-right"></i> Option Type</span></a></li>
+                        </ul>
                     </li>
                     <li class="nav-item">
-                        <i class="fas fa-home fa-inverse"></i><a class="nav-link" href="~/SBBoss/Log">Log Details</a>
-                    </li>
-                    <li class="nav-item">
-                        <i class="fas fa-home fa-inverse"></i><a class="nav-link" href="~/SBBoss/PettyCash">Petty Cash</a>
-                    </li>
-                    <li class="nav-item">
-                        <i class="fas fa-home fa-inverse"></i><a class="nav-link" href="~/SBBoss/Log/BossIndex">Correct Log Details</a>
-                    </li>
-                    <li class="nav-item">
-                        <i class="fas fa-home fa-inverse"></i><a class="nav-link" href="~/SBBoss/LeaveApplication/ConfirmOrCancel">Leave Approval</a>
-                    </li>
-                    <li class="nav-item">
-                        <i class="fas fa-home fa-inverse"></i><a class="nav-link" href="~/SBBoss/Accomodation">Accomodation</a>
+                        <a href="#" data-toggle="collapse" data-target="#submenu-own"><span style="display:block;"><i class="fas fa-home fa-inverse"></i> Assets<i class="fas fa-angle-down float-right"></i></span></a>
+                        <ul id="submenu-own" class="collapse">
+                            <li class="nav-item"><i class="fas fa-align-justify fa-inverse"></i><a class="nav-link" href="~/SBBoss/AssetBill">Bills</a></li>
+                            <li class="nav-item"><i class="fas fa-car fa-inverse"></i><a class="nav-link" href="~/SBBoss/Trip">Car Trip Details</a></li>
+
+                        </ul>
                     </li>
 
-                    <li class="nav-item">
-                        <i class="fas fa-calendar-plus fa-inverse"></i><a class="nav-link " href="~/SBBoss/Package?sid=@((int)Speedbird.ServiceTypeEnum.Packages)">Package</a>
-                    </li>
-                    <li class="nav-item">
-                        <i class="fas fa-question-circle fa-inverse"></i></i><a class="nav-link" href="~/SBBoss/CustomerQuery">Customer Queries</a>
-                    </li>
-                    <li class="nav-item">
-                        <i class="fas fa-ship fa-inverse"></i><a class="nav-link " href="~/SBBoss/Package?sid=@((int)Speedbird.ServiceTypeEnum.Cruise)">Cruise</a>
-                    </li>
-                    <li class="nav-item">
-                        <i class="fas fa-bus fa-inverse"></i><a class="nav-link " href="~/SBBoss/Package?sid=@((int)Speedbird.ServiceTypeEnum.SightSeeing)">Sight Seeing</a>
-                    </li>
+                    
 
-                    <li class="nav-item">
-                        <i class="fas fa-motorcycle fa-inverse"></i><a class="nav-link" href="~/SBBoss/CarBike">Car/Bike</a>
-                    </li>
 
-                    <li class="nav-item">
-                        <i class="fas fa-motorcycle fa-inverse"></i><a class="nav-link" href="~/SBBoss/SR">SR</a>
-                    </li>
 
-                    <li class="nav-item">
-                        <i class="fas fa-newspaper fa-inverse"></i><a class="nav-link" href="~/SBBoss/MiceVisa/Mice">Mice</a>
-                    </li>
-                    <li class="nav-item">
-                        <i class="fas fa-file-alt fa-inverse"></i><a class="nav-link" href="~/SBBoss/MiceVisa/Visa">Visa</a>
-                    </li>
-                    <li class="nav-item">
-                        <i class="fas fa-calendar-alt fa-inverse"></i><a class="nav-link" href="~/SBBoss/Booking/Index">Bookings</a>
-                    </li>
-                    <li class="nav-item">
-                        <i class="fas fa-chart-line fa-inverse"></i><a class="nav-link" href="~/SBBoss/Review/Index">Reviews</a>
-                    </li>
-                    <li class="nav-item">
-                        <i class="fas fa-address-book fa-inverse"></i><a class="nav-link" href="~/SBBoss/Coupon/Agents"> Agents</a>
-                    </li>
+
 
 
                 </ul>

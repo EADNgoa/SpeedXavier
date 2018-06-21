@@ -1,5 +1,7 @@
 ﻿
-
+@{
+    ViewBag.Title = "Cars and Bikes";
+}
 
 <div class="card border rounded DropShadow">
     <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
@@ -11,20 +13,20 @@
 
         @if (@ViewBag.CarBikeName != null)
         {
-        <h1> @ViewBag.CarBikeName</h1>
-        @Html.Hidden("CarBikeID", (int)ViewBag.CarBikeID)
-        <div class="btn-group-lg" role="group" aria-label="Basic example">
-            <button id="DetailsBtn" type="button" class="btn btn-secondary">Details</button>
-            <button id="PriceBtn" type="button" class="btn btn-secondary">Price</button>
-            <button id="ImgBtn" type="button" class="btn btn-secondary">Images</button>
-            <button id="ValBtn" type="button" class="btn btn-secondary">Validity</button>
-        </div>
+            <h1> @ViewBag.CarBikeName</h1>
+            @Html.Hidden("CarBikeID", (int)ViewBag.CarBikeID)
+            <div class="btn-group-lg" role="group" aria-label="Basic example">
+                <button id="DetailsBtn" type="button" class="btn btn-secondary">Details</button>
+                <button id="PriceBtn" type="button" class="btn btn-secondary">Price</button>
+                <button id="ImgBtn" type="button" class="btn btn-secondary">Images</button>
+                <button id="ValBtn" type="button" class="btn btn-secondary">Validity</button>
+            </div>
         }
         else
         {
             ViewBag.CarBikeID = 0;
         }
-       
+
 
 
         <hr />

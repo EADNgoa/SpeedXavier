@@ -676,8 +676,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         {
             try
             {
-                var res = db.Execute("Update ServiceRequest set IgnoreReason=@0 where SRID=@1", IgnoreReason, SRID);
-                var sta= db.Execute("Update ServiceRequest set SRStatusId=@0 where SRID=@1", (int)SRStatusEnum.NoAction, SRID);
+                int res = db.Execute("Update ServiceRequest set IgnoreReason=@0 ,SRStatusId=@1, EmpId=@2  where SRID=@3", IgnoreReason, (int)SRStatusEnum.NoAction,User.Identity.GetUserId() , SRID);                
                 
                 return true;
 
@@ -695,9 +694,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
         {
             try
             {
-                var res = db.Execute("Update ServiceRequest set RemindAt=@0 where SRID=@1", remindAtDt, SRID);
-                var sta = db.Execute("Update ServiceRequest set SRStatusId=@0 where SRID=@1", (int)SRStatusEnum.NoAction, SRID);
-
+                int res = db.Execute("Update ServiceRequest set RemindAt=@0,SRStatusId=@1, EmpId=@2  where SRID=@3", remindAtDt, (int)SRStatusEnum.NoAction, User.Identity.GetUserId(), SRID);
+                
                 return true;
 
             }

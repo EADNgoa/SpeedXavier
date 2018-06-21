@@ -51,12 +51,12 @@ body {
 }
 
 
-
 .nav-item:hover {
-    outline: none;    
+    outline: none;
     font-weight: 800;
-    box-shadow: 3px 1px 3px #ffd800;
+    box-shadow:10px 1px 3px 3px cyan;
 }
+
 
 
 
