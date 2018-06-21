@@ -16,6 +16,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
 {
     public class PackageController : EAController
     {
+        [EAAuthorize(FunctionName = "Package", Writable = false)]
+
         public ActionResult Index(int? page, string AN, int? sid)
         {
         
@@ -29,6 +31,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
         }
 
         [HttpPost]
+        [EAAuthorize(FunctionName = "Package", Writable = false)]
+
         public JsonResult GetPkgList(DTParameters parameters, int sid)
         {
             var columnSearch = parameters.Columns.Select(s => s.Search.Value).Take(PackageColumns.Count()).ToList();
@@ -109,7 +113,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 throw ex;
             }
         }
-
+        [EAAuthorize(FunctionName = "Package", Writable = false)]
         private string GetWhereWithOrClauseFromColumns(string[] columnDefs, List<string> searchValues)
         {
             try
@@ -164,7 +168,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             "EndDateStr",
             "Daysleft"
         };
-
+        [EAAuthorize(FunctionName = "Package", Writable = true)]
         public ActionResult Manage(int? id, int? sid, int mode = 1, int EID = 0) //Mode 1=Details,2=Prices,3=images,4=validity
         {
             ViewBag.sid = sid;
@@ -178,7 +182,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             ViewBag.PackageId = id;
             return View();
         }
-
+        [EAAuthorize(FunctionName = "Package", Writable = true)]
         public ActionResult FetchDetails(int? id, int sid)
         {
             ViewBag.sid = sid;
@@ -202,6 +206,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [EAAuthorize(FunctionName = "Package", Writable = true)]
         public ActionResult  Manage([Bind(Include = "PackageID,ServiceTypeID,PackageName,Description,Duration,Itinerary,Highlights,Dificulty,GroupSize,GuideLanguageID,StartTime,Inclusion,Exclusion,CouponCode, MeetAndInfo")] Package item, System.Collections.Generic.List<int> GeoTreeID )
         {
             using (var transaction = db.GetTransaction())
@@ -228,7 +233,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             }
             
         }
-
+        [EAAuthorize(FunctionName = "Package", Writable = true)]
         public ActionResult PackPrice(int? id,int? sid, int? EID)
         {
             ViewBag.PackageId = id;
@@ -243,13 +248,14 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [EAAuthorize(FunctionName = "Package", Writable = true)]
         public ActionResult PackPrice([Bind(Include = "PriceID,ServiceID,OptionTypeID,WEF,_Price")] Price item,int sid)
         {
             base.BaseSave<Price>(item, item.PriceID > 0);
             return RedirectToAction("Manage",new { id=item.ServiceID,  sid, mode=2});
         }
 
-
+        [EAAuthorize(FunctionName = "Package", Writable = true)]
         public ActionResult PackPicture(int? id, int sid)
         {
             ViewBag.PackageId = id;
@@ -265,6 +271,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [EAAuthorize(FunctionName = "Package", Writable = true)]
         public ActionResult PackPicture([Bind(Include = "PictureID,ServiceTypeID,PictureName,ServiceID,UploadedFile")] PictureDets pics)
         {
             Picture res = new Picture
@@ -288,8 +295,9 @@ namespace Speedbird.Areas.SBBoss.Controllers
             return base.BaseSave<Picture>(res, pics.PictureID > 0, "Manage", new { id = pics.ServiceID, sid = pics.ServiceTypeID, mode=3 });
 
         }
-        
+
         //Now only for Picture Delete
+        [EAAuthorize(FunctionName = "Package", Writable = true)]
         public ActionResult Delete(int? PackID, int? ActID, int? pid, int? sid, int? AttractID, int? CatID, int? GuideID, int? stid)
         {
             if (ActID != null && PackID != null)
@@ -328,7 +336,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             }
             return RedirectToAction("Manage");
         }
-
+        [EAAuthorize(FunctionName = "Package", Writable = true)]
         public ActionResult PVManage(int? id, int? sid, int? EID)
         {
             ViewBag.Pack = db.FirstOrDefault<Package>($"Select * From Package Where PackageID='{id}'");
@@ -339,6 +347,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [EAAuthorize(FunctionName = "Package", Writable = true)]
         public void PVManage([Bind(Include = "PVID,ValidFrom,ValidTo,ServiceID,ServiceTypeID")] PackageValidity item)
         {
             base.BaseSave<PackageValidity>(item, item.PVId > 0);
@@ -346,6 +355,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
         #region InLine form
         //Activities
+        [EAAuthorize(FunctionName = "Package", Writable = true)]
         public JsonResult GetAct(string term)
         {
             var locs = db.Fetch<Activity>("Select ActivityId, ActivityName from Activity where ActivityName like '%" + term + "%'");
@@ -353,6 +363,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
         }
 
         [HttpPost]
+        [EAAuthorize(FunctionName = "Package", Writable = true)]
+
         public void ActSave(int PackageId, IEnumerable<int> ActIds)
         {
             db.Delete<Package_Activity>("Where PackageId=@0", PackageId);
@@ -361,6 +373,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
         }
 
         //Categories
+        [EAAuthorize(FunctionName = "Package", Writable = true)]
+
         public JsonResult GetCat(string term)
         {
             var locs = db.Fetch<Category>("Select CategoryId, CategoryName from Category where CategoryName like '%" + term + "%'");
@@ -368,6 +382,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
         }
 
         [HttpPost]
+        [EAAuthorize(FunctionName = "Package", Writable = true)]
+
         public void CatSave(int PackageId, IEnumerable<int> ActIds)
         {
             db.Delete<Package_Category>("Where PackageId=@0", PackageId);
@@ -376,6 +392,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
         }
 
         //Attractions
+        [EAAuthorize(FunctionName = "Package", Writable = true)]
+
         public JsonResult GetAtt(string term)
         {
             var locs = db.Fetch<Attraaction>("Select AttractionId, AttractionName from Attraaction where AttractionName like '%" + term + "%'");
@@ -383,6 +401,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
         }
 
         [HttpPost]
+        [EAAuthorize(FunctionName = "Package", Writable = true)]
+
         public void AttSave(int PackageId, IEnumerable<int> ActIds)
         {
             db.Delete<Package_Attraction>("Where PackageId=@0", PackageId);
@@ -391,6 +411,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
         }
 
         //Language
+        [EAAuthorize(FunctionName = "Package", Writable = true)]
+
         public JsonResult GetLan(string term)
         {
             var locs = db.Fetch<GuideLanguage>("Select GuideLanguageId, GuideLanguageName from GuideLanguage where GuideLanguageName like '%" + term + "%'");
@@ -398,6 +420,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
         }
 
         [HttpPost]
+        [EAAuthorize(FunctionName = "Package", Writable = true)]
+
         public void LanSave(int PackageId, IEnumerable<int> ActIds)
         {
             db.Delete<Package_Language>("Where PackageId=@0", PackageId);
@@ -406,6 +430,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         }
 
         //Attributes
+        [EAAuthorize(FunctionName = "Package", Writable = true)]
         public JsonResult GetAtr(string term)
         {
             var locs = db.Fetch<Attribute>("Select AttributeId, AttributeText from Attribute where AttributeText like '%" + term + "%'");
@@ -413,6 +438,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         }
 
         [HttpPost]
+        [EAAuthorize(FunctionName = "Package", Writable = true)]
         public void AtrSave(int PackageId, IEnumerable<int> ActIds)
         {
             db.Delete<Package_Attribute>("Where PackageId=@0", PackageId);
@@ -421,6 +447,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         }
 
         //Icons
+        [EAAuthorize(FunctionName = "Package", Writable = true)]
         public JsonResult GetIcn()
         {   
                 var i = Directory.EnumerateFiles(Server.MapPath("~/Icons"), "*.png").Select(f => f.Substring(f.LastIndexOf("\\")+1));
@@ -428,6 +455,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         }
 
         [HttpPost]
+        [EAAuthorize(FunctionName = "Package", Writable = true)]
         public void IcnSave(int PackageId, IEnumerable<string> IcnNames, int ServiceTypeId)
         {
             db.Delete<Icon>("Where ServiceId=@0 and ServiceTypeId=@1", PackageId, ServiceTypeId);
@@ -444,6 +472,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
         }
 
         //Supplier
+        [EAAuthorize(FunctionName = "Package", Writable = true)]
+
         public JsonResult GetSup(string term)
         {
             var locs = db.Fetch<Supplier>("Select * from Supplier where SupplierName like '%" + term + "%'");
@@ -451,6 +481,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         }
 
         [HttpPost]
+        [EAAuthorize(FunctionName = "Package", Writable = true)]
         public void SupSave(int PackageId, IEnumerable<int> ActIds, string Conts)
         {
 
@@ -473,7 +504,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             }
         }
         #endregion
-
+        [EAAuthorize(FunctionName = "Package", Writable = true)]
         public string KillSup(int PackageId, int deadSup)
         {
             db.Delete<Package_Supplier>("Where packageId=@0 and SupplierId=@1",PackageId,deadSup);

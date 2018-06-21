@@ -14,6 +14,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
     public class GeoTreeController : EAController
     {
         // GET: Clients
+        [EAAuthorize(FunctionName = "Geo Locations", Writable = false)]
+
         public ActionResult Index(int? GeoId)
         {
             if (GeoId.HasValue && GeoId>0)
@@ -35,6 +37,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
 
         // GET: Clients/Create
+        [EAAuthorize(FunctionName = "Geo Locations", Writable = true)]
+
         public ActionResult Manage(int? id)
         {   
             return View(base.BaseCreateEdit<GeoTree>(id, "GeoTreeId"));
@@ -45,6 +49,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [EAAuthorize(FunctionName = "Geo Locations", Writable = true)]
+
         public ActionResult Manage([Bind(Include = "GeoTreeID,GeoName,GeoParentID,ImagePath")] GeoTree item, System.Web.HttpPostedFileBase UploadedFile)
         {
             item.ImagePath= SaveImage(new PetaPoco.Sql("Select ImagePath from GeoTree where GeoTreeId=@0", item.GeoTreeID),"GeoTree",item.GeoTreeID, UploadedFile);
@@ -57,12 +63,14 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [EAAuthorize(FunctionName = "Geo Locations", Writable = true)]
+
         public ActionResult AddGeo([Bind(Include = "GeoParentId,GeoName")] GeoTree item)
         {
             if (item.GeoParentID == 0) item.GeoParentID = null;
             return base.BaseSave<GeoTree>(item, false,"Index",new { GeoId=item.GeoParentID});
         }
-
+        [EAAuthorize(FunctionName = "Geo Locations", Writable = true)]
         public JsonResult GetLocations(string term)
         {
             var locs = db.Fetch<GeoTree>("Select CONCAT(g.GeoName,': ', dbo.GetGeoAncestorsStr(g.GeoTreeID)) as GeoName,g.GeoTreeID from GeoTree g where GeoName like '%" + term + "%'");

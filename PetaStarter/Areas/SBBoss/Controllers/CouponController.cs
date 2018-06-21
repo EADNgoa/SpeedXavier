@@ -15,6 +15,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
     public class CouponController : EAController
     {
         // GET: Clients
+        [EAAuthorize(FunctionName = "Coupon", Writable = false)]
+
         public ActionResult Index(int? page ,string AN )
         {
             if (AN?.Length > 0) page = 1;
@@ -24,6 +26,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
 
         // GET: Clients/Create
+        [EAAuthorize(FunctionName = "Coupon", Writable = true)]
+
         public ActionResult Manage(int? id)
         {
            // ViewBag.UnitID = new SelectList(db.Fetch<Unit>("Select UnitID,UnitName from Units"), "UnitID", "UnitName");
@@ -36,6 +40,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [EAAuthorize(FunctionName = "Coupon", Writable = true)]
+
         public ActionResult Manage([Bind(Include = "DiscountCouponID,CouponCode,ValidFrom,ValidTo,Amount,Perc")] DiscountCoupon item)
         {            
             return base.BaseSave<DiscountCoupon>(item, item.DiscountCouponID > 0);

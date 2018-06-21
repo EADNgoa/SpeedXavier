@@ -14,6 +14,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
     public class ActivityController : EAController
     {
         // GET: Clients
+        [EAAuthorize(FunctionName = "Activity", Writable = false)]
         public ActionResult Index(int? page ,string AN )
         {
             if (AN?.Length > 0) page = 1;
@@ -23,6 +24,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
 
         // GET: Clients/Create
+        [EAAuthorize(FunctionName = "Activity", Writable = true)]
         public ActionResult Manage(int? id)
         {
            // ViewBag.UnitID = new SelectList(db.Fetch<Unit>("Select UnitID,UnitName from Units"), "UnitID", "UnitName");
@@ -35,6 +37,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [EAAuthorize(FunctionName = "Activity", Writable = true)]
+
         public ActionResult Manage([Bind(Include = "ActivityID,ActivityName")] Activity item, System.Web.HttpPostedFileBase UploadedFile)
         {
             item.ImagePath = SaveImage(new PetaPoco.Sql("Select ImagePath from Activity where ActivityID=@0", item.ActivityID), "Activity", item.ActivityID, UploadedFile);

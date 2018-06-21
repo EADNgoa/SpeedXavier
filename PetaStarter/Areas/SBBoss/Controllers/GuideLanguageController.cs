@@ -14,6 +14,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
     public class GuideLanguageController : EAController
     {
         // GET: Clients
+        [EAAuthorize(FunctionName = "Guide Language", Writable = false)]
+
         public ActionResult Index(int? page ,string AN )
         {
             if (AN?.Length > 0) page = 1;
@@ -23,6 +25,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
 
         // GET: Clients/Create
+        [EAAuthorize(FunctionName = "Guide Language", Writable = true)]
+
         public ActionResult Manage(int? id)
         {
            // ViewBag.UnitID = new SelectList(db.Fetch<Unit>("Select UnitID,UnitName from Units"), "UnitID", "UnitName");
@@ -35,6 +39,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [EAAuthorize(FunctionName = "Guide Language", Writable = true)]
         public ActionResult Manage([Bind(Include = "GuideLanguageID,GuideLanguageName")] GuideLanguage item)
         {            
             return base.BaseSave<GuideLanguage>(item, item.GuideLanguageID > 0);
