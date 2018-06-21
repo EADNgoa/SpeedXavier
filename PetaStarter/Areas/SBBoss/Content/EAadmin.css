@@ -39,15 +39,14 @@ body {
 #navVert a, i {
     font-family: Roboto, sans-serif;
     color: white;
-    display: inline !important;
-    width: 300px;
+    display: inline !important;    
 }
 
 #navHorz a, i {
     font-family: Roboto, sans-serif;
     color: white;
     display: inline !important;
-    width: 300px;
+    
 }
 
 
