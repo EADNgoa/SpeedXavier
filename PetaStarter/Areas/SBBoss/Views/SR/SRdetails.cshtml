@@ -65,6 +65,11 @@
                     <input type="text" id="SupplierName" name="SupplierName" style="color:black;" data-autocomplete-idholder="#SupplierID" value="" data-autocombo-url="@Url.Action("AutoCompleteSup")" class="form-control" />
                     @Html.ValidationMessageFor(model => model.SupplierID, "", new { @class = "text-danger" })
                 </div>
+                <div class="input-group col mb-3">
+                    <div class="input-group-prepend"><span class="input-group-text">Coupon</span></div>
+                    @Html.EditorFor(model => model.CouponCode, new { htmlAttributes = new { @type = "text", @class = " form-control" } })
+                    @Html.ValidationMessageFor(model => model.CouponCode, "", new { @class = "text-danger" })
+                </div>
             </div>
             <div class="form-row">
 

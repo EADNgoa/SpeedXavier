@@ -272,16 +272,7 @@
     <Content Include="Content\css\blueimp-gallery-video.css" />
     <Content Include="Content\css\blueimp-gallery.css" />
     <Content Include="Content\css\blueimp-gallery.min.css" />
-    <Content Include="Content\css\fa-brands.css" />
-    <Content Include="Content\css\fa-brands.min.css" />
-    <Content Include="Content\css\fa-regular.css" />
-    <Content Include="Content\css\fa-regular.min.css" />
-    <Content Include="Content\css\fa-solid.css" />
-    <Content Include="Content\css\fa-solid.min.css" />
-    <Content Include="Content\css\fontawesome-all.css" />
-    <Content Include="Content\css\fontawesome-all.min.css" />
-    <Content Include="Content\css\fontawesome.css" />
-    <Content Include="Content\css\fontawesome.min.css" />
+    <Content Include="Content\css\FA5all.css" />
     <Content Include="Content\css\select2.css" />
     <Content Include="Content\css\select2.min.css" />
     <Content Include="Content\datatables.min.css" />
