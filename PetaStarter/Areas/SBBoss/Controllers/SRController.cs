@@ -295,24 +295,21 @@ namespace Speedbird.Areas.SBBoss.Controllers
         [EAAuthorize(FunctionName = "Service Requests", Writable = true)]
         public ActionResult ExistingCustRec(string fn, string sn, string ph, string em)
         {
-
-            var recs = db.Query<CustomerDets>("Select * from Customer").ToList();
-            if (fn != null)
-            {
-                recs = recs.Where(c => Regex.IsMatch(c.FName, fn, RegexOptions.IgnoreCase)).ToList();
-            }
+            var sql = new PetaPoco.Sql("Select * from Customer");
+                        
+            if (fn != null)            
+                sql.Append($" where LOWER(FName) like '%{fn.ToLower()}%'");                
+            
             if (sn != "")
-            {
-                recs = recs.Where(c => Regex.IsMatch(c.SName, sn, RegexOptions.IgnoreCase)).ToList();
-            }
+                sql.Append($" where LOWER(SName) like '%{sn.ToLower()}%'");
+            
             if (ph != "")
-            {
-                recs = recs.Where(c => Regex.IsMatch(c.Phone, ph, RegexOptions.IgnoreCase)).ToList();
-            }
+                sql.Append($" where Phone like '%{ph}%'");            
+            
             if (em != "")
-            {
-                recs = recs.Where(c => Regex.IsMatch(c.Email, em, RegexOptions.IgnoreCase)).ToList();
-            }
+                sql.Append($" where LOWER(Email) like '%{em.ToLower()}%'");
+
+            var recs = db.Query<Customer>(sql);
 
             return PartialView("CustomerSearchPartial", recs);
         }
@@ -345,7 +342,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                         db.Insert(new SR_Cust { ServiceRequestID = item.SRID, CustomerID = cust.CustomerID });
 
                     }
-                    if (Event.Length == 0)
+                    if (Event?.Length == 0)
                     {
                         Event = "User has Edited the Field";
                     }
@@ -527,14 +524,19 @@ namespace Speedbird.Areas.SBBoss.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [EAAuthorize(FunctionName = "Service Requests", Writable = true)]
-        public ActionResult SRLogs([Bind(Include = "SRLID,SRID,SRDID,LogDateTime,UserID,Type,Event,SRID")] SRlog item)
+        public ActionResult SRLogs([Bind(Include = "SRLID,SRID,SRDID,Type,Event")] SRlog item)
+        {
+            LogAction(item);
+            return RedirectToAction("Manage", new { id = item.SRID, mode = 2 });
+        }
+
+        private void LogAction(SRlog item)
         {
             item.LogDateTime = DateTime.Now;
             item.UserID = User.Identity.GetUserId();
             base.BaseSave<SRlog>(item, item.SRLID > 0);
-            return RedirectToAction("Manage", new { id = item.SRID, mode = 2 });
-
         }
+                
         [EAAuthorize(FunctionName = "Service Requests", Writable = true)]
         public ActionResult Delete(int? id, int? pid)
         {
