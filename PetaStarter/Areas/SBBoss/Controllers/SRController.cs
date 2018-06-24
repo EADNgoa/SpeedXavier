@@ -13,6 +13,7 @@ using System.Web.Mvc;
 using System.Text.RegularExpressions;
 using static PetaStarter.Areas.SBBoss.Models.DataTablesModels;
 using System.Collections;
+using KellermanSoftware.CompareNetObjects;
 
 namespace Speedbird.Areas.SBBoss.Controllers
 {
@@ -38,7 +39,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         {
             page = 1;
             ViewBag.ServiceRequestTypeId = st;
-            return View("SRQueueIndex", base.BaseIndex<ServiceRequestDets>(page, " TDate, event as request,FName, SName, Phone  ", $"ServiceRequest sr inner join SR_Cust sc on sr.SRID = sc.ServiceRequestID " +
+            return View("SRQueueIndex", base.BaseIndex<ServiceRequestDets>(page, "sr.SRID, TDate, event as request,FName, SName, Phone  ", $"ServiceRequest sr inner join SR_Cust sc on sr.SRID = sc.ServiceRequestID " +
                 $"inner join Customer c on c.CustomerID = sc.CustomerID inner join SRlogs l on sr.SRID=l.SRID where ServiceTypeID={(int)st} and SRStatusID ={(int)SRStatusEnum.New}"));
         }
 
@@ -130,6 +131,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 throw ex;
             }
         }
+
         [HttpPost]
         [EAAuthorize(FunctionName = "Service Requests", Writable = false)]
         public JsonResult GetSRDetList(DTParameters parameters, int? id)
@@ -169,6 +171,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 throw ex;
             }
         }
+
         [EAAuthorize(FunctionName = "Service Requests", Writable = false)]
         private string GetWhereWithOrClauseFromColumns(string[] columnDefs, List<string> searchValues)
         {
@@ -245,18 +248,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
        };
 
 
-        [EAAuthorize(FunctionName = "Service Requests", Writable = true)]
-        public ActionResult Manage(int? id, int mode = 1, int EID = 0) //Mode 1=Details,2=Prices,3=images,4=validity
-        {
+      
 
-            ViewBag.mode = mode;
-
-
-            ViewBag.EID = EID;
-            ViewBag.SRID = id;
-
-            return View();
-        }
         [EAAuthorize(FunctionName = "Service Requests", Writable = false)]
         public ActionResult GetSRInfo(int id, int? mode)
         {
@@ -266,6 +259,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             ViewBag.mode = mode;
             return PartialView("InfoHeader", rec);
         }
+
         [EAAuthorize(FunctionName = "Service Requests", Writable = true)]
         public ActionResult FetchDetails(int? id)
         {
@@ -292,48 +286,69 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
             return PartialView("Details", SR);
         }
+
         [EAAuthorize(FunctionName = "Service Requests", Writable = true)]
         public ActionResult ExistingCustRec(string fn, string sn, string ph, string em)
         {
-
-            var recs = db.Query<CustomerDets>("Select * from Customer").ToList();
-            if (fn != null)
-            {
-                recs = recs.Where(c => Regex.IsMatch(c.FName, fn, RegexOptions.IgnoreCase)).ToList();
-            }
+            var sql = new PetaPoco.Sql("Select * from Customer where 1=1");
+                        
+            if (fn != null)            
+                sql.Append($" and LOWER(FName) like '%{fn.ToLower()}%'");                
+            
             if (sn != "")
-            {
-                recs = recs.Where(c => Regex.IsMatch(c.SName, sn, RegexOptions.IgnoreCase)).ToList();
-            }
+                sql.Append($" and LOWER(SName) like '%{sn.ToLower()}%'");
+            
             if (ph != "")
-            {
-                recs = recs.Where(c => Regex.IsMatch(c.Phone, ph, RegexOptions.IgnoreCase)).ToList();
-            }
+                sql.Append($" and Phone like '%{ph}%'");            
+            
             if (em != "")
-            {
-                recs = recs.Where(c => Regex.IsMatch(c.Email, em, RegexOptions.IgnoreCase)).ToList();
-            }
+                sql.Append($" and LOWER(Email) like '%{em.ToLower()}%'");
+
+           var recs = db.Query<CustomerDets>(sql);
 
             return PartialView("CustomerSearchPartial", recs);
         }
 
+        [EAAuthorize(FunctionName = "Service Requests", Writable = true)]
+        public ActionResult Manage(int? id, int mode = 1, int EID = 0) //Mode 1=Details,2=Prices,3=images,4=validity
+        {
+
+            ViewBag.mode = mode;
+
+
+            ViewBag.EID = EID;
+            ViewBag.SRID = id;
+
+            return View();
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-
         [EAAuthorize(FunctionName = "Service Requests", Writable = true)]
         public ActionResult Manage([Bind(Include = "SRID,CustID,SRStatusID,EmpID,BookingTypeID,EnquirySource,AgentID,TDate, ServiceTypeID")] ServiceRequest item, string Event, int? CID, string FName, string SName, string Email, string Phone)
-
         {
             using (var transaction = db.GetTransaction())
             {
                 if (ModelState.IsValid)
-                {
-
+                {                    
                     item.EmpID = User.Identity.GetUserId();
-                    item.TDate = DateTime.Now;
+                    if (item.TDate==null)
+                        item.TDate = DateTime.Now;
                     if (item.SRStatusID == null) item.SRStatusID = (int)SRStatusEnum.New;
 
-                    var r = (item.SRID > 0) ? db.Update(item) : db.Insert(item);
+                    if (item.SRID > 0)
+                    {
+                        db.Update(item);
+                        string Objdiffs = FindDiffs<ServiceRequest>(item.SRID, item, "Service Request");
+                        if (Objdiffs.Length>0)
+                            LogAction(new SRlog { SRID = item.SRID, Event = Objdiffs });
+                    }
+                    else
+                    {
+                        db.Insert(item);
+                        LogAction(new SRlog { SRID = item.SRID, Event = Event });
+                    }
+
                     if (CID != null)
                     {
                         db.Insert(new SR_Cust { ServiceRequestID = item.SRID, CustomerID = (int)CID });
@@ -345,11 +360,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                         db.Insert(new SR_Cust { ServiceRequestID = item.SRID, CustomerID = cust.CustomerID });
 
                     }
-                    if (Event.Length == 0)
-                    {
-                        Event = "User has Edited the Field";
-                    }
-                    db.Insert(new SRlog { SRID = item.SRID, LogDateTime = DateTime.Now, UserID = User.Identity.GetUserId(), Type = true, Event = Event });
+
                     transaction.Complete();
                     return new JsonResult { Data = true };
                 }
@@ -382,17 +393,20 @@ namespace Speedbird.Areas.SBBoss.Controllers
         {
             using (var transaction = db.GetTransaction())
             {
-
                 try
-                {
-                    bool tf = false;
-                    if (Event == "")
+                {                                       
+                    if(item.SRDID > 0)
                     {
-                        Event = $"Added {((ServiceTypeEnum)item.ServiceTypeID)} Service ";
-                        tf = true;
+                        db.Update(item);
+                        LogAction(new SRlog { SRID = item.SRID, SRDID=item.SRDID, Event = Event, Type=true});
+                        LogAction(new SRlog { SRID = item.SRID, SRDID = item.SRDID, Event = FindDiffs<SRdetail>(item.SRDID,item,"Service") });
                     }
-                    base.BaseSave<SRdetail>(item, item.SRDID > 0);
-                    var r = db.Insert(new SRlog { SRDID = item.SRDID, LogDateTime = DateTime.Now, UserID = User.Identity.GetUserId(), Type = tf, Event = Event, SRID = item.SRID });
+                    else
+                    {
+                        db.Insert(item);
+                        LogAction(new SRlog { SRID = item.SRID, SRDID = item.SRDID, Event = Event, Type = true });
+                        LogAction(new SRlog { SRID = item.SRID, SRDID = item.SRDID, Event = "Added " + item.ServiceTypeName });
+                    }
                     transaction.Complete();
                 }
                 catch (Exception ex)
@@ -439,7 +453,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
                 res.Path = fn;
             }
-
+            LogAction(new SRlog { SRID = item.SRID, Event = item.UploadName + " Uploaded" });
             return base.BaseSave<SRUpload>(res, item.SRUID > 0, "Manage", new { id = item.SRID, mode = 5 });
 
         }
@@ -465,13 +479,14 @@ namespace Speedbird.Areas.SBBoss.Controllers
             if (CID != null)
             {
                 db.Insert(new SR_Cust { ServiceRequestID = (int)SRID, CustomerID = (int)CID });
+                LogAction(new SRlog { SRID = SRID.Value,  Event = "Existing customer added" });
             }
             else if (FName != null && Email != null && SName != null && Phone != null)
             {
-
                 var cust = new Customer { FName = FName, SName = SName, Phone = Phone, Email = Email };
                 db.Insert(cust);
                 db.Insert(new SR_Cust { ServiceRequestID = (int)SRID, CustomerID = cust.CustomerID });
+                LogAction(new SRlog { SRID = SRID.Value, Event = $"Customer {FName} {SName} added" });
             }
 
             if (UploadedFile != null && UploadName != null)
@@ -483,6 +498,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 UploadedFile.SaveAs(SavePath);
 
                 db.Insert(new SRUpload { UploadName = UploadName, Path = fn, SRID = SRID });
+                LogAction(new SRlog { SRID = SRID.Value , Event = UploadName+  " Uploaded"});
             }
             return RedirectToAction("Manage", new { id = (int)SRID, mode = 4 });
 
@@ -527,14 +543,47 @@ namespace Speedbird.Areas.SBBoss.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [EAAuthorize(FunctionName = "Service Requests", Writable = true)]
-        public ActionResult SRLogs([Bind(Include = "SRLID,SRID,SRDID,LogDateTime,UserID,Type,Event,SRID")] SRlog item)
+        public ActionResult SRLogs([Bind(Include = "SRLID,SRID,SRDID,Event")] SRlog item)
+        {
+            item.Type = true;
+            LogAction(item);
+            return RedirectToAction("Manage", new { id = item.SRID, mode = 2 });
+        }
+
+        /// <summary>
+        /// Finds the changed properties and returns a formatted string OR says a new obj added
+        /// </summary>
+        /// <typeparam name="T">The type of object to create the DB log for</typeparam>
+        /// <param name="Id">The id of the new(0) or edited object. It will be used to fetch the exiting db record</param>
+        /// <param name="newObj">The new edited object</param>
+        /// <param name="objName">The name of the object. Used only to state what got edited</param>
+        /// <returns></returns>
+        private string FindDiffs<T>(int Id, T newObj, string objName)
+        {
+            if (Id > 0)
+            {
+                var oldObj = db.Single<T>(Id);
+                CompareLogic c = new CompareLogic(new ComparisonConfig { MaxDifferences = 99 });
+                ComparisonResult comparisonResult = c.Compare(oldObj, newObj);
+                string res = " ";
+                foreach (var item in comparisonResult.Differences)
+                    res += $"{item.PropertyName}: {item.Object1Value}->{item.Object2Value} +";
+                if (res.Length > 1)
+                    return objName + " Changed: " + res.Substring(0, res.Length - 1);
+                else
+                    return "";
+            }
+            else
+                return objName+ " Added";
+        }
+
+        private void LogAction(SRlog item)
         {
             item.LogDateTime = DateTime.Now;
             item.UserID = User.Identity.GetUserId();
             base.BaseSave<SRlog>(item, item.SRLID > 0);
-            return RedirectToAction("Manage", new { id = item.SRID, mode = 2 });
-
         }
+                
         [EAAuthorize(FunctionName = "Service Requests", Writable = true)]
         public ActionResult Delete(int? id, int? pid)
         {
