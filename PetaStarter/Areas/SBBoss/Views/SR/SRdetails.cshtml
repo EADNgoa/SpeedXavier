@@ -67,6 +67,7 @@
                 </div>
                 <div class="input-group col mb-3">
                     <div class="input-group-prepend"><span class="input-group-text">Coupon Code</span></div>
+
                     @Html.EditorFor(model => model.CouponCode, new { htmlAttributes = new { @type = "text", @class = " form-control" } })
                     @Html.ValidationMessageFor(model => model.CouponCode, "", new { @class = "text-danger" })
                 </div>

@@ -29,8 +29,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
         public ActionResult Manage(int? id)
         {
-           // ViewBag.UnitID = new SelectList(db.Fetch<Unit>("Select UnitID,UnitName from Units"), "UnitID", "UnitName");
-            
+            ViewBag.GeoId = db.Query<GeoTree>("Select * from GeoTree where GeoTreeId = (Select LocationId from driver where DriverID=@0)", id ?? 0).Select(sl => new SelectListItem { Text = sl.GeoName, Value = sl.GeoTreeID.ToString(), Selected = true });
+
             return View(base.BaseCreateEdit<Driver>(id, "DriverID"));
         }
 
@@ -40,7 +40,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [EAAuthorize(FunctionName = "Driver", Writable = true)]
-        public ActionResult Manage([Bind(Include = "DriverID,DriverName,Phone,Address,EmerContactName,EmerContactNo")] Driver item)
+        public ActionResult Manage([Bind(Include = "DriverID,DriverName,Phone,Address,EmerContactName,EmerContactNo, CarModel, LocationId")] Driver item)
         {
             return base.BaseSave<Driver>(item, item.DriverID > 0);
         }

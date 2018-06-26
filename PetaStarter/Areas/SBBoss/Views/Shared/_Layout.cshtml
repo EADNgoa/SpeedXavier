@@ -11,7 +11,7 @@
     @Styles.Render("~/Content/dtpic")
     @Styles.Render("~/SBBoss/Content/EAcss")
     @Styles.Render("~/Content/fa5")
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    @*<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">*@
     <link rel="stylesheet" type="text/css" href="~/Content/DataTables/datatables.min.css" />
 
 
@@ -42,11 +42,11 @@
             <div class="col-sm-2">
                 <ul class="nav flex-column small side-nav DropShadow" id="navVert">
                     <li height="70px;"><br /><br /><br /><hr /></li>
+                    <li class="nav-item"><i class="fas fa-motorcycle fa-inverse"></i><a class="nav-link" href="~/SBBoss/SR/Manage">Enquiry</a></li>
                     <li class="nav-item">
-                        <a href="#" data-toggle="collapse" data-target="#submenu-book"><span style="display:block; "><i class="fas fa-book" ></i> Bookings  <i class="float-right fas fa-angle-down"></i></span></a>
+                        <a href="#" data-toggle="collapse" data-target="#submenu-book"><span style="display:block; "><i class="fas fa-book-open" ></i> Bookings  <i class="float-right fas fa-angle-down"></i></span></a>
                         <ul id="submenu-book" class="collapse">
                             <li class="nav-item"><i class="fas fa-question-circle fa-inverse"></i></i><a class="nav-link" href="~/SBBoss/CustomerQuery">Customer Queries</a></li>
-                            <li class="nav-item"><i class="fas fa-motorcycle fa-inverse"></i><a class="nav-link" href="~/SBBoss/SR/Manage">Enquiry</a></li>
                             <li class="nav-item"><i class="fab fa-btc fa-inverse"></i><a class="nav-link" href="~/SBBoss/SR">Bookings</a></li>
                             <li class="nav-item"><i class="fas fa-newspaper fa-inverse"></i><a class="nav-link" href="~/SBBoss/MiceVisa/Mice">Mice</a></li>
                             <li class="nav-item"><i class="fas fa-calendar-alt fa-inverse"></i><a class="nav-link" href="~/SBBoss/Booking/Index">Web Bookings</a></li>

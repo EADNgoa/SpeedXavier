@@ -48,6 +48,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="KellermanSoftware.Compare-NET-Objects, Version=4.53.0.0, Culture=neutral, PublicKeyToken=d970ace04cc85217, processorArchitecture=MSIL">
+      <HintPath>..\packages\CompareNETObjects.4.53.0.0\lib\net46\KellermanSoftware.Compare-NET-Objects.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.8.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.8\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
     </Reference>
@@ -258,6 +261,7 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Readme\Compare-NET-Objects-Help.txt" />
     <Content Include="Areas\SBBoss\Custom\BBS.ico" />
     <Content Include="Areas\SBBoss\Custom\EAwell.jpg" />
     <Content Include="Areas\SBBoss\Custom\Emblem.png" />
@@ -273,16 +277,7 @@
     <Content Include="Content\css\blueimp-gallery-video.css" />
     <Content Include="Content\css\blueimp-gallery.css" />
     <Content Include="Content\css\blueimp-gallery.min.css" />
-    <Content Include="Content\css\fa-brands.css" />
-    <Content Include="Content\css\fa-brands.min.css" />
-    <Content Include="Content\css\fa-regular.css" />
-    <Content Include="Content\css\fa-regular.min.css" />
-    <Content Include="Content\css\fa-solid.css" />
-    <Content Include="Content\css\fa-solid.min.css" />
-    <Content Include="Content\css\fontawesome-all.css" />
-    <Content Include="Content\css\fontawesome-all.min.css" />
-    <Content Include="Content\css\fontawesome.css" />
-    <Content Include="Content\css\fontawesome.min.css" />
+    <Content Include="Content\css\FA5all.css" />
     <Content Include="Content\css\select2.css" />
     <Content Include="Content\css\select2.min.css" />
     <Content Include="Content\datatables.min.css" />
