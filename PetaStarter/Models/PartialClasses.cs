@@ -48,7 +48,14 @@ namespace Speedbird
         public DateTime LogOut { get; set; }
         public string UserName { get; set; }
     }
-   
+    public partial class SRdetail
+    {
+        public string tstr { get { return $"{Tdate:dd MMM yyyy hh:mm}"; } }
+        public string fstr { get { return $"{Fdate:dd MMM yyyy hh:mm}"; } }
+        public string ServiceTypeName { get { return ((ServiceTypeEnum)ServiceTypeID).ToString(); } }
+
+
+    }
     public partial class SRdetailDets
     {
         public int SRDID { get; set; }
@@ -64,9 +71,7 @@ namespace Speedbird
         public DateTime Fdate { get; set; }
         public string fstr { get { return $"{Fdate:dd-MMM-yyyy}"; } }
         public DateTime Tdate { get; set; }
-        public string tstr { get { return $"{Tdate:dd MMM yyyy hh:mm}"; } }
-        public string fstr { get { return $"{Fdate:dd MMM yyyy hh:mm}"; } }
-        public string ServiceTypeName { get { return ((ServiceTypeEnum)ServiceTypeID).ToString(); } }
+        public string tstr { get { return $"{Tdate:dd MMM yyyy hh:mm}"; } }        
 
         public int SupplierID { get; set; }
         public decimal Cost { get; set; }
