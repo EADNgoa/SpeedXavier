@@ -361,6 +361,13 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
                     }
 
+                    if (Event.Length == null)
+                    {
+                        Event = "User has Edited the Field";
+                    }
+                    db.Insert(new SRlog { SRID = item.SRID, LogDateTime = DateTime.Now, UserID = User.Identity.GetUserId(), Type = true, Event = Event });
+
+
                     transaction.Complete();
                     return new JsonResult { Data = true };
                 }
@@ -389,7 +396,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [EAAuthorize(FunctionName = "Service Requests", Writable = true)]
-        public ActionResult SRdetails([Bind(Include = "SRDID,SRID,ServiceTypeID,FromLoc,ToLoc,Fdate,Tdate,SupplierID,Cost,SellPrice,PNRno,TicketNo,Heritage,ChildNo,AdultNo,InfantNo,RoomType,CouponCode,City,Airline,DateOfIssue,ContractNo,GuideLanguageID,SSType,CarType,Model")] SRdetail item, string Event)
+        public ActionResult SRdetails([Bind(Include = "SRDID,HasAc,HasCarrier,RateBasis,PayTo,PickUpPoint,DropPoint,SRID,ServiceTypeID,FromLoc,ToLoc,Fdate,Tdate,SupplierID,Cost,SellPrice,PNRno,TicketNo,Heritage,ChildNo,AdultNo,InfantNo,RoomType,CouponCode,City,Airline,DateOfIssue,ContractNo,GuideLanguageID,SSType,CarType,Model,")] SRdetail item, string Event)
         {
             using (var transaction = db.GetTransaction())
             {
@@ -645,6 +652,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
                     return PartialView($"_{((ServiceTypeEnum)ServiceTypeId).ToString()}", db.SingleOrDefault<SRdetail>(id));
                 case ServiceTypeEnum.Flight:
                     return PartialView($"_{((ServiceTypeEnum)ServiceTypeId).ToString()}", db.SingleOrDefault<SRdetail>(id));
+                case ServiceTypeEnum.TaxiHire:
+                    return PartialView($"_{((ServiceTypeEnum)ServiceTypeId).ToString()}", db.SingleOrDefault<SRdetail>(id));
                 default:
                     return PartialView("_NotFound");
             }
@@ -701,6 +710,11 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 {"Fdate","Valid From" },
                 {"FromLoc","Destination Country" }
             };
+            Dictionary<string, string> TaxiHire = new Dictionary<string, string>()
+            {
+                {"Fdate","From Date" },
+                {"FromLoc","From Location" }
+            };
 
             Dictionary<string, Dictionary<string, string>> dynLabels = new Dictionary<string, Dictionary<string, string>>()
             {
@@ -711,7 +725,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 { (ServiceTypeEnum.Cruise).ToString(), Cruise},
                 { (ServiceTypeEnum.Flight).ToString(), Flight},
                 { (ServiceTypeEnum.Visa).ToString(), Visa},
-                { (ServiceTypeEnum.Insurance).ToString(), Insurance}
+                { (ServiceTypeEnum.Insurance).ToString(), Insurance},
+                { (ServiceTypeEnum.TaxiHire).ToString(), TaxiHire}
             };
 
 

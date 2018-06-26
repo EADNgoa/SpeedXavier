@@ -199,6 +199,7 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Areas\SBBoss\Controllers\QuestionsController.cs" />
     <Compile Include="Areas\SBBoss\Controllers\AssetBillController.cs" />
     <Compile Include="Areas\SBBoss\Controllers\BanksController.cs" />
     <Compile Include="Areas\SBBoss\Controllers\TripController.cs" />
@@ -739,6 +740,9 @@
     <Content Include="Content\webfonts\fa-solid-900.ttf" />
     <Content Include="Content\webfonts\fa-solid-900.woff" />
     <Content Include="Content\webfonts\fa-solid-900.woff2" />
+    <Content Include="Areas\SBBoss\Views\SR\_TaxiHire.cshtml" />
+    <Content Include="Areas\SBBoss\Views\Questions\Index.cshtml" />
+    <Content Include="Areas\SBBoss\Views\Questions\Manage.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Areas\SBBoss\Views\SR\CustomerSearchPartial.cshtml" />
     <Content Include="Areas\SBBoss\Views\SR\SRCustomers.cshtml" />

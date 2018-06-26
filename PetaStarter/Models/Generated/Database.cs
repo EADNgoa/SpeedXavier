@@ -453,6 +453,17 @@ namespace Speedbird
 		[Column] public int AccomodationID { get; set; }
 	}
     
+	[TableName("dbo.FeedBack")]
+	[PrimaryKey("FeedBackID", AutoIncrement=false)]
+	[ExplicitColumns]
+    public partial class FeedBack  
+    {
+		[Column] public int FeedBackID { get; set; }
+		[Column] public int? QuestionID { get; set; }
+		[Column] public int? SRDID { get; set; }
+		[Column] public int? StarRating { get; set; }
+	}
+    
 	[TableName("dbo.FunctionGroups")]
 	[PrimaryKey("FunctionID", AutoIncrement=false)]
 	[ExplicitColumns]
@@ -788,6 +799,15 @@ namespace Speedbird
 		[Column] public decimal? WeekendPrice { get; set; }
 	}
     
+	[TableName("dbo.Questions")]
+	[PrimaryKey("QuestionID", AutoIncrement=false)]
+	[ExplicitColumns]
+    public partial class Question  
+    {
+		[Column] public int QuestionID { get; set; }
+		[Column] public string FQuestion { get; set; }
+	}
+    
 	[TableName("dbo.Rating")]
 	[PrimaryKey("RatingID")]
 	[ExplicitColumns]
@@ -918,6 +938,10 @@ namespace Speedbird
 		[Column] public int? GuideLanguageID { get; set; }
 		[Column] public DateTime? DateOfIssue { get; set; }
 		[Column] public string ContractNo { get; set; }
+		[Column] public string PayTo { get; set; }
+		[Column] public string RateBasis { get; set; }
+		[Column] public string PickUpPoint { get; set; }
+		[Column] public string DropPoint { get; set; }
 	}
     
 	[TableName("dbo.SRlogs")]
