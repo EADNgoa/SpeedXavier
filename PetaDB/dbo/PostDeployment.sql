@@ -1,8 +1,9 @@
-﻿
+
 IF NOT EXISTS (SELECT * FROM UserFunctions)
 BEGIN
 	SET IDENTITY_INSERT [dbo].[UserFunctions] ON
 	INSERT INTO [dbo].[UserFunctions] ([FunctionID], [FunctionName], [Module]) VALUES (1, N'User Rights', N'UserRights')
+
 	INSERT INTO [dbo].[UserFunctions] ([FunctionID], [FunctionName], [Module]) VALUES (2, N'Holiday', N'Masters')
     INSERT INTO [dbo].[UserFunctions] ([FunctionID], [FunctionName], [Module]) VALUES (3, N'Leave Type', N'Masters')
     INSERT INTO [dbo].[UserFunctions] ([FunctionID], [FunctionName], [Module]) VALUES (4, N'Leave Entitlement', N'Masters')
@@ -49,6 +50,7 @@ BEGIN --Create an Admin group
 	SET IDENTITY_INSERT [dbo].Groups OFF
 END
 
+
 IF NOT EXISTS (SELECT * FROM FunctionGroups)
 BEGIN --Give all permissions to admin group
 	INSERT INTO FunctionGroups
@@ -76,3 +78,4 @@ BEGIN
 
 	SET IDENTITY_INSERT [dbo].[ServiceCommison] OFF
 END
+

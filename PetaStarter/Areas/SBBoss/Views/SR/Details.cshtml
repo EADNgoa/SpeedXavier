@@ -16,46 +16,48 @@
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     if (Model?.SRID > 0)
-    { 
+    {
         @Html.HiddenFor(model => model.SRID)
         @Html.HiddenFor(model => model.EmpID)
         @Html.HiddenFor(model => model.AgentID)
+        @Html.HiddenFor(model => model.TDate)
 
         @Html.Action("GetSRInfo", "SR", new { id = Model.SRID, mode = ViewBag.mode })
-    } else
+    }
+    else
     {
         @Html.Hidden("AgentID")
     }
 
     <div class="form-row">
-    @if (Model?.SRID > 0)
-    {
+        @if (Model?.SRID > 0)
+        {
+            <div class="input-group col mb-3">
+                <div class="input-group-prepend"><span class="input-group-text">Agent Name</span></div>
+
+                @if (ViewBag.AgentName != null)
+                {
+                    @Html.HiddenFor(model => model.AgentID)
+
+                    <input type="text" id="UserName" name="UserName" style="color:black;" data-autocomplete-idholder="#AgentID" value=" @ViewBag.AgentName " data-autocombo-url="@Url.Action("AutoCompleteAgent")" class="form-control disabled" />
+                }
+                else
+                {
+                    <input type="text" id="UserName" name="UserName" style="color:black;" data-autocomplete-idholder="#AgentID" value="" data-autocombo-url="@Url.Action("AutoCompleteAgent")" class="form-control" />
+                }
+                @Html.ValidationMessageFor(model => model.CustID, "", new { @class = "text-danger" })
+            </div>
+        }
         <div class="input-group col mb-3">
-            <div class="input-group-prepend"><span class="input-group-text">Agent Name</span></div>
-
-            @if (ViewBag.AgentName != null)
-            {
-                @Html.HiddenFor(model => model.AgentID)
-
-                <input type="text" id="UserName" name="UserName" style="color:black;" data-autocomplete-idholder="#AgentID" value=" @ViewBag.AgentName " data-autocombo-url="@Url.Action("AutoCompleteAgent")" class="form-control disabled" />
-            }
-            else
-            {
-                <input type="text" id="UserName" name="UserName" style="color:black;" data-autocomplete-idholder="#AgentID" value="" data-autocombo-url="@Url.Action("AutoCompleteAgent")" class="form-control" />
-            }
-            @Html.ValidationMessageFor(model => model.CustID, "", new { @class = "text-danger" })
+            <div class="input-group-prepend"><span class="input-group-text">Enquiry Source</span></div>
+            @Html.DropDownListFor(model => model.EnquirySource, null, htmlAttributes: new { @type = "text", @class = " form-control" })
+            @Html.ValidationMessageFor(model => model.EnquirySource, "", new { @class = "text-danger" })
         </div>
-    }
-    <div class="input-group col mb-3">
-        <div class="input-group-prepend"><span class="input-group-text">Enquiry Source</span></div>
-        @Html.DropDownListFor(model => model.EnquirySource, null, htmlAttributes: new { @type = "text", @class = " form-control" })
-        @Html.ValidationMessageFor(model => model.EnquirySource, "", new { @class = "text-danger" })
-    </div>
-    <div class="input-group col mb-3">
-        <div class="input-group-prepend"><span class="input-group-text">ServiceType</span></div>
-        @Html.DropDownListFor(model => model.ServiceTypeID, null, htmlAttributes: new { @type = "text", @class = " form-control" })
-        @Html.ValidationMessageFor(model => model.ServiceTypeID, "", new { @class = "text-danger" })
-    </div>
+        <div class="input-group col mb-3">
+            <div class="input-group-prepend"><span class="input-group-text">ServiceType</span></div>
+            @Html.DropDownListFor(model => model.ServiceTypeID, null, htmlAttributes: new { @type = "text", @class = " form-control" })
+            @Html.ValidationMessageFor(model => model.ServiceTypeID, "", new { @class = "text-danger" })
+        </div>
 
 
     </div>
@@ -77,28 +79,28 @@
         }
     </div>
 
-        if (Model?.SRID == null)
-        {
-            <div class="form-row">
-                @Html.Hidden("CID")
-                <div class="input-group col mb-3">
-                    <div class="input-group-prepend"><span class="input-group-text">First Name</span></div>
-                    @Html.Editor("FName", new { htmlAttributes = new { @class = "form-control" } })
-                </div>
-                <div class="input-group col mb-3">
-                    <div class="input-group-prepend"><span class="input-group-text">Sur Name</span></div>
-                    @Html.Editor("SName", new { htmlAttributes = new { @class = "form-control" } })
-                </div>
-                <div class="input-group col mb-3">
-                    <div class="input-group-prepend"><span class="input-group-text">Phone</span></div>
-                    @Html.Editor("Phone", new { htmlAttributes = new { @class = "form-control" } })
-                </div>
-                <div class="input-group col mb-3">
-                    <div class="input-group-prepend"><span class="input-group-text">Email</span></div>
-                    @Html.Editor("Email", new { htmlAttributes = new { @class = "form-control" } })
-                </div>
+    if (Model?.SRID == null)
+    {
+        <div class="form-row">
+            @Html.Hidden("CID")
+            <div class="input-group col mb-3">
+                <div class="input-group-prepend"><span class="input-group-text">First Name</span></div>
+                @Html.Editor("FName", new { htmlAttributes = new { @class = "form-control" } })
             </div>
-        }
+            <div class="input-group col mb-3">
+                <div class="input-group-prepend"><span class="input-group-text">Sur Name</span></div>
+                @Html.Editor("SName", new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+            <div class="input-group col mb-3">
+                <div class="input-group-prepend"><span class="input-group-text">Phone</span></div>
+                @Html.Editor("Phone", new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+            <div class="input-group col mb-3">
+                <div class="input-group-prepend"><span class="input-group-text">Email</span></div>
+                @Html.Editor("Email", new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+        </div>
+    }
 
     <div id="ExistingCust">
         <br />
@@ -150,14 +152,14 @@
 
                 </tbody>
             </table>
-         }
+        }
     </div>
 
 
- }
-    <div class="input-group col ">
-        <input id="SaveDetailFrm" type="submit" value="Save" class="btn btn-primary" />
-    </div>
+}
+<div class="input-group col ">
+    <input id="SaveDetailFrm" type="submit" value="Save" class="btn btn-primary" />
+</div>
 
 <script>
 
@@ -166,7 +168,7 @@
             //Submit form
             $('#SaveDetailFrm').click(function () {
                 var detFrm = $('#detFrm');
-                
+
                 //Save the details form if it exists else just move on.
                 if (typeof (detFrm[0]) == 'object') {
                     $.ajax({

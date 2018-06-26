@@ -48,19 +48,13 @@ namespace Speedbird
         public DateTime LogOut { get; set; }
         public string UserName { get; set; }
     }
-    public partial class SRdetail
-    {
-        public string tstr { get { return $"{Tdate:dd MMM yyyy hh:mm}"; } }
-        public string fstr { get { return $"{Fdate:dd MMM yyyy hh:mm}"; } }
-        public string ServiceTypeName { get { return ((ServiceTypeEnum)ServiceTypeID).ToString(); } }
-
-
-    }
+   
     public partial class SRdetailDets
     {
         public int SRDID { get; set; }
         public int SRID { get; set; }
         public int ServiceTypeID { get; set; }
+        public string ServiceTypeName { get { return ((ServiceTypeEnum)ServiceTypeID).ToString(); } }
         public int CarType { get; set; }
         public string CouponCode { get; set; }
         public string Airline { get; set; }
@@ -68,7 +62,12 @@ namespace Speedbird
         public string FromLoc { get; set; }
         public string ToLoc { get; set; }
         public DateTime Fdate { get; set; }
+        public string fstr { get { return $"{Fdate:dd-MMM-yyyy}"; } }
         public DateTime Tdate { get; set; }
+        public string tstr { get { return $"{Tdate:dd MMM yyyy hh:mm}"; } }
+        public string fstr { get { return $"{Fdate:dd MMM yyyy hh:mm}"; } }
+        public string ServiceTypeName { get { return ((ServiceTypeEnum)ServiceTypeID).ToString(); } }
+
         public int SupplierID { get; set; }
         public decimal Cost { get; set; }
         public decimal SellPrice { get; set; }
@@ -513,7 +512,8 @@ namespace Speedbird
         CarBike,
         Insurance,
         Flight,
-        Visa
+        Visa,
+        TaxiHire
     }
 
     public enum MealPlanEnum
@@ -576,7 +576,7 @@ namespace Speedbird
     {
         Small,
         Medium,
-        Big
+        Large
     }
     public enum LeaveApplicationStatusEnum
     {

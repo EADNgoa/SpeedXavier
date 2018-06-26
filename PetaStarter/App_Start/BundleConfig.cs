@@ -38,7 +38,7 @@ namespace Speedbird
             bundles.Add(new StyleBundle("~/SBBoss/Content/EAcss").Include(
                       "~/Areas/SBBoss/Content/EAadmin.css"));
             bundles.Add(new StyleBundle("~/Content/fa5").Include(
-                   "~/Content/css/fontawesome-all.css"));
+                   "~/Content/css/FA5all.css"));
 
 
 

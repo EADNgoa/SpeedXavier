@@ -51,7 +51,7 @@
             <div class="form-row">
                 <div class="input-group col mb-3">
                     <div class="input-group-prepend"><span class="input-group-text">Service Type</span></div>
-                    @Html.DropDownList("ServiceTypeID", null, htmlAttributes: new { @type = "text", @class = "form-control" })
+                    @Html.DropDownListFor(model=>model.ServiceTypeID,null, htmlAttributes: new { @type = "text", @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.ServiceTypeID, "", new { @class = "text-danger" })
                 </div>
 
@@ -64,6 +64,12 @@
                     <div class="input-group-prepend"><span class="input-group-text">Supplier</span></div>
                     <input type="text" id="SupplierName" name="SupplierName" style="color:black;" data-autocomplete-idholder="#SupplierID" value="" data-autocombo-url="@Url.Action("AutoCompleteSup")" class="form-control" />
                     @Html.ValidationMessageFor(model => model.SupplierID, "", new { @class = "text-danger" })
+                </div>
+                <div class="input-group col mb-3">
+                    <div class="input-group-prepend"><span class="input-group-text">Coupon Code</span></div>
+
+                    @Html.EditorFor(model => model.CouponCode, new { htmlAttributes = new { @type = "text", @class = " form-control" } })
+                    @Html.ValidationMessageFor(model => model.CouponCode, "", new { @class = "text-danger" })
                 </div>
             </div>
             <div class="form-row">
@@ -157,7 +163,7 @@
     $(function () {
 
         var setDynLabels = function (sid) {
-            
+
             //Set the labels of the common form fields based on the selected Service Type
             $.post('@Url.Action("FetchSTlabels", "SR")', { CommonLabel: '@Html.DisplayNameFor(model => model.FromLoc)', ServiceTypeId: sid }, function (data) {
                 $('#@Html.DisplayNameFor(model =>model.FromLoc)' + '_lbl').html(data);
@@ -170,15 +176,15 @@
         };
 
         //Load the dynamic fields based on first Service type automatically
-        $('#placeholderEditDiv').load('@Url.Action("FetchSTpartial", "SR")', { ServiceTypeId: $('#ServiceTypeID').val(), IsReadOnly: false }, setDynLabels($('#ServiceTypeID').val()));
+        $('#placeholderEditDiv').load('@Url.Action("FetchSTpartial", "SR")', { ServiceTypeId: $('#ServiceTypeID').val(),id:$('#SRDID').val() ,IsReadOnly: false }, setDynLabels($('#ServiceTypeID').val()));
 
         //Then on change of the dropDown load the dynamic fields based on the selected Service type
         $('#ServiceTypeID').on('change', function () {
             var sid = $(this).val();
-            
+
 
             //Load the Dynamic Fields of the Form based on the selected Service Type
-            $('#placeholderEditDiv').load('@Url.Action("FetchSTpartial", "SR")', { ServiceTypeId: sid, IsReadOnly: false });
+            $('#placeholderEditDiv').load('@Url.Action("FetchSTpartial", "SR")', { ServiceTypeId: sid, id: $('#SRDID').val() , IsReadOnly: false });
             setDynLabels(sid);
         });
 
