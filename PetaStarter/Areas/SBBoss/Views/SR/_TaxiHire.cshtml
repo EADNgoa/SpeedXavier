@@ -2,7 +2,7 @@
 <fieldset @ViewBag.IsReadOnly>
     <div class="form-row">
         <div class="input-group col mb-3">
-            <div class="input-group-prepend"><span class="input-group-text">Drop Off Address</span></div>
+            <div class="input-group-prepend"><span class="input-group-text">To Location</span></div>
             @Html.EditorFor(model => model.ToLoc, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
             @Html.ValidationMessageFor(model => model.ToLoc, "", new { @class = "text-danger" })
         </div>
@@ -13,7 +13,7 @@
 
         </div>
         <div class="input-group col mb-3">
-            <div class="input-group-prepend"><span class="input-group-text">Car Type</span></div>
+            <div class="input-group-prepend"><span class="input-group-text">Taxi Type</span></div>
             @Html.DropDownList("CarType", null, htmlAttributes: new { @type = "text", @class = "form-control" })
             @Html.ValidationMessageFor(model => model.ToLoc, "", new { @class = "text-danger" })
         </div>
@@ -27,25 +27,61 @@
 
         </div>
         <div class="input-group col mb-3">
-            <div class="input-group-prepend"><span class="input-group-text">License No</span></div>
-            @Html.EditorFor(model => model.PNRno, new { htmlAttributes = new {  @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.PNRno, "", new { @class = "text-danger" })
+            <div class="input-group-prepend"><span class="input-group-text">Pick Up Point</span></div>
+            @Html.EditorFor(model => model.PickUpPoint, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.PickUpPoint, "", new { @class = "text-danger" })
 
         </div>
         <div class="input-group col mb-3">
-            <div class="input-group-prepend"><span class="input-group-text">Has Ac</span></div>
-            @Html.EditorFor(model => model.HasAc, new { htmlAttributes = new { @type = "time", @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.HasAc, "", new { @class = "text-danger" })
+            <div class="input-group-prepend"><span class="input-group-text">Drop Point</span></div>
+            @Html.EditorFor(model => model.DropPoint, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.DropPoint, "", new { @class = "text-danger" })
 
         </div>
-       
+    </div>
         <div class="form-row">
             <div class="input-group col mb-3">
+                <div class="input-group-prepend"><span class="input-group-text">Has Ac</span></div>
+                @Html.EditorFor(model => model.HasAc, new { htmlAttributes = new {  @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.HasAc, "", new { @class = "text-danger" })
+
+            </div>
+
+            <div class="input-group col mb-3">
                 <div class="input-group-prepend"><span class="input-group-text">Has Carrier</span></div>
-                @Html.EditorFor(model => model.HasCarrier, new { htmlAttributes = new { @type = "time", @class = "form-control" } })
+                @Html.EditorFor(model => model.HasCarrier, new { htmlAttributes = new {  @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.HasCarrier, "", new { @class = "text-danger" })
 
             </div>
+            <div class="input-group col mb-3">
+                <div class="input-group-prepend"><span class="input-group-text">Pay To</span></div>
+                <select name="PayTo" class="form-control">
+                    <option value="Paid to Us">
+                        Paid To US
+                    </option>
+                    <option value="Paid to Driver">
+                        Paid To Driver
+                    </option>
+                </select>
+                @Html.ValidationMessageFor(model => model.PayTo, "", new { @class = "text-danger" })
+
+            </div>
+
+        </div>
+        <div class="form-row">
+            <div class="input-group col mb-3">
+                <div class="input-group-prepend"><span class="input-group-text">Rate Basis</span></div>
+                <select name="RateBasis" class="form-control col-3">                
+                   <option value=" 8hrs-80kms">
+                       8hrs-80kms
+                   </option>
+                </select>
+                @Html.ValidationMessageFor(model => model.RateBasis, "", new { @class = "text-danger" })
+
+            </div>
+
+      
+
         </div>
     </div>
 </fieldset>

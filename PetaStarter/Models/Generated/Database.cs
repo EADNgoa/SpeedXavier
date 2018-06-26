@@ -236,6 +236,7 @@ namespace Speedbird
 		[Column] public int BankID { get; set; }
 		[Column] public string BankName { get; set; }
 		[Column] public string Address { get; set; }
+		[Column] public string AccNo { get; set; }
 	}
     
 	[TableName("dbo.BookedCustomer")]
@@ -448,6 +449,17 @@ namespace Speedbird
     {
 		[Column] public int FacilityID { get; set; }
 		[Column] public int AccomodationID { get; set; }
+	}
+    
+	[TableName("dbo.FeedBack")]
+	[PrimaryKey("FeedBackID", AutoIncrement=false)]
+	[ExplicitColumns]
+    public partial class FeedBack  
+    {
+		[Column] public int FeedBackID { get; set; }
+		[Column] public int? QuestionID { get; set; }
+		[Column] public int? SRDID { get; set; }
+		[Column] public int? StarRating { get; set; }
 	}
     
 	[TableName("dbo.FunctionGroups")]
@@ -771,6 +783,15 @@ namespace Speedbird
 		[Column] public decimal? WeekendPrice { get; set; }
 	}
     
+	[TableName("dbo.Questions")]
+	[PrimaryKey("QuestionID", AutoIncrement=false)]
+	[ExplicitColumns]
+    public partial class Question  
+    {
+		[Column] public int QuestionID { get; set; }
+		[Column] public string FQuestion { get; set; }
+	}
+    
 	[TableName("dbo.Rating")]
 	[PrimaryKey("RatingID")]
 	[ExplicitColumns]
@@ -872,6 +893,8 @@ namespace Speedbird
 		[Column] public string AgentID { get; set; }
 		[Column] public int? ServiceTypeID { get; set; }
 		[Column] public DateTime? TDate { get; set; }
+		[Column] public string IgnoreReason { get; set; }
+		[Column] public DateTime? RemindAt { get; set; }
 	}
     
 	[TableName("dbo.SR_Cust")]
@@ -915,6 +938,10 @@ namespace Speedbird
 		[Column] public int? GuideLanguageID { get; set; }
 		[Column] public DateTime? DateOfIssue { get; set; }
 		[Column] public string ContractNo { get; set; }
+		[Column] public string PayTo { get; set; }
+		[Column] public string RateBasis { get; set; }
+		[Column] public string PickUpPoint { get; set; }
+		[Column] public string DropPoint { get; set; }
 	}
     
 	[TableName("dbo.SRlogs")]

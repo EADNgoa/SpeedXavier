@@ -31,6 +31,11 @@
     [GuideLanguageID] INT NULL, 
     [DateOfIssue] DATE NULL, 
     [ContractNo] VARCHAR(50) NULL, 
+    [PayTo] VARCHAR(50) NULL, 
+    [RateBasis] VARCHAR(50) NULL, 
+    [PickUpPoint] VARCHAR(100) NULL, 
+    [DropPoint] VARCHAR(100) NULL, 
+  
     CONSTRAINT [FK_SRdetails_ToSR] FOREIGN KEY ([SRID]) REFERENCES [ServiceRequest]([SRID]), 
     CONSTRAINT [FK_SRdetails_ToSupplier] FOREIGN KEY ([SupplierID]) REFERENCES [Supplier]([SupplierID]), 
     CONSTRAINT [FK_SRdetails_ToGuideLanguage] FOREIGN KEY ([GuideLanguageID]) REFERENCES [GuideLanguage]([GuideLanguageID])
