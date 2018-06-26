@@ -54,7 +54,6 @@
                     @Html.DropDownListFor(model=>model.ServiceTypeID,null, htmlAttributes: new { @type = "text", @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.ServiceTypeID, "", new { @class = "text-danger" })
                 </div>
-
                 <div class="input-group col mb-3">
                     <div class="input-group-prepend">@Html.LabelFor(model => model.FromLoc, new { @class = "input-group-text", @id = @Html.IdFor(m => m.FromLoc) + "_lbl" })</div>
                     @Html.EditorFor(model => model.FromLoc, new { htmlAttributes = new { @type = "text", @class = " form-control" } })

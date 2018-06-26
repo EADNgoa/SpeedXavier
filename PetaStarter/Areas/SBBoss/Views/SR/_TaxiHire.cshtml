@@ -71,21 +71,93 @@
         <div class="form-row">
             <div class="input-group col mb-3">
                 <div class="input-group-prepend"><span class="input-group-text">Rate Basis</span></div>
-                <select name="RateBasis" class="form-control col-3">                
-                   <option value=" 8hrs-80kms">
-                       8hrs-80kms
-                   </option>
+                <select name="RateBasis" class="form-control col-3">
+                    <option value=" 8hrs-80kms">
+                        8hrs-80kms
+                    </option>
                 </select>
                 @Html.ValidationMessageFor(model => model.RateBasis, "", new { @class = "text-danger" })
 
             </div>
+            @if (Model?.SRDID > 0) { 
+            <div class="input-group col mb-3">
 
-      
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#AssignDriverModal" data-srdid="@Model.SRDID">
+                    Assign Driver
+                </button>
+
+            </div>
+
+            }
+        </div>
+
+</fieldset>
+<div class="modal fade" id="AssignDriverModal" tabindex="-1" role="dialog" aria-labelledby="AssignDriverLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="AssignDriverModalLabel">Assign Driver</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            @using (Html.BeginForm("AssignDriver", "SR", FormMethod.Post, new { id = "AssignDrvFrm" }))
+            {
+
+                @Html.AntiForgeryToken()
+            <div class="modal-body">
+                <div class="input-group col mb-3">
+                    <div class="input-group-prepend"><span class="input-group-text">Select Driver</span></div>
+                    <input type="text" id="DriverName" name="DriverName" style="color:black;" data-autocomplete-idholder="#DriverID" value="" data-autocombo-url="@Url.Action("AutoCompleteDrv")" class="form-control" />
+                    @Html.ValidationMessageFor(model => model.DriverID, "", new { @class = "text-danger" })
+                </div>
+                <div class="input-group col mb-3">
+                    <div class="input-group-prepend"><span class="input-group-text">Location</span></div>
+                    <select id="GeoTreeID" name="GeoTreeID" class="form-control GeoSelect input-group.input-group-lg">
+                        @foreach (var o in ViewBag.GeoId)
+                        {
+                          <option value="@o.Value">@o.Text</option>
+                        }
+                    </select>
+                </div>
+
+            </div>
+            }
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button id="SaveReason" type="button" class="btn btn-primary" data-dismiss="modal">Save</button>
+            </div>
 
         </div>
     </div>
-</fieldset>
+</div>
 <script>
+    $('#AssignDriverModal').on('shown.bs.modal', function (event) {
+
+        var button = $(event.relatedTarget); // Button that triggered the modal
+
+        var modal = $(this);
+        modal.find('#DriverName').focus();
+        modal.find('.GeoSelect').focus();
+    })
+
+     $('#SaveReason').click(function () {
+         var detFrm = $('#AssignDrvFrm');
+
+            //Save the details form if it exists else just move on.
+            if (typeof (detFrm[0]) == 'object') {
+                $.ajax({
+                    url: '@Url.Action("AssignDriver", "SR")',
+                    type: 'post',
+                    data: $(detFrm).serialize(),
+                    success: function () {
+                        window.location.assign('@Url.Action("SRdetails", new { SRDID = Model.SRDID })');
+                    }
+                });
+            }
+     });
+
     $(function () {
         //DateTime picker
         $('input[type=date]').datetimepicker({
@@ -97,16 +169,40 @@
 
         }).attr('type', 'text').attr('autocomplete', 'off');
 
-        //Disable the browsers default date picker
-        $('input[type=time]').timepicker({
-            showButtonPanel: true,
-            timeFormat: "hh:mm"
 
-        }).attr('type', 'text').attr('autocomplete', 'off');
 
         //Disable the browsers default date picker
         jQuery.validator.methods["date"] = function (value, element) { return true; }
 
-    });
-    
+     });
+      //GeoSelector
+        $(document).ready(function () {
+            function formatState(state) {
+                if (!state.id) {
+                    return state.text;
+                }
+                var parts = state.text.split(",");
+                return parts[0];
+
+            };
+
+
+
+            $(".GeoSelect").select2({
+                placeholder: "Type 3 letters to choose",
+                templateSelection: formatState,
+
+                ajax: {
+                    url: '@(Url.Action("GetLocations", "GeoTree"))',
+                    dataType: 'json',
+                    quietMillis: 250,
+                    results: function (data, page) {
+                        return { results: data.data };
+                    }
+                }
+            });
+
+
+        });
+
 </script>

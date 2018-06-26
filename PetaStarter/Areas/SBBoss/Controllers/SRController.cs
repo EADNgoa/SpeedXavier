@@ -361,7 +361,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
                     }
 
-                    if (Event.Length == null)
+                    if (Event?.Length == null)
                     {
                         Event = "User has Edited the Field";
                     }
@@ -623,13 +623,18 @@ namespace Speedbird.Areas.SBBoss.Controllers
             var filteredItems = db.Fetch<Supplier>($"Select * from Supplier Where SupplierName like '%{term}%'").Select(c => new { id = c.SupplierID, value = c.SupplierName });
             return Json(filteredItems, JsonRequestBehavior.AllowGet);
         }
-
+        public ActionResult AutoCompleteDrv(string term)
+        {
+            var filteredItems = db.Fetch<Driver>($"Select * from Driver Where DriverName like '%{term}%'").Select(c => new { id = c.DriverID, value = c.DriverName });
+            return Json(filteredItems, JsonRequestBehavior.AllowGet);
+        }
 
 
         public ActionResult FetchSTpartial(int? id, int ServiceTypeId, bool IsReadOnly)
         {
             ViewBag.GuideLanguageID = db.Fetch<GuideLanguage>("Select * from GuideLanguage").Select(v => new SelectListItem { Text = v.GuideLanguageName, Value = v.GuideLanguageID.ToString() }).ToList();
             ViewBag.CarType = Enum.GetValues(typeof(CarTypeEnum)).Cast<CarTypeEnum>().Select(v => new SelectListItem { Text = v.ToString(), Value = ((int)v).ToString() }).ToList();
+            ViewBag.GeoId = db.Query<GeoTree>("Select * from GeoTree where GeoTreeId = (Select GeoTreeId from Driver where DriverID=@0)", id ?? 0).Select(sl => new SelectListItem { Text = sl.GeoName, Value = sl.GeoTreeID.ToString(), Selected = true });
 
             if (IsReadOnly)
                 ViewBag.IsReadOnly = "disabled";
@@ -742,6 +747,23 @@ namespace Speedbird.Areas.SBBoss.Controllers
             {
                 int res = db.Execute("Update ServiceRequest set IgnoreReason=@0 ,SRStatusId=@1, EmpId=@2  where SRID=@3", IgnoreReason, (int)SRStatusEnum.NoAction,User.Identity.GetUserId() , SRID);                
                 
+                return true;
+
+            }
+            catch (Exception ex)
+            {
+                return false;
+                throw ex;
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public bool AssignDriver(int SRDID, int DriverID)
+        {
+            try
+            {
+                int res = db.Execute("Update SRdetails set DriverID=@0 where SRDID=@1", DriverID, SRDID);
                 return true;
 
             }
