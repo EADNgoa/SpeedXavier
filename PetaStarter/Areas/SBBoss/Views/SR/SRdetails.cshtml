@@ -90,7 +90,7 @@
                 </div>
                 <div class="input-group col mb-3">
                     <div class="input-group-prepend">@Html.LabelFor(model => model.Fdate, new {@class="input-group-text", @id = @Html.IdFor(m => m.Fdate)+"_lbl" })</div>
-                    @Html.EditorFor(model => model.Fdate, new { htmlAttributes = new { @type = "date", @class = " form-control" } })
+                    @Html.EditorFor(model => model.Fdate, new { htmlAttributes = new { @type = "text", @class = "eadate form-control" } })
                     @Html.ValidationMessageFor(model => model.Fdate, "", new { @class = "text-danger" })
                 </div>
             </div>
