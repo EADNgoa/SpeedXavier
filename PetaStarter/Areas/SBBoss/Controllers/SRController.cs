@@ -792,6 +792,11 @@ namespace Speedbird.Areas.SBBoss.Controllers
             }
         }
 
+        public ViewResult _AssignDriver()
+        {
+            return View();
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

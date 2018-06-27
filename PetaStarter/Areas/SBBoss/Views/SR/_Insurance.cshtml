@@ -25,7 +25,7 @@
     <div class="form-row">
         <div class="input-group col-4 mb-3">
             <div class="input-group-prepend"><span class="input-group-text">Valid Till</span></div>
-            @Html.EditorFor(model => model.Tdate, new { htmlAttributes = new { @type = "date", @class = "form-control" } })
+            @Html.EditorFor(model => model.Tdate, new { htmlAttributes = new { @type = "text", @class = "eadate form-control" } })
             @Html.ValidationMessageFor(model => model.Tdate, "", new { @class = "text-danger" })
 
         </div>

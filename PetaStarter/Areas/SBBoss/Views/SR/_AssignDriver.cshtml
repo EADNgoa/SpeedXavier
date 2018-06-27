@@ -1,0 +1,45 @@
+﻿<div class="modal fade" id="AssignDriverModal" tabindex="-1" role="dialog" aria-labelledby="AssignDriverLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="AssignDriverModalLabel">Choose Driver</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            @using (Html.BeginForm("AssignDriver", "SR", FormMethod.Post, new { id = "AssignDrvFrm" }))
+            {
+
+                @Html.AntiForgeryToken()
+                <div class="modal-body">
+                    <div class="input-group col mb-3">
+                        <div class="input-group-prepend"><span class="input-group-text">Select Driver</span></div>
+                        <input type="text" id="DriverName" name="DriverName" style="color:black;" data-autocomplete-idholder="#DriverID" value="" data-autocombo-url="@Url.Action("AutoCompleteDrv")" class="form-control" />
+
+                    </div>
+                    <div class="input-group col mb-3">
+                        <div class="input-group-prepend"><span class="input-group-text">Location</span></div>
+                        <select id="GeoTreeID" name="GeoTreeID" class="form-control GeoSelect input-group.input-group-lg"></select>
+                    </div>
+
+                </div>
+            }
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button id="SaveDriver" type="button" class="btn btn-primary" data-dismiss="modal">Save</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+    $('#AssignDriverModal').on('shown.bs.modal', function (event) {
+
+        var button = $(event.relatedTarget); // Button that triggered the modal
+
+        var modal = $(this);
+        modal.find('#DriverName').focus();
+    })
+
+</script>
