@@ -47,7 +47,32 @@ namespace Speedbird.Areas.SBBoss.Controllers
             item.Tdate = DateTime.Now;
             return base.BaseSave<PettyCash>(item, item.CashInHandRegID > 0);
         }
+        [EAAuthorize(FunctionName = "Petty Cash", Writable = true)]
+        public ActionResult Details(int? id, int? EID)
+        {
+            var rec = base.BaseCreateEdit<PCdetail>(EID, "PCDID");
+            ViewBag.PCID = id;
+            ViewBag.Title = "Petty Cash Details";
 
+            ViewBag.PC = db.FirstOrDefault<PettyCash>("Select * From PettyCash Where CashInHandRegID=@0", id);
+            ViewBag.PCD = db.Fetch<PCdetail>($"Select * From PCdetails pd inner join Supplier s on s.SupplierID = pd.SupplierID where PettyCashID ='{id}' ORDER By PCDID Desc");
+            return View(rec);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [EAAuthorize(FunctionName = "Petty Cash", Writable = true)]
+        public ActionResult Details([Bind(Include = "PCDID,PettyCashID,Category,Details,Cost,SupplierID,InvoiceNo,BillImage,SRID")] PCdetail item, System.Web.HttpPostedFileBase UploadedFile)
+        {
+            item.BillImage = SaveImage(new PetaPoco.Sql("Select BillImage from PCdetails where PCDID=@0", item.PCDID), "PCdetails", item.PCDID, UploadedFile);
+            base.BaseSave<PCdetail>(item, item.PCDID > 0);
+            return RedirectToAction("Details", new { id = item.PettyCashID});
+        }
+        public ActionResult AutoCompleteSup(string term)
+        {
+            var filteredItems = db.Fetch<Supplier>($"Select * from Supplier Where SupplierName like '%{term}%'").Select(c => new { id = c.SupplierID, value = c.SupplierName });
+            return Json(filteredItems, JsonRequestBehavior.AllowGet);
+        }
         protected override void Dispose(bool disposing)
         {
             if (disposing)

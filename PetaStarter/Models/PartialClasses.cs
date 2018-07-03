@@ -12,6 +12,19 @@ using Microsoft.AspNet.Identity;
 
 namespace Speedbird
 {
+    public class DriverDets
+    {
+        public int DriverID { get; set; }
+        public string Phone { get; set; }
+        public string GeoName { get; set; }
+        public string DriverName { get; set; }
+        public string CarModel { get; set; }
+        public int Score { get; set; }
+        public int DBCount { get; set; }
+
+
+
+    }
     public class BankAccountDets
     {
         public int BankAccountID { get; set; }
@@ -207,7 +220,10 @@ namespace Speedbird
     public partial class Package
     {
     }
-
+    [MetadataType(typeof(SRdetailsMetadata))]
+    public partial class SRdetail
+    {
+    }
     [MetadataType(typeof(AccomodationMetadata))]
     public partial class Accomodation
     {
@@ -340,6 +356,7 @@ namespace Speedbird
         public string Email { get; set; }
         public string Phone { get; set; }
         public string IdPicture { get; set; }
+        public string Type { get; set; }
 
     }
 
@@ -461,6 +478,8 @@ namespace Speedbird
         public int SRID { get; set; }
         public int CustomerID { get; set; }
         public int SRStatusID { get; set; }
+        public int PayStatusID { get; set; }
+
         public string Status { get { return ((SRStatusEnum)SRStatusID).ToString(); } }
         public DateTime TDate { get; set; }
 
@@ -587,6 +606,14 @@ namespace Speedbird
         Pending,
         Approved,
         Rejected
+    }
+    public enum PayType
+    {
+        Full_Paid,
+        Part_Paid,
+        Not_Paid,
+        Cancelled
+
     }
 
     public class EAAuthorizeAttribute : AuthorizeAttribute

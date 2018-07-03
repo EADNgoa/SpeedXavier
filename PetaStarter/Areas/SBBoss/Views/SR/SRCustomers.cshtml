@@ -38,6 +38,24 @@
         <div class="input-group-prepend"><span class="input-group-text">Email</span></div>
         @Html.Editor("Email", new { htmlAttributes = new { @class = "form-control" } })
     </div>
+
+    <div class="input-group col mb-3">
+        <div class="input-group-prepend"><span class="input-group-text">Person Type</span></div>
+        <select name="Type" class="form-control">
+            <option value="Infant">
+                Infant
+            </option>
+            <option value="Child">
+                Child
+            </option>
+            <option value="Adult">
+                Adult
+            </option>
+
+        </select>
+        @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
+
+    </div>
     <div class="input-group col mb-3">
         <input type="submit" value="Save" class="btn btn-primary" />
     </div>
@@ -56,17 +74,16 @@
                                 Sr No
                             </th>
                             <th>
-                                First Name
+                               Name
                             </th>
-                            <th>
-                                Sur Name
-                            </th>
+                      
                             <th>
                                 Phone
                             </th>
                             <th>
                                 Email
                             </th>
+                            <th>Type</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -157,11 +174,8 @@
             <tr class="">
                 <th>Sr No</th>
                 <th>
-                    First Name
-                </th>
-                <th>
-                    Sur Name
-                </th>
+                    Name
+               
                 <th>
                     Phone
                 </th>
@@ -170,7 +184,7 @@
                 <th>
                     Email
                 </th>
-
+                <th> Type</th>
                 <th></th>
             </tr>
             @{int i = 1;}
@@ -181,12 +195,8 @@
                     @i
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.FName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.SName)
-                </td>
-
+                    @Html.DisplayFor(modelItem => item.FName)&nbsp;@Html.DisplayFor(modelItem => item.SName)
+       
                 <td>
                     @Html.DisplayFor(modelItem => item.Phone)
 
@@ -195,9 +205,12 @@
                     @Html.DisplayFor(modelItem => item.Email)
 
                 </td>
-
                 <td>
-               @Html.ActionLink("Delete", "SRCustomers", new { cid = item.CustomerID, id = ViewBag.SRID},new {@Class="delcust" })
+                    @Html.DisplayFor(modelItem => item.Type)
+
+                </td>
+                <td>
+                    @Html.ActionLink("Delete", "SRCustomers", new { cid = item.CustomerID, id = ViewBag.SRID }, new { @Class = "delcust" })
                 </td>
             </tr>
                 i++;

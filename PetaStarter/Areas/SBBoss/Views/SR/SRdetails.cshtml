@@ -29,6 +29,22 @@
 @Html.Action("GetSRInfo", "SR", new { id = ViewBag.SRID, mode = ViewBag.mode })
 
 <div class="section-to-Not-print">
+    @if (Model?.SRDID > 0)
+    {
+        <div class="row">
+            <div class="col">
+                <center>
+                    <button type="button" class="btn btn-link btn-lg" data-toggle="modal" data-target="#AssignCustModal" data-srdid="@Model.SRDID">
+                        Add Customer
+                    </button>
+                </center>
+
+            </div>
+
+        </div>
+    }
+
+    <br />
     @using (Html.BeginForm("SRdetails", "SR", FormMethod.Post))
     {
         @Html.AntiForgeryToken()
@@ -97,6 +113,14 @@
                     @Html.ValidationMessageFor(model => model.Fdate, "", new { @class = "text-danger" })
                 </div>
             </div>
+            <div class="form-row">
+                <div class="input-group col mb-3">
+                    <div class="input-group-prepend"><span class="input-group-text">Supplier Invoice No</span></div>
+                    @Html.EditorFor(model => model.SuppInvNo, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.SuppInvNo, "", new { @class = "text-danger" })
+                </div>
+
+            </div>
 
             @*Dynamic Form-rows based on Selected Service Type*@
             <div id="placeholderEditDiv"></div>
@@ -113,7 +137,6 @@
     }
 </div>
 <br />
-
 
 <hr />
 <table id="SRDetTbl" class="table table-sm table-striped">
@@ -158,8 +181,14 @@
     @Scripts.Render("~/bundles/jqueryval")
 }
 <script type="text/javascript" src="~/Content/DataTables/datatables.min.js"></script>
-<script>
+@if (Model?.SRDID > 0)
+{
+    <script>
+    $('#AssignCust').load('@Url.Action("_AssignCust")', { SRDID: @Model.SRDID,SRID:@Model.SRID });
 
+    </script>
+}
+<script>
 
 
     $(function () {
@@ -298,7 +327,6 @@
 
             }
         });
-
 
     })
 

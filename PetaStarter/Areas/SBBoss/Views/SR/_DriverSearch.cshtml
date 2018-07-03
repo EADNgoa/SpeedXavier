@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Speedbird.CustomerDets>
+﻿@model IEnumerable<Speedbird.DriverDets>
 <style>
     .table{
         width:100%;
@@ -10,22 +10,25 @@
     <div>
         <br />
         <table class="table table-sm table-striped">
-            <thead class="bg-info">
+            <thead class="bg-primary">
                 <tr>
                     <th>
 
                     </th>
                     <th>
-                         Name
-                 </th>
-                    <th>
-                        Mobile
+                        Driver Name
                     </th>
                     <th>
-                        Email
+                        Phone
                     </th>
                     <th>
-                        Type
+                        Car Model
+                    </th>
+                    <th>
+                        Location
+                    </th>
+                    <th>
+                        Score
                     </th>
                 </tr>
             </thead>
@@ -35,21 +38,21 @@
                 {
                     <tr>
                         <td>
-                            <input type="radio" value=@item.CustomerID name="CID" />
+                            <input type="radio" value=@item.DriverID name="DID" id="DID" />
                         </td>
                         <td>
-                            @item.FName &nbsp; @item.SName
+                            @item.DriverName
                         </td>
-                     
                         <td>
                             @item.Phone
                         </td>
                         <td>
-                            @item.Email
+                            @item.CarModel
                         </td>
                         <td>
-                            @item.Type
+                            @item.GeoName
                         </td>
+                        <td>@item.Score</td>
                     </tr>
 
 
@@ -65,9 +68,9 @@
 <script>
     $(document).ready(function () {
         $("input[type='radio']").on('change', function () {
-            var selectedValue = $("input[name='CID']:checked").val();
+            var selectedValue = $("input[name='DID']:checked").val();
             if (selectedValue) {
-                $("#CID").val(selectedValue);
+                $("#DID").val(selectedValue);
             }
         });
 

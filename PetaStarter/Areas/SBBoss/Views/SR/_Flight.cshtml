@@ -19,7 +19,12 @@
             @Html.ValidationMessageFor(model => model.TicketNo, "", new { @class = "text-danger" })
 
         </div>
+        <div class="input-group col mb-3">
+            <div class="input-group-prepend"><span class="input-group-text">Infant No</span></div>
+            @Html.EditorFor(model => model.infantNo, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.infantNo, "", new { @class = "text-danger" })
 
+        </div>
     </div>
     <div class="form-row">
 
@@ -31,8 +36,8 @@
         </div>
         <div class="input-group col mb-3">
             <div class="input-group-prepend"><span class="input-group-text">Flight No</span></div>
-            @Html.EditorFor(model => model.AdultNo, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.AdultNo, "", new { @class = "text-danger" })
+            @Html.EditorFor(model => model.FlightNo, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.FlightNo, "", new { @class = "text-danger" })
 
         </div>
         <div class="input-group col mb-3">
@@ -47,7 +52,7 @@
     <div class="form-row">
         <div class="input-group col mb-3">
             <div class="input-group-prepend"><span class="input-group-text">Destination Airport</span></div>
-            @Html.EditorFor(model => model.ToLoc, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+            @Html.EditorFor(model => model.ToLoc, new { htmlAttributes = new { @type = "text", @class = "form-control"} })
             @Html.ValidationMessageFor(model => model.ToLoc, "", new { @class = "text-danger" })
 
         </div>

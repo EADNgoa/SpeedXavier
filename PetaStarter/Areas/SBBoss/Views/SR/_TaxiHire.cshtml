@@ -69,9 +69,9 @@
 
     </div>
     <div class="form-row">
-        <div class="input-group col mb-3">
+        <div class="input-group col-3 mb-3">
             <div class="input-group-prepend"><span class="input-group-text">Rate Basis</span></div>
-            <select name="RateBasis" class="form-control col-3">
+            <select name="RateBasis" class="form-control col-12">
                 <option value=" 8hrs-80kms">
                     8hrs-80kms
                 </option>
@@ -81,44 +81,69 @@
         </div>
         @if (Model?.SRDID > 0)
         {
-            <div class="input-group col mb-3">
+            <div class="input-group col-3 mb-3">
 
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#AssignDriverModal" data-srdid="@Model.SRDID">
-                    Assign Driver
-                </button>
+                @if (ViewBag.IsReadOnly == null)
+                {
+                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#AssignDriverModal" data-srdid="@Model.SRDID">
+                        @if (Model?.DriverID == null)
+                        {
+                            @:  Assign Driver
+                        }
+                        else
+                        {
+                            @: Change Driver
+                        }
+
+                    </button>
+                    <div class="input-group-prepend"><span class="input-group-text" style="color:blue">@ViewBag.DrvNm</span></div>
+
+                }
+                else
+                {
+                    <div class="input-group-prepend"><span class="input-group-text">Driver Name</span></div>
+                    <input type="text" value="@ViewBag.DrvNm" class="form-control" />
+                }
+
+
 
             </div>
+        }
+        @if (ViewBag.IsReadOnly == null)
+        {
+            if (Model?.DriverID > 0)
+            {
+                <div class="input-group col-3 mb-3">
+                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#DrvReviewModal" data-srdid="@Model.SRDID">
+                        Feedback
+                    </button>
+                </div>
 
+            }
         }
     </div>
 
 </fieldset>
 
-
-@if (Model?.SRDID != null)
+@if (Model?.SRDID > 0)
 {
-<script>
-$('#SaveDriver').click(function() {
-        var detFrm = $('#AssignDrvFrm');
+    <script>
+       $('#AssignDriver').load('@Url.Action("_AssignDriver")', { SRID: @Model.SRID,SRDID: @Model.SRDID});
+       $('#Review').load('@Url.Action("_DrvReview")', { SRID: @Model.SRID,SRDID: @Model.SRDID});
+    </script>
 
-        if (typeof(detFrm[0]) == 'object')
-        {
-    $.ajax({
-        url: '@Url.Action("AssignDriver", "SR")',
-        type: 'post',
-        data: $(detFrm).serialize(),
-        success: function() {
-                    window.location.assign('@Url.Action("SRdetails", new { SRDID = Model.SRDID })');
-                }
-            });
-        }
-    });
-</script>
+}
+else
+{
+    <script>
+      $('#AssignDriver').load('@Url.Action("_AssignDriver")', { SRID: @Model?.SRID,SRDID: @Model?.SRDID});
+       $('#Review').load('@Url.Action("_DrvReview")', { SRID: @Model?.SRID,SRDID: @Model?.SRDID});
+    </script>
 }
 
 <script>
-    $('#AssignDriver').load('@Url.Action("_AssignDriver")');
-  
+
+
 
     $(function () {
         //DateTime picker
@@ -144,34 +169,7 @@ $('#SaveDriver').click(function() {
         jQuery.validator.methods["date"] = function (value, element) { return true; }
 
     });
-      //GeoSelector
-        $(document).ready(function () {
-        function formatState(state) {
-            if (!state.id) {
-                return state.text;
-            }
-            var parts = state.text.split(",");
-            return parts[0];
-
-        };
 
 
-
-            $(".GeoSelect").select2({
-            placeholder: "Type 3 letters to choose",
-                templateSelection: formatState,
-
-                ajax: {
-                url: '@(Url.Action("GetLocations", "GeoTree"))',
-                    dataType: 'json',
-                    quietMillis: 250,
-                    results: function (data, page) {
-                    return { results: data.data };
-                }
-            }
-        });
-
-
-    });
 
 </script>

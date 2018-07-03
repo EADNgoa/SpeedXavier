@@ -14,6 +14,16 @@
 
         </div>
         <div class="input-group col mb-3">
+            <div class="input-group-prepend"><span class="input-group-text">Infant No</span></div>
+            @Html.EditorFor(model => model.infantNo, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.infantNo, "", new { @class = "text-danger" })
+
+        </div>
+        
+
+    </div>
+    <div class="form-row">
+        <div class="input-group col mb-3">
             <div class="input-group-prepend"><span class="input-group-text">To Date</span></div>
             @Html.EditorFor(model => model.Tdate, new { htmlAttributes = new { @type = "text", @class = "eadate form-control" } })
             @Html.ValidationMessageFor(model => model.Tdate, "", new { @class = "text-danger" })
@@ -24,7 +34,6 @@
             @Html.DropDownList("GuideLanguageID", null, htmlAttributes: new { @type = "text", @class = "form-control" })
             @Html.ValidationMessageFor(model => model.GuideLanguageID, "", new { @class = "text-danger" })
         </div>
-       
     </div>
 </fieldset>
 <script>

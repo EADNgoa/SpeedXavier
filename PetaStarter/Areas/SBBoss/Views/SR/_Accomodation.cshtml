@@ -19,13 +19,42 @@
             @Html.ValidationMessageFor(model => model.AdultNo, "", new { @class = "text-danger" })
 
         </div>
-        <div class="input-group col-3 mb-3">
+     
+    </div>
+    <div class="form-row">
+        <div class="input-group col mb-3">
+            <div class="input-group-prepend"><span class="input-group-text">Infant No</span></div>
+            @Html.EditorFor(model => model.infantNo, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.infantNo, "", new { @class = "text-danger" })
+
+        </div>
+        <div class="input-group col mb-3">
+            <div class="input-group-prepend"><span class="input-group-text">No of Rooms</span></div>
+            @Html.EditorFor(model => model.TicketNo, new { htmlAttributes = new { @type = "number", @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.TicketNo, "", new { @class = "text-danger" })
+
+        </div>
+        <div class="input-group col mb-3">
             <div class="input-group-prepend"><span class="input-group-text">Room Type</span></div>
             @Html.EditorFor(model => model.RoomType, new { htmlAttributes = new { @type = "text", @class = " form-control" } })
             @Html.ValidationMessageFor(model => model.RoomType, "", new { @class = "text-danger" })
         </div>
     </div>
-  
+    <div class="form-row">
+        <div class="input-group col-4 mb-3">
+            <div class="input-group-prepend"><span class="input-group-text">Pay To</span></div>
+            <select name="PayTo" class="form-control">
+                <option value="Paid to Us">
+                    Apartment
+                </option>
+                <option value="Paid to Driver">
+                    Us
+                </option>
+            </select>
+            @Html.ValidationMessageFor(model => model.PayTo, "", new { @class = "text-danger" })
+
+        </div>
+    </div>
 </fieldset>
 
 <script>

@@ -377,6 +377,7 @@ namespace Speedbird
 		[Column] public string Email { get; set; }
 		[Column] public string Phone { get; set; }
 		[Column] public string IdPicture { get; set; }
+		[Column] public string Type { get; set; }
 	}
     
 	[TableName("dbo.CustomerQuery")]
@@ -461,7 +462,7 @@ namespace Speedbird
 	}
     
 	[TableName("dbo.FeedBack")]
-	[PrimaryKey("FeedBackID", AutoIncrement=false)]
+	[PrimaryKey("FeedBackID")]
 	[ExplicitColumns]
     public partial class FeedBack  
     {
@@ -742,6 +743,22 @@ namespace Speedbird
 		[Column] public int? ServiceTypeID { get; set; }
 	}
     
+	[TableName("dbo.PCdetails")]
+	[PrimaryKey("PCDID")]
+	[ExplicitColumns]
+    public partial class PCdetail  
+    {
+		[Column] public int PCDID { get; set; }
+		[Column] public int? PettyCashID { get; set; }
+		[Column] public string Category { get; set; }
+		[Column] public string Details { get; set; }
+		[Column] public decimal? Cost { get; set; }
+		[Column] public int? SupplierID { get; set; }
+		[Column] public string InvoiceNo { get; set; }
+		[Column] public string BillImage { get; set; }
+		[Column] public int? SRID { get; set; }
+	}
+    
 	[TableName("dbo.PettyCash")]
 	[PrimaryKey("CashInHandRegID")]
 	[ExplicitColumns]
@@ -793,7 +810,7 @@ namespace Speedbird
 	}
     
 	[TableName("dbo.Questions")]
-	[PrimaryKey("QuestionID", AutoIncrement=false)]
+	[PrimaryKey("QuestionID")]
 	[ExplicitColumns]
     public partial class Question  
     {
@@ -898,6 +915,7 @@ namespace Speedbird
 		[Column] public int? SRStatusID { get; set; }
 		[Column] public string EmpID { get; set; }
 		[Column] public int? EnquirySource { get; set; }
+		[Column] public int? PayStatusID { get; set; }
 		[Column] public int? BookingTypeID { get; set; }
 		[Column] public string AgentID { get; set; }
 		[Column] public int? ServiceTypeID { get; set; }
@@ -912,6 +930,15 @@ namespace Speedbird
     public partial class SR_Cust  
     {
 		[Column] public int ServiceRequestID { get; set; }
+		[Column] public int CustomerID { get; set; }
+	}
+    
+	[TableName("dbo.SRD_Cust")]
+	[PrimaryKey("SRDID", AutoIncrement=false)]
+	[ExplicitColumns]
+    public partial class SRD_Cust  
+    {
+		[Column] public int SRDID { get; set; }
 		[Column] public int CustomerID { get; set; }
 	}
     
@@ -952,6 +979,8 @@ namespace Speedbird
 		[Column] public string PickUpPoint { get; set; }
 		[Column] public string DropPoint { get; set; }
 		[Column] public int? DriverID { get; set; }
+		[Column] public string FlightNo { get; set; }
+		[Column] public string SuppInvNo { get; set; }
 	}
     
 	[TableName("dbo.SRlogs")]

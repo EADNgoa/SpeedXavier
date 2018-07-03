@@ -5,6 +5,7 @@
     [SRStatusID] INT NULL, 
     [EmpID] NVARCHAR(128) NULL, 
     [EnquirySource] INT NULL, 
+    [PayStatusID] INT            NULL,
 	[BookingTypeID] INT NULL, 
     [AgentID] NVARCHAR(128) NULL, 
     [ServiceTypeID] INT NULL, 
