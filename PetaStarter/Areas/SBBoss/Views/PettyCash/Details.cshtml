@@ -96,7 +96,7 @@
                     </div>
                     <div class="input-group col mb-3">
                         <div class="input-group-prepend"><span class="input-group-text">Supplier</span></div>
-                        <input type="text" id="SupplierName" name="SupplierName" style="color:black;" data-autocomplete-idholder="#SupplierID" value="" data-autocombo-url="@Url.Action("AutoCompleteSup")" class="form-control" />
+                        <input type="text" id="SupplierName" name="SupplierName" style="color:black;" data-autocomplete-idholder="#SupplierID" value="@ViewBag?.SupplierName" data-autocombo-url="@Url.Action("AutoCompleteSup")" class="form-control" />
                         @Html.ValidationMessageFor(model => model.SupplierID, "", new { @class = "text-danger" })
                     </div> 
                     <div class="input-group col mb-3">
@@ -113,8 +113,16 @@
                         @Html.ValidationMessageFor(model => model.Cost, "", new { @class = "text-danger" })
                     </div>
                     <div class="input-group col mb-3">
-                        <div class="input-group-prepend"><span class="input-group-text">Upload Image</span></div>
-                        <input type="file" name="UploadedFile" />
+                                                <div class="input-group-prepend"><span class="input-group-text">Upload Image</span></div>
+
+                       @if (Model?.BillImage != null)
+                       {
+                          <input type="file" name="UploadedFile" value="/Images/@Model.BillImage"/>
+
+                        }
+                        else {
+                           <input type="file" name="UploadedFile" />
+                        }
                     </div>
                 </div>
 
@@ -148,14 +156,14 @@
 
                 <th class="section-to-Not-print"></th>
             </tr>
-            @foreach (var item in (IEnumerable<Speedbird.PCdetail>)ViewBag.PCD)
+            @foreach (var item in (IEnumerable<Speedbird.PCdetailDets>)ViewBag.PCD)
             {
                 <tr>
                     <td>
                         @item.Category
                     </td>
                     <td>
-                        @item.SupplierID
+                        @item.SupplierName
                     </td>
                     <td>
                         @item.InvoiceNo

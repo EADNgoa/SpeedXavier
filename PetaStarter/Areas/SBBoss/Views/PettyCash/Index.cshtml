@@ -87,7 +87,8 @@
                         @item.Remarks
                     </td>
                     <td>
-                        @Html.ActionLink("Details","Details",new {id=item.CashInHandRegID})
+                        <a href="@Url.Action("Details","PettyCash", new {id = item.CashInHandRegID })"><i title="Details" class="fas fa-newspaper fa-inverse h3 float-right DropShadow"></i></a>
+
                     </td>
                     <td>
                         <a href="@Url.Action("Manage","PettyCash", new {id = item.CashInHandRegID })"><i title="Edit" class="fas fa-edit fa-inverse h3 float-right DropShadow"></i></a>

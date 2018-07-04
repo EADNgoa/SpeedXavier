@@ -301,7 +301,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 sql.Append($" and Phone like '%{ph}%'");            
             
             if (em != "")
-                sql.Append($" and LOWER(Email) like '%{em.ToLower()}%'");
+                sql.Append(" and LOWER(Email) like '%@0%'",em.ToLower());
 
            var recs = db.Query<CustomerDets>(sql);
 
@@ -636,7 +636,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             ViewBag.SRDID = id;
             if (IsReadOnly)
                 ViewBag.IsReadOnly = "disabled";
-
+            
             switch ((ServiceTypeEnum)ServiceTypeId)
             {
                 case ServiceTypeEnum.Accomodation:
@@ -889,6 +889,16 @@ namespace Speedbird.Areas.SBBoss.Controllers
        {
             var locs = db.Fetch<GeoTree>("Select CONCAT(g.GeoName,': ', dbo.GetGeoAncestorsStr(g.GeoTreeID)) as GeoName,g.GeoTreeID from GeoTree g where GeoName like '%" + term + "%'");
             return Json(new { results = locs.Select(a => new { id = a.GeoTreeID, text = a.GeoName.TrimEnd(',', ' ') }) }, JsonRequestBehavior.AllowGet);
+        }
+
+        [EAAuthorize(FunctionName = "Service Requests", Writable = true)]
+        public ActionResult CustSearch(int? id)
+        {
+            ViewBag.SRDID = id;
+            ViewBag.Check = "True";
+            var rec = db.Query<CustomerDets>("Select * from Customer c inner join SRD_Cust sc on c.CustomerID = sc.CustomerID inner join SRdetails sd on sd.SRDID = sc.SRDID Where sc.SRDID=@0 ", id).ToList();
+
+            return PartialView("CustomerSearchPartial",rec);
         }
         protected override void Dispose(bool disposing)
         {

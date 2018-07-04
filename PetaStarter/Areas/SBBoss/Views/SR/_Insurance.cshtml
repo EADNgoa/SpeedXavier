@@ -19,7 +19,7 @@
             @Html.ValidationMessageFor(model => model.City, "", new { @class = "text-danger" })
 
         </div>
-       
+
 
     </div>
     <div class="form-row">
@@ -31,6 +31,9 @@
         </div>
     </div>
 </fieldset>
+@if (ViewBag.isReadOnly != null)
+{@Html.Action("CustSearch", "SR", new { id = Model.SRDID })
+}
 <script>
     $(function () {
         //DateTime picker
@@ -52,7 +55,7 @@
         //Disable the browsers default date picker
         jQuery.validator.methods["date"] = function (value, element) { return true; }
     });
- 
 
-   
+
+
 </script>

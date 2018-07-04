@@ -28,6 +28,9 @@
 
 
     </div>
+    @if (ViewBag.isReadOnly != null)
+    {@Html.Action("CustSearch", "SR", new { id = Model.SRDID })
+}
 </fieldset>
 <script>
     $(function () {

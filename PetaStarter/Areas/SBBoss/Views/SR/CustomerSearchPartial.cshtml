@@ -7,17 +7,21 @@
 </style>
 @if (Model != null)
 {
-    <div>
-        <br />
+<div>
+    @if (ViewBag.Check != null)
+    { <h4>Assigned Pax:</h4>}
         <table class="table table-sm table-striped">
             <thead class="bg-info">
                 <tr>
-                    <th>
+                    @if (ViewBag.Check == null)
+                    {
+                        <th>
 
-                    </th>
+                        </th>
+                    }
                     <th>
-                         Name
-                 </th>
+                        Name
+                    </th>
                     <th>
                         Mobile
                     </th>
@@ -34,13 +38,16 @@
                 @foreach (var item in Model)
                 {
                     <tr>
-                        <td>
-                            <input type="radio" value=@item.CustomerID name="CID" />
-                        </td>
+                        @if (ViewBag.Check == null)
+                        {
+                            <td>
+                                <input type="radio" value=@item.CustomerID name="CID" />
+                            </td>
+                        }
                         <td>
                             @item.FName &nbsp; @item.SName
                         </td>
-                     
+
                         <td>
                             @item.Phone
                         </td>
@@ -55,7 +62,7 @@
 
 
                 }
-               
+
 
             </tbody>
         </table>

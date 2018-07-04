@@ -20,7 +20,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         public ActionResult Index(int? page, DateTime? dt)
         {
             page = 1;
-            return View("Index", base.BaseIndex<PettyCash>(page, " * ", "PettyCash Where Tdate Like '%" + dt + "%'"));
+            return View("Index", base.BaseIndex<PettyCash>(page, " * ", "PettyCash Where Tdate Like '%" + dt + "%' Order By CashInHandRegID Desc"));
         }
 
 
@@ -51,11 +51,15 @@ namespace Speedbird.Areas.SBBoss.Controllers
         public ActionResult Details(int? id, int? EID)
         {
             var rec = base.BaseCreateEdit<PCdetail>(EID, "PCDID");
+            if(rec?.PettyCashID > 0)
+            {
+
+            }
             ViewBag.PCID = id;
             ViewBag.Title = "Petty Cash Details";
 
             ViewBag.PC = db.FirstOrDefault<PettyCash>("Select * From PettyCash Where CashInHandRegID=@0", id);
-            ViewBag.PCD = db.Fetch<PCdetail>($"Select * From PCdetails pd inner join Supplier s on s.SupplierID = pd.SupplierID where PettyCashID ='{id}' ORDER By PCDID Desc");
+            ViewBag.PCD = db.Fetch<PCdetailDets>($"Select * From PCdetails pd inner join Supplier s on s.SupplierID = pd.SupplierID where PettyCashID ='{id}' ORDER By PCDID Desc");
             return View(rec);
         }
 

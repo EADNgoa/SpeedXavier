@@ -19,7 +19,7 @@
             @Html.ValidationMessageFor(model => model.AdultNo, "", new { @class = "text-danger" })
 
         </div>
-     
+
     </div>
     <div class="form-row">
         <div class="input-group col mb-3">
@@ -43,18 +43,39 @@
     <div class="form-row">
         <div class="input-group col-4 mb-3">
             <div class="input-group-prepend"><span class="input-group-text">Pay To</span></div>
+            @{ string p;}
             <select name="PayTo" class="form-control">
-                <option value="Paid to Us">
-                    Apartment
-                </option>
-                <option value="Paid to Driver">
-                    Us
-                </option>
+                @if (Model?.SRDID > 0)
+                {
+                    <option value="@Model.PayTo">
+                        @Model.PayTo
+                    </option>
+                    <option value="Paid to Apartment">
+                        Apartment
+                    </option>
+                    <option value="Paid to US">
+                        Us
+                    </option>
+                }
+                else
+                {
+
+                    <option value="Paid to Apartment">
+                        Apartment
+                    </option>
+                    <option value="Paid to US">
+                        Us
+                    </option>
+                }
+
             </select>
             @Html.ValidationMessageFor(model => model.PayTo, "", new { @class = "text-danger" })
 
         </div>
     </div>
+    @if (ViewBag.isReadOnly != null)
+    {@Html.Action("CustSearch", "SR", new { id = Model.SRDID })
+}
 </fieldset>
 
 <script>
@@ -65,13 +86,13 @@
             showButtonPanel: true,
             changeMonth: true,
             changeYear: true,
-            timeFormat:"hh:mm"
-            
+            timeFormat: "hh:mm"
+
         }).attr('type', 'text').attr('autocomplete', 'off');
 
         //Disable the browsers default date picker
     });
 
 
-    
+
 </script>

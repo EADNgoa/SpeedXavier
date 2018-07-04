@@ -5,6 +5,8 @@
 }
 
 <style>
+   
+
 
     /*for Datatables*/
     td.details-control {
@@ -83,20 +85,29 @@
                     <input type="text" id="SupplierName" name="SupplierName" style="color:black;" data-autocomplete-idholder="#SupplierID" value="" data-autocombo-url="@Url.Action("AutoCompleteSup")" class="form-control" />
                     @Html.ValidationMessageFor(model => model.SupplierID, "", new { @class = "text-danger" })
                 </div>
+            
+            </div>
+            <div class="form-row">
                 <div class="input-group col mb-3">
                     <div class="input-group-prepend"><span class="input-group-text">Coupon Code</span></div>
 
                     @Html.EditorFor(model => model.CouponCode, new { htmlAttributes = new { @type = "text", @class = " form-control" } })
                     @Html.ValidationMessageFor(model => model.CouponCode, "", new { @class = "text-danger" })
                 </div>
-            </div>
-            <div class="form-row">
 
                 <div class="input-group col mb-3">
                     <div class="input-group-prepend"><span class="input-group-text">Contract No</span></div>
                     @Html.EditorFor(model => model.ContractNo, new { htmlAttributes = new { @type = "text", @class = " form-control" } })
                     @Html.ValidationMessageFor(model => model.ContractNo, "", new { @class = "text-danger" })
                 </div>
+
+                <div class="input-group col mb-3">
+                    <div class="input-group-prepend">@Html.LabelFor(model => model.Fdate, new { @class = "input-group-text", @id = @Html.IdFor(m => m.Fdate) + "_lbl" })</div>
+                    @Html.EditorFor(model => model.Fdate, new { htmlAttributes = new { @type = "text", @class = "eadate form-control" } })
+                    @Html.ValidationMessageFor(model => model.Fdate, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-row">
                 <div class="input-group col mb-3">
                     <div class="input-group-prepend"><span class="input-group-text">Cost Price</span></div>
                     @Html.EditorFor(model => model.Cost, new { htmlAttributes = new { @type = "text", @class = " form-control" } })
@@ -108,14 +119,7 @@
                     @Html.ValidationMessageFor(model => model.SellPrice, "", new { @class = "text-danger" })
                 </div>
                 <div class="input-group col mb-3">
-                    <div class="input-group-prepend">@Html.LabelFor(model => model.Fdate, new { @class = "input-group-text", @id = @Html.IdFor(m => m.Fdate) + "_lbl" })</div>
-                    @Html.EditorFor(model => model.Fdate, new { htmlAttributes = new { @type = "text", @class = "eadate form-control" } })
-                    @Html.ValidationMessageFor(model => model.Fdate, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="input-group col mb-3">
-                    <div class="input-group-prepend"><span class="input-group-text">Supplier Invoice No</span></div>
+                    <div class="input-group-prepend"><span class="input-group-text"> Invoice No</span></div>
                     @Html.EditorFor(model => model.SuppInvNo, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.SuppInvNo, "", new { @class = "text-danger" })
                 </div>
@@ -143,7 +147,6 @@
     <thead class="thead-light">
         <tr role="row">
             <th>Dets</th>
-            <th><input type="text" class="form-control" placeholder="Filter Request No"></th>
             <th></th>
             <th><input type="date" class="form-control" placeholder="Filter Date"></th>
 
@@ -157,7 +160,6 @@
         </tr>
         <tr role="row">
             <th></th>
-            <th scope="col"> Request No</th>
             <th scope="col"> Service Type</th>
             <th scope="col"> Date</th>
 
@@ -188,7 +190,7 @@
 
     </script>
 }
-<script>
+    <script>
 
 
     $(function () {
@@ -201,7 +203,7 @@
             });
 
             $.post('@Url.Action("FetchSTlabels", "SR")', { CommonLabel: '@Html.DisplayNameFor(model => model.Fdate)', ServiceTypeId: sid }, function (data) {
-                $('#@Html.DisplayNameFor(model =>model.Fdate)' + '_lbl').html(data);
+                $('#@Html.DisplayNameFor(model =>model.Fdate)' + '_lbl').html(data);p
             });
 
         };
@@ -270,7 +272,7 @@
                     "data": null,
                     "defaultContent": ''
                 },
-                { data: "SRID" },
+
                 { data: "ServiceTypeName" },
                 { data: "fstr" },
 
@@ -283,17 +285,17 @@
                 { data: "SellPrice" },
             ],
             columnDefs: [{
-                'targets': 9,
+                'targets': 8,
                 'searchable': false,
                 'orderable': false,
                 'bSortable': false,
                 'render': function (data, type, full, meta) {
-                    return '<a href="/SBBoss/SR/Manage?id='+ full.SRID +'&&mode='+3+'&&EID='+full.SRDID+'"><i class="fas fa-edit fa-inverse h3 float-right DropShadow"></i></a> &nbsp;';
+                    return '<button type="button" class="btn btn-link " data-toggle="modal" data-target="#AssignCustModal" data-srdid=' + full.SRDID +'"> <i class="fas fa-user fa-inverse h3 float-left DropShadow"></i></button><a href="/SBBoss/SR/Manage?id='+ full.SRID +'&&mode='+3+'&&EID='+full.SRDID+'"><i class="fas fa-edit fa-inverse h3  DropShadow"></i></a> ';
                 }
             },
             {
                 targets: 'no-sort',
-                orderable: false
+                orderable: true
             }]
         });
 
@@ -332,4 +334,4 @@
 
 
 
-</script>
+    </script>

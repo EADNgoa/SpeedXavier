@@ -124,6 +124,9 @@
     </div>
 
 </fieldset>
+@if (ViewBag.isReadOnly != null)
+{@Html.Action("CustSearch", "SR", new { id = Model.SRDID })
+}
 
 @if (Model?.SRDID > 0)
 {

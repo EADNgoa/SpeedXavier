@@ -12,6 +12,24 @@ using Microsoft.AspNet.Identity;
 
 namespace Speedbird
 {
+    public class PCdetailDets
+    {
+        public int PCDID { get; set; }
+        public int SupplierID { get; set; }
+
+        public string PettyCashID { get; set; }
+        public string Category { get; set; }
+        public string Details { get; set; }
+        public decimal Cost { get; set; }
+        public string SupplierName { get; set; }
+        public string InvoiceNo { get; set; }
+        public string BillImage { get; set; }
+
+        public int SRID { get; set; }
+
+
+
+    }
     public class DriverDets
     {
         public int DriverID { get; set; }
