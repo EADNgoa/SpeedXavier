@@ -53,7 +53,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             var rec = base.BaseCreateEdit<PCdetail>(EID, "PCDID");
             if(rec?.PettyCashID > 0)
             {
-
+                ViewBag.SupplierName = db.ExecuteScalar<string>("Select SupplierName from Supplier where SupplierID = @0",rec.SupplierID);
             }
             ViewBag.PCID = id;
             ViewBag.Title = "Petty Cash Details";
