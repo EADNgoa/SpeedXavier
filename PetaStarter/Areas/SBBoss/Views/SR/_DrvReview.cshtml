@@ -1,0 +1,108 @@
+﻿
+<div class="modal fade" id="DrvReviewModal" tabindex="-1" role="dialog" aria-labelledby="DrvReviewLabel" aria-hidden="true">
+    <div class="modal-dialog" rol
+         e="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="DrvReviewModalLabel">Feedback</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            @using (Html.BeginForm("DrvReview", "SR", FormMethod.Post, new { id = "ReviewDrv" }))
+            {
+
+                @Html.AntiForgeryToken()
+                @Html.Hidden("SRID", (int)ViewBag.SRDID)
+
+                @Html.Hidden("SRDID", (int)ViewBag.SRDID)
+                <div class="modal-body">
+
+
+                    <div>
+                        <br />
+                        <table class="table table-sm table-striped">
+                            <thead class="bg-primary">
+                                <tr>
+                                    <th colspan="2">
+                                        <center>Give Score</center>
+                                    </th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                               
+                                @foreach (var item in ViewBag.Quests)
+                                {
+                                    <tr>
+                                        <td>
+                                            <select id="Star" name="Star">
+                                                <option value=""></option>
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                            </select>
+
+                                        </td>
+                                        <td>
+                                            @Html.Hidden("QuestionID",(int)item.QuestionID)
+                                            @item.FQuestion
+                                        </td>
+                                    </tr>
+                                }
+
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+            }
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button id="SaveRev" type="button" class="btn btn-primary" data-dismiss="modal">Save</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+$('#SaveRev').click(function() {
+        var detFrm = $('#ReviewDrv');
+
+        if (typeof(detFrm[0]) == 'object')
+        {
+    $.ajax({
+        url: '@Url.Action("ReviewDriver", "SR")',
+        type: 'post',
+        data: $(detFrm).serialize(),
+        success: function () {
+
+                        window.location.assign('@Url.Action("Manage", new { id = (int)ViewBag.SRID,mode=3 })');
+                }
+            });
+        }
+    });
+    $('#DrvReviewModal').on('shown.bs.modal', function (event) {
+
+        var button = $(event.relatedTarget); // Button that triggered the modal
+        var recipient = button.data('srdid');
+        var modal = $(this);
+        modal.find('#SRDID').val(recipient);
+
+        modal.find('#Example').focus();
+
+
+    });
+
+
+
+
+</script>

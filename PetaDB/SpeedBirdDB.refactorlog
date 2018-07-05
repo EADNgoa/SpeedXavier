@@ -574,5 +574,33 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="[FK_Driver_ToGeoTree]" />
 
-</Operation>
+  </Operation>
+  <Operation Name="Rename Refactor" Key="91186fac-a3f7-4310-9223-72c564d69c55" ChangeDateTime="07/03/2018 04:46:39">
+    <Property Name="ElementName" Value="[dbo].[PCdetails].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[PCdetails]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="PCDID" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="aa94986e-d53c-4277-9dd0-a7746ad7dbc6" ChangeDateTime="07/03/2018 04:48:44">
+    <Property Name="ElementName" Value="[dbo].[PCdetails].[Invoice]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[PCdetails]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="InvoiceNo" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="9d409101-612e-475b-aec7-5f98527912a9" ChangeDateTime="07/03/2018 05:39:17">
+    <Property Name="ElementName" Value="[dbo].[PCdetails].[Supplier]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[PCdetails]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="SupplierID" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="934f9f9c-c92b-4064-a4fd-034de73eb146" ChangeDateTime="07/03/2018 10:12:35">
+    <Property Name="ElementName" Value="[dbo].[ServiceRequest].[ServiceTypeID]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[ServiceRequest]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="PayStatusID" />
+  </Operation>
 </Operations>

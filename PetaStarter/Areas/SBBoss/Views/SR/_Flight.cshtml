@@ -19,7 +19,12 @@
             @Html.ValidationMessageFor(model => model.TicketNo, "", new { @class = "text-danger" })
 
         </div>
+        <div class="input-group col mb-3">
+            <div class="input-group-prepend"><span class="input-group-text">Infant No</span></div>
+            @Html.EditorFor(model => model.infantNo, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.infantNo, "", new { @class = "text-danger" })
 
+        </div>
     </div>
     <div class="form-row">
 
@@ -31,8 +36,8 @@
         </div>
         <div class="input-group col mb-3">
             <div class="input-group-prepend"><span class="input-group-text">Flight No</span></div>
-            @Html.EditorFor(model => model.AdultNo, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.AdultNo, "", new { @class = "text-danger" })
+            @Html.EditorFor(model => model.FlightNo, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.FlightNo, "", new { @class = "text-danger" })
 
         </div>
         <div class="input-group col mb-3">
@@ -41,7 +46,7 @@
             @Html.ValidationMessageFor(model => model.Airline, "", new { @class = "text-danger" })
 
         </div>
-      
+
 
     </div>
     <div class="form-row">
@@ -66,6 +71,9 @@
         </div>
     </div>
 </fieldset>
+@if (ViewBag.isReadOnly != null)
+{@Html.Action("CustSearch", "SR", new { id = Model.SRDID })
+}
 <script>
     $(function () {
         //DateTime picker
@@ -88,6 +96,6 @@
         //Disable the browsers default date picker
         jQuery.validator.methods["date"] = function (value, element) { return true; }
     });
-  
+
 
 </script>

@@ -42,7 +42,9 @@
                 <th>
                    Date
                 </th>
-            
+                 <th>
+                     Name and Designation
+                 </th>
                 <th>
                     Cash to Declare at the Start
                 </th>
@@ -55,6 +57,7 @@
                 <th>
                     Remarks
                 </th>
+                <th></th>
                 <th></th>
             </tr>
             @{int i = 1;}
@@ -82,6 +85,10 @@
                     </td>
                     <td>
                         @item.Remarks
+                    </td>
+                    <td>
+                        <a href="@Url.Action("Details","PettyCash", new {id = item.CashInHandRegID })"><i title="Details" class="fas fa-newspaper fa-inverse h3 float-right DropShadow"></i></a>
+
                     </td>
                     <td>
                         <a href="@Url.Action("Manage","PettyCash", new {id = item.CashInHandRegID })"><i title="Edit" class="fas fa-edit fa-inverse h3 float-right DropShadow"></i></a>

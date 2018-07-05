@@ -1,0 +1,198 @@
+﻿<style>
+    .modal-lg {
+        max-width: 100% !important;
+    }
+</style>
+<div class="modal modal-lg fade" id="AssignDriverModal" tabindex="-1" role="dialog" aria-labelledby="AssignDriverLabel" aria-hidden="true">
+    <div class="modal-dialog  " role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="AssignDriverModalLabel">Choose Driver</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            @using (Html.BeginForm("AssignDriver", "SR", FormMethod.Post, new { id = "AssignDrvFrm" }))
+            {
+
+                @Html.AntiForgeryToken()
+                @Html.Hidden("SRDID")
+                @Html.Hidden("SRID",(int) ViewBag.SRID)
+            <div class="modal-body">
+                <div class="input-group col mb-3">
+                    <div class="input-group-prepend"><span class="input-group-text">Select Driver</span></div>
+                    @Html.Editor("DriverName", new { htmlAttributes = new { @class = "form-control" } })
+
+                </div>
+                <div class="input-group col mb-3 ">
+                    <div class="input-group-prepend"><span class="input-group-text">Location</span></div>
+                    <input type="text" id="GeoName" name="GeoName" style="color:black;" data-autocomplete-idholder="#GeoTreeID" value="" data-autocombo-url="@Url.Action("GetLocations")" class="form-control" />
+                    
+
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <center>
+                            <button id="scr" type="button" class="btn btn-link " style="width:140px" name="scr"  value="">Sort by Score</button>
+                        </center>
+                    </div>
+                    <div class="col-6">
+                        <center>
+                            <button id="bks" type="button" class="btn btn-link " style="width:140px" name="bks" value="">Sort by Bookings</button>
+                        </center>
+                    </div>
+                </div>
+                <div class="row">
+                    <div id="SearchDrv" class="col-12">
+                        <br />
+                        <table class="table table-sm table-striped">
+                            <thead class="bg-primary">
+                                <tr>
+                                    <th>
+                                        Sr No
+                                    </th>
+                                    <th>
+                                        Driver Name
+                                    </th>
+                                    <th>
+                                        Phone
+                                    </th>
+                                    <th>
+                                       Car Model
+                                    </th>
+                                    <th>
+                                        Location
+                                    </th>
+                                    <th>
+                                        Score
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td colspan="6">&nbsp;</td>
+                                </tr>
+
+                                <tr>
+                                    <td colspan="6">&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="6">&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="6"><center>This Table Will Display Existing Customers.</center></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="6">&nbsp;</td>
+                                </tr>
+
+                                <tr>
+                                    <td colspan="6">&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="6">&nbsp;</td>
+                                </tr>
+
+
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+
+            </div>
+
+            }
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button id="SaveDriver" type="button" class="btn btn-primary" data-dismiss="modal">Save</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+    $("#DriverName,#GeoTreeID").keyup(function () {
+
+        var dn = $('#DriverName').val();
+        var gt = $('#GeoTreeID').val();
+        var did = $('#DID').val();
+        var sdid = $('#SRDID').val();
+
+        if (dn.length == 3 || gt != null) {
+            $('#SearchDrv').html("");
+            $('#SearchDrv').load("/SBBoss/SR/FetchDrv?DriverName=" + dn + "&&SRDID=" + sdid);
+        }
+    });
+    $("#scr").click(function (e) {
+
+        var btn = e.target.id;
+        if (btn == "scr") {
+            var scr = $('#scr').val();
+        }
+        else if (btn=="#bks"){
+            var scr = $('#bks').val();
+        }
+        var dn = $('#DriverName').val();
+        var gt = $('#GeoTreeID').val();
+        var sdid = $('#SRDID').val();
+
+        if (dn.length == 3 || gt != null) {
+            $('#SearchDrv').html("");
+            $('#SearchDrv').load("/SBBoss/SR/FetchDrv?DriverName=" + dn + "&&SRDID=" + sdid + "&&scr=" + scr + "&&bks=" + bks);
+        }
+    });
+
+
+
+$('#SaveDriver').click(function() {
+        var detFrm = $('#AssignDrvFrm');
+
+        if (typeof(detFrm[0]) == 'object')
+        {
+    $.ajax({
+        url: '@Url.Action("AssignDriver", "SR")',
+        type: 'post',
+        data: $(detFrm).serialize(),
+        success: function () {
+
+                        window.location.assign('@Url.Action("Manage", new { id = (int)ViewBag.SRID,mode=3 })');
+                }
+            });
+        }
+    });
+    $('#AssignDriverModal').on('shown.bs.modal', function (event) {
+
+        var button = $(event.relatedTarget); // Button that triggered the modal
+        var recipient = button.data('srdid');
+        var modal = $(this);
+        modal.find('#SRDID').val(recipient);
+
+        modal.find('#DriverName').focus();
+        modal.find('#GeoTreeID').focus();
+
+    })
+
+
+    
+
+
+    $(document).ready(function () {
+        $('*[data-autocombo-url]')
+            .each(function () {
+                $(this).autocomplete({
+                    source: $(this).data("autocombo-url"),
+                    minLenght: 3,
+                    delay: 500,
+                    select: function (event, ui) {
+                        $($(this).data("autocomplete-idholder")).val(ui.item.id);
+                    }
+                });
+            });
+    });
+
+
+
+
+</script>

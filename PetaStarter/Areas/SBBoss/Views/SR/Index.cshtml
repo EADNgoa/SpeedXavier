@@ -88,9 +88,7 @@
                 { data: "Src" },
                 { data: "AgentName" },
                 { data: "Status" },
-
-                { data: "TotSA" },
-                { data: "AccAmt" },
+    
 
 
             ],
@@ -104,17 +102,17 @@
                     'render': function (data, type, full, meta,row) {
 
 
-                        if (full.SRStatusID == @((int) Speedbird.SRStatusEnum.Cancelled)) {
+                        if (full.PayStatusID == @((int) Speedbird.PayType.Cancelled)) {
                             return '<a href="/SBBoss/SR/manage/' + full.SRID + '"><i class="fas bg-secondary fa-edit fa-inverse h3 float-right DropShadow"></i></a>';
                         }
                         else {
-                            if (full.AccAmt >= full.TotSA) {
+                            if (full.PayStatusID ==  @((int)Speedbird.PayType.Full_Paid )) {
                             return '<a href="/SBBoss/SR/manage/' + full.SRID + '"><i class="fas bg-success fa-edit fa-inverse h3 float-right DropShadow"></i></a>';
                             }
-                            if (full.AccAmt >= 1 && full.AccAmt <= full.TotSA) {
+                            if (full.PayStatusID ==  @((int)Speedbird.PayType.Part_Paid)){
                                 return '<a href="/SBBoss/SR/manage/' + full.SRID + '"><i class="fas bg-warning fa-edit fa-inverse h3 float-right DropShadow"></i></a>';
                             }
-                            if (full.AccAmt == 0) {
+                            if (full.PayStatusID ==  @((int)Speedbird.PayType.Not_Paid)) {
                                 return '<a href="/SBBoss/SR/manage/' + full.SRID + '"><i class="fas bg-danger fa-edit fa-inverse h3 float-right DropShadow"></i></a>';
                             }
                         }
@@ -128,13 +126,7 @@
 
 
                 },
-                {
-                    'targets': 10,
-                    'visible': false,
-                    'searchable': false,
-
-                },
-
+            
 
                 {
                 targets: 'no-sort',

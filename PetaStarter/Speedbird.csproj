@@ -743,6 +743,11 @@
     <Content Include="Areas\SBBoss\Views\SR\_TaxiHire.cshtml" />
     <Content Include="Areas\SBBoss\Views\Questions\Index.cshtml" />
     <Content Include="Areas\SBBoss\Views\Questions\Manage.cshtml" />
+    <Content Include="Areas\SBBoss\Views\SR\_AssignDriver.cshtml" />
+    <Content Include="Areas\SBBoss\Views\SR\_DriverSearch.cshtml" />
+    <Content Include="Areas\SBBoss\Views\SR\_DrvReview.cshtml" />
+    <Content Include="Areas\SBBoss\Views\PettyCash\Details.cshtml" />
+    <Content Include="Areas\SBBoss\Views\SR\_AssignCust.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Areas\SBBoss\Views\SR\CustomerSearchPartial.cshtml" />
     <Content Include="Areas\SBBoss\Views\SR\SRCustomers.cshtml" />

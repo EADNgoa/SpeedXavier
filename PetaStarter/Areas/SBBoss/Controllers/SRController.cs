@@ -109,8 +109,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                     r.SName = cust.SName;
                     r.Phone = cust.Phone;
                     r.Email = cust.Email;
-                    r.TotSA = db.ExecuteScalar<decimal?>("Select Sum(SellPrice) as SellPrice from SrDetails where SRID=@0", r.SRID) ?? 0;
-                    r.AccAmt = db.ExecuteScalar<decimal?>("Select Sum(AmountIn) as AmountIn From BankAccount where SRID=@0", r.SRID) ?? 0;
+       
                     r.AgentName = db.ExecuteScalar<string>("Select UserName from AspNetUsers where Id=@0", r.AgentID) ?? "";
 
                 });
@@ -302,7 +301,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 sql.Append($" and Phone like '%{ph}%'");            
             
             if (em != "")
-                sql.Append($" and LOWER(Email) like '%{em.ToLower()}%'");
+                sql.Append(" and LOWER(Email) like '%@0%'",em.ToLower());
 
            var recs = db.Query<CustomerDets>(sql);
 
@@ -361,7 +360,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
                     }
 
-                    if (Event.Length == null)
+                    if (Event?.Length == null)
                     {
                         Event = "User has Edited the Field";
                     }
@@ -396,7 +395,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [EAAuthorize(FunctionName = "Service Requests", Writable = true)]
-        public ActionResult SRdetails([Bind(Include = "SRDID,HasAc,HasCarrier,RateBasis,PayTo,PickUpPoint,DropPoint,SRID,ServiceTypeID,FromLoc,ToLoc,Fdate,Tdate,SupplierID,Cost,SellPrice,PNRno,TicketNo,Heritage,ChildNo,AdultNo,InfantNo,RoomType,CouponCode,City,Airline,DateOfIssue,ContractNo,GuideLanguageID,SSType,CarType,Model,")] SRdetail item, string Event)
+        public ActionResult SRdetails([Bind(Include = "SRDID,HasAc,HasCarrier,RateBasis,PayTo,PickUpPoint,DropPoint,SRID,ServiceTypeID,FromLoc,ToLoc,SuppInvNo,Fdate,Tdate,SupplierID,Cost,SellPrice,PNRno,TicketNo,Heritage,ChildNo,AdultNo,InfantNo,RoomType,CouponCode,City,Airline,DateOfIssue,FlightNo,ContractNo,GuideLanguageID,SSType,CarType,Model,")] SRdetail item, string Event)
         {
             using (var transaction = db.GetTransaction())
             {
@@ -481,7 +480,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
         [HttpPost]
         [EAAuthorize(FunctionName = "Service Requests", Writable = true)]
-        public ActionResult SRCustomers(string FName, string SName, string Email, string Phone, int? CID, int? SRID, string UploadName, HttpPostedFileBase UploadedFile)
+        public ActionResult SRCustomers(string FName, string SName, string Email, string Phone, int? CID, int? SRID,string Type,string UploadName, HttpPostedFileBase UploadedFile)
         {
             if (CID != null)
             {
@@ -490,7 +489,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             }
             else if (FName != null && Email != null && SName != null && Phone != null)
             {
-                var cust = new Customer { FName = FName, SName = SName, Phone = Phone, Email = Email };
+                var cust = new Customer { FName = FName, SName = SName, Phone = Phone, Email = Email ,Type = Type };
                 db.Insert(cust);
                 db.Insert(new SR_Cust { ServiceRequestID = (int)SRID, CustomerID = cust.CustomerID });
                 LogAction(new SRlog { SRID = SRID.Value, Event = $"Customer {FName} {SName} added" });
@@ -623,17 +622,21 @@ namespace Speedbird.Areas.SBBoss.Controllers
             var filteredItems = db.Fetch<Supplier>($"Select * from Supplier Where SupplierName like '%{term}%'").Select(c => new { id = c.SupplierID, value = c.SupplierName });
             return Json(filteredItems, JsonRequestBehavior.AllowGet);
         }
-
+        public ActionResult AutoCompleteDrv(string term)
+        {
+            var filteredItems = db.Fetch<Driver>($"Select * from Driver Where DriverName like '%{term}%'").Select(c => new { id = c.DriverID, value = c.DriverName });
+            return Json(filteredItems, JsonRequestBehavior.AllowGet);
+        }
 
 
         public ActionResult FetchSTpartial(int? id, int ServiceTypeId, bool IsReadOnly)
         {
             ViewBag.GuideLanguageID = db.Fetch<GuideLanguage>("Select * from GuideLanguage").Select(v => new SelectListItem { Text = v.GuideLanguageName, Value = v.GuideLanguageID.ToString() }).ToList();
             ViewBag.CarType = Enum.GetValues(typeof(CarTypeEnum)).Cast<CarTypeEnum>().Select(v => new SelectListItem { Text = v.ToString(), Value = ((int)v).ToString() }).ToList();
-
+            ViewBag.SRDID = id;
             if (IsReadOnly)
                 ViewBag.IsReadOnly = "disabled";
-
+            
             switch ((ServiceTypeEnum)ServiceTypeId)
             {
                 case ServiceTypeEnum.Accomodation:
@@ -653,6 +656,11 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 case ServiceTypeEnum.Flight:
                     return PartialView($"_{((ServiceTypeEnum)ServiceTypeId).ToString()}", db.SingleOrDefault<SRdetail>(id));
                 case ServiceTypeEnum.TaxiHire:
+                    var DrvID = db.FirstOrDefault<Driver>("Select DriverID from SRdetails where SRDID=@0", id);
+                    if (DrvID?.DriverID > 0)
+                    {
+                        ViewBag.DrvNm = db.ExecuteScalar<string>("Select DriverName From Driver where DriverID=@0", DrvID.DriverID);
+                    }
                     return PartialView($"_{((ServiceTypeEnum)ServiceTypeId).ToString()}", db.SingleOrDefault<SRdetail>(id));
                 default:
                     return PartialView("_NotFound");
@@ -754,6 +762,41 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        public bool AssignDriver(int? SRDID, int? DID)
+        {
+            try
+            {
+                int res = db.Execute("Update SRdetails set DriverID=@0 where SRDID=@1", DID, SRDID);
+                return true;
+
+            }
+            catch (Exception ex)
+            {
+                return false;
+                throw ex;
+            }
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public bool ReviewDriver(IEnumerable<int> Star,IEnumerable<int> QuestionID,int SRDID)
+        {
+            try
+            {
+                var SQ = Star.Zip(QuestionID, (s, q) => new { star = s, questID = q });
+                foreach (var item in SQ)
+                {
+                    db.Insert(new FeedBack { SRDID = SRDID, QuestionID = item.questID, StarRating = item.star });
+                }                  
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+                throw ex;
+            }
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public bool RemindAt(int SRID, DateTime remindAtDt)
         {
             try
@@ -770,6 +813,93 @@ namespace Speedbird.Areas.SBBoss.Controllers
             }
         }
 
+        public ViewResult _AssignDriver(int? SRID,int? SRDID)
+        {
+            ViewBag.GeoId = db.Query<GeoTree>("Select * from GeoTree ").Select(sl => new SelectListItem { Text = sl.GeoName, Value = sl.GeoTreeID.ToString(), Selected = true });
+            ViewBag.SRDID = SRDID;
+            ViewBag.SRID = SRID;
+
+            return View();
+        }
+
+        public ViewResult _AssignCust(int? SRID, int? SRDID)
+        {
+            ViewBag.Cust = db.Query<CustomerDets>("Select * from Customer c inner join SR_Cust sc on c.CustomerID = sc.CustomerID inner join ServiceRequest sr on sr.SRID = sc.ServiceRequestID Where sc.ServiceRequestID=@0 ", SRID).ToList();
+            ViewBag.AssignedCust = db.Query<CustomerDets>("Select * from Customer c inner join SRD_Cust sc on c.CustomerID = sc.CustomerID inner join SRdetails sd on sd.SRDID = sc.SRDID Where sc.SRDID=@0 ", SRDID).ToList();
+
+            ViewBag.SRDID = SRDID;
+            ViewBag.SRID = SRID;
+
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public bool AssignCust(IEnumerable<int?> CID, int? SRDID)
+        {
+            try
+            {
+                foreach (var item in CID)
+                {
+                    db.Insert(new SRD_Cust { SRDID =(int) SRDID,CustomerID=(int)item });
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+                throw ex;
+            }
+        }
+        [EAAuthorize(FunctionName = "Service Requests", Writable = true)]
+        public ActionResult FetchDrv(string DriverName,int? GeoTreeID ,int? SRDID,string scr,string bks)
+      {
+            var sql = new PetaPoco.Sql("Select d.DriverID,d.DriverName,d.Phone,d.Address,d.CarModel,g.GeoName,coalesce(sum(f.StarRating),0)as Score,(select count(DriverID) as DriverID from SRdetails where DriverID =sd.DriverID) as DBCount from Driver d left  join SRdetails sd on sd.DriverID = d.DriverID left join FeedBack f on f.SRDID = sd.SRDID  inner join GeoTree g on g.GeoTreeID= d.LocationId ");
+
+            if (DriverName != null)
+                sql.Append($" Where LOWER(DriverName) like '%{DriverName.ToLower()}%'");
+
+            if (GeoTreeID != null)
+                sql.Append($" and LocationId={GeoTreeID}");
+
+            sql.Append(" Group By d.DriverName,d.DriverID,d.Address,d.CarModel,d.Phone,d.LocationId,g.GeoName,sd.DriverID");
+            if (scr != null)
+            {
+                sql.Append($" Order By Score Desc");
+            }
+            else if(bks != null)
+            {
+                sql.Append("Order By DBCount Asc");
+            }
+            var recs = db.Query<DriverDets>(sql);
+
+         
+            
+            return PartialView("_DriverSearch", recs);
+        }
+        public ViewResult _DrvReview(int? SRID, int? SRDID)
+        {
+            ViewBag.Quests = db.Query<Question>("Select * from Questions ");
+            ViewBag.SRDID = SRDID;
+            ViewBag.SRID = SRID;
+
+            return View();
+        }
+        [EAAuthorize(FunctionName = "Service Requests", Writable = true)]
+        public JsonResult GetLocations(string term)
+       {
+            var locs = db.Fetch<GeoTree>("Select CONCAT(g.GeoName,': ', dbo.GetGeoAncestorsStr(g.GeoTreeID)) as GeoName,g.GeoTreeID from GeoTree g where GeoName like '%" + term + "%'");
+            return Json(new { results = locs.Select(a => new { id = a.GeoTreeID, text = a.GeoName.TrimEnd(',', ' ') }) }, JsonRequestBehavior.AllowGet);
+        }
+
+        [EAAuthorize(FunctionName = "Service Requests", Writable = true)]
+        public ActionResult CustSearch(int? id)
+        {
+            ViewBag.SRDID = id;
+            ViewBag.Check = "True";
+            var rec = db.Query<CustomerDets>("Select * from Customer c inner join SRD_Cust sc on c.CustomerID = sc.CustomerID inner join SRdetails sd on sd.SRDID = sc.SRDID Where sc.SRDID=@0 ", id).ToList();
+
+            return PartialView("CustomerSearchPartial",rec);
+        }
         protected override void Dispose(bool disposing)
         {
             if (disposing)

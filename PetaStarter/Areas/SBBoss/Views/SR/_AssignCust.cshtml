@@ -1,0 +1,209 @@
+﻿<style>
+    .modal-lg {
+        max-width: 100% !important;
+    }
+</style>
+<div class="modal modal-lg fade" id="AssignCustModal" tabindex="-1" role="dialog" aria-labelledby="AssignCustLabel" aria-hidden="true">
+    <div class="modal-dialog  " role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="AssignCustModalLabel">Select Customers</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            @using (Html.BeginForm("AssignCust", "SR", FormMethod.Post, new { id = "AssignCustFrm" }))
+    {
+
+        @Html.AntiForgeryToken()
+        @Html.Hidden("SRDID", (int)ViewBag.SRDID)
+        <div class="modal-body">
+
+            <div class="row">
+                <div id="SearchCust" class="col">
+                    <br />
+                    <h4>Assign Customers</h4>
+                    <table class="table table-sm table-striped">
+                        <thead class="bg-info">
+                            <tr>
+                                <th>
+
+                                </th>
+                                <th></th>
+                                <th>
+                                    Name
+                                </th>
+                                <th>
+                                    Mobile
+                                </th>
+                                <th>
+                                    Email
+                                </th>
+                                <th>
+                                    Type
+                                </th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @foreach (var item in ViewBag.Cust)
+                    {
+                        <tr>
+
+                            <td colspan="3">
+                                <input type="checkbox" value=@item.CustomerID name="CID" />
+                                @item.FName  @item.SName
+                            </td>
+
+                            <td>
+                                @item.Phone
+                            </td>
+                            <td>
+                                @item.Email
+                            </td>
+                            <td>
+                                @item.Type
+                            </td>
+
+                        </tr>
+
+
+
+            }
+
+
+                        </tbody>
+                    </table>
+
+
+
+                </div>
+            </div>
+
+        </div>
+
+}
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button id="SaveCust" type="button" class="btn btn-primary" data-dismiss="modal">Save</button>
+            </div>
+            @if (ViewBag.AssignedCust != null)
+    {
+        <div class="Container">
+            <h4>List of customers already assigned:</h4>
+            <table class="table table-sm table-striped">
+                <thead class="bg-info">
+                    <tr>
+                        <th>
+
+                        </th>
+                        <th></th>
+                        <th>
+                            Name
+                        </th>
+                        <th>
+                            Mobile
+                        </th>
+                        <th>
+                            Email
+                        </th>
+                        <th>
+                            Type
+                        </th>
+
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var item in ViewBag.AssignedCust)
+            {
+                <tr>
+
+                    <td colspan="3">
+                        @item.FName  @item.SName
+                    </td>
+
+                    <td>
+                        @item.Phone
+                    </td>
+                    <td>
+                        @item.Email
+                    </td>
+                    <td>
+                        @item.Type
+                    </td>
+
+                </tr>
+
+
+
+    }
+
+
+                </tbody>
+            </table>
+        </div>
+}
+
+        </div>
+    </div>
+
+</div>
+  
+<script>
+
+
+
+
+$('#SaveCust').click(function() {
+        var detFrm = $('#AssignCustFrm');
+
+        if (typeof(detFrm[0]) == 'object')
+        {
+    $.ajax({
+        url: '@Url.Action("AssignCust", "SR")',
+        type: 'post',
+        data: $(detFrm).serialize(),
+        success: function () {
+                        window.location.assign('@Url.Action("Manage", new { id = (int)ViewBag.SRID ,mode=3 })');
+                }
+            });
+        }
+    });
+    $('#AssignCustModal').on('shown.bs.modal', function (event) {
+
+        var button = $(event.relatedTarget); // Button that triggered the modal
+        var recipient = button.data('srdid');
+        var modal = $(this);
+        modal.find('#SRDID').val(recipient);
+
+        modal.find('#CID').focus();
+      
+
+    })
+
+
+    
+
+
+    $(document).ready(function () {
+        $('*[data-autocombo-url]')
+            .each(function () {
+                $(this).autocomplete({
+                    source: $(this).data("autocombo-url"),
+                    minLenght: 3,
+                    delay: 500,
+                    select: function (event, ui) {
+                        $($(this).data("autocomplete-idholder")).val(ui.item.id);
+                    }
+                });
+            });
+    });
+
+
+
+
+</script>

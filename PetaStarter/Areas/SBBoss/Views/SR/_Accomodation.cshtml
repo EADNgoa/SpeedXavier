@@ -4,7 +4,7 @@
     <div class="form-row">
         <div class="input-group col mb-3">
             <div class="input-group-prepend"><span class="input-group-text">To Date</span></div>
-            @Html.EditorFor(model => model.Tdate, new { htmlAttributes = new { @type = "date", @class = " form-control" } })
+            @Html.EditorFor(model => model.Tdate, new { htmlAttributes = new { @type = "text", @class = " form-control" } })
             @Html.ValidationMessageFor(model => model.Tdate, "", new { @class = "text-danger" })
 
         </div>
@@ -15,17 +15,67 @@
         </div>
         <div class="input-group col mb-3">
             <div class="input-group-prepend"><span class="input-group-text">No Of Adults</span></div>
-            @Html.EditorFor(model => model.AdultNo, new { htmlAttributes = new { @type = "text", @class = " form-control" } })
+            @Html.EditorFor(model => model.AdultNo, new { htmlAttributes = new { @type = "text", @class = "eadate form-control" } })
             @Html.ValidationMessageFor(model => model.AdultNo, "", new { @class = "text-danger" })
 
         </div>
-        <div class="input-group col-3 mb-3">
+
+    </div>
+    <div class="form-row">
+        <div class="input-group col mb-3">
+            <div class="input-group-prepend"><span class="input-group-text">Infant No</span></div>
+            @Html.EditorFor(model => model.infantNo, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.infantNo, "", new { @class = "text-danger" })
+
+        </div>
+        <div class="input-group col mb-3">
+            <div class="input-group-prepend"><span class="input-group-text">No of Rooms</span></div>
+            @Html.EditorFor(model => model.TicketNo, new { htmlAttributes = new { @type = "number", @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.TicketNo, "", new { @class = "text-danger" })
+
+        </div>
+        <div class="input-group col mb-3">
             <div class="input-group-prepend"><span class="input-group-text">Room Type</span></div>
             @Html.EditorFor(model => model.RoomType, new { htmlAttributes = new { @type = "text", @class = " form-control" } })
             @Html.ValidationMessageFor(model => model.RoomType, "", new { @class = "text-danger" })
         </div>
     </div>
-  
+    <div class="form-row">
+        <div class="input-group col-4 mb-3">
+            <div class="input-group-prepend"><span class="input-group-text">Pay To</span></div>
+            @{ string p;}
+            <select name="PayTo" class="form-control">
+                @if (Model?.SRDID > 0)
+                {
+                    <option value="@Model.PayTo">
+                        @Model.PayTo
+                    </option>
+                    <option value="Paid to Apartment">
+                        Apartment
+                    </option>
+                    <option value="Paid to US">
+                        Us
+                    </option>
+                }
+                else
+                {
+
+                    <option value="Paid to Apartment">
+                        Apartment
+                    </option>
+                    <option value="Paid to US">
+                        Us
+                    </option>
+                }
+
+            </select>
+            @Html.ValidationMessageFor(model => model.PayTo, "", new { @class = "text-danger" })
+
+        </div>
+    </div>
+    @if (ViewBag.isReadOnly != null)
+    {@Html.Action("CustSearch", "SR", new { id = Model.SRDID })
+}
 </fieldset>
 
 <script>
@@ -36,13 +86,13 @@
             showButtonPanel: true,
             changeMonth: true,
             changeYear: true,
-            timeFormat:"hh:mm"
-            
+            timeFormat: "hh:mm"
+
         }).attr('type', 'text').attr('autocomplete', 'off');
 
         //Disable the browsers default date picker
     });
 
 
-    
+
 </script>

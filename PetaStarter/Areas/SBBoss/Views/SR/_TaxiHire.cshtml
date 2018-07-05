@@ -8,16 +8,16 @@
         </div>
         <div class="input-group col mb-3">
             <div class="input-group-prepend"><span class="input-group-text">To Date</span></div>
-            @Html.EditorFor(model => model.Tdate, new { htmlAttributes = new { @type = "date", @class = "form-control" } })
+            @Html.EditorFor(model => model.Tdate, new { htmlAttributes = new { @type = "text", @class = "eadate form-control" } })
             @Html.ValidationMessageFor(model => model.Tdate, "", new { @class = "text-danger" })
 
         </div>
         <div class="input-group col mb-3">
             <div class="input-group-prepend"><span class="input-group-text">Taxi Type</span></div>
             @Html.DropDownList("CarType", null, htmlAttributes: new { @type = "text", @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.ToLoc, "", new { @class = "text-danger" })
+            @Html.ValidationMessageFor(model => model.CarType, "", new { @class = "text-danger" })
         </div>
-   
+
     </div>
     <div class="form-row">
         <div class="input-group col mb-3">
@@ -39,53 +39,115 @@
 
         </div>
     </div>
-        <div class="form-row">
-            <div class="input-group col mb-3">
-                <div class="input-group-prepend"><span class="input-group-text">Has Ac</span></div>
-                @Html.EditorFor(model => model.HasAc, new { htmlAttributes = new {  @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.HasAc, "", new { @class = "text-danger" })
-
-            </div>
-
-            <div class="input-group col mb-3">
-                <div class="input-group-prepend"><span class="input-group-text">Has Carrier</span></div>
-                @Html.EditorFor(model => model.HasCarrier, new { htmlAttributes = new {  @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.HasCarrier, "", new { @class = "text-danger" })
-
-            </div>
-            <div class="input-group col mb-3">
-                <div class="input-group-prepend"><span class="input-group-text">Pay To</span></div>
-                <select name="PayTo" class="form-control">
-                    <option value="Paid to Us">
-                        Paid To US
-                    </option>
-                    <option value="Paid to Driver">
-                        Paid To Driver
-                    </option>
-                </select>
-                @Html.ValidationMessageFor(model => model.PayTo, "", new { @class = "text-danger" })
-
-            </div>
+    <div class="form-row">
+        <div class="input-group col mb-3">
+            <div class="input-group-prepend"><span class="input-group-text">Has Ac</span></div>
+            @Html.EditorFor(model => model.HasAc, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.HasAc, "", new { @class = "text-danger" })
 
         </div>
-        <div class="form-row">
-            <div class="input-group col mb-3">
-                <div class="input-group-prepend"><span class="input-group-text">Rate Basis</span></div>
-                <select name="RateBasis" class="form-control col-3">                
-                   <option value=" 8hrs-80kms">
-                       8hrs-80kms
-                   </option>
-                </select>
-                @Html.ValidationMessageFor(model => model.RateBasis, "", new { @class = "text-danger" })
 
-            </div>
-
-      
+        <div class="input-group col mb-3">
+            <div class="input-group-prepend"><span class="input-group-text">Has Carrier</span></div>
+            @Html.EditorFor(model => model.HasCarrier, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.HasCarrier, "", new { @class = "text-danger" })
 
         </div>
+        <div class="input-group col mb-3">
+            <div class="input-group-prepend"><span class="input-group-text">Pay To</span></div>
+            <select name="PayTo" class="form-control">
+                <option value="Paid to Us">
+                    Paid To US
+                </option>
+                <option value="Paid to Driver">
+                    Paid To Driver
+                </option>
+            </select>
+            @Html.ValidationMessageFor(model => model.PayTo, "", new { @class = "text-danger" })
+
+        </div>
+
     </div>
+    <div class="form-row">
+        <div class="input-group col-3 mb-3">
+            <div class="input-group-prepend"><span class="input-group-text">Rate Basis</span></div>
+            <select name="RateBasis" class="form-control col-12">
+                <option value=" 8hrs-80kms">
+                    8hrs-80kms
+                </option>
+            </select>
+            @Html.ValidationMessageFor(model => model.RateBasis, "", new { @class = "text-danger" })
+
+        </div>
+        @if (Model?.SRDID > 0)
+        {
+            <div class="input-group col-3 mb-3">
+
+                @if (ViewBag.IsReadOnly == null)
+                {
+                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#AssignDriverModal" data-srdid="@Model.SRDID">
+                        @if (Model?.DriverID == null)
+                        {
+                            @:  Assign Driver
+                        }
+                        else
+                        {
+                            @: Change Driver
+                        }
+
+                    </button>
+                    <div class="input-group-prepend"><span class="input-group-text" style="color:blue">@ViewBag.DrvNm</span></div>
+
+                }
+                else
+                {
+                    <div class="input-group-prepend"><span class="input-group-text">Driver Name</span></div>
+                    <input type="text" value="@ViewBag.DrvNm" class="form-control" />
+                }
+
+
+
+            </div>
+        }
+        @if (ViewBag.IsReadOnly == null)
+        {
+            if (Model?.DriverID > 0)
+            {
+                <div class="input-group col-3 mb-3">
+                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#DrvReviewModal" data-srdid="@Model.SRDID">
+                        Feedback
+                    </button>
+                </div>
+
+            }
+        }
+    </div>
+
 </fieldset>
+@if (ViewBag.isReadOnly != null)
+{@Html.Action("CustSearch", "SR", new { id = Model.SRDID })
+}
+
+@if (Model?.SRDID > 0)
+{
+    <script>
+       $('#AssignDriver').load('@Url.Action("_AssignDriver")', { SRID: @Model.SRID,SRDID: @Model.SRDID});
+       $('#Review').load('@Url.Action("_DrvReview")', { SRID: @Model.SRID,SRDID: @Model.SRDID});
+    </script>
+
+}
+else
+{
+    <script>
+      $('#AssignDriver').load('@Url.Action("_AssignDriver")', { SRID: @Model?.SRID,SRDID: @Model?.SRDID});
+       $('#Review').load('@Url.Action("_DrvReview")', { SRID: @Model?.SRID,SRDID: @Model?.SRDID});
+    </script>
+}
+
 <script>
+
+
+
     $(function () {
         //DateTime picker
         $('input[type=date]').datetimepicker({
@@ -97,16 +159,20 @@
 
         }).attr('type', 'text').attr('autocomplete', 'off');
 
-        //Disable the browsers default date picker
-        $('input[type=time]').timepicker({
+        $('.eadate').datepicker({
+            dateFormat: "dd-MM-yy",
             showButtonPanel: true,
-            timeFormat: "hh:mm"
+            changeMonth: true,
+            changeYear: true,
 
-        }).attr('type', 'text').attr('autocomplete', 'off');
+
+        });
 
         //Disable the browsers default date picker
         jQuery.validator.methods["date"] = function (value, element) { return true; }
 
     });
-    
+
+
+
 </script>

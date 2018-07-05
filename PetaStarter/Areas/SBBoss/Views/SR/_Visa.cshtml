@@ -28,7 +28,7 @@
 
     </div>
     <div class="form-row">
-  
+
         <div class="input-group col mb-3">
             <div class="input-group-prepend"><span class="input-group-text">Date Of Issue</span></div>
             @Html.EditorFor(model => model.DateOfIssue, new { htmlAttributes = new { @type = "date", @class = "form-control" } })
@@ -50,6 +50,9 @@
 
     </div>
 </fieldset>
+@if (ViewBag.isReadOnly != null)
+{@Html.Action("CustSearch", "SR", new { id = Model.SRDID })
+}
 <script>
     $(function () {
         //DateTime picker
@@ -73,5 +76,5 @@
         jQuery.validator.methods["date"] = function (value, element) { return true; }
 
     });
-  
+
 </script>

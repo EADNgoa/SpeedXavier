@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[FeedBack]
 (
-	[FeedBackID] INT NOT NULL PRIMARY KEY, 
+	[FeedBackID] INT NOT NULL PRIMARY KEY IDENTITY, 
     [QuestionID] INT NULL, 
     [SRDID] INT NULL, 
     [StarRating] INT NULL, 

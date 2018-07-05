@@ -12,6 +12,37 @@ using Microsoft.AspNet.Identity;
 
 namespace Speedbird
 {
+    public class PCdetailDets
+    {
+        public int PCDID { get; set; }
+        public int SupplierID { get; set; }
+
+        public string PettyCashID { get; set; }
+        public string Category { get; set; }
+        public string Details { get; set; }
+        public decimal Cost { get; set; }
+        public string SupplierName { get; set; }
+        public string InvoiceNo { get; set; }
+        public string BillImage { get; set; }
+
+        public int SRID { get; set; }
+
+
+
+    }
+    public class DriverDets
+    {
+        public int DriverID { get; set; }
+        public string Phone { get; set; }
+        public string GeoName { get; set; }
+        public string DriverName { get; set; }
+        public string CarModel { get; set; }
+        public int Score { get; set; }
+        public int DBCount { get; set; }
+
+
+
+    }
     public class BankAccountDets
     {
         public int BankAccountID { get; set; }
@@ -72,7 +103,6 @@ namespace Speedbird
         public string fstr { get { return $"{Fdate:dd-MMM-yyyy}"; } }
         public DateTime Tdate { get; set; }
         public string tstr { get { return $"{Tdate:dd MMM yyyy hh:mm}"; } }        
-
         public int SupplierID { get; set; }
         public decimal Cost { get; set; }
         public decimal SellPrice { get; set; }
@@ -208,7 +238,10 @@ namespace Speedbird
     public partial class Package
     {
     }
-
+    [MetadataType(typeof(SRdetailsMetadata))]
+    public partial class SRdetail
+    {
+    }
     [MetadataType(typeof(AccomodationMetadata))]
     public partial class Accomodation
     {
@@ -341,6 +374,7 @@ namespace Speedbird
         public string Email { get; set; }
         public string Phone { get; set; }
         public string IdPicture { get; set; }
+        public string Type { get; set; }
 
     }
 
@@ -462,6 +496,8 @@ namespace Speedbird
         public int SRID { get; set; }
         public int CustomerID { get; set; }
         public int SRStatusID { get; set; }
+        public int PayStatusID { get; set; }
+
         public string Status { get { return ((SRStatusEnum)SRStatusID).ToString(); } }
         public DateTime TDate { get; set; }
 
@@ -588,6 +624,14 @@ namespace Speedbird
         Pending,
         Approved,
         Rejected
+    }
+    public enum PayType
+    {
+        Full_Paid,
+        Part_Paid,
+        Not_Paid,
+        Cancelled
+
     }
 
     public class EAAuthorizeAttribute : AuthorizeAttribute
