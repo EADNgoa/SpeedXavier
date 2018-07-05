@@ -89,12 +89,11 @@
             </div>
             <div class="form-row">
                 <div class="input-group col mb-3">
-                    <div class="input-group-prepend"><span class="input-group-text">Coupon Code</span></div>
-
-                    @Html.EditorFor(model => model.CouponCode, new { htmlAttributes = new { @type = "text", @class = " form-control" } })
-                    @Html.ValidationMessageFor(model => model.CouponCode, "", new { @class = "text-danger" })
+                    <div class="input-group-prepend"><span class="input-group-text"> Invoice No</span></div>
+                    @Html.EditorFor(model => model.SuppInvNo, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.SuppInvNo, "", new { @class = "text-danger" })
                 </div>
-
+                
                 <div class="input-group col mb-3">
                     <div class="input-group-prepend"><span class="input-group-text">Contract No</span></div>
                     @Html.EditorFor(model => model.ContractNo, new { htmlAttributes = new { @type = "text", @class = " form-control" } })
@@ -119,9 +118,9 @@
                     @Html.ValidationMessageFor(model => model.SellPrice, "", new { @class = "text-danger" })
                 </div>
                 <div class="input-group col mb-3">
-                    <div class="input-group-prepend"><span class="input-group-text"> Invoice No</span></div>
-                    @Html.EditorFor(model => model.SuppInvNo, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.SuppInvNo, "", new { @class = "text-danger" })
+                    <div class="input-group-prepend"><span class="input-group-text">Coupon Code</span></div>
+                    @Html.EditorFor(model => model.CouponCode, new { htmlAttributes = new { @type = "text", @class = " form-control" } })
+                    @Html.ValidationMessageFor(model => model.CouponCode, "", new { @class = "text-danger" })
                 </div>
 
             </div>
@@ -203,7 +202,7 @@
             });
 
             $.post('@Url.Action("FetchSTlabels", "SR")', { CommonLabel: '@Html.DisplayNameFor(model => model.Fdate)', ServiceTypeId: sid }, function (data) {
-                $('#@Html.DisplayNameFor(model =>model.Fdate)' + '_lbl').html(data);p
+                $('#@Html.DisplayNameFor(model =>model.Fdate)' + '_lbl').html(data);
             });
 
         };

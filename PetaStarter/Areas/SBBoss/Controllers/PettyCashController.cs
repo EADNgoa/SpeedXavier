@@ -59,7 +59,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             ViewBag.Title = "Petty Cash Details";
 
             ViewBag.PC = db.FirstOrDefault<PettyCash>("Select * From PettyCash Where CashInHandRegID=@0", id);
-            ViewBag.PCD = db.Fetch<PCdetailDets>($"Select * From PCdetails pd inner join Supplier s on s.SupplierID = pd.SupplierID where PettyCashID ='{id}' ORDER By PCDID Desc");
+            ViewBag.PCD = db.Fetch<PCdetailDets>($"Select * From PCdetails pd left join Supplier s on s.SupplierID = pd.SupplierID where PettyCashID ='{id}' ORDER By PCDID Desc");
             return View(rec);
         }
 

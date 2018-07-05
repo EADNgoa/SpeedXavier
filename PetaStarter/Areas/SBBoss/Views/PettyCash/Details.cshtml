@@ -43,10 +43,10 @@
                         Date
                     </th>
                     <th>
-                        Cash In
+                        Start
                     </th>
                     <th>
-                        Cash Out
+                        End
                     </th>
                 </tr>
                 <tr>
@@ -111,6 +111,11 @@
                         <div class="input-group-prepend"><span class="input-group-text">Cost</span></div>
                         @Html.EditorFor(model => model.Cost, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.Cost, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="input-group col mb-3">
+                        <div class="input-group-prepend"><span class="input-group-text">Booking Id</span></div>
+                        @Html.EditorFor(model => model.SRID, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.SRID, "", new { @class = "text-danger" })
                     </div>
                     <div class="input-group col mb-3">
                                                 <div class="input-group-prepend"><span class="input-group-text">Upload Image</span></div>
