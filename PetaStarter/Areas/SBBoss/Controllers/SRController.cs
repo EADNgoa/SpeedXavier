@@ -829,8 +829,9 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
         public PartialViewResult _AssignCust(int? SRID, int? SRDID)
         {
-            ViewBag.Cust = db.Query<CustomerDets>("Select * from Customer c inner join SR_Cust sc on c.CustomerID = sc.CustomerID inner join ServiceRequest sr on sr.SRID = sc.ServiceRequestID Where sc.ServiceRequestID=@0 ", SRID).ToList();
-            ViewBag.AssignedCust = db.Query<CustomerDets>("Select * from Customer c inner join SRD_Cust sc on c.CustomerID = sc.CustomerID inner join SRdetails sd on sd.SRDID = sc.SRDID Where sc.SRDID=@0 ", SRDID).ToList();
+            ViewBag.Cust = db.Query<CustomerDets>("Select c.CustomerID, sc.ServiceRequestID as BookingID, c.FName,c.SName,c.Email,c.Phone, c.[Type] from Customer c inner join SR_Cust sc on c.CustomerID = sc.CustomerID 	" +
+                "Where sc.ServiceRequestID=@0 and c.CustomerID not in (Select CustomerID from SRD_Cust where srdid=@1)", SRID,SRDID).ToList();
+            ViewBag.AssignedCust = db.Query<CustomerDets>("Select c.CustomerID, c.FName,c.SName,c.Email,c.Phone, c.[Type]  from Customer c inner join SRD_Cust sc on c.CustomerID = sc.CustomerID Where sc.SRDID=@0 ", SRDID).ToList();
 
             ViewBag.SRDID = SRDID;
             ViewBag.SRID = SRID;

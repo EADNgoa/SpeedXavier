@@ -3,8 +3,8 @@
         max-width: 100% !important;
     }
 </style>
-<div class="modal modal-lg fade" id="AssignCustModal" tabindex="-1" role="dialog" aria-labelledby="AssignCustLabel" aria-hidden="true">
-    <div class="modal-dialog  " role="document">
+
+    <div class="modal-dialog  modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="AssignCustModalLabel">Select Customers</h5>
@@ -17,7 +17,8 @@
     {
 
         @Html.AntiForgeryToken()
-        @Html.Hidden("SRDID", (int)ViewBag.SRDID)
+        if(ViewBag.SRDID!=null)
+        { @Html.Hidden("SRDID", (int)ViewBag.SRDID)}
         <div class="modal-body">
 
             <div class="row">
@@ -151,7 +152,7 @@
         </div>
     </div>
 
-</div>
+
   
 <script>
 

@@ -289,7 +289,7 @@
                 'orderable': false,
                 'bSortable': false,
                 'render': function (data, type, full, meta) {
-                    return '<button type="button" class="btn btn-link " data-toggle="modal" data-target="#AssignCustModal" data-srdid=' + full.SRDID +'"> <i class="fas fa-user fa-inverse h3 float-left DropShadow"></i></button><a href="/SBBoss/SR/Manage?id='+ full.SRID +'&&mode='+3+'&&EID='+full.SRDID+'"><i class="fas fa-edit fa-inverse h3  DropShadow"></i></a> ';
+                    return '<button type="button" class="btn btn-link " data-toggle="modal" data-target="#ACModal" data-srdid=' + full.SRDID +'> <i class="fas fa-user fa-inverse float-left DropShadow"></i></button><a href="/SBBoss/SR/Manage?id='+ full.SRID +'&&mode='+3+'&&EID='+full.SRDID+'"><i class="fas fa-edit fa-inverse DropShadow"></i></a> ';
                 }
             },
             {
@@ -329,6 +329,20 @@
             }
         });
 
+        
+
+        $('#ACModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget) // Button that triggered the modal
+            var recipient = button.data('srdid') // Extract info from data-* attributes
+            // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+            // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+          //  debugger;
+            $('#AssignCust').load('@Url.Action("_AssignCust")', { SRDID: recipient, SRID: @ViewBag.SRID });
+
+            //var modal = $(this)
+            //modal.find('.modal-title').text('New message to ' + recipient)
+            //modal.find('.modal-body input').val(recipient)
+        })
     })
 
 
