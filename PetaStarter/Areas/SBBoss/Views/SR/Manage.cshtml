@@ -1,12 +1,14 @@
-﻿@*Assign Driver Modal*@
+﻿@*Assign Review Modal*@
+<div class="modal fade" id="ACModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div id="AssignCust">    </div>
+</div>
+@*EOF Assign Cust Modal*@
+@*Assign Driver Modal*@
 <div id="AssignDriver"> </div>
 @*EOF Assign Driver Modal*@
 @*Assign Review Modal*@
 <div id="Review"> </div>
-@*EOF Assign Cust Modal*@
-@*Assign Review Modal*@
-<div id="AssignCust"> </div>
-@*EOF Assign Cust Modal*@
+@*EOF Assign Review Modal*@
 <div class="card border rounded DropShadow">
 
     <div class="card-body">
@@ -69,11 +71,11 @@
                 '@Url.Action("FetchDetails", new { id = (int)ViewBag.SRID })'
             );
         });
+
         $('#SRBtn').click(function () {
             var detFrm = $('#detFrm');
 
             //Save the details form if it exists else just move on.
-
                 $.ajax({
                     type: 'post',
                     data: $(detFrm).serialize()
@@ -83,8 +85,6 @@
                     );
 
                 });
-
-
         });
 
         $('#ImgBtn').click(function () {
