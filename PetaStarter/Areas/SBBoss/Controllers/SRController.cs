@@ -818,16 +818,16 @@ namespace Speedbird.Areas.SBBoss.Controllers
             }
         }
 
-        public ViewResult _AssignDriver(int? SRID,int? SRDID)
+        public PartialViewResult _AssignDriver(int? SRID,int? SRDID)
         {
             ViewBag.GeoId = db.Query<GeoTree>("Select * from GeoTree ").Select(sl => new SelectListItem { Text = sl.GeoName, Value = sl.GeoTreeID.ToString(), Selected = true });
             ViewBag.SRDID = SRDID;
             ViewBag.SRID = SRID;
 
-            return View();
+            return PartialView();
         }
 
-        public ViewResult _AssignCust(int? SRID, int? SRDID)
+        public PartialViewResult _AssignCust(int? SRID, int? SRDID)
         {
             ViewBag.Cust = db.Query<CustomerDets>("Select * from Customer c inner join SR_Cust sc on c.CustomerID = sc.CustomerID inner join ServiceRequest sr on sr.SRID = sc.ServiceRequestID Where sc.ServiceRequestID=@0 ", SRID).ToList();
             ViewBag.AssignedCust = db.Query<CustomerDets>("Select * from Customer c inner join SRD_Cust sc on c.CustomerID = sc.CustomerID inner join SRdetails sd on sd.SRDID = sc.SRDID Where sc.SRDID=@0 ", SRDID).ToList();
@@ -835,7 +835,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             ViewBag.SRDID = SRDID;
             ViewBag.SRID = SRID;
 
-            return View();
+            return PartialView();
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -881,13 +881,13 @@ namespace Speedbird.Areas.SBBoss.Controllers
             
             return PartialView("_DriverSearch", recs);
         }
-        public ViewResult _DrvReview(int? SRID, int? SRDID)
+        public PartialViewResult _DrvReview(int? SRID, int? SRDID)
         {
             ViewBag.Quests = db.Query<Question>("Select * from Questions ");
             ViewBag.SRDID = SRDID;
             ViewBag.SRID = SRID;
 
-            return View();
+            return PartialView();
         }
         [EAAuthorize(FunctionName = "Service Requests", Writable = true)]
         public JsonResult GetLocations(string term)
