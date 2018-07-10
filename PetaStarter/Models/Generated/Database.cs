@@ -883,6 +883,33 @@ namespace Speedbird
 		[Column] public bool? IsVisible { get; set; }
 	}
     
+	[TableName("dbo.RP_SR")]
+	[PrimaryKey("RPDID", AutoIncrement=false)]
+	[ExplicitColumns]
+    public partial class RP_SR  
+    {
+		[Column] public int RPDID { get; set; }
+		[Column] public int SRID { get; set; }
+		[Column] public decimal? Amount { get; set; }
+	}
+    
+	[TableName("dbo.RPdets")]
+	[PrimaryKey("RPDID")]
+	[ExplicitColumns]
+    public partial class RPdet  
+    {
+		[Column] public int RPDID { get; set; }
+		[Column] public string BankName { get; set; }
+		[Column] public string ChequeNo { get; set; }
+		[Column] public DateTime? Date { get; set; }
+		[Column] public decimal? Amount { get; set; }
+		[Column] public string TransactionNo { get; set; }
+		[Column] public string Note { get; set; }
+		[Column] public int? SRID { get; set; }
+		[Column] public int? Type { get; set; }
+		[Column] public bool? AmtUsed { get; set; }
+	}
+    
 	[TableName("dbo.ServiceCommision")]
 	[PrimaryKey("ServiceID")]
 	[ExplicitColumns]
