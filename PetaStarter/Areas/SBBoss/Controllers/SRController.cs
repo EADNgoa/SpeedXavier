@@ -333,7 +333,12 @@ namespace Speedbird.Areas.SBBoss.Controllers
                     item.EmpID = User.Identity.GetUserId();
                     if (item.TDate==null)
                         item.TDate = DateTime.Now;
-                    if (item.SRStatusID == null) item.SRStatusID = (int)SRStatusEnum.New;
+
+                    if (item.SRStatusID == null)
+                        item.SRStatusID = (int)SRStatusEnum.New;
+
+                    if (item.CustID == null)
+                        item.CustID=CID;
 
                     if (item.SRID > 0)
                     {

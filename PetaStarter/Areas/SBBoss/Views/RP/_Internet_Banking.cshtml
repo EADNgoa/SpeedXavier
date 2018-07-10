@@ -1,0 +1,38 @@
+﻿@model Speedbird.RPdet
+
+<fieldset>
+    <div class="form-row">
+        <div class="input-group col mb-3">
+            <div class="input-group-prepend"><span class="input-group-text">Bank Name</span></div>
+            @Html.EditorFor(model => model.BankName, new { htmlAttributes = new { @type = "text", @class = "eadate form-control" } })
+            @Html.ValidationMessageFor(model => model.BankName, "", new { @class = "text-danger" })
+
+        </div>
+        <div class="input-group col mb-3">
+            <div class="input-group-prepend"><span class="input-group-text">Transaction No</span></div>
+            @Html.EditorFor(model => model.TransactionNo, new { htmlAttributes = new { @type = "text", @class = "eadate form-control" } })
+            @Html.ValidationMessageFor(model => model.TransactionNo, "", new { @class = "text-danger" })
+
+        </div>
+     
+    </div>
+</fieldset>
+
+<script>
+    $(function () {
+        //DateTime picker
+        $('input[type=date]').datetimepicker({
+            dateFormat: "dd-MM-yy",
+            showButtonPanel: true,
+            changeMonth: true,
+            changeYear: true,
+            timeFormat: "hh:mm"
+
+        }).attr('type', 'text').attr('autocomplete', 'off');
+
+        //Disable the browsers default date picker
+    });
+
+
+
+</script>

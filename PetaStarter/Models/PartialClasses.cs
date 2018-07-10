@@ -24,9 +24,30 @@ namespace Speedbird
         public string SupplierName { get; set; }
         public string InvoiceNo { get; set; }
         public string BillImage { get; set; }
-
         public int SRID { get; set; }
 
+    }
+    public class RPDetails
+    {
+        public int RPDID { get; set; }
+        public int Type { get; set; }
+
+       
+        public decimal Amount { get; set; }
+        public decimal UnUsedAmt { get; set; }
+
+
+    }
+    public class SRBooking
+    {
+        public int SRID { get; set; }
+        public string cName { get; set; }
+        public string UserName { get; set; }
+        public decimal PaidAmt { get; set; }
+        public decimal OrigAmt { get; set; }
+
+        public decimal OA { get; set; }
+        public decimal Remainder { get; set; }
 
 
     }
@@ -632,6 +653,12 @@ namespace Speedbird
         Not_Paid,
         Cancelled
 
+    }
+    public enum AmtType
+    {
+        Cash,
+        Cheque,
+        Internet_Banking
     }
 
     public class EAAuthorizeAttribute : AuthorizeAttribute

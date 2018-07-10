@@ -1,0 +1,14 @@
+﻿CREATE TABLE [dbo].[RPdets]
+(
+	[RPDID] INT NOT NULL PRIMARY KEY IDENTITY, 
+    [BankName] VARCHAR(50) NULL, 
+    [ChequeNo] VARCHAR(50) NULL, 
+    [Date] DATE NULL, 
+    [Amount] DECIMAL(18, 2) NULL, 
+    [TransactionNo] VARCHAR(50) NULL, 
+    [Note] VARCHAR(MAX) NULL, 
+    [SRID] INT NULL, 
+    [Type] INT NULL, 
+    [AmtUsed] BIT NULL, 
+    CONSTRAINT [FK_RPdets_ToSR] FOREIGN KEY ([SRID]) REFERENCES [ServiceRequest]([SRID])
+)

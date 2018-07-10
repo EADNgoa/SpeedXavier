@@ -199,6 +199,7 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Areas\SBBoss\Controllers\RPController.cs" />
     <Compile Include="Areas\SBBoss\Controllers\QuestionsController.cs" />
     <Compile Include="Areas\SBBoss\Controllers\AssetBillController.cs" />
     <Compile Include="Areas\SBBoss\Controllers\BanksController.cs" />
@@ -748,6 +749,13 @@
     <Content Include="Areas\SBBoss\Views\SR\_DrvReview.cshtml" />
     <Content Include="Areas\SBBoss\Views\PettyCash\Details.cshtml" />
     <Content Include="Areas\SBBoss\Views\SR\_AssignCust.cshtml" />
+    <Content Include="Areas\SBBoss\Views\RP\Reciept.cshtml" />
+    <Content Include="Areas\SBBoss\Views\RP\Manage.cshtml" />
+    <Content Include="Areas\SBBoss\Views\RP\_NotFound.cshtml" />
+    <Content Include="Areas\SBBoss\Views\RP\_Cash.cshtml" />
+    <Content Include="Areas\SBBoss\Views\RP\_Cheque.cshtml" />
+    <Content Include="Areas\SBBoss\Views\RP\_Internet_Banking.cshtml" />
+    <Content Include="Areas\SBBoss\Views\RP\_SearchBooking.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Areas\SBBoss\Views\SR\CustomerSearchPartial.cshtml" />
     <Content Include="Areas\SBBoss\Views\SR\SRCustomers.cshtml" />

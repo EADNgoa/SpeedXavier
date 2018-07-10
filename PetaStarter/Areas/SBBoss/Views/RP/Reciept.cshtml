@@ -1,0 +1,247 @@
+﻿@model  Speedbird.RPdet
+
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Reciepts";
+}
+
+
+<div class="card border rounded DropShadow">
+    <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
+        <span class="h5">Payment</span>
+        <a href="@Url.Action("Reciept","Rp", new {id=0 })"><i class="fas fa-undo-alt fa-inverse h3 float-right DropShadow"></i></a>
+
+    </div>
+    <div class="card-body">
+
+        <div class="row d-block mx-auto">
+            <h5 class="card-title">&nbsp;</h5>
+            @using (Html.BeginForm("SaveReciept", "RP", FormMethod.Post, new { id = "SaveForm" }))
+        {
+            if (Model?.RPDID > 0)
+            {
+                @Html.HiddenFor(model => model.RPDID)
+        }
+
+
+        <div class="form-row">
+            <div class="input-group  mb-3">
+                <div class="input-group-prepend"><span class="input-group-text">Note</span></div>
+                <div class="form-control" style="padding:0px !important">@Html.TextArea("Note", null, htmlAttributes: new { @class = " form-control" })</div>
+                @Html.ValidationMessageFor(model => model.Note, "", new { @class = "text-danger" })
+
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="input-group col mb-3">
+                <div class="input-group-prepend"><span class="input-group-text">Payment Type</span></div>
+                @Html.DropDownListFor(model => model.Type, null, htmlAttributes: new { @type = "text", @class = " form-control" })
+                @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="input-group col mb-3">
+                <div class="input-group-prepend"><span class="input-group-text">Amount</span></div>
+                @Html.EditorFor(model => model.Amount, new { htmlAttributes = new { @type = "text", @class = " form-control" } })
+                @Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div id="placeholderEditDiv"></div>
+        @*Dynamic Form-rows based on Selected Payment Type*@
+
+        <div class="input-group col mb-3 fa-pull-right">
+            <button type="submit" class="btn btn-primary " name="SaveReceipt" id="SaveReceipt">Save</button>
+        </div>
+}
+
+        </div>
+        @if (Model?.RPDID > 0)
+    {
+        using (Html.BeginForm("SaveReciept", "RP", FormMethod.Post, new { id = "AssignPay" }))
+        {
+            @Html.Hidden("Id", Model.RPDID)
+            @Html.Hidden("TotalAmt")
+            @Html.Hidden("OA")
+            @Html.Hidden("ManAmt")
+            @Html.Hidden("SRID")
+
+
+
+
+            <div class="row col-12 searchBK">
+                <table class="table table-striped">
+                    <thead></thead>
+                    <tr class="bg-primary rounded">
+                        <td style="float:right">Enter Customer Name:</td>
+                        <th>
+                            @Html.Editor("CustName", new { htmlAttributes = new { @class = "form-control " } })
+                        </th>
+                        <td style="float:right">Enter Agent Name:</td>
+
+                        <th>
+                            @Html.Editor("AgentName", new { htmlAttributes = new { @class = "form-control w" } })
+
+                        </th>
+                        <td class="bg-white"><b>Amount Left:</b> <u>@ViewBag.TotAmt</u></td>
+                    </tr>
+                    <tr class="bg-secondary">
+
+                        <th>
+                            Booking No
+                        </th>
+                        <th>
+                            Name
+                        </th>
+                        <th>
+                            Total Amount
+                        </th>
+                        <th>
+                            Current Payment
+                        </th>
+                        <th>
+
+                        </th>
+                    </tr>
+                    @foreach (var item in (IEnumerable<Speedbird.SRBooking>)ViewBag.Bookings)
+                {
+                    <tr>
+
+                        <td>
+                            @item.SRID
+                        </td>
+                        <td>
+                            @if (item.cName != null)
+                        {
+                            @: @item.cName
+                    }
+                            @if (item.UserName != null)
+                        {
+                            @: @item.UserName
+                    }
+                        </td>
+                        <td>
+                            @(item.OA - item.PaidAmt )
+                        </td>
+                        <td>
+                            <input name="Amt" type="text" class="form-control" data-save="@item.SRID" />
+                        </td>
+                        <td>
+                            <div class="form-row">
+
+
+                                <div class="input-group col mb-3 fa-pull-right">
+                                    <button type="button" class="btn btn-primary SavePayment" name="SavePayment" data-srid="@item.SRID" data-oa=" @(item.OA - item.PaidAmt )">Save</button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+            }
+
+                </table>
+            </div>}
+
+}
+else
+{
+    <table class="table">
+        <tr>
+            <th>Sr No</th>
+           
+            <th>
+               Payment Type
+            </th>
+            <th>
+                Amount
+            </th>
+            <th>Used Amount</th>
+           
+            <th></th>
+        </tr>
+        @{int i = 1;}
+        @foreach (var item in (IEnumerable<Speedbird.RPDetails>)ViewBag.UnUsedP)
+    {
+        <tr>
+            <td>
+                @i
+            </td>
+      
+            <td>
+                @((Speedbird.AmtType)item.Type)
+            </td>
+            <td>
+                @item.Amount
+            </td>
+            <td>
+                @item.UnUsedAmt
+            </td>
+           
+            <td>
+                <a href="@Url.Action("Reciept","RP", new {id = item.RPDID })"><i title="Edit" class="fas fa-edit fa-inverse h3 float-right DropShadow"></i></a>
+            </td>
+        </tr>
+    i++;
+}
+
+    </table>
+}
+    </div>
+</div>
+<script>
+        $('#placeholderEditDiv').load('@Url.Action("FetchRcptPartial", "RP")', { Type: $('#Type').val(),id:$('#RPDID').val() });
+
+        //Then on change of the dropDown load the dynamic fields based on the selected  type
+        $('#Type').on('change', function () {
+            var Type = $(this).val();
+
+
+            //Load the Dynamic Fields of the Form based on the selected  Type
+            $('#placeholderEditDiv').load('@Url.Action("FetchRcptPartial", "RP")', { Type: $('#Type').val(), id: $('#RPDID').val()});
+    });
+
+</script>
+
+<script>
+        $("#CustName,#AgentName").keyup(function () {
+
+            var cn = $('#CustName').val();
+            var an = $('#AgentName').val();
+
+
+            if (cn.length == 5 || an.length == 5) {
+                $('.searchBK').html("");
+                $('.searchBK').load("/SBBoss/RP/Reciept?CustName=" + cn + "&&AgentName=" + an +"&&IsSearch="+true);
+            }
+        });
+
+    
+</script>
+
+
+<script>
+        $('.SavePayment').click(function () {
+            var srid = $(this).data('srid');
+            var oa = $(this).data('oa');
+            var ManAmt = $('input[data-save="' + srid + '"]').val();
+            var ta = $("#Amount").val();
+            $("#SRID").val(srid);
+            $("#OA").val(oa);
+            $("#ManAmt").val(ManAmt);
+            $("#TotalAmt").val(ta);
+
+            var detFrm = $('#AssignPay');
+
+        if (typeof(detFrm[0]) == 'object')
+        {
+
+            $.ajax({
+
+        url: '@Url.Action("Reciept", "RP")',
+        type: 'post',
+        data: $(detFrm).serialize(),
+        success: function () {
+                    
+                        window.location.assign('@Url.Action("Reciept")');
+                }
+            });
+        }
+    });
+</script>
