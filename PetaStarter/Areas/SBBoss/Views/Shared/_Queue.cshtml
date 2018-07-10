@@ -6,6 +6,8 @@
 </style>
 
 <br />
+@if (Model.Count() > 0)
+{
 <div class="row alert alert-primary alert-dismissible fade show" role="alert" style="position:absolute; top:15px;left:80px; border:3px groove #ffffec">
     @foreach (var item in Model)
     {
@@ -21,6 +23,7 @@
             <span aria-hidden="true">&times;</span>
         </button>
 </div>
+}
 <script>
     $(document).ready(function () {
         $('.alert').alert();
