@@ -2,10 +2,27 @@
 @{
     ViewBag.Title = "Register";
 }
+<style>
+    .alink {
+        color: lightcyan;
+        font-family: 'Times New Roman', Times, serif;
+        font-size: 20px;
+        font-weight: bolder;
+    }
 
+    body {
+        background-image: url(/Images/LoginBG.jpeg);
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+
+    p {
+        background: rgba(0, 0, 0,0.7);
+    }
+</style>
 <h2>@ViewBag.Title.</h2>
 
-@using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+@using (Html.BeginForm("Register", "Account", new { @area = "" }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
     @Html.AntiForgeryToken()
     <h4>Create a new account.</h4>

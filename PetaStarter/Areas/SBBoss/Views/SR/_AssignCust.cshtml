@@ -4,25 +4,25 @@
     }
 </style>
 
-    <div class="modal-dialog  modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="AssignCustModalLabel">Select Customers</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
+<div class="modal-dialog  modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="AssignCustModalLabel">Select Customers</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
 
-            @using (Html.BeginForm("AssignCust", "SR", FormMethod.Post, new { id = "AssignCustFrm" }))
-    {
-
-        @Html.AntiForgeryToken()
-        if(ViewBag.SRDID!=null)
-        { @Html.Hidden("SRDID", (int)ViewBag.SRDID)}
         <div class="modal-body">
+            @using (Html.BeginForm("AssignCust", "SR", FormMethod.Post, new { id = "AssignCustFrm" }))
+            {
 
-            <div class="row">
-                <div id="SearchCust" class="col">
+                @Html.AntiForgeryToken()
+                if (ViewBag.SRDID != null)
+                { @Html.Hidden("SRDID", (int)ViewBag.SRDID)}
+
+            
+                <div id="SearchCust" >
                     <br />
                     <h4>Assign Customers</h4>
                     <table class="table table-sm table-striped">
@@ -50,29 +50,29 @@
                         <tbody>
 
                             @foreach (var item in ViewBag.Cust)
-                    {
-                        <tr>
+                            {
+                                <tr>
 
-                            <td colspan="3">
-                                <input type="checkbox" value=@item.CustomerID name="CID" />
-                                @item.FName  @item.SName
-                            </td>
+                                    <td colspan="3">
+                                        <input type="checkbox" value=@item.CustomerID name="CID" />
+                                        @item.FName  @item.SName
+                                    </td>
 
-                            <td>
-                                @item.Phone
-                            </td>
-                            <td>
-                                @item.Email
-                            </td>
-                            <td>
-                                @item.Type
-                            </td>
+                                    <td>
+                                        @item.Phone
+                                    </td>
+                                    <td>
+                                        @item.Email
+                                    </td>
+                                    <td>
+                                        @item.Type
+                                    </td>
 
-                        </tr>
+                                </tr>
 
 
 
-            }
+                            }
 
 
                         </tbody>
@@ -80,80 +80,81 @@
 
 
 
-                </div>
-            </div>
+                    </div>
+                
+             }
 
-        </div>
-
-}
-
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button id="SaveCust" type="button" class="btn btn-primary" data-dismiss="modal">Save</button>
-            </div>
             @if (ViewBag.AssignedCust != null)
-    {
-        <div class="Container">
-            <h4>List of customers already assigned:</h4>
-            <table class="table table-sm table-striped">
-                <thead class="bg-info">
-                    <tr>
-                        <th>
-
-                        </th>
-                        <th></th>
-                        <th>
-                            Name
-                        </th>
-                        <th>
-                            Mobile
-                        </th>
-                        <th>
-                            Email
-                        </th>
-                        <th>
-                            Type
-                        </th>
-
-                    </tr>
-                </thead>
-                <tbody>
-
-                    @foreach (var item in ViewBag.AssignedCust)
             {
-                <tr>
+             
+                            <h4>List of customers already assigned:</h4>
+                            <table class="table table-sm table-striped">
+                                <thead class="bg-info">
+                                    <tr>
+                                        <th>
 
-                    <td colspan="3">
-                        @item.FName  @item.SName
-                    </td>
+                                        </th>
+                                        <th></th>
+                                        <th>
+                                            Name
+                                        </th>
+                                        <th>
+                                            Mobile
+                                        </th>
+                                        <th>
+                                            Email
+                                        </th>
+                                        <th>
+                                            Type
+                                        </th>
 
-                    <td>
-                        @item.Phone
-                    </td>
-                    <td>
-                        @item.Email
-                    </td>
-                    <td>
-                        @item.Type
-                    </td>
+                                    </tr>
+                                </thead>
+                                <tbody>
 
-                </tr>
+                                    @foreach (var item in ViewBag.AssignedCust)
+                                    {
+                                        <tr>
+
+                                            <td colspan="3">
+                                                @item.FName  @item.SName
+                                            </td>
+
+                                            <td>
+                                                @item.Phone
+                                            </td>
+                                            <td>
+                                                @item.Email
+                                            </td>
+                                            <td>
+                                                @item.Type
+                                            </td>
+
+                                        </tr>
 
 
 
-    }
+                                    }
 
 
-                </tbody>
-            </table>
+                                </tbody>
+                            </table>
+                     
+            }
+
         </div>
-}
 
-        </div>
+
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button id="SaveCust" type="button" class="btn btn-primary" >Save</button>
+        </div> @*Modal footer*@
     </div>
+</div>
 
 
-  
+
 <script>
 
 
@@ -174,20 +175,6 @@ $('#SaveCust').click(function() {
             });
         }
     });
-    $('#AssignCustModal').on('shown.bs.modal', function (event) {
-
-        var button = $(event.relatedTarget); // Button that triggered the modal
-        var recipient = button.data('srdid');
-        var modal = $(this);
-        modal.find('#SRDID').val(recipient);
-
-        modal.find('#CID').focus();
-      
-
-    })
-
-
-    
 
 
     $(document).ready(function () {
