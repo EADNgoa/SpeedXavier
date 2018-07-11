@@ -199,6 +199,7 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Areas\SBBoss\Controllers\AdminController.cs" />
     <Compile Include="Areas\SBBoss\Controllers\RPController.cs" />
     <Compile Include="Areas\SBBoss\Controllers\QuestionsController.cs" />
     <Compile Include="Areas\SBBoss\Controllers\AssetBillController.cs" />
@@ -393,6 +394,7 @@
     <Content Include="Images\India 3.png" />
     <Content Include="Images\India.jpg" />
     <Content Include="Images\international 3.png" />
+    <Content Include="Images\LoginBG.jpeg" />
     <Content Include="Images\logo.png" />
     <Content Include="Images\page1pic.jpg" />
     <Content Include="Images\reload.png" />
@@ -756,6 +758,7 @@
     <Content Include="Areas\SBBoss\Views\RP\_Cheque.cshtml" />
     <Content Include="Areas\SBBoss\Views\RP\_Internet_Banking.cshtml" />
     <Content Include="Areas\SBBoss\Views\RP\_SearchBooking.cshtml" />
+    <Content Include="Areas\SBBoss\Views\Admin\Index.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Areas\SBBoss\Views\SR\CustomerSearchPartial.cshtml" />
     <Content Include="Areas\SBBoss\Views\SR\SRCustomers.cshtml" />

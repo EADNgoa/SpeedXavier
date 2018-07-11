@@ -57,7 +57,7 @@ namespace Speedbird.Controllers
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
-            ViewBag.ReturnUrl = returnUrl;
+            ViewBag.ReturnUrl = (returnUrl?.Length > 0) ? returnUrl : Request.UrlReferrer.LocalPath;
             return View();
         }
 
@@ -163,7 +163,7 @@ namespace Speedbird.Controllers
 
                 if (result.Succeeded)
                 {
-                  //  db.Update($"Update AspNetUsers Set UserType='{(int)UserTypeEnum.Guest}' Where Id={user.Id}");
+                    db.Update($"Update AspNetUsers Set UserType='{(int)UserTypeEnum.Admin}' Where Id={user.Id}");
 
                     await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
 
@@ -201,7 +201,7 @@ namespace Speedbird.Controllers
 
                 if (result.Succeeded)
                 {
-                   db.Execute($"Update AspNetUsers Set UserType='{(int)UserTypeEnum.Guest}' Where Id='{user.Id}'");
+                   db.Execute($"Update AspNetUsers Set UserType='{(int)UserTypeEnum.Agent}' Where Id='{user.Id}'");
                     var item = new AgentDiscount {UserID = user.Id };
                     db.Insert(item);
                     await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
@@ -506,7 +506,7 @@ namespace Speedbird.Controllers
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
             CheckUser.LogOut = DateTime.Now;
             if (CheckUser != null) db.Update(CheckUser);
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Login", "Account");
         }
 
         //

@@ -2,11 +2,31 @@
     ViewBag.Title = "Confirm Email";
 }
 
+<style>
+    .alink {
+        color: lightcyan;
+        font-family: 'Times New Roman', Times, serif;
+        font-size: 20px;
+        font-weight: bolder;
+    }
+
+    body {
+        background-image: url(/Images/LoginBG.jpeg);
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+
+    p {
+        background: rgba(0, 0, 0,0.7);
+        color:white;
+        font-weight:bold;
+    }
+</style>
 <h2>@ViewBag.Title.</h2>
 <div>
     <p>
         Thank you for signing up. Your request is being processed.
-        Please @Html.ActionLink("Click here to Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })
+        Please @Html.ActionLink("Click here to Log in", "Login", "Account", routeValues: new { @area = "" }, htmlAttributes: new { id = "loginLink" })
         after our admin have verified your identity.
     </p>
 </div>
