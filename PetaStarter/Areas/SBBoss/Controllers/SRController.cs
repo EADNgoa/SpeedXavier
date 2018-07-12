@@ -46,26 +46,12 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
 
         [EAAuthorize(FunctionName = "Service Requests", Writable = false)]
-        public ActionResult SRDairyDets(int? page, DateTime? AN)
+        public ActionResult SRDiaryDets(DateTime? AN)
         {
-            ViewBag.Title = "Dairy";
-            var getPaid = db.Query<ServiceRequestDets>("Select SRID From ServiceRequest").ToList();
-            getPaid.ForEach(r =>
-            {
-
-                r.TotSA = db.FirstOrDefault<decimal>("Select Sum(SellPrice) as SellPrice from SrDetails where SRID=@0", r.SRID);
-                r.AccAmt = db.FirstOrDefault<decimal>("Select Sum(AmountIn) as AmountIn From BankAccount where SRID=@0", r.SRID);
-
-            });
-            getPaid = getPaid.Where(a => a.AccAmt >= a.TotSA).ToList();
-
-            var ids = String.Join(",", getPaid.Select(x => x.SRID));
-
-            if (AN == null)
-            {
-                AN = DateTime.Now.Date;
-            }
-            return View("SRDairyDets", base.BaseIndex<SRdetailDets>(page, " * ", $"SRdetails sd inner join Supplier s on s.SupplierID =sd.SupplierID where SRID in ({ids}) and Cast(Fdate as Date) like '%" + AN.Value.Date.ToString("yyyy-MM-dd") + "%'"));
+            ViewBag.Title = "Diary";
+            AN=AN ?? DateTime.Now.Date;
+            
+            return View("SRDiaryDets", base.BaseIndex<SRdetailDets>(1, " * ", $"ServiceRequest sr , SRdetails srd where sr.PayStatusID={(int)PayType.Full_Paid} and sr.srid=srd.SRID and (srd.FDate='{AN:yyyy-MM-dd}' or ('{AN:yyyy-MM-dd}' between srd.Fdate and srd.TDate))"));
 
         }
 
