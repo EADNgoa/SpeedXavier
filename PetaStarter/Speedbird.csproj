@@ -199,6 +199,7 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Areas\SBBoss\Controllers\GroupController.cs" />
     <Compile Include="Areas\SBBoss\Controllers\AdminController.cs" />
     <Compile Include="Areas\SBBoss\Controllers\RPController.cs" />
     <Compile Include="Areas\SBBoss\Controllers\QuestionsController.cs" />
@@ -759,6 +760,9 @@
     <Content Include="Areas\SBBoss\Views\RP\_Internet_Banking.cshtml" />
     <Content Include="Areas\SBBoss\Views\RP\_SearchBooking.cshtml" />
     <Content Include="Areas\SBBoss\Views\Admin\Index.cshtml" />
+    <Content Include="Areas\SBBoss\Views\RP\Payment.cshtml" />
+    <Content Include="Areas\SBBoss\Views\Group\Index.cshtml" />
+    <Content Include="Areas\SBBoss\Views\Group\Manage.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Areas\SBBoss\Views\SR\CustomerSearchPartial.cshtml" />
     <Content Include="Areas\SBBoss\Views\SR\SRCustomers.cshtml" />

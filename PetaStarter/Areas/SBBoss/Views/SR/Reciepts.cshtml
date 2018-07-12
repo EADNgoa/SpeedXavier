@@ -39,7 +39,7 @@
                 <div class="input-group col mb-3">
                     <div class="input-group-prepend"><span class="input-group-text">Select Bank</span></div>
                     @Html.DropDownList("BankID", null, htmlAttributes:  new { @type = "text", @class = "form-control" } )
-                    @Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.BankID, "", new { @class = "text-danger" })
                 </div>
                 <div class="input-group col mb-3">
                     <div class="input-group-prepend"><span class="input-group-text">Amount</span></div>
