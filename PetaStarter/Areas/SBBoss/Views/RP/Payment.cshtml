@@ -8,8 +8,8 @@
 
 <div class="card border rounded DropShadow">
     <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
-        <span class="h5">Reciepts</span>
-        <a href="@Url.Action("Reciept","Rp", new {id=0 })"><i class="fas fa-undo-alt fa-inverse h3 float-right DropShadow"></i></a>
+        <span class="h5">Payment</span>
+        <a href="@Url.Action("Payment","Rp", new {id=0 })"><i class="fas fa-undo-alt fa-inverse h3 float-right DropShadow"></i></a>
 
     </div>
     <div class="card-body">
@@ -23,7 +23,7 @@
                 @Html.HiddenFor(model => model.RPDID)
         }
 
-            @Html.Hidden("IsPayment",(bool)false)
+        @Html.Hidden("IsPayment", (bool)true)
         <div class="form-row">
             <div class="input-group  mb-3">
                 <div class="input-group-prepend"><span class="input-group-text">Note</span></div>
@@ -63,6 +63,8 @@
             @Html.Hidden("OA")
             @Html.Hidden("ManAmt")
             @Html.Hidden("SRID")
+            @Html.Hidden("SupplierID")
+
 
 
 
@@ -71,14 +73,13 @@
                 <table class="table table-striped">
                     <thead></thead>
                     <tr class="bg-primary rounded">
-                        <td style="float:right">Enter Customer Name:</td>
+                        <td style="float:right">Enter Supplier Name:</td>
                         <th>
-                            @Html.Editor("CustName", new { htmlAttributes = new { @class = "form-control " } })
+                            <input type="text" id="SupplierName" name="SupplierName" style="color:black;" data-autocomplete-idholder="#SupplierID" value="" data-autocombo-url="@Url.Action("AutoCompleteSup")" class="form-control" />
                         </th>
-                        <td style="float:right">Enter Agent Name:</td>
+                        <td style="float:right"></td>
 
                         <th>
-                            @Html.Editor("AgentName", new { htmlAttributes = new { @class = "form-control w" } })
 
                         </th>
                         <td class="bg-white"><b>Amount Left:</b> <u>@ViewBag.TotAmt</u></td>
@@ -145,15 +146,15 @@ else
     <table class="table">
         <tr>
             <th>Sr No</th>
-           
+
             <th>
-               Payment Type
+                Payment Type
             </th>
             <th>
                 Amount
             </th>
             <th>Used Amount</th>
-           
+
             <th></th>
         </tr>
         @{int i = 1;}
@@ -163,7 +164,7 @@ else
             <td>
                 @i
             </td>
-      
+
             <td>
                 @((Speedbird.AmtType)item.Type)
             </td>
@@ -173,9 +174,9 @@ else
             <td>
                 @item.UnUsedAmt
             </td>
-           
+
             <td>
-                <a href="@Url.Action("Reciept","RP", new {id = item.RPDID })"><i title="Edit" class="fas fa-edit fa-inverse h3 float-right DropShadow"></i></a>
+                <a href="@Url.Action("Payment","RP", new {id = item.RPDID })"><i title="Edit" class="fas fa-edit fa-inverse h3 float-right DropShadow"></i></a>
             </td>
         </tr>
     i++;
@@ -198,21 +199,18 @@ else
     });
 
 </script>
-
 <script>
-        $("#CustName,#AgentName").keyup(function () {
+    $("#SupplierName").change(function () {
 
-            var cn = $('#CustName').val();
-            var an = $('#AgentName').val();
+        var sid = $('#SupplierID').val();
 
 
-            if (cn.length == 5 || an.length == 5) {
-                $('.searchBK').html("");
-                $('.searchBK').load("/SBBoss/RP/Reciept?CustName=" + cn + "&&AgentName=" + an + "&&IsSearch=" + true + "&&Id=" + $("#RPDID").val());
-            }
-        });
+            $('.searchBK').html(" ");
+            $('.searchBK').load("/SBBoss/RP/Payment?SupplierID=" + sid + "&&IsSearch=" + true + "&&Id=" + $("#RPDID").val());
+       
+    });
 
-    
+
 </script>
 
 
@@ -234,12 +232,12 @@ else
 
             $.ajax({
 
-        url: '@Url.Action("Reciept", "RP")',
+        url: '@Url.Action("Payment", "RP")',
         type: 'post',
         data: $(detFrm).serialize(),
         success: function () {
-                    
-                        window.location.assign('@Url.Action("Reciept")');
+
+                        window.location.assign('@Url.Action("Payment")');
                 }
             });
         }

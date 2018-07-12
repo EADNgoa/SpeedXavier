@@ -908,6 +908,7 @@ namespace Speedbird
 		[Column] public int? SRID { get; set; }
 		[Column] public int? Type { get; set; }
 		[Column] public bool? AmtUsed { get; set; }
+		[Column] public bool? IsPayment { get; set; }
 	}
     
 	[TableName("dbo.ServiceCommision")]

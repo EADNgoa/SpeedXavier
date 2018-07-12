@@ -45,6 +45,7 @@ namespace Speedbird
         public string UserName { get; set; }
         public decimal PaidAmt { get; set; }
         public decimal OrigAmt { get; set; }
+        public int SupplierID { get; set; }
 
         public decimal OA { get; set; }
         public decimal Remainder { get; set; }

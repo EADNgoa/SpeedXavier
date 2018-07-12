@@ -1,5 +1,7 @@
 ﻿<table class="table table-striped">
-    <thead>Amount Used:@ViewBag.AmtUsed</thead>
+    <thead></thead>
+    @if (ViewBag.Reciepts != null)
+    {
     <tr class="bg-primary rounded">
         <td style="float:right">Enter Customer Name:</td>
         <th>
@@ -11,8 +13,26 @@
             @Html.Editor("AgentName", new { htmlAttributes = new { @class = "form-control w" } })
 
         </th>
-        <td></td>
+        <td>
+        <td class="bg-white"><b>Amount Left:</b> <u>@ViewBag.TotAmt</u></td>
+        </td>
     </tr>
+    }
+    else if (ViewBag.Payments != null)
+    {
+        <tr class="bg-primary rounded">
+            <td style="float:right">Enter Supplier Name:</td>
+            <th>
+                <input type="text" id="SupplierName" name="SupplierName" style="color:black;" data-autocomplete-idholder="#SupplierID" value="" data-autocombo-url="@Url.Action("AutoCompleteSup")" class="form-control" />
+            </th>
+            <td style="float:right"></td>
+
+            <th>
+
+            </th>
+            <td class="bg-white"><b>Amount Left:</b> <u>@ViewBag.TotAmt</u></td>
+        </tr>
+    }
     <tr class="bg-secondary">
 
         <th>
@@ -68,25 +88,26 @@
 
 </table>
 
+@if (ViewBag.Reciepts != null)
+{
+    <script>
+        $("#CustName,#AgentName").keyup(function () {
 
-<script>
-    $("#CustName,#AgentName").keyup(function () {
-
-        var cn = $('#CustName').val();
-        var an = $('#AgentName').val();
-
-
-        if (cn.length == 5 || an.length == 5) {
-            $('.searchBK').html(" ");
-            $('.searchBK').load("/SBBoss/RP/Reciept?CustName=" + cn + "&&AgentName=" + an + "&&IsSearch=" + true);
-        }
-    });
+            var cn = $('#CustName').val();
+            var an = $('#AgentName').val();
 
 
-</script>
+            if (cn.length == 5 || an.length == 5) {
+                $('.searchBK').html(" ");
+                $('.searchBK').load("/SBBoss/RP/Reciept?CustName=" + cn + "&&AgentName=" + an + "&&IsSearch=" + true + "&&Id=" + $("#RPDID").val());
+            }
+        });
 
 
-<script>
+    </script>
+
+
+    <script>
         $('.SavePayment').click(function () {
             var srid = $(this).data('srid');
             var oa = $(this).data('oa');
@@ -114,4 +135,55 @@
             });
         }
     });
-</script>
+    </script>
+}
+
+@if (ViewBag.Payments != null)
+{
+    <script>
+        $("#SupplierName").change(function () {
+
+            var sid = $('#SupplierID').val();
+
+
+            $('.searchBK').html(" ");
+            $('.searchBK').load("/SBBoss/RP/Payment?SupplierID=" + sid + "&&IsSearch=" + true + "&&Id=" + $("#RPDID").val());
+
+        });
+
+
+    </script>
+
+
+
+
+    <script>
+        $('.SavePayment').click(function () {
+            var srid = $(this).data('srid');
+            var oa = $(this).data('oa');
+            var ManAmt = $('input[data-save="' + srid + '"]').val();
+            var ta = $("#Amount").val();
+            $("#SRID").val(srid);
+            $("#OA").val(oa);
+            $("#ManAmt").val(ManAmt);
+            $("#TotalAmt").val(ta);
+
+            var detFrm = $('#AssignPay');
+
+        if (typeof(detFrm[0]) == 'object')
+        {
+
+            $.ajax({
+
+        url: '@Url.Action("Payment", "RP")',
+        type: 'post',
+        data: $(detFrm).serialize(),
+        success: function () {
+
+                        window.location.assign('@Url.Action("Payment")');
+                }
+            });
+        }
+    });
+    </script>
+}
