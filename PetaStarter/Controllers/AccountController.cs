@@ -163,7 +163,8 @@ namespace Speedbird.Controllers
 
                 if (result.Succeeded)
                 {
-                    db.Update($"Update AspNetUsers Set UserType='{(int)UserTypeEnum.Admin}' Where Id={user.Id}");
+                    db.Execute($"Update AspNetUsers Set UserType={(int)UserTypeEnum.Admin} Where Id='{user.Id}'");
+                    db.Insert(new UserGroup { GroupID = 1, UserID = user.Id });
 
                     await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
 

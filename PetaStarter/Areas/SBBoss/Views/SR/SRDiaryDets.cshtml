@@ -12,13 +12,13 @@
     </div>
     <div class="card-body">
         <h5 class="card-title">&nbsp;</h5>
-        @using (Html.BeginForm("SRDairyDets", "SR", FormMethod.Get))
+        @using (Html.BeginForm("SRDiaryDets", "SR", FormMethod.Get))
         {
             <div class="row d-print-none">
                 <table>
                     <tr style="text-align:center">
                         <td>&nbsp;Date:</td>
-                        <td> @Html.TextBox("AN", ViewBag.CurrentFilter as string, new { @class = "form-control",@type="date" })</td>
+                        <td> @Html.TextBox("AN", ViewBag.CurrentFilter as string, new { @class = "form-control eadate",@type="text" })</td>
                         <td><input type="submit" value="Search" class="btn btn-primary" /></td>
                     </tr>
                 </table>
@@ -35,10 +35,10 @@
                 <h5>&nbsp;</h5>
                 <table class="table">
                     <tr role="row">
-                        <th>Sr No</th>
-                        <th scope="col"> Request No</th>
+                        <th>Bk No</th>
+                        
                         <th scope="col"> Service Type</th>
-                        <th scope="col"> Date</th>
+                        <th scope="col"> Start date</th>
                         <th scope="col">Supplier</th>
                         <th scope="col">Contract No</th>
                         <th scope="col">Coupon Code</th>
@@ -51,11 +51,9 @@
                     {
                         <tr>
                             <td>
-                                @i
+                                @item.SRID
                             </td>
-                            <td>
-                                @item.SRDID
-                            </td>
+                        
                             <td>
                                 @((Speedbird.ServiceTypeEnum)item.ServiceTypeID)
                             </td>
