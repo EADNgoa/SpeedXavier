@@ -3,7 +3,7 @@
         max-width: 100% !important;
     }
 </style>
-<div class="modal fade" id="AssignDriverModal" tabindex="-1" role="dialog" aria-labelledby="AssignDriverLabel" aria-hidden="true">
+<div class="modal fade" id="AssignDriverModal" role="dialog" aria-labelledby="AssignDriverLabel" aria-hidden="true">
     <div class="modal-dialog  modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -27,19 +27,20 @@
                 </div>
                 <div class="input-group col mb-3 ">
                     <div class="input-group-prepend"><span class="input-group-text">Location</span></div>
-                    <input type="text" id="GeoName" name="GeoName" style="color:black;" data-autocomplete-idholder="#GeoTreeID" value="" data-autocombo-url="@Url.Action("GetLocations")" class="form-control" />
+                    <select id="GeoTreeID" name="GeoTreeID" class="form-control GeoSelect">                 
+                    </select>
                     
 
                 </div>
                 <div class="row">
                     <div class="col-6">
                         <center>
-                            <button id="scr" type="button" class="btn btn-link " style="width:140px" name="scr"  value="">Sort by Score</button>
+                            <button id="scr" type="button" class="btn btn-link srtOdr" style="width:140px" name="scr"  value="1">Sort by Score</button>
                         </center>
                     </div>
                     <div class="col-6">
                         <center>
-                            <button id="bks" type="button" class="btn btn-link " style="width:140px" name="bks" value="">Sort by Bookings</button>
+                            <button id="bks" type="button" class="btn btn-link srtOdr" style="width:140px" name="bks" value="1">Sort by Bookings</button>
                         </center>
                     </div>
                 </div>
@@ -113,7 +114,7 @@
     </div>
 </div>
 <script>
-    $("#DriverName,#GeoTreeID").keyup(function () {
+    $("#DriverName").keyup(function () {
 
         var dn = $('#DriverName').val();
         var gt = $('#GeoTreeID').val();
@@ -122,17 +123,17 @@
 
         if (dn.length == 3 || gt != null) {
             $('#SearchDrv').html("");
-            $('#SearchDrv').load("/SBBoss/SR/FetchDrv?DriverName=" + dn + "&&SRDID=" + sdid);
+            $('#SearchDrv').load("/SBBoss/SR/FetchDrv?DriverName=" + dn + "&&SRDID=" + sdid + "&GeoTreeID=" + gt);
         }
     });
-    $("#scr").click(function (e) {
+    $(".srtOdr").click(function (e) {
 
         var btn = e.target.id;
         if (btn == "scr") {
             var scr = $('#scr').val();
         }
-        else if (btn=="#bks"){
-            var scr = $('#bks').val();
+        else {
+            var bks = $('#bks').val();
         }
         var dn = $('#DriverName').val();
         var gt = $('#GeoTreeID').val();
@@ -140,7 +141,7 @@
 
         if (dn.length == 3 || gt != null) {
             $('#SearchDrv').html("");
-            $('#SearchDrv').load("/SBBoss/SR/FetchDrv?DriverName=" + dn + "&&SRDID=" + sdid + "&&scr=" + scr + "&&bks=" + bks);
+            $('#SearchDrv').load("/SBBoss/SR/FetchDrv?DriverName=" + dn + "&SRDID=" + sdid + "&scr=" + scr + "&bks=" + bks + "&GeoTreeID=" + gt);
         }
     });
 
@@ -190,6 +191,45 @@ $('#SaveDriver').click(function() {
                     }
                 });
             });
+
+            function formatState(state) {
+                if (!state.id) {
+                    return state.text;
+                }
+                var parts = state.text.split(",");
+                return parts[0];
+
+            };
+
+          $(".GeoSelect").select2({
+                placeholder: "Type 3 letters to choose",
+                templateSelection: formatState,
+
+                ajax: {
+                    url: '@(Url.Action("GetLocations", "GeoTree"))',
+                    dataType: 'json',
+                    quietMillis: 250,
+                    results: function (data, page) {
+                        return { results: data.data };
+                    }
+                }
+        });
+
+        $('.GeoSelect').on('select2:select', function (e) {
+            var data = e.params.data;
+            console.log(data);
+
+            var dn = $('#DriverName').val();
+            var gt = $('#GeoTreeID').val();
+            var did = $('#DID').val();
+            var sdid = $('#SRDID').val();
+
+            if (dn.length == 3 || gt != null) {
+                $('#SearchDrv').html("");
+                $('#SearchDrv').load("/SBBoss/SR/FetchDrv?DriverName=" + dn + "&SRDID=" + sdid + "&GeoTreeID=" + gt);
+            }
+
+        });
     });
 
 

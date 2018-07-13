@@ -45,7 +45,8 @@ namespace Speedbird
             bundles.Add(new ScriptBundle("~/bundles/jquerydtpicker").Include(
                     "~/Scripts/jquery-ui-timepicker-addon.js",
                     "~/Scripts/select2.min.js",
-                    "~/Scripts/jquery-te-1.4.0.min.js"));
+                    "~/Scripts/jquery-te-1.4.0.min.js",
+                    "~/Scripts/jquery.barrating.min.js"));
             bundles.Add(new StyleBundle("~/Content/dtpic").Include(
                     "~/Content/jquery-ui-timepicker-addon.css",
                     "~/Content/css/select2.min.css",

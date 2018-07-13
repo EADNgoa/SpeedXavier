@@ -74,7 +74,7 @@
                             <li class="nav-item"><i class="fas fa-align-center "></i><a class="nav-link" href="~/SBBoss/LeaveType">Leave Type</a></li>
                             <li class="nav-item"><i class="fab fa-black-tie "></i><a class="nav-link" href="~/SBBoss/LeaveEntitlement">Leave Entitlement</a></li>
                             <li class="nav-item"><i class="fas fa-calendar-check fa-inverse"></i><a class="nav-link" href="~/SBBoss/LeaveApplication/ConfirmOrCancel">Leave Approval</a></li>
-                            <li class="nav-item"><i class="far fa-clock fa-inverse"></i><a class="nav-link" href="~/SBBoss/Log/BossIndex">Correct Log Details</a></li>
+                            <li class="nav-item"><i class="far fa-clock fa-inverse"></i><a class="nav-link" href="~/SBBoss/Log/BossIndex">Change Log</a></li>
                             <li><a href="~/SBBoss/ServiceCommision"><span style="display:block;"><i class="fab fa-cuttlefish"></i> Service Commision</span></a></li>
                             <li><a href="~/SBBoss/Group"><span style="display:block;"><i class="fas fa-code-branch"></i> Add Groups</span></a></li>
 
@@ -138,7 +138,7 @@
         </li>
         @Html.Partial("_LoginPartial")
     </ul>
-    <img src="/Areas/SBBoss/Custom/Logo.jpg" id="emblem" class="zindex-tooltip" />
+    <a href="/SBBoss/Admin"><img src="/Areas/SBBoss/Custom/Logo.jpg" id="emblem" class="zindex-tooltip" /></a>
     <div class="EAfoot">
         <p class="text-center" style="margin-bottom:0px; line-height: 1.8rem; color:white"><span class="text-muted">&copy; @DateTime.Now.Year -</span> EEAAtech</p>
     </div>

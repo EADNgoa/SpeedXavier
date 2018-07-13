@@ -1,4 +1,5 @@
-﻿
+﻿<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
+<link rel="stylesheet" href="~/scripts/themes/fontawesome-stars.css">
 <div class="modal fade" id="DrvReviewModal" tabindex="-1" role="dialog" aria-labelledby="DrvReviewLabel" aria-hidden="true">
     <div class="modal-dialog" rol
          e="document">
@@ -26,19 +27,18 @@
                             <thead class="bg-primary">
                                 <tr>
                                     <th colspan="2">
-                                        <center>Give Score</center>
+                                        <center class="text-light">Please score the driver. 5 is best and 1 worst.</center>
                                     </th>
 
                                 </tr>
                             </thead>
                             <tbody>
-                               
+
                                 @foreach (var item in ViewBag.Quests)
                                 {
                                     <tr>
-                                        <td>
-                                            <select id="Star" name="Star">
-                                                <option value=""></option>
+                                        <td width="30%">
+                                            <select id="Star" name="Star" class="jqStar">                                                
                                                 <option value="1">1</option>
                                                 <option value="2">2</option>
                                                 <option value="3">3</option>
@@ -47,8 +47,8 @@
                                             </select>
 
                                         </td>
-                                        <td>
-                                            @Html.Hidden("QuestionID",(int)item.QuestionID)
+                                        <td width="70%">
+                                            @Html.Hidden("QuestionID", (int)item.QuestionID)
                                             @item.FQuestion
                                         </td>
                                     </tr>
@@ -74,35 +74,45 @@
 
 
 <script>
-$('#SaveRev').click(function() {
-        var detFrm = $('#ReviewDrv');
+    $(function () { 
 
-        if (typeof(detFrm[0]) == 'object')
-        {
-    $.ajax({
-        url: '@Url.Action("ReviewDriver", "SR")',
-        type: 'post',
-        data: $(detFrm).serialize(),
-        success: function () {
+        $('#SaveRev').click(function () {
+                var detFrm = $('#ReviewDrv');
 
-                        window.location.assign('@Url.Action("Manage", new { id = (int)ViewBag.SRID,mode=3 })');
+                if (typeof(detFrm[0]) == 'object')
+                {
+                    $.ajax({
+                        url: '@Url.Action("ReviewDriver", "SR")',
+                        type: 'post',
+                        data: $(detFrm).serialize(),
+                        success: function () {
+
+                                        window.location.assign('@Url.Action("Manage", new { id = (int)ViewBag.SRID,mode=3 })');
+                        }
+                    });
                 }
-            });
-        }
-    });
-    $('#DrvReviewModal').on('shown.bs.modal', function (event) {
+        });
 
-        var button = $(event.relatedTarget); // Button that triggered the modal
-        var recipient = button.data('srdid');
-        var modal = $(this);
-        modal.find('#SRDID').val(recipient);
+        $('#DrvReviewModal').on('shown.bs.modal', function (event) {        
 
-        modal.find('#Example').focus();
+            var button = $(event.relatedTarget); // Button that triggered the modal
+            var recipient = button.data('srdid');
+            var modal = $(this);
+            modal.find('#SRDID').val(recipient);
 
-
-    });
+            modal.find('#Example').focus();
 
 
+        });
+
+        
+        $('.jqStar').barrating({
+            theme: 'fontawesome-stars'
+            
+        });
+        
+
+    })
 
 
 </script>

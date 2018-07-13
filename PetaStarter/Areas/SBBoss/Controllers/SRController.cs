@@ -773,6 +773,9 @@ namespace Speedbird.Areas.SBBoss.Controllers
         {
             try
             {
+                //First delete old ratings for thsi record if they exist
+                db.Execute("Delete from Feedback where SRDID=@0", SRDID);
+
                 var SQ = Star.Zip(QuestionID, (s, q) => new { star = s, questID = q });
                 foreach (var item in SQ)
                 {
@@ -806,7 +809,6 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
         public PartialViewResult _AssignDriver(int? SRID,int? SRDID)
         {
-            ViewBag.GeoId = db.Query<GeoTree>("Select * from GeoTree ").Select(sl => new SelectListItem { Text = sl.GeoName, Value = sl.GeoTreeID.ToString(), Selected = true });
             ViewBag.SRDID = SRDID;
             ViewBag.SRID = SRID;
 
@@ -845,7 +847,9 @@ namespace Speedbird.Areas.SBBoss.Controllers
         [EAAuthorize(FunctionName = "Service Requests", Writable = true)]
         public ActionResult FetchDrv(string DriverName,int? GeoTreeID ,int? SRDID,string scr,string bks)
       {
-            var sql = new PetaPoco.Sql("Select d.DriverID,d.DriverName,d.Phone,d.Address,d.CarModel,g.GeoName,coalesce(sum(f.StarRating),0)as Score,(select count(DriverID) as DriverID from SRdetails where DriverID =sd.DriverID) as DBCount from Driver d left  join SRdetails sd on sd.DriverID = d.DriverID left join FeedBack f on f.SRDID = sd.SRDID  inner join GeoTree g on g.GeoTreeID= d.LocationId ");
+            var sql = new PetaPoco.Sql("Select d.DriverID,d.DriverName,d.Phone,d.Address,d.CarModel,g.GeoName,coalesce(sum(f.StarRating),0)as Score,(select count(DriverID) as DriverID " +
+                "from SRdetails where DriverID =sd.DriverID) as DBCount from Driver d left  join SRdetails sd on sd.DriverID = d.DriverID left join FeedBack f on f.SRDID = sd.SRDID  " +
+                "inner join GeoTree g on g.GeoTreeID= d.LocationId ");
 
             if (DriverName != null)
                 sql.Append($" Where LOWER(DriverName) like '%{DriverName.ToLower()}%'");

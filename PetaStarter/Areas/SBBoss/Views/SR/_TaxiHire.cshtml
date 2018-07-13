@@ -73,7 +73,10 @@
             <div class="input-group-prepend"><span class="input-group-text">Rate Basis</span></div>
             <select name="RateBasis" class="form-control col-12">
                 <option value=" 8hrs-80kms">
-                    8hrs-80kms
+                    80kms
+                </option>
+                <option value=" 8hrs-80kms">
+                    8hrs
                 </option>
             </select>
             @Html.ValidationMessageFor(model => model.RateBasis, "", new { @class = "text-danger" })

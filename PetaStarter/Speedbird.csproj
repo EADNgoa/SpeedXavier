@@ -269,6 +269,7 @@
     <Content Include="Areas\SBBoss\Custom\EAwell.jpg" />
     <Content Include="Areas\SBBoss\Custom\Emblem.png" />
     <Content Include="Areas\SBBoss\Custom\HeaderRaised.jpg" />
+    <Content Include="Areas\SBBoss\Custom\Logo.jpg" />
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />
     <Content Include="Content\bootstrap-reboot.css" />
@@ -533,7 +534,7 @@
     <Content Include="Scripts\i18n\zh-TW.js" />
     <Content Include="Scripts\jquery-bar-rating\jquery.barrating.min.js" />
     <Content Include="Scripts\jquery-te-1.4.0.min.js" />
-    <Content Include="Scripts\jquery.barrating.js" />
+    <Content Include="Scripts\jquery.barrating.min.js" />
     <Content Include="Scripts\jquery.masonry.min.js" />
     <Content Include="Content\themes\base\accordion.css" />
     <Content Include="Content\themes\base\all.css" />
@@ -820,6 +821,7 @@
     <Content Include="Scripts\jquery-ui-1.12.1.js" />
     <Content Include="Scripts\jquery-ui-1.12.1.min.js" />
     <Content Include="Scripts\jquery-bar-rating\jquery.barrating.min.js.map" />
+    <Content Include="Scripts\jquery.barrating.min.js.map" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery-ui-sliderAccess.js" />
     <Content Include="Scripts\jquery-ui-timepicker-addon.js" />
@@ -841,6 +843,16 @@
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\select2.js" />
     <Content Include="Scripts\select2.min.js" />
+    <Content Include="Scripts\themes\bars-1to10.css" />
+    <Content Include="Scripts\themes\bars-horizontal.css" />
+    <Content Include="Scripts\themes\bars-movie.css" />
+    <Content Include="Scripts\themes\bars-pill.css" />
+    <Content Include="Scripts\themes\bars-reversed.css" />
+    <Content Include="Scripts\themes\bars-square.css" />
+    <Content Include="Scripts\themes\bootstrap-stars.css" />
+    <Content Include="Scripts\themes\css-stars.css" />
+    <Content Include="Scripts\themes\fontawesome-stars-o.css" />
+    <Content Include="Scripts\themes\fontawesome-stars.css" />
     <Content Include="Scripts\umd\popper-utils.js" />
     <Content Include="Scripts\umd\popper-utils.min.js" />
     <Content Include="Scripts\umd\popper.js" />
