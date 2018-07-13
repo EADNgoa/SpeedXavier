@@ -171,7 +171,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             NPbkngs.Append(" Group By sd.SupplierID,sd.SRID,s.SupplierName");
             var bkngs = db.Query<SRBooking>(NPbkngs).Where(a => a.OA > 0).ToList();
             bkngs.ForEach(b=> {
-                b.PaidAmt = db.ExecuteScalar<decimal?>("Select Sum(Amount) as PaidAmt From RP_SR where SRID = @0",b.SRID) ?? 0;
+                b.PaidAmt = db.ExecuteScalar<decimal?>("Select Sum(rp.Amount) as PaidAmt From RP_SR rp inner join RPDets rd on rd.RPDID=rp.RPDID where rp.SRID = @0 and rd.IsPayment =@1",b.SRID,true) ?? 0;
 
             });
             ViewBag.UnUsedP = db.Fetch<RPDetails>("Select rp.RPDID,rp.Amount,rp.Type,(Select Coalesce(Sum(Amount),0) from RP_SR Where RPDID = rp.RPDID) as UnUsedAmt from RPdets rp  where AmtUsed is Null and IsPayment =@0",true);

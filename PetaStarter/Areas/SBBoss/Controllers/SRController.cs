@@ -310,7 +310,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [EAAuthorize(FunctionName = "Service Requests", Writable = true)]
-        public ActionResult Manage([Bind(Include = "SRID,CustID,SRStatusID,EmpID,BookingTypeID,EnquirySource,AgentID,TDate, ServiceTypeID")] ServiceRequest item, string Event, int? CID, string FName, string SName, string Email, string Phone)
+        public ActionResult Manage([Bind(Include = "SRID,CustID,SRStatusID,EmpID,BookingTypeID,EnquirySource,AgentID,TDate,PayStatusID,ServiceTypeID")] ServiceRequest item, string Event, int? CID, string FName, string SName, string Email, string Phone)
         {
             using (var transaction = db.GetTransaction())
             {
@@ -506,25 +506,18 @@ namespace Speedbird.Areas.SBBoss.Controllers
         {
             var rec = base.BaseCreateEdit<SRReciept>(EID, "RecieptID");
             ViewBag.SRID = id;
-            ViewBag.Title = "Reciepts";
-            ViewBag.PayMode = Enum.GetValues(typeof(PayModeEnum)).Cast<PayModeEnum>().Select(v => new SelectListItem { Text = v.ToString(), Value = ((int)v).ToString() }).ToList();
+            ViewBag.Title = "Profit and loss Details";
+            ViewBag.Debit = db.ExecuteScalar<decimal?>("Select sum(Cost) as Cost from SRdetails Where SRID =@0",id);
+            ViewBag.Credit = db.ExecuteScalar<decimal?>("Select sum(Amount) as Amt from RP_SR Where SRID =@0", id);
+           var  rp= db.Fetch<RPDetails>("select rp.Date,rp.Note,rp.Type,rs.Amount,rp.IsPayment from RPDets rp left join RP_SR rs on rp.RPDID = rs.RPDID Where rs.SRID = @0",id);
+            ViewBag.Reciepts = rp.Where(r => r.IsPayment == false);
+            ViewBag.Payments = rp.Where(r => r.IsPayment == true);
 
-            ViewBag.BankID = db.Query<Bank>("Select * from Banks", rec?.BankID ?? 0).Select(sl => new SelectListItem { Text = sl.BankName, Value = sl.BankID.ToString(), Selected = true });
-            ViewBag.SRs = db.FirstOrDefault<ServiceRequestDets>("Select * From ServiceRequest Where SRID=@0", id);
-            ViewBag.Reciepts = db.Fetch<BankAccount>($"Select * From BankAccount where SRID ='{id}'");
+
             return PartialView(rec);
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [EAAuthorize(FunctionName = "Service Requests", Writable = true)]
-        public ActionResult Reciepts([Bind(Include = "RecieptID,SRID,RecieptDate,Amount,PayMode")] SRReciept item)
-        {
-            base.BaseSave<SRReciept>(item, item.RecieptID > 0);
-            return RedirectToAction("Manage", new { id = item.SRID, mode = 6 });
-
-        }
-
+      
         [EAAuthorize(FunctionName = "Service Requests", Writable = true)]
         public ActionResult SRLogs(int? id, int? sid, int? EID)
         {
