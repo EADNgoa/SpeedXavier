@@ -18,9 +18,13 @@
     if (Model?.SRID > 0)
     {
         @Html.HiddenFor(model => model.SRID)
+        @Html.HiddenFor(model => model.CustID)
+
         @Html.HiddenFor(model => model.EmpID)
         @Html.HiddenFor(model => model.AgentID)
         @Html.HiddenFor(model => model.TDate)
+        @Html.HiddenFor(model => model.PayStatusID)
+
 
         @Html.Action("GetSRInfo", "SR", new { id = Model.SRID, mode = ViewBag.mode })
     }
@@ -62,22 +66,22 @@
 
     </div>
     <div class="form-row">
-       
+
         @if (Model?.SRID > 0)
-    {
-        <div class="input-group col mb-3">
-            <div class="input-group-prepend"><span class="input-group-text">Status</span></div>
-            @Html.DropDownListFor(model => model.SRStatusID, null, htmlAttributes: new { @type = "text", @class = " form-control" })
-            @Html.ValidationMessageFor(model => model.SRStatusID, "", new { @class = "text-danger" })
-        </div>
-}
-else
-{
-    <div class="input-group col mb-3">
-        <div class="input-group-prepend"><span class="input-group-text">Requests</span></div>
-        <div class="form-control" style="padding:0px !important">@Html.TextArea("Event", null, htmlAttributes: new { @class = "form-control" })</div>
-    </div>
-}
+        {
+            <div class="input-group col mb-3">
+                <div class="input-group-prepend"><span class="input-group-text">Status</span></div>
+                @Html.DropDownListFor(model => model.SRStatusID, null, htmlAttributes: new { @type = "text", @class = " form-control" })
+                @Html.ValidationMessageFor(model => model.SRStatusID, "", new { @class = "text-danger" })
+            </div>
+        }
+        else
+        {
+            <div class="input-group col mb-3">
+                <div class="input-group-prepend"><span class="input-group-text">Requests</span></div>
+                <div class="form-control" style="padding:0px !important">@Html.TextArea("Event", null, htmlAttributes: new { @class = "form-control" })</div>
+            </div>
+        }
     </div>
 
     if (Model?.SRID == null)

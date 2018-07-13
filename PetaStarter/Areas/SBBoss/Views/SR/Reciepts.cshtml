@@ -10,96 +10,81 @@
     <a href="@Url.Action("Index","SR",new { sid= ViewBag.sid})"><i class="fas fa-undo-alt fa-inverse h3 float-right DropShadow"></i></a>
 </div>
 
-@Html.Action("GetSRInfo", "SR", new { id = ViewBag.SRs.SRID, mode = ViewBag.mode })
-
-<div class="section-to-Not-print">
-
-    @using (Html.BeginForm("Reciepts", "SR", FormMethod.Post))
-    {
-        @Html.AntiForgeryToken()
-
-        <div class="form-horizontal ">
-
-
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
-            @Html.Hidden("SRID", (int)ViewBag.SRs.SRID)
-
-            @if (Model?.RecieptID != null)
-            {@Html.Hidden("RecieptID", (int)Model.RecieptID)}
-
-
-            <div class="form-row">
-
-                <div class="input-group col mb-3">
-                    <div class="input-group-prepend"><span class="input-group-text">Date</span></div>
-                    @Html.EditorFor(model => model.RecieptDate, new { htmlAttributes = new { @type = "text", @class = "eadate form-control" } })
-                    @Html.ValidationMessageFor(model => model.RecieptDate, "", new { @class = "text-danger" })
-                </div>
-                <div class="input-group col mb-3">
-                    <div class="input-group-prepend"><span class="input-group-text">Select Bank</span></div>
-                    @Html.DropDownList("BankID", null, htmlAttributes:  new { @type = "text", @class = "form-control" } )
-                    @Html.ValidationMessageFor(model => model.BankID, "", new { @class = "text-danger" })
-                </div>
-                <div class="input-group col mb-3">
-                    <div class="input-group-prepend"><span class="input-group-text">Amount</span></div>
-                    @Html.EditorFor(model => model.Amount, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })
-                </div>
-
-            </div>
-            <div class="form-row">
-                <div class="input-group col mb-3">
-                    <div class="input-group-prepend"><span class="input-group-text">Pay Mode</span></div>
-                    @Html.DropDownList("PayMode", null, htmlAttributes: new { @type = "text", @class = " form-control" })
-                    @Html.ValidationMessageFor(model => model.PayMode, "", new { @class = "text-danger" })
-                </div>
-                <div class="input-group col mb-3">
-                    <input type="submit" value="Save" class="btn btn-primary" />
-                </div>
-            </div>
-
-        </div>
-    }
-</div>
-<br />
-
-
-<hr />
-<table class="table table-sm section-to-print index-css" width="100%">
+<h4>Profit/Loss Details</h4>
+<table class="table table-striped">
     <tr>
-        <th>Date </th>
-        <th>Trans No.</th>
-        <th>Comment</th>
-        <th>Amount In</th>
-        <th>Amount Out</th>
-
-        <th class="section-to-Not-print"></th>
+        <td>Amount Spend</td>
+        <td>Amount Recieved</td>
+        <td>Total Profit</td>
     </tr>
-    @foreach (var item in (IEnumerable<Speedbird.BankAccount>)ViewBag.Reciepts)
+    <tr>
+        <td>
+            @ViewBag.Debit
+        </td>
+        <td>
+            @ViewBag.Credit
+        </td>
+        <td>
+            @(ViewBag.Credit - ViewBag.Debit)
+        </td>
+    </tr>
+</table>
+<br />
+<h4>Debit Details</h4>
+<table class="table table-striped">
+    <tr>
+        <th>Date</th>
+        <th>Note</th>
+        <th>Type</th>
+        <th>Amount</th>
+    </tr>
+    @foreach (var item in (IEnumerable<Speedbird.RPDetails>)ViewBag.Reciepts)
     {
         <tr>
             <td>
-                @($"{item.TDate:dd/MMM/yyyy}")
+                @($"{item.Date:dd/MMM/yyyy}")
             </td>
             <td>
-                @item.TransNo
+                @item.Note
             </td>
             <td>
-                @item.Comment
+                @((Speedbird.AmtType)item.Type)
             </td>
             <td>
-                @item.AmountIn
-            </td>
-            <td>@item.AmountOut</td>
-            <td>
-                <a href="@Url.Action("Manage","SR",new {id = (int?)ViewBag.SRID, mode=5, EID=item.BankAccountID })">Edit</a>
+                @item.Amount
             </td>
         </tr>
     }
 
 </table>
+<br />
+<h4>Credit Details</h4>
+<table class="table table-striped">
+    <tr>
+        <th>Date</th>
+        <th>Note</th>
+        <th>Type</th>
+        <th>Amount</th>
+    </tr>
+    @foreach (var item in (IEnumerable<Speedbird.RPDetails>)ViewBag.Payments)
+    {
+        <tr>
+            <td>
+                @($"{item.Date:dd/MMM/yyyy}")
+            </td>
+            <td>
+                @item.Note
+            </td>
+            <td>
+                @((Speedbird.AmtType)item.Type)
+            </td>
+            <td>
+                @item.Amount
+            </td>
+        </tr>
+    }
 
+</table>
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }

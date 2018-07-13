@@ -31,8 +31,9 @@ namespace Speedbird
     {
         public int RPDID { get; set; }
         public int Type { get; set; }
-
-       
+        public bool IsPayment { get; set; }
+        public DateTime Date { get; set; }
+        public string Note { get; set; }
         public decimal Amount { get; set; }
         public decimal UnUsedAmt { get; set; }
 
