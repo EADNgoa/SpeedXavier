@@ -355,9 +355,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                     {
                         Event = "User has Edited the Field";
                     }
-                    db.Insert(new SRlog { SRID = item.SRID, LogDateTime = DateTime.Now, UserID = User.Identity.GetUserId(), Type = true, Event = Event });
-
-
+                    
                     transaction.Complete();
                     return new JsonResult { Data = true };
                 }
