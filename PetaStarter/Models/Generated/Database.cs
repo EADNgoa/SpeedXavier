@@ -899,7 +899,7 @@ namespace Speedbird
     public partial class RPdet  
     {
 		[Column] public int RPDID { get; set; }
-		[Column] public string BankName { get; set; }
+		[Column] public int? BankName { get; set; }
 		[Column] public string ChequeNo { get; set; }
 		[Column] public DateTime? Date { get; set; }
 		[Column] public decimal? Amount { get; set; }
@@ -909,6 +909,7 @@ namespace Speedbird
 		[Column] public int? Type { get; set; }
 		[Column] public bool? AmtUsed { get; set; }
 		[Column] public bool? IsPayment { get; set; }
+		[Column] public DateTime? Cdate { get; set; }
 	}
     
 	[TableName("dbo.ServiceCommision")]

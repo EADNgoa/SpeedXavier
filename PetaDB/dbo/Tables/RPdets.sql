@@ -11,5 +11,7 @@
     [Type] INT NULL, 
     [AmtUsed] BIT NULL, 
     [IsPayment] BIT NULL, 
+	    [Cdate] DATE NULL, 
+
     CONSTRAINT [FK_RPdets_ToSR] FOREIGN KEY ([SRID]) REFERENCES [ServiceRequest]([SRID])
 )

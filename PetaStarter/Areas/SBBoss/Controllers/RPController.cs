@@ -191,6 +191,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         [EAAuthorize(FunctionName = "Reciept", Writable = true)]
         public ActionResult SaveReciept([Bind(Include = "RPDID,BankName,ChequeNo,Date,Amount,TransactionNo,Note,Type,IsPayment")] RPdet item)
         {
+            item.Cdate = DateTime.Now;
             base.BaseSave<RPdet>(item, item.RPDID > 0);
             string p = "";
             if (item.IsPayment == false)
