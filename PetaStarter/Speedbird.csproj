@@ -199,6 +199,7 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Areas\SBBoss\Controllers\SupplierController.cs" />
     <Compile Include="Areas\SBBoss\Controllers\AgentController.cs" />
     <Compile Include="Areas\SBBoss\Controllers\GroupController.cs" />
     <Compile Include="Areas\SBBoss\Controllers\AdminController.cs" />
@@ -766,6 +767,9 @@
     <Content Include="Areas\SBBoss\Views\Group\Index.cshtml" />
     <Content Include="Areas\SBBoss\Views\Group\Manage.cshtml" />
     <Content Include="Areas\SBBoss\Views\Agent\Index.cshtml" />
+    <Content Include="Areas\SBBoss\Views\Supplier\Index.cshtml" />
+    <Content Include="Areas\SBBoss\Views\Supplier\Manage.cshtml" />
+    <Content Include="Areas\SBBoss\Views\Supplier\PaymentList.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Areas\SBBoss\Views\SR\CustomerSearchPartial.cshtml" />
     <Content Include="Areas\SBBoss\Views\SR\SRCustomers.cshtml" />
