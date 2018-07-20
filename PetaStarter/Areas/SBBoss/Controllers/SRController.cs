@@ -371,37 +371,66 @@ namespace Speedbird.Areas.SBBoss.Controllers
         [EAAuthorize(FunctionName = "Service Requests", Writable = true)]
         public ActionResult SRdetails(int? id, int? EID)
         {
+            var rec = base.BaseCreateEdit<SRdetail>(EID, "SRDID");
+            if (EID > 0)
+            {
+                var  prec = db.FirstOrDefault<SRdetail>("select Tdate,FromLoc,ToLoc from Srdetails where ParentID =@0",EID) ;
+                if (prec != null)
+                {
+                    rec.Tdate = prec.Tdate ?? null;
+                }
+            }
             ViewBag.SRID = id;
             ViewBag.Title = "Manage Services";
             ViewBag.SRs = db.FirstOrDefault<ServiceRequestDets>("Select * From ServiceRequest sr inner join Customer c on c.CustomerID=sr.CustID Where SRID=@0", id);
             ViewBag.SRDets = db.Fetch<SRdetail>("Select * from SRdetails where SRID =@0", id);
             ViewBag.ServiceTypeID = Enum.GetValues(typeof(ServiceTypeEnum)).Cast<ServiceTypeEnum>().Select(v => new SelectListItem { Text = v.ToString(), Value = ((int)v).ToString() }).ToList();
 
-            return PartialView(base.BaseCreateEdit<SRdetail>(EID, "SRDID"));
+            return PartialView(rec);
         }
 
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         [EAAuthorize(FunctionName = "Service Requests", Writable = true)]
-        public ActionResult SRdetails([Bind(Include = "SRDID,HasAc,HasCarrier,RateBasis,PayTo,PickUpPoint,DropPoint,SRID,ServiceTypeID,FromLoc,ToLoc,SuppInvNo,Fdate,Tdate,SupplierID,Cost,SellPrice,PNRno,TicketNo,Heritage,ChildNo,AdultNo,InfantNo,RoomType,CouponCode,City,Airline,DateOfIssue,FlightNo,ContractNo,GuideLanguageID,SSType,CarType,Model,")] SRdetail item, string Event)
+        public ActionResult SRdetails([Bind(Include = "SRDID,HasAc,HasCarrier,RateBasis,PayTo,PickUpPoint,DropPoint,SRID,ServiceTypeID,FromLoc,ToLoc,SuppInvNo,Fdate,Tdate,SupplierID,Cost,SellPrice,PNRno,TicketNo,Heritage,ChildNo,AdultNo,InfantNo,RoomType,CouponCode,City,Airline,DateOfIssue,FlightNo,ContractNo,GuideLanguageID,SSType,CarType,Model,ParentID,IsReturn")] SRdetail item, string Event,string IsReturn)
         {
             using (var transaction = db.GetTransaction())
             {
                 try
-                {                                       
+                {
+                    DateTime? td =(DateTime?)item?.Tdate ;
                     if(item.SRDID > 0)
                     {
+
+                        if (item.ServiceTypeID == (int)ServiceTypeEnum.Flight)
+                        {
+                            item.Tdate = null;
+                        }
+
                         db.Update(item);
                         LogAction(new SRlog { SRID = item.SRID, SRDID=item.SRDID, Event = Event, Type=true});
                         LogAction(new SRlog { SRID = item.SRID, SRDID = item.SRDID, Event = FindDiffs<SRdetail>(item.SRDID,item,"Service") });
+                        if(item.IsReturn == true)
+                        {
+                            db.Execute($"Update Srdetails Set Tdate ={td} and FromLoc='{item.ToLoc}' and ToLoc ='{item.FromLoc}' where ");
+                        }
                     }
                     else
                     {
+                        if(item.ServiceTypeID == (int)ServiceTypeEnum.Flight)
+                        {
+                            item.Tdate = null;
+                        }
                         db.Insert(item);
+                        if (IsReturn == "true")
+                        {
+                            db.Insert(new SRdetail { FromLoc = item.ToLoc, ToLoc = item.FromLoc, Tdate = td, ParentID = item.SRDID, ServiceTypeID = item.ServiceTypeID });
+                        }
                         LogAction(new SRlog { SRID = item.SRID, SRDID = item.SRDID, Event = Event, Type = true });
                         LogAction(new SRlog { SRID = item.SRID, SRDID = item.SRDID, Event = "Added " + item.ServiceTypeName });
                     }
+                    
                     transaction.Complete();
                 }
                 catch (Exception ex)

@@ -770,6 +770,7 @@
     <Content Include="Areas\SBBoss\Views\Supplier\Index.cshtml" />
     <Content Include="Areas\SBBoss\Views\Supplier\Manage.cshtml" />
     <Content Include="Areas\SBBoss\Views\Supplier\PaymentList.cshtml" />
+    <Content Include="Areas\SBBoss\Views\Agent\PaymentList.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Areas\SBBoss\Views\SR\CustomerSearchPartial.cshtml" />
     <Content Include="Areas\SBBoss\Views\SR\SRCustomers.cshtml" />

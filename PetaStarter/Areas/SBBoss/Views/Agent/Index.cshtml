@@ -54,7 +54,7 @@
                         @Html.DisplayFor(modelItem => item.UserName)
                     </td>
                     <td>
-                        <a href="@Url.Action("Manage","Activity", new {id = item.Id })"><i title="Edit" class="fas fa-edit fa-inverse h3 float-right DropShadow"></i></a>
+                        <a href="@Url.Action("PaymentList","Agent", new {id = item.Id })"><i title="PaymentList" class="fas fa-rupee-sign fa-inverse h3 float-right DropShadow"></i></a>
                     </td>
                 </tr>
                 i++;
