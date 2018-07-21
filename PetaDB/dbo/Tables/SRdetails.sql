@@ -41,7 +41,7 @@
 	    [SuppInvNo] VARCHAR(50) NULL, 
 
     [ParentID] INT NULL, 
-    [IsReturn] BIT NULL, 
+    [IsReturn] BIT NOT NULL, 
     CONSTRAINT [FK_SRdetails_ToSR] FOREIGN KEY ([SRID]) REFERENCES [ServiceRequest]([SRID]), 
     CONSTRAINT [FK_SRdetails_ToSupplier] FOREIGN KEY ([SupplierID]) REFERENCES [Supplier]([SupplierID]), 
     CONSTRAINT [FK_SRdetails_ToGuideLanguage] FOREIGN KEY ([GuideLanguageID]) REFERENCES [GuideLanguage]([GuideLanguageID]), 

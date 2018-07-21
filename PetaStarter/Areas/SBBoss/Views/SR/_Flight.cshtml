@@ -83,10 +83,13 @@
             @Html.ValidationMessageFor(model => model.HasAc, "", new { @class = "text-danger" })
 
         </div>
-        <div class="input-group col mb-3">
-                <div class="input-group-prepend"><span class="input-group-text">Is Return?</span></div>
-@Html.EditorFor(model => model.IsReturn, null, new { htmlAttributes = new { @type = "text", @class = "form-control " } })   
-
+            <div class="input-group col mb-3">
+                <div class="input-group-prepend">
+                    <div class="input-group-text">
+                        @Html.EditorFor(model => model.IsReturn)
+                    </div>
+                </div>
+                <label class="form-control">Is Return?</label>
             </div>
           
         
