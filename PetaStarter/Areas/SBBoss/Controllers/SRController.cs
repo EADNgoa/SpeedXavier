@@ -413,7 +413,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                         LogAction(new SRlog { SRID = item.SRID, SRDID = item.SRDID, Event = FindDiffs<SRdetail>(item.SRDID,item,"Service") });
                         if(item.IsReturn == true)
                         {
-                            db.Execute($"Update Srdetails Set Tdate ={td} and FromLoc='{item.ToLoc}' and ToLoc ='{item.FromLoc}' where ");
+                            db.Execute($"Update Srdetails Set Tdate ='{td.Value.ToString("dd-MM-yyyy")}',FromLoc='{item.ToLoc}',ToLoc ='{item.FromLoc}' where ParentID ={item.SRDID}");
                         }
                     }
                     else

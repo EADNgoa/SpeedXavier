@@ -92,7 +92,7 @@
         
         <div class="input-group col mb-3">
             <div class="input-group-prepend"><span class="input-group-text">Return Date</span></div>
-            @Html.EditorFor(model => model.Tdate, new { htmlAttributes = new { @type = "text", @class = "form-control eadate", disabled = "disabled" } })
+             @Html.EditorFor(model => model.Tdate, new { htmlAttributes = new { @type = "text", @class = "eadate form-control" } })
             @Html.ValidationMessageFor(model => model.Tdate, "", new { @class = "text-danger" })
 
         </div>
@@ -103,7 +103,15 @@
 {@Html.Action("CustSearch", "SR", new { id = Model.SRDID })
 }
 <script >
-   
+  
+    if ($('#IsReturn').val() == 'true') {
+
+        $('#Tdate').prop("disabled", false);
+
+    }
+    else if ($('#IsReturn').val == 'false') {
+        $('#Tdate').prop("disabled", true);
+    }
     $('#IsReturn').on('change', function () {
         
         if($(this).val() == 'true') {
