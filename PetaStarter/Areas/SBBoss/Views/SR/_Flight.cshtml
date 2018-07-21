@@ -92,7 +92,7 @@
         
         <div class="input-group col mb-3">
             <div class="input-group-prepend"><span class="input-group-text">Return Date</span></div>
-             @Html.EditorFor(model => model.Tdate, new { htmlAttributes = new { @type = "text", @class = "eadate form-control" } })
+             @Html.EditorFor(model => model.Tdate, new { htmlAttributes = new { @type = "text", @class = "eadatetime form-control" } })
             @Html.ValidationMessageFor(model => model.Tdate, "", new { @class = "text-danger" })
 
         </div>
@@ -106,11 +106,11 @@
   
     if ($('#IsReturn').val() == 'true') {
 
-        $('#Tdate').prop("disabled", false);
+        $('#Tdate').prop("disabled", true);
 
     }
     else if ($('#IsReturn').val == 'false') {
-        $('#Tdate').prop("disabled", true);
+        $('#Tdate').prop("disabled", false);
     }
     $('#IsReturn').on('change', function () {
         
@@ -131,22 +131,22 @@
 </script>
 <script>
     $(function () {
-        //DateTime picker
-        $('input[type=date]').datetimepicker({
+        $('.eadatetime').datetimepicker({
             dateFormat: "dd-MM-yy",
             showButtonPanel: true,
             changeMonth: true,
             changeYear: true,
             timeFormat: "hh:mm"
 
-        }).attr('type', 'text').attr('autocomplete', 'off');
-
-
-        $('input[type=time]').timepicker({
+        });
+        $('.eadate').datepicker({
+            dateFormat: "dd-MM-yy",
             showButtonPanel: true,
-            timeFormat: "hh:mm"
+            changeMonth: true,
+            changeYear: true,
 
-        }).attr('type', 'text').attr('autocomplete', 'off');
+
+        });
 
         //Disable the browsers default date picker
         jQuery.validator.methods["date"] = function (value, element) { return true; }

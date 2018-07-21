@@ -64,22 +64,22 @@ END
 
 IF NOT EXISTS (SELECT * FROM ServiceCommision)
 BEGIN
-	SET IDENTITY_INSERT [dbo].[ServiceCommison] ON
-	INSERT INTO [dbo].[ServiceCommision] ([ServiceID], [ServiceName]) VALUES (1, N'Accomodation')
-		INSERT INTO [dbo].[ServiceCommision] ([ServiceID], [ServiceName]) VALUES (2, N'Packages')
-			INSERT INTO [dbo].[ServiceCommision] ([ServiceID], [ServiceName]) VALUES (3, N'Cruise')
-				INSERT INTO [dbo].[ServiceCommision] ([ServiceID], [ServiceName]) VALUES (4, N'SightSeeing')
+	SET IDENTITY_INSERT [dbo].ServiceCommision ON
+	INSERT INTO [dbo].ServiceCommision ([ServiceID], [ServiceName]) VALUES (1, N'Accomodation')
+		INSERT INTO [dbo].ServiceCommision ([ServiceID], [ServiceName]) VALUES (2, N'Packages')
+			INSERT INTO [dbo].ServiceCommision ([ServiceID], [ServiceName]) VALUES (3, N'Cruise')
+				INSERT INTO [dbo].ServiceCommision ([ServiceID], [ServiceName]) VALUES (4, N'SightSeeing')
 
-	INSERT INTO [dbo].[ServiceCommision] ([ServiceID], [ServiceName]) VALUES (5, N'CarBike')
-		INSERT INTO [dbo].[ServiceCommision] ([ServiceID], [ServiceName]) VALUES (6, N'Insurance')
-			INSERT INTO [dbo].[ServiceCommision] ([ServiceID], [ServiceName]) VALUES (7, N'Visa')
-				INSERT INTO [dbo].[ServiceCommision] ([ServiceID], [ServiceName]) VALUES (8, N'Flight')
-
-
+	INSERT INTO [dbo].ServiceCommision ([ServiceID], [ServiceName]) VALUES (5, N'CarBike')
+		INSERT INTO [dbo].ServiceCommision ([ServiceID], [ServiceName]) VALUES (6, N'Insurance')
+			INSERT INTO [dbo].ServiceCommision ([ServiceID], [ServiceName]) VALUES (7, N'Visa')
+				INSERT INTO [dbo].ServiceCommision ([ServiceID], [ServiceName]) VALUES (8, N'Flight')
 
 
 
 
-	SET IDENTITY_INSERT [dbo].[ServiceCommison] OFF
+
+
+	SET IDENTITY_INSERT [dbo].ServiceCommision OFF
 END
 

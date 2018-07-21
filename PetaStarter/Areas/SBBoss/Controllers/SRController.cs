@@ -372,14 +372,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         public ActionResult SRdetails(int? id, int? EID)
         {
             var rec = base.BaseCreateEdit<SRdetail>(EID, "SRDID");
-            if (EID > 0)
-            {
-                var  prec = db.FirstOrDefault<SRdetail>("select Tdate,FromLoc,ToLoc from Srdetails where ParentID =@0",EID) ;
-                if (prec != null)
-                {
-                    rec.Tdate = prec.Tdate ?? null;
-                }
-            }
+            
             ViewBag.SRID = id;
             ViewBag.Title = "Manage Services";
             ViewBag.SRs = db.FirstOrDefault<ServiceRequestDets>("Select * From ServiceRequest sr inner join Customer c on c.CustomerID=sr.CustID Where SRID=@0", id);
@@ -424,7 +417,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                         }
                         db.Insert(item);
                         if (IsReturn == "true")
-                        {
+                        {//We need to insert this duplicate record so that we can show this return flight in the Daily Diary on the return journey date
                             db.Insert(new SRdetail { FromLoc = item.ToLoc, ToLoc = item.FromLoc, Tdate = td, ParentID = item.SRDID, ServiceTypeID = item.ServiceTypeID });
                         }
                         LogAction(new SRlog { SRID = item.SRID, SRDID = item.SRDID, Event = Event, Type = true });
@@ -665,7 +658,16 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 case ServiceTypeEnum.Visa:
                     return PartialView($"_{((ServiceTypeEnum)ServiceTypeId).ToString()}", db.SingleOrDefault<SRdetail>(id));
                 case ServiceTypeEnum.Flight:
-                    return PartialView($"_{((ServiceTypeEnum)ServiceTypeId).ToString()}", db.SingleOrDefault<SRdetail>(id));
+                    var rec = db.SingleOrDefault<SRdetail>(id);
+                    if (id > 0)
+                    {
+                        var prec = db.FirstOrDefault<SRdetail>("select Tdate,FromLoc,ToLoc from Srdetails where ParentID =@0", id);
+                        if (prec != null)
+                        {
+                            rec.Tdate = prec.Tdate ?? null;
+                        }
+                    }
+                    return PartialView($"_{((ServiceTypeEnum)ServiceTypeId).ToString()}", rec);
                 case ServiceTypeEnum.TaxiHire:
                     var DrvID = db.FirstOrDefault<Driver>("Select DriverID from SRdetails where SRDID=@0", id);
                     if (DrvID?.DriverID > 0)
