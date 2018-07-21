@@ -589,9 +589,13 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
         private void LogAction(SRlog item)
         {
-            item.LogDateTime = DateTime.Now;
-            item.UserID = User.Identity.GetUserId();
-            base.BaseSave<SRlog>(item, item.SRLID > 0);
+            if (item.Event.Length > 0)
+            {
+                item.LogDateTime = DateTime.Now;
+                item.UserID = User.Identity.GetUserId();
+
+                db.Insert(item);
+            }
         }
                 
         [EAAuthorize(FunctionName = "Service Requests", Writable = true)]
