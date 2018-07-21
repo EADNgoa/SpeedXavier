@@ -72,7 +72,7 @@
     <div class="input-group col mb-3">
         <div class="input-group-prepend">
             <div class="input-group-text">
-                @Html.EditorFor(model => model.HasAc, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.HasAc)
             </div>
         </div>
         <label class="form-control">Has AC?</label>
@@ -119,7 +119,7 @@ if (Model?.CarBikeID > 0)
     <div class="input-group col mb-3">
         <div class="input-group-prepend">
             <div class="input-group-text">
-                @Html.EditorFor(model => model.IsBike, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.IsBike)
             </div>
         </div>
         <label class="form-control">Is Bike?</label>
@@ -127,7 +127,7 @@ if (Model?.CarBikeID > 0)
     <div class="input-group col mb-3">
         <div class="input-group-prepend">
             <div class="input-group-text">
-                @Html.EditorFor(model => model.HasCarrier, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.HasCarrier)
             </div>
         </div>
         <label class="form-control">Has Carrier?</label>
@@ -135,7 +135,7 @@ if (Model?.CarBikeID > 0)
     <div class="input-group col mb-3">
         <div class="input-group-prepend">
             <div class="input-group-text">
-                @Html.EditorFor(model => model.InclHelmet, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.InclHelmet)
             </div>
         </div>
         <label class="form-control">Includes Helmet?</label>

@@ -9,6 +9,11 @@ body {
     bottom: 30px;
 }
 
+input[type="checkbox"] {
+    width: 13px;
+    height:13px;
+}
+
 .img-fluid {
     max-width: 100%;
     width: 100%;

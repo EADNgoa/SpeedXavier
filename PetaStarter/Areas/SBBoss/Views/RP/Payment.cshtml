@@ -2,13 +2,13 @@
 
 @using PagedList.Mvc;
 @{
-    ViewBag.Title = "Reciepts";
+    ViewBag.Title = "Payments";
 }
 
 
 <div class="card border rounded DropShadow">
     <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
-        <span class="h5">Payment</span>
+        <span class="h3">Payment</span>
         <a href="@Url.Action("Payment","Rp", new {id=0 })"><i class="fas fa-undo-alt fa-inverse h3 float-right DropShadow"></i></a>
 
     </div>
@@ -71,20 +71,20 @@
 
             <div class="row col-12 searchBK">
                 <table class="table table-striped">
-                    <thead></thead>
-                    <tr class="bg-primary rounded">
-                        <td style="float:right">Enter Supplier Name:</td>
+                    
+                    <tr class="bg-info rounded">
+                        <th style="float:right">Enter Supplier Name:</th>
                         <th>
                             <input type="text" id="SupplierName" name="SupplierName" style="color:black;" data-autocomplete-idholder="#SupplierID" value="" data-autocombo-url="@Url.Action("AutoCompleteSup")" class="form-control" />
                         </th>
-                        <td style="float:right"></td>
+                        <th style="float:right"></th>
 
                         <th>
 
                         </th>
-                        <td class="bg-white"><b>Amount Left:</b> <u>@ViewBag.TotAmt</u></td>
+                        <th class="bg-white"><b>Amount Left:</b> <u>@ViewBag.TotAmt</u></th>
                     </tr>
-                    <tr class="bg-secondary">
+                    <tr class="bg-light">
 
                         <th>
                             Booking No
