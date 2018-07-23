@@ -28,7 +28,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             ViewBag.SupplierID = SupplierID;
             ViewBag.SupplierName = db.ExecuteScalar<string>("Select SupplierName from Supplier Where SupplierID=@0", SupplierID);
 
-            var sql = new PetaPoco.Sql("Select (Select Sum(Amount) from RP_SR rs where rs.SRID = sd.SRID)as PaidAmt,Coalesce(sum(sd.Cost),0) as OA,s.SupplierName as UserName,sd.SRID from SRdetails sd inner join Supplier s on s.SupplierID = sd.SupplierID  left join RP_SR rs on rs.SRID =sd.SRID  left join RPdets rd on rd.RPDID =rs.RPDID where sd.SupplierID=@0",SupplierID);
+            var sql = new PetaPoco.Sql("Select (Select Sum(Amount) from RP_SR rs where rs.SRID = sd.SRID)as PaidAmt,Coalesce(sum(sd.Cost),0) as OA,s.SupplierName as UserName,sd.SRID from SRdetails sd inner join Supplier s on s.SupplierID = sd.SupplierID  left join RP_SR rs on rs.SRID =sd.SRID  left join RPdets rd on rd.RPDID =rs.RPDID where sd.SupplierID=@0",SupplierID,true);
             if (fd != null && td != null)
                 sql.Append($" and cast(Cdate as Date) Between '{fd:yyyy-MM-dd}' and  '{td:yyyy-MM-dd}'");
 

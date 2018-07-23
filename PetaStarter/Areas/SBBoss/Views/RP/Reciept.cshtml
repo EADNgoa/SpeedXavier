@@ -8,7 +8,7 @@
 
 <div class="card border rounded DropShadow">
     <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
-        <span class="h5">Reciepts</span>
+        <span class="h3">Reciepts</span>
         <a href="@Url.Action("Reciept","Rp", new {id=0 })"><i class="fas fa-undo-alt fa-inverse h3 float-right DropShadow"></i></a>
 
     </div>
@@ -70,20 +70,20 @@
             <div class="row col-12 searchBK">
                 <table class="table table-striped">
                     <thead></thead>
-                    <tr class="bg-primary rounded">
-                        <td style="float:right">Enter Customer Name:</td>
+                    <tr class="bg-info rounded">
+                        <th style="float:right">Enter Customer Name:</th>
                         <th>
                             @Html.Editor("CustName", new { htmlAttributes = new { @class = "form-control " } })
                         </th>
-                        <td style="float:right">Enter Agent Name:</td>
+                        <th style="float:right">Enter Agent Name:</th>
 
                         <th>
                             @Html.Editor("AgentName", new { htmlAttributes = new { @class = "form-control w" } })
 
                         </th>
-                        <td class="bg-white"><b>Amount Left:</b> <u>@ViewBag.TotAmt</u></td>
+                        <th class="bg-white"><b>Amount Left:</b> <u>@ViewBag.TotAmt</u></th>
                     </tr>
-                    <tr class="bg-secondary">
+                    <tr class="bg-light">
 
                         <th>
                             Booking No

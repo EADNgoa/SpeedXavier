@@ -110,7 +110,7 @@ namespace Speedbird.Controllers
         }
 
 
-        public ActionResult PackagesPartialView(ServiceTypeEnum? st, IEnumerable<int> CatID, IEnumerable<int> ActID,int? Gsize,int? diff,int? dur,int? GuideLanguageID, IEnumerable<int> AttractID,IEnumerable<int> FacilityID,decimal? maxPrice,decimal? minPrice,int? NoPax,int? large,int? small,int? hasAc,int? HasCarrier,IEnumerable<int> DestIds)
+        public ActionResult PackagesPartialView(ServiceTypeEnum? st, IEnumerable<int> CatID, IEnumerable<int> ActID,int? Gsize,int? diff,int? dur,int? GuideLanguageID, IEnumerable<int> AttractID,IEnumerable<int> FacilityID,decimal? maxPrice,decimal? minPrice,int? NoPax,int? large,int? small,int? hasAc,int? HasCarrier,IEnumerable<int> DestIds,int? IsBike)
         {            
             
             string Dests = "";
@@ -180,6 +180,10 @@ namespace Speedbird.Controllers
                 if (HasCarrier!=null)
                 {
                     WhereSql.Append(" and c.Hascarrier=@0", HasCarrier);                    
+                }
+                if (IsBike != null)
+                {
+                    WhereSql.Append(" and c.IsBike=@0", IsBike);
                 }
                 MainSql.Append(FromSql);
                 MainSql.Append(WhereSql);

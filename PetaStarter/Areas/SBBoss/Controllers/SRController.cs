@@ -371,37 +371,59 @@ namespace Speedbird.Areas.SBBoss.Controllers
         [EAAuthorize(FunctionName = "Service Requests", Writable = true)]
         public ActionResult SRdetails(int? id, int? EID)
         {
+            var rec = base.BaseCreateEdit<SRdetail>(EID, "SRDID");
+            
             ViewBag.SRID = id;
             ViewBag.Title = "Manage Services";
             ViewBag.SRs = db.FirstOrDefault<ServiceRequestDets>("Select * From ServiceRequest sr inner join Customer c on c.CustomerID=sr.CustID Where SRID=@0", id);
             ViewBag.SRDets = db.Fetch<SRdetail>("Select * from SRdetails where SRID =@0", id);
             ViewBag.ServiceTypeID = Enum.GetValues(typeof(ServiceTypeEnum)).Cast<ServiceTypeEnum>().Select(v => new SelectListItem { Text = v.ToString(), Value = ((int)v).ToString() }).ToList();
 
-            return PartialView(base.BaseCreateEdit<SRdetail>(EID, "SRDID"));
+            return PartialView(rec);
         }
 
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         [EAAuthorize(FunctionName = "Service Requests", Writable = true)]
-        public ActionResult SRdetails([Bind(Include = "SRDID,HasAc,HasCarrier,RateBasis,PayTo,PickUpPoint,DropPoint,SRID,ServiceTypeID,FromLoc,ToLoc,SuppInvNo,Fdate,Tdate,SupplierID,Cost,SellPrice,PNRno,TicketNo,Heritage,ChildNo,AdultNo,InfantNo,RoomType,CouponCode,City,Airline,DateOfIssue,FlightNo,ContractNo,GuideLanguageID,SSType,CarType,Model,")] SRdetail item, string Event)
+        public ActionResult SRdetails([Bind(Include = "SRDID,HasAc,HasCarrier,RateBasis,PayTo,PickUpPoint,DropPoint,SRID,ServiceTypeID,FromLoc,ToLoc,SuppInvNo,Fdate,Tdate,SupplierID,Cost,SellPrice,PNRno,TicketNo,Heritage,ChildNo,AdultNo,InfantNo,RoomType,CouponCode,City,Airline,DateOfIssue,FlightNo,ContractNo,GuideLanguageID,SSType,CarType,Model,ParentID,IsReturn")] SRdetail item, string Event,string IsReturn)
         {
             using (var transaction = db.GetTransaction())
             {
                 try
-                {                                       
+                {
+                    DateTime? td =(DateTime?)item?.Tdate ;
                     if(item.SRDID > 0)
                     {
+
+                        if (item.ServiceTypeID == (int)ServiceTypeEnum.Flight)
+                        {
+                            item.Tdate = null;
+                        }
+
                         db.Update(item);
                         LogAction(new SRlog { SRID = item.SRID, SRDID=item.SRDID, Event = Event, Type=true});
                         LogAction(new SRlog { SRID = item.SRID, SRDID = item.SRDID, Event = FindDiffs<SRdetail>(item.SRDID,item,"Service") });
+                        if(item.IsReturn == true)
+                        {
+                            db.Execute($"Update Srdetails Set Tdate ='{td.Value.ToString("dd-MM-yyyy")}',FromLoc='{item.ToLoc}',ToLoc ='{item.FromLoc}' where ParentID ={item.SRDID}");
+                        }
                     }
                     else
                     {
+                        if(item.ServiceTypeID == (int)ServiceTypeEnum.Flight)
+                        {
+                            item.Tdate = null;
+                        }
                         db.Insert(item);
+                        if (IsReturn == "true")
+                        {//We need to insert this duplicate record so that we can show this return flight in the Daily Diary on the return journey date
+                            db.Insert(new SRdetail { FromLoc = item.ToLoc, ToLoc = item.FromLoc, Tdate = td, ParentID = item.SRDID, ServiceTypeID = item.ServiceTypeID });
+                        }
                         LogAction(new SRlog { SRID = item.SRID, SRDID = item.SRDID, Event = Event, Type = true });
                         LogAction(new SRlog { SRID = item.SRID, SRDID = item.SRDID, Event = "Added " + item.ServiceTypeName });
                     }
+                    
                     transaction.Complete();
                 }
                 catch (Exception ex)
@@ -567,9 +589,13 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
         private void LogAction(SRlog item)
         {
-            item.LogDateTime = DateTime.Now;
-            item.UserID = User.Identity.GetUserId();
-            base.BaseSave<SRlog>(item, item.SRLID > 0);
+            if (item.Event.Length > 0)
+            {
+                item.LogDateTime = DateTime.Now;
+                item.UserID = User.Identity.GetUserId();
+
+                db.Insert(item);
+            }
         }
                 
         [EAAuthorize(FunctionName = "Service Requests", Writable = true)]
@@ -636,7 +662,16 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 case ServiceTypeEnum.Visa:
                     return PartialView($"_{((ServiceTypeEnum)ServiceTypeId).ToString()}", db.SingleOrDefault<SRdetail>(id));
                 case ServiceTypeEnum.Flight:
-                    return PartialView($"_{((ServiceTypeEnum)ServiceTypeId).ToString()}", db.SingleOrDefault<SRdetail>(id));
+                    var rec = db.SingleOrDefault<SRdetail>(id);
+                    if (id > 0)
+                    {
+                        var prec = db.FirstOrDefault<SRdetail>("select Tdate,FromLoc,ToLoc from Srdetails where ParentID =@0", id);
+                        if (prec != null)
+                        {
+                            rec.Tdate = prec.Tdate ?? null;
+                        }
+                    }
+                    return PartialView($"_{((ServiceTypeEnum)ServiceTypeId).ToString()}", rec);
                 case ServiceTypeEnum.TaxiHire:
                     var DrvID = db.FirstOrDefault<Driver>("Select DriverID from SRdetails where SRDID=@0", id);
                     if (DrvID?.DriverID > 0)

@@ -52,7 +52,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             }
 
             protected ActionResult BaseSave<T>(T ObjToSave, bool isExisting)
-            {
+            {               
                 if (ModelState.IsValid)
                 {                    
                     var r = (isExisting) ? db.Update(ObjToSave) : db.Insert(ObjToSave);

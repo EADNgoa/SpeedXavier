@@ -163,7 +163,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 }
             }
 
-            var NPbkngs = new PetaPoco.Sql("Select sd.SRID,sd.SupplierID,s.SupplierName as UserName,Sum(sd.Cost) as OA From SRdetails sd inner join Supplier s on s.SupplierID=sd.SupplierID inner join ServiceRequest sr on sr.SRID =sd.SRID Where sd.SupplierID is not null and sr.PayStatusID =0");
+            var NPbkngs = new PetaPoco.Sql("Select sd.SRID,sd.SupplierID,s.SupplierName as UserName,Sum(sd.Cost) as OA From SRdetails sd inner join Supplier s on s.SupplierID=sd.SupplierID inner join ServiceRequest sr on sr.SRID =sd.SRID Where sd.SupplierID is not null and sr.PayStatusID <>@0",PayType.Cancelled);
             if (SupplierID != null)
             {
                 NPbkngs.Append($" and sd.SupplierID = {SupplierID}");

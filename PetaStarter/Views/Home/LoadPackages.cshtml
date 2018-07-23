@@ -212,6 +212,12 @@
                     @Html.DropDownList("TF", ViewBag.TF as IEnumerable<SelectListItem>, "---", new { @class = "form-control Carrier" })
                 </div>
             </div>
+            <div class="form-group">
+                <label class="lead">Is Bike?</label>
+                <div class="col-md-12">
+                    @Html.DropDownList("TF", ViewBag.TF as IEnumerable<SelectListItem>, "---", new { @class = "form-control IsBike" })
+                </div>
+            </div>
 
 }
 
@@ -379,14 +385,14 @@ foreach (var item in ViewBag.fac)
                     maxPrice: $("#maxPrice").val(), minPrice: $("#minPrice").val(),
                     FacilityID: FacValues, NoPax: parseInt($(".nopax option:selected").val()),
                     large: parseInt($(".large option:selected").val()), small: parseInt($(".large option:selected").val()), HasAc: $(".Ac option:selected").val(),
-                    HasCarrier: $(".Carrier option:selected").val(), DestIds: DestValues
+                    HasCarrier: $(".Carrier option:selected").val(), DestIds: DestValues, IsBike: $(".IsBike option:selected").val()
                 }
             );
 
         };
 
 
-        $(".cat,.act,.gsize,.diffic,.dur,.attract,.language,.fac,.nopax,.large,.small,.Ac,.Carrier").change(setFilters);
+        $(".cat,.act,.gsize,.diffic,.dur,.attract,.language,.fac,.nopax,.large,.small,.Ac,.Carrier,.IsBike").change(setFilters);
         $(".GeoSelect").on('change', function (e) {
             setFilters();
         });
