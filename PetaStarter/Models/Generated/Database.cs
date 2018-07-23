@@ -1011,7 +1011,7 @@ namespace Speedbird
 		[Column] public string FlightNo { get; set; }
 		[Column] public string SuppInvNo { get; set; }
 		[Column] public int? ParentID { get; set; }
-		[Column] public bool? IsReturn { get; set; }
+		[Column] public bool IsReturn { get; set; }
 	}
     
 	[TableName("dbo.SRlogs")]
