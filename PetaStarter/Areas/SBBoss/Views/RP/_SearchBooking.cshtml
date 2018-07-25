@@ -2,21 +2,21 @@
     <thead></thead>
     @if (ViewBag.Reciepts != null)
     {
-    <tr class="bg-primary rounded">
-        <td style="float:right">Enter Customer Name:</td>
-        <th>
-            @Html.Editor("CustName", new { htmlAttributes = new { @class = "form-control " } })
-        </th>
-        <td style="float:right">Enter Agent Name:</td>
+        <tr class="bg-primary rounded">
+            <td style="float:right">Enter Customer Name:</td>
+            <th>
+                @Html.Editor("CustName", new { htmlAttributes = new { @class = "form-control " } })
+            </th>
+            <td style="float:right">Enter Agent Name:</td>
 
-        <th>
-            @Html.Editor("AgentName", new { htmlAttributes = new { @class = "form-control w" } })
+            <th>
+                @Html.Editor("AgentName", new { htmlAttributes = new { @class = "form-control w" } })
 
-        </th>
-        <td>
-        <td class="bg-white"><b>Amount Left:</b> <u>@ViewBag.TotAmt</u></td>
-        </td>
-    </tr>
+            </th>
+            <td>
+            <td class="bg-white"><b>Amount Left:</b> <u>@ViewBag.TotAmt</u></td>
+
+        </tr>
     }
     else if (ViewBag.Payments != null)
     {
@@ -24,6 +24,22 @@
             <td style="float:right">Enter Supplier Name:</td>
             <th>
                 <input type="text" id="SupplierName" name="SupplierName" style="color:black;" data-autocomplete-idholder="#SupplierID" value="" data-autocombo-url="@Url.Action("AutoCompleteSup")" class="form-control" />
+            </th>
+            <td style="float:right"></td>
+
+            <th>
+
+            </th>
+            <td class="bg-white"><b>Amount Left:</b> <u>@ViewBag.TotAmt</u></td>
+        </tr>
+    }
+    else if (ViewBag.DReciepts != null)
+    {
+        <tr class="bg-primary rounded">
+            <td style="float:right">Enter Driver Name:</td>
+            <th>
+                @Html.Editor("DriverName", new { htmlAttributes = new { @class = "form-control w" } })
+
             </th>
             <td style="float:right"></td>
 
@@ -181,6 +197,57 @@
         success: function () {
 
                         window.location.assign('@Url.Action("Payment")');
+                }
+            });
+        }
+    });
+    </script>
+}
+
+@if (ViewBag.DReciepts != null)
+{
+    <script>
+        $("#DriverName").keyup(function () {
+
+            var dn = $('#DriverName').val();
+
+
+            if (dn.length == 5) {
+                $('.searchBK').html(" ");
+                $('.searchBK').load("/SBBoss/RP/DReciept?DriverName=" + dn + "&&IsSearch=" + true + "&&Id=" + $("#DRPDID").val());
+            }
+        });
+
+
+    </script>
+
+
+
+
+    <script>
+        $('.SavePayment').click(function () {
+            var srid = $(this).data('srid');
+            var oa = $(this).data('oa');
+            var ManAmt = $('input[data-save="' + srid + '"]').val();
+            var ta = $("#Amount").val();
+            $("#SRID").val(srid);
+            $("#OA").val(oa);
+            $("#ManAmt").val(ManAmt);
+            $("#TotalAmt").val(ta);
+
+            var detFrm = $('#AssignPay');
+
+        if (typeof(detFrm[0]) == 'object')
+        {
+
+            $.ajax({
+
+        url: '@Url.Action("DReciepts", "RP")',
+        type: 'post',
+        data: $(detFrm).serialize(),
+        success: function () {
+
+                        window.location.assign('@Url.Action("DReciepts")');
                 }
             });
         }

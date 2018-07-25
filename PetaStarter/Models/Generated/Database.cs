@@ -443,6 +443,35 @@ namespace Speedbird
 		[Column] public int? LocationId { get; set; }
 	}
     
+	[TableName("dbo.DRP_SR")]
+	[PrimaryKey("DRPDID", AutoIncrement=false)]
+	[ExplicitColumns]
+    public partial class DRP_SR  
+    {
+		[Column] public int DRPDID { get; set; }
+		[Column] public int SRID { get; set; }
+		[Column] public decimal? Amount { get; set; }
+	}
+    
+	[TableName("dbo.DRPdets")]
+	[PrimaryKey("DRPDID")]
+	[ExplicitColumns]
+    public partial class DRPdet  
+    {
+		[Column] public int DRPDID { get; set; }
+		[Column] public int? BankName { get; set; }
+		[Column] public string ChequeNo { get; set; }
+		[Column] public DateTime? Date { get; set; }
+		[Column] public decimal? Amount { get; set; }
+		[Column] public string TransactionNo { get; set; }
+		[Column] public string Note { get; set; }
+		[Column] public int? SRID { get; set; }
+		[Column] public int? Type { get; set; }
+		[Column] public bool? AmtUsed { get; set; }
+		[Column] public bool? IsPayment { get; set; }
+		[Column] public DateTime? Cdate { get; set; }
+	}
+    
 	[TableName("dbo.Facility")]
 	[PrimaryKey("FacilityID")]
 	[ExplicitColumns]

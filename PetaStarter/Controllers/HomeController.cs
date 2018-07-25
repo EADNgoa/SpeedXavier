@@ -79,10 +79,11 @@ namespace Speedbird.Controllers
             {
                 items.Add(new SelectListItem { Text = ""+i, Value= ""+i });
             }
-            List<SelectListItem> tf = new List<SelectListItem>();
-           
-                tf.Add(new SelectListItem { Text = "YES" , Value = "1"  });
-                tf.Add(new SelectListItem { Text = "NO", Value = "0" });
+            List<SelectListItem> tf = new List<SelectListItem>
+            {
+                new SelectListItem { Text = "YES", Value = "1" },
+                new SelectListItem { Text = "NO", Value = "0" }
+            };
 
 
 
