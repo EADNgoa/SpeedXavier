@@ -10,12 +10,12 @@
     <a href="@Url.Action("Index","SR",new { sid= ViewBag.sid})"><i class="fas fa-undo-alt fa-inverse h3 float-right DropShadow"></i></a>
 </div>
 
-<h4>Profit/Loss Details</h4>
+<h4>Profit/Loss Summary</h4>
 <table class="table table-striped">
     <tr>
-        <td>Amount Spend</td>
-        <td>Amount Recieved</td>
-        <td>Total Profit</td>
+        <th>Amount Spend</th>
+        <th>Amount Recieved</th>
+        <th>Total Profit</th>
     </tr>
     <tr>
         <td>
@@ -28,6 +28,42 @@
             @(ViewBag.Credit - ViewBag.Debit)
         </td>
     </tr>
+</table>
+<br />
+<h4>Services</h4>
+<table class="table table-striped">
+    <tr>
+        <th>Service Name</th>
+        <th>Cost Price</th>
+        <th>Sell Price</th>
+        <th>Tax</th>
+        <th>Commsion</th>
+        <th>Total</th>
+    </tr>
+    @foreach (var item in (IEnumerable<Speedbird.SRdetailDets>)ViewBag.Services)
+    {
+        <tr>
+            <td>
+                @((Speedbird.ServiceTypeEnum)item.ServiceTypeID)
+            </td>
+            <td>
+                @item.Cost
+            </td>
+            <td>
+               @item.SellPrice
+            </td>
+            <td>
+              @item.Tax
+            </td>
+            <td>
+                @item.Commision
+            </td>
+            <td>
+                @item.Total
+            </td>
+        </tr>
+    }
+
 </table>
 <br />
 <h4>Debit Details</h4>

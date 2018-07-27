@@ -1,10 +1,67 @@
-﻿
+﻿<style>
+    .EATranspHeader {
+        background-color: rgba(0, 0, 0, 0.5);
+        color: white;
+        padding-left: 15px;
+    }
+
+    .EAUpMovedDiv {
+        position: relative;
+        top: -248px;
+    }
+
+    .EATitle {
+        font-family: "Merriweather Sans", serif;
+        font-size: 36px;
+        font-weight: 700;
+        letter-spacing: -1px;
+        line-height: 44px;
+        padding-top: 51px;
+        margin-bottom: 5px;
+        font-variant: small-caps;
+    }
+
+    .EAIconText {
+        font-variant: small-caps;
+        font-family: "Merriweather Sans", serif;
+        color: white;
+        font-size: 18px;
+    }
+</style>
 @model  Speedbird.CarBikeDets
 
-<div class="col-4">
-    <h2 style="margin-left:60px;">@Model.CarBikeName</h2>
-    <br />
+
+
+<div class="col-5 EAUpMovedDiv">
+    <div class="EATranspHeader">
+        <h1 class="EATitle">@Model.CarBikeName</h1>
+        <div class="FloatBadge">
+            @Model.GeoName
+        </div>
+        <hr style="background-color:white; border:1px solid white; margin:3px;" />
+        @foreach (var i in ViewBag.Icns)
+        {
+            <img src="/Icons/@i" height="43px;" />
+            <span class="EAIconText">@i.Substring(0, i.IndexOf('.'))</span>
+        }
+        <hr style="background-color:white; border:1px solid white;margin:3px;" />
+      
+    </div>
+
     <div class="DetailBlock">
+        <div class="row">
+            <table class="table">
+                <tr>
+                    <td class="desc">
+                        <i class="material-icons" style="color:#009de0;">&#xe25f;</i>  @Model.CarBikeName 
+                    </td>
+                </tr>
+              
+            </table>
+        </div>
+
+    </div>
+    <div class="DescriptionBlock">
         <div class="row">
             <table class="table">
                 <tr>
@@ -13,8 +70,9 @@
                         Description
                     </td>
                 </tr>
+
                 <tr>
-                    <td style="color:#11496d;">
+                    <td>
                         @Html.Raw(Model.Description)
                     </td>
                 </tr>
@@ -22,121 +80,103 @@
         </div>
 
     </div>
-    <div class="DetailBlock">
+
+    <div id="blueimp-gallery" class="blueimp-gallery">
+        <div class="slides"></div>
+        <h3 class="title"></h3>
+        <a class="prev" style="color:wheat">‹</a>
+        <a class="next" style="color:white">›</a>
+        <a class="close" style="color:wheat">×</a>
+        <a class="play-pause"></a>
+        <ol class="indicator"></ol>
+    </div>
+    <div id="links" style="margin-left:30px;">
+        @foreach (var item in Model.pic)
+        {
+            <a href="/Images/@item.PictureName" title="@Model.CarBikeName">
+                <img height="200px;" src="/Images/@item.PictureName" alt="@Model.CarBikeName">
+            </a>
+        }
+    </div>
+    <br />
+    <hr />
+
+    <div class="DetailBlock" style="min-height:0;">
+
         <div class="row">
-            <table class="table">
-                <tr>
-                    <td class="desc">
-                        <i style="font-size:24px" class="fa">&#xf152;</i>
-                        Speifications
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Location
-                    </td>
-                    <td>
-                        @Model.GeoName
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Ac
-                    </td>
-                    <td>
-                        @Model.HasAc
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Location
-                    </td>
-                    <td>
-                        @Model.GeoName
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        No of People
-                    </td>
-                    <td>
-                        @Model.NoPax
-                    </td>
-                </tr>
-                @if (Model.InclHelmet == false)
-                {
-                    <tr>
-                        <td>
-                            No Of Small Bags
-                        </td>
-                        <td>
-                            @Model.NoSmallBags
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            No Of Large Bags
-                        </td>
-                        <td>
-                            @Model.NoLargeBags
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Has Carrier
-                        </td>
-                        <td>
-                            @Model.HasCarrier
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Has Ac
-                        </td>
-                        <td>
-                            @Model.HasAc
-                        </td>
-                    </tr>
-                }
-                else
-                {
-                    <tr>
-                        <td>
-                            Has Helmet
-                        </td>
-                        <td>
-                            @Model.InclHelmet
-                        </td>
-                    </tr>
-                }
-            </table>
+            <div class="row desc d-lg-table-cell" style="padding-left:30px;margin-left:0px;">
+                <i style="font-size:24px" class="fa">&#xf072;</i>
+                Car and Bike Details
+            </div>
         </div>
+
+        <div class="row">
+            <div class="col-2">
+                <b>No of Pax:</b>
+            </div>
+            <div class="col-4">
+                @Html.Raw(Model.NoPax)
+            </div>
+            <div class="col-2">
+                <b>No of Small Bags:</b>
+            </div>
+            <div class="col-1">
+                @Html.Raw(Model.NoSmallBags) 
+            </div>
+            <div class="col-2">
+                <b>No of Large Bags:</b>
+            </div>
+            <div class="col-1">
+                @Model.NoLargeBags
+            </div>
+        </div>
+        <div class="row" style="margin-top:10px;">
+            <div class="col-12">
+                <b>Location: </b>
+               
+                   @ViewBag.GeoName
+                  
+              
+            </div>
+        </div>
+        <hr />
+
+        <div class="row">
+            <div class="col-12" style="color: darkblue; font-weight:700">
+                Has Ac:
+            </div>
+            <div class="col-12">
+                @Html.Raw(Model.HasAc)
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="col-6">
+                <div class="row">
+                    <div class="col-12" style="color: darkblue; font-weight:700">
+                        Has Carrier:
+                    </div>
+                    <div class="col-12">
+                        @Html.Raw(Model.HasCarrier)
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12" style="color: darkblue; font-weight:700">
+                        Include Helmet:
+                    </div>
+                    <div class="col-12">
+                        @Html.Raw(Model.InclHelmet)
+                    </div>
+                </div>
+            </div>
+          
+        </div>
+
+
+        ==============
+
 
     </div>
 
-    <br />
-    <br />
-    <div class="desc">
-        <i style="font-size:24px; margin-left:30px;" class="fa">&#xf302;</i>   Images
-        <div id="blueimp-gallery" class="blueimp-gallery">
-            <div class="slides"></div>
-            <h3 class="title"></h3>
-            <a class="prev" style="color:wheat">‹</a>
-            <a class="next" style="color:white">›</a>
-            <a class="close" style="color:wheat">×</a>
-            <a class="play-pause"></a>
-            <ol class="indicator"></ol>
-        </div>
-        <div id="links" style="margin-left:30px;">
-            @foreach (var item in Model.pic)
-            {
-                <a href="/Images/@item.PictureName" title="@Model.CarBikeName">
-                    <img height="200px;" src="/Images/@item.PictureName" alt="@Model.CarBikeName">
-                </a>
-            }
-        </div>
-    </div>
+
 </div>
-       
-
-

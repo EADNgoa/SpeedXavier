@@ -146,6 +146,12 @@ namespace Speedbird
         public string ContractNo { get; set; }
         public string GuideLanguageName { get; set; }
         public string SupplierName { get; set; }
+        public decimal Tax { get; set; }
+        public decimal Commision { get; set; }
+        public decimal Total { get; set; }
+
+
+
 
     }
     public partial class CustomerQuery
