@@ -188,6 +188,114 @@ namespace Speedbird.Areas.SBBoss.Controllers
             return View(base.BaseCreateEdit<RPdet>(id, "RPDID"));
 
         }
+        [EAAuthorize(FunctionName = "Reciept", Writable = false)]
+        public ActionResult DReciept(string DriverName, bool? IsSearch, decimal? OA, int? id, decimal? ManAmt, int? SRID, decimal? TotalAmt,int? check)
+        {
+            ViewBag.Type = Enum.GetValues(typeof(AmtType)).Cast<AmtType>().Select(v => new SelectListItem { Text = v.ToString(), Value = ((int)v).ToString() }).ToList();
+            decimal usedAmt = db.ExecuteScalar<decimal?>("Select Coalesce(sum(Amount),0) From DRP_SR Where DRPDID =@0", id) ?? 0;
+            decimal ActualOA = db.ExecuteScalar<decimal?>("Select Coalesce(sum(SellPrice),0) From SRdetails Where SRID =@0", SRID) ?? 0;
+
+            if (SRID != null)
+            {
+                usedAmt += ManAmt ?? OA ?? 0;
+                if (OA != null || ManAmt != null)
+                {
+                    if (OA <= TotalAmt || ManAmt <= TotalAmt)
+                    {
+                        if (ManAmt == null)
+                        {
+                            ManAmt = 0;
+                        }
+                        if ((ManAmt < OA && usedAmt <= TotalAmt) || (OA <= TotalAmt && ManAmt <= TotalAmt && usedAmt <= TotalAmt && ManAmt <= OA))
+                        {
+                            var PExist = db.ExecuteScalar<decimal?>("Select Coalesce(Amount,0) From DRP_SR Where DRPDID =@0 and  SRID = @1", id, SRID) ?? 0;
+                            if (PExist != 0)
+                            {
+
+
+                                if (ManAmt <= OA && OA <= TotalAmt && PExist < (OA + ActualOA))
+                                    db.Execute("Delete from DRP_SR Where SRID=@0 and DRPDID =@1", SRID, id);
+                            }
+
+                            if (ManAmt <= OA || (PExist < (OA + ActualOA) && OA <= TotalAmt))
+                            {
+                                if (ManAmt == 0)
+                                    ManAmt = null;
+                                ManAmt += PExist;
+                                OA += PExist;
+                                db.Insert(new DRP_SR { SRID = (int)SRID, DRPDID = (int)id, Amount = ManAmt ?? OA });
+                                if (usedAmt == TotalAmt)
+                                {
+                                    db.Execute("Update DRPDets set AmtUsed=@0 where DRPDID=@1", true, id);
+
+                                }
+                                
+                            }
+
+                        }
+                    }
+                }
+            }
+
+            var NPbkngs = new PetaPoco.Sql($"select sd.SRID,d.DriverID,d.DriverName as UserName,PayTo,sum(SellPrice) as OA,sum(Cost) as Cost,(select coalesce (sum(Amount),0) from DRP_SR where SRID = sd.SRID ) as PaidAmt from SRdetails sd inner join Driver d on d.DriverID=sd.DriverID left join DRPDets drp on drp.SRID=sd.SRID and IsPayment = '{check}' where ");
+
+            if (check==1)
+            {
+                NPbkngs.Append($" PayTo = 'Paid To Us' ");
+
+            }
+            else
+            {
+                NPbkngs.Append($" PayTo = 'Paid To Driver' ");
+            }
+            if (DriverName !=null)
+            {
+                NPbkngs.Append($" and LOWER(d.DriverName) like '%{DriverName.ToLower()}%'");
+            }
+          
+            NPbkngs.Append(" group by d.DriverID,d.DriverName,PayTo,sd.SRID");
+            var bkngs = db.Query<SRBooking>(NPbkngs).Where(a => a.OA > 0).ToList();
+            ViewBag.UnUsedP = db.Fetch<RPDetails>("Select rp.DRPDID,rp.Amount,rp.Type,(Select Coalesce(Sum(Amount),0) from DRP_SR Where DRPDID = rp.DRPDID) as UnUsedAmt from DRPdets rp  where AmtUsed is Null and IsPayment = @0", check);
+            decimal getT = db.ExecuteScalar<decimal?>("Select Amount from DRPDets Where DRPDID=@0", id) ?? 0;
+            ViewBag.TotAmt = getT - usedAmt;
+            ViewBag.Bookings = bkngs;
+
+            if (IsSearch == true)
+            {
+                ViewBag.DReciepts = "true";
+                return PartialView("_SearchBooking");
+            }
+            var p = "";
+            if (check==1)
+            {
+                 p = "DriverP";
+            }
+            else
+            {
+                p = "DriverR";
+            }
+
+            return View(p,base.BaseCreateEdit<DRPdet>(id, "DRPDID"));
+
+        }
+
+        [EAAuthorize(FunctionName = "Reciept", Writable = true)]
+        public ActionResult SaveDRVReciept([Bind(Include = "DRPDID,BankName,ChequeNo,Date,Amount,TransactionNo,Note,Type,IsPayment")] DRPdet item)
+        {
+            item.Cdate = DateTime.Now;
+            base.BaseSave<DRPdet>(item, item.DRPDID > 0);
+            int p = 0;
+            if (item.IsPayment == false)
+            {
+                p = 0;
+            }
+            else if (item.IsPayment == true)
+            {
+                p = 1;
+            }
+            return RedirectToAction("DReciept", new { id = item.DRPDID ,check=p});
+        }
+
         [EAAuthorize(FunctionName = "Reciept", Writable = true)]
         public ActionResult SaveReciept([Bind(Include = "RPDID,BankName,ChequeNo,Date,Amount,TransactionNo,Note,Type,IsPayment")] RPdet item)
         {
