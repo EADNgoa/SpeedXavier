@@ -528,6 +528,7 @@ namespace Speedbird
         public int CustomerID { get; set; }
         public int SRStatusID { get; set; }
         public int PayStatusID { get; set; }
+        public int ServiceTypeID { get; set; }
 
         public string Status { get { return ((SRStatusEnum)SRStatusID).ToString(); } }
         public DateTime TDate { get; set; }
