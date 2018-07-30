@@ -42,23 +42,17 @@
 <script>
     $(function () {
         //DateTime picker
-        $('input[type=date]').datetimepicker({
+        $('.eadate').datepicker({
             dateFormat: "dd-MM-yy",
             showButtonPanel: true,
             changeMonth: true,
             changeYear: true,
-            timeFormat: "hh:mm"
 
-        }).attr('type', 'text').attr('autocomplete', 'off');
+
+        });
 
         //Disable the browsers default date picker
     });
-    $('input[type=time]').timepicker({
-        showButtonPanel: true,
-        timeFormat: "hh:mm"
-
-    }).attr('type', 'text').attr('autocomplete', 'off');
-
-        //Disable the browsers default date picker
+   
 
 </script>

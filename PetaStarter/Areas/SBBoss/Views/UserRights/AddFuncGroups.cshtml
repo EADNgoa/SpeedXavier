@@ -1,4 +1,4 @@
-﻿@model PagedList.IPagedList<Speedbird.Areas.SBBoss.Models.ExistingFuncViewModel>
+﻿@model PagedList.IPagedList<ClickLock.Models.ExistingFuncViewModel>
 @using PagedList.Mvc;
 @{
     ViewBag.Title = "Give Users Permission";
@@ -7,119 +7,64 @@
     <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
         <span class="h3">@ViewBag.Title</span>
     </div>
+    @if (ViewBag.errMsg != null)
+    {
+        <div class="alert alert-danger" role="alert">
+            @ViewBag.errMsg
+        </div>
+    }
     <div class="card-body">
         <h5>&nbsp;</h5>
 
-        <center><h2>Add Functions To Groups</h2></center>
-        <div class="col-md-6">
-            <div class="row">
-                @using (Html.BeginForm("ExistingFuncRec", "UserRights", FormMethod.Post, new { id = "fgform", enctype = "multipart/form-data" }))
-            {
-                @Html.Hidden("GroupID");
-            <div class="form-group">
-                @Html.Label("Groups", htmlAttributes: new { @class = "control-label col-md-6" })
-                <div class="col-md-10">
-                    <input type="text" id="GroupName" name="GroupName" style="color:black;" data-autocomplete-idholder="#GroupID" value="" data-autocombo-url="@Url.Action("AutoCompleteGroups")" class="form-control" />
-                </div>
+        @using (Html.BeginForm("GetExistingFns", "UserRights", FormMethod.Post, new { id = "fgform"}))
+        {
+            @Html.Hidden("GroupID");
+            <div class="form-inline">
+                @Html.Label("Type a few letters of the group name and then choose a group from the list to edit its permissions", htmlAttributes: new { @class = "control-label col-md-6" })
+                <input type="text" id="GroupName" name="GroupName" style="color:black;" data-autocomplete-idholder="#GroupID" value="" data-autogroup-url="@Url.Action("AutoCompleteGroups")" class="form-control" />
             </div>
-            <br />
-            <br />
-            <div class="form-group">
-                <div class="col-md-offset-2  col-md-10">
-                    <input type="submit" value="Submit" class="btn btn-default" />
-                </div>
+        }
+
+        <br />
+
+        <div class="row">
+            <div class="col-6">
+                <div id="AvailableFns">                </div>
             </div>
 
-            <br />
-    }
-            </div>
-            <br />
-            <br />
-            <div>
-                <h4>Set of Availaible Functions</h4>
-                <table class="table table-hover " height="100%">
-                    <tr>
-                        <th>Sr No</th>
-                        <th>Group Name</th>
-                        <th></th>
-                    </tr>
-                    <tbody id="FuncNotAssign">
-                        @{int i = 1; }
-                        @foreach (var item in ViewBag.Func)
-                    {
-                        <tr>
-                            <td>
-                                @i
-                            </td>
-                            <td>
-                                <Big>@item.Module  ></Big> @item.FunctionName
-                            </td>
-                            <td>
-                                @using (Html.BeginForm("ExistingFuncRec", "UserRights", FormMethod.Post, new { id = "Frec", @class = "FunRec" }))
-                            {
-                                <div class="form-group">
-                                    <div class=" col-md-12">
-                                        <input type="hidden" id="G" name="G" value="" />
-                                        <input type="hidden" id="F" name="F" value="@item.FunctionID" />
-                                        <input type="submit" id="sub" name="sub" value="Read" data-fid="@item.FunctionID" class="btn btn-default  " />
-
-                                        <input type="submit" id="sub" name="sub" value="Write" data-fid="@item.FunctionID" class="btn btn-default  " />
-                                    </div>
-                                </div>
-                        }
-                            </td>
-                        </tr>
-                    i++;
-                }
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div class="col-md-6" id="ExistingFunc">
-
-
+            <div class="col-6" id="ExistingFunc">        </div>
         </div>
         @section Scripts {
 
             @Scripts.Render("~/bundles/jqueryval")
         }
         <script>
+
             $(document).ready(function () {
+                $('#AvailableFns').hide();
+                $('*[data-autogroup-url]')
+                    .each(function () {
+                        $(this).autocomplete({
+                            source: $(this).data("autogroup-url"),
+                            minLenght: 3,
+                            delay: 500,
+                            select: function (event, ui) {
+                                $($(this).data("autocomplete-idholder")).val(ui.item.id);
 
-                $("#fgform").submit(function (e) {
+                                var gp = $('#GroupID').val();
+                                var $form = $("#fgform"),
+                                    url = $form.attr('action');
+                                var posting = $.post(url, { GroupName: $('#GroupName').val(), GroupID: $('#GroupID').val() });
+                                posting.done(function (data) {
+                                    $('#ExistingFunc').load("/UserRights/GetExistingFns?GID=" + gp);
+                                    $('#AvailableFns').show();
+                                    $('#AvailableFns').load("/UserRights/GetAllOtherFns?GID=" + gp);
 
-                    e.preventDefault();
-                    var gp = $('#GroupID').val();
-                    var $form = $(this),
-                        url = $form.attr('action');
-                    var posting = $.post(url, { GroupName: $('#GroupName').val(), GroupID: $('#GroupID').val() });
-                    posting.done(function (data) {
-
-                        $('#ExistingFunc').load("/SBBoss/UserRights/ExistingFuncRec?GID=" + gp);
-
-
+                                });
+                            }
+                        });
                     });
-                });
-            })
-
-
-            $(document).ready(function () {
-                $('.FunRec').submit(function (e) {
-                    e.preventDefault();
-                    var gp = $('#GroupID').val();
-                    var sb = $('#sub').val();
-                    $('#ExistingFunc').html("");
-                    var $form = $(this),
-                        url = $form.attr('action');
-
-                    var posting = $.post(url, { G: gp, F: $form["0"][1].value, sub: sb });
-                    posting.done(function (data) { $('#ExistingFunc').load("/SBBoss/UserRights/ExistingFuncRec?GID=" + gp); });
-
-                });
-            })
-
-
-
+            });
 
         </script>
     </div>

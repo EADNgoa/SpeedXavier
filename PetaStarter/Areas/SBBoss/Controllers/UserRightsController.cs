@@ -1,4 +1,6 @@
-﻿using PagedList;
+﻿
+using PagedList;
+using Speedbird.Areas.SBBoss.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,9 +13,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
   
 
         [EAAuthorize(FunctionName = "User Rights", Writable = false)]
-        public ActionResult AddUserGroups(int? page)
-        {
-            ViewBag.UserName = db.Fetch<Group>("Select Id,UserName from AspNetUsers");
+        public ActionResult AddUserGroups()
+        {            
             ViewBag.Grp = db.Fetch<Group>("Select * from Groups");
             return View();
         }
@@ -39,8 +40,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 
 
             }
-            List<Speedbird.Areas.SBBoss.Models.ExistingUserViewModel> recs = db.Fetch<Speedbird.Areas.SBBoss.Models.ExistingUserViewModel>("Select * from AspNetUsers anu inner join UserGroups ug on anu.Id = ug.UserID inner Join Groups g on g.GroupID = ug.GroupID Where ug.GroupID = @0", GID ?? 0);
-            ViewBag.func = db.Fetch< Speedbird.Areas.SBBoss.Models.ExistingUserViewModel>("Select * from UserFunctions uf inner join FunctionGroups fg on uf.FunctionID =fg.FunctionID inner join Groups g on g.GroupID = fg.GroupID where fg.GroupID=@0;",GID ?? 0);
+            List<ExistingUserViewModel> recs = db.Fetch<ExistingUserViewModel>("Select * from AspNetUsers anu inner join UserGroups ug on anu.Id = ug.UserID inner Join Groups g on g.GroupID = ug.GroupID Where ug.GroupID = @0", GID ?? 0);
+            ViewBag.func = db.Fetch<ExistingUserViewModel>("Select * from UserFunctions uf inner join FunctionGroups fg on uf.FunctionID =fg.FunctionID inner join Groups g on g.GroupID = fg.GroupID where fg.GroupID=@0;",GID ?? 0);
             return PartialView("ExistingUsersPartial", recs);
         }
         public ActionResult DelUserRec(int? GID, FormCollection fm)
@@ -52,51 +53,62 @@ namespace Speedbird.Areas.SBBoss.Controllers
               var DeleteRec = db.Execute("Delete from UserGroups Where UserID=@0 and GroupID=@1 ", uid, gid);
                 GID = gid;
             }
-            List<Speedbird.Areas.SBBoss.Models.ExistingUserViewModel> recs = db.Fetch<Speedbird.Areas.SBBoss.Models.ExistingUserViewModel>("Select * from AspNetUsers anu inner join UserGroups ug on anu.Id = ug.UserID inner Join Groups g on g.GroupID = ug.GroupID Where ug.GroupID = @0", (int)GID);
-            ViewBag.func = db.Fetch<Speedbird.Areas.SBBoss.Models.ExistingUserViewModel>("Select * from UserFunctions uf inner join FunctionGroups fg on uf.FunctionID =fg.FunctionID inner join Groups g on g.GroupID = fg.GroupID where fg.GroupID=@0", (int)GID);
+            List<ExistingUserViewModel> recs = db.Fetch<ExistingUserViewModel>("Select * from AspNetUsers anu inner join UserGroups ug on anu.Id = ug.UserID inner Join Groups g on g.GroupID = ug.GroupID Where ug.GroupID = @0", (int)GID);
+            ViewBag.func = db.Fetch<ExistingUserViewModel>("Select * from UserFunctions uf inner join FunctionGroups fg on uf.FunctionID =fg.FunctionID inner join Groups g on g.GroupID = fg.GroupID where fg.GroupID=@0", (int)GID);
             return PartialView("ExistingUsersPartial", recs);
         }
 
         [EAAuthorize(FunctionName = "User Rights", Writable = false)]
-        public ActionResult AddFuncGroups(int? page)
-        {
-            ViewBag.GroupID = db.Fetch<Group>("Select GroupID,GroupName from Groups");
-            ViewBag.Func = db.Fetch<Speedbird.Areas.SBBoss.Models.ExistingFuncViewModel>("Select FunctionID,FunctionName,Module from UserFunctions ORDER BY Module,FunctionName ASC");
+        public ActionResult AddFuncGroups(string err)
+        {            
+            //ViewBag.Func = db.Fetch<ExistingFuncViewModel>("Select FunctionID,FunctionName,Module from UserFunctions ORDER BY Module,FunctionName ASC");
+            ViewBag.errMsg = err;
             return View();
                     
         }
+
+        [EAAuthorize(FunctionName = "User Rights", Writable = false)]
+        public ActionResult GetAllOtherFns(int GID)
+        {         
+            var res = db.Fetch<ExistingFuncViewModel>("Select FunctionID,FunctionName,Module from UserFunctions where FunctionID not in (select FunctionID from FunctionGroups where GroupID = @0) ORDER BY Module,FunctionName ASC",GID);
+            
+            return PartialView("AvailableFnsPartial", res);
+
+        }
         [EAAuthorize(FunctionName = "User Rights", Writable = true)]
-        public ActionResult ExistingFuncRec(int? GID, FormCollection fm,string sub)
+        public ActionResult ExistingFuncRec(int GID, int FID,string sub)
         {
             try
             {
-                if (fm["G"] != null && fm["F"] != null)
-                {
-                    int fid = int.Parse(fm["F"]);
-                    int gid = int.Parse(fm["G"]);
-                    var item = new FunctionGroup() { FunctionID = fid, GroupID = (int)gid};
+                if (GID >0 && FID >0)
+                {                    
+                    var item = new FunctionGroup() { FunctionID = FID, GroupID = GID};
                     if(sub == "Read")
                     {
                         item.Writable = false;
                     }
-                    else if (sub == "Write")
+                    if (sub == "Write")
                     {
                         item.Writable = true;
                     }
-                    db.Insert(item);
-                    GID = gid;
+                    db.Insert(item);                    
                 }
-
-                if (fm["GroupID"] != null) GID = int.Parse(fm["GroupID"]);
             }
             catch(Exception e)
-            {
-                Console.WriteLine("Please Select The Group: '{0}'", e);
-
+            {                
+                return RedirectToAction("AddFuncGroups", new { err= $"Please Select The Group: '{e}'" } );
             }
-            List<Speedbird.Areas.SBBoss.Models.ExistingFuncViewModel> recs = db.Fetch<Speedbird.Areas.SBBoss.Models.ExistingFuncViewModel>("Select * from UserFunctions uf inner join FunctionGroups fg on uf.FunctionID = fg.FunctionID inner join Groups g on g.GroupID = fg.GroupID where fg.GroupID = @0", GID ?? 0);
+
+            return new EmptyResult();
+        }
+
+        [EAAuthorize(FunctionName = "User Rights", Writable = true)]
+        public ActionResult GetExistingFns(int GID)
+        {
+            List<ExistingFuncViewModel> recs = db.Fetch<ExistingFuncViewModel>("Select * from UserFunctions uf inner join FunctionGroups fg on uf.FunctionID = fg.FunctionID inner join Groups g on g.GroupID = fg.GroupID where fg.GroupID = @0", GID);
             return PartialView("ExistingFuncPartial", recs);
         }
+
         [EAAuthorize(FunctionName = "User Rights", Writable = true)]
         public ActionResult DelFuncRec(int? GID, FormCollection fm)
         {
@@ -107,8 +119,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 var DeleteRec = db.Execute("Delete from FunctionGroups Where FunctionID=@0 and GroupID=@1 ", fid, gid);
                 GID = gid;
             }
-            List<Speedbird.Areas.SBBoss.Models.ExistingFuncViewModel> recs = db.Fetch<Speedbird.Areas.SBBoss.Models.ExistingFuncViewModel>("Select * from UserFunctions uf inner join FunctionGroups fg on uf.FunctionID = fg.FunctionID inner join Groups g on g.GroupID = fg.GroupID where fg.GroupID = @0", (int)GID);
-            return PartialView("ExistingFuncPartial", recs);
+
+            return GetExistingFns(GID.Value);
         }
 
         public ActionResult AutoCompleteGroups(string term)

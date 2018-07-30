@@ -4,20 +4,20 @@
     <div class="form-row">
         <div class="input-group col mb-3">
             <div class="input-group-prepend"><span class="input-group-text">To Date</span></div>
-            @Html.EditorFor(model => model.Tdate, new { htmlAttributes = new { @type = "text", @class = " form-control" } })
+            @Html.EditorFor(model => model.Tdate, new { htmlAttributes = new { @type = "text", @class = "eadate form-control" } })
             @Html.ValidationMessageFor(model => model.Tdate, "", new { @class = "text-danger" })
 
-        </div>
-        <div class="input-group col mb-3 ">
-            <div class="input-group-prepend"><span class="input-group-text">No of kids</span></div>
-            @Html.EditorFor(model => model.ChildNo, new { htmlAttributes = new { @type = "text", @class = " form-control " } })
-            @Html.ValidationMessageFor(model => model.ChildNo, "", new { @class = "text-danger" })
         </div>
         <div class="input-group col mb-3">
             <div class="input-group-prepend"><span class="input-group-text">No Of Adults</span></div>
             @Html.EditorFor(model => model.AdultNo, new { htmlAttributes = new { @type = "text", @class = "eadate form-control" } })
             @Html.ValidationMessageFor(model => model.AdultNo, "", new { @class = "text-danger" })
 
+        </div>
+        <div class="input-group col mb-3 ">
+            <div class="input-group-prepend"><span class="input-group-text">No of kids</span></div>
+            @Html.EditorFor(model => model.ChildNo, new { htmlAttributes = new { @type = "text", @class = " form-control " } })
+            @Html.ValidationMessageFor(model => model.ChildNo, "", new { @class = "text-danger" })
         </div>
 
     </div>
@@ -80,17 +80,14 @@
 
 <script>
     $(function () {
-        //DateTime picker
-        $('input[type=date]').datetimepicker({
+        $('.eadate').datepicker({
             dateFormat: "dd-MM-yy",
             showButtonPanel: true,
             changeMonth: true,
             changeYear: true,
-            timeFormat: "hh:mm"
 
-        }).attr('type', 'text').attr('autocomplete', 'off');
 
-        //Disable the browsers default date picker
+        });
     });
 
 
