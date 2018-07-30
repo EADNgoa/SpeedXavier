@@ -1,0 +1,49 @@
+﻿@model IEnumerable<ClickLock.Models.ExistingFuncViewModel>
+
+
+<h4>Set of Availaible Functions</h4>
+<table class="table table-hover " height="100%">
+    <tr>
+        <th>Sr No</th>
+        <th>Group Name</th>
+        <th></th>
+    </tr>
+    <tbody id="FuncNotAssign">
+        @{int i = 1; }
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @i
+                </td>
+                <td>
+                    <Big>@item.Module  ></Big> @item.FunctionName
+                </td>
+                <td>
+
+                    <div class=" col-md-12">
+                        <input type="submit" name="sub" value="Read" data-fid="@item.FunctionID" class="btn btn-default btnSubmit " />
+                        <input type="submit" name="sub" value="Write" data-fid="@item.FunctionID" class="btn btn-default btnSubmit " />
+                    </div>
+
+                </td>
+            </tr>
+            i++;
+        }
+    </tbody>
+</table>
+<script>
+    
+            $(document).ready(function () {
+                $('.btnSubmit').on('click', function () {
+                    var gp = $('#GroupID').val();
+                    var sb = $(this).val();
+                    $(this).parent().hide();
+                    $('#ExistingFunc').html("");
+
+                    var posting = $.post('@Url.Action("ExistingFuncRec", "UserRights")', { GID: gp, FID: $(this).data('fid'), sub: sb });
+                    posting.done(function (data) { $('#ExistingFunc').load("/UserRights/GetExistingFns?GID=" + gp); });
+
+                });
+            })
+</script>

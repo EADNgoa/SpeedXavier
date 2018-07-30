@@ -37,8 +37,9 @@ BEGIN
     INSERT INTO [dbo].[UserFunctions] ([FunctionID], [FunctionName], [Module]) VALUES (32, N'Car & Bike', N'Car & Bike')
     INSERT INTO [dbo].[UserFunctions] ([FunctionID], [FunctionName], [Module]) VALUES (33, N'Tax', N'Tax')
     INSERT INTO [dbo].[UserFunctions] ([FunctionID], [FunctionName], [Module]) VALUES (34, N'Questions', N'Questions')
-	    INSERT INTO [dbo].[UserFunctions] ([FunctionID], [FunctionName], [Module]) VALUES (35, N'Reciept', N'Reciept')
-		    INSERT INTO [dbo].[UserFunctions] ([FunctionID], [FunctionName], [Module]) VALUES (36, N'Group', N'Group')
+	INSERT INTO [dbo].[UserFunctions] ([FunctionID], [FunctionName], [Module]) VALUES (35, N'Reciept', N'Reciept')
+	INSERT INTO [dbo].[UserFunctions] ([FunctionID], [FunctionName], [Module]) VALUES (36, N'Group', N'Group')
+	INSERT INTO [dbo].[UserFunctions] ([FunctionID], [FunctionName], [Module]) VALUES (36, N'Supplier', N'Supplier')
 
 
 

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Speedbird.Areas.SBBoss.Models.ExistingUserViewModel>
+﻿@model IEnumerable<ClickLock.Models.ExistingUserViewModel>
    
     @{ int i = 1;}
 
@@ -6,7 +6,7 @@
 
     @if (Model != null)
     {
-        <div class="row MastDet" style="margin-top:24%">
+        <div class="row MastDet" >
             <h4><u><b>List of Users</b></u></h4>
         <table class="table">
             <thead>
@@ -97,7 +97,7 @@
                   url = $form.attr('action');
 
               var posting = $.post(url, { UserName: $('#UserName').val(), GroupID: $('#GroupID').val(), Id: $form["0"][1].value});
-              posting.done(function (data) { $('#ExistingUsers').load("/SBBoss/UserRights/DelUserRec?GID=" + gp); });
+              posting.done(function (data) { $('#ExistingUsers').load("/UserRights/DelUserRec?GID=" + gp); });
 
           });
       })

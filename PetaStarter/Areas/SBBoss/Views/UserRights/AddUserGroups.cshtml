@@ -1,8 +1,25 @@
-﻿@model PagedList.IPagedList<Speedbird.Areas.SBBoss.Models.ExistingUserViewModel>
+﻿@model PagedList.IPagedList<ClickLock.Models.ExistingUserViewModel>
 @using PagedList.Mvc;
 @{
     ViewBag.Title = "Add Users To Groups";
 }
+
+<style>
+    a {
+        color: black;
+    }
+
+    .selected {
+        background-color: rgba(41, 103, 182, 0.89);
+        color: #FFF;
+    }
+
+    .GroupSelector tr:hover {
+        background-color: rgba(41, 103, 182, 0.3);
+        color: #FFF;
+    }
+</style>
+
 <div class="card border rounded DropShadow">
     <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
         <span class="h3">@ViewBag.Title</span>
@@ -10,79 +27,61 @@
     <div class="card-body">
         <h5>&nbsp;</h5>
 
-        <center><h2>Add Users To Groups</h2></center>
-
-
-        <div class="col-md-6">
-            <div class="row">
-                @using (Html.BeginForm("ExistingUserRec", "UserRights", FormMethod.Post, new { id = "Ugform" }))
-            {
-                @Html.Hidden("Id");
-            <div class="form-group">
-                @Html.Label("User Name", htmlAttributes: new { @class = "control-label col-md-6" })
-                <div class="col-md-10">
-                    <input type="text" id="UserName" name="UserName" style="color:black;" data-autocomplete-idholder="#Id" value="" data-autocombo-url="@Url.Action("AutoCompleteUsers")" class="form-control" />
-                    <input type="hidden" id="GroupID" name="Group" value=" " />
-
-                </div>
-            </div>
-            <br />
-            <br />
-            <div class="form-group">
-                <div class="col-md-10">
-                    <input type="submit" value="Add User" class="btn btn-default" />
-                </div>
-            </div>
-
-            <br />
-    }
-            </div>
-            <br />
-            <br />
-            <div class="MastDet">
-                <h4>List Of Groups</h4>
-                <table class="table table-hover " height="100%">
-                    <tr>
-                        <th>Sr No</th>
-                        <th>Group Name</th>
-                    </tr>
-                    <tbody>
-                        @{int i = 1; }
-                        @foreach (var item in (IEnumerable<Speedbird.Group>)ViewBag.Grp)
-                    {
+        <div class="row">
+            <div class="col-6">
+                <div class="MastDet">
+                    <h4>First select a Group</h4>
+                    <table class="table GroupSelector" height="100%">
                         <tr>
-                            <td>
-                                @i
-                            </td>
-                            <td>
-                                <a href="#" id="@item.GroupID" class="activeRec">@item.GroupName</a>
-                            </td>
+                            <th>Sr No</th>
+                            <th>Group Name</th>
                         </tr>
-                    i++;
-                }
-                    </tbody>
-                </table>
+                        <tbody>
+                            @{int i = 1; }
+                            @foreach (var item in (IEnumerable<ClickLock.Group>)ViewBag.Grp)
+                            {
+                                <tr id="@item.GroupID">
+                                    <td>
+                                        @i
+                                    </td>
+                                    <td>
+                                        @item.GroupName
+                                    </td>
+                                </tr>
+                                i++;
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="MastDet">
+                    <h4>Then type a user name</h4>
+                    @using (Html.BeginForm("ExistingUserRec", "UserRights", FormMethod.Post, new { id = "Ugform", @class= "form-inline" }))
+                    {
+                        @Html.Hidden("Id");
+                        <input type="hidden" id="GroupID" name="Group" value=" " />
+                        <div class="form-group m-3">
+                            <input type="text" id="UserName" name="UserName" data-autocomplete-idholder="#Id" value="" data-autocombo-url="@Url.Action("AutoCompleteUsers")" class="form-control" />                                
+                        </div>
+                        <div class="form-group m-3"><input type="submit" value="Add User to Group" class="btn btn-primary " id="AssignUsrDiv" /></div>                            
+                    }
+                </div>
+
+                
+
             </div>
-        </div>
-        <div class="col-md-6" id="ExistingUsers">
+            <div class="col-6" id="ExistingUsers">
 
-
+            </div>
         </div>
         @section Scripts {
 
             @Scripts.Render("~/bundles/jqueryval")
         }
         <script>
+          
             $(document).ready(function () {
-                $('.activeRec').click(function () {
-                    var GID = this.id;
-                    $('#ExistingUsers').html("");
-                    $('#ExistingUsers').load("/SBBoss/UserRights/ExistingUserRec?GID=" + GID);
-                    $("#GroupID").val(GID);
-                    return false;
-                })
-            });
-            $(document).ready(function () {
+                $('#AssignUsrDiv').hide();
                 $("#Ugform").submit(function (event) {
                     event.preventDefault();
                     $('#ExistingUsers').html("");
@@ -90,7 +89,18 @@
                     var $form = $(this),
                         url = $form.attr('action');
                     var posting = $.post(url, { UserName: $('#UserName').val(), Group: $('#GroupID').val(), Id: $('#Id').val() });
-                    posting.done(function (data) { $('#ExistingUsers').load("/SBBoss/UserRights/ExistingUserRec?GID=" + gp); });
+                    posting.done(function (data) { $('#ExistingUsers').load("/UserRights/ExistingUserRec?GID=" + gp); });
+                });
+
+                $(".GroupSelector tr").click(function () {
+                    $(this).parent().children().removeClass("selected");
+                    $(this).addClass("selected");
+
+                    var GID = this.id;
+                    $('#ExistingUsers').html("");
+                    $('#ExistingUsers').load("/UserRights/ExistingUserRec?GID=" + GID);
+                    $("#GroupID").val(GID);
+                    $('#AssignUsrDiv').show();
                 });
             })
 
