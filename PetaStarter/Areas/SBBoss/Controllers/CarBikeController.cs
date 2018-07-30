@@ -215,7 +215,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
         public ActionResult CarPicture(int? id)
         {
-            ViewBag.ServiceTypeID = ServiceTypeEnum.Accomodation;
+            ViewBag.ServiceTypeID = ServiceTypeEnum.CarBike;
 
             ViewBag.Pack = db.FirstOrDefault<CarBike>($"Select * From CarBike Where CarBikeID={id}");
             ViewBag.Pics = db.Fetch<Picture>($"Select * From Picture where ServiceID='{id}' and ServiceTypeID='{(int)ServiceTypeEnum.Accomodation}'");

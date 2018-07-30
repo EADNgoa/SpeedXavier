@@ -1,31 +1,68 @@
-﻿
-@model  Speedbird.AccomodationDets
+﻿<style>
+    .EATranspHeader {
+        background-color: rgba(0, 0, 0, 0.5);
+        color: white;
+        padding-left: 15px;
+    }
 
-<style>
+    .EAUpMovedDiv {
+        position: relative;
+        top: -248px;
+    }
+
+    .EATitle {
+        font-family: "Merriweather Sans", serif;
+        font-size: 36px;
+        font-weight: 700;
+        letter-spacing: -1px;
+        line-height: 44px;
+        padding-top: 51px;
+        margin-bottom: 5px;
+        font-variant: small-caps;
+    }
+
+    .EAIconText {
+        font-variant: small-caps;
+        font-family: "Merriweather Sans", serif;
+        color: white;
+        font-size: 18px;
+    }
+
     #map {
         height: 400px;
         width: 90%;
         margin-left: 30px;
     }
 </style>
+@model  Speedbird.AccomodationDets
 
-<div class="col-4">
 
-    <h2 style="margin-left:60px;">@Model.AccomName</h2>
-    <br />
+
+<div class="col-5 EAUpMovedDiv">
+    <div class="EATranspHeader">
+        <h1 class="EATitle">@Model.AccomName</h1>
+        <div class="FloatBadge">
+            @Model.GeoName
+        </div>
+        <hr style="background-color:white; border:1px solid white; margin:3px;" />
+        @foreach (var i in ViewBag.Icns)
+        {
+            <img src="/Icons/@i" height="43px;" />
+            <span class="EAIconText">@i.Substring(0, i.IndexOf('.'))</span>
+        }
+        <hr style="background-color:white; border:1px solid white;margin:3px;" />
+
+    </div>
+
     <div class="DetailBlock">
         <div class="row">
             <table class="table">
                 <tr>
                     <td class="desc">
-                        <i class="material-icons" style="color:#009de0;">&#xe25f;</i>   @Model.AccomName Description
+                        <i class="material-icons" style="color:#009de0;">&#xe25f;</i>  @Model.AccomName
                     </td>
                 </tr>
-                <tr>
-                    <td style="color:#11496d;">
-                        @Html.Raw(Model.Description)
-                    </td>
-                </tr>
+
             </table>
         </div>
 
@@ -35,49 +72,80 @@
             <table class="table">
                 <tr>
                     <td class="desc">
-                        <i style="font-size:24px" class="fa">&#xf036;</i>   Facilities
-                        <br />
-                        <ul>
-                            @foreach (var item in ViewBag.facs)
-                            {
-                                <li>@item.FacilityName</li>
-                            }
-                        </ul>
+                        <i style="font-size:24px" class="fa">&#xf036;</i>
+                        Description
                     </td>
                 </tr>
 
-
+                <tr>
+                    <td>
+                        @Html.Raw(Model.Description)
+                    </td>
+                </tr>
             </table>
         </div>
 
     </div>
 
-    <div class="desc">
-        <i style="font-size:24px; margin-left:30px;" class="fa">&#xf302;</i>   Images
-        <div id="blueimp-gallery" class="blueimp-gallery">
-            <div class="slides"></div>
-            <h3 class="title"></h3>
-            <a class="prev" style="color:wheat">‹</a>
-            <a class="next" style="color:white">›</a>
-            <a class="close" style="color:wheat">×</a>
-            <a class="play-pause"></a>
-            <ol class="indicator"></ol>
-        </div>
-        <div id="links" style="margin-left:30px;">
-            @foreach (var item in Model.pic)
-            {
-                <a href="/Images/@item.PictureName" title="@Model.AccomName">
-                    <img height="200px;" src="/Images/@item.PictureName" alt="@Model.AccomName">
-                </a>
-            }
-        </div>
+    <div id="blueimp-gallery" class="blueimp-gallery">
+        <div class="slides"></div>
+        <h3 class="title"></h3>
+        <a class="prev" style="color:wheat">‹</a>
+        <a class="next" style="color:white">›</a>
+        <a class="close" style="color:wheat">×</a>
+        <a class="play-pause"></a>
+        <ol class="indicator"></ol>
+    </div>
+    <div id="links" style="margin-left:30px;">
+        @foreach (var item in Model.pic)
+        {
+            <a href="/Images/@item.PictureName" title="@Model.AccomName">
+                <img height="200px;" src="/Images/@item.PictureName" alt="@Model.AccomName">
+            </a>
+        }
     </div>
     <br />
+    <hr />
 
-    <div class="desc">
-        <i style="font-size:24px; margin-left:30px;" class="fa">&#xf279;</i>   Location Map
-        <div id="map" width="80%"></div>
+    <div class="DetailBlock" style="min-height:0;">
+
+        <div class="row">
+            <div class="row desc d-lg-table-cell" style="padding-left:30px;margin-left:0px;">
+                <i style="font-size:24px" class="fa">&#xf072;</i>
+                Accomodation Details
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-2">
+                <b>Lattitude:</b>
+            </div>
+            <div class="col-4">
+                @Html.Raw(Model.Lat)
+            </div>
+            <div class="col-2">
+                <b>Longitude:</b>
+            </div>
+            <div class="col-4">
+                @Html.Raw(Model.longt)
+            </div>
+
+        </div>
+    
+        <br />
+        <br />
+
+        <div class="row">
+            <i style="font-size:24px; margin-left:30px;" class="fa">&#xf279;</i>   Location Map
+            <div id="map" width="80%"></div>
+        </div>
+
+        <hr />
+
+
+
     </div>
+
 
 </div>
 
@@ -101,5 +169,3 @@
 <script async defer
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAC6Yyjmk9tLMPEe6ID2rmzwcYPCHKYrZU&callback=initMap">
 </script>
-
-

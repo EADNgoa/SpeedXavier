@@ -524,17 +524,43 @@ namespace Speedbird.Areas.SBBoss.Controllers
         [EAAuthorize(FunctionName = "Service Requests", Writable = true)]
         public ActionResult Reciepts(int? id, int? sid, int? EID)
         {
-            var rec = base.BaseCreateEdit<SRReciept>(EID, "RecieptID");
             ViewBag.SRID = id;
             ViewBag.Title = "Profit and loss Details";
             ViewBag.Debit = db.ExecuteScalar<decimal?>("Select sum(Cost) as Cost from SRdetails Where SRID =@0",id);
             ViewBag.Credit = db.ExecuteScalar<decimal?>("Select sum(Amount) as Amt from RP_SR Where SRID =@0", id);
-           var  rp= db.Fetch<RPDetails>("select rp.Date,rp.Note,rp.Type,rs.Amount,rp.IsPayment from RPDets rp left join RP_SR rs on rp.RPDID = rs.RPDID Where rs.SRID = @0",id);
+
+            var services = db.Query<SRdetailDets>("Select ServiceTypeID,Cost,SellPrice from SRdetails where SRID=@0",id).ToList();
+           services.ForEach(s=>
+            {
+                var tax = db.ExecuteScalar<decimal?>("Select Percentage From Taxes Where ServiceTypeID=@0 and WEF<GetDate() order by WEF desc ", s.ServiceTypeID)??0;
+                s.Tax = s.SellPrice * tax / 100;
+                var st = (ServiceTypeEnum)s.ServiceTypeID;
+                var commision = db.Fetch<ServiceCommision>($"Select Perc,Amount  From ServiceCommision Where ServiceName='{st}' ");
+                commision.ForEach(c=> {
+                    if (c.Perc != null)
+                    {
+                        s.Commision = c.Perc ?? 0;
+                        var tot = s.SellPrice * s.Commision / 100;
+                        s.Total = tot + s.SellPrice +s.Tax;
+                    }
+                    else if (c.Amount != null)
+                    {
+                        s.Commision = c.Amount ?? 0;
+                        s.Total = s.SellPrice + s.Tax + s.Commision;
+                    }
+
+                });
+                
+               
+            });
+            ViewBag.Services = services;
+
+          var  rp= db.Fetch<RPDetails>("select rp.Date,rp.Note,rp.Type,rs.Amount,rp.IsPayment from RPDets rp left join RP_SR rs on rp.RPDID = rs.RPDID Where rs.SRID = @0",id);
             ViewBag.Reciepts = rp.Where(r => r.IsPayment == false);
             ViewBag.Payments = rp.Where(r => r.IsPayment == true);
 
 
-            return PartialView(rec);
+            return PartialView();
         }
 
       

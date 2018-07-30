@@ -79,10 +79,11 @@ namespace Speedbird.Controllers
             {
                 items.Add(new SelectListItem { Text = ""+i, Value= ""+i });
             }
-            List<SelectListItem> tf = new List<SelectListItem>();
-           
-                tf.Add(new SelectListItem { Text = "YES" , Value = "1"  });
-                tf.Add(new SelectListItem { Text = "NO", Value = "0" });
+            List<SelectListItem> tf = new List<SelectListItem>
+            {
+                new SelectListItem { Text = "YES", Value = "1" },
+                new SelectListItem { Text = "NO", Value = "0" }
+            };
 
 
 
@@ -316,6 +317,8 @@ namespace Speedbird.Controllers
             var accom = db.Query<AccomodationDets>("select * From Accomodation  Where AccomodationID =@0", ServiceID).ToList().FirstOrDefault();
             accom.pic = db.Fetch<PictureDets>("Select * From Picture Where ServiceID=@0 and ServiceTypeID=@1 Order By NewID()", accom.AccomodationID, (int)ServiceTypeEnum.Accomodation).ToList();
             accom.GeoName = db.First<string>("Select GeoName From GeoTree  where GeoTreeID=@0", accom.GeoTreeID);
+            ViewBag.Icns = db.Query<string>("Select Iconpath from Icons where ServiceTypeId=@0 and ServiceId=@1 ", st, ServiceID);
+
             try
             {
                 ViewBag.facs = db.Fetch<Facility>("Select f.* From facility f, Facility_Accomodation a where f.facilityID= a.facilityID and  a.AccomodationID=@0 ", ServiceID);
@@ -334,6 +337,7 @@ namespace Speedbird.Controllers
             var CarBike = db.FirstOrDefault<CarBikeDets>("select * From CarBike  Where CarBikeID =@0", ServiceID);
             CarBike.pic = db.Fetch<PictureDets>("Select * From Picture Where ServiceID=@0 and ServiceTypeID=@1 Order By NewID()", CarBike.CarBikeID, (int)ServiceTypeEnum.CarBike).ToList();
             CarBike.GeoName = db.First<string>("Select GeoName From GeoTree  where GeoTreeID=@0", CarBike.GeoTreeID);
+            ViewBag.Icns = db.Query<string>("Select Iconpath from Icons where ServiceTypeId=@0 and ServiceId=@1 ", st, ServiceID);
 
             return PartialView(CarBike);
         }

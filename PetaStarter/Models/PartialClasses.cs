@@ -29,6 +29,8 @@ namespace Speedbird
     }
     public class RPDetails
     {
+        public int DRPDID { get; set; }
+
         public int RPDID { get; set; }
         public int Type { get; set; }
         public bool IsPayment { get; set; }
@@ -144,6 +146,12 @@ namespace Speedbird
         public string ContractNo { get; set; }
         public string GuideLanguageName { get; set; }
         public string SupplierName { get; set; }
+        public decimal Tax { get; set; }
+        public decimal Commision { get; set; }
+        public decimal Total { get; set; }
+
+
+
 
     }
     public partial class CustomerQuery
@@ -520,6 +528,7 @@ namespace Speedbird
         public int CustomerID { get; set; }
         public int SRStatusID { get; set; }
         public int PayStatusID { get; set; }
+        public int ServiceTypeID { get; set; }
 
         public string Status { get { return ((SRStatusEnum)SRStatusID).ToString(); } }
         public DateTime TDate { get; set; }
