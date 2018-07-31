@@ -37,7 +37,6 @@ namespace Speedbird.Controllers
 
       
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public ActionResult AddToCart(int? ServiceID,int? ServiceTypeID,System.Web.HttpPostedFileBase UploadedFile,DateTime? CheckIn, DateTime? CheckOut,int? nums,int? Qty,string fname,string sname,string email,string phno,int? CustomerID,string chckbtn,string Query, string Gtime, int? Glang)
         {
             if (chckbtn == "cart")
@@ -47,22 +46,28 @@ namespace Speedbird.Controllers
                 if (ServiceTypeID == (int)ServiceTypeEnum.Accomodation)
                 {
                     var getItem = db.FirstOrDefault<AccomodationDets>("Select * From Accomodation where AccomodationID=@0", ServiceID);
-                    getItem.price = db.FirstOrDefault<decimal>("Select Top 1 Price from Prices p inner join OptionType ot on p.OptionTypeID = ot.OptionTypeID Where ServiceID=@0 and ot.ServiceTypeID=@1 and WEF<GetDate() order by WEF desc", ServiceID, ServiceTypeID);
-                    item = new Cart { Id = User.Identity.GetUserId(), ServiceID = ServiceID, Qty = Qty, CheckIn = CheckIn, CheckOut = CheckOut, NoOfGuest = nums, OrigPrice = getItem.price, ServiceTypeID = ServiceTypeID };
+                    var dets = db.FirstOrDefault<CartDets>("Select Top 1 Price as OrigPrice,p.OptionTypeID from Prices p inner join OptionType ot on p.OptionTypeID = ot.OptionTypeID Where ServiceID=@0 and ot.ServiceTypeID=@1 and WEF<GetDate() order by WEF desc", ServiceID, ServiceTypeID);
+                    getItem.price = dets.OrigPrice;
+                  
+                    item = new Cart { Id = User.Identity.GetUserId(), ServiceID = ServiceID, Qty = Qty, CheckIn = CheckIn, CheckOut = CheckOut, NoOfGuest = nums, OrigPrice = getItem.price, ServiceTypeID = ServiceTypeID,OptionTypeID=dets.OptionTypeID };
                     db.Insert(item);
                 }
                 if (ServiceTypeID == (int)ServiceTypeEnum.Packages || ServiceTypeID == (int)ServiceTypeEnum.Cruise || ServiceTypeID == (int)ServiceTypeEnum.SightSeeing)
                 {
                     var getItem = db.FirstOrDefault<PackageDets>("Select * From Package where PackageID=@0", ServiceID);
-                    getItem.price = db.FirstOrDefault<decimal>("Select Top 1 Price from Prices p inner join OptionType ot on p.OptionTypeID = ot.OptionTypeID Where ServiceID=@0 and ot.ServiceTypeID=@1 and WEF<GetDate() order by WEF desc", ServiceID, ServiceTypeID);
-                    item = new Cart { Id = User.Identity.GetUserId(), ServiceID = ServiceID, Qty = Qty, CheckIn = CheckIn, CheckOut = CheckOut, NoOfGuest = nums, OrigPrice = getItem.price, ServiceTypeID = ServiceTypeID };
+                    var dets = db.FirstOrDefault<CartDets>("Select Top 1 Price as OrigPrice,p.OptionTypeID from Prices p inner join OptionType ot on p.OptionTypeID = ot.OptionTypeID Where ServiceID=@0 and ot.ServiceTypeID=@1 and WEF<GetDate() order by WEF desc", ServiceID, ServiceTypeID);
+                    getItem.price = dets.OrigPrice;
+
+                    item = new Cart { Id = User.Identity.GetUserId(), ServiceID = ServiceID, Qty = Qty, CheckIn = CheckIn, CheckOut = CheckOut, NoOfGuest = nums, OrigPrice = getItem.price, ServiceTypeID = ServiceTypeID, OptionTypeID = dets.OptionTypeID };
                     db.Insert(item);
                 }
                 if (ServiceTypeID == (int)ServiceTypeEnum.CarBike)
                 {
                     var getItem = db.FirstOrDefault<CarBikeDets>("Select * From CarBike where CarbikeID=@0", ServiceID);
-                    getItem.price = db.FirstOrDefault<decimal>("Select Top 1 Price from Prices p inner join OptionType ot on p.OptionTypeID = ot.OptionTypeID Where ServiceID=@0 and ot.ServiceTypeID=@1 and WEF<GetDate() order by WEF desc", ServiceID, ServiceTypeID);
-                    item = new Cart { Id = User.Identity.GetUserId(), ServiceID = ServiceID, Qty = Qty, CheckIn = CheckIn, CheckOut = CheckOut, NoOfGuest = nums, OrigPrice = getItem.price, ServiceTypeID = ServiceTypeID };
+                    var dets = db.FirstOrDefault<CartDets>("Select Top 1 Price as OrigPrice,p.OptionTypeID from Prices p inner join OptionType ot on p.OptionTypeID = ot.OptionTypeID Where ServiceID=@0 and ot.ServiceTypeID=@1 and WEF<GetDate() order by WEF desc", ServiceID, ServiceTypeID);
+                    getItem.price = dets.OrigPrice;
+
+                    item = new Cart { Id = User.Identity.GetUserId(), ServiceID = ServiceID, Qty = Qty, CheckIn = CheckIn, CheckOut = CheckOut, NoOfGuest = nums, OrigPrice = getItem.price, ServiceTypeID = ServiceTypeID, OptionTypeID = dets.OptionTypeID };
                     db.Insert(item);
                 }
 
@@ -94,22 +99,24 @@ namespace Speedbird.Controllers
 
                 if (Query != null)
                 {
-                    string ServiceName = "";
+                  
                     if (ServiceTypeID == (int)ServiceTypeEnum.Accomodation)
                     {
-                        ServiceName = db.FirstOrDefault<AccomodationDets>("Select * From Accomodation where AccomodationID=@0", ServiceID).AccomName;
+                      var  ServiceName = db.FirstOrDefault<AccomodationDets>("Select * From Accomodation where AccomodationID=@0", ServiceID).AccomName;
                     }
                     if (ServiceTypeID == (int)ServiceTypeEnum.Packages || ServiceTypeID == (int)ServiceTypeEnum.Cruise || ServiceTypeID == (int)ServiceTypeEnum.SightSeeing)
                     {
-                        ServiceName= db.FirstOrDefault<PackageDets>("Select * From Package where PackageID=@0", ServiceID).PackageName;
+                      var  ServiceName= db.FirstOrDefault<PackageDets>("Select * From Package where PackageID=@0", ServiceID).PackageName;
                     }
                     if (ServiceTypeID == (int)ServiceTypeEnum.CarBike)
                     {
-                        ServiceName= db.FirstOrDefault<CarBikeDets>("Select * From CarBike where CarbikeID=@0", ServiceID).CarBikeName;
+                      var  ServiceName= db.FirstOrDefault<CarBikeDets>("Select * From CarBike where CarbikeID=@0", ServiceID).CarBikeName;
                     }
 
-                    var cust = new CustomerQuery { FName = fname, SName = sname, Email = email, Phone = phno,_Query=Query,ServiceID=ServiceID,ServiceTypeID=ServiceTypeID ,CheckIn=CheckIn,CheckOut=CheckOut,NoPax=nums,Qty=Qty,Tdate=DateTime.Now, Glang=Glang, Gtime=Gtime,ServiceName=ServiceName};
-
+                    // var cust = new ServiceRequest { FName = fname, SName = sname, Email = email, Phone = phno,_Query=Query,ServiceID=ServiceID,ServiceTypeID=ServiceTypeID ,CheckIn=CheckIn,CheckOut=CheckOut,NoPax=nums,Qty=Qty,Tdate=DateTime.Now, Glang=Glang, Gtime=Gtime,ServiceName=ServiceName};
+                    var sr = new ServiceRequest {BookingTypeID=(int)BookingTypeEnum.Online,EnquirySource=(int)EnquirySourceEnum.Web,ServiceTypeID=ServiceTypeID,PayStatusID=(int)PayType.Not_Paid,SRStatusID=(int)SRStatusEnum.Request};
+                   
+                    var cust = new Customer {FName=fname,SName=sname, Email = email, Phone = phno };
                     if (UploadedFile != null)
                     {
                         string fn = UploadedFile.FileName.Substring(UploadedFile.FileName.LastIndexOf('\\') + 1);
@@ -119,6 +126,20 @@ namespace Speedbird.Controllers
                         cust.IdPicture = fn;
                     }
                     db.Insert(cust);
+                    sr.CustID = cust.CustomerID;
+                    db.Insert(sr);
+                    db.Insert(new SRdetail
+                    {
+                        SRID = sr.SRID,
+                        ItemID = ServiceID,
+                        ServiceTypeID = ServiceTypeID,
+                        
+                        Qty = Qty,
+                        Fdate = CheckIn,
+                        Tdate = CheckOut,
+                        AdultNo = nums,
+                    });
+                    db.Insert(new SR_Cust {ServiceRequestID=sr.SRID,CustomerID=cust.CustomerID});
                 }
             }
                 return RedirectToAction("Index", "Home");
@@ -138,7 +159,7 @@ namespace Speedbird.Controllers
 
                 try
                 {
-                    var item = new Booking { BookDate = DateTime.Now, UserID = User.Identity.GetUserId(), StatusID = 1 };
+                    var item = new ServiceRequest { TDate = DateTime.Now, UserID = User.Identity.GetUserId(), SRStatusID = (int)SRStatusEnum.Booked,PayStatusID=(int)PayType.Full_Paid,BookingTypeID=(int)BookingTypeEnum.Online,EnquirySource=(int)EnquirySourceEnum.Web };
                     db.Insert(item);
                     CartItems.ForEach(c =>
                     {
@@ -146,13 +167,16 @@ namespace Speedbird.Controllers
                         var Bcust = db.FirstOrDefault<BookedCustomer>("select * from BookedCustomer where CartID=@0", c.CartID);
                         if (Bcust!=null && Bcust.CustomerID!= null)
                         {
+                            item.CustID = Bcust.CustomerID;
+                            db.Update(item);
                            var del= db.Execute($"Delete From BookedCustomer Where BCID={Bcust.BCID}");
-                            db.Insert(new BookedCustomer {BookingID=item.BookingID,CustomerID=Bcust.CustomerID });
+
+                            db.Insert(new SR_Cust {ServiceRequestID=item.SRID,CustomerID=(int)Bcust.CustomerID });
                           
                         }
-                        var bd = new BookingDetail
+                        var bd = new SRdetail
                         {
-                            BookingID = item.BookingID,
+                           /* BookingID = item.BookingID,
                             ServiceID = c.ServiceID,
                             ServiceTypeID = c.ServiceTypeID,
                             OptionTypeID = c.OptionTypeID,
@@ -160,7 +184,18 @@ namespace Speedbird.Controllers
                             CheckIn = c.CheckIn,
                             CheckOut = c.CheckOut,
                             NoOfGuests = c.NoOfGuest,
-                            Price = c.OrigPrice
+                            Price = c.OrigPrice*/
+
+                            SRID=item.SRID,
+                            ItemID=c.ServiceID,
+                            ServiceTypeID=c.ServiceTypeID,
+                            OptionTypeID=c.OptionTypeID,
+                            Qty=c.Qty,
+                            Fdate=c.CheckIn,
+                            Tdate=c.CheckOut,
+                            AdultNo=c.NoOfGuest,
+                            SellPrice=c.OrigPrice
+                            
                         };
                         db.Insert(bd);
                      var delc= db.Execute("Delete From Cart Where CartID=@0", c.CartID);

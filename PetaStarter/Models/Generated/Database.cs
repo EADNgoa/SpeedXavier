@@ -970,6 +970,7 @@ namespace Speedbird
     {
 		[Column] public int SRID { get; set; }
 		[Column] public int? CustID { get; set; }
+		[Column] public string UserID { get; set; }
 		[Column] public int? SRStatusID { get; set; }
 		[Column] public string EmpID { get; set; }
 		[Column] public int? EnquirySource { get; set; }
@@ -1009,6 +1010,7 @@ namespace Speedbird
 		[Column] public int? SRID { get; set; }
 		[Column] public int? ServiceTypeID { get; set; }
 		[Column] public int? CarType { get; set; }
+		[Column] public int? ItemID { get; set; }
 		[Column] public string CouponCode { get; set; }
 		[Column] public string Airline { get; set; }
 		[Column] public string Model { get; set; }
@@ -1039,8 +1041,10 @@ namespace Speedbird
 		[Column] public int? DriverID { get; set; }
 		[Column] public string FlightNo { get; set; }
 		[Column] public string SuppInvNo { get; set; }
+		[Column] public decimal? Qty { get; set; }
 		[Column] public int? ParentID { get; set; }
 		[Column] public bool IsReturn { get; set; }
+		[Column] public int? OptionTypeID { get; set; }
 	}
     
 	[TableName("dbo.SRlogs")]

@@ -269,10 +269,7 @@ namespace Speedbird
     public partial class Package
     {
     }
-    [MetadataType(typeof(SRdetailsMetadata))]
-    public partial class SRdetail
-    {
-    }
+ 
     [MetadataType(typeof(AccomodationMetadata))]
     public partial class Accomodation
     {

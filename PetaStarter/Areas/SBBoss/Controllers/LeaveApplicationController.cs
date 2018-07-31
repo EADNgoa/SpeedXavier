@@ -19,6 +19,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         public ActionResult Index(int? page, DateTime? AN)
         {
             page = 1;
+            ViewBag.LvHst = db.Query<LeaveApplicationDets>("Select lt.LeaveTypeName,lb.LeaveYear,lb.LeaveDays,le.LeaveDays as DaysAllowed from LeaveBalance lb inner join LeaveEntitlement le on lb.LeaveTypeID=le.LeaveTypeID inner join LeaveType lt on lt.LeaveTypeID=lb.LeaveTypeID where lb.UserID=@0 and lb.LeaveYear=@1",User.Identity.GetUserId());
             return View("Index", base.BaseIndex<LeaveApplicationDets>(page, " * ", $"LeaveApplications la inner join LeaveType lt on lt.LeaveTypeID=la.LeaveTypeID Where ApplicationDate like '%" + AN + "%'"));
         }
 
