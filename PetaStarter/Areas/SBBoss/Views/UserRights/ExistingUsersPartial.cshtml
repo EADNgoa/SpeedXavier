@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ClickLock.Models.ExistingUserViewModel>
+﻿@model IEnumerable<Speedbird.Areas.SBBoss.Models.ExistingUserViewModel>
    
     @{ int i = 1;}
 
@@ -86,19 +86,21 @@
         </div>
         }
   <script>
-      $(document).ready(function () {
+       $(document).ready(function () {
           $('.Dfuncrec').submit(function (e) {
               e.preventDefault();
               $('#ExistingUsers').html("");
-        
+
               var gp = $('#GroupID').val();
-             
+
               var $form = $(this),
                   url = $form.attr('action');
 
-              var posting = $.post(url, { UserName: $('#UserName').val(), GroupID: $('#GroupID').val(), Id: $form["0"][1].value});
-              posting.done(function (data) { $('#ExistingUsers').load("/UserRights/DelUserRec?GID=" + gp); });
+              var posting = $.post(url, { UserName: $('#UserName').val(), GroupID: $('#GroupID').val(), Id: $form["0"][1].value });
+              posting.done(function (data) {
+                  $('#ExistingUsers').load("@Url.Action("DelUserRec", "UserRights")", { GID: gp });
 
+              });
           });
-      })
+      });
   </script>      

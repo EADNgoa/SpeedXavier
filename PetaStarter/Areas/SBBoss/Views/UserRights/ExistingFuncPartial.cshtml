@@ -1,4 +1,4 @@
-﻿@model IEnumerable< ClickLock.Models.ExistingFuncViewModel>
+﻿@model IEnumerable<Speedbird.Areas.SBBoss.Models.ExistingFuncViewModel>
    
 
 
@@ -37,7 +37,10 @@
                         <Big>@item.Module  ></Big> @item.FunctionName
                     </td>
                     <td>
-                        @item.Writable
+                        @if ((bool)item.Writable)
+                        {<i class="fas fa-check-circle text-success h3" ></i>}
+                        else
+                        { <i class="fas fa-times-circle text-secondary h3" ></i>}
                     </td>
                     <td>
                         @using (Html.BeginForm("DelFuncRec", "UserRights", FormMethod.Post, new { id = "Delrec", @class = "drc" }))
@@ -63,24 +66,24 @@
    
         }
   <script>
-       $(document).ready(function () {
-           $('.drc').submit(function (e) {
-               e.preventDefault();
-               $('#ExistingFunc').html("");
+      $(document).ready(function () {
+          $('.drc').submit(function (e) {
+              e.preventDefault();
+              $('#ExistingFunc').html("");
 
 
-               var gp = $('#GroupID').val();
+              var gp = $('#GroupID').val();
 
 
-               var $form = $(this),
-                   url = $form.attr('action');
+              var $form = $(this),
+                  url = $form.attr('action');
 
-               var posting = $.post(url, { GroupID: gp, FunctionID: $form["0"][1].value  });               
-               posting.done(function (data) {
-                   $('#ExistingFunc').load("/UserRights/DelFuncRec?GID=" + gp);
-                   $('#AvailableFns').load("/UserRights/GetAllOtherFns?GID=" + gp);
-               });
+              var posting = $.post(url, { GroupID: gp, FunctionID: $form["0"][1].value });
+              posting.done(function (data) {
+                  $('#ExistingFunc').load("@Url.Action("DelFuncRec", "UserRights")", { GID: gp });
+                  $('#AvailableFns').load("@Url.Action("GetAllOtherFns", "UserRights")", { GID: gp });
+              });
 
-           });
-       })
+          });
+      });
 </script>          
