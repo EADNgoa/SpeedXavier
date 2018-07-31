@@ -1,4 +1,4 @@
-﻿@model PagedList.IPagedList<ClickLock.Models.ExistingFuncViewModel>
+﻿@model PagedList.IPagedList<Speedbird.Areas.SBBoss.Models.ExistingFuncViewModel>
 @using PagedList.Mvc;
 @{
     ViewBag.Title = "Give Users Permission";
@@ -39,8 +39,7 @@
             @Scripts.Render("~/bundles/jqueryval")
         }
         <script>
-
-            $(document).ready(function () {
+  $(document).ready(function () {
                 $('#AvailableFns').hide();
                 $('*[data-autogroup-url]')
                     .each(function () {
@@ -56,10 +55,9 @@
                                     url = $form.attr('action');
                                 var posting = $.post(url, { GroupName: $('#GroupName').val(), GroupID: $('#GroupID').val() });
                                 posting.done(function (data) {
-                                    $('#ExistingFunc').load("/UserRights/GetExistingFns?GID=" + gp);
+                                    $('#ExistingFunc').load("@Url.Action("GetExistingFns","UserRights")", { GID: gp });
                                     $('#AvailableFns').show();
-                                    $('#AvailableFns').load("/UserRights/GetAllOtherFns?GID=" + gp);
-
+                                    $('#AvailableFns').load("@Url.Action("GetAllOtherFns", "UserRights")", { GID: gp } );
                                 });
                             }
                         });

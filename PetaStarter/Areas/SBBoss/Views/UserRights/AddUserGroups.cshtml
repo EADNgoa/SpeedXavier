@@ -1,4 +1,4 @@
-﻿@model PagedList.IPagedList<ClickLock.Models.ExistingUserViewModel>
+﻿@model PagedList.IPagedList<Speedbird.Areas.SBBoss.Models.ExistingUserViewModel>
 @using PagedList.Mvc;
 @{
     ViewBag.Title = "Add Users To Groups";
@@ -38,7 +38,7 @@
                         </tr>
                         <tbody>
                             @{int i = 1; }
-                            @foreach (var item in (IEnumerable<ClickLock.Group>)ViewBag.Grp)
+                            @foreach (var item in (IEnumerable<Speedbird.Group>)ViewBag.Grp)
                             {
                                 <tr id="@item.GroupID">
                                     <td>
@@ -89,7 +89,9 @@
                     var $form = $(this),
                         url = $form.attr('action');
                     var posting = $.post(url, { UserName: $('#UserName').val(), Group: $('#GroupID').val(), Id: $('#Id').val() });
-                    posting.done(function (data) { $('#ExistingUsers').load("/UserRights/ExistingUserRec?GID=" + gp); });
+                    posting.done(function (data) {
+                        $('#ExistingUsers').load("@Url.Action("ExistingUserRec", "UserRights")", { GID: gp });
+                    });
                 });
 
                 $(".GroupSelector tr").click(function () {
@@ -98,7 +100,7 @@
 
                     var GID = this.id;
                     $('#ExistingUsers').html("");
-                    $('#ExistingUsers').load("/UserRights/ExistingUserRec?GID=" + GID);
+                    $('#ExistingUsers').load("@Url.Action("ExistingUserRec", "UserRights")", { GID: GID });    
                     $("#GroupID").val(GID);
                     $('#AssignUsrDiv').show();
                 });

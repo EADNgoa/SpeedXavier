@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ClickLock.Models.ExistingFuncViewModel>
+﻿@model IEnumerable<Speedbird.Areas.SBBoss.Models.ExistingFuncViewModel>
 
 
 <h4>Set of Availaible Functions</h4>
@@ -33,17 +33,18 @@
     </tbody>
 </table>
 <script>
-    
-            $(document).ready(function () {
-                $('.btnSubmit').on('click', function () {
-                    var gp = $('#GroupID').val();
-                    var sb = $(this).val();
-                    $(this).parent().hide();
-                    $('#ExistingFunc').html("");
 
-                    var posting = $.post('@Url.Action("ExistingFuncRec", "UserRights")', { GID: gp, FID: $(this).data('fid'), sub: sb });
-                    posting.done(function (data) { $('#ExistingFunc').load("/UserRights/GetExistingFns?GID=" + gp); });
+     $(document).ready(function () {
+        $('.btnSubmit').on('click', function () {
+            var gp = $('#GroupID').val();
+            var sb = $(this).val();
+            $(this).parent().hide();
+            $('#ExistingFunc').html("");
 
-                });
-            })
+            var posting = $.post('@Url.Action("ExistingFuncRec", "UserRights")', { GID: gp, FID: $(this).data('fid'), sub: sb });
+            posting.done(function (data) {
+                $('#ExistingFunc').load("@Url.Action("GetExistingFns", "UserRights")", { GID: gp });
+            });
+        });
+    });
 </script>
