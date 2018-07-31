@@ -23,6 +23,7 @@
             <table class="table table-striped">
                 <tr>
                     <th>Date</th>
+                    <th>Bk. No.</th>
                     <th>Name</th>
                     <th>Service</th>
                     <th>Enquiry Source</th>
@@ -31,6 +32,7 @@
                 {
                 <tr>
                     <td>  @($"{item.TDate:dd/MMM/yyyy}")</td>
+                    <td>@item.SRID</td>
                     <td>@item.FName&nbsp;@item.SName</td>
                     <td>@((Speedbird.ServiceTypeEnum)item.ServiceTypeID) </td>
                     <td>@((Speedbird.EnquirySourceEnum)item.EnquirySource) </td>
@@ -76,8 +78,8 @@
                 {
                 <tr>
                     <td>  @($"{item.LogIn:dd/MMM/yyyy}")</td>
-                    <td>  @($"{item.LogIn:HH:MM}")</td>
-                    <td>  @($"{item.LogOut:HH:MM}")</td>
+                    <td>  @($"{item.LogIn:HH:mm}")</td>
+                    <td>  @($"{item.LogOut:HH:mm}")</td>
                 </tr>
                 }
             </table>
@@ -88,19 +90,19 @@
             </div>
             <table class="table table-striped">
                 <tr>
-                    <th>Application Date</th>
-                    <th>Leave Start Date</th>
                     <th>Leave Type</th>
-                    <th>No Of Days</th>
+                    <th>Total</th>
+                    <th>Availed</th>
+                    <th>Remaining</th>
 
                 </tr>
-                @foreach (var item in (IEnumerable<Speedbird.LeaveApplicationDets>)ViewBag.LvApp)
+                @foreach (var item in (IEnumerable<Speedbird.LeaveBalanceRpt>)ViewBag.LvApp)
                 {
-                <tr>
-                    <td>  @($"{item.ApplicationDate:dd/MMM/yyyy}")</td>
-                    <td>  @($"{item.LeaveStartDate:dd/MMM/yyyy}")</td>
+                <tr>                    
                     <td>  @item.LeaveTypeName</td>
-                    <td>  @item.NoOfDays</td>
+                    <td>  @item.TotalLeave</td>
+                    <td>  @item.Availed</td>
+                    <td>  @item.Remaining</td>
                 </tr>
                 }
             </table>
@@ -109,18 +111,3 @@
     </div>
 </div>
 
-
-<br /><br />
-<div class="alert alert-info" role="alert">
-    <h1 class="alert-heading">Spectacular Speedbird !</h1>
-    <p>Welcome! This is the Office section of the Spectacular Speedbird web tool.</p>
-    <hr>
-    <p class="mb-0">We hope you enjoy using it as much as we have enjoyed making it for you.</p>
-    <br />
-    <address>
-        <strong>EEAAtech</strong><br>
-        c/o: Erryl Alvares<br>
-        Miramar<br>
-        <abbr title="Phone">P:</abbr> 9923379793
-    </address>
-</div>
