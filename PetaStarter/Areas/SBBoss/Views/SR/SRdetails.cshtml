@@ -47,7 +47,7 @@
     }
 
     <br />
-    @using (Html.BeginForm("SRdetails", "SR", FormMethod.Post))
+    @using (Html.BeginForm("SRdetails", "SR", FormMethod.Post,new {id="ServiceDets" }))
     {
         @Html.AntiForgeryToken()
 
@@ -77,7 +77,7 @@
                 </div>
                 <div class="input-group col mb-3">
                     <div class="input-group-prepend">@Html.LabelFor(model => model.FromLoc, new { @class = "input-group-text", @id = @Html.IdFor(m => m.FromLoc) + "_lbl" })</div>
-                    @Html.EditorFor(model => model.FromLoc, new { htmlAttributes = new { @type = "text", @class = " form-control" } })
+                    @Html.EditorFor(model => model.FromLoc, new { htmlAttributes = new { @type = "text", @class = " form-control", @onblur = "FLength(this)" } })
                     @Html.ValidationMessageFor(model => model.FromLoc, "", new { @class = "text-danger" })
                 </div>
                 <div class="input-group col mb-3">
@@ -85,15 +85,24 @@
                     <input type="text" id="SupplierName" name="SupplierName" style="color:black;" data-autocomplete-idholder="#SupplierID" value="" data-autocombo-url="@Url.Action("AutoCompleteSup")" class="form-control" />
                     @Html.ValidationMessageFor(model => model.SupplierID, "", new { @class = "text-danger" })
                 </div>
-            
+                <div class="input-group col mb-3">
+                    <div class="input-group-prepend"><span class="input-group-text">Option Type</span></div>
+                    @Html.DropDownListFor(model => model.OptionTypeID, null, htmlAttributes: new { @type = "text", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.OptionTypeID, "", new { @class = "text-danger" })
+                </div>
             </div>
             <div class="form-row">
+                <div class="input-group col mb-3">
+                    <div class="input-group-prepend">Quantity</div>
+                    @Html.EditorFor(model => model.Qty, new { htmlAttributes = new { @type = "text", @class = " form-control", @onblur = "FLength(this)" } })
+                    @Html.ValidationMessageFor(model => model.Qty, "", new { @class = "text-danger" })
+                </div>
                 <div class="input-group col mb-3">
                     <div class="input-group-prepend"><span class="input-group-text"> Invoice No</span></div>
                     @Html.EditorFor(model => model.SuppInvNo, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.SuppInvNo, "", new { @class = "text-danger" })
                 </div>
-                
+
                 <div class="input-group col mb-3">
                     <div class="input-group-prepend"><span class="input-group-text">Contract No</span></div>
                     @Html.EditorFor(model => model.ContractNo, new { htmlAttributes = new { @type = "text", @class = " form-control" } })
@@ -133,7 +142,7 @@
 
 
                 <div class="input-group col mb-3">
-                    <input type="submit" value="Save" class="btn btn-primary" />
+                    <input type="submit" value="Save" class="btn btn-primary"  />
                 </div>
             </div>
         </div>
@@ -182,6 +191,8 @@
     @Scripts.Render("~/bundles/jqueryval")
 }
 <script type="text/javascript" src="~/Content/DataTables/datatables.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/Jquery.form.js"></script>
+
 @if (Model?.SRDID > 0)
 {
     <script>

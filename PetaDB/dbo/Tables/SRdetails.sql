@@ -4,6 +4,8 @@
     [SRID] INT NULL, 
     [ServiceTypeID] INT NULL, 
 	[CarType] INT NULL,
+    [ItemID] INT NULL,
+
 	[CouponCode] VARCHAR(100) NULL,
 	[Airline] VARCHAR(100) NULL, 
 
@@ -39,11 +41,15 @@
     [DriverID] INT NULL, 
     [FlightNo] VARCHAR(50) NULL, 
 	    [SuppInvNo] VARCHAR(50) NULL, 
+	    [Qty] DECIMAL(18, 2) NULL, 
 
     [ParentID] INT NULL, 
     [IsReturn] BIT NOT NULL DEFAULT 0, 
+    [OptionTypeID] INT NULL, 
     CONSTRAINT [FK_SRdetails_ToSR] FOREIGN KEY ([SRID]) REFERENCES [ServiceRequest]([SRID]), 
     CONSTRAINT [FK_SRdetails_ToSupplier] FOREIGN KEY ([SupplierID]) REFERENCES [Supplier]([SupplierID]), 
     CONSTRAINT [FK_SRdetails_ToGuideLanguage] FOREIGN KEY ([GuideLanguageID]) REFERENCES [GuideLanguage]([GuideLanguageID]), 
+	    CONSTRAINT [FK_SRdetails_OptionType] FOREIGN KEY ([OptionTypeID]) REFERENCES [OptionType]([OptionTypeID]), 
+
     CONSTRAINT [FK_SRdetails_ToDriver] FOREIGN KEY ([DriverID]) REFERENCES [Driver]([DriverID])
 )
