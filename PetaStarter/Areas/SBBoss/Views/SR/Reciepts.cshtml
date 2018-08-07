@@ -13,7 +13,7 @@
 <h4>Profit/Loss Summary</h4>
 <table class="table table-striped">
     <tr>
-        <th>Amount Spend</th>
+        <th>Amount Spent</th>
         <th>Amount Recieved</th>
         <th>Total Profit</th>
     </tr>
@@ -38,7 +38,7 @@
         <th>Sell Price</th>
         <th>Tax</th>
         <th>Commsion</th>
-        <th>Total</th>
+        <th>Total Profit</th>
     </tr>
     @foreach (var item in (IEnumerable<Speedbird.SRdetailDets>)ViewBag.Services)
     {
@@ -50,19 +50,59 @@
                 @item.Cost
             </td>
             <td>
-               @item.SellPrice
+                @item.SellPrice
             </td>
             <td>
-              @item.Tax
+                @item.Tax
             </td>
             <td>
-                @item.Commision
+                @item.Commision @item.PercComm
             </td>
             <td>
                 @item.Total
             </td>
         </tr>
     }
+
+</table>
+<br />
+<h4>Sell and Cost price per pax</h4>
+<table class="table table-striped">
+    <tr>
+        <th>Customer Name</th>
+        <th>Cost Price</th>
+        <th>Sell Price</th>
+        <th>Cost Per Pax</th>
+        <th>Sell Cost Per Pax</th>
+    </tr>
+    @{ decimal PcTotal = 0, PsTotal=0;}
+    @foreach (var item in (IEnumerable<Speedbird.PaxDets>)ViewBag.PaxDetail)
+    {
+        <tr>
+        
+            <td>
+                @item.UserName
+            </td>
+            <td>
+                @item.Cost
+            </td>
+            <td>
+                @item.SellPrice
+            </td>
+            <td>
+                @item.PCost
+            </td>
+            <td>
+                @item.PSell
+            </td>
+        </tr>
+        PcTotal += item.PCost;
+        PsTotal += item.PSell;
+    }
+    <tr>
+        <td></td><td></td><td><b>Total:</b></td>
+        <td>@PcTotal</td><td>@PsTotal</td>
+    </tr>
 
 </table>
 <br />

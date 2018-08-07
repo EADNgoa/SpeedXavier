@@ -63,6 +63,8 @@
             @Html.Hidden("OA")
             @Html.Hidden("ManAmt")
             @Html.Hidden("SRID")
+            @Html.Hidden("SRDID")
+
             @Html.Hidden("SupplierID")
 
 
@@ -71,7 +73,7 @@
 
             <div class="row col-12 searchBK">
                 <table class="table table-striped">
-                    
+
                     <tr class="bg-info rounded">
                         <th style="float:right">Enter Supplier Name:</th>
                         <th>
@@ -120,7 +122,7 @@
                     }
                         </td>
                         <td>
-                            @(item.OA-item.PaidAmt  )
+                            @(item.OA - item.PaidAmt )
                         </td>
                         <td>
                             <input name="Amt" type="text" class="form-control" data-save="@item.SRID" />
@@ -130,7 +132,7 @@
 
 
                                 <div class="input-group col mb-3 fa-pull-right">
-                                    <button type="button" class="btn btn-primary SavePayment" name="SavePayment" data-srid="@item.SRID" data-oa=" @(item.OA - item.PaidAmt )">Save</button>
+                                    <button type="button" class="btn btn-primary SavePayment" name="SavePayment" data-srid="@item.SRID" data-supplierid="@item.SupplierID" data-oa=" @(item.OA - item.PaidAmt )">Save</button>
                                 </div>
                             </div>
                         </td>
@@ -217,10 +219,14 @@ else
 <script>
         $('.SavePayment').click(function () {
             var srid = $(this).data('srid');
+            var supid = $(this).data('supplierid');
+
             var oa = $(this).data('oa');
             var ManAmt = $('input[data-save="' + srid + '"]').val();
             var ta = $("#Amount").val();
             $("#SRID").val(srid);
+            $("#SupplierID").val(supid);
+
             $("#OA").val(oa);
             $("#ManAmt").val(ManAmt);
             $("#TotalAmt").val(ta);

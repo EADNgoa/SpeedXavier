@@ -1,4 +1,5 @@
-﻿using Speedbird.Controllers;
+﻿using PagedList;
+using Speedbird.Controllers;
 using System;
 //using System.Collections.Generic;
 using System.Data;
@@ -22,6 +23,24 @@ namespace Speedbird.Areas.SBBoss.Controllers
             return View("Index", base.BaseIndex<Driver>(page, " * ","Driver Where DriverName like '%" + AN + "%'"));
         }
 
+        public ActionResult PaymentList(int? page, int? DriverID, DateTime? fd, DateTime? td)
+        {
+            page = 1;
+            ViewBag.DriverID = DriverID;
+            ViewBag.DriverNamse = db.ExecuteScalar<string>("Select DriveName from Driver Where DriverID=@0", DriverID);
+
+            var sql = new PetaPoco.Sql("Select (Select Sum(Amount) from DRP_SR rs where rs.SRID = sd.SRID)as PaidAmt,Coalesce(sum(sd.Cost),0) as OA,d.DriverName as UserName,sd.SRID from SRdetails sd inner join Driver d on d.DriverID = sd.DriverID  left join DRP_SR rs on rs.SRID =sd.SRID  left join RPdets rd on rd.RPDID =rs.DRPDID where sd.DriverID=@0", DriverID);
+            if (fd != null && td != null)
+                sql.Append($" and cast(Cdate as Date) Between '{fd:yyyy-MM-dd}' and  '{td:yyyy-MM-dd}'");
+
+            sql.Append(" Group By sd.SRID,s.SupplierName");
+            var rec = db.Query<SRBooking>(sql).ToList();
+
+
+            int pageSize = 10;
+            int pageNumber = (page ?? 1);
+            return View(rec.ToPagedList(pageNumber, pageSize));
+        }
 
 
         // GET: Clients/Create
