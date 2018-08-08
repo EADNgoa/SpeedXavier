@@ -44,6 +44,8 @@ namespace Speedbird
     public class SRBooking
     {
         public int SRID { get; set; }
+        public int SRDID { get; set; }
+
         public string cName { get; set; }
         public string UserName { get; set; }
         public decimal PaidAmt { get; set; }
@@ -52,6 +54,21 @@ namespace Speedbird
         public DateTime Cdate { get; set; }
         public decimal OA { get; set; }
         public decimal Remainder { get; set; }
+
+
+    }
+    public class PaxDets
+    {
+        public int SRID { get; set; }
+        public int SRDID { get; set; }
+        public int CustomerID { get; set; }
+
+        public int Qty { get; set; }
+        public string UserName { get; set; }
+        public decimal SellPrice { get; set; }
+        public decimal Cost { get; set; }
+        public decimal PSell { get; set; }
+        public decimal PCost { get; set; }
 
 
     }
@@ -148,6 +165,8 @@ namespace Speedbird
         public string SupplierName { get; set; }
         public decimal Tax { get; set; }
         public decimal Commision { get; set; }
+        public string PercComm { get; set; }
+
         public decimal Total { get; set; }
 
 

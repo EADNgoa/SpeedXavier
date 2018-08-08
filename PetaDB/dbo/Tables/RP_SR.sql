@@ -3,6 +3,7 @@
 	[RPDID] INT NOT NULL, 
     [SRID] Int NOT NULL 
     PRIMARY KEY ([RPDID],[SRID]), 
-    [Amount] DECIMAL(18, 2) NULL
+    [Amount] DECIMAL(18, 2) NULL, 
+    [SRDID] INT NULL
 
 )

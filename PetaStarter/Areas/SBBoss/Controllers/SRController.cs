@@ -14,6 +14,7 @@ using System.Text.RegularExpressions;
 using static PetaStarter.Areas.SBBoss.Models.DataTablesModels;
 using System.Collections;
 using KellermanSoftware.CompareNetObjects;
+using PetaPoco;
 
 namespace Speedbird.Areas.SBBoss.Controllers
 {
@@ -529,6 +530,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             ViewBag.Title = "Profit and loss Details";
             ViewBag.Debit = db.ExecuteScalar<decimal?>("Select sum(Cost) as Cost from SRdetails Where SRID =@0",id);
             ViewBag.Credit = db.ExecuteScalar<decimal?>("Select sum(Amount) as Amt from RP_SR Where SRID =@0", id);
+            ViewBag.PaxDetail = db.Fetch<PaxDets>("; Exec AmtPerPax @@SRID = @0", id).ToList();
 
             var services = db.Query<SRdetailDets>("Select ServiceTypeID,Cost,SellPrice from SRdetails where SRID=@0",id).ToList();
            services.ForEach(s=>
@@ -541,13 +543,14 @@ namespace Speedbird.Areas.SBBoss.Controllers
                     if (c.Perc != null)
                     {
                         s.Commision = c.Perc ?? 0;
+                        s.PercComm = "%";
                         var tot = s.SellPrice * s.Commision / 100;
-                        s.Total = tot + s.SellPrice +s.Tax;
+                        s.Total = s.SellPrice - s.Tax - tot;
                     }
                     else if (c.Amount != null)
                     {
                         s.Commision = c.Amount ?? 0;
-                        s.Total = s.SellPrice + s.Tax + s.Commision;
+                        s.Total = s.SellPrice - s.Tax - s.Commision;
                     }
 
                 });

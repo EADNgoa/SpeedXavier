@@ -4,17 +4,19 @@
         height:30px;
         width:100%;
     }
-    .card {
-        padding: 0 !important;
-        background-color: rgba(215, 209, 209, 0.00);
-    }
+ 
+    
   
 </style>
 
 
-<div class="container-fluid ">
+<div class="card ">
+    <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
+        <span class="h5">Employee Profile</span>
+    </div>
+    <br />
     <div class="row">
-        <div class="col card">
+        <div class="col ">
             <div class="card-header">
                 <header>
                     <center><b>Service Requests</b></center>
@@ -30,17 +32,18 @@
                 </tr>
                 @foreach (var item in (IEnumerable<Speedbird.ServiceRequestDets>)ViewBag.OpenSR)
                 {
-                <tr>
-                    <td>  @($"{item.TDate:dd/MMM/yyyy}")</td>
-                    <td>@item.SRID</td>
-                    <td>@item.FName&nbsp;@item.SName</td>
-                    <td>@((Speedbird.ServiceTypeEnum)item.ServiceTypeID) </td>
-                    <td>@((Speedbird.EnquirySourceEnum)item.EnquirySource) </td>
-                </tr>             
+
+                    <tr>
+                        <td>  @($"{item.TDate:dd/MMM/yyyy}")</td>
+                        <td>@item.FName&nbsp;@item.SName</td>
+                        <td>@((Speedbird.ServiceTypeEnum)item.ServiceTypeID) </td>
+                        <td>@((Speedbird.EnquirySourceEnum)item.EnquirySource) </td>
+                    </tr>
+
                 }
             </table>
         </div>
-        <div class="col card">
+        <div class="col ">
             <div class="card-header">
                 <header><center><b>Commisions</b></center> </header>
             </div>
@@ -49,21 +52,21 @@
                     <th>Service Request No</th>
                     <th>Total Sell Cost</th>
                     <th>Commsion</th>
-                    
+
                 </tr>
                 @foreach (var item in ViewBag.Services)
-                  {
-                    <tr>              
+                {
+                    <tr>
                         <td>@item.SRID</td>
                         <td>@item.SellPrice </td>
                         <td>@item.Total</td>
                     </tr>
-                  }
+                }
             </table>
         </div>
     </div>
     <div class="row">
-        <div class="col card">
+        <div class="col ">
             <div class="card-header">
                 <header> <center><b>Attendance</b></center></header>
             </div>
@@ -72,19 +75,21 @@
                     <th>Date</th>
                     <th>Log In</th>
                     <th>Log Out</th>
-                   
+
                 </tr>
                 @foreach (var item in (IEnumerable<Speedbird.UserLogRecDets>)ViewBag.UserLogs)
                 {
-                <tr>
-                    <td>  @($"{item.LogIn:dd/MMM/yyyy}")</td>
-                    <td>  @($"{item.LogIn:HH:mm}")</td>
-                    <td>  @($"{item.LogOut:HH:mm}")</td>
-                </tr>
+\
+                    <tr>
+                        <td>  @($"{item.LogIn:dd/MMM/yyyy}")</td>
+                        <td>  @($"{item.LogIn:HH:MM}")</td>
+                        <td>  @($"{item.LogOut:HH:MM}")</td>
+                    </tr>
+
                 }
             </table>
         </div>
-        <div class="col card">
+        <div class="col ">
             <div class="card-header">
                 <header><center><b>Leave Applications</b></center> </header>
             </div>
@@ -97,13 +102,14 @@
 
                 </tr>
                 @foreach (var item in (IEnumerable<Speedbird.LeaveBalanceRpt>)ViewBag.LvApp)
-                {
+
                 <tr>                    
                     <td>  @item.LeaveTypeName</td>
                     <td>  @item.TotalLeave</td>
                     <td>  @item.Availed</td>
                     <td>  @item.Remaining</td>
                 </tr>
+
                 }
             </table>
         </div>

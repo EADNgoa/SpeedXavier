@@ -104,7 +104,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             return View(base.BaseCreateEdit<RPdet>(id, "RPDID"));
 
         }
-        public ActionResult Payment(int? SupplierID, bool? IsSearch, decimal? OA, int? id, decimal? ManAmt, int? SRID, decimal? TotalAmt)
+        public ActionResult Payment(int? SupplierID, bool? IsSearch, decimal? OA, int? id, decimal? ManAmt, int? SRID,int? SRDID, decimal? TotalAmt)
         {
             ViewBag.Type = Enum.GetValues(typeof(AmtType)).Cast<AmtType>().Select(v => new SelectListItem { Text = v.ToString(), Value = ((int)v).ToString() }).ToList();
             decimal usedAmt = db.ExecuteScalar<decimal?>("Select Coalesce(sum(Amount),0) From RP_SR Where RPDID =@0", id) ?? 0;
@@ -138,7 +138,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                                     ManAmt = null;
                                 ManAmt += PExist;
                                 OA += PExist;
-                                db.Insert(new RP_SR { SRID = (int)SRID, RPDID = (int)id, Amount = ManAmt ?? OA });
+                                db.Insert(new RP_SR { SRID = (int)SRID, RPDID = (int)id, Amount = ManAmt ?? OA,SRDID=SupplierID });
                                 if (usedAmt == TotalAmt)
                                 {
                                     db.Execute("Update RPDets set AmtUsed=@0 where RPDID=@1", true, id);
@@ -163,17 +163,14 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 }
             }
 
-            var NPbkngs = new PetaPoco.Sql("Select sd.SRID,sd.SupplierID,s.SupplierName as UserName,Sum(sd.Cost) as OA From SRdetails sd inner join Supplier s on s.SupplierID=sd.SupplierID inner join ServiceRequest sr on sr.SRID =sd.SRID Where sd.SupplierID is not null and sr.PayStatusID <>@0",PayType.Cancelled);
+            var NPbkngs = new PetaPoco.Sql("Select (select sum(Amount) from RP_SR where SRID=sd.SRID and SRDID=sd.SupplierID) as PaidAmt,sd.SRID,sd.SupplierID,s.SupplierName as UserName,Sum(sd.Cost) as OA From SRdetails sd inner join Supplier s on s.SupplierID=sd.SupplierID inner join ServiceRequest sr on sr.SRID =sd.SRID Where sd.SupplierID is not null and sr.PayStatusID <>@0",PayType.Cancelled);
             if (SupplierID != null)
             {
                 NPbkngs.Append($" and sd.SupplierID = {SupplierID}");
             }
             NPbkngs.Append(" Group By sd.SupplierID,sd.SRID,s.SupplierName");
             var bkngs = db.Query<SRBooking>(NPbkngs).Where(a => a.OA > 0).ToList();
-            bkngs.ForEach(b=> {
-                b.PaidAmt = db.ExecuteScalar<decimal?>("Select Sum(rp.Amount) as PaidAmt From RP_SR rp inner join RPDets rd on rd.RPDID=rp.RPDID where rp.SRID = @0 and rd.IsPayment =@1",b.SRID,true) ?? 0;
-
-            });
+         
             ViewBag.UnUsedP = db.Fetch<RPDetails>("Select rp.RPDID,rp.Amount,rp.Type,(Select Coalesce(Sum(Amount),0) from RP_SR Where RPDID = rp.RPDID) as UnUsedAmt from RPdets rp  where AmtUsed is Null and IsPayment =@0",true);
             decimal getT = db.ExecuteScalar<decimal?>("Select Amount from RPDets Where RPDID=@0", id) ?? 0;
             ViewBag.TotAmt = getT - usedAmt;

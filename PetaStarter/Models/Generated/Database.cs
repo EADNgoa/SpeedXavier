@@ -920,6 +920,7 @@ namespace Speedbird
 		[Column] public int RPDID { get; set; }
 		[Column] public int SRID { get; set; }
 		[Column] public decimal? Amount { get; set; }
+		[Column] public int? SRDID { get; set; }
 	}
     
 	[TableName("dbo.RPdets")]
