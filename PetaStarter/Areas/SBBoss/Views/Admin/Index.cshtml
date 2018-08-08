@@ -79,7 +79,7 @@
                 </tr>
                 @foreach (var item in (IEnumerable<Speedbird.UserLogRecDets>)ViewBag.UserLogs)
                 {
-\
+
                     <tr>
                         <td>  @($"{item.LogIn:dd/MMM/yyyy}")</td>
                         <td>  @($"{item.LogIn:HH:MM}")</td>
@@ -102,7 +102,7 @@
 
                 </tr>
                 @foreach (var item in (IEnumerable<Speedbird.LeaveBalanceRpt>)ViewBag.LvApp)
-
+                { 
                 <tr>                    
                     <td>  @item.LeaveTypeName</td>
                     <td>  @item.TotalLeave</td>
