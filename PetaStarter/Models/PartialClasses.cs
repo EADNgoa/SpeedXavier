@@ -190,6 +190,14 @@ namespace Speedbird
         public int LeaveDays { get; set; }
         public string LeaveTypeName { get; set; }
     }
+
+    public class LeaveBalanceRpt
+    {
+        public string LeaveTypeName { get; set; }
+        public decimal TotalLeave { get; set; }
+        public decimal Availed { get; set; }
+        public decimal Remaining { get; set; }
+    }
     public  class LeaveApplicationDets
     {
         public int LeaveApplicationID { get; set; }

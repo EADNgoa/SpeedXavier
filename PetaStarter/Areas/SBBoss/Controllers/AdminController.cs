@@ -21,7 +21,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         public ActionResult Index()
         {
             var userid = User.Identity.GetUserId();
-            ViewBag.OpenSR = db.Query<ServiceRequestDets>("Select Top 5 FName,SName,ServiceTypeID,Tdate,EnquirySource from ServiceRequest sr inner join Customer c on c.CustomerID =sr.CustID where sr.SRStatusID = @0", (int)SRStatusEnum.New).ToList();
+            ViewBag.OpenSR = db.Query<ServiceRequestDets>("Select Top 5 sr.SRID, FName,SName,ServiceTypeID,Tdate,EnquirySource from ServiceRequest sr inner join Customer c on c.CustomerID =sr.CustID where sr.SRStatusID = @0", (int)SRStatusEnum.Request).ToList();
             var services = db.Query<SRdetailDets>("Select sd.TDate Tdate,sr.SRID,sr.ServiceTypeID,Cost,SellPrice from ServiceRequest sd inner join SRdetails sr on sr.SRID=sd.SRID where EmpID=@0", userid).ToList();
             services.ForEach(s =>
             {
@@ -51,7 +51,9 @@ namespace Speedbird.Areas.SBBoss.Controllers
             ViewBag.Services = sRdetailDet;
 
             ViewBag.UserLogs = db.Query<UserLogRecDets>("Select Top 5 * from UserLogRec Where UserID=@0 Order By UserLogID Desc",userid).ToList();
-            ViewBag.LvApp = db.Query<LeaveApplicationDets>("Select Top 5 LeaveTypeName,LeaveStartDate,NoOfDays,ApplicationDate From LeaveApplications la inner join LeaveType lt on lt.LeaveTypeID=la.LeaveTypeID where UserID=@0 and StatusID=@1 and Year(LeaveStartDate)=@2",userid,LeaveApplicationStatusEnum.Approved,DateTime.Now.Year).ToList();
+            ViewBag.LvApp = db.Query<LeaveBalanceRpt>("select t.LeaveTypeName, e.LeaveDays as TotalLeave, b.LeaveDays as Availed, (e.LeaveDays-b.LeaveDays) as Remaining  " +
+                "from LeaveEntitlement e inner join LeaveType t on e.LeaveTypeID=t.LeaveTypeID left join LeaveBalance b on e.LeaveTypeID=b.LeaveTypeID " +
+                "where e.LeaveYear =year(getdate()) and (UserID is null or UserID=@0)", userid).ToList();
             return View("Index");
         }
 
