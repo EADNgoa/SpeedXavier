@@ -2,35 +2,33 @@
     <thead></thead>
     @if (ViewBag.Reciepts != null)
     {
-        <tr class="bg-primary rounded">
-            <td style="float:right">Enter Customer Name:</td>
-            <th>
-                @Html.Editor("CustName", new { htmlAttributes = new { @class = "form-control " } })
-            </th>
-            <td style="float:right">Enter Agent Name:</td>
+    <tr class="bg-info rounded">
+        <th style="float:right">Enter Customer Name:</th>
+        <th>
+            @Html.Editor("CustName", new { htmlAttributes = new { @class = "form-control " } })
+        </th>
+        <th style="float:right">Enter Agent Name:</th>
 
-            <th>
-                @Html.Editor("AgentName", new { htmlAttributes = new { @class = "form-control w" } })
+        <th>
+            @Html.Editor("AgentName", new { htmlAttributes = new { @class = "form-control w" } })
 
-            </th>
-            <td>
-            <td class="bg-white"><b>Amount Left:</b> <u>@ViewBag.TotAmt</u></td>
-
-        </tr>
+        </th>
+        <th class="bg-white"><b>Amount Left:</b> <u>@ViewBag.TotAmt</u></th>
+    </tr>
     }
     else if (ViewBag.Payments != null)
     {
-        <tr class="bg-primary rounded">
-            <td style="float:right">Enter Supplier Name:</td>
+        <tr class="bg-info rounded">
+            <th style="float:right">Enter Supplier Name:</th>
             <th>
                 <input type="text" id="SupplierName" name="SupplierName" style="color:black;" data-autocomplete-idholder="#SupplierID" value="" data-autocombo-url="@Url.Action("AutoCompleteSup")" class="form-control" />
             </th>
-            <td style="float:right"></td>
+            <th style="float:right"></th>
 
             <th>
 
             </th>
-            <td class="bg-white"><b>Amount Left:</b> <u>@ViewBag.TotAmt</u></td>
+            <th class="bg-white"><b>Amount Left:</b> <u>@ViewBag.TotAmt</u></th>
         </tr>
     }
     else if (ViewBag.DReciepts != null)
