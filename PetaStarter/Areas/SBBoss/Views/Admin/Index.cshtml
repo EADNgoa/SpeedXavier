@@ -26,8 +26,7 @@
                 <tr>
                     <th>Date</th>
                     <th>Bk. No.</th>
-                    <th>Name</th>
-                    <th>Service</th>
+                    <th>Name</th>                    
                     <th>Enquiry Source</th>
                 </tr>
                 @foreach (var item in (IEnumerable<Speedbird.ServiceRequestDets>)ViewBag.OpenSR)
@@ -36,7 +35,7 @@
                     <tr>
                         <td>  @($"{item.TDate:dd/MMM/yyyy}")</td>
                         <td>@item.FName&nbsp;@item.SName</td>
-                        <td>@((Speedbird.ServiceTypeEnum)item.ServiceTypeID) </td>
+                        <td>@((Speedbird.ServiceTypeEnum)item.ServiceTypeID) </td>                        
                         <td>@((Speedbird.EnquirySourceEnum)item.EnquirySource) </td>
                     </tr>
 
