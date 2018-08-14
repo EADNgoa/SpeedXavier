@@ -207,7 +207,9 @@ namespace Speedbird.Areas.SBBoss.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [EAAuthorize(FunctionName = "Package", Writable = true)]
-        public ActionResult  Manage([Bind(Include = "PackageID,ServiceTypeID,PackageName,Description,Duration,Itinerary,Highlights,Dificulty,GroupSize,GuideLanguageID,StartTime,Inclusion,Exclusion,CouponCode, MeetAndInfo")] Package item, System.Collections.Generic.List<int> GeoTreeID )
+        public ActionResult  Manage([Bind(Include = "PackageID,ServiceTypeID,PackageName,Description,Duration,Itinerary,Highlights,Dificulty,GroupSize,GuideLanguageID,StartTime,Inclusion,Exclusion,CouponCode, MeetAndInfo")] Package item,
+            System.Collections.Generic.List<int> GeoTreeID, System.Collections.Generic.List<int> SupID, string ContID, System.Collections.Generic.List<int> ActID, System.Collections.Generic.List<int> CatID,
+            System.Collections.Generic.List<int> AtrID, System.Collections.Generic.List<int> LanID, System.Collections.Generic.List<int> AttID, System.Collections.Generic.List<string> IcnID)
         {
             using (var transaction = db.GetTransaction())
             {
@@ -215,16 +217,19 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 {
                     var r = (item.PackageID > 0) ? db.Update(item) : db.Insert(item);
 
-
-                    db.Execute("Delete from Package_GeoTree where packageId=@0", item.PackageID);
-                    GeoTreeID.ForEach(g =>
-                    {
-                        db.Insert(new Package_GeoTree { GeoTreeID = g, PackageID = item.PackageID });
-                    });
+                    GeoSave(item.PackageID, GeoTreeID);
+                    ActSave(item.PackageID, ActID);
+                    CatSave(item.PackageID, CatID);
+                    AttSave(item.PackageID, AttID);
+                    LanSave(item.PackageID, LanID);
+                    AtrSave(item.PackageID, AtrID);                    
+                    SupSave(item.PackageID, SupID, ContID);
+                    IcnSave(item.PackageID, IcnID, item.ServiceTypeID.Value);
 
                     transaction.Complete();
                     return new JsonResult { Data = true };
-                } else
+                }
+                else
                 {
                     transaction.Dispose();
                     return new JsonResult { Data = false };
@@ -233,6 +238,14 @@ namespace Speedbird.Areas.SBBoss.Controllers
             }
             
         }
+
+        private void GeoSave(int packageId, List<int> GeoTreeID)
+        {
+            db.Execute($"Delete from Package_GeoTree where packageId={packageId}");
+            if (GeoTreeID?.Count>0)
+                GeoTreeID.ForEach(g => db.Insert(new Package_GeoTree { GeoTreeID = g, PackageID = packageId }));
+        }
+
         [EAAuthorize(FunctionName = "Package", Writable = true)]
         public ActionResult PackPrice(int? id,int? sid, int? EID)
         {
@@ -368,8 +381,13 @@ namespace Speedbird.Areas.SBBoss.Controllers
         public void ActSave(int PackageId, IEnumerable<int> ActIds)
         {
             db.Delete<Package_Activity>("Where PackageId=@0", PackageId);
-            foreach (var item in ActIds)
-                db.Insert(new Package_Activity { PackageID = PackageId, ActivityID = item });
+            if (ActIds?.Count() > 0)
+            {
+                foreach (var item in ActIds)
+                {
+                    db.Insert(new Package_Activity { PackageID = PackageId, ActivityID = item });
+                }
+            }
         }
 
         //Categories
@@ -387,8 +405,13 @@ namespace Speedbird.Areas.SBBoss.Controllers
         public void CatSave(int PackageId, IEnumerable<int> ActIds)
         {
             db.Delete<Package_Category>("Where PackageId=@0", PackageId);
-            foreach (var item in ActIds)
-                db.Insert(new Package_Category { PackageID = PackageId, CategoryID = item });
+            if (ActIds?.Count() > 0)
+            {
+                foreach (var item in ActIds)
+                {
+                    db.Insert(new Package_Category { PackageID = PackageId, CategoryID = item });
+                }
+            }
         }
 
         //Attractions
@@ -406,8 +429,13 @@ namespace Speedbird.Areas.SBBoss.Controllers
         public void AttSave(int PackageId, IEnumerable<int> ActIds)
         {
             db.Delete<Package_Attraction>("Where PackageId=@0", PackageId);
-            foreach (var item in ActIds)
-                db.Insert(new Package_Attraction { PackageID = PackageId, AttractionID = item });
+            if (ActIds?.Count() > 0)
+            {
+                foreach (var item in ActIds)
+                {
+                    db.Insert(new Package_Attraction { PackageID = PackageId, AttractionID = item });
+                }
+            }
         }
 
         //Language
@@ -425,8 +453,13 @@ namespace Speedbird.Areas.SBBoss.Controllers
         public void LanSave(int PackageId, IEnumerable<int> ActIds)
         {
             db.Delete<Package_Language>("Where PackageId=@0", PackageId);
-            foreach (var item in ActIds)
-                db.Insert(new Package_Language { PackageId = PackageId, GuideLanguageId = item });
+            if (ActIds?.Count() > 0)
+            {
+                foreach (var item in ActIds)
+                {
+                    db.Insert(new Package_Language { PackageId = PackageId, GuideLanguageId = item });
+                }
+            }
         }
 
         //Attributes
@@ -442,8 +475,13 @@ namespace Speedbird.Areas.SBBoss.Controllers
         public void AtrSave(int PackageId, IEnumerable<int> ActIds)
         {
             db.Delete<Package_Attribute>("Where PackageId=@0", PackageId);
-            foreach (var item in ActIds)
-                db.Insert(new Package_Attribute { PackageID = PackageId, AttributeID = item, ServiceTypeId = (int) ServiceTypeEnum.Packages  });
+            if (ActIds?.Count()>0)
+            {
+                foreach (var item in ActIds)
+                {
+                    db.Insert(new Package_Attribute { PackageID = PackageId, AttributeID = item, ServiceTypeId = (int) ServiceTypeEnum.Packages  });
+                }
+            }
         }
 
         //Icons
@@ -459,15 +497,10 @@ namespace Speedbird.Areas.SBBoss.Controllers
         public void IcnSave(int PackageId, IEnumerable<string> IcnNames, int ServiceTypeId)
         {
             db.Delete<Icon>("Where ServiceId=@0 and ServiceTypeId=@1", PackageId, ServiceTypeId);
-            try
+            if (IcnNames?.Count()>0)
             {
                 foreach (var item in IcnNames)
                     db.Insert(poco: new Icon { ServiceId = PackageId, IconPath = item, ServiceTypeId = ServiceTypeId });
-            }
-            catch (Exception e)
-            {
-
-                throw e;
             }
         }
 
@@ -486,6 +519,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         {
 
             //Clean and split Contract nos
+            Conts = Conts ?? "";
             Conts= Conts.Replace("\n", "");
             var SplitConts = Conts.Split(',');
             var GoodConts = SplitConts.Where(c => c.Trim().Length > 1).Select(c=>c.Trim()).ToArray();
@@ -497,10 +531,13 @@ namespace Speedbird.Areas.SBBoss.Controllers
             db.Delete<Package_Supplier>("Where PackageId=@0", PackageId);
 
             int i = 0;
-            foreach (var item in ActIds)
+            if (ActIds?.Count() > 0)
             {
-                db.Insert(new Package_Supplier { PackageID = PackageId, SupplierID = item,ServiceTypeID=(int)ServiceTypeEnum.Packages, ContractNo = GoodConts[i] });
-                i++;
+                foreach (var item in ActIds)
+                {
+                    db.Insert(new Package_Supplier { PackageID = PackageId, SupplierID = item,ServiceTypeID=(int)ServiceTypeEnum.Packages, ContractNo = GoodConts[i] });
+                    i++;
+                }
             }
         }
         #endregion

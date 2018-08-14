@@ -24,6 +24,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         public ActionResult Index(int? page, string AN)
         {
             ViewBag.Title = "Service Requests";
+            ViewBag.SRStatusID = Enum.GetValues(typeof(SRStatusEnum)).Cast<SRStatusEnum>().Where(v => v > SRStatusEnum.NoAction).Select(v => new SelectListItem { Text = v.ToString(), Value = ((int)v).ToString() }).ToList();
             return View();
         }
 
@@ -63,22 +64,43 @@ namespace Speedbird.Areas.SBBoss.Controllers
             var columnSearch = parameters.Columns.Select(s => s.Search.Value).Take(SRColumns.Count()).ToList();
 
             //XMLPath uses nested queries so to avoid that we construct these 4 filters ourselves
-            string CustName = "";
+            string CustFName = "";
+            string CustSName = "";
+            string Cemail = "";
+            string Cphone = "";
             string AgentName = "";
 
-            if (columnSearch[2]?.Length > 0) { CustName = columnSearch[2]; columnSearch[2] = null; }
-            if (columnSearch[6]?.Length > 0) { AgentName = columnSearch[6]; columnSearch[6] = null; }
+            if (columnSearch[2]?.Length > 0) { CustFName = columnSearch[2]; columnSearch[2] = null; }
+            if (columnSearch[3]?.Length > 0) { CustSName = columnSearch[3]; columnSearch[3] = null; }
+            if (columnSearch[4]?.Length > 0) { Cphone = columnSearch[4]; columnSearch[4] = null; }
+            if (columnSearch[5]?.Length > 0) { Cemail = columnSearch[5]; columnSearch[5] = null; }
+            if (columnSearch[7]?.Length > 0) { AgentName = columnSearch[7]; columnSearch[7] = null; }
 
 
 
-            var sql = new PetaPoco.Sql($"Select * from ServiceRequest s where SRStatusId>@0", (int)SRStatusEnum.New);
+            var sql = new PetaPoco.Sql($"Select * from ServiceRequest s"); 
             var fromsql = new PetaPoco.Sql();
-            var wheresql = new PetaPoco.Sql();
+            var wheresql = new PetaPoco.Sql(" where SRStatusId >@0", (int)SRStatusEnum.NoAction);
 
-            if (CustName.Length > 0)
+            if (CustFName.Length > 0 || CustSName.Length > 0 || Cemail.Length > 0 || Cphone.Length > 0)
             {
-                fromsql.Append(", Customer c");
-                wheresql.Append($"and  c.CustomerID=s.CustomerID and CustomerName like '%{CustName}%'");
+                fromsql.Append(", Customer c ");
+                wheresql.Append($" and  c.CustomerID=s.CustID ");
+
+                if (CustFName.Length > 0)
+                    wheresql.Append($" and c.FName like '%{CustFName}%' ");
+                if (CustSName.Length > 0)
+                    wheresql.Append($" and c.SName like '%{CustSName}%' ");
+                if (Cemail.Length > 0)
+                    wheresql.Append($" and c.email like '%{Cemail}%' ");
+                if (Cphone.Length > 0)
+                    wheresql.Append($" and c.phone like '%{Cphone}%' ");
+            }
+
+            if (AgentName.Length>0)
+            {
+                fromsql.Append(", AspNetUsers u");
+                wheresql.Append($" and  u.id=s.AgentId and u.email like '%{AgentName}%' ");
             }
 
             wheresql.Append($"{GetWhereWithOrClauseFromColumns(SRColumns, columnSearch)}");
@@ -87,7 +109,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
             try
             {
-                var res = db.Query<ServiceRequestDets>(sql).Skip(parameters.Start).Take(parameters.Length).ToList();
+                var cnt = db.Query<ServiceRequestDets>(sql).ToList();
+                var res = cnt.Skip(parameters.Start).Take(parameters.Length).ToList();
 
                 res.ForEach(r =>
                 {
@@ -106,8 +129,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 {
                     draw = parameters.Draw,
                     data = res,
-                    recordsFiltered = 10,
-                    recordsTotal = res.Count()
+                    recordsFiltered = cnt.Count,
+                    recordsTotal = cnt.Count
                 };
                 return Json(dataTableResult, JsonRequestBehavior.AllowGet);
             }
@@ -181,7 +204,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                         }
                         if (i == searchValues.Count - 1)
                         {
-                            subQuery = subQuery.Remove(subQuery.LastIndexOf("and"), 2).Insert(subQuery.LastIndexOf("and"), "");
+                            subQuery = subQuery.Remove(subQuery.LastIndexOf("and"), 3);
                         }
                     }
                 }
@@ -203,21 +226,15 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
         private string[] SRColumns => new string[]
         {
-            "SRID",
-            "DT",
+            "SRID", 
+            "Date",
             "FName",
             "SName",
             "Phone",
-
-            "Status",
-            "AgentName",
-            "Src",
-
             "Email",
-            "EnquirySouce",
+            "Src",
             "AgentName",
             "SRStatusID"
-
         };
         private string[] SRDetColumns => new string[]
        {
@@ -263,7 +280,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             }
 
 
-            ViewBag.SRStatusID = Enum.GetValues(typeof(SRStatusEnum)).Cast<SRStatusEnum>().Select(v => new SelectListItem { Text = v.ToString(), Value = ((int)v).ToString() }).ToList();
+            ViewBag.SRStatusID = Enum.GetValues(typeof(SRStatusEnum)).Cast<SRStatusEnum>().Where(v => v > SRStatusEnum.NoAction).Select(v => new SelectListItem { Text = v.ToString(), Value = ((int)v).ToString() }).ToList();            
 
             ViewBag.EnquirySource = Enum.GetValues(typeof(EnquirySourceEnum)).Cast<EnquirySourceEnum>().Select(v => new SelectListItem { Text = v.ToString(), Value = ((int)v).ToString() }).ToList();
             ViewBag.ServiceTypeID = Enum.GetValues(typeof(ServiceTypeEnum)).Cast<ServiceTypeEnum>().Select(v => new SelectListItem { Text = v.ToString(), Value = ((int)v).ToString() }).ToList();
@@ -378,7 +395,11 @@ namespace Speedbird.Areas.SBBoss.Controllers
             ViewBag.Title = "Manage Services";
             ViewBag.SRs = db.FirstOrDefault<ServiceRequestDets>("Select * From ServiceRequest sr inner join Customer c on c.CustomerID=sr.CustID Where SRID=@0", id);
             ViewBag.SRDets = db.Fetch<SRdetail>("Select * from SRdetails where SRID =@0", id);
-            ViewBag.ServiceTypeID = Enum.GetValues(typeof(ServiceTypeEnum)).Cast<ServiceTypeEnum>().Select(v => new SelectListItem { Text = v.ToString(), Value = ((int)v).ToString() }).ToList();
+            List<SelectListItem> ServiceTypeID = Enum.GetValues(typeof(ServiceTypeEnum)).Cast<ServiceTypeEnum>().Select(v => new SelectListItem { Text = v.ToString(), Value = ((int)v).ToString() }).ToList();
+            var defaultServType = db.Single<ServiceRequest>(id).ServiceTypeID;
+            var selST= ServiceTypeID.First<SelectListItem>(a => int.Parse(a.Value) == defaultServType);
+            selST.Selected = true;
+            ViewBag.ServiceTypeID = ServiceTypeID;
             ViewBag.OptionTypeID = new SelectList(db.Fetch<OptionType>("Select OptionTypeID,OptionTypeName from OptionType where ServiceTypeID=@0", (int)ServiceTypeEnum.Accomodation), "OptionTypeID", "OptionTypeName");
 
             return PartialView(rec);

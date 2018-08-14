@@ -93,7 +93,7 @@
             </div>
             <div class="form-row">
                 <div class="input-group col mb-3">
-                    <div class="input-group-prepend">Quantity</div>
+                    <div class="input-group-prepend"><span class="input-group-text">Quantity</span></div>
                     @Html.EditorFor(model => model.Qty, new { htmlAttributes = new { @type = "text", @class = " form-control", @onblur = "FLength(this)" } })
                     @Html.ValidationMessageFor(model => model.Qty, "", new { @class = "text-danger" })
                 </div>

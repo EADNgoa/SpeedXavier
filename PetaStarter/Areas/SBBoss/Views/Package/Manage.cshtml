@@ -50,23 +50,7 @@
 <script>
     $(function () {
 
-        //Submit form
-        $('#SaveDetails').click(function () {
-            var detFrm = $('#detFrm');
-
-            //Save the details form if it exists else just move on.
-            if (typeof (detFrm[0]) == 'object') {
-                $.ajax({
-                    url: detFrm.action,
-                    type: 'post',
-                    data: $(detFrm).serialize(),
-                    success: function () {
-                        window.location.assign('@Url.Action("Index", new { sid = (int)ViewBag.sid })');
-                    }
-                });
-            }
-        });
-
+        
 
         $('#DetailsBtn').click(function () {
             $('#TabContent').load(

@@ -22,16 +22,16 @@
                 </tr>
                 <tr role="row">
                     <th><input type="text" class="form-control" placeholder="N#"></th>
-                    <th><input type="date" class="form-control" placeholder="Filter Date"></th>
+                    <th></th>
 
                     <th><input type="text" class="form-control" placeholder="Filter First Name"></th>
                     <th><input type="text" class="form-control" placeholder="Filter Sur Name"></th>
 
                     <th><input type="text" class="form-control" placeholder="Filter Phone"></th>
                     <th><input type="text" class="form-control" placeholder="Filter Email"></th>
-                    <th><input type="text" class="form-control" placeholder="Filter Enquiry Source"></th>
-                    <th><input type="text" class="form-control" placeholder="Filter Agent Name"></th>
-                    <th><input type="text" class="form-control" placeholder="Filter Status"></th>
+                    <th></th>
+                    <th><input type="text" class="form-control" placeholder="Agent Name"></th>
+                    <th>@Html.DropDownList("SRStatus",(IEnumerable<SelectListItem>)ViewBag.SRStatusID, new { @class = "form-control"})</th>
 
 
                     <th width="5%"></th>
@@ -63,7 +63,7 @@
         var oTable = $('#SRTbl').DataTable({
 
             serverSide: true,
-            searching: true,
+            
             ajax: {
                 context: this,
                 "type": "POST",
@@ -137,6 +137,12 @@
 
 
         $("#SRTbl thead th input[type=text]").on('change', function () {
+            oTable.column($(this).parent().index() + ':visible')
+                .search(this.value)
+                .draw();
+        });
+
+        $("#SRStatus").on('change', function () {
             oTable.column($(this).parent().index() + ':visible')
                 .search(this.value)
                 .draw();
