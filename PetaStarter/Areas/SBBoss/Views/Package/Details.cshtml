@@ -170,7 +170,7 @@
     <div class="input-group col mb-3">
         <div class="input-group-prepend"><span class="input-group-text">Attributes</span></div>
         <select id="AtrID" name="AtrID" class="form-control sel2Lkup" data-setu="AtrSave" data-geturl="GetAtr" multiple="multiple">
-            @if (ViewBag.GeoId != null)
+            @if (ViewBag.Atrs != null)
             {
                 foreach (var o in ViewBag.Atrs)
                 {
@@ -185,7 +185,7 @@
     <div class="input-group col mb-3">
         <div class="input-group-prepend"><span class="input-group-text">Languages</span></div>
         <select id="LanID" name="LanID" class="form-control sel2Lkup" data-setu="LanSave" multiple="multiple">
-            @if (ViewBag.GeoId != null)
+            @if (ViewBag.Lang != null)
             {
                 foreach (var o in ViewBag.Lang)
                 {
@@ -197,7 +197,7 @@
     <div class="input-group col mb-3">
         <div class="input-group-prepend"><span class="input-group-text">Attractions</span></div>
         <select id="AttID" name="AttID" class="form-control sel2Lkup" data-setu="AttSave" multiple="multiple">
-            @if (ViewBag.GeoId != null)
+            @if (ViewBag.Atts != null)
             {
                 foreach (var o in ViewBag.Atts)
                 {
@@ -209,7 +209,7 @@
     <div class="input-group col mb-3">
         <div class="input-group-prepend"><span class="input-group-text">Icons</span></div>
         <select id="IcnID" name="IcnID" class="form-control" data-setu="IcnSave" multiple="multiple">            
-            @if (ViewBag.GeoId != null)
+            @if (ViewBag.Icns != null)
             {
                 foreach (var o in ViewBag.Icns)
                 {
@@ -230,7 +230,25 @@
 
 <script>
     $(function(){
-               
+
+        //Submit form when the Save button is clicked
+        $('#SaveDetails').click(function () {
+            var detFrm = $('#detFrm');
+
+            //Save the details form if it exists else just move on.
+            if (typeof (detFrm[0]) == 'object') {
+                $.ajax({
+                    url: detFrm.action,
+                    type: 'post',
+                    data: $(detFrm).serialize(),
+                    success: function () {
+                        window.location.assign('@Url.Action("Index", new { sid = (int)ViewBag.sid })');
+                    }
+                });
+            }
+        });
+
+
 
         //Icons
         function setupIcons(data) {

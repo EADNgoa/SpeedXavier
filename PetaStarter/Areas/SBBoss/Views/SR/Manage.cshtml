@@ -76,7 +76,8 @@
             var detFrm = $('#detFrm');
 
             //Save the details form if it exists else just move on.
-                $.ajax({
+            if (typeof (detFrm[0]) == 'object') {
+            $.ajax({
                     type: 'post',
                     data: $(detFrm).serialize()
                 }).done(function () {
@@ -84,7 +85,13 @@
                         '@Url.Action("SRdetails", new { id = (int)ViewBag.SRID })'
                     );
 
-                });
+                    });
+            } else {
+                $('#TabContent').load(
+                    '@Url.Action("SRdetails", new { id = (int)ViewBag.SRID })'
+                    );
+
+            }
         });
 
         $('#ImgBtn').click(function () {

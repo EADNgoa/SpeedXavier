@@ -15,7 +15,7 @@
         </div>
         <div class="input-group col mb-3">
             <div class="input-group-prepend"><span class="input-group-text">No Of Adults</span></div>
-            @Html.EditorFor(model => model.AdultNo, new { htmlAttributes = new { @type = "text", @class = "eadate form-control" } })
+            @Html.EditorFor(model => model.AdultNo, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
             @Html.ValidationMessageFor(model => model.AdultNo, "", new { @class = "text-danger" })
 
         </div>

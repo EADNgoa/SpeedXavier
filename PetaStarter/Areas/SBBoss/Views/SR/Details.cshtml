@@ -207,6 +207,19 @@
                 $('#ExistingCust').load("/SBBoss/SR/ExistingCustRec?fn=" + fname + "&&sn=" + sname + "&&ph=" + phone + "&&em=" + email);
             }
 
-        })
+        });
+
+        $('*[data-autocombo-url]').each(function () {
+            $(this).autocomplete({
+                source: $(this).data("autocombo-url"),
+                minLenght: 3,
+                delay: 500,
+                select: function (event, ui) {
+                    $($(this).data("autocomplete-idholder")).val(ui.item.id);
+                }
+            });
+        });
     });
+
+    
 </script>

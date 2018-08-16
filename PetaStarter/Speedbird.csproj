@@ -240,8 +240,6 @@
     <Compile Include="Areas\SBBoss\Models\DataTablesModels.cs" />
     <Compile Include="Areas\SBBoss\Models\ExistingFuncViewModels.cs" />
     <Compile Include="Areas\SBBoss\Models\ExistingUserViewModels.cs" />
-    <Compile Include="Areas\SBBoss\Models\Metadata.cs" />
-    <Compile Include="Areas\SBBoss\Models\PartialClasses.cs" />
     <Compile Include="Areas\SBBoss\SBBossAreaRegistration.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Areas\SBBoss\Controllers\AttractionController.cs" />
