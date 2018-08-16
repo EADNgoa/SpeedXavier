@@ -121,6 +121,8 @@ namespace Speedbird
         public DateTime LogOut { get; set; }
         public string UserName { get; set; }
     }
+
+    [MetadataType(typeof(SRdetailsMetadata))]
     public partial class SRdetail
     {
         public string tstr { get { return $"{Tdate:dd MMM yyyy hh:mm}"; } }

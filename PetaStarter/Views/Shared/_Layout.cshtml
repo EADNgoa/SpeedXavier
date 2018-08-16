@@ -27,7 +27,7 @@
 
     @Scripts.Render("~/bundles/jquerydtpicker")
     <script src="/Scripts/jquery.masonry.min.js"></script>
-    <script src="/Scripts/imagesloaded.pkgd.min.js"></script>
+    @*<script src="/Scripts/imagesloaded.pkgd.min.js"></script>*@
     <div id="TopBody">
         @RenderBody()
         
@@ -79,7 +79,7 @@
             }).attr('type', 'text').attr('autocomplete', 'off');
 
             //Disable the browsers default date picker
-            jQuery.validator.methods["date"] = function (value, element) { return true; }
+            //jQuery.validator.methods["date"] = function (value, element) { return true; }
 
 
 

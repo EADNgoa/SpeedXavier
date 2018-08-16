@@ -5,9 +5,6 @@
 }
 
 <style>
-   
-
-
     /*for Datatables*/
     td.details-control {
         background: url('/Content/DataTables/DataTables-1.10.16/images/details_open.png') no-repeat center center;
@@ -94,7 +91,7 @@
             <div class="form-row">
                 <div class="input-group col mb-3">
                     <div class="input-group-prepend"><span class="input-group-text">Quantity</span></div>
-                    @Html.EditorFor(model => model.Qty, new { htmlAttributes = new { @type = "text", @class = " form-control", @onblur = "FLength(this)" } })
+                    @Html.EditorFor(model => model.Qty, new { htmlAttributes = new { @type = "text", @class = " form-control"} })
                     @Html.ValidationMessageFor(model => model.Qty, "", new { @class = "text-danger" })
                 </div>
                 <div class="input-group col mb-3">
