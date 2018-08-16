@@ -38,13 +38,13 @@
         </div>
         <div class="input-group col mb-3">
             <div class="input-group-prepend"><span class="input-group-text">PNR No</span></div>
-            @Html.EditorFor(model => model.PNRno, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+            @Html.EditorFor(model => model.PNRno, new { htmlAttributes = new { @type = "text", @class = "form-control", @onblur = "PNRLength(this)" } })
             @Html.ValidationMessageFor(model => model.PNRno, "", new { @class = "text-danger" })
 
         </div>
         <div class="input-group col mb-3">
             <div class="input-group-prepend"><span class="input-group-text">Flight No</span></div>
-            @Html.EditorFor(model => model.FlightNo, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+            @Html.EditorFor(model => model.FlightNo, new { htmlAttributes = new { @type = "text", @class = "form-control", @onblur = "FlightLength(this)" } })
             @Html.ValidationMessageFor(model => model.FlightNo, "", new { @class = "text-danger" })
 
         </div>
@@ -55,13 +55,13 @@
     <div class="form-row">
         <div class="input-group col mb-3">
             <div class="input-group-prepend"><span class="input-group-text">Airline</span></div>
-            @Html.EditorFor(model => model.Airline, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+            @Html.EditorFor(model => model.Airline, new { htmlAttributes = new { @type = "text", @class = "form-control", @onblur = "FLength(this)" } })
             @Html.ValidationMessageFor(model => model.Airline, "", new { @class = "text-danger" })
 
         </div>
         <div class="input-group col mb-3">
             <div class="input-group-prepend"><span class="input-group-text">Destination Airport</span></div>
-            @Html.EditorFor(model => model.ToLoc, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+            @Html.EditorFor(model => model.ToLoc, new { htmlAttributes = new { @type = "text", @class = "form-control", @onblur = "FLength(this)" } })
             @Html.ValidationMessageFor(model => model.ToLoc, "", new { @class = "text-danger" })
 
         </div>
@@ -135,7 +135,7 @@
 <script>
 
 
-    function PNRLength(el) {
+    function FlightLength(el) {
         if (el.value.length != 5) {
             alert("length must be exactly 5 characters")
             return false;
@@ -148,23 +148,13 @@
             return false;
         }
     }
-    function PNRLength(el) {
-        if (el.value.length != 3) {
-            alert("length must be exactly 3 characters")
-            return false;
-        }
-    }
+
     function FLength(el) {
         if (el.value.length != 3) {
             alert("length must be exactly 3 characters")
             return false;
         }
-    } function TLength(el) {
-        if (el.value.length != 3) {
-            alert("length must be exactly 3 characters")
-            return false;
-        }
-    }
+    } 
     $('.eadatetime').datetimepicker({
         dateFormat: "dd-MM-yy",
         showButtonPanel: true,

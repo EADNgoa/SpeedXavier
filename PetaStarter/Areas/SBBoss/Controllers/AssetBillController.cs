@@ -27,6 +27,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
         [EAAuthorize(FunctionName = "Asset Bill", Writable = true)]
         public ActionResult Manage(int? id)
         {
+            // ViewBag.UnitID = new SelectList(db.Fetch<Unit>("Select UnitID,UnitName from Units"), "UnitID", "UnitName");
+
             ViewBag.ServiceTypeID = Enum.GetValues(typeof(ServiceTypeEnum)).Cast<ServiceTypeEnum>().Where(a => a.ToString() == ServiceTypeEnum.Accomodation.ToString() || a.ToString() == ServiceTypeEnum.CarBike.ToString()).Select(v => new SelectListItem { Text = v.ToString(), Value = ((int)v).ToString() }).ToList();
        
 
