@@ -73,10 +73,10 @@
             <div class="input-group-prepend"><span class="input-group-text">Rate Basis</span></div>
             <select name="RateBasis" class="form-control col-12">
                 <option value=" 8hrs-80kms">
-                    80kms
+                    8Hrs-80kms
                 </option>
-                <option value=" 8hrs-80kms">
-                    8hrs
+                <option value=" None">
+                    None
                 </option>
             </select>
             @Html.ValidationMessageFor(model => model.RateBasis, "", new { @class = "text-danger" })
@@ -131,21 +131,14 @@
 {@Html.Action("CustSearch", "SR", new { id = Model.SRDID })
 }
 
-@if (Model?.SRDID > 0)
+@if (Model!=null)
 {
     <script>
-       $('#AssignDriver').load('@Url.Action("_AssignDriver")', { SRID: @Model.SRID,SRDID: @Model.SRDID});
-       $('#Review').load('@Url.Action("_DrvReview")', { SRID: @Model.SRID,SRDID: @Model.SRDID});
+           $('#AssignDriver').load('@Url.Action("_AssignDriver")', { SRID: @Model.SRID,SRDID: @Model.SRDID});
+           $('#Review').load('@Url.Action("_DrvReview")', { SRID: @Model.SRID,SRDID: @Model.SRDID});
     </script>
+}
 
-}
-else
-{
-    <script>
-      $('#AssignDriver').load('@Url.Action("_AssignDriver")', { SRID: @Model?.SRID,SRDID: @Model?.SRDID});
-       $('#Review').load('@Url.Action("_DrvReview")', { SRID: @Model?.SRID,SRDID: @Model?.SRDID});
-    </script>
-}
 
 <script>
 
