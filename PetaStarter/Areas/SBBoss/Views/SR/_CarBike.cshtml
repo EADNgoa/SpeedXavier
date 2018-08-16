@@ -2,6 +2,11 @@
 <fieldset @ViewBag.IsReadOnly>
     <div class="form-row">
         <div class="input-group col mb-3">
+            <div class="input-group-prepend"><span class="input-group-text">Car Or Bike</span></div>
+            <input type="text" id="CarBikeName" name="CarBikeName" style="color:black;" data-autocomplete-idholder="#ItemID" value="" data-autocombo-url="@Url.Action("AutoCompleteCar")" class="form-control" />
+            @Html.ValidationMessageFor(model => model.ItemID, "", new { @class = "text-danger" })
+        </div>
+        <div class="input-group col mb-3">
             <div class="input-group-prepend"><span class="input-group-text">Drop Off Address</span></div>
             @Html.EditorFor(model => model.ToLoc, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
             @Html.ValidationMessageFor(model => model.ToLoc, "", new { @class = "text-danger" })
@@ -75,6 +80,20 @@
         //Disable the browsers default date picker
         jQuery.validator.methods["date"] = function (value, element) { return true; }
 
+    });
+
+    $(document).ready(function () {
+        $('*[data-autocombo-url]')
+            .each(function () {
+                $(this).autocomplete({
+                    source: $(this).data("autocombo-url"),
+                    minLenght: 3,
+                    delay: 500,
+                    select: function (event, ui) {
+                        $($(this).data("autocomplete-idholder")).val(ui.item.id);
+                    }
+                });
+            });
     });
 
 </script>

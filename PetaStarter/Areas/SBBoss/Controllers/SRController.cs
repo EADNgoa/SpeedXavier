@@ -388,7 +388,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [EAAuthorize(FunctionName = "Service Requests", Writable = true)]
-        public ActionResult SRdetails([Bind(Include = "SRDID,HasAc,HasCarrier,RateBasis,PayTo,PickUpPoint,DropPoint,SRID,ServiceTypeID,FromLoc,ToLoc,SuppInvNo,Fdate,Tdate,SupplierID,Cost,SellPrice,PNRno,TicketNo,Heritage,ChildNo,AdultNo,InfantNo,RoomType,CouponCode,City,Airline,DateOfIssue,FlightNo,ContractNo,GuideLanguageID,SSType,CarType,Model,ParentID,IsReturn,OptionTypeID")] SRdetail item, string Event,string IsReturn)
+        public ActionResult SRdetails([Bind(Include = "SRDID,HasAc,HasCarrier,RateBasis,PayTo,PickUpPoint,DropPoint,SRID,ServiceTypeID,FromLoc,ToLoc,SuppInvNo,Fdate,Tdate,SupplierID,Cost,SellPrice,PNRno,TicketNo,Heritage,ChildNo,AdultNo,InfantNo,RoomType,CouponCode,City,Airline,DateOfIssue,FlightNo,ContractNo,GuideLanguageID,SSType,CarType,Model,ParentID,IsReturn,OptionTypeID,ItemID")] SRdetail item, string Event,string IsReturn)
         {
             using (var transaction = db.GetTransaction())
             {
@@ -666,7 +666,32 @@ namespace Speedbird.Areas.SBBoss.Controllers
             return Json(filteredItems, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult AutoCompletePack(string term)
+        {
+            var filteredItems = db.Fetch<Package>($"Select * from Package Where PackageName like '%{term}%' and ServiceTypeID={(int)ServiceTypeEnum.Packages}").Select(c => new { id = c.PackageID, value = c.PackageName});
+            return Json(filteredItems, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult AutoCompleteSight(string term)
+        {
+            var filteredItems = db.Fetch<Package>($"Select * from Package Where PackageName like '%{term}%' and ServiceTypeID={(int)ServiceTypeEnum.SightSeeing}").Select(c => new { id = c.PackageID, value = c.PackageName});
+            return Json(filteredItems, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult AutoCompleteCruise(string term)
+        {
+            var filteredItems = db.Fetch<Package>($"Select * from Package Where PackageName like '%{term}%' and ServiceTypeID={(int)ServiceTypeEnum.Cruise}").Select(c => new { id = c.PackageID, value = c.PackageName});
+            return Json(filteredItems, JsonRequestBehavior.AllowGet);
+        }
 
+        public ActionResult AutoCompleteAccom(string term)
+        {
+            var filteredItems = db.Fetch<Accomodation>($"Select * from Accomodation Where AccomName like '%{term}%'").Select(c => new { id = c.AccomodationID, value = c.AccomName});
+            return Json(filteredItems, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult AutoCompleteCar(string term)
+        {
+            var filteredItems = db.Fetch<CarBike>($"Select * from CarBike Where CarBikeName like '%{term}%'").Select(c => new { id = c.CarBikeID, value = c.CarBikeName });
+            return Json(filteredItems, JsonRequestBehavior.AllowGet);
+        }
         public ActionResult FetchSTpartial(int? id, int ServiceTypeId, bool IsReadOnly)
         {
             ViewBag.GuideLanguageID = db.Fetch<GuideLanguage>("Select * from GuideLanguage").Select(v => new SelectListItem { Text = v.GuideLanguageName, Value = v.GuideLanguageID.ToString() }).ToList();
