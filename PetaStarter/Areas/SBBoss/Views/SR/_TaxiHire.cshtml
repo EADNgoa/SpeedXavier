@@ -56,12 +56,29 @@
         <div class="input-group col mb-3">
             <div class="input-group-prepend"><span class="input-group-text">Pay To</span></div>
             <select name="PayTo" class="form-control">
-                <option value="Paid to Us">
-                    Paid To US
-                </option>
-                <option value="Paid to Driver">
-                    Paid To Driver
-                </option>
+                 @if (Model?.SRDID > 0)
+                {
+                    <option value="@Model.PayTo">
+                        @Model.PayTo
+                    </option>
+                    <option value="Paid to Driver">
+                        Apartment
+                    </option>
+                    <option value="Paid to US">
+                        Us
+                    </option>
+                }
+                else
+                {
+
+                    <option value="Paid to Driver">
+                        Apartment
+                    </option>
+                    <option value="Paid to US">
+                        Us
+                    </option>
+                }
+
             </select>
             @Html.ValidationMessageFor(model => model.PayTo, "", new { @class = "text-danger" })
 
