@@ -190,7 +190,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         {
             ViewBag.Type = Enum.GetValues(typeof(AmtType)).Cast<AmtType>().Select(v => new SelectListItem { Text = v.ToString(), Value = ((int)v).ToString() }).ToList();
             decimal usedAmt = db.ExecuteScalar<decimal?>("Select Coalesce(sum(Amount),0) From DRP_SR Where DRPDID =@0", id) ?? 0;
-            decimal ActualOA = db.ExecuteScalar<decimal?>("Select Coalesce(sum(SellPrice),0) From SRdetails Where SRID =@0", SRID) ?? 0;
+            decimal ActualOA = db.ExecuteScalar<decimal?>("Select Coalesce(sum(Cost),0) From SRdetails Where SRID =@0", SRID) ?? 0;
 
             if (SRID != null)
             {
@@ -234,7 +234,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 }
             }
 
-            var NPbkngs = new PetaPoco.Sql($"select sd.SRID,d.DriverID,d.DriverName as UserName,PayTo,sum(SellPrice) as OA,sum(Cost) as Cost,(select coalesce (sum(Amount),0) from DRP_SR where SRID = sd.SRID ) as PaidAmt from SRdetails sd inner join Driver d on d.DriverID=sd.DriverID left join DRPDets drp on drp.SRID=sd.SRID and IsPayment = '{check}' where ");
+            var NPbkngs = new PetaPoco.Sql($"select sd.SRID,d.DriverID,d.DriverName as UserName,PayTo,sum(SellPrice) as SellPrice ,sum(Cost) as OA,(select coalesce (sum(Amount),0) from DRP_SR where SRID = sd.SRID ) as PaidAmt from SRdetails sd inner join Driver d on d.DriverID=sd.DriverID left join DRPDets drp on drp.SRID=sd.SRID and IsPayment = '{check}' where ");
 
             if (check==1)
             {
