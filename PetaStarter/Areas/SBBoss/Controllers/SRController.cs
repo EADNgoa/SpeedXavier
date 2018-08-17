@@ -720,10 +720,21 @@ namespace Speedbird.Areas.SBBoss.Controllers
             ViewBag.SRDID = id;
             if (IsReadOnly)
                 ViewBag.IsReadOnly = "disabled";
-            
+            List<SelectListItem> PayTo = new List<SelectListItem>()
+                    {
+                            new SelectListItem {
+                                Text = "Pay to us", Value = "Pay to us"
+                            },
+                            new SelectListItem {
+                                Text = "Pay to them", Value = "Pay to them"
+                            }
+                        };
+            ViewBag.PayTo = PayTo;
+          
+
             switch ((ServiceTypeEnum)ServiceTypeId)
             {
-                case ServiceTypeEnum.Accomodation:
+                case ServiceTypeEnum.Accomodation:                
                     return PartialView($"_{((ServiceTypeEnum)ServiceTypeId).ToString()}", db.SingleOrDefault<SRdetail>(id));
                 case ServiceTypeEnum.SightSeeing:
                     return PartialView($"_{((ServiceTypeEnum)ServiceTypeId).ToString()}", db.SingleOrDefault<SRdetail>(id));
@@ -754,6 +765,16 @@ namespace Speedbird.Areas.SBBoss.Controllers
                     {
                         ViewBag.DrvNm = db.ExecuteScalar<string>("Select DriverName From Driver where DriverID=@0", DrvID.DriverID);
                     }
+                    List<SelectListItem> RateBasis = new List<SelectListItem>()
+                    {
+                            new SelectListItem {
+                                Text = "8hrs -80Kms", Value = "8hrs -80Kms"
+                            },
+                            new SelectListItem {
+                                Text = "None", Value = "None"
+                            }
+                        };
+                    ViewBag.RateBasis = RateBasis;
                     return PartialView($"_{((ServiceTypeEnum)ServiceTypeId).ToString()}", db.SingleOrDefault<SRdetail>(id));
                 default:
                     return PartialView("_NotFound");
