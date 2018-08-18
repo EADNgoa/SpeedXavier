@@ -53,33 +53,10 @@
             @Html.ValidationMessageFor(model => model.HasCarrier, "", new { @class = "text-danger" })
 
         </div>
-        <div class="input-group col mb-3">
+        <div class="input-group col-4 mb-3">
             <div class="input-group-prepend"><span class="input-group-text">Pay To</span></div>
-            <select name="PayTo" class="form-control">
-                 @if (Model?.SRDID > 0)
-                {
-                    <option value="@Model.PayTo">
-                        @Model.PayTo
-                    </option>
-                    <option value="Paid to Driver">
-                        Apartment
-                    </option>
-                    <option value="Paid to US">
-                        Us
-                    </option>
-                }
-                else
-                {
+            @Html.DropDownListFor(model => model.PayTo, null, htmlAttributes: new { @type = "text", @class = "form-control" })
 
-                    <option value="Paid to Driver">
-                        Apartment
-                    </option>
-                    <option value="Paid to US">
-                        Us
-                    </option>
-                }
-
-            </select>
             @Html.ValidationMessageFor(model => model.PayTo, "", new { @class = "text-danger" })
 
         </div>
@@ -88,17 +65,13 @@
     <div class="form-row">
         <div class="input-group col-3 mb-3">
             <div class="input-group-prepend"><span class="input-group-text">Rate Basis</span></div>
-            <select name="RateBasis" class="form-control col-12">
-                <option value=" 8hrs-80kms">
-                    8Hrs-80kms
-                </option>
-                <option value=" None">
-                    None
-                </option>
-            </select>
-            @Html.ValidationMessageFor(model => model.RateBasis, "", new { @class = "text-danger" })
+           
+                @Html.DropDownListFor(model => model.RateBasis, null, htmlAttributes: new { @type = "text", @class = "form-control" })
 
-        </div>
+                @Html.ValidationMessageFor(model => model.RateBasis, "", new { @class = "text-danger" })
+
+            </div>
+    
         @if (Model?.SRDID > 0)
         {
             <div class="input-group col-3 mb-3">
