@@ -1,7 +1,8 @@
 ﻿CREATE TABLE [dbo].[ServiceRequest]
 (
 	[SRID] INT NOT NULL PRIMARY KEY IDENTITY, 
-    [CustID] INT NULL, 
+    [BookingNo]        INT            NULL,
+	[CustID] INT NULL, 
 	[UserID] NVARCHAR(128) NULL, 
     [SRStatusID] INT NULL, 
     [EmpID] NVARCHAR(128) NULL, 

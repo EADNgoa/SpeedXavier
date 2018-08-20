@@ -1,32 +1,31 @@
-﻿<style>
-    header{
-        background-color:cornflowerblue;
-        height:30px;
-        width:100%;
+﻿@using Microsoft.AspNet.Identity
+<style>
+    header {
+        background-color: cornflowerblue;
+        height: 30px;
+        width: 100%;
     }
- 
-    
-  
 </style>
 
 
 <div class="card ">
     <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
-        <span class="h5">Employee Profile</span>
+        <span class="h5">Employee Profile of @User.Identity.GetUserName()</span>
     </div>
     <br />
     <div class="row">
         <div class="col ">
             <div class="card-header">
                 <header>
-                    <center><b>Service Requests</b></center>
+                    <center class="text-light"><b>Unconfirmed Booking Folders</b></center>
                 </header>
             </div>
             <table class="table table-striped">
                 <tr>
                     <th>Date</th>
                     <th>Bk. No.</th>
-                    <th>Name</th>                    
+                    <th>Name</th>
+                    <th>Type</th>
                     <th>Enquiry Source</th>
                 </tr>
                 @foreach (var item in (IEnumerable<Speedbird.ServiceRequestDets>)ViewBag.OpenSR)
@@ -34,8 +33,9 @@
 
                     <tr>
                         <td>  @($"{item.TDate:dd/MMM/yyyy}")</td>
+                        <td>@item.BookingNo</td>
                         <td>@item.FName&nbsp;@item.SName</td>
-                        <td>@((Speedbird.ServiceTypeEnum)item.ServiceTypeID) </td>                        
+                        <td>@((Speedbird.ServiceTypeEnum)item.ServiceTypeID) </td>
                         <td>@((Speedbird.EnquirySourceEnum)item.EnquirySource) </td>
                     </tr>
 
@@ -44,11 +44,11 @@
         </div>
         <div class="col ">
             <div class="card-header">
-                <header><center><b>Commisions</b></center> </header>
+                <header><center class="text-light"><b>Commisions</b></center> </header>
             </div>
             <table class="table table-striped">
                 <tr>
-                    <th>Service Request No</th>
+                    <th>Booking No</th>
                     <th>Total Sell Cost</th>
                     <th>Commsion</th>
 
@@ -67,7 +67,7 @@
     <div class="row">
         <div class="col ">
             <div class="card-header">
-                <header> <center><b>Attendance</b></center></header>
+                <header> <center class="text-light"><b>Attendance</b></center></header>
             </div>
             <table class="table table-striped">
                 <tr>
@@ -90,7 +90,7 @@
         </div>
         <div class="col ">
             <div class="card-header">
-                <header><center><b>Leave Applications</b></center> </header>
+                <header><center class="text-light"><b>Leave Balance</b></center> </header>
             </div>
             <table class="table table-striped">
                 <tr>
@@ -101,13 +101,13 @@
 
                 </tr>
                 @foreach (var item in (IEnumerable<Speedbird.LeaveBalanceRpt>)ViewBag.LvApp)
-                { 
-                <tr>                    
-                    <td>  @item.LeaveTypeName</td>
-                    <td>  @item.TotalLeave</td>
-                    <td>  @item.Availed</td>
-                    <td>  @item.Remaining</td>
-                </tr>
+                {
+                    <tr>
+                        <td>  @item.LeaveTypeName</td>
+                        <td>  @item.TotalLeave</td>
+                        <td>  @item.Availed</td>
+                        <td>  @item.Remaining</td>
+                    </tr>
 
                 }
             </table>

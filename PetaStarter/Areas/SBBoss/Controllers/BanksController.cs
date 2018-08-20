@@ -58,8 +58,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
             }
             
-            ViewBag.BA = db.Fetch<BankAccountDets>($"Select ba.BankAccountID,ba.TDate,AmountIn,AmountOut,SRID,TransNo,UserID, s.SupplierName,anu.UserName,Comment From BankAccount ba " +
-                $" left join AspNetUsers anu on anu.Id=ba.UserID left join Supplier s on s.SupplierID = ba.SupplierID where ba.BankID ='{id}'");
+            ViewBag.BA = db.Fetch<BankAccountDets>($"Select ba.BankAccountID,ba.TDate,AmountIn,AmountOut,ba.SRID, sr.BookingNo,TransNo,ba.UserID, s.SupplierName,anu.UserName,Comment From BankAccount ba " +
+                $" inner join ServiceRequest sr on sr.SRID=ba.SRID left join AspNetUsers anu on anu.Id=ba.UserID left join Supplier s on s.SupplierID = ba.SupplierID where ba.BankID ='{id}'");
             return View(rec);
         }
 

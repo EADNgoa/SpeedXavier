@@ -64,33 +64,27 @@ namespace Speedbird.Areas.SBBoss.Controllers
             var columnSearch = parameters.Columns.Select(s => s.Search.Value).Take(SRColumns.Count()).ToList();
 
             //XMLPath uses nested queries so to avoid that we construct these 4 filters ourselves
-            string CustFName = "";
-            string CustSName = "";
+            string CustName = "";            
             string Cemail = "";
             string Cphone = "";
             string AgentName = "";
 
-            if (columnSearch[2]?.Length > 0) { CustFName = columnSearch[2]; columnSearch[2] = null; }
-            if (columnSearch[3]?.Length > 0) { CustSName = columnSearch[3]; columnSearch[3] = null; }
-            if (columnSearch[4]?.Length > 0) { Cphone = columnSearch[4]; columnSearch[4] = null; }
-            if (columnSearch[5]?.Length > 0) { Cemail = columnSearch[5]; columnSearch[5] = null; }
-            if (columnSearch[7]?.Length > 0) { AgentName = columnSearch[7]; columnSearch[7] = null; }
+            if (columnSearch[2]?.Length > 0) { CustName = columnSearch[2]; columnSearch[2] = null; }            
+            if (columnSearch[3]?.Length > 0) { Cphone = columnSearch[3]; columnSearch[3] = null; }
+            if (columnSearch[4]?.Length > 0) { Cemail = columnSearch[4]; columnSearch[4] = null; }
+            if (columnSearch[5]?.Length > 0) { AgentName = columnSearch[5]; columnSearch[5] = null; }
 
 
 
-            var sql = new PetaPoco.Sql($"Select * from ServiceRequest s"); 
-            var fromsql = new PetaPoco.Sql();
-            var wheresql = new PetaPoco.Sql(" where SRStatusId >@0", (int)SRStatusEnum.NoAction);
+            var sql = new PetaPoco.Sql($"Select SRID, BookingNo,TDate, CONCAT(c.FName, ' ', c.SName) as CName, c.Phone, c.email, u.email as AgentName,SRStatusID, PayStatusID " +
+                $"from ServiceRequest s left join AspNetUsers u on u.id=s.AgentId ");
+            var fromsql = new PetaPoco.Sql(", Customer c ");                
+            var wheresql = new PetaPoco.Sql(" where c.CustomerID=s.CustID and SRStatusId >@0", (int)SRStatusEnum.NoAction);
 
-            if (CustFName.Length > 0 || CustSName.Length > 0 || Cemail.Length > 0 || Cphone.Length > 0)
+            if (CustName.Length > 0 || Cemail.Length > 0 || Cphone.Length > 0)
             {
-                fromsql.Append(", Customer c ");
-                wheresql.Append($" and  c.CustomerID=s.CustID ");
-
-                if (CustFName.Length > 0)
-                    wheresql.Append($" and c.FName like '%{CustFName}%' ");
-                if (CustSName.Length > 0)
-                    wheresql.Append($" and c.SName like '%{CustSName}%' ");
+                if (CustName.Length > 0)
+                    wheresql.Append($" and (c.FName like '%{CustName}%' or c.SName like '%{CustName}%' )");                
                 if (Cemail.Length > 0)
                     wheresql.Append($" and c.email like '%{Cemail}%' ");
                 if (Cphone.Length > 0)
@@ -99,31 +93,21 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
             if (AgentName.Length>0)
             {
-                fromsql.Append(", AspNetUsers u");
-                wheresql.Append($" and  u.id=s.AgentId and u.email like '%{AgentName}%' ");
+                wheresql.Append($" and u.email like '%{AgentName}%' ");
             }
 
             wheresql.Append($"{GetWhereWithOrClauseFromColumns(SRColumns, columnSearch)}");
             sql.Append(fromsql);
             sql.Append(wheresql);
 
+            var sortStr = parameters.SortOrder;
+            sortStr = sortStr.Replace("Status", "SRStatusID");
+            sql.Append(" order by " + sortStr);
+
             try
             {
                 var cnt = db.Query<ServiceRequestDets>(sql).ToList();
                 var res = cnt.Skip(parameters.Start).Take(parameters.Length).ToList();
-
-                res.ForEach(r =>
-                {
-                    var cust = db.FirstOrDefault<Customer>("Select c.* from Customer c inner join SR_Cust sc on c.CustomerID=sc.CustomerID inner join ServiceRequest sr on sr.SRID = sc.ServiceRequestID Where sc.ServiceRequestID = @0", r.SRID);
-                    r.FName = cust.FName;
-                    r.SName = cust.SName;
-                    r.Phone = cust.Phone;
-                    r.Email = cust.Email;
-       
-                    r.AgentName = db.ExecuteScalar<string>("Select UserName from AspNetUsers where Id=@0", r.AgentID) ?? "";
-
-                });
-
 
                 var dataTableResult = new DTResult<ServiceRequestDets>
                 {
@@ -226,13 +210,11 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
         private string[] SRColumns => new string[]
         {
-            "SRID", 
-            "Date",
-            "FName",
-            "SName",
+            "BookingNo", 
+            "TDate",
+            "CName",            
             "Phone",
-            "Email",
-            "Src",
+            "Email",            
             "AgentName",
             "SRStatusID"
         };
@@ -266,13 +248,13 @@ namespace Speedbird.Areas.SBBoss.Controllers
         [EAAuthorize(FunctionName = "Service Requests", Writable = true)]
         public ActionResult FetchDetails(int? id)
         {
-            ViewBag.Title = "Service Request";
+            ViewBag.Title = "Booking Folder";
 
             var SR = base.BaseCreateEdit<ServiceRequest>(id, "SRID");
             if (id > 0)
             {
-                if (SR.SRStatusID < (int)SRStatusEnum.Request)
-                    SR.SRStatusID = (int)SRStatusEnum.Request;
+                if (SR.SRStatusID < (int)SRStatusEnum.Unconfirmed)
+                    SR.SRStatusID = (int)SRStatusEnum.Unconfirmed;
 
                 ViewBag.AgentName = db.ExecuteScalar<string>("Select UserName From AspNetUsers where Id = @0 ", SR.AgentID);
 
@@ -313,7 +295,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         }
 
         [EAAuthorize(FunctionName = "Service Requests", Writable = true)]
-        public ActionResult Manage(int? id, int mode = 1, int EID = 0) //Mode 1=Details,2=Prices,3=images,4=validity
+        public ActionResult Manage(int? id, int mode = 1, int EID = 0) //Mode 1=Details,2=Notepad,3=Services, 4=Customers, 5=images,6=BookingSummary
         {
 
             ViewBag.mode = mode;
@@ -328,7 +310,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [EAAuthorize(FunctionName = "Service Requests", Writable = true)]
-        public ActionResult Manage([Bind(Include = "SRID,CustID,SRStatusID,EmpID,BookingTypeID,EnquirySource,AgentID,TDate,PayStatusID,ServiceTypeID")] ServiceRequest item, string Event, int? CID, string FName, string SName, string Email, string Phone)
+        public ActionResult Manage([Bind(Include = "SRID,BookingNo,CustID,SRStatusID,EmpID,BookingTypeID,EnquirySource,AgentID,TDate,PayStatusID,ServiceTypeID")] ServiceRequest item, string Event, int? CID, string FName, string SName, string Email, string Phone)
         {
             using (var transaction = db.GetTransaction())
             {
@@ -343,6 +325,13 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
                     if (item.CustID == null)
                         item.CustID=CID;
+
+                    //on 19 aug 18 Xavier said the Enquiry number should be different from BkNo. BkNo needs to be sequential
+                    if (item.BookingNo == null)
+                    {
+                        var lastBkId = db.FirstOrDefault<int>("select coalesce(max(BookingNo),0) from ServiceRequest");
+                        item.BookingNo = ++lastBkId;
+                    }
 
                     if (item.SRID > 0)
                     {

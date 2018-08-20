@@ -2,7 +2,7 @@
 
 @using PagedList.Mvc;
 @{
-    ViewBag.Title = "Supplier Payment History";
+    ViewBag.Title = "Driver Payment History";
 }
 
 
@@ -12,18 +12,18 @@
     </div>
     <div class="card-body">
         <h5 class="card-title">&nbsp;</h5>
-        @using (Html.BeginForm("PaymentList", "Supplier", FormMethod.Get))
+        @using (Html.BeginForm("PaymentList", "Driver", FormMethod.Get))
         {
             if (ViewBag.SupplierID !=null)
             {
-                @Html.Hidden("SupplierId",(int)ViewBag.SupplierID )
+                @Html.Hidden("DriverId",(int)ViewBag.DriverID )
             }
             <div class="row d-print-none">
                 <table>
                     <tr style="text-align:center">
-                        <td>&nbsp;Supplier Name:</td>
+                        <td>&nbsp;Driver Name:</td>
                         <td>
-                            <input type="text" id="SupplierName" name="SupplierName" style="color:black;"value="@ViewBag.SupplierName"  class="form-control" disabled />
+                            <input type="text" id="DriverName" name="DriverName" style="color:black;"value="@ViewBag.DriverName"  class="form-control" disabled />
                         </td>
                         <td>&nbsp;From Date:</td>
                         <td> @Html.TextBox("fd", ViewBag.CurrentFilter as string, new { @class = "form-control eadate",type="text" })</td>
@@ -42,7 +42,7 @@
 <div class="card border rounded DropShadow">
     <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
         <span class="h3">@ViewBag.Title</span>
-        <a href="@Url.Action("Index","Supplier")"><i class="fas fa-undo-alt fa-inverse h3 float-right DropShadow"></i></a>
+        <a href="@Url.Action("Index","Driver")"><i class="fas fa-undo-alt fa-inverse h3 float-right DropShadow"></i></a>
     </div>
     <div class="card-body">
         <h5>&nbsp;</h5>
@@ -50,7 +50,7 @@
             <tr>
                 <th>Sr No</th>
              
-                <th>Service Request No</th>
+                <th>Booking No</th>
                 <th>
                     Actual Amount
                 </th>
@@ -70,7 +70,7 @@
                     </td>
                    
                     <td>
-                        @Html.DisplayFor(modelItem => item.SRID)
+                        @Html.DisplayFor(modelItem => item.BookingNo)
 
                     </td>
                     <td>

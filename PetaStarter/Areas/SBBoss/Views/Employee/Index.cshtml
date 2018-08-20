@@ -41,7 +41,7 @@
             <table class="table table-striped">
                 <tr>
                     <th>Date</th>
-                    <th>Service Request No</th>
+                    <th>Booking No</th>
                     <th>Total Sell Cost</th>
                     <th>Commsion</th>
 
@@ -50,7 +50,7 @@
             {
                 <tr>
                     <td> @($"{item.Tdate:dd/MMM/yyyy}")</td>
-                    <td>@item.SRID</td>
+                    <td>@item.BookingNo</td>
                     <td>@item.SellPrice </td>
                     <td>@item.Total</td>
                 </tr>

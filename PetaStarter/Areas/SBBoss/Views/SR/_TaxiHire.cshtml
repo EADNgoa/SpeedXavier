@@ -124,7 +124,7 @@
 @if (Model!=null)
 {
     <script>
-           $('#AssignDriver').load('@Url.Action("_AssignDriver")', { SRID: @Model.SRID,SRDID: @Model.SRDID});
+           $('#AssignDriver').load('@Url.Action("_AssignDriver")', { SRID: @Model.SRID, SRDID: @Model.SRDID});
            $('#Review').load('@Url.Action("_DrvReview")', { SRID: @Model.SRID,SRDID: @Model.SRDID});
     </script>
 }

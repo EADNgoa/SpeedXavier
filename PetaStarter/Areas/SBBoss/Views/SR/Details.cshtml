@@ -1,11 +1,5 @@
 ﻿@model Speedbird.ServiceRequest
-<style>
 
-    #map {
-        height: 350px;
-        width: 100%;
-    }
-</style>
 <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
     <span class="h3">@ViewBag.Title</span>
     <a href="@Url.Action("Index","SR",new { sid= ViewBag.sid})"><i class="fas fa-undo-alt fa-inverse h3 float-right DropShadow"></i></a>
@@ -24,6 +18,7 @@
         @Html.HiddenFor(model => model.AgentID)
         @Html.HiddenFor(model => model.TDate)
         @Html.HiddenFor(model => model.PayStatusID)
+        @Html.HiddenFor(model => model.BookingNo)
 
 
         @Html.Action("GetSRInfo", "SR", new { id = Model.SRID, mode = ViewBag.mode })

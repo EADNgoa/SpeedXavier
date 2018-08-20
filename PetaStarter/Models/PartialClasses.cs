@@ -44,6 +44,7 @@ namespace Speedbird
     public class SRBooking
     {
         public int SRID { get; set; }
+        public int BookingNo { get; set; }
         public int SRDID { get; set; }
 
         public string cName { get; set; }
@@ -92,6 +93,7 @@ namespace Speedbird
         public decimal? AmountIn { get; set; }
         public decimal? AmountOut { get; set; }
         public int SRID { get; set; }
+        public int BookingNo { get; set; }
         public string TransNo { get; set; }
         public string UserID { get; set; }
         public string SupplierName { get; set; }
@@ -135,6 +137,7 @@ namespace Speedbird
     {
         public int SRDID { get; set; }
         public int SRID { get; set; }
+        public int BookingNo { get; set; }
         public int ServiceTypeID { get; set; }
         public string ServiceTypeName { get { return ((ServiceTypeEnum)ServiceTypeID).ToString(); } }
         public int CarType { get; set; }
@@ -318,6 +321,7 @@ namespace Speedbird
     [MetadataType(typeof(BankAccountMetadata))]
     public partial class BankAccount
     {
+        public int BookingNo { get; set; }
     }
     public class ActivityDets
     {
@@ -551,6 +555,7 @@ namespace Speedbird
     public class ServiceRequestDets
     {
         public int SRID { get; set; }
+        public int BookingNo { get; set; }
         public int CustomerID { get; set; }
         public int SRStatusID { get; set; }
         public int PayStatusID { get; set; }
@@ -567,6 +572,8 @@ namespace Speedbird
         public string AgentID { get; set; }
         public string FName { get; set; }
         public string SName { get; set; }
+        public string CName { get; set; }
+        
         public string Phone { get; set; }
         public string Email { get; set; }
         public string AgentName { get; set; }
@@ -651,8 +658,8 @@ namespace Speedbird
         New,
         Reminder,
         NoAction,
-        Request,    
-        Booked,
+        Unconfirmed,    
+        Confirmed,
         Completed,
         Cancelled
       

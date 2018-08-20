@@ -37,7 +37,7 @@
                         <div class="input-group col mb-3">
                             <div class="input-group-prepend"><span class="input-group-text">Rec. Date</span></div>
                             @Html.EditorFor(model => model.TDate, "{0:dd-MM-yyyy}", new { htmlAttributes = new { @type = "text", @class = "eadate form-control" } })
-                            @Html.ValidationMessageFor(model => model.TransNo, "", new { @class = "text-danger" })
+                            @Html.ValidationMessageFor(model => model.TDate, "", new { @class = "text-danger" })
                         </div>
                         <div class="input-group col mb-3">
                             <div class="input-group-prepend"><span class="input-group-text">Transaction No</span></div>
@@ -80,9 +80,9 @@ else
                             @Html.ValidationMessageFor(model => model.Comment, "", new { @class = "text-danger" })
                         </div>
                         <div class="input-group col-2 mb-3">
-                            <div class="input-group-prepend"><span class="input-group-text">Service Request No</span></div>
-                            @Html.EditorFor(model => model.SRID, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.SRID, "", new { @class = "text-danger" })
+                            <div class="input-group-prepend"><span class="input-group-text">Booking No</span></div>
+                            @Html.EditorFor(model => model.BookingNo, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.BookingNo, "", new { @class = "text-danger" })
                         </div>
                         <div class="input-group col mb-3">
                             <div class="input-group-prepend"><span class="input-group-text">Amount In</span></div>
@@ -121,7 +121,7 @@ else
                 <th>Comment</th>
                 <th>Supplier Name</th>
                 <th>Agent Name</th>
-                <th>Service Request No</th>
+                <th>Booking No</th>
                 <th>Amount In</th>
                 <th>Amount Out</th>
 
@@ -147,7 +147,7 @@ else
                     </td>
 
                     <td>
-                        @item.SRID
+                        @item.BookingNo
                     </td>
                     <td>
                         @item.AmountIn

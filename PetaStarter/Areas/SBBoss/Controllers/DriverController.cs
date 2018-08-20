@@ -27,13 +27,13 @@ namespace Speedbird.Areas.SBBoss.Controllers
         {
             page = 1;
             ViewBag.DriverID = DriverID;
-            ViewBag.DriverNamse = db.ExecuteScalar<string>("Select DriveName from Driver Where DriverID=@0", DriverID);
+            ViewBag.DriverName = db.ExecuteScalar<string>("Select DriverName from Driver Where DriverID=@0", DriverID);
 
-            var sql = new PetaPoco.Sql("Select (Select Sum(Amount) from DRP_SR rs where rs.SRID = sd.SRID)as PaidAmt,Coalesce(sum(sd.Cost),0) as OA,d.DriverName as UserName,sd.SRID from SRdetails sd inner join Driver d on d.DriverID = sd.DriverID  left join DRP_SR rs on rs.SRID =sd.SRID  left join RPdets rd on rd.RPDID =rs.DRPDID where sd.DriverID=@0", DriverID);
+            var sql = new PetaPoco.Sql("Select (Select Sum(Amount) from DRP_SR rs where rs.SRID = sd.SRID)as PaidAmt,Coalesce(sum(sd.Cost),0) as OA,d.DriverName as UserName,sd.SRID , BookingNo from SRdetails sd inner join ServiceRequest sr on sd.SRID=sr.SRID inner join Driver d on d.DriverID = sd.DriverID  left join DRP_SR rs on rs.SRID =sd.SRID  left join RPdets rd on rd.RPDID =rs.DRPDID where sd.DriverID=@0", DriverID);
             if (fd != null && td != null)
                 sql.Append($" and cast(Cdate as Date) Between '{fd:yyyy-MM-dd}' and  '{td:yyyy-MM-dd}'");
 
-            sql.Append(" Group By sd.SRID,s.SupplierName");
+            sql.Append(" Group By sd.SRID,sr.BookingNo,d.DriverName");
             var rec = db.Query<SRBooking>(sql).ToList();
 
 

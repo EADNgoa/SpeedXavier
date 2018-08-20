@@ -114,7 +114,7 @@ namespace Speedbird.Controllers
                     }
 
                     // var cust = new ServiceRequest { FName = fname, SName = sname, Email = email, Phone = phno,_Query=Query,ServiceID=ServiceID,ServiceTypeID=ServiceTypeID ,CheckIn=CheckIn,CheckOut=CheckOut,NoPax=nums,Qty=Qty,Tdate=DateTime.Now, Glang=Glang, Gtime=Gtime,ServiceName=ServiceName};
-                    var sr = new ServiceRequest {BookingTypeID=(int)BookingTypeEnum.Online,EnquirySource=(int)EnquirySourceEnum.Web,ServiceTypeID=ServiceTypeID,PayStatusID=(int)PayType.Not_Paid,SRStatusID=(int)SRStatusEnum.Request};
+                    var sr = new ServiceRequest {BookingTypeID=(int)BookingTypeEnum.Online,EnquirySource=(int)EnquirySourceEnum.Web,ServiceTypeID=ServiceTypeID,PayStatusID=(int)PayType.Not_Paid,SRStatusID=(int)SRStatusEnum.Unconfirmed};
                    
                     var cust = new Customer {FName=fname,SName=sname, Email = email, Phone = phno };
                     if (UploadedFile != null)
@@ -159,7 +159,7 @@ namespace Speedbird.Controllers
 
                 try
                 {
-                    var item = new ServiceRequest { TDate = DateTime.Now, UserID = User.Identity.GetUserId(), SRStatusID = (int)SRStatusEnum.Booked,PayStatusID=(int)PayType.Full_Paid,BookingTypeID=(int)BookingTypeEnum.Online,EnquirySource=(int)EnquirySourceEnum.Web };
+                    var item = new ServiceRequest { TDate = DateTime.Now, UserID = User.Identity.GetUserId(), SRStatusID = (int)SRStatusEnum.Confirmed,PayStatusID=(int)PayType.Full_Paid,BookingTypeID=(int)BookingTypeEnum.Online,EnquirySource=(int)EnquirySourceEnum.Web };
                     db.Insert(item);
                     CartItems.ForEach(c =>
                     {
