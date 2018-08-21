@@ -2,14 +2,14 @@
 <fieldset @ViewBag.IsReadOnly>
     <div class="form-row">
         <div class="input-group col mb-3">
-            <div class="input-group-prepend"><span class="input-group-text">Cruise</span></div>
-            <input type="text" id="PackageName" name="PackageName" style="color:black;" data-autocomplete-idholder="#ItemID" value="" data-autocombo-url="@Url.Action("AutoCompletePack")" class="form-control" />
-            @Html.ValidationMessageFor(model => model.ItemID, "", new { @class = "text-danger" })
-        </div>
-        <div class="input-group col mb-3">
             <div class="input-group-prepend"><span class="input-group-text">To Date</span></div>
             @Html.EditorFor(model => model.Tdate, new { htmlAttributes = new { @type = "text", @class = "eadate form-control" } })
             @Html.ValidationMessageFor(model => model.Tdate, "", new { @class = "text-danger" })
+        </div>
+        <div class="input-group col mb-3">
+            <div class="input-group-prepend"><span class="input-group-text">Pkg Name</span></div>
+            <input type="text" id="PackageName" name="PackageName" style="color:black;" data-autocomplete-idholder="#ItemID" value="" data-autocombo-url="@Url.Action("AutoCompletePack")" class="form-control" />
+            @Html.ValidationMessageFor(model => model.ItemID, "", new { @class = "text-danger" })
         </div>
         <div class="input-group col mb-3">
             <div class="input-group-prepend"><span class="input-group-text">Adult No</span></div>

@@ -1,10 +1,10 @@
 ﻿@model Speedbird.SRdetail
 <fieldset @ViewBag.IsReadOnly>
     <div class="form-row">
-        <div class="input-group col mb-3">
-            <div class="input-group-prepend"><span class="input-group-text">Cruise</span></div>
-            <input type="text" id="PackageName" name="PackageName" style="color:black;" data-autocomplete-idholder="#ItemID" value="" data-autocombo-url="@Url.Action("AutoCompleteCruise")" class="form-control" />
-            @Html.ValidationMessageFor(model => model.ItemID, "", new { @class = "text-danger" })
+        <div class="input-group col-4 mb-3">
+            <div class="input-group-prepend"><span class="input-group-text">Port Of Departure</span></div>
+            @Html.EditorFor(model => model.Tdate, new { htmlAttributes = new { @type = "text", @class = "eadate form-control" } })
+            @Html.ValidationMessageFor(model => model.Tdate, "", new { @class = "text-danger" })
         </div>
         <div class="input-group col mb-3">
             <div class="input-group-prepend"><span class="input-group-text">To Date</span></div>
@@ -12,14 +12,19 @@
             @Html.ValidationMessageFor(model => model.Tdate, "", new { @class = "text-danger" })
         </div>
         <div class="input-group col mb-3">
+            <div class="input-group-prepend"><span class="input-group-text">Cruise</span></div>
+            <input type="text" id="PackageName" name="PackageName" style="color:black;" data-autocomplete-idholder="#ItemID" value="" data-autocombo-url="@Url.Action("AutoCompleteCruise")" class="form-control" />
+            @Html.ValidationMessageFor(model => model.ItemID, "", new { @class = "text-danger" })
+        </div>
+
+    </div>
+    <div class="form-row">
+        <div class="input-group col mb-3">
             <div class="input-group-prepend"><span class="input-group-text">Adult No</span></div>
             @Html.EditorFor(model => model.AdultNo, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
             @Html.ValidationMessageFor(model => model.AdultNo, "", new { @class = "text-danger" })
 
         </div>
-
-    </div>
-    <div class="form-row">
         <div class="input-group col-4 mb-3">
             <div class="input-group-prepend"><span class="input-group-text">Child No</span></div>
             @Html.EditorFor(model => model.ChildNo, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
@@ -31,11 +36,6 @@
             @Html.EditorFor(model => model.infantNo, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
             @Html.ValidationMessageFor(model => model.infantNo, "", new { @class = "text-danger" })
 
-        </div>
-        <div class="input-group col-4 mb-3">
-            <div class="input-group-prepend"><span class="input-group-text">Port Of Departure</span></div>
-            @Html.EditorFor(model => model.Tdate, new { htmlAttributes = new { @type = "text", @class = "eadate form-control" } })
-            @Html.ValidationMessageFor(model => model.Tdate, "", new { @class = "text-danger" })
         </div>
 
     </div>

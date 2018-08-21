@@ -234,7 +234,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 }
             }
 
-            var NPbkngs = new PetaPoco.Sql($"select sd.SRID,d.DriverID,d.DriverName as UserName,PayTo,sum(SellPrice) as SellPrice ,sum(Cost) as OA,(select coalesce (sum(Amount),0) from DRP_SR where SRID = sd.SRID ) as PaidAmt from SRdetails sd inner join Driver d on d.DriverID=sd.DriverID left join DRPDets drp on drp.SRID=sd.SRID and IsPayment = '{check}' where ");
+            var NPbkngs = new PetaPoco.Sql($"select sd.SRID,d.DriverID,d.DriverName as UserName,PayTo,sum(SellPrice) as SellPrice ,sum(Cost) as OA,(select coalesce (sum(Amount),0) from DRP_SR where SRID = sd.SRID ) as PaidAmt " +
+                $"from SRdetails sd inner join Driver d on d.DriverID=sd.DriverID left join DRPDets drp on drp.SRID=sd.SRID and IsPayment = '{check}' where ");
 
             if (check==1)
             {
@@ -313,22 +314,9 @@ namespace Speedbird.Areas.SBBoss.Controllers
         public ActionResult FetchRcptpartial(int? id, int Type)
         {
             ViewBag.RPDID = id;
-
             ViewBag.BankName = db.Query<Bank>("Select * from Banks").Select(sl => new SelectListItem { Text = sl.BankName, Value = sl.BankID.ToString(), Selected = true });
 
-            switch ((AmtType)Type)
-            {
-                case AmtType.Cash:
-                    return PartialView($"_{((AmtType)Type).ToString()}", db.SingleOrDefault<RPdet>(id));
-                case AmtType.Cheque:
-                    return PartialView($"_{((AmtType)Type).ToString()}", db.SingleOrDefault<RPdet>(id));
-                case AmtType.Internet_Banking:
-
-                    return PartialView($"_{((AmtType)Type).ToString()}", db.SingleOrDefault<RPdet>(id));
-
-                default:
-                    return PartialView("_NotFound");
-            }
+            return PartialView($"_{((AmtType)Type).ToString()}", db.SingleOrDefault<RPdet>(id));            
         }
         public ActionResult AutoCompleteSup(string term)
         {

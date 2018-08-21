@@ -194,6 +194,7 @@ namespace Speedbird
 		[Column] public bool Disabled { get; set; }
 		[Column] public DateTime? LastLogin { get; set; }
 		[Column] public int? UserType { get; set; }
+		[Column] public string RealName { get; set; }
 	}
     
 	[TableName("dbo.Attraaction")]

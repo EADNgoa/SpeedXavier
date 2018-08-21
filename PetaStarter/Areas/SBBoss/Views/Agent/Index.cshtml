@@ -32,6 +32,7 @@
 <div class="card border rounded DropShadow">
     <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
         <span class="h3">@ViewBag.Title</span>
+        <a href="@Url.Action("Manage","Agent")"><i class="fas fa-plus-circle fa-inverse h3 float-right DropShadow"></i></a>
     </div>
     <div class="card-body">
         <h5>&nbsp;</h5>
@@ -41,6 +42,8 @@
                 <th>
                     Agent Name
                 </th>
+                <th>Email</th>
+                <th></th>
                 <th></th>
             </tr>
             @{int i = 1;}
@@ -51,10 +54,16 @@
                         @i
                     </td>
                     <td>
+                        @Html.DisplayFor(modelItem => item.RealName)
+                    </td>
+                    <td>
                         @Html.DisplayFor(modelItem => item.UserName)
                     </td>
                     <td>
                         <a href="@Url.Action("PaymentList","Agent", new {id = item.Id })"><i title="PaymentList" class="fas fa-rupee-sign fa-inverse h3 float-right DropShadow"></i></a>
+                    </td>
+                    <td>
+                        <a href="@Url.Action("manage","Agent", new {id = item.Id })"><i title="Edit" class="fas fa-user-edit fa-inverse h3 float-right DropShadow"></i></a>
                     </td>
                 </tr>
                 i++;

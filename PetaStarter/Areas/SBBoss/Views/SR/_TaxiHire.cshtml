@@ -7,26 +7,6 @@
             @Html.ValidationMessageFor(model => model.ToLoc, "", new { @class = "text-danger" })
         </div>
         <div class="input-group col mb-3">
-            <div class="input-group-prepend"><span class="input-group-text">To Date</span></div>
-            @Html.EditorFor(model => model.Tdate, new { htmlAttributes = new { @type = "text", @class = "eadate form-control" } })
-            @Html.ValidationMessageFor(model => model.Tdate, "", new { @class = "text-danger" })
-
-        </div>
-        <div class="input-group col mb-3">
-            <div class="input-group-prepend"><span class="input-group-text">Taxi Type</span></div>
-            @Html.DropDownList("CarType", null, htmlAttributes: new { @type = "text", @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.CarType, "", new { @class = "text-danger" })
-        </div>
-
-    </div>
-    <div class="form-row">
-        <div class="input-group col mb-3">
-            <div class="input-group-prepend"><span class="input-group-text">Model</span></div>
-            @Html.EditorFor(model => model.Model, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.Model, "", new { @class = "text-danger" })
-
-        </div>
-        <div class="input-group col mb-3">
             <div class="input-group-prepend"><span class="input-group-text">Pick Up Point</span></div>
             @Html.EditorFor(model => model.PickUpPoint, new { htmlAttributes = new { @class = "form-control" } })
             @Html.ValidationMessageFor(model => model.PickUpPoint, "", new { @class = "text-danger" })
@@ -36,16 +16,28 @@
             <div class="input-group-prepend"><span class="input-group-text">Drop Point</span></div>
             @Html.EditorFor(model => model.DropPoint, new { htmlAttributes = new { @class = "form-control" } })
             @Html.ValidationMessageFor(model => model.DropPoint, "", new { @class = "text-danger" })
-
         </div>
     </div>
     <div class="form-row">
+        <div class="input-group col mb-3">
+            <div class="input-group-prepend"><span class="input-group-text">Taxi Type</span></div>
+            @Html.DropDownList("CarType", null, htmlAttributes: new { @type = "text", @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.CarType, "", new { @class = "text-danger" })
+        </div>
+        <div class="input-group col mb-3">
+            <div class="input-group-prepend"><span class="input-group-text">Model</span></div>
+            @Html.EditorFor(model => model.Model, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Model, "", new { @class = "text-danger" })
+        </div>
         <div class="input-group col mb-3">
             <div class="input-group-prepend"><span class="input-group-text">Has Ac</span></div>
             @Html.EditorFor(model => model.HasAc, new { htmlAttributes = new { @class = "form-control" } })
             @Html.ValidationMessageFor(model => model.HasAc, "", new { @class = "text-danger" })
 
         </div>
+        
+    </div>
+    <div class="form-row">
 
         <div class="input-group col mb-3">
             <div class="input-group-prepend"><span class="input-group-text">Has Carrier</span></div>
@@ -53,70 +45,70 @@
             @Html.ValidationMessageFor(model => model.HasCarrier, "", new { @class = "text-danger" })
 
         </div>
-        <div class="input-group col-4 mb-3">
+        <div class="input-group col mb-3">
             <div class="input-group-prepend"><span class="input-group-text">Pay To</span></div>
             @Html.DropDownListFor(model => model.PayTo, null, htmlAttributes: new { @type = "text", @class = "form-control" })
-
             @Html.ValidationMessageFor(model => model.PayTo, "", new { @class = "text-danger" })
-
         </div>
-
-    </div>
-    <div class="form-row">
-        <div class="input-group col-3 mb-3">
+        <div class="input-group col mb-3">
             <div class="input-group-prepend"><span class="input-group-text">Rate Basis</span></div>
-           
-                @Html.DropDownListFor(model => model.RateBasis, null, htmlAttributes: new { @type = "text", @class = "form-control" })
-
-                @Html.ValidationMessageFor(model => model.RateBasis, "", new { @class = "text-danger" })
-
-            </div>
+            @Html.DropDownListFor(model => model.RateBasis, null, htmlAttributes: new { @type = "text", @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.RateBasis, "", new { @class = "text-danger" })
+        </div>
+    </div>
     
-        @if (Model?.SRDID > 0)
-        {
-            <div class="input-group col-3 mb-3">
+    <div  class="form-row">
+        <div class="input-group col mb-3">
 
-                @if (ViewBag.IsReadOnly == null)
-                {
-                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#AssignDriverModal" data-srdid="@Model.SRDID">
-                        @if (Model?.DriverID == null)
-                        {
-                            @:  Assign Driver
-                        }
-                        else
-                        {
-                            @: Change Driver
-                        }
-
-                    </button>
-                    <div class="input-group-prepend"><span class="input-group-text" style="color:blue">@ViewBag.DrvNm</span></div>
-
-                }
-                else
-                {
-                    <div class="input-group-prepend"><span class="input-group-text">Driver Name</span></div>
-                    <input type="text" value="@ViewBag.DrvNm" class="form-control" />
-                }
-
-
-
-            </div>
-        }
-        @if (ViewBag.IsReadOnly == null)
-        {
-            if (Model?.DriverID > 0)
+            @if (Model?.SRDID > 0)
             {
                 <div class="input-group col-3 mb-3">
-                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#DrvReviewModal" data-srdid="@Model.SRDID">
-                        Feedback
-                    </button>
-                </div>
 
+                    @if (ViewBag.IsReadOnly == null)
+                    {
+                        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#AssignDriverModal" data-srdid="@Model.SRDID">
+                            @if (Model?.DriverID == null)
+                            {
+                                @:  Assign Driver
+                            }
+                            else
+                            {
+                                @: Change Driver
+                            }
+
+                        </button>
+                        <div class="input-group-prepend"><span class="input-group-text" style="color:blue">@ViewBag.DrvNm</span></div>
+
+                    }
+                    else
+                    {
+                        <div class="input-group-prepend"><span class="input-group-text">Driver Name</span></div>
+                        <input type="text" value="@ViewBag.DrvNm" class="form-control" />
+                    }
+
+
+
+                </div>
             }
-        }
+
+            @if (ViewBag.IsReadOnly == null)
+            {
+                if (Model?.DriverID > 0)
+                {
+                    <div class="input-group col mb-3">
+                        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#DrvReviewModal" data-srdid="@Model.SRDID">
+                            Feedback
+                        </button>
+                    </div>
+
+                }
+            }
+        </div>
     </div>
 
 </fieldset>
+
+
 @if (ViewBag.isReadOnly != null)
 {@Html.Action("CustSearch", "SR", new { id = Model.SRDID })
 }

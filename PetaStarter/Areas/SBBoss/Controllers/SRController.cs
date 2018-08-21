@@ -25,6 +25,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         {
             ViewBag.Title = "Service Requests";
             ViewBag.SRStatusID = Enum.GetValues(typeof(SRStatusEnum)).Cast<SRStatusEnum>().Where(v => v > SRStatusEnum.NoAction).Select(v => new SelectListItem { Text = v.ToString(), Value = ((int)v).ToString() }).ToList();
+            ViewBag.PayStatusID = Enum.GetValues(typeof(PayType)).Cast<PayType>().Select(v => new SelectListItem { Text = v.ToString(), Value = ((int)v).ToString() }).ToList();
             return View();
         }
 
@@ -101,7 +102,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             sql.Append(wheresql);
 
             var sortStr = parameters.SortOrder;
-            sortStr = sortStr.Replace("Status", "SRStatusID");
+            sortStr = sortStr.Replace("Status", "SRStatusID");            
             sql.Append(" order by " + sortStr);
 
             try
@@ -216,7 +217,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
             "Phone",
             "Email",            
             "AgentName",
-            "SRStatusID"
+            "SRStatusID",
+            "PayStatusID"
         };
         private string[] SRDetColumns => new string[]
        {
@@ -248,7 +250,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         [EAAuthorize(FunctionName = "Service Requests", Writable = true)]
         public ActionResult FetchDetails(int? id)
         {
-            ViewBag.Title = "Booking Folder";
+            ViewBag.Title = id.Value>0 ?"Booking Folder": "New Enquiry";
 
             var SR = base.BaseCreateEdit<ServiceRequest>(id, "SRID");
             if (id > 0)
@@ -327,7 +329,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                         item.CustID=CID;
 
                     //on 19 aug 18 Xavier said the Enquiry number should be different from BkNo. BkNo needs to be sequential
-                    if (item.BookingNo == null)
+                    if (item.BookingNo == null && item.SRStatusID>(int)SRStatusEnum.NoAction)
                     {
                         var lastBkId = db.FirstOrDefault<int>("select coalesce(max(BookingNo),0) from ServiceRequest");
                         item.BookingNo = ++lastBkId;
@@ -355,7 +357,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
                         var cust = new Customer { FName = FName, SName = SName, Phone = Phone, Email = Email };
                         db.Insert(cust);
                         db.Insert(new SR_Cust { ServiceRequestID = item.SRID, CustomerID = cust.CustomerID });
-
+                        item.CustID = cust.CustomerID;
+                        db.Update(item);
                     }
 
                     if (Event?.Length == null)

@@ -3,16 +3,23 @@
 <fieldset @ViewBag.IsReadOnly>
     <div class="form-row">
         <div class="input-group col mb-3">
-            <div class="input-group-prepend"><span class="input-group-text">Accomodation</span></div>
+            <div class="input-group-prepend"><span class="input-group-text">To Date</span></div>
+            @Html.EditorFor(model => model.Tdate, new { htmlAttributes = new { @type = "text", @class = "eadate form-control" } })
+            @Html.ValidationMessageFor(model => model.Tdate, "", new { @class = "text-danger" })
+        </div>
+        <div class="input-group col mb-3">
+            <div class="input-group-prepend"><span class="input-group-text">Hotel/Appt</span></div>
             <input type="text" id="AccomName" name="AccomName" style="color:black;" data-autocomplete-idholder="#ItemID" value="" data-autocombo-url="@Url.Action("AutoCompleteAccom")" class="form-control" />
             @Html.ValidationMessageFor(model => model.ItemID, "", new { @class = "text-danger" })
         </div>
         <div class="input-group col mb-3">
-            <div class="input-group-prepend"><span class="input-group-text">To Date</span></div>
-            @Html.EditorFor(model => model.Tdate, new { htmlAttributes = new { @type = "text", @class = "eadate form-control" } })
-            @Html.ValidationMessageFor(model => model.Tdate, "", new { @class = "text-danger" })
-
+            <div class="input-group-prepend"><span class="input-group-text">Room Name</span></div>
+            @Html.EditorFor(model => model.RoomType, new { htmlAttributes = new { @type = "text", @class = " form-control" } })
+            @Html.ValidationMessageFor(model => model.RoomType, "", new { @class = "text-danger" })
         </div>
+
+    </div>
+    <div class="form-row">
         <div class="input-group col mb-3">
             <div class="input-group-prepend"><span class="input-group-text">No Of Adults</span></div>
             @Html.EditorFor(model => model.AdultNo, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
@@ -24,36 +31,21 @@
             @Html.EditorFor(model => model.ChildNo, new { htmlAttributes = new { @type = "text", @class = " form-control " } })
             @Html.ValidationMessageFor(model => model.ChildNo, "", new { @class = "text-danger" })
         </div>
-
-    </div>
-    <div class="form-row">
         <div class="input-group col mb-3">
             <div class="input-group-prepend"><span class="input-group-text">Infant No</span></div>
             @Html.EditorFor(model => model.infantNo, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
             @Html.ValidationMessageFor(model => model.infantNo, "", new { @class = "text-danger" })
 
-        </div>
-        <div class="input-group col mb-3">
-            <div class="input-group-prepend"><span class="input-group-text">No of Rooms</span></div>
-            @Html.EditorFor(model => model.TicketNo, new { htmlAttributes = new { @type = "number", @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.TicketNo, "", new { @class = "text-danger" })
-
-        </div>
-        <div class="input-group col mb-3">
-            <div class="input-group-prepend"><span class="input-group-text">Room Type</span></div>
-            @Html.EditorFor(model => model.RoomType, new { htmlAttributes = new { @type = "text", @class = " form-control" } })
-            @Html.ValidationMessageFor(model => model.RoomType, "", new { @class = "text-danger" })
-        </div>
-    </div>
-    <div class="form-row">
+        </div>        
         <div class="input-group col-4 mb-3">
             <div class="input-group-prepend"><span class="input-group-text">Pay To</span></div>
-            @Html.DropDownListFor(model => model.PayTo, null, htmlAttributes:new { @type = "text", @class = "form-control" } )
+            @Html.DropDownListFor(model => model.PayTo, null, htmlAttributes: new { @type = "text", @class = "form-control" })
 
             @Html.ValidationMessageFor(model => model.PayTo, "", new { @class = "text-danger" })
 
         </div>
     </div>
+    
     @if (ViewBag.isReadOnly != null)
     {@Html.Action("CustSearch", "SR", new { id = Model.SRDID })
 }

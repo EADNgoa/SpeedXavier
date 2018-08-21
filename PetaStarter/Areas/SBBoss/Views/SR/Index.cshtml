@@ -31,9 +31,9 @@
                     
                     <th><input type="text" class="form-control" placeholder="Agent Name"></th>
                     <th>@Html.DropDownList("SRStatus",(IEnumerable<SelectListItem>)ViewBag.SRStatusID, new { @class = "form-control"})</th>
+                    <th>@Html.DropDownList("PayStatus",(IEnumerable<SelectListItem>)ViewBag.PayStatusID, new { @class = "form-control"})</th>
 
 
-                    <th width="5%"></th>
                 </tr>
                 <tr role="row">
                     <th scope="col" width="80px">No.</th>
@@ -62,7 +62,7 @@
 
             serverSide: true,
             "dom": 'lrtip',
-            
+            "order": [[0, "desc"]],
             ajax: {
                 context: this,
                 "type": "POST",
@@ -139,7 +139,11 @@
                 .search(this.value)
                 .draw();
         });
-
+        $("#PayStatus").on('change', function () {
+            oTable.column($(this).parent().index() + ':visible')
+                .search(this.value)
+                .draw();
+        });
     })
 
 

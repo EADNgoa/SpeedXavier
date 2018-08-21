@@ -1,0 +1,18 @@
+﻿@model Speedbird.RPdet
+
+<fieldset>
+    <div class="form-row">
+        <div class="input-group col mb-3">
+            <div class="input-group-prepend"><span class="input-group-text">Select Bank</span></div>
+            @Html.DropDownList("BankName", null, htmlAttributes: new { @type = "text", @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.BankName, "", new { @class = "text-danger" })
+        </div>
+        <div class="input-group col mb-3">
+            <div class="input-group-prepend"><span class="input-group-text">Transaction No</span></div>
+            @Html.EditorFor(model => model.TransactionNo, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.TransactionNo, "", new { @class = "text-danger" })
+
+        </div>
+
+    </div>
+</fieldset>
