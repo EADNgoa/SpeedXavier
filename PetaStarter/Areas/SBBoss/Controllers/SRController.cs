@@ -542,39 +542,37 @@ namespace Speedbird.Areas.SBBoss.Controllers
             ViewBag.SRID = id;
             ViewBag.Title = "Profit and loss Details";
             ViewBag.Debit = db.ExecuteScalar<decimal?>("Select sum(Cost) as Cost from SRdetails Where SRID =@0",id);
-            ViewBag.Credit = db.ExecuteScalar<decimal?>("Select sum(Amount) as Amt from RP_SR Where SRID =@0", id);
+            ViewBag.Credit = db.ExecuteScalar<decimal?>("Select sum(Amount) as Amt from RP_SR Where SRID =@0", id)??0 +
+                db.ExecuteScalar<decimal?>("Select sum(Amount) as Amt from DRP_SR Where SRID =@0", id)??0;
             ViewBag.PaxDetail = db.Fetch<PaxDets>("; Exec AmtPerPax @@SRID = @0", id).ToList();
 
             var services = db.Query<SRdetailDets>("Select ServiceTypeID,Cost,SellPrice from SRdetails where SRID=@0",id).ToList();
            services.ForEach(s=>
             {
                 var tax = db.ExecuteScalar<decimal?>("Select Percentage From Taxes Where ServiceTypeID=@0 and WEF<GetDate() order by WEF desc ", s.ServiceTypeID)??0;
-                s.Tax = s.SellPrice * tax / 100;
-                var st = (ServiceTypeEnum)s.ServiceTypeID;
-                var commision = db.Fetch<ServiceCommision>($"Select Perc,Amount  From ServiceCommision Where ServiceName='{st}' ");
-                commision.ForEach(c=> {
+                s.Tax = s.SellPrice * tax / 100;                
+                var c = db.FirstOrDefault<ServiceCommision>($"Select Perc,Amount  From ServiceCommision Where Serviceid={s.ServiceTypeID + 1} ");
+                
                     if (c.Perc != null)
                     {
                         s.Commision = c.Perc ?? 0;
                         s.PercComm = "%";
                         var tot = s.SellPrice * s.Commision / 100;
-                        s.Total = s.SellPrice - s.Tax - tot;
+                        s.Total = s.SellPrice - s.Tax - tot - s.Cost;
                     }
                     else if (c.Amount != null)
                     {
                         s.Commision = c.Amount ?? 0;
-                        s.Total = s.SellPrice - s.Tax - s.Commision;
+                        s.Total = s.SellPrice - s.Tax - s.Commision - s.Cost;
                     }
 
-                });
-                
-               
             });
             ViewBag.Services = services;
 
-          var  rp= db.Fetch<RPDetails>("select rp.Date,rp.Note,rp.Type,rs.Amount,rp.IsPayment from RPDets rp left join RP_SR rs on rp.RPDID = rs.RPDID Where rs.SRID = @0",id);
-            ViewBag.Reciepts = rp.Where(r => r.IsPayment == false);
-            ViewBag.Payments = rp.Where(r => r.IsPayment == true);
+            var  rp= db.Fetch<RPDetails>("select rp.Date,rp.Note,rp.Type,rs.Amount,rp.IsPayment from RPDets rp left join RP_SR rs on rp.RPDID = rs.RPDID Where rs.SRID = @0",id);
+            var drp = db.Fetch<RPDetails>("select rp.Date,rp.Note,rp.Type,rs.Amount,rp.IsPayment from DRPDets rp left join DRP_SR rs on rp.DRPDID = rs.DRPDID Where rs.SRID = @0", id);
+            ViewBag.Reciepts = rp.Concat(drp).Where(d => d.IsPayment == false);
+            ViewBag.Payments = rp.Concat(drp).Where(r => r.IsPayment == true);
 
 
             return PartialView();
@@ -718,7 +716,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                                 Text = "Pay to us", Value = "Pay to us"
                             },
                             new SelectListItem {
-                                Text = "Pay to them", Value = "Pay to them"
+                                Text = "Pay to driver", Value = "Pay to driver"
                             }
                         };
             ViewBag.PayTo = PayTo;
@@ -1011,6 +1009,13 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
             return PartialView("CustomerSearchPartial",rec);
         }
+
+        public JsonResult GetOptionsOfST(int serviceTypeId)
+        {
+            var locs = db.Fetch<OptionType>("Select * from OptionType where ServiceTypeId=@0",serviceTypeId);
+            return Json(new { results = locs.Select(a => new { id = a.OptionTypeID, text = a.OptionTypeName }) }, JsonRequestBehavior.AllowGet);
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

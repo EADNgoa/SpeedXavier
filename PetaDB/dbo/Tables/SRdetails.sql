@@ -28,8 +28,8 @@
     [City] VARCHAR(50) NULL, 
 
     [Heritage] VARCHAR(50) NULL, 
-    [HasAc] BIT NULL, 
-    [HasCarrier] BIT NULL, 
+    [HasAc] BIT NOT NULL DEFAULT 0, 
+    [HasCarrier] BIT NOT NULL DEFAULT 0, 
     [GuideLanguageID] INT NULL, 
     [DateOfIssue] DATE NULL, 
     [ContractNo] VARCHAR(50) NULL, 

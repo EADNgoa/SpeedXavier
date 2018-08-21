@@ -29,22 +29,26 @@
             @Html.EditorFor(model => model.Model, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
             @Html.ValidationMessageFor(model => model.Model, "", new { @class = "text-danger" })
         </div>
-        <div class="input-group col mb-3">
-            <div class="input-group-prepend"><span class="input-group-text">Has Ac</span></div>
-            @Html.EditorFor(model => model.HasAc, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.HasAc, "", new { @class = "text-danger" })
-
-        </div>
         
+        <div class="input-group col mb-3">
+            <div class="input-group-prepend">
+                <div class="input-group-text">
+                    @Html.CheckBoxFor(model => model.HasAc, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+            </div>
+            <label class="form-control">Has AC?</label>
+        </div>
     </div>
     <div class="form-row">
-
         <div class="input-group col mb-3">
-            <div class="input-group-prepend"><span class="input-group-text">Has Carrier</span></div>
-            @Html.EditorFor(model => model.HasCarrier, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.HasCarrier, "", new { @class = "text-danger" })
-
+            <div class="input-group-prepend">
+                <div class="input-group-text">
+                    @Html.CheckBoxFor(model => model.HasCarrier, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+            </div>
+            <label class="form-control">Has Carrier?</label>
         </div>
+        
         <div class="input-group col mb-3">
             <div class="input-group-prepend"><span class="input-group-text">Pay To</span></div>
             @Html.DropDownListFor(model => model.PayTo, null, htmlAttributes: new { @type = "text", @class = "form-control" })

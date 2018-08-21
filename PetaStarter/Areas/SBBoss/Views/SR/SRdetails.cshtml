@@ -241,10 +241,19 @@
         $('#ServiceTypeID').on('change', function () {
             var sid = $(this).val();
 
-
             //Load the Dynamic Fields of the Form based on the selected Service Type
             $('#placeholderEditDiv').load('@Url.Action("FetchSTpartial", "SR")', { ServiceTypeId: sid, id: $('#SRDID').val() , IsReadOnly: false });
             setDynLabels(sid);
+
+            //Fill the Option Type box
+            $.get('@Url.Action("GetOptionsOfST", "SR")', { ServiceTypeId: sid } , function (data) {                
+                $('#OptionTypeID').find('option').remove();
+                
+                $.each(data.results, function (index, value) {
+                    $('<option>').val(value.id).text(value.text).appendTo('#OptionTypeID');
+                  
+                });
+            });
         });
 
         //DateTime picker

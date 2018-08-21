@@ -206,7 +206,7 @@ else
             var an = $('#AgentName').val();
 
 
-            if (cn.length == 5 || an.length == 5) {
+            if (cn.length >= 3 || an.length >=3) {
                 $('.searchBK').html("");
                 $('.searchBK').load("/SBBoss/RP/Reciept?CustName=" + cn + "&&AgentName=" + an + "&&IsSearch=" + true + "&&Id=" + $("#RPDID").val());
             }

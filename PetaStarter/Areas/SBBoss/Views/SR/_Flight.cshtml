@@ -61,7 +61,7 @@
         <div class="input-group col mb-3">
             <div class="input-group-prepend">
                 <div class="input-group-text">
-                    @Html.CheckBoxFor(model => model.HasCarrier.Value, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+                    @Html.CheckBoxFor(model => model.HasCarrier, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
                 </div>
             </div>
             <label class="form-control">Check in buggage?</label>
@@ -73,7 +73,7 @@
         <div class="input-group col mb-3">
             <div class="input-group-prepend">
                 <div class="input-group-text">
-                    @Html.CheckBoxFor(model => model.HasAc.Value, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+                    @Html.CheckBoxFor(model => model.HasAc, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
                 </div>
             </div>
             <label class="form-control">Meal Included?</label>
@@ -104,8 +104,7 @@
 <script>
     $('#Tdate').prop("disabled", true);
 
-    $('#IsReturn').on('change', function () {
-        
+    $('#IsReturn').on('change', function () {        
         $('#Tdate').prop("disabled", $('#IsReturn').is(":not(:checked)") );
             
     });

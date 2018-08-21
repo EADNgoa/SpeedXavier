@@ -1030,8 +1030,8 @@ namespace Speedbird
 		[Column] public string RoomType { get; set; }
 		[Column] public string City { get; set; }
 		[Column] public string Heritage { get; set; }
-		[Column] public bool? HasAc { get; set; }
-		[Column] public bool? HasCarrier { get; set; }
+		[Column] public bool HasAc { get; set; }
+		[Column] public bool HasCarrier { get; set; }
 		[Column] public int? GuideLanguageID { get; set; }
 		[Column] public DateTime? DateOfIssue { get; set; }
 		[Column] public string ContractNo { get; set; }
