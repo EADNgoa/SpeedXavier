@@ -80,7 +80,7 @@
                         <th class="bg-white"><b>Amount Left:</b> <u>@ViewBag.TotAmt</u></th>
                     </tr>
                     <tr class="bg-light">
-
+                        
                         <th>
                             Booking No
                         </th>
@@ -102,7 +102,7 @@
                     @foreach (var item in (IEnumerable<Speedbird.SRBooking>)ViewBag.Bookings)
                 {
                     <tr>
-
+                        
                         <td>
                             @item.BookingNo
                         </td>
@@ -145,7 +145,7 @@ else
     <table class="table">
         <tr>
             <th>Sr No</th>
-
+            <th>Date</th>
             <th>
                 Payment Type
             </th>
@@ -163,7 +163,7 @@ else
             <td>
                 @i
             </td>
-
+            <td>@($"{item.Date:dd-MMM-yyyy}")</td>
             <td>
                 @((Speedbird.AmtType)item.Type)
             </td>

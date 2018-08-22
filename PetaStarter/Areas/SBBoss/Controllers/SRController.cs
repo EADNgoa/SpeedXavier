@@ -569,8 +569,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
             });
             ViewBag.Services = services;
 
-            var  rp= db.Fetch<RPDetails>("select rp.Date,rp.Note,rp.Type,rs.Amount,rp.IsPayment from RPDets rp left join RP_SR rs on rp.RPDID = rs.RPDID Where rs.SRID = @0",id);
-            var drp = db.Fetch<RPDetails>("select rp.Date,rp.Note,rp.Type,rs.Amount,rp.IsPayment from DRPDets rp left join DRP_SR rs on rp.DRPDID = rs.DRPDID Where rs.SRID = @0", id);
+            var  rp= db.Fetch<RPDetails>("select rp.CDate as [Date],rp.Note,rp.Type,rs.Amount,rp.IsPayment from RPDets rp left join RP_SR rs on rp.RPDID = rs.RPDID Where rs.SRID = @0",id);
+            var drp = db.Fetch<RPDetails>("select rp.CDate as [Date],rp.Note,rp.Type,rs.Amount,rp.IsPayment from DRPDets rp left join DRP_SR rs on rp.DRPDID = rs.DRPDID Where rs.SRID = @0", id);
             ViewBag.Reciepts = rp.Concat(drp).Where(d => d.IsPayment == false);
             ViewBag.Payments = rp.Concat(drp).Where(r => r.IsPayment == true);
 
@@ -710,21 +710,22 @@ namespace Speedbird.Areas.SBBoss.Controllers
             ViewBag.SRDID = id;
             if (IsReadOnly)
                 ViewBag.IsReadOnly = "disabled";
-            List<SelectListItem> PayTo = new List<SelectListItem>()
+          
+
+            switch ((ServiceTypeEnum)ServiceTypeId)
+            {
+                case ServiceTypeEnum.Accomodation:
+                    List<SelectListItem> AccPayTo = new List<SelectListItem>()
                     {
                             new SelectListItem {
                                 Text = "Pay to us", Value = "Pay to us"
                             },
                             new SelectListItem {
-                                Text = "Pay to driver", Value = "Pay to driver"
+                                Text = "Pay to owner", Value = "Pay to owner"
                             }
                         };
-            ViewBag.PayTo = PayTo;
-          
+                    ViewBag.PayTo = AccPayTo;
 
-            switch ((ServiceTypeEnum)ServiceTypeId)
-            {
-                case ServiceTypeEnum.Accomodation:                
                     return PartialView($"_{((ServiceTypeEnum)ServiceTypeId).ToString()}", db.SingleOrDefault<SRdetail>(id));
                 case ServiceTypeEnum.SightSeeing:
                     return PartialView($"_{((ServiceTypeEnum)ServiceTypeId).ToString()}", db.SingleOrDefault<SRdetail>(id));
@@ -765,6 +766,17 @@ namespace Speedbird.Areas.SBBoss.Controllers
                             }
                         };
                     ViewBag.RateBasis = RateBasis;
+                    List<SelectListItem> TaxiPayTo = new List<SelectListItem>()
+                    {
+                            new SelectListItem {
+                                Text = "Pay to us", Value = "Pay to us"
+                            },
+                            new SelectListItem {
+                                Text = "Pay to driver", Value = "Pay to driver"
+                            }
+                        };
+                    ViewBag.PayTo = TaxiPayTo;
+
                     return PartialView($"_{((ServiceTypeEnum)ServiceTypeId).ToString()}", db.SingleOrDefault<SRdetail>(id));
                 default:
                     return PartialView("_NotFound");

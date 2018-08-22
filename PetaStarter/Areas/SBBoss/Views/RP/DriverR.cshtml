@@ -149,7 +149,7 @@ else
     <table class="table">
         <tr>
             <th>Sr No</th>
-
+            <th>Date</th>
             <th>
                 Payment Type
             </th>
@@ -167,7 +167,7 @@ else
             <td>
                 @i
             </td>
-
+            <td>@($"{item.Date:dd-MMM-yyyy}")</td>
             <td>
                 @((Speedbird.AmtType)item.Type)
             </td>
