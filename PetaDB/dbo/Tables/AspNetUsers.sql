@@ -15,6 +15,7 @@
     [Disabled] BIT NOT NULL DEFAULT 0, 
     [LastLogin] DATETIME NULL, 
     [UserType] INT NULL, 
+    [RealName] VARCHAR(50) NULL, 
     CONSTRAINT [PK_dbo.AspNetUsers] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
 

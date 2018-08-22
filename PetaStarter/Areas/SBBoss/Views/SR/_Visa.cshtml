@@ -19,16 +19,16 @@
             @Html.ValidationMessageFor(model => model.Model, "", new { @class = "text-danger" })
 
         </div>
+       
+
+    </div>
+    <div class="form-row">
         <div class="input-group col mb-3">
             <div class="input-group-prepend"><span class="input-group-text">Passport No</span></div>
             @Html.EditorFor(model => model.TicketNo, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
             @Html.ValidationMessageFor(model => model.TicketNo, "", new { @class = "text-danger" })
 
         </div>
-
-    </div>
-    <div class="form-row">
-
         <div class="input-group col mb-3">
             <div class="input-group-prepend"><span class="input-group-text">Date Of Issue</span></div>
             @Html.EditorFor(model => model.DateOfIssue, new { htmlAttributes = new { @type = "date", @class = "form-control" } })

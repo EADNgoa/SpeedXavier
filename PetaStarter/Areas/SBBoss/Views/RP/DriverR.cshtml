@@ -9,7 +9,7 @@
 <div class="card border rounded DropShadow">
     <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
         <span class="h3">Driver Reciepts</span>
-        <a href="@Url.Action("DriverRP","Rp", new {id=0 })"><i class="fas fa-undo-alt fa-inverse h3 float-right DropShadow"></i></a>
+        <a href="/SBBoss/RP/DReciept?check=0"><i class="fas fa-undo-alt fa-inverse h3 float-right DropShadow"></i></a>
 
     </div>
     <div class="card-body">
@@ -92,8 +92,10 @@
                             Name
                         </th>
                         <th>
-                            Total Amount
+                            Total
                         </th>
+                        <th>Paid</th>
+                        <th>Outstanding</th>
                         <th>
                             Current Payment
                         </th>
@@ -106,18 +108,20 @@
                     <tr>
 
                         <td>
-                            @item.SRID
+                            @item.BookingNo
                         </td>
                         <td>
                             @if (item.cName != null)
-                        {
-                            @: @item.cName
-                    }
+                            {
+                                @: @item.cName
+                            }
                             @if (item.UserName != null)
-                        {
-                            @: @item.UserName
-                    }
+                            {
+                                @: @item.UserName
+                            }
                         </td>
+                        <td>@item.OA</td>
+                        <td>@item.PaidAmt</td>
                         <td>
                             @(item.OA - item.PaidAmt )
                         </td>
@@ -206,9 +210,9 @@ else
             var dn = $('#DriverName').val();
 
 
-            if (dn.length == 3 ) {
+            if (dn.length >= 3) {
                 $('.searchBK').html("");
-                $('.searchBK').load("/SBBoss/RP/DReciept?DriverName="+ dn + "&&IsSearch=" + true + "&&Id=" + $("#DRPDID").val()+"&&check="+ 0);
+                $('.searchBK').load("/SBBoss/RP/DReciept?DriverName="+ dn + "&&IsSearch=" + true + "&&Id=" + $("#DRPDID").val()+"&&check=0");
             }
         });
 

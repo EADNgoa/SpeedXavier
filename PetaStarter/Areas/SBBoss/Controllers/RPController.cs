@@ -234,23 +234,24 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 }
             }
 
-            var NPbkngs = new PetaPoco.Sql($"select sd.SRID,d.DriverID,d.DriverName as UserName,PayTo,sum(SellPrice) as SellPrice ,sum(Cost) as OA,(select coalesce (sum(Amount),0) from DRP_SR where SRID = sd.SRID ) as PaidAmt from SRdetails sd inner join Driver d on d.DriverID=sd.DriverID left join DRPDets drp on drp.SRID=sd.SRID and IsPayment = '{check}' where ");
+            var NPbkngs = new PetaPoco.Sql($"select sd.SRID,sr.BookingNo,d.DriverID,d.DriverName as UserName,PayTo,sum(SellPrice) as SellPrice ,sum(Cost) as OA," +
+                $"(select coalesce (sum(Amount),0) from DRP_SR where SRID = sd.SRID ) as PaidAmt " +
+                $"from SRdetails sd inner join ServiceRequest sr on sd.SRID=sr.SRID inner join Driver d on d.DriverID=sd.DriverID where ");
 
             if (check==1)
             {
-                NPbkngs.Append($" PayTo = 'Paid To Us' ");
-
+                NPbkngs.Append($" lower(PayTo) like '%us%'  ");
             }
             else
             {
-                NPbkngs.Append($" PayTo = 'Paid To Driver' ");
+                NPbkngs.Append($" lower(PayTo) like '%driver%'  ");
             }
             if (DriverName !=null)
             {
                 NPbkngs.Append($" and LOWER(d.DriverName) like '%{DriverName.ToLower()}%'");
             }
           
-            NPbkngs.Append(" group by d.DriverID,d.DriverName,PayTo,sd.SRID");
+            NPbkngs.Append(" group by d.DriverID,d.DriverName,PayTo,sd.SRID, sr.BookingNo");
             var bkngs = db.Query<SRBooking>(NPbkngs).Where(a => a.OA > 0).ToList();
             ViewBag.UnUsedP = db.Fetch<RPDetails>("Select rp.DRPDID,rp.Amount,rp.Type,(Select Coalesce(Sum(Amount),0) from DRP_SR Where DRPDID = rp.DRPDID) as UnUsedAmt from DRPdets rp  where AmtUsed is Null and IsPayment = @0", check);
             decimal getT = db.ExecuteScalar<decimal?>("Select Amount from DRPDets Where DRPDID=@0", id) ?? 0;
@@ -260,6 +261,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
             if (IsSearch == true)
             {
                 ViewBag.DReciepts = "true";
+                ViewBag.check = check;
+                ViewBag.DRPDID = id;
                 return PartialView("_SearchBooking");
             }
             var p = "";
@@ -313,22 +316,9 @@ namespace Speedbird.Areas.SBBoss.Controllers
         public ActionResult FetchRcptpartial(int? id, int Type)
         {
             ViewBag.RPDID = id;
-
             ViewBag.BankName = db.Query<Bank>("Select * from Banks").Select(sl => new SelectListItem { Text = sl.BankName, Value = sl.BankID.ToString(), Selected = true });
 
-            switch ((AmtType)Type)
-            {
-                case AmtType.Cash:
-                    return PartialView($"_{((AmtType)Type).ToString()}", db.SingleOrDefault<RPdet>(id));
-                case AmtType.Cheque:
-                    return PartialView($"_{((AmtType)Type).ToString()}", db.SingleOrDefault<RPdet>(id));
-                case AmtType.Internet_Banking:
-
-                    return PartialView($"_{((AmtType)Type).ToString()}", db.SingleOrDefault<RPdet>(id));
-
-                default:
-                    return PartialView("_NotFound");
-            }
+            return PartialView($"_{((AmtType)Type).ToString()}", db.SingleOrDefault<RPdet>(id));            
         }
         public ActionResult AutoCompleteSup(string term)
         {

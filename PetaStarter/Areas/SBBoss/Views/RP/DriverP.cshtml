@@ -2,14 +2,14 @@
 
 @using PagedList.Mvc;
 @{
-    ViewBag.Title = "Reciepts";
+    ViewBag.Title = "Driver Payments";
 }
 
 
 <div class="card border rounded DropShadow">
     <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
-        <span class="h3">Driver Payments</span>
-        <a href="@Url.Action("DriverRP","Rp", new {id=0 })"><i class="fas fa-undo-alt fa-inverse h3 float-right DropShadow"></i></a>
+        <span class="h3">@ViewBag.Title</span>
+        <a href="/SBBoss/RP/DReciept?check=1"><i class="fas fa-undo-alt fa-inverse h3 float-right DropShadow"></i></a>
 
     </div>
     <div class="card-body">
@@ -71,16 +71,12 @@
             <div class="row col-12 searchBK">
                 <table class="table table-striped">
                     <thead></thead>
-                    <tr class="bg-info rounded">
-                        <th style="float:right">Enter Driver Name:</th>
+                    <tr class="bg-info ">
+                        <th>Enter Driver Name:</th>
                         <th>
                             @Html.Editor("DriverName", new { htmlAttributes = new { @class = "form-control " } })
                         </th>
-                        <th style="float:right"></th>
-
-                        <th>
-
-                        </th>
+                        
                         <th class="bg-white"><b>Amount Left:</b> <u>@ViewBag.TotAmt</u></th>
                     </tr>
                     <tr class="bg-light">
@@ -92,8 +88,10 @@
                             Name
                         </th>
                         <th>
-                            Total Amount
+                            Total 
                         </th>
+                        <th>Paid</th>
+                        <th>Outstanding</th>
                         <th>
                             Current Payment
                         </th>
@@ -106,7 +104,7 @@
                     <tr>
 
                         <td>
-                            @item.SRID
+                            @item.BookingNo
                         </td>
                         <td>
                             @if (item.cName != null)
@@ -118,6 +116,8 @@
                             @: @item.UserName
                     }
                         </td>
+                        <td>@item.OA</td>
+                        <td>@item.PaidAmt</td>
                         <td>
                             @(item.OA - item.PaidAmt )
                         </td>
@@ -206,9 +206,9 @@ else
             var dn = $('#DriverName').val();
 
 
-            if (dn.length == 3 ) {
+            if (dn.length >= 3 ) {
                 $('.searchBK').html("");
-                $('.searchBK').load("/SBBoss/RP/DReciept?DriverName=" + dn + "&&IsSearch=" + true + "&&Id=" + $("#DRPDID").val(), +"&&check=" + 1);
+                $('.searchBK').load("/SBBoss/RP/DReciept?DriverName=" + dn + "&&IsSearch=" + true + "&&Id=" + $("#DRPDID").val() +"&&check=1");
             }
         });
 
