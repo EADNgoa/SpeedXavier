@@ -226,7 +226,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                                     db.Execute("Update DRPDets set AmtUsed=@0 where DRPDID=@1", true, id);
 
                                 }
-                                
+                              
                             }
 
                         }
@@ -253,7 +253,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
           
             NPbkngs.Append(" group by d.DriverID,d.DriverName,PayTo,sd.SRID, sr.BookingNo");
             var bkngs = db.Query<SRBooking>(NPbkngs).Where(a => a.OA > 0).ToList();
-            ViewBag.UnUsedP = db.Fetch<RPDetails>("Select rp.DRPDID,rp.Amount,rp.Type,(Select Coalesce(Sum(Amount),0) from DRP_SR Where DRPDID = rp.DRPDID) as UnUsedAmt from DRPdets rp  where AmtUsed is Null and IsPayment = @0", check);
+            ViewBag.UnUsedP = db.Fetch<RPDetails>("Select rp.CDate as [Date], rp.DRPDID,rp.Amount,rp.Type,(Select Coalesce(Sum(Amount),0) from DRP_SR Where DRPDID = rp.DRPDID) as UnUsedAmt from DRPdets rp  where AmtUsed is Null and IsPayment = @0", check);
             decimal getT = db.ExecuteScalar<decimal?>("Select Amount from DRPDets Where DRPDID=@0", id) ?? 0;
             ViewBag.TotAmt = getT - usedAmt;
             ViewBag.Bookings = bkngs;
