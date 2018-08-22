@@ -45,6 +45,8 @@
 
     [ParentID] INT NULL, 
     [IsReturn] BIT NOT NULL DEFAULT 0, 
+    [IsInternational] BIT NOT NULL DEFAULT 0, 
+
     [OptionTypeID] INT NULL, 
     CONSTRAINT [FK_SRdetails_ToSR] FOREIGN KEY ([SRID]) REFERENCES [ServiceRequest]([SRID]), 
     CONSTRAINT [FK_SRdetails_ToSupplier] FOREIGN KEY ([SupplierID]) REFERENCES [Supplier]([SupplierID]), 
