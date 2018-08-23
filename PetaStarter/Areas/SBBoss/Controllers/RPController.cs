@@ -40,7 +40,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                             {
                                 
                               
-                                if (ManAmt <= OA && OA <= TotalAmt &&  PExist < (OA+ActualOA))
+                                if (ManAmt <= OA  &&  PExist < (OA+ActualOA))
                                     db.Execute("Delete from RP_SR Where SRID=@0 and RPDID =@1", SRID, id);
                             }
 
@@ -98,6 +98,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             if (IsSearch==true )
             {
                 ViewBag.Reciepts = "true";
+                ViewBag.RPDID = id;
                 return PartialView("_SearchBooking");
             }
             
@@ -128,7 +129,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                             {
 
 
-                                if (ManAmt <= OA && OA <= TotalAmt && PExist < (OA + ActualOA))
+                                if (ManAmt <= OA && PExist < (OA + ActualOA))
                                     db.Execute("Delete from RP_SR Where SRID=@0 and RPDID =@1", SRID, id);
                             }
 
@@ -179,6 +180,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             if (IsSearch == true)
             {
                 ViewBag.Payments = "true";
+                ViewBag.RPDID = id;
                 return PartialView("_SearchBooking");
             }
 

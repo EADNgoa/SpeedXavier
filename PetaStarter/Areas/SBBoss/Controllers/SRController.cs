@@ -430,6 +430,10 @@ namespace Speedbird.Areas.SBBoss.Controllers
                         {
                             item.Tdate = null;
                         }
+                        if (item.ECommision == null)
+                        {
+                            item.ECommision = -1;
+                        }
                         db.Insert(item);
                         if (IsReturn == "true")
                         {//We need to insert this duplicate record so that we can show this return flight in the Daily Diary on the return journey date
@@ -546,13 +550,15 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 db.ExecuteScalar<decimal?>("Select sum(Amount) as Amt from DRP_SR Where SRID =@0", id)??0;
             ViewBag.PaxDetail = db.Fetch<PaxDets>("; Exec AmtPerPax @@SRID = @0", id).ToList();
 
-            var services = db.Query<SRdetailDets>("Select ServiceTypeID,Cost,SellPrice from SRdetails where SRID=@0",id).ToList();
+            var services = db.Query<SRdetailDets>("Select SRID,SRDID,ServiceTypeID,Cost,SellPrice,ECommision from SRdetails where SRID=@0",id).ToList();
            services.ForEach(s=>
             {
                 var tax = db.ExecuteScalar<decimal?>("Select Percentage From Taxes Where ServiceTypeID=@0 and WEF<GetDate() order by WEF desc ", s.ServiceTypeID)??0;
                 s.Tax = s.SellPrice * tax / 100;                
                 var c = db.FirstOrDefault<ServiceCommision>($"Select Perc,Amount  From ServiceCommision Where Serviceid={s.ServiceTypeID + 1} ");
-                
+
+                if (s.ECommision <0)
+                {
                     if (c.Perc != null)
                     {
                         s.Commision = c.Perc ?? 0;
@@ -565,6 +571,12 @@ namespace Speedbird.Areas.SBBoss.Controllers
                         s.Commision = c.Amount ?? 0;
                         s.Total = s.SellPrice - s.Tax - s.Commision - s.Cost;
                     }
+                }
+                else
+                {
+                    s.Commision = s.ECommision;
+                    s.Total = s.SellPrice - s.Tax - s.Commision - s.Cost;
+                }
 
             });
             ViewBag.Services = services;
@@ -1028,6 +1040,28 @@ namespace Speedbird.Areas.SBBoss.Controllers
             return Json(new { results = locs.Select(a => new { id = a.OptionTypeID, text = a.OptionTypeName }) }, JsonRequestBehavior.AllowGet);
         }
 
+
+        //Load Edit Commsion Modal
+        public PartialViewResult _EditComm(int? SRID)
+        {
+            ViewBag.SRID = SRID;
+           return PartialView();
+        }
+
+        public bool EditComm(int? SRDID, decimal? ECommision)
+        {
+            try
+            {
+                int res = db.Execute("Update SRdetails set ECommision=@0 where SRDID=@1",ECommision,SRDID);
+                return true;
+
+            }
+            catch (Exception ex)
+            {
+                return false;
+                throw ex;
+            }
+        }
         protected override void Dispose(bool disposing)
         {
             if (disposing)

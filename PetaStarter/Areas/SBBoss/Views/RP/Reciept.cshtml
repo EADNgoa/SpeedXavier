@@ -94,6 +94,8 @@
                         <th>
                             Total Amount
                         </th>
+                        <th>Paid</th>
+                        <th>Outstanding</th>
                         <th>
                             Current Payment
                         </th>
@@ -121,6 +123,8 @@
                         <td>
                             @(item.OA - item.PaidAmt )
                         </td>
+                        <td>@item.PaidAmt</td>
+                        <td>@item.OA</td>
                         <td>
                             <input name="Amt" type="text" class="form-control" data-save="@item.SRID" />
                         </td>

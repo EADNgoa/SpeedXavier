@@ -1,23 +1,29 @@
-﻿@Html.Hidden("check",(int)ViewBag.check)
-@Html.Hidden("DRPDID", (int)ViewBag.DRPDID)
+﻿@if (ViewBag.Check != null)
+{
+    @Html.Hidden("check", (int)ViewBag.check)
+    @Html.Hidden("DRPDID", (int)ViewBag.DRPDID)
+
+
+}
+
 
 <table class="table table-striped">
     <thead></thead>
     @if (ViewBag.Reciepts != null)
     {
-    <tr class="bg-info rounded">
-        <th style="float:right">Enter Customer Name:</th>
-        <th>
-            @Html.Editor("CustName", new { htmlAttributes = new { @class = "form-control " } })
-        </th>
-        <th style="float:right">Enter Agent Name:</th>
+        <tr class="bg-info rounded">
+            <th style="float:right">Enter Customer Name:</th>
+            <th>
+                @Html.Editor("CustName", new { htmlAttributes = new { @class = "form-control " } })
+            </th>
+            <th style="float:right">Enter Agent Name:</th>
 
-        <th>
-            @Html.Editor("AgentName", new { htmlAttributes = new { @class = "form-control" } })
+            <th>
+                @Html.Editor("AgentName", new { htmlAttributes = new { @class = "form-control" } })
 
-        </th>
-        <th class="bg-white"><b>Amount Left:</b> <u>@ViewBag.TotAmt</u></th>
-    </tr>
+            </th>
+            <th class="bg-white"><b>Amount Left:</b> <u>@ViewBag.TotAmt</u></th>
+        </tr>
     }
     else if (ViewBag.Payments != null)
     {
@@ -26,7 +32,7 @@
             <th>
                 <input type="text" id="SupplierName" name="SupplierName" style="color:black;" data-autocomplete-idholder="#SupplierID" value="" data-autocombo-url="@Url.Action("AutoCompleteSup")" class="form-control" />
             </th>
-           
+
             <th class="bg-white"><b>Amount Left:</b> <u>@ViewBag.TotAmt</u></th>
         </tr>
     }
@@ -38,29 +44,29 @@
                 @Html.Editor("DriverName", new { htmlAttributes = new { @class = "form-control" } })
 
             </th>
-                        
+
             <td class="bg-white"><b>Amount Left:</b> <u>@ViewBag.TotAmt</u></td>
         </tr>
     }
-        <tr class="bg-light">
-            <th>
-                Booking No
-            </th>
-            <th>
-                Name
-            </th>
-            <th>
-                Total
-            </th>
-            <th>Paid</th>
-            <th>Outstanding</th>
-            <th>
-                Current Payment
-            </th>
-            <th>
+    <tr class="bg-light">
+        <th>
+            Booking No
+        </th>
+        <th>
+            Name
+        </th>
+        <th>
+            Total
+        </th>
+        <th>Paid</th>
+        <th>Outstanding</th>
+        <th>
+            Current Payment
+        </th>
+        <th>
 
-            </th>
-        </tr>
+        </th>
+    </tr>
     @foreach (var item in (IEnumerable<Speedbird.SRBooking>)ViewBag.Bookings)
     {
         <tr>
@@ -142,7 +148,7 @@
         data: $(detFrm).serialize(),
         success: function () {
 
-                        window.location.assign('@Url.Action("Reciept")');
+                        window.location.assign('@Url.Action("Reciept",new { id = (int)ViewBag.RPDID })');
                 }
             });
         }
@@ -192,7 +198,7 @@
         data: $(detFrm).serialize(),
         success: function () {
 
-                        window.location.assign('@Url.Action("Payment")');
+                        window.location.assign('@Url.Action("Payment",new { id = (int)ViewBag.RPDID })');
                 }
             });
         }
