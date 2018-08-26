@@ -444,6 +444,7 @@ namespace Speedbird
         public int AgentDiscountID { get; set; }
         public string UserID { get; set; }
         public string UserName { get; set; }
+        public string RealName { get; set; }
         public int ServiceTypeID { get; set; }
         public decimal Amount { get; set; }
         public decimal Percantage { get; set; }
@@ -692,9 +693,9 @@ namespace Speedbird
     }
     public enum PayType
     {
-        Full_Paid,
-        Part_Paid,
         Not_Paid,
+        Part_Paid,
+        Full_Paid,
         Cancelled
 
     }
@@ -702,7 +703,8 @@ namespace Speedbird
     {
         Cash,
         Cheque,
-        Internet_Banking
+        Internet_Banking,
+        Card
     }
 
     public class EAAuthorizeAttribute : AuthorizeAttribute

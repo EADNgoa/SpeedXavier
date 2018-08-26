@@ -778,6 +778,8 @@
     <Content Include="Areas\SBBoss\Views\UserRights\AvailableFnsPartial.cshtml" />
     <Content Include="Areas\SBBoss\Views\Driver\PaymentList.cshtml" />
     <Content Include="Areas\SBBoss\Views\Employee\Index.cshtml" />
+    <Content Include="Areas\SBBoss\Views\RP\_Card.cshtml" />
+    <Content Include="Areas\SBBoss\Views\Agent\Manage.cshtml" />
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <Content Include="Areas\SBBoss\Views\RP\DriverR.cshtml" />
     <Content Include="Areas\SBBoss\Views\RP\DriverP.cshtml" />

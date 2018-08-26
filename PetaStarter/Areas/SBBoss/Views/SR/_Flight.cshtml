@@ -10,6 +10,24 @@
 
     <div class="form-row">
         <div class="input-group col mb-3">
+            <div class="input-group-prepend"><span class="input-group-text">Destination Airport</span></div>
+            @Html.EditorFor(model => model.ToLoc, new { htmlAttributes = new { @type = "text", @class = "form-control LenRestrict", data_mlen = 2 } })
+            @Html.ValidationMessageFor(model => model.ToLoc, "", new { @class = "text-danger" })
+        </div>
+        <div class="input-group col mb-3">
+            <div class="input-group-prepend"><span class="input-group-text">PNR No</span></div>
+            @Html.EditorFor(model => model.PNRno, new { htmlAttributes = new { @type = "text", @class = "form-control LenRestrict", data_mlen = 5 } })
+            @Html.ValidationMessageFor(model => model.PNRno, "", new { @class = "text-danger" })
+
+        </div>
+        <div class="input-group col mb-3">
+            <div class="input-group-prepend"><span class="input-group-text">Ticket No</span></div>
+            @Html.EditorFor(model => model.TicketNo, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.TicketNo, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="input-group col mb-3">
             <div class="input-group-prepend"><span class="input-group-text">Adult No</span></div>
             @Html.EditorFor(model => model.AdultNo, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
             @Html.ValidationMessageFor(model => model.AdultNo, "", new { @class = "text-danger" })
@@ -22,31 +40,31 @@
 
         </div>
         <div class="input-group col mb-3">
-            <div class="input-group-prepend"><span class="input-group-text">Ticket No</span></div>
-            @Html.EditorFor(model => model.TicketNo, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.TicketNo, "", new { @class = "text-danger" })
-
-        </div>
-
-    </div>
-    <div class="form-row">
-        <div class="input-group col mb-3">
             <div class="input-group-prepend"><span class="input-group-text">Infant No</span></div>
             @Html.EditorFor(model => model.infantNo, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
             @Html.ValidationMessageFor(model => model.infantNo, "", new { @class = "text-danger" })
 
         </div>
-        <div class="input-group col mb-3">
-            <div class="input-group-prepend"><span class="input-group-text">PNR No</span></div>
-            @Html.EditorFor(model => model.PNRno, new { htmlAttributes = new { @type = "text", @class = "form-control LenRestrict", data_mlen = 5 } })
-            @Html.ValidationMessageFor(model => model.PNRno, "", new { @class = "text-danger" })
-
-        </div>
+    </div>
+    <div class="form-row">
         <div class="input-group col mb-3">
             <div class="input-group-prepend"><span class="input-group-text">Flight No</span></div>
             @Html.EditorFor(model => model.FlightNo, new { htmlAttributes = new { @type = "text", @class = "form-control LenRestrict", data_mlen = 4 } })
             @Html.ValidationMessageFor(model => model.FlightNo, "", new { @class = "text-danger" })
-
+        </div>
+        <div class="input-group col mb-3">
+            <div class="input-group-prepend"><span class="input-group-text">Airline</span></div>
+            @Html.EditorFor(model => model.Airline, new { htmlAttributes = new { @type = "text", @class = "form-control LenRestrict", data_mlen = 2 } })
+            @Html.ValidationMessageFor(model => model.Airline, "", new { @class = "text-danger" })
+        </div>
+        
+        <div class="input-group col mb-3">
+            <div class="input-group-prepend">
+                <div class="input-group-text">
+                    @Html.CheckBoxFor(model => model.HasCarrier, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+                </div>
+            </div>
+            <label class="form-control">Check in buggage?</label>
         </div>
 
 
@@ -54,29 +72,12 @@
     </div>
     <div class="form-row">
         <div class="input-group col mb-3">
-            <div class="input-group-prepend"><span class="input-group-text">Airline</span></div>
-            @Html.EditorFor(model => model.Airline, new { htmlAttributes = new { @type = "text", @class = "form-control LenRestrict", data_mlen = 2 } })
-            @Html.ValidationMessageFor(model => model.Airline, "", new { @class = "text-danger" })
-
-        </div>
-        <div class="input-group col mb-3">
-            <div class="input-group-prepend"><span class="input-group-text">Destination Airport</span></div>
-            @Html.EditorFor(model => model.ToLoc, new { htmlAttributes = new { @type = "text", @class = "form-control LenRestrict", data_mlen = 2 } })
-            @Html.ValidationMessageFor(model => model.ToLoc, "", new { @class = "text-danger" })
-
-        </div>
-        <div class="input-group col mb-3">
-            <div class="input-group-prepend"><span class="input-group-text">Check in buggage?</span></div>
-            @Html.EditorFor(model => model.HasCarrier, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.HasCarrier, "", new { @class = "text-danger" })
-
-        </div>
-
-        <div class="input-group col mb-3">
-            <div class="input-group-prepend"><span class="input-group-text">Include Meal?</span></div>
-            @Html.EditorFor(model => model.HasAc, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.HasAc, "", new { @class = "text-danger" })
-
+            <div class="input-group-prepend">
+                <div class="input-group-text">
+                    @Html.CheckBoxFor(model => model.HasAc, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+                </div>
+            </div>
+            <label class="form-control">Meal Included?</label>
         </div>
 
     </div>
@@ -90,6 +91,7 @@
             </div>
             <label class="form-control">Is International?</label>
         </div>
+
         <div class="input-group col mb-3">
             <div class="input-group-prepend">
                 <div class="input-group-text">
@@ -113,27 +115,11 @@
 {@Html.Action("CustSearch", "SR", new { id = Model.SRDID })
 }
 <script>
+    $('#Tdate').prop("disabled", true);
 
-    if ($('#IsReturn').val() == 'true') {
-
-        $('#Tdate').prop("disabled", true);
-
-    }
-    else if ($('#IsReturn').val == 'false') {
-        $('#Tdate').prop("disabled", false);
-    }
-    $('#IsReturn').on('change', function () {
-
-        if ($(this).val() == 'true') {
-
-            $('#Tdate').prop("disabled", false);
-
-        }
-        else if ($(this).val() == 'false') {
-            $('#Tdate').prop("disabled", true);
-        }
-
-
+    $('#IsReturn').on('change', function () {        
+        $('#Tdate').prop("disabled", $('#IsReturn').is(":not(:checked)") );
+            
     });
 
 
