@@ -5,12 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - </title>
     <link rel="icon" href="~/Custom/BBS.ico">
-    @Styles.Render("~/Content/themes/base/css")
-    @Scripts.Render("~/bundles/modernizr")
+    @Styles.Render("~/Content/themes/base/css")    
     @Styles.Render("~/Content/css")
     @Styles.Render("~/Content/dtpic")
     @Styles.Render("~/Content/EAcss")
-    @Scripts.Render("~/Content/fa5")
+    @Styles.Render("~/Content/fa5")
     
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Quattrocento+Sans|Merriweather+Sans">
@@ -18,21 +17,21 @@
 </head>
 <body>
     @*<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>*@
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
     @Html.Partial("_MenuPartial")
 
     @Scripts.Render("~/bundles/jquery")
-
-    @Scripts.Render("~/bundles/jqueryui")
-
-    @Scripts.Render("~/bundles/jquerydtpicker")
-    <script src="/Scripts/jquery.masonry.min.js"></script>
     @*<script src="/Scripts/imagesloaded.pkgd.min.js"></script>*@
     <div id="TopBody">
         @RenderBody()
-        
+
     </div>
 
+    <script src="/Scripts/jquery.masonry.min.js"></script>
+    @Scripts.Render("~/bundles/jqueryui")
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+
+    @Scripts.Render("~/bundles/jquerydtpicker")
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
 
