@@ -654,7 +654,8 @@ namespace Speedbird
         Web,
         Walk_In,
         Word_Of_Mouth,
-        Print_Media
+        Print_Media,
+        Agent
     }
     public enum SRStatusEnum
     {

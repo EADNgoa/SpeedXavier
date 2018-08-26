@@ -54,7 +54,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             ViewBag.Title = "Diary";
             AN=AN ?? DateTime.Now.Date;
             
-            return View("SRDiaryDets", base.BaseIndex<SRdetailDets>(1, " * ", $"ServiceRequest sr , SRdetails srd where sr.PayStatusID={(int)PayType.Full_Paid} and sr.srid=srd.SRID and (srd.FDate='{AN:yyyy-MM-dd}' or ('{AN:yyyy-MM-dd}' between srd.Fdate and srd.TDate))"));
+            return View("SRDiaryDets", base.BaseIndex<SRdetailDets>(1, " * ", $"ServiceRequest sr , SRdetails srd where sr.SRstatusID in ({(int)SRStatusEnum.Confirmed},{(int)SRStatusEnum.Completed}) and sr.srid=srd.SRID and (srd.FDate='{AN:yyyy-MM-dd}' or ('{AN:yyyy-MM-dd}' between srd.Fdate and srd.TDate))"));
 
         }
 

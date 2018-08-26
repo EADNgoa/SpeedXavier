@@ -9,28 +9,24 @@ namespace Speedbird
         public static void RegisterBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
-                        "~/Scripts/jquery-{version}.js"));
+                        "~/Scripts/jquery-3.3.1.min.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
-                        "~/Scripts/jquery.validate*"));
+                        "~/Scripts/jquery.validate.min.js"));
 
-            // Use the development version of Modernizr to develop with and learn from. Then, when you're
-            // ready for production, use the build tool at https://modernizr.com to pick only the tests you need.
-            bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
-                        "~/Scripts/modernizr-*"));
-
+           
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
-                      "~/Scripts/bootstrap.js",                      
-                      "~/Scripts/respond.js"));
+                      "~/Scripts/bootstrap.min.js",                      
+                      "~/Scripts/respond.min.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryui").Include(
-                      "~/Scripts/jquery-ui-{version}.js"));
+                      "~/Scripts/jquery-ui-1.12.1.min.js"));
             bundles.Add(new StyleBundle("~/Content/themes/base/css").Include(
                         "~/Content/themes/base/all.css"));
 
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                      "~/Content/bootstrap.css",
+                      "~/Content/bootstrap.min.css",
                       "~/Content/site.css"));
 
             bundles.Add(new StyleBundle("~/Content/EAcss").Include(
@@ -43,12 +39,12 @@ namespace Speedbird
 
 
             bundles.Add(new ScriptBundle("~/bundles/jquerydtpicker").Include(
-                    "~/Scripts/jquery-ui-timepicker-addon.js",
+                    "~/Scripts/jquery-ui-timepicker-addon.min.js",
                     "~/Scripts/select2.min.js",
                     "~/Scripts/jquery-te-1.4.0.min.js",
                     "~/Scripts/jquery.barrating.min.js"));
             bundles.Add(new StyleBundle("~/Content/dtpic").Include(
-                    "~/Content/jquery-ui-timepicker-addon.css",
+                    "~/Content/jquery-ui-timepicker-addon.min.css",
                     "~/Content/css/select2.min.css",
                     "~/Content/select2-bootstrap.css",
                     "~/Content/jquery-te-1.4.0.css"));

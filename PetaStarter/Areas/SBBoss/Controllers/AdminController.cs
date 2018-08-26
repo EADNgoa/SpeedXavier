@@ -21,6 +21,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         public ActionResult Index()
         {
             var userid = User.Identity.GetUserId();
+            ViewBag.RealName = db.Single<string>($"select realname from AspNetUsers where id='{userid}'");
             ViewBag.OpenSR = db.Query<ServiceRequestDets>("Select Top 5 sr.SRID,sr.BookingNo, FName,SName,ServiceTypeID,Tdate,EnquirySource from ServiceRequest sr inner join Customer c on c.CustomerID =sr.CustID where sr.SRStatusID = @0 and EmpId=@1 order by sr.srid desc", (int)SRStatusEnum.Unconfirmed, userid).ToList();
             var services = db.Query<SRdetailDets>("Select sd.TDate Tdate,sr.SRID,sr.ServiceTypeID,Cost,SellPrice from ServiceRequest sd inner join SRdetails sr on sr.SRID=sd.SRID where EmpID=@0", userid).ToList();
             services.ForEach(s =>
