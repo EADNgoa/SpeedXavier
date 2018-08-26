@@ -153,6 +153,8 @@ namespace Speedbird
         public int SupplierID { get; set; }
         public decimal Cost { get; set; }
         public decimal SellPrice { get; set; }
+        public decimal ECommision { get; set; }
+
         public string PNRno { get; set; }
         public string TicketNo { get; set; }
         public int ChildNo { get; set; }

@@ -48,6 +48,7 @@
     [IsInternational] BIT NOT NULL DEFAULT 0, 
 
     [OptionTypeID] INT NULL, 
+    [ECommision] DECIMAL(18, 2) NULL, 
     CONSTRAINT [FK_SRdetails_ToSR] FOREIGN KEY ([SRID]) REFERENCES [ServiceRequest]([SRID]), 
     CONSTRAINT [FK_SRdetails_ToSupplier] FOREIGN KEY ([SupplierID]) REFERENCES [Supplier]([SupplierID]), 
     CONSTRAINT [FK_SRdetails_ToGuideLanguage] FOREIGN KEY ([GuideLanguageID]) REFERENCES [GuideLanguage]([GuideLanguageID]), 

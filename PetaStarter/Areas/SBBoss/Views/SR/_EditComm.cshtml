@@ -1,0 +1,81 @@
+﻿<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
+<link rel="stylesheet" href="~/scripts/themes/fontawesome-stars.css">
+<div class="modal fade" id="ECommModal" tabindex="-1" role="dialog" aria-labelledby="ECommLabel" aria-hidden="true">
+    <div class="modal-dialog" rol
+         e="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ECommModalLabel">Edit Commision</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            @using (Html.BeginForm("EditComm", "SR", FormMethod.Post, new { id = "EditCommFrm" }))
+            {
+
+                @Html.AntiForgeryToken()
+              
+                <div class="modal-body">
+
+                    @Html.Hidden("SRDID")
+                    <div class="form-row">
+                        <div class="input-group col mb-3">
+                            <div class="input-group-prepend"><span class="input-group-text">Enter Amount</span></div>
+                            @Html.Editor("ECommision", new { htmlAttributes = new { @type = "text", @class = " form-control" } })
+                        </div>
+                    </div>
+
+                </div>
+
+            }
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button id="SaveComm" type="button" class="btn btn-primary" data-dismiss="modal">Save</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    $(function () { 
+
+        $('#SaveComm').click(function () {
+                var detFrm = $('#EditCommFrm');
+
+                if (typeof(detFrm[0]) == 'object')
+                {
+                    $.ajax({
+                        url: '@Url.Action("EditComm", "SR")',
+                        type: 'post',
+                        data: $(detFrm).serialize(),
+                        success: function () {
+
+                                        window.location.assign('@Url.Action("Manage", new { id = (int)ViewBag.SRID,mode=6 })');
+                        }
+                    });
+                }
+        });
+
+        $('#ECommModal').on('shown.bs.modal', function (event) {        
+
+            var button = $(event.relatedTarget); // Button that triggered the modal
+            var srdid = button.data('srdid');
+            var modal = $(this);
+            $('#SRDID').val(srdid);
+
+            modal.find('#ECommision').focus();
+
+
+        });
+
+    
+        
+
+    })
+
+
+</script>

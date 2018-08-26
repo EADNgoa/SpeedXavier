@@ -1049,6 +1049,7 @@ namespace Speedbird
 		[Column] public bool IsReturn { get; set; }
 		[Column] public bool IsInternational { get; set; }
 		[Column] public int? OptionTypeID { get; set; }
+		[Column] public decimal? ECommision { get; set; }
 	}
     
 	[TableName("dbo.SRlogs")]
