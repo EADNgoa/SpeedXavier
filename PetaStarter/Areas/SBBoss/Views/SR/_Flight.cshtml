@@ -68,6 +68,7 @@
         </div>
 
 
+
     </div>
     <div class="form-row">
         <div class="input-group col mb-3">
@@ -77,6 +78,18 @@
                 </div>
             </div>
             <label class="form-control">Meal Included?</label>
+        </div>
+
+    </div>
+    <div class="form-row">
+ 
+        <div class="input-group col-4 mb-3">
+            <div class="input-group-prepend">
+                <div class="input-group-text">
+                    @Html.EditorFor(model => model.IsInternational)
+                </div>
+            </div>
+            <label class="form-control">Is International?</label>
         </div>
 
         <div class="input-group col mb-3">

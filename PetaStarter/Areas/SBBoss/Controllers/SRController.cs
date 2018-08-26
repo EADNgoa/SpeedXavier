@@ -401,7 +401,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [EAAuthorize(FunctionName = "Service Requests", Writable = true)]
-        public ActionResult SRdetails([Bind(Include = "SRDID,HasAc,HasCarrier,RateBasis,PayTo,PickUpPoint,DropPoint,SRID,ServiceTypeID,FromLoc,ToLoc,SuppInvNo,Fdate,Tdate,SupplierID,Cost,SellPrice,PNRno,TicketNo,Heritage,ChildNo,AdultNo,InfantNo,RoomType,CouponCode,City,Airline,DateOfIssue,FlightNo,ContractNo,GuideLanguageID,SSType,CarType,Model,ParentID,IsReturn,OptionTypeID,ItemID")] SRdetail item, string Event,string IsReturn)
+        public ActionResult SRdetails([Bind(Include = "SRDID,HasAc,HasCarrier,RateBasis,PayTo,PickUpPoint,DropPoint,SRID,ServiceTypeID,FromLoc,ToLoc,SuppInvNo,Fdate,Tdate,SupplierID,Cost,SellPrice,PNRno,TicketNo,Heritage,ChildNo,AdultNo,InfantNo,RoomType,CouponCode,City,Airline,DateOfIssue,FlightNo,ContractNo,GuideLanguageID,SSType,CarType,Model,ParentID,IsReturn,IsInternational,OptionTypeID,ItemID")] SRdetail item, string Event,string IsReturn)
         {
             using (var transaction = db.GetTransaction())
             {
