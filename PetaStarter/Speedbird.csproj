@@ -201,6 +201,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Areas\SBBoss\Controllers\EmployeeController.cs" />
+    <Compile Include="Areas\SBBoss\Controllers\OwnedAssetController.cs" />
     <Compile Include="Areas\SBBoss\Controllers\SupplierController.cs" />
     <Compile Include="Areas\SBBoss\Controllers\AgentController.cs" />
     <Compile Include="Areas\SBBoss\Controllers\GroupController.cs" />
@@ -781,6 +782,7 @@
     <Content Include="Areas\SBBoss\Views\RP\_Card.cshtml" />
     <Content Include="Areas\SBBoss\Views\Agent\Manage.cshtml" />
     <Content Include="Areas\SBBoss\Views\SR\_EditComm.cshtml" />
+    <Content Include="Areas\SBBoss\Views\OwnedAsset\Index.cshtml" />
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <Content Include="Areas\SBBoss\Views\RP\DriverR.cshtml" />
     <Content Include="Areas\SBBoss\Views\RP\DriverP.cshtml" />
