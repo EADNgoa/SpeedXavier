@@ -32,7 +32,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         [EAAuthorize(FunctionName = "Service Requests", Writable = false)]
         public ActionResult SRQueue(int? page, string AN)
         {
-            var LatestSR = db.Query<Queue>("Select ServiceTypeId, Count(1) as Count from ServiceRequest where SRStatusID = @0 group by ServiceTypeId having count(ServiceTypeId)>0", SRStatusEnum.New);
+            var LatestSR = db.Query<Queue>("Select ServiceTypeId, Count(1) as Count from ServiceRequest where SRStatusID in (@0,@1) and (RemindAt is null OR RemindAt<GetDate()) group by ServiceTypeId having count(ServiceTypeId)>0", SRStatusEnum.New, SRStatusEnum.Reminder);
 
             return PartialView("_Queue", LatestSR);
         }
@@ -42,8 +42,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
         {
             page = 1;
             ViewBag.ServiceRequestTypeId = st;
-            return View("SRQueueIndex", base.BaseIndex<ServiceRequestDets>(page, "sr.SRID, TDate, event as request,FName, SName, Phone  ", $"ServiceRequest sr inner join SR_Cust sc on sr.SRID = sc.ServiceRequestID " +
-                $"inner join Customer c on c.CustomerID = sc.CustomerID inner join SRlogs l on sr.SRID=l.SRID where ServiceTypeID={(int)st} and SRStatusID ={(int)SRStatusEnum.New}"));
+            return View("SRQueueIndex", base.BaseIndex<ServiceRequestDets>(page, "sr.SRID, TDate, event as request,FName, SName, Phone, IgnoreReason  ", $"ServiceRequest sr inner join SR_Cust sc on sr.SRID = sc.ServiceRequestID " +
+                $"inner join Customer c on c.CustomerID = sc.CustomerID inner join SRlogs l on sr.SRID=l.SRID where ServiceTypeID={(int)st} and SRStatusID in({(int)SRStatusEnum.New} , {(int)SRStatusEnum.Reminder})"));
         }
 
 
@@ -69,16 +69,18 @@ namespace Speedbird.Areas.SBBoss.Controllers
             string Cemail = "";
             string Cphone = "";
             string AgentName = "";
+            string UserName = "";
 
             if (columnSearch[2]?.Length > 0) { CustName = columnSearch[2]; columnSearch[2] = null; }            
             if (columnSearch[3]?.Length > 0) { Cphone = columnSearch[3]; columnSearch[3] = null; }
             if (columnSearch[4]?.Length > 0) { Cemail = columnSearch[4]; columnSearch[4] = null; }
             if (columnSearch[5]?.Length > 0) { AgentName = columnSearch[5]; columnSearch[5] = null; }
+            if (columnSearch[6]?.Length > 0) { UserName = columnSearch[6]; columnSearch[6] = null; }
 
 
 
-            var sql = new PetaPoco.Sql($"Select SRID, BookingNo,TDate, CONCAT(c.FName, ' ', c.SName) as CName, c.Phone, c.email, u.email as AgentName,SRStatusID, PayStatusID " +
-                $"from ServiceRequest s left join AspNetUsers u on u.id=s.AgentId ");
+            var sql = new PetaPoco.Sql($"Select SRID, BookingNo,TDate, CONCAT(c.FName, ' ', c.SName) as CName, c.Phone, c.email, u.email as AgentName, substring(e.RealName,1,10) as UserName, SRStatusID, PayStatusID " +
+                $"from ServiceRequest s left join AspNetUsers u on u.id=s.AgentId left join AspNetUsers e on s.EmpId=e.Id ");
             var fromsql = new PetaPoco.Sql(", Customer c ");                
             var wheresql = new PetaPoco.Sql(" where c.CustomerID=s.CustID and SRStatusId >@0", (int)SRStatusEnum.NoAction);
 
@@ -96,7 +98,10 @@ namespace Speedbird.Areas.SBBoss.Controllers
             {
                 wheresql.Append($" and u.email like '%{AgentName}%' ");
             }
-
+            if (UserName.Length > 0)
+            {
+                wheresql.Append($" and e.RealName like '%{UserName}%' ");
+            }
             wheresql.Append($"{GetWhereWithOrClauseFromColumns(SRColumns, columnSearch)}");
             sql.Append(fromsql);
             sql.Append(wheresql);
@@ -217,6 +222,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             "Phone",
             "Email",            
             "AgentName",
+            "UserName",
             "SRStatusID",
             "PayStatusID"
         };
@@ -225,9 +231,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             "SRID",
             "ServiceTypeName",
             "FromLoc",
-            "ToLoc",
-            "ContractNo",
-            "CouponCode",
+            "ToLoc",            
             "fstr",
             "SupplierName",
             "Cost",
@@ -241,7 +245,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         public ActionResult GetSRInfo(int id, int? mode)
         {
             var rec = db.FirstOrDefault<ServiceRequestDets>("Select * From ServiceRequest Where SRID=@0", id);
-            rec.UserName = db.ExecuteScalar<string>("Select UserName From AspNetUsers Where Id=@0", rec.EmpID);
+            rec.UserName = db.ExecuteScalar<string>("Select substring(RealName,1,3) From AspNetUsers Where Id=@0", rec.EmpID);
             rec.AgentName = db.ExecuteScalar<string>("Select UserName From AspNetUsers Where Id=@0", rec.AgentID);
             ViewBag.mode = mode;
             return PartialView("InfoHeader", rec);
@@ -264,8 +268,12 @@ namespace Speedbird.Areas.SBBoss.Controllers
             }
 
 
-            ViewBag.SRStatusID = Enum.GetValues(typeof(SRStatusEnum)).Cast<SRStatusEnum>().Where(v => v > SRStatusEnum.NoAction).Select(v => new SelectListItem { Text = v.ToString(), Value = ((int)v).ToString() }).ToList();            
+            if (id.HasValue && id>0)         //on 6 sept we changed this for the auto status feature.
+                ViewBag.SRStatusID = db.Single<ServiceRequest>(id).SRStatusID;
+                //ViewBag.SRStatusID = Enum.GetValues(typeof(SRStatusEnum)).Cast<SRStatusEnum>().Where(v => v > SRStatusEnum.NoAction).Select(v => new SelectListItem { Text = v.ToString(), Value = ((int)v).ToString() }).ToList();            
 
+
+            
             ViewBag.EnquirySource = Enum.GetValues(typeof(EnquirySourceEnum)).Cast<EnquirySourceEnum>().Select(v => new SelectListItem { Text = v.ToString(), Value = ((int)v).ToString() }).ToList();
             ViewBag.ServiceTypeID = Enum.GetValues(typeof(ServiceTypeEnum)).Cast<ServiceTypeEnum>().Select(v => new SelectListItem { Text = v.ToString(), Value = ((int)v).ToString() }).ToList();
 
@@ -327,6 +335,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
                     if (item.CustID == null)
                         item.CustID=CID;
+
+                    item.PayStatusID = item.PayStatusID ?? (int) PayType.Not_Paid;
 
                     //on 19 aug 18 Xavier said the Enquiry number should be different from BkNo. BkNo needs to be sequential
                     if (item.BookingNo == null && item.SRStatusID>(int)SRStatusEnum.NoAction)
@@ -392,7 +402,10 @@ namespace Speedbird.Areas.SBBoss.Controllers
             var selST= ServiceTypeID.First<SelectListItem>(a => int.Parse(a.Value) == defaultServType);
             selST.Selected = true;
             ViewBag.ServiceTypeID = ServiceTypeID;
-            ViewBag.OptionTypeID = new SelectList(db.Fetch<OptionType>("Select OptionTypeID,OptionTypeName from OptionType where ServiceTypeID=@0", (int)ServiceTypeEnum.Accomodation), "OptionTypeID", "OptionTypeName");
+            if (rec!=null)
+                ViewBag.OptionTypeID = new SelectList(db.Fetch<OptionType>("Select OptionTypeID,OptionTypeName from OptionType where ServiceTypeID=@0", (int)rec.ServiceTypeID), "OptionTypeID", "OptionTypeName",rec.OptionTypeID);
+            else
+                ViewBag.OptionTypeID = new SelectList(db.Fetch<OptionType>("Select OptionTypeID,OptionTypeName from OptionType where ServiceTypeID=@0", defaultServType), "OptionTypeID", "OptionTypeName");
 
             return PartialView(rec);
         }
@@ -401,7 +414,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [EAAuthorize(FunctionName = "Service Requests", Writable = true)]
-        public ActionResult SRdetails([Bind(Include = "SRDID,HasAc,HasCarrier,RateBasis,PayTo,PickUpPoint,DropPoint,SRID,ServiceTypeID,FromLoc,ToLoc,SuppInvNo,Fdate,Tdate,SupplierID,Cost,SellPrice,PNRno,TicketNo,Heritage,ChildNo,AdultNo,InfantNo,RoomType,CouponCode,City,Airline,DateOfIssue,FlightNo,ContractNo,GuideLanguageID,SSType,CarType,Model,ParentID,IsReturn,IsInternational,OptionTypeID,ItemID")] SRdetail item, string Event,string IsReturn)
+        public ActionResult SRdetails([Bind(Include = "SRDID,HasAc,HasCarrier,RateBasis,PayTo,PickUpPoint,DropPoint,SRID,ServiceTypeID,FromLoc,ToLoc,SuppInvNo,Fdate,Tdate,SupplierID,Cost,SellPrice,PNRno,TicketNo,Heritage,ChildNo,AdultNo,InfantNo,RoomType,CouponCode,City,Airline,DateOfIssue,FlightNo,ContractNo,GuideLanguageID,SSType,CarType,Model,ParentID,IsReturn,IsInternational,OptionTypeID,ItemID, Qty")] SRdetail item, string Event,string IsReturn)
         {
             using (var transaction = db.GetTransaction())
             {
@@ -416,9 +429,9 @@ namespace Speedbird.Areas.SBBoss.Controllers
                             item.Tdate = null;
                         }
 
-                        db.Update(item);
                         LogAction(new SRlog { SRID = item.SRID, SRDID=item.SRDID, Event = Event, Type=true});
                         LogAction(new SRlog { SRID = item.SRID, SRDID = item.SRDID, Event = FindDiffs<SRdetail>(item.SRDID,item,"Service") });
+                        db.Update(item);
                         if(item.IsReturn == true)
                         {
                             db.Execute($"Update Srdetails Set Tdate ='{td.Value.ToString("dd-MM-yyyy")}',FromLoc='{item.ToLoc}',ToLoc ='{item.FromLoc}' where ParentID ={item.SRDID}");
@@ -599,7 +612,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             ViewBag.Title = "Service Reauest Logs";
 
             ViewBag.SRs = db.FirstOrDefault<ServiceRequestDets>("Select * From ServiceRequest Where SRID=@0", id);
-            ViewBag.SRLogDets = db.Fetch<SRlogsDets>($"Select * From SRLogs sl inner join AspNetUsers anu on sl.UserID = anu.Id where SRID ='{id}' ORDER By SRLID Desc");
+            ViewBag.SRLogDets = db.Fetch<SRlogsDets>($"Select sl.srlid,sl.srdid,sl.logDateTime,substring(anu.Realname,1,10) as UserName,sl.Type,Event From SRLogs sl inner join AspNetUsers anu on sl.UserID = anu.Id where SRID ='{id}' ORDER By SRLID Desc");
             return PartialView(rec);
         }
 
@@ -928,11 +941,11 @@ namespace Speedbird.Areas.SBBoss.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public bool RemindAt(int SRID, DateTime remindAtDt)
+        public bool RemindAt(int SRID, DateTime remindAtDt, string IgnoreReason)
         {
             try
             {
-                int res = db.Execute("Update ServiceRequest set RemindAt=@0,SRStatusId=@1, EmpId=@2  where SRID=@3", remindAtDt, (int)SRStatusEnum.NoAction, User.Identity.GetUserId(), SRID);
+                int res = db.Execute("Update ServiceRequest set RemindAt=@0,SRStatusId=@1, EmpId=@2,IgnoreReason=@3 where SRID=@4", remindAtDt, (int)SRStatusEnum.Reminder, User.Identity.GetUserId(), IgnoreReason, SRID);
                 
                 return true;
 
@@ -1053,6 +1066,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
             try
             {
                 int res = db.Execute("Update SRdetails set ECommision=@0 where SRDID=@1",ECommision,SRDID);
+                
+                LogAction(new SRlog { SRID = db.Single<SRdetail>(SRDID).SRID, SRDID=SRDID, Event = "Commission Edited to "+ ECommision });
                 return true;
 
             }

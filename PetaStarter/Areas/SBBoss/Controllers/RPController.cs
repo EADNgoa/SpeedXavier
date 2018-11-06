@@ -57,17 +57,20 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
                                 }
                                 int pid = 0;
+                                
                                 if (OA != null || OA ==ManAmt)
                                 {
-                                    pid = (int)PayType.Full_Paid;
+                                    pid = (int)PayType.Full_Paid;                                    
                                 }
                                 if (ManAmt != null && (ManAmt<=(OA+PExist)) && OA != ManAmt)
                                 {
                                     pid = (int)PayType.Part_Paid;
                                 }
 
-                                
-                                db.Execute("Update ServiceRequest set PayStatusID =@0 Where SRID = @1 ",pid, SRID);
+                                if (pid==(int)PayType.Full_Paid)
+                                    db.Execute("Update ServiceRequest set PayStatusID =@0, SRStatusID = @1 Where SRID = @2 ",pid, (int)SRStatusEnum.Confirmed, SRID);
+                                else
+                                    db.Execute("Update ServiceRequest set PayStatusID =@0 Where SRID = @1 ",pid, SRID);
                             }
 
                         }
@@ -75,11 +78,11 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 }
             }
             
-            var NPbkngs = new PetaPoco.Sql($"Select distinct sr.SRID, CONCAT(c.FName,' ' ,c.SName) as cName,anu.UserName," +
+            var NPbkngs = new PetaPoco.Sql($"Select distinct sr.SRID,sr.BookingNo, CONCAT(c.FName,' ' ,c.SName) as cName,anu.UserName," +
                 "(select Coalesce(sum(SellPrice),0) From SRdetails Where SRID =sr.SRID) as OA ," +
                 "(Select  Coalesce(Sum(Amount),0) from RP_SR rs Where SRID=sr.SRID) as PaidAmt " +
                 "from ServiceRequest sr left join AspNetUsers anu on anu.Id = sr.AgentID left join Customer c on c.CustomerID =sr.CustID  " +
-                $"Where sr.PayStatusID in (1,2)");
+                $"Where sr.PayStatusID in ({(int)PayType.Not_Paid},{(int)PayType.Part_Paid})");
                 if (CustName?.Length > 0)
                 {
                     NPbkngs.Append($" and LOWER(CONCAT(c.FName,' ' ,c.SName)) like '%{CustName.ToLower()}%'");
@@ -89,6 +92,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 string cha = "@";
                 NPbkngs.Append($" and LOWER(anu.UserName) like '%{cha}%'",AgentName);
                 }
+            NPbkngs.Append(" order by sr.BookingNo desc");
           var bkngs = db.Query<SRBooking>(NPbkngs).Where(a=>a.OA > 0).ToList();
           ViewBag.UnUsedP = db.Fetch<RPDetails>("Select rp.RPDID,rp.Amount,rp.Type,(Select Coalesce(Sum(Amount),0) from RP_SR Where RPDID = rp.RPDID) as UnUsedAmt from RPdets rp  where AmtUsed is Null and IsPayment = @0",false);           
           decimal getT = db.ExecuteScalar<decimal?>("Select Amount from RPDets Where RPDID=@0",id) ?? 0;

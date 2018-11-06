@@ -644,4 +644,18 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="ECommision" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="fc9686e3-37a3-4f0a-bef7-d97e21e32393" ChangeDateTime="09/25/2018 03:01:07">
+    <Property Name="ElementName" Value="[dbo].[Agent].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Agent]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="AgentId" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="f667fe43-efaf-4dee-b8e0-1d502b16467e" ChangeDateTime="09/25/2018 03:27:35">
+    <Property Name="ElementName" Value="[dbo].[Agent].[AgencyName]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Agent]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="ContactName" />
+  </Operation>
 </Operations>

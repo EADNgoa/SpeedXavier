@@ -6,16 +6,20 @@
 </style>
 @if (Model != null)
 {
-    <table class="table table-active">
+    <div class="alert alert-secondary">
+    <table class="table table-sm table-dark">
         <tr>
             <th>
                 Booking No.
             </th>
             <th>
+                Booking Date.
+            </th>
+            <th>
                 Status
             </th>
             <th>
-                Employee Name
+                Emp. Name
             </th>
             <th>
                 Agent Name
@@ -27,6 +31,9 @@
         <tr>
             <td>
                 @Model.BookingNo
+            </td>
+            <td>
+                @Model.DT
             </td>
             <td>
                 @((Speedbird.SRStatusEnum) Model.SRStatusID)
@@ -42,6 +49,6 @@
             </td>
         </tr>
     </table>
-
+</div>
 }
 

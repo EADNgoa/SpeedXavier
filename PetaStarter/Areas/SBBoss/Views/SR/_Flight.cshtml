@@ -59,46 +59,82 @@
         </div>
         
         <div class="input-group col mb-3">
-            <div class="input-group-prepend">
-                <div class="input-group-text">
-                    @Html.CheckBoxFor(model => model.HasCarrier, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+            @if (ViewBag.isReadOnly != null)
+            {
+                <div class="bg-secondary px-2 text-light">
+                    @Html.Label((Model.HasCarrier) ? "Includes Check-in Baggage" : "No Check-in Baggage")
                 </div>
-            </div>
-            <label class="form-control">Check in buggage?</label>
+            }
+            else
+            {
+                <div class="input-group-prepend">
+                    <div class="input-group-text">
+                        @Html.CheckBoxFor(model => model.HasCarrier, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+                <label class="form-control">Includes Check-in Baggage?</label>
+            }
         </div>
 
 
 
     </div>
     <div class="form-row">
-        <div class="input-group col mb-3">
-            <div class="input-group-prepend">
-                <div class="input-group-text">
-                    @Html.CheckBoxFor(model => model.HasAc, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
-                </div>
-            </div>
-            <label class="form-control">Meal Included?</label>
-        </div>
+        
 
     </div>
     <div class="form-row">
- 
-        <div class="input-group col-4 mb-3">
-            <div class="input-group-prepend">
-                <div class="input-group-text">
-                    @Html.EditorFor(model => model.IsInternational)
+        <div class="input-group col mb-3">
+            @if (ViewBag.isReadOnly != null)
+            {
+                <div class="bg-secondary px-2 text-light">
+                    @Html.Label((Model.HasAc) ? "Includes Meal" : "Without Meal")
                 </div>
-            </div>
-            <label class="form-control">Is International?</label>
+            }
+            else
+            {
+                <div class="input-group-prepend">
+                    <div class="input-group-text">
+                        @Html.CheckBoxFor(model => model.HasAc, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+                    </div>
+                </div>
+                <label class="form-control">Is Meal Included?</label>
+            }
+        </div>
+        <div class="input-group col mb-3">
+            @if (ViewBag.isReadOnly != null)
+            {
+                <div class="bg-secondary px-2 text-light">
+                    @Html.Label((Model.IsInternational) ? "International Flight" : "Domestic Flight")
+                </div>
+            }
+            else
+            {
+                <div class="input-group-prepend">
+                    <div class="input-group-text">
+                        @Html.CheckBoxFor(model => model.IsInternational, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+                    </div>
+                </div>
+                <label class="form-control">Is International?</label>
+            }
         </div>
 
         <div class="input-group col mb-3">
-            <div class="input-group-prepend">
-                <div class="input-group-text">
-                    @Html.EditorFor(model => model.IsReturn)
+            @if (ViewBag.isReadOnly != null)
+            {
+                <div class="bg-secondary px-2 text-light">
+                    @Html.Label((Model.IsReturn) ? "Return Flight" : "One Way flight")
                 </div>
-            </div>
-            <label class="form-control">Is Return?</label>
+            }
+            else
+            {
+                <div class="input-group-prepend">
+                    <div class="input-group-text">
+                        @Html.CheckBoxFor(model => model.IsReturn, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+                    </div>
+                </div>
+                <label class="form-control">Is Return?</label>
+            }
         </div>
 
 
@@ -140,7 +176,7 @@
         showButtonPanel: true,
         changeMonth: true,
         changeYear: true,
-        timeFormat: "hh:mm"
+        timeFormat: "HH:mm"
 
     });
     $('.eadate').datepicker({

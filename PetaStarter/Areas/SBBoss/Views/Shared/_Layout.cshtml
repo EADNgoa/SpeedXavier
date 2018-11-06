@@ -9,7 +9,7 @@
     @Styles.Render("~/Content/css")
     @Styles.Render("~/Content/dtpic")
     @Styles.Render("~/SBBoss/Content/EAcss")
-    @Styles.Render("~/Content/fa5")
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
     
     <link rel="stylesheet" type="text/css" href="~/Content/DataTables/datatables.min.css" />
 
@@ -90,8 +90,8 @@
                         <a href="#" data-toggle="collapse" data-target="#submenu-cont"><span style="display:block;"><i class="fas fa-cogs fa-inverse"></i> Setup<i class="fas fa-angle-down float-right"></i></span></a>
                         <ul id="submenu-cont" class="collapse" data-parent="#navVert">
                             <li class="nav-item"><i class="fas fa-taxi fa-inverse"></i><a class="nav-link" href="~/SBBoss/Driver"> Driver</a></li>
-                            <li class="nav-item"><i class="fas fa-address-book fa-inverse"></i><a class="nav-link" href="~/SBBoss/Coupon/Agents"> Agent Discount</a></li>
                             <li class="nav-item"><i class="fas fa-address-book fa-inverse"></i><a class="nav-link" href="~/SBBoss/Agent"> Agents </a></li>
+                            <li class="nav-item"><i class="fas fa-address-book fa-inverse"></i><a class="nav-link" href="~/SBBoss/Coupon/Agents"> Agent Discount</a></li>
                             <li class="nav-item"><i class="far fa-user fa-inverse"></i><a class="nav-link" href="~/SBBoss/Supplier"> Supplier</a></li>
                             <li class="nav-item"><i class="fab fa-accusoft fa-inverse"></i><a class="nav-link" href="~/SBBoss/Coupon"> Coupons</a></li>
                             <li class="nav-item"><i class="fab fa-cc-visa fa-inverse"></i><a class="nav-link" href="~/SBBoss/MiceVisa/Visa"> Visa</a></li>
@@ -169,7 +169,7 @@
             showButtonPanel: true,
             changeMonth: true,
             changeYear: true,
-            timeFormat: "hh:mm"
+            timeFormat: "HH:mm"
 
         }).attr('type', 'text').attr('autocomplete', 'off');
 
@@ -182,7 +182,7 @@
             showButtonPanel: true,
             changeMonth: true,
             changeYear: true,
-            timeFormat: "hh:mm"
+            timeFormat: "HH:mm"
 
         });
         $('.eadate').datepicker({

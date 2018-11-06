@@ -108,7 +108,7 @@
                     <tr>
 
                         <td>
-                            @item.SRID
+                            @item.BookingNo
                         </td>
                         <td>
                             @if (item.cName != null)
@@ -121,10 +121,12 @@
                     }
                         </td>
                         <td>
-                            @(item.OA - item.PaidAmt )
+                            @item.OA
                         </td>
                         <td>@item.PaidAmt</td>
-                        <td>@item.OA</td>
+                        <td>
+                            @(item.OA - item.PaidAmt )
+                        </td>
                         <td>
                             <input name="Amt" type="text" class="form-control" data-save="@item.SRID" />
                         </td>

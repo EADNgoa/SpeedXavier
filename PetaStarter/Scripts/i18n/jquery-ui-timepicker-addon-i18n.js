@@ -857,7 +857,7 @@
 		timezoneText: 'เขตเวลา',
 		currentText: 'เวลาปัจจุบัน',
 		closeText: 'ปิด',
-		timeFormat: 'hh:mm tt',
+		timeFormat: 'HH:mm tt',
 		timeSuffix: ''
 	};
 
