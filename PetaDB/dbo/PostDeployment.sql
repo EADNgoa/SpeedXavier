@@ -42,6 +42,7 @@ BEGIN
 	INSERT INTO [dbo].[UserFunctions] ([FunctionID], [FunctionName], [Module]) VALUES (37, N'Supplier', N'Supplier')
 	INSERT INTO [dbo].[UserFunctions] ([FunctionID], [FunctionName], [Module]) VALUES (38, N'BossLogDetails', N'Boss Log Details')
 	INSERT INTO [dbo].[UserFunctions] ([FunctionID], [FunctionName], [Module]) VALUES (39, N'Agents', N'Setup')
+    INSERT INTO [dbo].[UserFunctions] ([FunctionID], [FunctionName], [Module]) VALUES (40, N'OwnedAsset', N'OwnedAsset')
 
 
 

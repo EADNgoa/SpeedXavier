@@ -1,0 +1,110 @@
+﻿@model  IEnumerable<Speedbird.SRdetailDets>
+
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Profit and Loss Summary for Owned Assets";
+}
+
+
+<div class="card border rounded DropShadow">
+    <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
+        <span class="h5">Search</span>
+    </div>
+    <div class="card-body">
+        <h5 class="card-title">&nbsp;</h5>
+        @using (Html.BeginForm("Index", "OwnedAsset", FormMethod.Get))
+        {
+            <div class="row d-print-none">
+                <table>
+                    <tr style="text-align:center">
+                        <td> ServiceType:</td>
+                        <td>
+                            @Html.DropDownList("ServiceTypeID",null,"-----",htmlAttributes: new {@Class="form-control" })
+                        </td>
+                        <td>&nbsp; From Date:</td>
+                        <td> @Html.TextBox("fd", ViewBag.CurrentFilter as string, new { @class = "form-control eadate", @type = "Text" })</td>
+                        <td>&nbsp; To Date:</td>
+                        <td> @Html.TextBox("td", ViewBag.CurrentFilter as string, new { @class = "form-control eadate", @type = "Text" })</td>
+                        <td><input type="submit" value="Search" class="btn btn-primary" /></td>
+                    </tr>
+                </table>
+
+            </div>
+        }
+    </div>
+</div>
+
+
+<div class="card border rounded DropShadow">
+    <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
+        <span class="h3">@ViewBag.Title</span>
+    </div>
+    <div class="card-body">
+        <h5>&nbsp;</h5>
+        <table class="table">
+            <tr>
+                <th>
+                   Date
+                </th>
+                <th>
+                    Service Name
+                </th>
+                <th>Service Type</th>
+                <th>
+                    Sell Price
+                </th>
+                <th>
+                    Cost Price
+                </th>
+                <th>
+                    Tax
+                </th>
+                <th>
+                    Commsion
+                </th>
+              <th>
+                  Total
+              </th>
+
+                <th></th>
+            </tr>
+            @foreach (var item in Model)
+            {
+            <tr>
+              
+                <td>
+                    @Html.DisplayFor(modelItem => item.Tdate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SupplierName)
+
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ServiceTypeName)
+
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SellPrice)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Cost)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Tax)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Commision)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Total)
+                </td>
+            </tr>
+            }
+
+        </table>
+      
+    </div>
+</div>
+
+
+
