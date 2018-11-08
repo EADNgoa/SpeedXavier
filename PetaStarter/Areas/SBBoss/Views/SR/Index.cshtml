@@ -30,6 +30,7 @@
                     <th><input type="text" class="form-control" placeholder="Filter Email"></th>
                     
                     <th><input type="text" class="form-control" placeholder="Agent Name"></th>
+                    <th><input type="text" class="form-control" placeholder="Emp Name"></th>
                     <th>@Html.DropDownList("SRStatus",(IEnumerable<SelectListItem>)ViewBag.SRStatusID, new { @class = "form-control"})</th>
                     <th>@Html.DropDownList("PayStatus",(IEnumerable<SelectListItem>)ViewBag.PayStatusID, new { @class = "form-control"})</th>
 
@@ -43,6 +44,7 @@
                     <th scope="col">Email</th>
                     
                     <th scope="col">Agent Name</th>
+                    <th scope="col">Emp Name</th>
                     <th scope="col">Status</th>
 
                     <th width="5%"></th>
@@ -84,6 +86,7 @@
                 { data: "Phone" },
                 { data: "Email" },                
                 { data: "AgentName" },
+                { data: "UserName" },
                 { data: "Status" },
     
 
@@ -92,7 +95,7 @@
             columnDefs: [
                 {
 
-                    'targets': 7,
+                    'targets': 8,
                     'searchable': false,
                     'orderable': false,
                     'bSortable': false,

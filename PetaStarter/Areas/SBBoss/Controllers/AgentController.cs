@@ -23,7 +23,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         public ActionResult Index(int? page ,string AN )
         {
             if (AN?.Length > 0) page = 1;
-            return View("Index", base.BaseIndex<AspNetUser>(page, " * ",$"AspNetUsers Where UserType={(int)UserTypeEnum.Agent} and realName like '%" + AN + "%'"));
+            return View("Index", base.BaseIndex<AgentView>(page, " a.*,u.id, u.RealName ",$"Agent a, AspNetUsers u Where a.AgentId=u.Id and u.UserType={(int)UserTypeEnum.Agent} and realName like '%" + AN + "%'"));
         }
 
         public ActionResult PaymentList(int? page, string Id, DateTime? fd, DateTime? td)
@@ -77,8 +77,9 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
         [EAAuthorize(FunctionName = "Agents", Writable = true)]
         public ActionResult Manage(string id)
-        {            
-            return View(db.SingleOrDefault<AspNetUser>($"Select top 1 * from AspNetUsers where Id = '{id}'") );
+        {
+            var agt = db.SingleOrDefault<AgentView>($"Select u.RealName as RealName,a.* from Agent a, AspNetUsers u where a.AgentId=u.Id and u.Id = '{id}'");
+            return View(agt);
         }
                 
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
@@ -86,27 +87,69 @@ namespace Speedbird.Areas.SBBoss.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [EAAuthorize(FunctionName = "Agents", Writable = true)]
-        public async Task<ActionResult> Manage([Bind(Include = "Id,RealName,email")] AspNetUser model)
+        public async Task<ActionResult> Manage([Bind(Include = "AgentId,RealName,ContactName,AgencyName,PhoneNo,Email,Address,PAN,GST,RCbook,BkAccNo,BkName,BkIFSC,BkAddress")] AgentView model)
         {
-            if (model.Id?.Length > 0)
+            using (var transaction = db.GetTransaction())
             {
-                db.Execute($"Update AspNetUsers Set RealName='{model.RealName}' Where Id='{model.Id}'");
-            } else
-            {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
 
-                var result = await UserManager.CreateAsync(user, "Agent1Pwd!");
-
-                if (result.Succeeded)
+                try
                 {
-                    db.Execute($"Update AspNetUsers Set UserType='{(int)UserTypeEnum.Agent}' , RealName='{model.RealName}' Where Id='{user.Id}'");
-                    var item = new AgentDiscount { UserID = user.Id };
-                    db.Insert(item);
+                    if (model.AgentId?.Length > 0)
+                    {
+                        db.Execute($"Update AspNetUsers Set RealName='{model.RealName}' Where Id='{model.AgentId}'");
+                        db.Update(new Agent
+                        {
+                            Address = model.Address,
+                            AgentId = model.AgentId,
+                            BkAccNo = model.BkAccNo,
+                            BkAddress = model.BkAddress,
+                            BkIFSC = model.BkIFSC,
+                            BkName = model.BkName,
+                            ContactName = model.ContactName,
+                            Email = model.Email,
+                            GST = model.GST,
+                            PAN = model.PAN,
+                            PhoneNo = model.PhoneNo,
+                            RCbook = model.RCbook
+                        });
+                    }
+                    else
+                    {
+                        var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
 
+                        var result = await UserManager.CreateAsync(user, "Agent1Pwd!");
+
+                        if (result.Succeeded)
+                        {
+                            db.Execute($"Update AspNetUsers Set UserType='{(int)UserTypeEnum.Agent}' , RealName='{model.RealName}' Where Id='{user.Id}'");
+                            db.Insert(new Agent
+                            {
+                                Address = model.Address,
+                                AgentId = user.Id,
+                                BkAccNo = model.BkAccNo,
+                                BkAddress = model.BkAddress,
+                                BkIFSC = model.BkIFSC,
+                                BkName = model.BkName,
+                                ContactName = model.ContactName,
+                                Email = model.Email,
+                                GST = model.GST,
+                                PAN = model.PAN,
+                                PhoneNo = model.PhoneNo,
+                                RCbook = model.RCbook
+                            });
+                            var item = new AgentDiscount { UserID = user.Id };
+                            db.Insert(item);
+                        }
+                    }
+                    transaction.Complete();
                 }
-            }
-                        
-                    return RedirectToAction("Index", "Agent");
+                catch (Exception e)
+                {
+                    transaction.Dispose();
+                    throw e;
+                }
+            }           
+            return RedirectToAction("Index", "Agent");
         }
 
         protected override void Dispose(bool disposing)

@@ -63,10 +63,10 @@
                     @item.UserName
                 </td>
                 <td>
-                    @($"{item.LogIn:hh:mm}")
+                    @($"{item.LogIn:HH:mm}")
                 </td>
                 <td>
-                    @($"{item.LogOut:hh:mm}")
+                    @($"{item.LogOut:HH:mm}")
                 </td>
                 <td>
                     <a href="@Url.Action("Manage","Log", new {id = item.UserLogID })"><i title="Edit" class="fas fa-edit fa-inverse h3 float-right DropShadow"></i></a>

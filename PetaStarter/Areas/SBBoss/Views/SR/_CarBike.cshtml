@@ -40,20 +40,38 @@
 
         </div>
         <div class="input-group col mb-3">
-            <div class="input-group-prepend">
-                <div class="input-group-text">
-                    @Html.CheckBoxFor(model => model.HasAc, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+            @if (ViewBag.isReadOnly != null)
+            {
+                <div class="bg-secondary px-2 text-light">
+                    @Html.Label((Model.HasAc) ? "Includes Air Conditioning" : "No A/C")
                 </div>
-            </div>
-            <label class="form-control">Has AC?</label>
+            }
+            else
+            {
+                <div class="input-group-prepend">
+                    <div class="input-group-text">
+                        @Html.CheckBoxFor(model => model.HasAc, new { htmlAttributes = new { @type = "text", @class = "form-control" } }) 
+                    </div>
+                </div>
+                <label class="form-control">Has AC?</label>
+            }
         </div>
         <div class="input-group col mb-3">
-            <div class="input-group-prepend">
-                <div class="input-group-text">
-                    @Html.CheckBoxFor(model => model.HasCarrier, new { htmlAttributes = new { @type = "time", @class = "form-control" } })
+            @if (ViewBag.isReadOnly != null)
+            {
+                <div class="bg-secondary px-2 text-light">
+                    @Html.Label((Model.HasCarrier) ? "Includes Carrier" : "No Carrier")
                 </div>
-            </div>
-            <label class="form-control">Has Carrier?</label>
+            }
+            else
+            {
+                <div class="input-group-prepend">
+                    <div class="input-group-text">
+                        @Html.CheckBoxFor(model => model.HasCarrier, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+                <label class="form-control">Has Carrier?</label>
+            }
         </div>
         
     </div>
@@ -69,14 +87,14 @@
             showButtonPanel: true,
             changeMonth: true,
             changeYear: true,
-            timeFormat: "hh:mm"
+            timeFormat: "HH:mm"
 
         }).attr('type', 'text').attr('autocomplete', 'off');
 
         //Disable the browsers default date picker
         $('input[type=time]').timepicker({
             showButtonPanel: true,
-            timeFormat: "hh:mm"
+            timeFormat: "HH:mm"
 
         }).attr('type', 'text').attr('autocomplete', 'off');
 
@@ -86,6 +104,13 @@
     });
 
     $(document).ready(function () {
+        $('.eadate').datepicker({
+            dateFormat: "dd-MM-yy",
+            showButtonPanel: true,
+            changeMonth: true,
+            changeYear: true
+        });
+
         $('*[data-autocombo-url]')
             .each(function () {
                 $(this).autocomplete({

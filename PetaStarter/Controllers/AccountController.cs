@@ -57,7 +57,8 @@ namespace Speedbird.Controllers
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
-            ViewBag.ReturnUrl = (returnUrl?.Length > 0) ? returnUrl : Request.UrlReferrer.LocalPath;
+            ViewBag.ReturnUrl =(returnUrl?.Length > 0) ? returnUrl : Request.UrlReferrer.LocalPath;
+            
             return View();
         }
 

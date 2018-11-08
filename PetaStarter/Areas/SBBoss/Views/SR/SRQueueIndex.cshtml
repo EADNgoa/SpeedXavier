@@ -18,10 +18,10 @@
                 <th scope="col">Name</th>                
                 <th scope="col">Phone</th>
                 <th scope="col">Requirement</th>
-                
+                <th>Note</th>
                 <th>Remind</th>
                 <th>Ignore</th>
-                <th width="5%">Make Shell</th>
+                <th width="5%">Create Folder</th>
             </tr>
             
             @foreach (var item in Model)
@@ -40,7 +40,9 @@
                 <td>
                     @item.Request
                 </td>
-                
+                <td>
+                    @item.IgnoreReason
+                </td>
 
                 <td>
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#RemindDateModal" data-srid="@item.SRID">
@@ -114,6 +116,9 @@
                 <input type="hidden" id="SRID" name="SRID" />
                 <div class="modal-body">
                     @Html.Editor("remindAtDt", new { htmlAttributes = new { @type = "text", @class = "eadatetime form-control" } })
+                </div>
+                <div class="modal-body">
+                    @Html.TextArea("IgnoreReason")
                 </div>
             }
             <div class="modal-footer">

@@ -46,8 +46,6 @@
 </div>
 <table class="table">
     <tr>
-        <th>Sr No</th>
-
         <th>
             Log Date/Time
         </th>
@@ -57,22 +55,19 @@
         <th>
             Is User Note ?
         </th>
-        <th>
+        <th width="70%">
             Event
         </th>
 
         <th></th>
     </tr>
-    @{int i = 1;}
+
     @foreach (var item in (IEnumerable<Speedbird.SRlogsDets>)ViewBag.SRLogdets)
     {
         <tr>
-            <td>
-                @i
-            </td>
           
             <td>
-                @($"{item.LogDateTime:dd/MMM/yyyy hh:mm}")
+                @($"{item.LogDateTime:dd/MMM/yyyy HH:mm}")
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.UserName)
@@ -91,7 +86,7 @@
                 <a href="@Url.Action("SRLogs","SR", new {id = item.SRLID })"></a>
             </td>
         </tr>
-        i++;
+        
     }
 
 </table>

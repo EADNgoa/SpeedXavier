@@ -12,6 +12,22 @@ using Microsoft.AspNet.Identity;
 
 namespace Speedbird
 {
+    public partial class AgentView
+    {
+        public string AgentId { get; set; }
+        public string RealName { get; set; }
+        public string ContactName { get; set; }
+        public string PhoneNo { get; set; }
+        public string Email { get; set; }
+        public string Address { get; set; }
+        public string PAN { get; set; }
+        public string GST { get; set; }
+        public string RCbook { get; set; }
+        public string BkAccNo { get; set; }
+        public string BkName { get; set; }
+        public string BkIFSC { get; set; }
+        public string BkAddress { get; set; }
+    }
     public class PCdetailDets
     {
         public int PCDID { get; set; }
@@ -127,8 +143,8 @@ namespace Speedbird
     [MetadataType(typeof(SRdetailsMetadata))]
     public partial class SRdetail
     {
-        public string tstr { get { return $"{Tdate:dd MMM yyyy hh:mm}"; } }
-        public string fstr { get { return $"{Fdate:dd MMM yyyy hh:mm}"; } }
+        public string tstr { get { return $"{Tdate:dd MMM yyyy HH:mm}"; } }
+        public string fstr { get { return $"{Fdate:dd MMM yyyy HH:mm}"; } }
         public string ServiceTypeName { get { return ((ServiceTypeEnum)ServiceTypeID).ToString(); } }
 
 
@@ -149,7 +165,7 @@ namespace Speedbird
         public DateTime Fdate { get; set; }
         public string fstr { get { return $"{Fdate:dd-MMM-yyyy}"; } }
         public DateTime Tdate { get; set; }
-        public string tstr { get { return $"{Tdate:dd MMM yyyy hh:mm}"; } }        
+        public string tstr { get { return $"{Tdate:dd MMM yyyy HH:mm}"; } }        
         public int SupplierID { get; set; }
         public decimal Cost { get; set; }
         public decimal SellPrice { get; set; }
@@ -182,8 +198,8 @@ namespace Speedbird
     }
     public partial class CustomerQuery
     {
-        public string Instr { get { return $"{CheckIn:dd MMM yyyy hh:mm}"; } }
-        public string Outstr { get { return $"{CheckOut:dd MMM yyyy hh:mm}"; } }
+        public string Instr { get { return $"{CheckIn:dd MMM yyyy HH:mm}"; } }
+        public string Outstr { get { return $"{CheckOut:dd MMM yyyy HH:mm}"; } }
         public string Tostr { get { return $"{Tdate:dd MMM yyyy}"; } }
         public string CustName { get { return FName + ' ' + SName;  } }        
         public string ServiceTypeName { get { return ((ServiceTypeEnum)ServiceTypeID).ToString();  } }
@@ -567,7 +583,7 @@ namespace Speedbird
         public string Status { get { return ((SRStatusEnum)SRStatusID).ToString(); } }
         public DateTime TDate { get; set; }
 
-        public string DT { get { return $"{TDate:dd MMM yyyy HH:MM}"; } }
+        public string DT { get { return $"{TDate:dd MMM yyyy HH:mm}"; } }
         public decimal? TotSA { get; set; }
         public decimal? AccAmt { get; set; }
 
@@ -585,6 +601,7 @@ namespace Speedbird
 
         public int EnquirySource { get; set; }
         public string Request { get; set; }
+        public string IgnoreReason { get; set; }
 
     }
     public class SRuploadDets

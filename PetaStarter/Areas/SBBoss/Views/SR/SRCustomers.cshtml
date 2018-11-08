@@ -10,7 +10,7 @@
     <span class="h3">@ViewBag.Title</span>
     <a href="@Url.Action("Index","SR",new { sid= ViewBag.sid})"><i class="fas fa-undo-alt fa-inverse h3 float-right DropShadow"></i></a>
 </div>
-
+@Html.Action("GetSRInfo", "SR", new { id = ViewBag.SRID, mode = ViewBag.mode })
 @using (Html.BeginForm("SRCustomers", "SR", FormMethod.Post, new { id = "" }))
 {
     @Html.AntiForgeryToken()
@@ -74,9 +74,9 @@
                                 Sr No
                             </th>
                             <th>
-                               Name
+                                Name
                             </th>
-                      
+
                             <th>
                                 Phone
                             </th>
@@ -175,7 +175,7 @@
                 <th>Sr No</th>
                 <th>
                     Name
-               
+
                 <th>
                     Phone
                 </th>
@@ -190,29 +190,29 @@
             @{int i = 1;}
             @foreach (var item in (List<Speedbird.Customer>)ViewBag.Custs)
             {
-            <tr>
-                <td>
-                    @i
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.FName)&nbsp;@Html.DisplayFor(modelItem => item.SName)
-       
-                <td>
-                    @Html.DisplayFor(modelItem => item.Phone)
+                <tr>
+                    <td>
+                        @i
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FName)&nbsp;@Html.DisplayFor(modelItem => item.SName)
 
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Email)
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Phone)
 
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Type)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Email)
 
-                </td>
-                <td>
-                    @Html.ActionLink("Delete", "SRCustomers", new { cid = item.CustomerID, id = ViewBag.SRID }, new { @Class = "delcust" })
-                </td>
-            </tr>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Type)
+
+                    </td>
+                    <td>
+                        @Html.ActionLink("Delete", "SRCustomers", new { cid = item.CustomerID, id = ViewBag.SRID }, new { @Class = "delcust" })
+                    </td>
+                </tr>
                 i++;
             }
 

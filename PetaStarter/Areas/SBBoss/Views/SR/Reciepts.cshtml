@@ -9,7 +9,7 @@
     <span class="h3">@ViewBag.Title</span>
     <a href="@Url.Action("Index", "SR", new { sid = ViewBag.sid })"><i class="fas fa-undo-alt fa-inverse h3 float-right DropShadow"></i></a>
 </div>
-
+@Html.Action("GetSRInfo", "SR", new { id = ViewBag.SRID, mode = ViewBag.mode })
 <h4>Profit/Loss Summary</h4>
 <table class="table table-striped">
     <tr>
@@ -175,27 +175,27 @@
 }
 @{
     var rec = (IEnumerable<Speedbird.SRdetailDets>)ViewBag.Services;
- }
-   
+}
 
-    @if (rec != null)
-    {
-        <script>
-           $('#EditComm').load('@Url.Action("_EditComm")', { SRID: @rec.First().SRID});
-        </script>
-    }
+
+@if (rec.Count() >0)
+{
     <script>
-        $(function () {
-            //DateTime picker
-            $('.eadate').datepicker({
-                dateFormat: "dd-M-yy",
-                showButtonPanel: true,
-                changeMonth: true,
-                changeYear: true
-            }).attr('type', 'text').attr('autocomplete', 'off');
-
-            //Disable the browsers default date picker
-            jQuery.validator.methods["date"] = function (value, element) { return true; }
-
-        })
+           $('#EditComm').load('@Url.Action("_EditComm")', { SRID: @rec.First().SRID});
     </script>
+}
+<script>
+    $(function () {
+        //DateTime picker
+        $('.eadate').datepicker({
+            dateFormat: "dd-M-yy",
+            showButtonPanel: true,
+            changeMonth: true,
+            changeYear: true
+        }).attr('type', 'text').attr('autocomplete', 'off');
+
+        //Disable the browsers default date picker
+        jQuery.validator.methods["date"] = function (value, element) { return true; }
+
+    })
+</script>
