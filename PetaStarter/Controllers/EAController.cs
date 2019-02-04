@@ -76,21 +76,30 @@ namespace Speedbird.Controllers
 
             }
 
-            protected override void OnException(ExceptionContext filterContext)
+        protected override void OnException(ExceptionContext filterContext)
+        {
+            if (!filterContext.ExceptionHandled)
             {
-                if (!filterContext.ExceptionHandled)
-                {
-                    string controller = filterContext.RouteData.Values["controller"].ToString();
-                    string action = filterContext.RouteData.Values["action"].ToString();
-                    Exception ex = filterContext.Exception;
+                string controller = filterContext.RouteData.Values["controller"].ToString();
+                string action = filterContext.RouteData.Values["action"].ToString();
+                Exception ex = filterContext.Exception;
+                var errorTime = DateTime.Now;
 
-                    filterContext.Result = new ViewResult
-                    {
-                        ViewName = "Error",
-                        ViewData = new ViewDataDictionary(new HandleErrorInfo(ex, controller, action))
-                    };
-                    filterContext.ExceptionHandled = true;
+                string MessageStack = ex.Message;
+                while (ex.InnerException != null)
+                {
+                    MessageStack += " > " + ex.InnerException.Message;
+                    ex = ex.InnerException;
                 }
+
+                //db.Insert(new InsectLog { CritterTime = errorTime, Controller = controller, Action = action, Message = MessageStack, Stack = ex.StackTrace });
+                filterContext.Result = new ViewResult
+                {
+                    ViewName = "Error",
+                    ViewData = new ViewDataDictionary(new HandleErrorInfo(ex, controller, action))
+                };
+                filterContext.ExceptionHandled = true;
             }
         }
+    }
     }

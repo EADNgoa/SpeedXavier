@@ -582,6 +582,18 @@ namespace Speedbird
 		[Column] public string IconPath { get; set; }
 	}
     
+	[TableName("dbo.InsectLog")]
+	[PrimaryKey("CritterTime", AutoIncrement=false)]
+	[ExplicitColumns]
+    public partial class InsectLog  
+    {
+		[Column] public DateTime CritterTime { get; set; }
+		[Column] public string Controller { get; set; }
+		[Column] public string Action { get; set; }
+		[Column] public string Message { get; set; }
+		[Column] public string Stack { get; set; }
+	}
+    
 	[TableName("dbo.LateBreak")]
 	[PrimaryKey("LateBreakID", AutoIncrement=false)]
 	[ExplicitColumns]
