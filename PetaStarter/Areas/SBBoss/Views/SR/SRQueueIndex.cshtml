@@ -18,10 +18,10 @@
                 <th scope="col">Name</th>                
                 <th scope="col">Phone</th>
                 <th scope="col">Requirement</th>
-                <th>Note</th>
-                <th>Remind</th>
-                <th>Ignore</th>
+                <th>Later?</th>
                 <th width="5%">Create Folder</th>
+                <th>Ignore?</th>
+                <th>For</th>
             </tr>
             
             @foreach (var item in Model)
@@ -40,22 +40,22 @@
                 <td>
                     @item.Request
                 </td>
-                <td>
-                    @item.IgnoreReason
-                </td>
 
                 <td>
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#RemindDateModal" data-srid="@item.SRID">
-                        Remind Later
-                    </button>
-                </td>
-                <td>
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#IgnoreReasonModal" data-srid="@item.SRID">
-                        No Action
+                        When?
                     </button>
                 </td>
                 <td>
                     <a href="@Url.Action("Manage","SR", new {id = item.SRID })"><i title="Edit" class="fas fa-edit fa-inverse h3 float-right DropShadow"></i></a>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#IgnoreReasonModal" data-srid="@item.SRID">
+                        Why?
+                    </button>
+                </td>
+                <td>
+                    @item.IgnoreReason
                 </td>
             </tr>
                 

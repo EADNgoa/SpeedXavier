@@ -658,4 +658,18 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="ContactName" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="6fa9ab65-d54b-4b7a-a0fe-6fe6c3c8250d" ChangeDateTime="02/20/2019 04:34:14">
+    <Property Name="ElementName" Value="[dbo].[SRdetails].[ItemID]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[SRdetails]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="StatusID" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="3ecbb39c-8644-4655-8cd5-483214952025" ChangeDateTime="02/20/2019 04:35:09">
+    <Property Name="ElementName" Value="[dbo].[SRdetails].[StatusID]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[SRdetails]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="IsCanceled" />
+  </Operation>
 </Operations>

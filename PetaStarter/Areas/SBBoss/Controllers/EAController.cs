@@ -43,7 +43,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             protected T BaseCreateEdit<T>(int? id, string IDname)
             {
                 T a;
-                if (id.HasValue) //is edit
+                if (id.HasValue && id>0) //is edit
                 {
                     a = db.SingleOrDefault<T>($"where {IDname} = @0", id);
                     return a;
@@ -57,9 +57,12 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 {                    
                     var r = (isExisting) ? db.Update(ObjToSave) : db.Insert(ObjToSave);
                     return RedirectToAction("Index");
+                } else
+                {
+                    MyExtensions.logModelStateErrors(ModelState,db,ControllerContext);
+                    return View(ObjToSave);
                 }
-
-                return View(ObjToSave);
+                
             }
 
             protected ActionResult BaseSave<T>(T ObjToSave, bool isExisting, object routeValues)
@@ -74,10 +77,12 @@ namespace Speedbird.Areas.SBBoss.Controllers
                     var r = (isExisting) ? db.Update(ObjToSave) : db.Insert(ObjToSave);
                     return RedirectToAction(RAction, routeValues);
                 }
-
-                return View(ObjToSave);
+                else
+                {
+                    MyExtensions.logModelStateErrors(ModelState, db, ControllerContext);
+                    return View(ObjToSave);
+                }
             }
-
         /// <summary>
         /// Deletes the old image (if any) and replaces with new, else just saves the new image
         /// </summary>
@@ -133,7 +138,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                     ex = ex.InnerException;
                 }
 
-               // db.Insert(new InsectLog { CritterTime = errorTime, Controller = controller, Action = action, Message = MessageStack, Stack = ex.StackTrace });
+               db.Insert(new InsectLog { CritterTime = errorTime, Controller = controller, Action = action, Message = MessageStack, Stack = ex.StackTrace });
                 filterContext.Result = new ViewResult
                 {
                     ViewName = "Error",

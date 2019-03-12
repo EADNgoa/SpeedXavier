@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace Speedbird
 {
@@ -14,6 +15,35 @@ namespace Speedbird
 
     public static class MyExtensions
     {
+        public static string getModelStateErrors(ModelStateDictionary mS)
+        {
+            /// <summary>
+            /// Called only when BaseSave cannot be used
+            /// </summary>
+            /// <param name="mS">Th ModelState to check for errors in</param>
+            /// <returns></returns>
+            if (!mS.IsValid)
+            {
+                var modelErrors = new List<string>();
+                foreach (var modelState in mS.Values)
+                {
+                    foreach (var modelError in modelState.Errors)
+                    {
+                        modelErrors.Add(modelError.ErrorMessage);
+                    }
+                }
+                return String.Join(", ", modelErrors);
+            }
+            return "No errors found in Model State";
+        }
+
+        //called from BaseSave. Internally calls getModelStateErrors
+        public static void logModelStateErrors(ModelStateDictionary mS,Repository db, ControllerContext ctxt)
+        {
+            string actionName = ctxt.RouteData.Values["action"].ToString();
+            string controllerName = ctxt.RouteData.Values["controller"].ToString();
+            db.Insert(new InsectLog { CritterTime = DateTime.Now, Controller = controllerName, Action = actionName, Message = getModelStateErrors(mS) });
+        }
 
         /// <summary>
         /// Finds if the User has permission for the given action

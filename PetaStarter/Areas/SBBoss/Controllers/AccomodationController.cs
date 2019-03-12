@@ -215,6 +215,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         [EAAuthorize(FunctionName = "Accomodation", Writable = true)]
         public ActionResult Price([Bind(Include = "PriceID,ServiceID,OptionTypeID,WEF,_Price")] Price item, int sid)
         {
+            //todo: basesave should be called with 'return'. Verify if this below DN code works
             base.BaseSave<Price>(item, item.PriceID > 0);
             return RedirectToAction("Manage", new { id = item.ServiceID, sid, mode = 2 });
         }

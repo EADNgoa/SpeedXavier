@@ -14,6 +14,7 @@
     [TDate] DATETIME NULL, 
     [IgnoreReason] VARCHAR(300) NULL, 
     [RemindAt] DATETIME NULL, 
+    [AgentBooker] VARCHAR(50) NULL, 
     CONSTRAINT [FK_ServiceRequest_ToCust] FOREIGN KEY ([CustID]) REFERENCES [Customer]([CustomerID]), 
     CONSTRAINT [FK_ServiceRequest_ToUser] FOREIGN KEY ([EmpID]) REFERENCES [AspNetUsers]([Id]), 
 

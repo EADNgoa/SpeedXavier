@@ -2,7 +2,7 @@
 
 <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
     <span class="h3">@ViewBag.Title</span>
-    <a href="@Url.Action("Index","SR",new { sid= ViewBag.sid})"><i class="fas fa-undo-alt fa-inverse h3 float-right DropShadow"></i></a>
+    <a data-route="BFSave" class="SaveDetailFrm" href="@Url.Action("Index","SR",new { sid= ViewBag.sid})"><i class="fas fa-undo-alt fa-inverse h3 float-right DropShadow"></i></a>
 </div>
 
 @using (Html.BeginForm("Manage", "SR", FormMethod.Post, new { id = "detFrm" }))
@@ -20,8 +20,27 @@
         @Html.HiddenFor(model => model.PayStatusID)
         @Html.HiddenFor(model => model.BookingNo)
 
+        var LeadCust = (Speedbird.CustomerDets)ViewBag.LeadCust;
+        <div class="alert-info row m-3">
+            <div class="col"><strong>Lead pax: </strong> @LeadCust.FName @LeadCust.SName</div>
+            <div class="col"><strong>Phone: </strong>@LeadCust.Phone</div>
+            <div class="col"><strong>Email: </strong>@LeadCust.Email</div>
+            <div class="col"><strong>&nbsp;</strong>&nbsp;</div>
+            <div class="col"><strong>&nbsp;</strong>&nbsp;</div>
+        </div>
 
-        @Html.Action("GetSRInfo", "SR", new { id = Model.SRID, mode = ViewBag.mode })
+        <div class="alert-info row m-3">
+            <div class="col"><strong>Agency: </strong> @ViewBag.AgentName</div>
+            @{ var agentDets = (Speedbird.Agent)ViewBag.AgentDetails; }
+            @if (agentDets !=null)
+            {
+                <div class="col"><strong>Phone: </strong> @agentDets.PhoneNo</div>            
+                <div class="col"><strong>Email: </strong> @agentDets.Email</div>            
+                <div class="col"><strong>State: </strong> @agentDets.State</div>            
+                <div class="col"><strong>Booker: </strong>@Model.AgentBooker</div>            
+            }
+        </div>
+
     }
     else
     {
@@ -31,6 +50,9 @@
     <div class="form-row">
         @if (Model?.SRID > 0)
         {
+
+
+            @Html.HiddenFor(model => model.ServiceTypeID)
             <div class="input-group col mb-3">
                 <div class="input-group-prepend"><span class="input-group-text">Agent Name</span></div>
 
@@ -47,29 +69,40 @@
                 @Html.ValidationMessageFor(model => model.CustID, "", new { @class = "text-danger" })
             </div>
         }
+        else
+        {
+            @Html.Hidden("IsLead", true)
+            <div class="input-group col mb-3">
+                <div class="input-group-prepend"><span class="input-group-text">ServiceType</span></div>
+                @Html.DropDownListFor(model => model.ServiceTypeID, null, htmlAttributes: new { @type = "text", @class = " form-control" })
+                @Html.ValidationMessageFor(model => model.ServiceTypeID, "", new { @class = "text-danger" })
+            </div>
+            <div class="input-group col mb-3">
+                <div class="input-group-prepend"><span class="input-group-text">Agent Booker</span></div>
+                @Html.EditorFor(model => model.AgentBooker, new { @type = "text", @class = " form-control" })
+                @Html.ValidationMessageFor(model => model.AgentBooker, "", new { @class = "text-danger" })
+            </div>
+            <div class="input-group col mb-3">
+                <input type="text" id="UserName" placeholder="Agent autocomplete" name="UserName" style="color:black;" data-autocomplete-idholder="#AgentID" value="" data-autocombo-url="@Url.Action("AutoCompleteAgent")" class="form-control" />
+            </div>
+            
+        }
         <div class="input-group col mb-3">
             <div class="input-group-prepend"><span class="input-group-text">Enquiry Source</span></div>
             @Html.DropDownListFor(model => model.EnquirySource, null, htmlAttributes: new { @type = "text", @class = " form-control" })
             @Html.ValidationMessageFor(model => model.EnquirySource, "", new { @class = "text-danger" })
         </div>
-        <div class="input-group col mb-3">
-            <div class="input-group-prepend"><span class="input-group-text">ServiceType</span></div>
-            @Html.DropDownListFor(model => model.ServiceTypeID, null, htmlAttributes: new { @type = "text", @class = " form-control" })
-            @Html.ValidationMessageFor(model => model.ServiceTypeID, "", new { @class = "text-danger" })
-        </div>
-
-
     </div>
     <div class="form-row">
 
         @if (Model?.SRID > 0)
         {
-            @Html.HiddenFor(model => model.SRStatusID,(int)ViewBag.SRStatusID)
+            @Html.HiddenFor(model => model.SRStatusID, (int)ViewBag.SRStatusID)
             @*<div class="input-group col mb-3">
-                <div class="input-group-prepend"><span class="input-group-text">Status</span></div>
-                @Html.DropDownListFor(model => model.SRStatusID, null, htmlAttributes: new { @type = "text", @class = " form-control" })
-                @Html.ValidationMessageFor(model => model.SRStatusID, "", new { @class = "text-danger" })
-            </div>*@
+                    <div class="input-group-prepend"><span class="input-group-text">Status</span></div>
+                    @Html.DropDownListFor(model => model.SRStatusID, null, htmlAttributes: new { @type = "text", @class = " form-control" })
+                    @Html.ValidationMessageFor(model => model.SRStatusID, "", new { @class = "text-danger" })
+                </div>*@
         }
         else
         {
@@ -159,31 +192,45 @@
 
 }
 <div class="input-group col ">
-    <input id="SaveDetailFrm" type="submit" value="Save" class="btn btn-primary" />
+    @if (Model?.SRID == null)
+    {
+        <input type="submit" data-route="QSave" class="btn btn-primary SaveDetailFrm" value="Save Enquiry" /> @*Route to Queue*@
+        <input type="submit" data-route="BFSave" class="btn btn-info SaveDetailFrm ml-5" value="Make Booking Folder" /> @*Route to Booking Folder*@
+    }
+    else
+    {
+        <input type="submit" data-route="BFSave" class="btn btn-info SaveDetailFrm ml-5" value="Save" /> @*Route to Booking Folder*@
+    }
 </div>
 
 <script>
 
+        var savefrm = function (routeTo) {
+            var detFrm = $('#detFrm');
+
+            //Save the details form if it exists else just move on.
+            if (typeof (detFrm[0]) == 'object') {
+                $.ajax({
+                    url: detFrm.action,
+                    type: 'post',
+                    data: $(detFrm).serialize() + '&routeto=' + routeTo,
+                    success: function (d) {
+                        if (routeTo == 'BFSave') {
+                            window.location.assign('@Url.Action("Manage")' + '/' + d.srid);
+                        } else {
+                            window.location.assign('@Url.Action("Manage")');
+                        };
+                    }
+                });
+            }
+        }
+
         $(document).ready(function () {
 
             //Submit form
-            $('#SaveDetailFrm').click(function () {
-                var detFrm = $('#detFrm');
-
-                //Save the details form if it exists else just move on.
-                if (typeof (detFrm[0]) == 'object') {
-                    $.ajax({
-                        url: detFrm.action,
-                        type: 'post',
-                        data: $(detFrm).serialize(),
-                        success: function () {
-                            window.location.assign('@Url.Action("Index")');
-                        }
-                    });
-                }
+            $('.SaveDetailFrm').on('click', function () {
+                savefrm($(this).data('route'));
             });
-
-
         });
 
 
@@ -217,5 +264,5 @@
         });
     });
 
-    
+
 </script>

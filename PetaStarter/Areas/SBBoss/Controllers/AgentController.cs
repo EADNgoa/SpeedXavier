@@ -87,7 +87,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [EAAuthorize(FunctionName = "Agents", Writable = true)]
-        public async Task<ActionResult> Manage([Bind(Include = "AgentId,RealName,ContactName,AgencyName,PhoneNo,Email,Address,PAN,GST,RCbook,BkAccNo,BkName,BkIFSC,BkAddress")] AgentView model)
+        public async Task<ActionResult> Manage([Bind(Include = "AgentId,RealName,ContactName,AgencyName,PhoneNo,Email,Address,State,PAN,GST,RCbook,BkAccNo,BkName,BkIFSC,BkAddress")] AgentView model)
         {
             using (var transaction = db.GetTransaction())
             {
@@ -100,6 +100,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                         db.Update(new Agent
                         {
                             Address = model.Address,
+                            State = model.State,
                             AgentId = model.AgentId,
                             BkAccNo = model.BkAccNo,
                             BkAddress = model.BkAddress,
@@ -125,6 +126,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                             db.Insert(new Agent
                             {
                                 Address = model.Address,
+                                State = model.State,
                                 AgentId = user.Id,
                                 BkAccNo = model.BkAccNo,
                                 BkAddress = model.BkAddress,

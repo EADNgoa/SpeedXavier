@@ -37,6 +37,11 @@
                     @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
                 </div>
+                <div class="input-group col mb-3">
+                    <div class="input-group-prepend"><span class="input-group-text">Agency State</span></div>
+                    @Html.EditorFor(model => model.State, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.State, "", new { @class = "text-danger" })
+                </div>
             </div>
 
             <div class="form-row">
