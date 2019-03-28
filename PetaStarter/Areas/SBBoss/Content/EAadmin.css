@@ -51,7 +51,6 @@ dl, ol, ul {
     width: 80%;
     margin-left: -18px;
     margin-right: 30px;
-    /*padding: 10px 10px;*/
     color: white;
 }
 
@@ -129,20 +128,9 @@ li {
     filter: "progid:DXImageTransform.Microsoft.Dropshadow(OffX=12, OffY=12, Color='#444')";
 }
 
-#EAcardTitle {
-    background-color: #0099CC;
-    top: -30px;
-    width: 80%;
-    margin-left: 30px;
-    margin-right: 30px;
-    padding: 10px 10px;
-    color: white;
-}
 
-.card {
-    margin-top:80px;
-    margin-left:30px;    
-}
+
+
 
 .table th {
     border-top:none;
