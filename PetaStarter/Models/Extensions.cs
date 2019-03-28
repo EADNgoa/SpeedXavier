@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Security.Claims;
+using System.Security.Principal;
 using System.Web;
 using System.Web.Mvc;
 
@@ -424,6 +426,16 @@ namespace Speedbird
         }
 
 
+    }
+
+    public static class IdentityExtensions
+    {
+        public static string GetRealName(this IIdentity identity)
+        {
+            var claim = ((ClaimsIdentity)identity).FindFirst("RealName");
+            // Test for null to avoid issues during local testing
+            return (claim != null) ? claim.Value : string.Empty;
+        }
     }
 
     //Read at https://blogs.msdn.microsoft.com/stuartleeks/2012/04/23/asp-net-mvc-jquery-ui-autocomplete/
