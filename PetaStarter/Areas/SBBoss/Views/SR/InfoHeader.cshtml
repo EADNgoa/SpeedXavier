@@ -10,44 +10,19 @@
     <table class="table table-sm table-dark">
         <tr>
             <th>
-                Booking No.
+                <span class="h3">Booking No:      <span class="text-warning"> @Model.BookingNo</span></span>
             </th>
             <th>
-                Booking Date.
+                <span class="h3"><span class="text-muted">Booked on:</span> @Model.DT</span>
             </th>
             <th>
-                Status
+                <span class="h3"><span class="text-muted">Status:</span>  @((Speedbird.SRStatusEnum)Model.SRStatusID)</span>
             </th>
             <th>
-                Emp. Name
-            </th>
-            <th>
-                Agent Name
-            </th>
-            <th>
-                Request Source
-            </th>
+                <span class="h3"><span class="text-muted">Emp. Name:</span>  @Model.UserName</span>
+            </th>            
         </tr>
-        <tr>
-            <td>
-                @Model.BookingNo
-            </td>
-            <td>
-                @Model.DT
-            </td>
-            <td>
-                @((Speedbird.SRStatusEnum) Model.SRStatusID)
-            </td>
-            <td>
-                @Model.UserName
-            </td>
-            <td>
-                @Model.AgentName
-            </td>
-            <td>
-                @((Speedbird.EnquirySourceEnum)Model.EnquirySource)
-            </td>
-        </tr>
+        
     </table>
 </div>
 }

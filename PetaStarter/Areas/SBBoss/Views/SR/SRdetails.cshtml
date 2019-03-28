@@ -16,12 +16,8 @@
     }
     /*End for Datatables*/
 </style>
-<div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
-    <span class="h3">@ViewBag.Title</span>
-    <a href="@Url.Action("Index","SR",new { sid= ViewBag.sid})"><i class="fas fa-undo-alt fa-inverse h3 float-right DropShadow"></i></a>
-</div>
 
-@Html.Action("GetSRInfo", "SR", new { id = ViewBag.SRID, mode = ViewBag.mode })
+
 <table id="SRDetTbl" class="table table-sm table-striped">
     <thead class="thead-light">
         @*<tr role="row">
@@ -45,7 +41,7 @@
             <th scope="col">Supplier</th>
             <th scope="col">Cost Price</th>
             <th scope="col">Sell Price</th>
-            <th width="5%"></th>
+            <th width="8%"></th>
         </tr>
     </thead>
     <tbody></tbody>
@@ -86,6 +82,7 @@
             @Html.Hidden("SRID", (int)ViewBag.SRID)
             @Html.HiddenFor(model => model.SupplierID)
             @Html.HiddenFor(model => model.ItemID)
+            @Html.HiddenFor(model => model.IsCanceled)
 
             @if (Model?.SRDID != null)
             {@Html.Hidden("SRDID", (int)Model.SRDID)}
@@ -94,7 +91,7 @@
             <div class="form-row">
                 <div class="input-group col mb-3">
                     <div class="input-group-prepend"><span class="input-group-text">Service Type</span></div>
-                    @Html.DropDownListFor(model => model.ServiceTypeID, null, htmlAttributes: new { @type = "text", @class = "form-control" })
+                    @Html.DropDownListFor(model => model.ServiceTypeID, null, htmlAttributes: new { @type = "text", @class = "form-control ServiceType" })
                     @Html.ValidationMessageFor(model => model.ServiceTypeID, "", new { @class = "text-danger" })
                 </div>
                 <div class="input-group col mb-3">
@@ -233,7 +230,7 @@
         $('#placeholderEditDiv').load('@Url.Action("FetchSTpartial", "SR")', { ServiceTypeId: $('#ServiceTypeID').val(),id:$('#SRDID').val() ,IsReadOnly: false }, setDynLabels($('#ServiceTypeID').val()));
 
         //Then on change of the dropDown load the dynamic fields based on the selected Service type
-        $('#ServiceTypeID').on('change', function () {
+        $('.ServiceType').on('change', function () {
             var sid = $(this).val();
 
             //Load the Dynamic Fields of the Form based on the selected Service Type
@@ -308,7 +305,13 @@
                 'orderable': false,
                 'bSortable': false,
                 'render': function (data, type, full, meta) {
-                    return '<button type="button" class="btn btn-link " data-toggle="modal" data-target="#ACModal" data-srdid=' + full.SRDID + '><i class="fas fa-user fa-inverse float-left DropShadow"></i></button><a href = "/SBBoss/SR/Manage?id='+ full.SRID +'&&mode='+3+'&&EID='+full.SRDID+'"><i class="fas fa-edit fa-inverse DropShadow"></i></a> ';
+                    if (full.IsCanceled) {
+                        return '<span class="text-danger">Cancelled</span>'
+                    } else {
+                        return '<button type="button" class="btn btn-link " data-toggle="modal" data-target="#ACModal" data-srdid=' + full.SRDID + '><i class="fas fa-user fa-inverse float-left DropShadow"></i></button>\
+<a href="/SBBoss/SR/Manage?id='+ full.SRID + '&&mode=' + 3 + '&&EID=' + full.SRDID + '"><i class="fas fa-edit fa-inverse DropShadow"></i></a>\
+<button type="button" class="btn btn-link delservice" data-srdid=' + full.SRDID + '><i class="fas fa-trash-alt fa-inverse float-left DropShadow"></i>';
+                    }
                 }
             },
             {
@@ -317,7 +320,10 @@
             }]
         });
 
-
+        $('#SRDetTbl').on('click','.delservice', function () {
+            $.post('@Url.Action("CancelService")', { SRDID: $(this).data('srdid') });
+            location.reload();
+        });
 
         $("#SRDetTbl thead th input[type=text]").on('change', function () {
             oTable.column($(this).parent().index() + ':visible')
@@ -354,10 +360,12 @@
             var button = $(event.relatedTarget) // Button that triggered the modal
             var recipient = button.data('srdid') // Extract info from data-* attributes
             $('#AssignCust').load('@Url.Action("_AssignCust")', { SRDID: recipient, SRID: @ViewBag.SRID });
-            var modal = $(this)
+            var modal = $(this);
             modal.find('#SRDID').val(recipient);
             modal.find('#CID').focus();
         })
+
+
     })
 
 

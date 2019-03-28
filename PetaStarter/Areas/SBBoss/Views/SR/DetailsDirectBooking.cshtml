@@ -1,0 +1,185 @@
+﻿@model Speedbird.ServiceRequest
+
+
+
+@using (Html.BeginForm("Manage", "SR", FormMethod.Post, new { id = "detFrm" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.Hidden("AgentID")
+
+<div class="form-row">
+    <div class="input-group col mb-3">
+        <div class="input-group-prepend"><span class="input-group-text">Enquiry Source</span></div>
+        @Html.DropDownListFor(model => model.EnquirySource, null, htmlAttributes: new { @type = "text", @class = " form-control" })
+        @Html.ValidationMessageFor(model => model.EnquirySource, "", new { @class = "text-danger" })
+    </div>
+    <div class="input-group col mb-3">
+        <div class="input-group-prepend"><span class="input-group-text">Agent Booker</span></div>
+        @Html.EditorFor(model => model.AgentBooker, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.AgentBooker, "", new { @class = "text-danger" })
+    </div>
+    <div class="input-group col mb-3">
+        <input type="text" id="UserName" placeholder="Agency autocomplete" name="UserName" style="color:black;" data-autocomplete-idholder="#AgentID" value="" data-autocombo-url="@Url.Action("AutoCompleteAgent")" class="form-control" />
+    </div>
+
+    @*We need to manually set the default Note and Service Type*@
+    @Html.Hidden("Event", "New Direct Booking Folder created")
+    @Html.Hidden("ServiceTypeID",0)
+</div>
+
+<div class="form-row">
+    @Html.Hidden("CID")
+    @Html.Hidden("IsLead", true)
+    <div class="input-group col mb-3">
+        <div class="input-group-prepend"><span class="input-group-text">First Name</span></div>
+        @Html.Editor("FName", new { htmlAttributes = new { @class = "form-control" } })
+    </div>
+    <div class="input-group col mb-3">
+        <div class="input-group-prepend"><span class="input-group-text">Sur Name</span></div>
+        @Html.Editor("SName", new { htmlAttributes = new { @class = "form-control" } })
+    </div>
+    <div class="input-group col mb-3">
+        <div class="input-group-prepend"><span class="input-group-text">Phone</span></div>
+        @Html.Editor("Phone", new { htmlAttributes = new { @class = "form-control" } })
+    </div>
+    <div class="input-group col mb-3">
+        <div class="input-group-prepend"><span class="input-group-text">Email</span></div>
+        @Html.Editor("Email", new { htmlAttributes = new { @class = "form-control" } })
+    </div>
+</div>
+<div id="ExistingCust">
+    <br />
+        <table class="table table-sm table-striped">
+            <thead class="bg-primary">
+                <tr>
+                    <th>
+
+                    </th>
+                    <th>
+                        First Name
+                    </th>
+                    <th>
+                        Sur Name
+                    </th>
+                    <th>
+                        Mobile
+                    </th>
+                    <th>
+                        Email
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan="5">&nbsp;</td>
+                </tr>
+
+                <tr>
+                    <td colspan="5">&nbsp;</td>
+                </tr>
+
+                <tr>
+                    <td colspan="5"><center>This Table Will Display Existing Customers.</center></td>
+                </tr>
+                <tr>
+                    <td colspan="5">&nbsp;</td>
+                </tr>
+
+                <tr>
+                    <td colspan="5">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td colspan="5">&nbsp;</td>
+                </tr>
+
+
+            </tbody>
+        </table>    
+</div>
+
+}
+
+
+<div class="input-group col ">
+    <input type="submit" data-route="BFSave" class="btn btn-info SaveDetailFrm ml-5" value="Save" /> @*Route to Booking Folder*@
+
+</div>
+
+<script>
+
+
+        $(document).ready(function () {
+
+            //Submit form
+            $('.SaveDetailFrm').on('click', function () {
+                var detFrm = $('#detFrm');
+
+                //Save the details form if it exists else just move on.
+                if (typeof (detFrm[0]) == 'object') {
+                    $.ajax({
+                        url: detFrm.action,
+                        type: 'post',
+                        data: $(detFrm).serialize() + '&routeto=BFSave',//we want to directly create a booking folder
+                        success: function (d) {
+                                window.location.assign('@Url.Action("Manage")' + '/' + d.srid);
+
+                        }
+                    });
+                }
+
+            });
+        });
+
+
+</script>
+
+<script>
+    $(document).ready(function () {
+
+        $('*[data-autocombo-url]').each(function () {
+            $(this).autocomplete({
+                source: $(this).data("autocombo-url"),
+                minLenght: 3,
+                delay: 500,
+                select: function (event, ui) {
+                    $($(this).data("autocomplete-idholder")).val(ui.item.id);
+                }
+            });
+        });
+    });
+
+
+</script>
+
+
+<script>
+    $(document).ready(function () {
+        $("#FName,#SName,#Phone,#Email").keyup(function () {
+
+            var fname = $('#FName').val();
+            var sname = $('#SName').val();
+            var phone = $('#Phone').val();
+            var email = $('#Email').val();
+
+            if (fname.length == 3 || sname.length == 3 || phone.length == 3 || email.length == 5) {
+                $('#ExistingCust').html("");
+                $('#ExistingCust').load("/SBBoss/SR/ExistingCustRec?fn=" + fname + "&&sn=" + sname + "&&ph=" + phone + "&&em=" + email);
+            }
+
+        });
+
+        $('*[data-autocombo-url]').each(function () {
+            $(this).autocomplete({
+                source: $(this).data("autocombo-url"),
+                minLenght: 3,
+                delay: 500,
+                select: function (event, ui) {
+                    $($(this).data("autocomplete-idholder")).val(ui.item.id);
+                }
+            });
+        });
+    });
+
+
+</script>

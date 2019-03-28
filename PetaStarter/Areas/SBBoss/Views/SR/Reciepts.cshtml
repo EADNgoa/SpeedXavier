@@ -1,37 +1,43 @@
 ﻿@model Speedbird.SRReciept
 
-@{
-    ViewBag.Title = "Booking Summary";
-}
 
 
-<div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
-    <span class="h3">@ViewBag.Title</span>
-    <a href="@Url.Action("Index", "SR", new { sid = ViewBag.sid })"><i class="fas fa-undo-alt fa-inverse h3 float-right DropShadow"></i></a>
-</div>
-@Html.Action("GetSRInfo", "SR", new { id = ViewBag.SRID, mode = ViewBag.mode })
 <h4>Profit/Loss Summary</h4>
-<table class="table table-striped">
+<table class="table table-striped table-condensed table-bordered" >
     <tr>
-        <th>Amount Spent</th>
-        <th>Amount Recieved</th>
+        <th></th>
+        <th>Spent</th>
+        <th>Recieved</th>
         <th>Total Profit</th>
     </tr>
     <tr>
+        <td><strong>Forecast</strong></td>
         <td>
-            @ViewBag.Debit
+            @ViewBag.FDebit
         </td>
         <td>
-            @ViewBag.Credit
+            @ViewBag.FCredit
         </td>
         <td>
-            @(ViewBag.Credit - ViewBag.Debit)
+            @(ViewBag.FCredit - ViewBag.FDebit)
+        </td>
+    </tr>
+    <tr>
+        <td><strong>Actuals</strong></td>
+        <td>
+            @ViewBag.ADebit
+        </td>
+        <td>
+            @ViewBag.ACredit
+        </td>
+        <td>
+            @(ViewBag.ACredit - ViewBag.ADebit)
         </td>
     </tr>
 </table>
-<br />
+<hr />
 <h4>Services</h4>
-<table class="table table-striped">
+<table class="table table-striped table-condensed table-bordered" >
     <tr>
         <th>Service Name</th>
         <th>Cost Price</th>
@@ -54,13 +60,13 @@
                 @item.SellPrice
             </td>
             <td>
-                @item.Tax
+                @($"{item.Tax:#.00}")
             </td>
             <td>
                 @item.Commision @item.PercComm
             </td>
             <td>
-                @item.Total
+                @($"{item.Total:#.00}")                
             </td>
             <td>
                 <button type="button" class="btn btn-info" data-toggle="modal" data-target="#ECommModal" data-srdid="@item.SRDID">
@@ -71,9 +77,9 @@
     }
 
 </table>
-<br />
+<hr />
 <h4>Sell and Cost price per pax</h4>
-<table class="table table-striped">
+<table class="table table-striped table-condensed table-bordered" >
     <tr>
         <th>Customer Name</th>
         <th>Cost Price</th>
@@ -114,9 +120,9 @@
     </tr>
 
 </table>
-<br />
-<h4>Debit Details</h4>
-<table class="table table-striped">
+<hr />
+<h4>Credit Details</h4>
+<table class="table table-striped table-condensed table-bordered" >
     <tr>
         <th>Date</th>
         <th>Note</th>
@@ -142,9 +148,9 @@
     }
 
 </table>
-<br />
-<h4>Credit Details</h4>
-<table class="table table-striped">
+<hr />
+<h4>Debit Details</h4>
+<table class="table table-striped table-condensed table-bordered" >
     <tr>
         <th>Date</th>
         <th>Note</th>
@@ -197,5 +203,10 @@
         //Disable the browsers default date picker
         jQuery.validator.methods["date"] = function (value, element) { return true; }
 
+    })
+
+    //Set the Customer Outstanding in the Manage.cshtml
+    $(function () {
+        $('#CustOutstanding').text(@((decimal)ViewBag.FCredit-(decimal)ViewBag.ACredit));
     })
 </script>

@@ -43,6 +43,7 @@ BEGIN
 	INSERT INTO [dbo].[UserFunctions] ([FunctionID], [FunctionName], [Module]) VALUES (38, N'BossLogDetails', N'Boss Log Details')
 	INSERT INTO [dbo].[UserFunctions] ([FunctionID], [FunctionName], [Module]) VALUES (39, N'Agents', N'Setup')
     INSERT INTO [dbo].[UserFunctions] ([FunctionID], [FunctionName], [Module]) VALUES (40, N'OwnedAsset', N'OwnedAsset')
+    INSERT INTO [dbo].[UserFunctions] ([FunctionID], [FunctionName], [Module]) VALUES (41, N'Admin', N'EditComm') ---Edit employee commission
 
 
 
@@ -59,11 +60,11 @@ BEGIN --Create an Admin group
 END
 
 
-IF NOT EXISTS (SELECT * FROM FunctionGroups)
-BEGIN --Give all permissions to admin group
+
+--Give all permissions to admin group
 	INSERT INTO FunctionGroups
-	SELECT FunctionID,1,'True' FROM UserFunctions
-END
+	SELECT FunctionID,1,'True' FROM UserFunctions where FunctionID not in (Select FunctionId from FunctionGroups where GroupID=1)
+
 
 
 IF NOT EXISTS (SELECT * FROM ServiceCommision)

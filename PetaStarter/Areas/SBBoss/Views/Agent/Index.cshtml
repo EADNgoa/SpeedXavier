@@ -36,7 +36,7 @@
     </div>
     <div class="card-body">
         <h5>&nbsp;</h5>
-        <table class="table">
+        <table class="table table-condensed">
             <tr>
                 <th>
                     Agency Name
@@ -44,6 +44,7 @@
                 <th>Contact</th>
                 <th>Phone</th>
                 <th>Email</th>
+                <th>State</th>
                 <th></th>
                 <th></th>
             </tr>
@@ -62,6 +63,9 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.State)
                 </td>
                 <td>
                     <a href="@Url.Action("PaymentList","Agent", new {id = item.AgentId })"><i title="PaymentList" class="fas fa-rupee-sign fa-inverse h3 float-right DropShadow"></i></a>

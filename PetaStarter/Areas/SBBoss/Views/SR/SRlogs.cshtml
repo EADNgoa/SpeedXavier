@@ -1,14 +1,8 @@
 ﻿@model Speedbird.SRlog
 @using PagedList.Mvc;
-@{
-    ViewBag.Title = "Booking Logs";
-}
 
 
-<div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
-    <span class="h3">@ViewBag.Title</span>
-    <a href="@Url.Action("Index","SR",new { sid= ViewBag.sid})"><i class="fas fa-undo-alt fa-inverse h3 float-right DropShadow"></i></a>
-</div>
+
 
 <div class="section-to-Not-print">
     @using (Html.BeginForm("SRLogs", "SR", FormMethod.Post))
@@ -27,7 +21,7 @@
 
         }
 
-            @Html.Action("GetSRInfo", "SR", new { id = (int)ViewBag.SRs.SRID, mode = ViewBag.mode })
+            
 
             <div class="form-row">
                 <div class="input-group col mb-3">

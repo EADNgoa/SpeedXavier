@@ -6,11 +6,8 @@
         width: 100%;
     }
 </style>
-<div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
-    <span class="h3">@ViewBag.Title</span>
-    <a href="@Url.Action("Index","SR",new { sid= ViewBag.sid})"><i class="fas fa-undo-alt fa-inverse h3 float-right DropShadow"></i></a>
-</div>
-@Html.Action("GetSRInfo", "SR", new { id = ViewBag.SRID, mode = ViewBag.mode })
+
+
 @using (Html.BeginForm("SRCustomers", "SR", FormMethod.Post, new { id = "" }))
 {
     @Html.AntiForgeryToken()
@@ -57,6 +54,10 @@
 
     </div>
     <div class="input-group col mb-3">
+        <div class="input-group-prepend"><span class="input-group-text">Is Lead</span></div>
+        @Html.CheckBox("IsLead", new { htmlAttributes = new { @class = "form-control" } })
+    </div>
+    <div class="input-group col mb-3">
         <input type="submit" value="Save" class="btn btn-primary" />
     </div>
 
@@ -84,6 +85,7 @@
                                 Email
                             </th>
                             <th>Type</th>
+                            
                         </tr>
                     </thead>
                     <tbody>
@@ -162,14 +164,14 @@
 
 <div class="row col-12">
     @{
-        var rec = ((IEnumerable<Speedbird.Customer>)ViewBag.Custs);
+        var rec = ((IEnumerable<Speedbird.CustomerDets>)ViewBag.Custs);
     }
 
     @if (rec.Count() > 0)
     {
         <table class="table table-striped ">
             <tr>
-                <th colspan="6" class="bg-success"><center><Big>Registered Customers</Big></center></th>
+                <th colspan="6" class="bg-success"><center><Big>Customers of this booking</Big></center></th>
             </tr>
             <tr class="">
                 <th>Sr No</th>
@@ -185,34 +187,35 @@
                     Email
                 </th>
                 <th> Type</th>
+                <th>Lead?</th>
                 <th></th>
             </tr>
             @{int i = 1;}
-            @foreach (var item in (List<Speedbird.Customer>)ViewBag.Custs)
+            @foreach (var item in rec)
             {
-                <tr>
-                    <td>
-                        @i
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.FName)&nbsp;@Html.DisplayFor(modelItem => item.SName)
+            <tr>
+                <td>
+                    @i
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FName)&nbsp;@Html.DisplayFor(modelItem => item.SName)
 
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Phone)
+                <td>
+                    @Html.DisplayFor(modelItem => item.Phone)
 
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
 
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Type)
-
-                    </td>
-                    <td>
-                        @Html.ActionLink("Delete", "SRCustomers", new { cid = item.CustomerID, id = ViewBag.SRID }, new { @Class = "delcust" })
-                    </td>
-                </tr>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Type)
+                </td>
+                <th>@Html.DisplayFor(modelItem => item.IsLead)</th>
+                <td>
+                    @Html.ActionLink("Delete", "SRCustomers", new { cid = item.CustomerID, id = ViewBag.SRID }, new { @Class = "delcust" })
+                </td>
+            </tr>
                 i++;
             }
 

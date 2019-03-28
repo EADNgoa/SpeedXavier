@@ -138,6 +138,7 @@ namespace Speedbird
 		[Column] public string BkName { get; set; }
 		[Column] public string BkIFSC { get; set; }
 		[Column] public string BkAddress { get; set; }
+		[Column] public string State { get; set; }
 	}
     
 	[TableName("dbo.AgentDiscount")]
@@ -582,6 +583,18 @@ namespace Speedbird
 		[Column] public string IconPath { get; set; }
 	}
     
+	[TableName("dbo.InsectLog")]
+	[PrimaryKey("CritterTime", AutoIncrement=false)]
+	[ExplicitColumns]
+    public partial class InsectLog  
+    {
+		[Column] public DateTime CritterTime { get; set; }
+		[Column] public string Controller { get; set; }
+		[Column] public string Action { get; set; }
+		[Column] public string Message { get; set; }
+		[Column] public string Stack { get; set; }
+	}
+    
 	[TableName("dbo.LateBreak")]
 	[PrimaryKey("LateBreakID", AutoIncrement=false)]
 	[ExplicitColumns]
@@ -1001,6 +1014,7 @@ namespace Speedbird
 		[Column] public DateTime? TDate { get; set; }
 		[Column] public string IgnoreReason { get; set; }
 		[Column] public DateTime? RemindAt { get; set; }
+		[Column] public string AgentBooker { get; set; }
 	}
     
 	[TableName("dbo.SR_Cust")]
@@ -1010,6 +1024,7 @@ namespace Speedbird
     {
 		[Column] public int ServiceRequestID { get; set; }
 		[Column] public int CustomerID { get; set; }
+		[Column] public bool IsLead { get; set; }
 	}
     
 	[TableName("dbo.SRD_Cust")]
@@ -1067,6 +1082,7 @@ namespace Speedbird
 		[Column] public bool IsInternational { get; set; }
 		[Column] public int? OptionTypeID { get; set; }
 		[Column] public decimal? ECommision { get; set; }
+		[Column] public bool IsCanceled { get; set; }
 	}
     
 	[TableName("dbo.SRlogs")]

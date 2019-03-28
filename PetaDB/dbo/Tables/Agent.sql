@@ -12,5 +12,6 @@
     [BkName] VARCHAR(50) NULL, 
     [BkIFSC] VARCHAR(15) NULL, 
     [BkAddress] VARCHAR(150) NULL, 
+    [State] VARCHAR(50) NULL, 
     CONSTRAINT [FK_Agent_ToAspNetUsers] FOREIGN KEY ([AgentId]) REFERENCES [AspNetUsers]([Id])
 )
