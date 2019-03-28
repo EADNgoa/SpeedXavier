@@ -23,7 +23,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
         public ActionResult Index(int? page ,string AN )
         {
             if (AN?.Length > 0) page = 1;
-            return View("Index", base.BaseIndex<AgentView>(page, " a.*,u.id, u.RealName ",$"Agent a, AspNetUsers u Where a.AgentId=u.Id and u.UserType={(int)UserTypeEnum.Agent} and realName like '%" + AN + "%'"));
+            return View("Index", base.BaseIndex<AgentView>(page, " a.*,u.id, u.RealName ",$"Agent a, AspNetUsers u Where a.AgentId=u.Id " +
+                $"and u.UserType={(int)UserTypeEnum.Agent} and realName like '%" + AN + "%' order by u.RealName"));
         }
 
         public ActionResult PaymentList(int? page, string Id, DateTime? fd, DateTime? td)
@@ -32,7 +33,9 @@ namespace Speedbird.Areas.SBBoss.Controllers
             ViewBag.Id = Id;
             ViewBag.AgentName = db.ExecuteScalar<string>("Select UserName from AspNetUsers Where Id = @0", Id);
 
-            var sql = new PetaPoco.Sql("Select distinct rd.RPDID,sr.SRID, sr.BookingNo, anu.UserName,sum(rs.Amount) as PaidAmt ,(select Coalesce(sum(SellPrice),0) From SRdetails Where SRID =sr.SRID) as OA from ServiceRequest sr inner join AspNetUsers anu on anu.Id = sr.AgentID left join  RP_SR rs on rs.SRID = sr.SRID left join RPdets rd on rd.RPDID = rs.RPDID Where sr.AgentID Is Not Null  and AgentID=@0", Id);
+            var sql = new PetaPoco.Sql("Select distinct rd.RPDID,sr.SRID, sr.BookingNo, anu.UserName,sum(rs.Amount) as PaidAmt ,(select Coalesce(sum(SellPrice),0) " +
+                "From SRdetails Where SRID =sr.SRID) as OA from ServiceRequest sr inner join AspNetUsers anu on anu.Id = sr.AgentID left join  RP_SR rs on rs.SRID = sr.SRID " +
+                "left join RPdets rd on rd.RPDID = rs.RPDID Where sr.AgentID Is Not Null  and AgentID=@0", Id);
             if (fd != null && td != null)
                 sql.Append($" and cast(Cdate as Date) Between '{fd:yyyy-MM-dd}' and  '{td:yyyy-MM-dd}'");
 

@@ -1,13 +1,5 @@
 ﻿@model Speedbird.SRuploadDets
 
-@{
-    ViewBag.Title = $"Manage Images";
-}
-
-<div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
-    <span class="h3">@ViewBag.Title</span>
-    <a href="@Url.Action("Index","SR",new { sid= ViewBag.sid})"><i class="fas fa-undo-alt fa-inverse h3 float-right DropShadow"></i></a>
-</div>
 
 <div class="section-to-Not-print">
     @using (Html.BeginForm("SRUpload", "SR", FormMethod.Post, new { enctype = "multipart/form-data" }))

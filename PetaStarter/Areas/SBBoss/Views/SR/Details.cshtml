@@ -1,9 +1,6 @@
 ﻿@model Speedbird.ServiceRequest
 
-<div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
-    <span class="h3">@ViewBag.Title</span>
-    <a data-route="BFSave" class="SaveDetailFrm" href="@Url.Action("Index","SR",new { sid= ViewBag.sid})"><i class="fas fa-undo-alt fa-inverse h3 float-right DropShadow"></i></a>
-</div>
+
 
 @using (Html.BeginForm("Manage", "SR", FormMethod.Post, new { id = "detFrm" }))
 {
@@ -79,7 +76,7 @@
             </div>
             <div class="input-group col mb-3">
                 <div class="input-group-prepend"><span class="input-group-text">Agent Booker</span></div>
-                @Html.EditorFor(model => model.AgentBooker, new { @type = "text", @class = " form-control" })
+                @Html.EditorFor(model => model.AgentBooker, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.AgentBooker, "", new { @class = "text-danger" })
             </div>
             <div class="input-group col mb-3">
@@ -191,6 +188,8 @@
 
 
 }
+
+
 <div class="input-group col ">
     @if (Model?.SRID == null)
     {

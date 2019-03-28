@@ -6,10 +6,7 @@
         width: 100%;
     }
 </style>
-<div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
-    <span class="h3">@ViewBag.Title</span>
-    <a href="@Url.Action("Index","SR",new { sid= ViewBag.sid})"><i class="fas fa-undo-alt fa-inverse h3 float-right DropShadow"></i></a>
-</div>
+
 
 @using (Html.BeginForm("SRCustomers", "SR", FormMethod.Post, new { id = "" }))
 {

@@ -1,14 +1,6 @@
 ﻿@model Speedbird.SRReciept
 
-@{
-    ViewBag.Title = "Booking Summary";
-}
 
-
-<div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
-    <span class="h3">@ViewBag.Title</span>
-    <a href="@Url.Action("Index", "SR", new { sid = ViewBag.sid })"><i class="fas fa-undo-alt fa-inverse h3 float-right DropShadow"></i></a>
-</div>
 
 <h4>Profit/Loss Summary</h4>
 <table class="table table-striped table-condensed table-bordered" >
@@ -211,5 +203,10 @@
         //Disable the browsers default date picker
         jQuery.validator.methods["date"] = function (value, element) { return true; }
 
+    })
+
+    //Set the Customer Outstanding in the Manage.cshtml
+    $(function () {
+        $('#CustOutstanding').text(@((decimal)ViewBag.FCredit-(decimal)ViewBag.ACredit));
     })
 </script>

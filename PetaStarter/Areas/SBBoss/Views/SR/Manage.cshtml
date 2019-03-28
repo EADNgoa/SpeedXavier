@@ -3,16 +3,16 @@
         box-shadow: 0 0 0 0.3rem rgba(10, 120, 218, 0.53);
     }
 
-    .funcBox{
-        border:3px solid black;
-        padding:10px;
+    .funcBox {
+        border: 3px solid black;
+        padding: 10px;
     }
 
-    .funcBox h3 {
-        border-bottom:5px double navy;
-        display:inline-block;
-        margin-bottom:35px;
-    }
+        .funcBox h3 {
+            border-bottom: 5px double navy;
+            display: inline-block;
+            margin-bottom: 35px;
+        }
 
     .heading {
         position: -webkit-sticky;
@@ -23,68 +23,76 @@
         font-size: 20px;
     }
 </style>
+
 @*Assign Review Modal*@
 <div class="modal fade" id="ACModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div id="AssignCust">    </div>
 </div>
 @*EOF Assign Cust Modal*@
+
 @*Assign Driver Modal*@
 <div id="AssignDriver"> </div>
-
 @*EOF Assign Driver Modal*@
+
 @*Assign Review Modal*@
 <div id="Review"> </div>
 @*EOF Assign Review Modal*@
 
 <div id="EditComm"> </div>
 
+
+
 <div class="card border rounded DropShadow">
+    <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
+        <span class="h3">@ViewBag.Title</span>
+        <a href="@Url.Action("Index","SR",new { sid= ViewBag.sid})"><i class="fas fa-undo-alt fa-inverse h3 float-right DropShadow"></i></a>
+    </div>
 
     <div class="card-body">
         <h5>&nbsp;</h5>
 
         <div id="TabContent">
-            @if (ViewBag.SRID != null)
+            @if (ViewBag.SRID != null)//Edit mode
             {
                 @Html.Hidden("SRID", (int)ViewBag.SRID)
                 @*<div class="btn-group-lg" role="group" aria-label="Basic example">
-                    <a href="#Sec_Dets" class="btn btn-secondary heading">Details</a>
-                    <a href="#Sec_SR" id="SRBtn"  class="btn btn-secondary heading">Services</a>
-                    <a href="#Sec_Pax" id="CustBtn"  class="btn btn-secondary heading">Passengers</a>
-                    <a href="#Sec_Upld" id="ImgBtn" class="btn btn-secondary heading">Uploads</a>
-                    <a href="#Sec_Fin" id="RecptBtn"  class="btn btn-secondary heading">Finance</a>
-                    <a href="#Sec_Log" id="NoteBtn"  class="btn btn-secondary heading">Log/ History</a>
-                </div>*@
+                        <a href="#Sec_Dets" class="btn btn-secondary heading">Details</a>
+                        <a href="#Sec_SR" id="SRBtn"  class="btn btn-secondary heading">Services</a>
+                        <a href="#Sec_Pax" id="CustBtn"  class="btn btn-secondary heading">Passengers</a>
+                        <a href="#Sec_Upld" id="ImgBtn" class="btn btn-secondary heading">Uploads</a>
+                        <a href="#Sec_Fin" id="RecptBtn"  class="btn btn-secondary heading">Finance</a>
+                        <a href="#Sec_Log" id="NoteBtn"  class="btn btn-secondary heading">Log/ History</a>
+                    </div>*@
 
-                <div id="Sec_Dets" class="funcBox mb-5">                     
+                <div id="Sec_Dets" class="funcBox mb-5">
                     @Html.Action("GetSRInfo", "SR", new { id = (int)ViewBag.SRID, mode = 0 })
                     @Html.Action("FetchDetails", "SR", new { id = (int)ViewBag.SRID })
                 </div>
                 <div id="Sec_SR" class="funcBox mb-5"><h3>Services </h3>@Html.Action("SRdetails", "SR", new { id = (int)ViewBag.SRID, EID = (int)ViewBag.EID })</div>
                 <div id="Sec_Pax" class="funcBox mb-5"><h3>Passengers </h3>@Html.Action("SRCustomers", "SR", new { id = (int)ViewBag.SRID })</div>
                 <div id="Sec_Upld" class="funcBox mb-5"><h3>Uploads / Documents </h3> @Html.Action("SRUpload", "SR", new { id = (int)ViewBag.SRID })</div>
-                <div id="Sec_Fin" class="funcBox mb-5"><h3>Finance </h3> @Html.Action("Reciepts", "SR", new { id = (int)ViewBag.SRID })</div>
+                <div id="Sec_Fin" class="funcBox mb-5"><h3>Finance </h3> <span class="float-right h3"><span class="text-muted">Customers outstanding:</span> <span id="CustOutstanding">$ 100</span></span> @Html.Action("Reciepts", "SR", new { id = (int)ViewBag.SRID })</div>
                 <div id="Sec_Log" class="funcBox mb-5"><h3>Booking Log </h3>@Html.Action("SRLogs", "SR", new { id = (int)ViewBag.SRID, mode = ViewBag.mode })</div>
 
                 @*@if (ViewBag.mode == 1)
-            {@Html.Action("FetchDetails", "SR", new { id = (int)ViewBag.SRID })}
-            @if (ViewBag.mode == 2)
-            {@Html.Action("SRLogs", "SR", new { id = (int)ViewBag.SRID, mode = ViewBag.mode })}
+                    {@Html.Action("FetchDetails", "SR", new { id = (int)ViewBag.SRID })}
+                    @if (ViewBag.mode == 2)
+                    {@Html.Action("SRLogs", "SR", new { id = (int)ViewBag.SRID, mode = ViewBag.mode })}
 
-            @if (ViewBag.mode == 3)
-            {@Html.Action("SRdetails", "SR", new { id = (int)ViewBag.SRID, EID = (int)ViewBag.EID })}
+                    @if (ViewBag.mode == 3)
+                    {@Html.Action("SRdetails", "SR", new { id = (int)ViewBag.SRID, EID = (int)ViewBag.EID })}
 
-            @if (ViewBag.mode == 4)
-            {@Html.Action("SRCustomers", "SR", new { id = (int)ViewBag.SRID })}
-            @if (ViewBag.mode == 5)
-            {@Html.Action("SRUpload", "SR", new { id = (int)ViewBag.SRID })}
-            @if (ViewBag.mode == 6)
-            {@Html.Action("Reciepts", "SR", new { id = (int)ViewBag.SRID })}*@
+                    @if (ViewBag.mode == 4)
+                    {@Html.Action("SRCustomers", "SR", new { id = (int)ViewBag.SRID })}
+                    @if (ViewBag.mode == 5)
+                    {@Html.Action("SRUpload", "SR", new { id = (int)ViewBag.SRID })}
+                    @if (ViewBag.mode == 6)
+                    {@Html.Action("Reciepts", "SR", new { id = (int)ViewBag.SRID })}*@
                 <hr />
             }
             else
             {
-                <div class="funcBox mb-5"> <h3>Summary </h3> @Html.Action("FetchDetails", "SR", new { id = 0 })</div>
+                <div class="funcBox mb-5">  @Html.Action("FetchDetails", "SR", new { id = 0 })</div>
                 ViewBag.SRID = 0;
             }
 

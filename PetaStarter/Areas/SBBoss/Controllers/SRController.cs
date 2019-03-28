@@ -253,7 +253,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         }
 
         [EAAuthorize(FunctionName = "Service Requests", Writable = true)]
-        public ActionResult FetchDetails(int? id)
+        public ActionResult FetchDetails(int? id, bool DirectBF=false)
         {
             ViewBag.Title = id.Value>0 ?"Booking Folder": "New Enquiry or Booking";
 
@@ -281,8 +281,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
             ViewBag.ServiceTypeID = Enum.GetValues(typeof(ServiceTypeEnum)).Cast<ServiceTypeEnum>().Select(v => new SelectListItem { Text = v.ToString(), Value = ((int)v).ToString() }).ToList();
 
             ViewBag.Cust = db.FirstOrDefault<Customer>("Select FName,SName from Customer where CustomerID=@0", SR?.CustID ?? 0);
-
-            return PartialView("Details", SR);
+                        
+            return DirectBF? PartialView("DetailsDirectBooking", SR): PartialView("Details", SR);
         }
 
         [EAAuthorize(FunctionName = "Service Requests", Writable = true)]
@@ -308,12 +308,13 @@ namespace Speedbird.Areas.SBBoss.Controllers
         }
 
         [EAAuthorize(FunctionName = "Service Requests", Writable = true)]
-        public ActionResult Manage(int? id, int EID = 0) 
+        public ActionResult Manage(int? id, int EID = 0, bool DirectBF=false) 
         {
            
             ViewBag.EID = EID;
             ViewBag.SRID = id;
-
+            ViewBag.DirectBF = DirectBF;
+            ViewBag.Title = (id.HasValue && id.Value > 0 || DirectBF) ? "Booking Folder" : "Enquiry";
             return View();
         }
 
@@ -1065,12 +1066,14 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
 
         //Load Edit Commsion Modal
+        [EAAuthorize(FunctionName = "EditComm", Writable = true)]
         public PartialViewResult _EditComm(int? SRID)
         {
             ViewBag.SRID = SRID;
            return PartialView();
         }
 
+        [EAAuthorize(FunctionName = "EditComm", Writable = true)]
         public bool EditComm(int? SRDID, decimal? ECommision)
         {
             try
