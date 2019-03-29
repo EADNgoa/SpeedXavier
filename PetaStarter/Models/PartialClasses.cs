@@ -142,6 +142,17 @@ namespace Speedbird
         public string UserName { get; set; }
     }
 
+    public class DriversEndingInsurance
+    {
+        public int DriverId { get; set; }
+        public string DriverName { get; set; }
+        public string CarBrand { get; set; }
+        public string Model { get; set; }
+        public DateTime InsuranceEndDate { get; set; }
+        public string InsuranceCompany { get; set; }
+
+    }
+
     [MetadataType(typeof(SRdetailsMetadata))]
     public partial class SRdetail
     {

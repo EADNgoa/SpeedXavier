@@ -55,6 +55,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
             ViewBag.LvApp = db.Query<LeaveBalanceRpt>("select t.LeaveTypeName, e.LeaveDays as TotalLeave, b.LeaveDays as Availed, (e.LeaveDays-b.LeaveDays) as Remaining  " +
                 "from LeaveEntitlement e inner join LeaveType t on e.LeaveTypeID=t.LeaveTypeID left join LeaveBalance b on e.LeaveTypeID=b.LeaveTypeID " +
                 "where e.LeaveYear =year(getdate()) and (UserID is null or UserID=@0)", userid).ToList();
+            ViewBag.DriversEndingInsurance = db.Query<DriversEndingInsurance>("select d.DriverId, d.DriverName,c.CarBrand,c.Model,c.InsuranceCompany,c.InsuranceEndDate " +
+                "from Driver d, DriversCars c where d.DriverID=c.DriverId and c.InsuranceEndDate< DATEADD(d,30,GetDate())");
             return View("Index");
         }
 

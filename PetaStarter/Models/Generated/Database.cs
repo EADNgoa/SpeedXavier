@@ -464,6 +464,21 @@ namespace Speedbird
 		[Column] public int? LocationId { get; set; }
 	}
     
+	[TableName("dbo.DriversCars")]
+	[PrimaryKey("CarId")]
+	[ExplicitColumns]
+    public partial class DriversCar  
+    {
+		[Column] public int CarId { get; set; }
+		[Column] public int DriverId { get; set; }
+		[Column] public string CarBrand { get; set; }
+		[Column] public string Model { get; set; }
+		[Column] public DateTime? DateOfPurchase { get; set; }
+		[Column] public string RCBookNo { get; set; }
+		[Column] public DateTime? InsuranceEndDate { get; set; }
+		[Column] public string InsuranceCompany { get; set; }
+	}
+    
 	[TableName("dbo.DRP_SR")]
 	[PrimaryKey("DRPDID", AutoIncrement=false)]
 	[ExplicitColumns]
