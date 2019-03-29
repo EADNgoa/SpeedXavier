@@ -45,7 +45,6 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
         // GET: Clients/Create
         [EAAuthorize(FunctionName = "Driver", Writable = true)]
-
         public ActionResult Manage(int? id)
         {
             ViewBag.GeoId = db.Query<GeoTree>("Select * from GeoTree where GeoTreeId = (Select LocationId from driver where DriverID=@0)", id ?? 0).Select(sl => new SelectListItem { Text = sl.GeoName, Value = sl.GeoTreeID.ToString(), Selected = true });
@@ -62,6 +61,31 @@ namespace Speedbird.Areas.SBBoss.Controllers
         public ActionResult Manage([Bind(Include = "DriverID,DriverName,Phone,Address,EmerContactName,EmerContactNo, CarModel, LocationId")] Driver item)
         {
             return base.BaseSave<Driver>(item, item.DriverID > 0);
+        }
+
+
+        [EAAuthorize(FunctionName = "Driver", Writable = true)]
+        public ActionResult CarManage(int? id, int? CarId)
+        {
+            if (CarId.HasValue)
+                id = db.SingleOrDefault<DriversCar>(CarId).DriverId;
+
+            ViewBag.DriverName = db.SingleOrDefault<Driver>(id).DriverName;
+            ViewBag.DriverId = id;
+            ViewBag.ExistingCars = db.Query<DriversCar>("where DriverId=@0", id);
+
+            return View(base.BaseCreateEdit<DriversCar>(CarId, "CarID"));
+        }
+
+        // POST: Clients/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [EAAuthorize(FunctionName = "Driver", Writable = true)]
+        public ActionResult CarManage([Bind(Include = "CarId, DriverId,CarBrand,Model,DateOfPurchase,RCBookNo,InsuranceEndDate,InsuranceCompany")] DriversCar item)
+        {
+            return base.BaseSave<DriversCar>(item, item.CarId > 0,"CarManage",new { Id= item.DriverId });
         }
 
         protected override void Dispose(bool disposing)

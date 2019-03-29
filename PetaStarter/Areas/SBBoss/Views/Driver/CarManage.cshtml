@@ -1,0 +1,143 @@
+﻿@model Speedbird.DriversCar
+@using Speedbird
+@{
+    ViewBag.Title = $"Manage Cars of {ViewBag.DriverName}";
+}
+
+<div class="card border rounded DropShadow">
+    <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
+        <span class="h3">@ViewBag.Title</span>
+        <a href="@Url.Action("Index","Driver")"><i class="fas fa-undo-alt fa-inverse h3 float-right DropShadow"></i></a>
+    </div>
+    <div class="card-body">
+
+
+        @using (Html.BeginForm("CarManage", "Driver", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal">
+
+
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.Hidden("DriverId", (int)ViewBag.DriverId)
+                @if (Model?.CarId > 0)
+                {
+                    @Html.HiddenFor(model => model.CarId)
+                }
+
+                <div class="form-row">
+                    <div class="input-group col mb-3">
+                        <div class="input-group-prepend"><span class="input-group-text">Car Brand</span></div>
+                        @Html.EditorFor(model => model.CarBrand, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.CarBrand, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="input-group col mb-3">
+                        <div class="input-group-prepend"><span class="input-group-text">Car Model</span></div>
+                        @Html.EditorFor(model => model.Model, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Model, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="input-group col mb-3">
+                        <div class="input-group-prepend"><span class="input-group-text">Car Bought On</span></div>
+                        @Html.EditorFor(model => model.DateOfPurchase, new { htmlAttributes = new { @type = "text", @class = "form-control eadate" } })
+                        @Html.ValidationMessageFor(model => model.DateOfPurchase, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="input-group col mb-3">
+                        <div class="input-group-prepend"><span class="input-group-text">RC Book No.</span></div>
+                        @Html.EditorFor(model => model.RCBookNo, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.RCBookNo, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="input-group col mb-3">
+                        <div class="input-group-prepend"><span class="input-group-text">Insurance End On</span></div>
+                        @Html.EditorFor(model => model.InsuranceEndDate, new { htmlAttributes = new { @type = "text", @class = "form-control eadate" } })
+                        @Html.ValidationMessageFor(model => model.InsuranceEndDate, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="input-group col mb-3">
+                        <div class="input-group-prepend"><span class="input-group-text">Insurance Company</span></div>
+                        @Html.EditorFor(model => model.InsuranceCompany, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.InsuranceCompany, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Save" class="btn btn-primary" />
+                    </div>
+                </div>
+            </div>
+        }
+
+
+    </div>
+</div>
+
+<div class="card border rounded DropShadow">
+    <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
+        <span class="h3">Car List</span>        
+    </div>
+    <div class="card-body">
+
+        <table class="table">
+            <tr>
+                <th>Brand</th>
+                <th>
+                    Model
+                </th>
+                <th>
+                    Bought On
+                </th>
+                <th>
+                    RC Book No.
+                </th>
+                <th>
+                    Ins. End on
+                </th>
+                <th>
+                    Ins. Company
+                </th>
+                <th></th>                
+            </tr>            
+            @foreach (var item in (IEnumerable<Speedbird.DriversCar>) ViewBag.ExistingCars)
+            {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CarBrand)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Model)
+                </td>
+                <td>
+                    @(((DateTime)item.DateOfPurchase).EAFormat())
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RCBookNo)
+                </td>
+
+                @if (item.InsuranceEndDate < DateTime.Now)
+                {
+                    <td style="background-color: #cc91b4">                 
+                        @(((DateTime)item.InsuranceEndDate).EAFormat())
+                    </td>}
+                else
+                {
+                    <td>
+                        @Html.DisplayFor(modelItem => item.InsuranceCompany)                        
+                    </td>
+                }
+
+                <td>
+                    <a href="@Url.Action("CarManage","Driver", new {CarId = item.CarId })"><i title="Edit" class="fas fa-edit fa-inverse h3 float-right DropShadow"></i></a>
+                </td>
+
+            </tr>
+
+            }
+
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

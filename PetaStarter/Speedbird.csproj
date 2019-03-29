@@ -784,6 +784,7 @@
     <Content Include="Areas\SBBoss\Views\SR\_EditComm.cshtml" />
     <Content Include="Areas\SBBoss\Views\OwnedAsset\Index.cshtml" />
     <Content Include="Areas\SBBoss\Views\SR\DetailsDirectBooking.cshtml" />
+    <Content Include="Areas\SBBoss\Views\Driver\CarManage.cshtml" />
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <Content Include="Areas\SBBoss\Views\RP\DriverR.cshtml" />
     <Content Include="Areas\SBBoss\Views\RP\DriverP.cshtml" />

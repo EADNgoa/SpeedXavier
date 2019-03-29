@@ -17,6 +17,31 @@ namespace Speedbird
 
     public static class MyExtensions
     {
+
+        //Extension method for Date
+        public static string EAFormat(this DateTime dt, bool withTime = false, bool forSQL = false)
+        {
+            return withTime ? $"{dt:dd/MMM/yyyy HH:mm}" : forSQL ? $"{dt:yyyy/MM/dd}" : $"{dt:dd/MMM/yyyy}";
+        }
+        //Extension method for decimal
+        public static string EAFormat(this decimal dcml, string currency = "")
+        {
+            return $"{currency} {dcml:#,###.00}";
+        }
+
+
+        /// <summary>
+        /// Return a substring for use in the @Html methods
+        /// </summary>
+        /// <param name="value">String to trim</param>
+        /// <param name="len">Size of desired new string</param>
+        /// <returns></returns>
+        public static string EAFormat(this string value, int len = 0)
+        {
+            return (value.Length > len ? value.Substring(0, len) + "..." : value).Trim();
+        }
+
+
         public static string getModelStateErrors(ModelStateDictionary mS)
         {
             /// <summary>

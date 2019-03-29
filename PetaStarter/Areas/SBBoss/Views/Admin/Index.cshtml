@@ -1,4 +1,5 @@
 ﻿@using Microsoft.AspNet.Identity
+@using Speedbird
 <style>
     header {
         background-color: cornflowerblue;
@@ -113,6 +114,50 @@
             </table>
         </div>
 
+    </div>
+
+    <div class="row">
+        <div class="col ">
+            <div class="card-header">
+                <header> <center class="text-light"><b>Attendance</b></center></header>
+            </div>
+            <table class="table table-striped">
+                <tr>
+                    <th>Driver</th>
+                    <th>Brand</th>
+                    <th>Model</th>
+                    <th>Ins. Company</th>
+                    <th>Ins. End</th>
+                    <td></td>
+                </tr>
+                @foreach (var item in (IEnumerable<Speedbird.DriversEndingInsurance>)ViewBag.DriversEndingInsurance)
+                {
+
+                <tr>
+                    <td>  @(item.DriverName)</td>
+                    <td>  @(item.CarBrand)</td>
+                    <td>  @(item.Model)</td>
+                    <td>  @(item.InsuranceCompany)</td>
+                    <td>  @(item.InsuranceEndDate.EAFormat())</td>
+                    @if (item.InsuranceEndDate < DateTime.Now)
+                    {
+                        <td style="background-color: #cc91b4">
+                            <a href="@Url.Action("CarManage", "Driver", new { id = item.DriverId })"><i title="Edit" class="fas fa-car fa-inverse h3 float-right DropShadow"></i></a>
+                        </td>}
+                    else
+                    {
+                        <td >
+                            <a href="@Url.Action("CarManage", "Driver", new { id = item.DriverId })"><i title="Edit" class="fas fa-car fa-inverse h3 float-right DropShadow"></i></a>
+                        </td>
+                    }
+                </tr>
+
+                }
+            </table>
+        </div>
+        <div class="col ">
+           
+        </div>
     </div>
 </div>
 
