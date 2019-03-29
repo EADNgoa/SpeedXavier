@@ -21,7 +21,7 @@
         <div class="input-group col mb-3">
             <div class="input-group-prepend"><span class="input-group-text">Type</span></div>
             @Html.DropDownList("CarType", null, htmlAttributes: new { @type = "text", @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.ToLoc, "", new { @class = "text-danger" })
+            @Html.ValidationMessageFor(model => model.CarType, "", new { @class = "text-danger" })
         </div>
 
     </div>

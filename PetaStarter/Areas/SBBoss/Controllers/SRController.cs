@@ -401,7 +401,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             ViewBag.SRDets = db.Fetch<SRdetail>("Select * from SRdetails where SRID =@0", id);
             List<SelectListItem> ServiceTypeID = Enum.GetValues(typeof(ServiceTypeEnum)).Cast<ServiceTypeEnum>().Select(v => new SelectListItem { Text = v.ToString(), Value = ((int)v).ToString() }).ToList();
             var defaultServType = db.Single<ServiceRequest>(id).ServiceTypeID;
-            var selST= ServiceTypeID.First<SelectListItem>(a => int.Parse(a.Value) == defaultServType);
+            var selST= ServiceTypeID.First(a => int.Parse(a.Value) == defaultServType);
             selST.Selected = true;
             ViewBag.ServiceTypeID = ServiceTypeID;
             if (rec!=null)

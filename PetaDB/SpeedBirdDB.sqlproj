@@ -154,6 +154,7 @@
     <Build Include="dbo\StoredProcedures\AmtPerPax.sql" />
     <Build Include="dbo\Tables\Agent.sql" />
     <Build Include="dbo\Tables\InsectLog.sql" />
+    <Build Include="dbo\Tables\DriversCars.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="SpeedBirdDB.refactorlog" />
