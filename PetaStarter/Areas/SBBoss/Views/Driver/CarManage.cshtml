@@ -113,12 +113,19 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.RCBookNo)
                 </td>
-                <td>
-                    @(((DateTime) item.InsuranceEndDate).EAFormat())
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.InsuranceCompany)
-                </td>
+
+                @if (item.InsuranceEndDate < DateTime.Now)
+                {
+                    <td style="background-color: #cc91b4">                 
+                        @(((DateTime)item.InsuranceEndDate).EAFormat())
+                    </td>}
+                else
+                {
+                    <td>
+                        @Html.DisplayFor(modelItem => item.InsuranceCompany)                        
+                    </td>
+                }
+
                 <td>
                     <a href="@Url.Action("CarManage","Driver", new {CarId = item.CarId })"><i title="Edit" class="fas fa-edit fa-inverse h3 float-right DropShadow"></i></a>
                 </td>
