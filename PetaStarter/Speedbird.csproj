@@ -254,6 +254,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\EAhelpers.cs" />
     <Compile Include="Models\Extensions.cs" />
     <Compile Include="Models\Generated\Database.cs">
       <AutoGen>True</AutoGen>
@@ -785,6 +786,7 @@
     <Content Include="Areas\SBBoss\Views\OwnedAsset\Index.cshtml" />
     <Content Include="Areas\SBBoss\Views\SR\DetailsDirectBooking.cshtml" />
     <Content Include="Areas\SBBoss\Views\Driver\CarManage.cshtml" />
+    <Content Include="Areas\SBBoss\Views\SR\WritePVs\_Transfer.cshtml" />
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <Content Include="Areas\SBBoss\Views\RP\DriverR.cshtml" />
     <Content Include="Areas\SBBoss\Views\RP\DriverP.cshtml" />
@@ -952,6 +954,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Areas\SBBoss\Views\SR\ReadPVs\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

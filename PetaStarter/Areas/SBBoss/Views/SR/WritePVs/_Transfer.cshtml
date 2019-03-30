@@ -1,0 +1,107 @@
+﻿@using Speedbird
+@model Speedbird.SRdetail
+
+<div class="form-row">
+    @Html.EASelectList("CustomerId", (IEnumerable<SelectListItem>)ViewBag.CustomerId, "", "Pax Name")
+    @Html.EADateFor(m => m.Tdate,"Transfer Dt")
+    @Html.EATextFor(m => m.Qty, "No. of Vehicles")
+    @Html.EATextFor(m => m.FromLoc, "From")
+</div>
+<div class="form-row">
+    @Html.EATextFor(m => m.PickUpPoint)
+    @Html.EATextFor(m => m.ToLoc)
+    @Html.EATextFor(m => m.DropPoint)
+    @Html.EASelectList("CarType", (IEnumerable<SelectListItem>)ViewBag.CarType, "", "Vehicle Type")
+</div>
+<div class="form-row">
+    @Html.EASelectList("Heritage", (IEnumerable<SelectListItem>)ViewBag.RateBasis, "", "Rate Basis")
+    @Html.EAChkBox("HasAc")
+    @Html.EAChkBox("HasCarrier")
+    @Html.EATextFor(m => m.BFCost)
+</div>
+<div class="form-row">
+    @Html.EATextFor(m => m.BFCost, "Vehicle Cost")
+    @Html.EATextFor(m => m.PayTo)
+    @Html.EATextFor(m => m.Cost)
+    @Html.EATextFor(m => m.SellPrice)
+</div>
+<hr>
+<div class="form-row">
+    @Html.EAAutocompleteFor(m => m.DriverID, "SR", "AutoCompleteDriver", "Driver")
+    @Html.EATextFor(m => m.SuppInvNo)
+    @Html.EATextFor(m => m.CouponCode)
+    @Html.EATextFor(m => m.SuppInvAmt)
+    @Html.EADateFor(m => m.SuppInvDt)
+    @Html.EATextFor(m => m.SuppConfNo)
+</div>
+    <div class="form-row">
+        <div class="input-group col mb-3">
+
+            @if (Model?.SRDID > 0)
+    {
+                <div class="input-group col-3 mb-3">
+
+                    @if (ViewBag.IsReadOnly == null)
+    {
+                        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#AssignDriverModal" data-srdid="@Model.SRDID">
+                            @if (Model?.DriverID == null)
+    {
+                                @:  Assign Driver
+                            }
+                            else
+                            {
+                                @: Change Driver
+                            }
+
+                        </button>
+                        <div class="input-group-prepend"><span class="input-group-text" style="color:blue">@ViewBag.DrvNm</span></div>
+
+                    }
+                    else
+                    {
+                        <div class="input-group-prepend"><span class="input-group-text">Driver Name</span></div>
+                        <input type="text" value="@ViewBag.DrvNm" class="form-control" />
+                    }
+
+
+
+                </div>
+            }
+
+            @if (ViewBag.IsReadOnly == null)
+            {
+                if (Model?.DriverID > 0)
+                {
+                    <div class="input-group col mb-3">
+                        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#DrvReviewModal" data-srdid="@Model.SRDID">
+                            Feedback
+                        </button>
+                    </div>
+
+                }
+            }
+        </div>
+    </div>
+
+
+
+    @if (ViewBag.isReadOnly != null)
+    {@Html.Action("CustSearch", "SR", new { id = Model.SRDID })
+}
+
+    @if (Model != null)
+    {
+        <script>
+           $('#AssignDriver').load('@Url.Action("_AssignDriver")', { SRID: @Model.SRID, SRDID: @Model.SRDID});
+           $('#Review').load('@Url.Action("_DrvReview")', { SRID: @Model.SRID,SRDID: @Model.SRDID});
+        </script>
+    }
+
+
+    <script>
+
+
+
+
+
+    </script>

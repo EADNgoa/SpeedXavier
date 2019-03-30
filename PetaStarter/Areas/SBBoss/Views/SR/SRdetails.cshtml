@@ -5,49 +5,12 @@
 }
 
 <style>
-    /*for Datatables*/
-    td.details-control {
-        background: url('/Content/DataTables/DataTables-1.10.16/images/details_open.png') no-repeat center center;
-        cursor: pointer;
+    body {
+        font-size:0.8rem;
     }
-
-    tr.shown td.details-control {
-        background: url('/Content/DataTables/DataTables-1.10.16/images/details_close.png') no-repeat center center;
-    }
-    /*End for Datatables*/
 </style>
 
-
-<table id="SRDetTbl" class="table table-sm table-striped">
-    <thead class="thead-light">
-        @*<tr role="row">
-                <th>Dets</th>
-                <th></th>
-                <th><input type="date" class="form-control" placeholder="Filter Date"></th>
-
-                <th><input type="text" class="form-control" placeholder="Filter Supplier"></th>
-                <th><input type="text" class="form-control" placeholder="Filter Contract No"></th>
-                <th><input type="text" class="form-control" placeholder="Filter Coupon Code"></th>
-
-                <th><input type="text" class="form-control" placeholder="Filter Cost Price"></th>
-                <th><input type="text" class="form-control" placeholder="Filter Sell Price"></th>
-                <th width="5%"></th>
-            </tr>*@
-        <tr role="row">
-            <th></th>
-            <th scope="col"> Service Type</th>
-            <th scope="col"> Date</th>
-
-            <th scope="col">Supplier</th>
-            <th scope="col">Cost Price</th>
-            <th scope="col">Sell Price</th>
-            <th width="8%"></th>
-        </tr>
-    </thead>
-    <tbody></tbody>
-</table>
-
-
+<div id="SRDetTbl">The list of added services will be shown here</div>
 
 
 
@@ -63,9 +26,7 @@
                         Add Customer
                     </button>
                 </center>
-
             </div>
-
         </div>
     }
 
@@ -93,66 +54,9 @@
                     <div class="input-group-prepend"><span class="input-group-text">Service Type</span></div>
                     @Html.DropDownListFor(model => model.ServiceTypeID, null, htmlAttributes: new { @type = "text", @class = "form-control ServiceType" })
                     @Html.ValidationMessageFor(model => model.ServiceTypeID, "", new { @class = "text-danger" })
-                </div>
-                <div class="input-group col mb-3">
-                    <div class="input-group-prepend"><span class="input-group-text">Quantity</span></div>
-                    @Html.EditorFor(model => model.Qty, new { htmlAttributes = new { @type = "text", @class = " form-control" } })
-                    @Html.ValidationMessageFor(model => model.Qty, "", new { @class = "text-danger" })
-                </div>
-                <div class="input-group col mb-3">
-                    <div class="input-group-prepend"><span class="input-group-text">Coupon Code</span></div>
-                    @Html.EditorFor(model => model.CouponCode, new { htmlAttributes = new { @type = "text", @class = " form-control" } })
-                    @Html.ValidationMessageFor(model => model.CouponCode, "", new { @class = "text-danger" })
-                </div>
-                <div class="input-group col mb-3">
-                    <div class="input-group-prepend"><span class="input-group-text">Option Type</span></div>
-                    @Html.DropDownListFor(model => model.OptionTypeID, null, htmlAttributes: new { @type = "text", @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.OptionTypeID, "", new { @class = "text-danger" })
-                </div>
+                </div>               
             </div>
-            <div class="form-row">
-                <div class="input-group col mb-3">
-                    <div class="input-group-prepend"><span class="input-group-text">Supplier</span></div>
-                    <input type="text" id="SupplierName" name="SupplierName" style="color:black;" data-autocomplete-idholder="#SupplierID" value="" data-autocombo-url="@Url.Action("AutoCompleteSup")" class="form-control" />
-                    @Html.ValidationMessageFor(model => model.SupplierID, "", new { @class = "text-danger" })
-                </div>
-                <div class="input-group col mb-3">
-                    <div class="input-group-prepend"><span class="input-group-text">Contract No</span></div>
-                    @Html.EditorFor(model => model.ContractNo, new { htmlAttributes = new { @type = "text", @class = " form-control" } })
-                    @Html.ValidationMessageFor(model => model.ContractNo, "", new { @class = "text-danger" })
-                </div>
-                <div class="input-group col mb-3">
-                    <div class="input-group-prepend"><span class="input-group-text"> Invoice No</span></div>
-                    @Html.EditorFor(model => model.SuppInvNo, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.SuppInvNo, "", new { @class = "text-danger" })
-                </div>
-                <div class="input-group col mb-3">
-                    <div class="input-group-prepend"><span class="input-group-text">Cost Price</span></div>
-                    @Html.EditorFor(model => model.Cost, new { htmlAttributes = new { @type = "text", @class = " form-control" } })
-                    @Html.ValidationMessageFor(model => model.Cost, "", new { @class = "text-danger" })
-                </div>
-
-
-            </div>
-            <div class="form-row">
-                <div class="input-group col mb-3">
-                    <div class="input-group-prepend"><span class="input-group-text">Sell Price</span></div>
-                    @Html.EditorFor(model => model.SellPrice, new { htmlAttributes = new { @type = "text", @class = " form-control" } })
-                    @Html.ValidationMessageFor(model => model.SellPrice, "", new { @class = "text-danger" })
-                </div>
-                <div class="input-group col mb-3">
-                    <div class="input-group-prepend">@Html.LabelFor(model => model.Fdate, new { @class = "input-group-text", @id = @Html.IdFor(m => m.Fdate) + "_lbl" })</div>
-                    @Html.EditorFor(model => model.Fdate, new { htmlAttributes = new { @type = "text", @class = "eadate form-control" } })
-                    @Html.ValidationMessageFor(model => model.Fdate, "", new { @class = "text-danger" })
-                </div>
-                <div class="input-group col mb-3">
-                    <div class="input-group-prepend">@Html.LabelFor(model => model.FromLoc, new { @class = "input-group-text", @id = @Html.IdFor(m => m.FromLoc) + "_lbl" })</div>
-                    @Html.EditorFor(model => model.FromLoc, new { htmlAttributes = new { @type = "text", @class = "form-control LenRestrict", data_mlen = 2 } })
-                    @Html.ValidationMessageFor(model => model.FromLoc, "", new { @class = "text-danger" })
-                </div>
-
-
-            </div>
+            
 
 
             @*Dynamic Form-rows based on Selected Service Type*@
@@ -211,30 +115,17 @@
 
     $(function () {
 
-        var setDynLabels = function (sid) {
-
-            //Set the labels of the common form fields based on the selected Service Type
-            $.post('@Url.Action("FetchSTlabels", "SR")', { CommonLabel: '@Html.DisplayNameFor(model => model.FromLoc)', ServiceTypeId: sid }, function (data) {
-                $('#@Html.DisplayNameFor(model =>model.FromLoc)' + '_lbl').html(data);
-            });
-
-            $.post('@Url.Action("FetchSTlabels", "SR")', { CommonLabel: '@Html.DisplayNameFor(model => model.Fdate)', ServiceTypeId: sid }, function (data) {
-                $('#@Html.DisplayNameFor(model =>model.Fdate)' + '_lbl').html(data);
-            });
-
-        };
-
+      
         //Load the dynamic fields based on first Service type automatically
-        $('#placeholderEditDiv').load('@Url.Action("FetchSTpartial", "SR")', { ServiceTypeId: $('#ServiceTypeID').val(),id:$('#SRDID').val() ,IsReadOnly: false }, setDynLabels($('#ServiceTypeID').val()));
+        $('#placeholderEditDiv').load('@Url.Action("FetchSTpartial", "SR")', { ServiceTypeId: $('#ServiceTypeID').val(),id:$('#SRDID').val() ,IsReadOnly: false, SRID: @ViewBag.SRID });
 
         //Then on change of the dropDown load the dynamic fields based on the selected Service type
         $('.ServiceType').on('change', function () {
             var sid = $(this).val();
 
             //Load the Dynamic Fields of the Form based on the selected Service Type
-            $('#placeholderEditDiv').load('@Url.Action("FetchSTpartial", "SR")', { ServiceTypeId: sid, id: $('#SRDID').val() , IsReadOnly: false });
-            setDynLabels(sid);
-
+            $('#placeholderEditDiv').load('@Url.Action("FetchSTpartial", "SR")', { ServiceTypeId: sid, id: $('#SRDID').val() , IsReadOnly: false, SRID: @ViewBag.SRID });
+            
             //Fill the Option Type box
             $.get('@Url.Action("GetOptionsOfST", "SR")', { ServiceTypeId: sid } , function (data) {
                 $('#OptionTypeID').find('option').remove();
@@ -267,90 +158,6 @@
         });
 
 
-
-
-
-         var oTable = $('#SRDetTbl').DataTable({
-            serverSide: true,
-            searching: true,
-            "dom": 'lrtip',
-            ajax: {
-                "type": "POST",
-                "url": '@Url.Action("GetSRDetList/"+ViewBag.SRID)',
-                "contentType": 'application/json; charset=utf-8',
-                'data': function (data) {
-                    return data = JSON.stringify(data);
-                }
-            },
-            processing: true,
-            deferRender: true,
-            columns: [
-                {
-                    "className": 'details-control',
-                    "orderable": false,
-                    "data": null,
-                    "defaultContent": ''
-                },
-                { data: "ServiceTypeName" },
-                { data: "fstr" },
-                { data: "SupplierName" },
-                { data: "Cost" },
-                { data: "SellPrice" },
-            ],
-            columnDefs: [{
-                'targets': 6,
-                'searchable': false,
-                'orderable': false,
-                'bSortable': false,
-                'render': function (data, type, full, meta) {
-                    if (full.IsCanceled) {
-                        return '<span class="text-danger">Cancelled</span>'
-                    } else {
-                        return '<button type="button" class="btn btn-link " data-toggle="modal" data-target="#ACModal" data-srdid=' + full.SRDID + '><i class="fas fa-user fa-inverse float-left DropShadow"></i></button>\
-<a href="/SBBoss/SR/Manage?id='+ full.SRID + '&&mode=' + 3 + '&&EID=' + full.SRDID + '"><i class="fas fa-edit fa-inverse DropShadow"></i></a>\
-<button type="button" class="btn btn-link delservice" data-srdid=' + full.SRDID + '><i class="fas fa-trash-alt fa-inverse float-left DropShadow"></i>';
-                    }
-                }
-            },
-            {
-                targets: 'no-sort',
-                orderable: true
-            }]
-        });
-
-        $('#SRDetTbl').on('click','.delservice', function () {
-            $.post('@Url.Action("CancelService")', { SRDID: $(this).data('srdid') });
-            location.reload();
-        });
-
-        $("#SRDetTbl thead th input[type=text]").on('change', function () {
-            oTable.column($(this).parent().index() + ':visible')
-                .search(this.value)
-                .draw();
-        });
-
-
-        // Add event listener for opening and closing details
-        $('#SRDetTbl tbody').on('click', 'td.details-control', function () {
-            var tr = $(this).closest('tr');
-            var row = oTable.row(tr);
-
-            if (row.child.isShown()) {
-                // This row is already open - close it
-                row.child.hide();
-                tr.removeClass('shown');
-            }
-            else {
-
-                // Open this row
-                $('#placeholderDiv').load('@Url.Action("FetchSTpartial", "SR")', { id: row.data().SRDID, ServiceTypeId: row.data().ServiceTypeID, IsReadOnly: true }, function () {
-                    row.child($('#placeholderDiv').html()).show();
-                    $('#placeholderDiv').html();
-                    tr.addClass('shown');
-                });
-
-            }
-        });
 
 
 

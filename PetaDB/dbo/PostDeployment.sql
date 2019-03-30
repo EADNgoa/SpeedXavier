@@ -51,6 +51,13 @@ BEGIN
 	SET IDENTITY_INSERT [dbo].[UserFunctions] OFF
 END
 
+IF NOT EXISTS (SELECT * FROM AspNetUsers)
+BEGIN
+		INSERT INTO [dbo].[AspNetUsers] ([Id], [Email], [EmailConfirmed], [PasswordHash], [SecurityStamp], [PhoneNumber], [PhoneNumberConfirmed], [TwoFactorEnabled], [LockoutEndDateUtc], [LockoutEnabled], [AccessFailedCount], [UserName], [DateCreated], [Disabled], [LastLogin], [UserType], [RealName]) VALUES (N'aaa59288-d983-4999-a53b-3109b9ff02ea', N'ea@ea.com', 1, N'ALdc2SanvmCYCeHZSsO7BcHQlbqdWdtQghYvuoD2eDk511epC+xcue7+yOF2KZSQEQ==', N'2db98bf0-a78a-4cb0-91dd-42a2a401d21b', NULL, 0, 0, NULL, 0, 0, N'ea@ea.com', N'2018-03-10 03:56:39', 0, NULL, 0,'SA')
+END
+
+
+
 IF NOT EXISTS (SELECT * FROM Groups)
 BEGIN --Create an Admin group
 	SET IDENTITY_INSERT [dbo].Groups ON
@@ -60,6 +67,10 @@ BEGIN --Create an Admin group
 END
 
 
+IF NOT EXISTS (SELECT * FROM UserGroups)
+BEGIN 
+	INSERT INTO [dbo].[UserGroups] ([UserID], [GroupID]) VALUES (N'aaa59288-d983-4999-a53b-3109b9ff02ea', 1)
+END
 
 --Give all permissions to admin group
 	INSERT INTO FunctionGroups

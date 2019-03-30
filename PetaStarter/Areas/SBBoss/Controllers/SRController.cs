@@ -416,7 +416,10 @@ namespace Speedbird.Areas.SBBoss.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [EAAuthorize(FunctionName = "Service Requests", Writable = true)]
-        public ActionResult SRdetails([Bind(Include = "SRDID,HasAc,HasCarrier,RateBasis,PayTo,PickUpPoint,DropPoint,SRID,ServiceTypeID,FromLoc,ToLoc,SuppInvNo,Fdate,Tdate,SupplierID,Cost,SellPrice,PNRno,TicketNo,Heritage,ChildNo,AdultNo,InfantNo,RoomType,CouponCode,City,Airline,DateOfIssue,FlightNo,ContractNo,GuideLanguageID,SSType,CarType,Model,ParentID,IsReturn,IsInternational,OptionTypeID,ItemId,IsCanceled, Qty")] SRdetail item, string Event,string IsReturn)
+        public ActionResult SRdetails([Bind(Include = "SRDID,SRID,ServiceTypeID,CarType,ItemID,CouponCode,Model,FromLoc,ToLoc,Fdate,Tdate,SupplierID,Cost,SellPrice,ChildNo," +
+            "AdultNo,InfantNo,Heritage,HasAc,HasCarrier,GuideLanguageID,DateOfIssue,ContractNo,PayTo,PickUpPoint,DropPoint,DriverID,SuppInvNo,Qty,ParentID,IsReturn," +
+            "IsInternational,OptionTypeID,ECommision,IsCanceled,SuppInvDt,SuppConfNo,NoExtraBeds,EBCostPNight,BFCost,LunchCost,DinnerCost,NoExtraService,ExtraServiceCost," +
+            "SuppInvAmt,GDSConfNo")] SRdetail item, string Event,string IsReturn)
         {
             using (var transaction = db.GetTransaction())
             {
@@ -614,7 +617,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             return PartialView();
         }
 
-      
+
         [EAAuthorize(FunctionName = "Service Requests", Writable = true)]
         public ActionResult SRLogs(int? id, int? sid, int? EID)
         {
@@ -707,12 +710,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             var filteredItems = db.Fetch<Supplier>($"Select * from Supplier Where SupplierName like '%{term}%'").Select(c => new { id = c.SupplierID, value = c.SupplierName });
             return Json(filteredItems, JsonRequestBehavior.AllowGet);
         }
-        public ActionResult AutoCompleteDrv(string term)
-        {
-            var filteredItems = db.Fetch<Driver>($"Select * from Driver Where DriverName like '%{term}%'").Select(c => new { id = c.DriverID, value = c.DriverName });
-            return Json(filteredItems, JsonRequestBehavior.AllowGet);
-        }
-
+        
         public ActionResult AutoCompletePack(string term)
         {
             var filteredItems = db.Fetch<Package>($"Select * from Package Where PackageName like '%{term}%' and ServiceTypeID={(int)ServiceTypeEnum.Packages}").Select(c => new { id = c.PackageID, value = c.PackageName});
@@ -734,15 +732,27 @@ namespace Speedbird.Areas.SBBoss.Controllers
             var filteredItems = db.Fetch<Accomodation>($"Select * from Accomodation Where AccomName like '%{term}%'").Select(c => new { id = c.AccomodationID, value = c.AccomName});
             return Json(filteredItems, JsonRequestBehavior.AllowGet);
         }
-        public ActionResult AutoCompleteCar(string term)
+        public JsonResult AutoCompleteCar(string term)
         {
-            var filteredItems = db.Fetch<CarBike>($"Select * from CarBike Where CarBikeName like '%{term}%'").Select(c => new { id = c.CarBikeID, value = c.CarBikeName });
-            return Json(filteredItems, JsonRequestBehavior.AllowGet);
+            return GetAutoCompleteData(term, "CarBikeID", "CarBikeName", "CarBike", $"Where CarBikeName like '%{term}%'");
         }
-        public ActionResult FetchSTpartial(int? id, int ServiceTypeId, bool IsReadOnly)
+        public JsonResult AutoCompleteDriver(string term)
+        {
+            return GetAutoCompleteData(term, "DriverID", "DriverName", "Driver", $"Where DriverName like '%{term}%'");            
+        }
+
+
+        public ActionResult FetchSTpartial(int? id, int ServiceTypeId, bool IsReadOnly, int SRID)
         {
             ViewBag.GuideLanguageID = db.Fetch<GuideLanguage>("Select * from GuideLanguage").Select(v => new SelectListItem { Text = v.GuideLanguageName, Value = v.GuideLanguageID.ToString() }).ToList();
             ViewBag.CarType = Enum.GetValues(typeof(CarTypeEnum)).Cast<CarTypeEnum>().Select(v => new SelectListItem { Text = v.ToString(), Value = ((int)v).ToString() }).ToList();
+                    
+            ViewBag.CustomerId = db.Fetch<Customer>($"Select c.CustomerId, Concat(Fname, ' ',Sname) as FName  from Customer c, sr_cust r where c.CustomerId=r.CustomerId and r.servicerequestid = @0",SRID).Select(u => new SelectListItem
+            {
+                Value = u.CustomerID.ToString(),
+                Text = u.FName
+            });
+
             ViewBag.SRDID = id;
             if (IsReadOnly)
                 ViewBag.IsReadOnly = "disabled";
@@ -786,7 +796,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                         }
                     }
                     return PartialView($"_{((ServiceTypeEnum)ServiceTypeId).ToString()}", rec);
-                case ServiceTypeEnum.TaxiHire:
+                case ServiceTypeEnum.Transfer:
                     var DrvID = db.FirstOrDefault<Driver>("Select DriverID from SRdetails where SRDID=@0", id);
                     if (DrvID?.DriverID > 0)
                     {
@@ -813,7 +823,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                         };
                     ViewBag.PayTo = TaxiPayTo;
 
-                    return PartialView($"_{((ServiceTypeEnum)ServiceTypeId).ToString()}", db.SingleOrDefault<SRdetail>(id));
+                    return PartialView($"WritePVs/_{((ServiceTypeEnum)ServiceTypeId).ToString()}", db.SingleOrDefault<SRdetail>(id));
                 default:
                     return PartialView("_NotFound");
             }
@@ -870,7 +880,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 {"Fdate","Valid From" },
                 {"FromLoc","Destination Country" }
             };
-            Dictionary<string, string> TaxiHire = new Dictionary<string, string>()
+            Dictionary<string, string> Transfer = new Dictionary<string, string>()
             {
                 {"Fdate","From Date" },
                 {"FromLoc","From Location" }
@@ -886,7 +896,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 { (ServiceTypeEnum.Flight).ToString(), Flight},
                 { (ServiceTypeEnum.Visa).ToString(), Visa},
                 { (ServiceTypeEnum.Insurance).ToString(), Insurance},
-                { (ServiceTypeEnum.TaxiHire).ToString(), TaxiHire}
+                { (ServiceTypeEnum.Transfer).ToString(), Transfer}
             };
 
 

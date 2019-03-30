@@ -78,7 +78,7 @@
                         </tr>
                         <tr>
                             <td colspan="10">                               
-                                 @{Html.RenderAction("FetchSTpartial", "SR", new { id = item.SRDID, ServiceTypeId = item.ServiceTypeID, IsReadOnly = true }); }
+                                 @{Html.RenderAction("FetchSTpartial", "SR", new { id = item.SRDID, ServiceTypeId = item.ServiceTypeID, IsReadOnly = true, SRID= item.SRID }); }
                             </td>
                         </tr>
                         i++;

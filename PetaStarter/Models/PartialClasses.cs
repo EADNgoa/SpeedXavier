@@ -12,7 +12,12 @@ using Microsoft.AspNet.Identity;
 
 namespace Speedbird
 {   
-    
+    public class EASelectListData
+    {
+        public string id { get; set; }
+        public string value { get; set; }
+    }
+
     public partial class AgentView
     {
         public string AgentId { get; set; }
@@ -170,8 +175,7 @@ namespace Speedbird
         public int ServiceTypeID { get; set; }
         public string ServiceTypeName { get { return ((ServiceTypeEnum)ServiceTypeID).ToString(); } }
         public int CarType { get; set; }
-        public string CouponCode { get; set; }
-        public string Airline { get; set; }
+        public string CouponCode { get; set; }        
         public string Model { get; set; }
         public string FromLoc { get; set; }
         public string ToLoc { get; set; }
@@ -182,10 +186,7 @@ namespace Speedbird
         public int SupplierID { get; set; }
         public decimal Cost { get; set; }
         public decimal SellPrice { get; set; }
-        public decimal ECommision { get; set; }
-
-        public string PNRno { get; set; }
-        public string TicketNo { get; set; }
+        public decimal ECommision { get; set; }                
         public int ChildNo { get; set; }
         public int AdultNo { get; set; }
         public int InfantNo { get; set; }
@@ -202,10 +203,8 @@ namespace Speedbird
         public decimal Tax { get; set; }
         public decimal Commision { get; set; }
         public string PercComm { get; set; }
-
         public decimal Total { get; set; }
         public bool IsCanceled { get; set; }
-
     }
     public partial class CustomerQuery
     {
@@ -651,7 +650,7 @@ namespace Speedbird
         Insurance,
         Flight,
         Visa,
-        TaxiHire
+        Transfer
     }
 
     public enum MealPlanEnum
@@ -713,9 +712,10 @@ namespace Speedbird
     }
     public enum CarTypeEnum
     {
-        Small,
-        Medium,
-        Large
+        HatchBack,
+        Sedan,
+        SUV,
+        MPV
     }
     public enum LeaveApplicationStatusEnum
     {
