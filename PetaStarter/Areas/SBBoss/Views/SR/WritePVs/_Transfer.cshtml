@@ -17,11 +17,11 @@
     @Html.EASelectList("Heritage", (IEnumerable<SelectListItem>)ViewBag.RateBasis, "", "Rate Basis")
     @Html.EAChkBox("HasAc")
     @Html.EAChkBox("HasCarrier")
-    @Html.EATextFor(m => m.BFCost)
+    @Html.EATextFor(m => m.BFCost, "Vehicle Cost")
 </div>
 <div class="form-row">
-    @Html.EATextFor(m => m.BFCost, "Vehicle Cost")
-    @Html.EATextFor(m => m.PayTo)
+    
+    @Html.EASelectListFor(m => m.PayTo)
     @Html.EATextFor(m => m.Cost)
     @Html.EATextFor(m => m.SellPrice)
 </div>
@@ -34,6 +34,7 @@
     @Html.EADateFor(m => m.SuppInvDt)
     @Html.EATextFor(m => m.SuppConfNo)
 </div>
+
     <div class="form-row">
         <div class="input-group col mb-3">
 
@@ -101,6 +102,22 @@
     <script>
 
 
+
+        $(function () {
+            //DateTime picker
+            
+
+            $('.eadate').datepicker({
+                dateFormat: "dd-MM-yy",
+                showButtonPanel: true,
+                changeMonth: true,
+                changeYear: true
+            });
+
+            //Disable the browsers default date picker
+            jQuery.validator.methods["date"] = function (value, element) { return true; }
+
+        });
 
 
 
