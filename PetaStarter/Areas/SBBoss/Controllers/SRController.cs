@@ -412,6 +412,37 @@ namespace Speedbird.Areas.SBBoss.Controllers
             return PartialView(rec);
         }
 
+        //Gets the details of the services saved in this booking folder.
+        [EAAuthorize(FunctionName = "Service Requests", Writable = true)]
+        public ActionResult FetchSRdetails(ServiceTypeEnum sType, int srdid)
+        {
+            PetaPoco.Sql sql = new Sql();
+            switch (sType)
+            {
+                case ServiceTypeEnum.Accomodation:
+
+                    break;
+                case ServiceTypeEnum.Packages:
+                    break;
+                case ServiceTypeEnum.Cruise:
+                    break;
+                case ServiceTypeEnum.SightSeeing:
+                    break;
+                case ServiceTypeEnum.CarBike:
+                    break;
+                case ServiceTypeEnum.Insurance:
+                    break;
+                case ServiceTypeEnum.Flight:
+                    break;
+                case ServiceTypeEnum.Visa:
+                    break;
+                case ServiceTypeEnum.Transfer:
+                    sql.Append("")
+                    break;
+                default:
+                    break;
+            }
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -772,7 +803,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                         };
                     ViewBag.PayTo = AccPayTo;
 
-                    return PartialView($"_{((ServiceTypeEnum)ServiceTypeId).ToString()}", db.SingleOrDefault<SRdetail>(id));
+                    return PartialView($"WritePVs/_{((ServiceTypeEnum)ServiceTypeId).ToString()}", db.SingleOrDefault<SRdetail>(id));
                 case ServiceTypeEnum.SightSeeing:
                     return PartialView($"_{((ServiceTypeEnum)ServiceTypeId).ToString()}", db.SingleOrDefault<SRdetail>(id));
                 case ServiceTypeEnum.CarBike:
@@ -811,7 +842,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                                 Text = "None", Value = "None"
                             }
                         };
-                    ViewBag.RateBasis = RateBasis;
+                    ViewBag.Heritage = RateBasis;
                     List<SelectListItem> TaxiPayTo = new List<SelectListItem>()
                     {
                             new SelectListItem {

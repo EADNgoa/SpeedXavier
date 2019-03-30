@@ -191,19 +191,7 @@
     </script>
 }
 <script>
-    $(function () {
-        //DateTime picker
-        $('.eadate').datepicker({
-            dateFormat: "dd-M-yy",
-            showButtonPanel: true,
-            changeMonth: true,
-            changeYear: true
-        }).attr('type', 'text').attr('autocomplete', 'off');
 
-        //Disable the browsers default date picker
-        jQuery.validator.methods["date"] = function (value, element) { return true; }
-
-    })
 
     //Set the Customer Outstanding in the Manage.cshtml
     $(function () {
