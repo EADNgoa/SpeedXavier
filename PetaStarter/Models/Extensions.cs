@@ -41,6 +41,16 @@ namespace Speedbird
             return (value.Length > len ? value.Substring(0, len) + "..." : value).Trim();
         }
 
+        /// <summary>
+        /// Converts a Camel case string to one with Spaces. Used to make Sql field names user friendly
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public static string CamelToSpaceString(string id)
+        {
+            return System.Text.RegularExpressions.Regex.Replace(id, "(\\B[A-Z])", " $1");
+        }
+
 
         public static string getModelStateErrors(ModelStateDictionary mS)
         {

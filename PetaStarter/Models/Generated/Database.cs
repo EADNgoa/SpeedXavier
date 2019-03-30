@@ -13,7 +13,7 @@
 // 
 //     Connection String Name: `DefaultConnection`
 //     Provider:               `System.Data.SqlClient`
-//     Connection String:      `Data Source=(LocalDb)\MSSQLLocalDB;Initial Catalog=SpeedBirdDB;Integrated Security=True`
+//     Connection String:      `Data Source=(LocalDb)\MSSQLLocalDB;Initial Catalog=SpeedBirdDBsrn;Integrated Security=True`
 //     Schema:                 ``
 //     Include Views:          `False`
 
@@ -668,20 +668,6 @@ namespace Speedbird
 		[Column] public string LeaveTypeName { get; set; }
 	}
     
-	[TableName("dbo.MICE")]
-	[PrimaryKey("MiceID")]
-	[ExplicitColumns]
-    public partial class MOUSE  
-    {
-		[Column] public int MiceID { get; set; }
-		[Column] public string GuestName { get; set; }
-		[Column] public DateTime? TDate { get; set; }
-		[Column] public string Phone { get; set; }
-		[Column] public string Email { get; set; }
-		[Column] public string AgentName { get; set; }
-		[Column] public string Detail { get; set; }
-	}
-    
 	[TableName("dbo.MiceDetails")]
 	[PrimaryKey("MiceID")]
 	[ExplicitColumns]
@@ -1063,7 +1049,6 @@ namespace Speedbird
 		[Column] public int? CarType { get; set; }
 		[Column] public int? ItemID { get; set; }
 		[Column] public string CouponCode { get; set; }
-		[Column] public string Airline { get; set; }
 		[Column] public string Model { get; set; }
 		[Column] public string FromLoc { get; set; }
 		[Column] public string ToLoc { get; set; }
@@ -1072,13 +1057,9 @@ namespace Speedbird
 		[Column] public int? SupplierID { get; set; }
 		[Column] public decimal? Cost { get; set; }
 		[Column] public decimal? SellPrice { get; set; }
-		[Column] public string PNRno { get; set; }
-		[Column] public string TicketNo { get; set; }
 		[Column] public int? ChildNo { get; set; }
 		[Column] public int? AdultNo { get; set; }
-		[Column] public int? infantNo { get; set; }
-		[Column] public string RoomType { get; set; }
-		[Column] public string City { get; set; }
+		[Column] public int? InfantNo { get; set; }
 		[Column] public string Heritage { get; set; }
 		[Column] public bool HasAc { get; set; }
 		[Column] public bool HasCarrier { get; set; }
@@ -1086,11 +1067,9 @@ namespace Speedbird
 		[Column] public DateTime? DateOfIssue { get; set; }
 		[Column] public string ContractNo { get; set; }
 		[Column] public string PayTo { get; set; }
-		[Column] public string RateBasis { get; set; }
 		[Column] public string PickUpPoint { get; set; }
 		[Column] public string DropPoint { get; set; }
 		[Column] public int? DriverID { get; set; }
-		[Column] public string FlightNo { get; set; }
 		[Column] public string SuppInvNo { get; set; }
 		[Column] public decimal? Qty { get; set; }
 		[Column] public int? ParentID { get; set; }
@@ -1099,6 +1078,17 @@ namespace Speedbird
 		[Column] public int? OptionTypeID { get; set; }
 		[Column] public decimal? ECommision { get; set; }
 		[Column] public bool IsCanceled { get; set; }
+		[Column] public DateTime? SuppInvDt { get; set; }
+		[Column] public string SuppConfNo { get; set; }
+		[Column] public int? NoExtraBeds { get; set; }
+		[Column] public int? EBCostPNight { get; set; }
+		[Column] public int? BFCost { get; set; }
+		[Column] public int? LunchCost { get; set; }
+		[Column] public int? DinnerCost { get; set; }
+		[Column] public int? NoExtraService { get; set; }
+		[Column] public int? ExtraServiceCost { get; set; }
+		[Column] public int? SuppInvAmt { get; set; }
+		[Column] public string GDSConfNo { get; set; }
 	}
     
 	[TableName("dbo.SRlogs")]

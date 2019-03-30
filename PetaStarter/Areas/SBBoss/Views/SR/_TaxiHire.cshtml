@@ -71,11 +71,11 @@
                 @Html.DropDownListFor(model => model.PayTo, null, htmlAttributes: new { @type = "text", @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.PayTo, "", new { @class = "text-danger" })
         </div>
-        <div class="input-group col mb-3">
+        @*<div class="input-group col mb-3">
                 <div class="input-group-prepend"><span class="input-group-text">Rate Basis</span></div>
                 @Html.DropDownListFor(model => model.RateBasis, null, htmlAttributes: new { @type = "text", @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.RateBasis, "", new { @class = "text-danger" })
-        </div>
+        </div>*@
     </div>
     
     

@@ -679,4 +679,11 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="CarId" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="c58eb293-62de-48cd-b5fb-416de39dbdec" ChangeDateTime="03/30/2019 02:20:05">
+    <Property Name="ElementName" Value="[dbo].[SRdetails].[ExtraService]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[SRdetails]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="NoExtraService" />
+  </Operation>
 </Operations>

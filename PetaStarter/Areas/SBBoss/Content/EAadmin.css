@@ -62,16 +62,19 @@ ul.dropdown-menu {
     margin-right: 0px;
 }
 
+.input-group-text {
+    width:130px;
+}
+
 /*EA Compressor*/
 #navVert {
     background-image: url("../Custom/sidenav5.jpg");
     background-repeat: no-repeat;
-    position:fixed;
+    position: fixed;
     height: 100vh;
-    width: 240px;    
-    background-size: cover;    
-    right:0px;
-    
+    width: 240px;
+    background-size: cover;
+    right: 0px;
 }
 
 #navHorz {
