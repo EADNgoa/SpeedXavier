@@ -83,7 +83,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [EAAuthorize(FunctionName = "Driver", Writable = true)]
-        public ActionResult CarManage([Bind(Include = "CarId, DriverId,CarBrand,Model,DateOfPurchase,RCBookNo,InsuranceEndDate,InsuranceCompany")] DriversCar item)
+        public ActionResult CarManage([Bind(Include = "CarId, DriverId,CarBrand,Model,DateOfPurchase,PlateNo,RCBookNo,InsuranceEndDate,InsuranceCompany")] DriversCar item)
         {
             return base.BaseSave<DriversCar>(item, item.CarId > 0,"CarManage",new { Id= item.DriverId });
         }
