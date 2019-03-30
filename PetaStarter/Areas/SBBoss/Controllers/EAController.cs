@@ -110,9 +110,9 @@ namespace Speedbird.Areas.SBBoss.Controllers
             return (fn.Length>0)?fn:oldImg;
         }
 
-        internal JsonResult GetAutoCompleteData(string term, string idField, string nameField, string table, string whereClause)
+        internal JsonResult GetAutoCompleteData(string idField, string nameField, string table, string whereClause)
         {
-            var filteredItems = db.Fetch<EASelectListData>($"Select {idField} as id, {nameField} as value from CarBike {whereClause}");
+            var filteredItems = db.Fetch<EASelectListData>($"Select {idField} as id, {nameField} as value from {table} {whereClause}");
             return Json(filteredItems, JsonRequestBehavior.AllowGet);
         }
 

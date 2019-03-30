@@ -18,6 +18,41 @@ namespace Speedbird
         public string value { get; set; }
     }
 
+    //Classes for SRDetails
+    public class TransferServiceView
+    {
+        public int cartype { get; set; }
+        public DateTime serviceDate { get; set; }
+        public string ContractNo { get; set; } 
+        public decimal Cost { get; set; } 
+        public string CouponCode { get; set; } 
+        public string DriverName { get; set; } 
+        public string Car { get; set; } 
+        public string DropPoint { get; set; } 
+        public decimal ECommision { get; set; } 
+        public DateTime Fdate { get; set; } 
+        public string FromLoc { get; set; } 
+        public bool HasAc { get; set; } 
+        public bool HasCarrier { get; set; } 
+        public string RateBasis { get; set; } 
+        public string IsCanceled { get; set; } 
+        public string Model { get; set; } 
+        public string PayTo { get; set; } 
+        public string PickUpPoint { get; set; } 
+        public int NoOfVehicles { get; set; } 
+        public decimal SellPrice { get; set; } 
+        public int ServiceTypeID { get; set; } 
+        public int SRDID { get; set; } 
+        public string SuppInvNo { get; set; } 
+        public string SuppConfNo { get; set; } 
+        public string BFCost { get; set; } 
+        public DateTime SuppInvDt { get; set; } 
+        public int SuppInvAmt { get; set; }
+
+    }
+
+    //EOF Classes for SRDetails
+
     public partial class AgentView
     {
         public string AgentId { get; set; }

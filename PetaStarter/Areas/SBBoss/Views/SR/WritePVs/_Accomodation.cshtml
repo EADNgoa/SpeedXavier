@@ -2,37 +2,7 @@
 @model Speedbird.SRdetail
 
 <div class="form-row">
-    @Html.EASelectList("CustomerId", (IEnumerable<SelectListItem>)ViewBag.CustomerId, "", "Pax Name")
-    @Html.EADateFor(m => m.Tdate,"Transfer Dt")
-    @Html.EATextFor(m => m.Qty, "No. of Vehicles")
-    @Html.EATextFor(m => m.FromLoc, "From")
-</div>
-<div class="form-row">
-    @Html.EATextFor(m => m.PickUpPoint)
-    @Html.EATextFor(m => m.ToLoc)
-    @Html.EATextFor(m => m.DropPoint)
-    @Html.EASelectList("CarType", (IEnumerable<SelectListItem>)ViewBag.CarType, "", "Vehicle Type")
-</div>
-<div class="form-row">
-    @Html.EASelectList("Heritage", (IEnumerable<SelectListItem>)ViewBag.RateBasis, "", "Rate Basis")
-    @Html.EAChkBox("HasAc")
-    @Html.EAChkBox("HasCarrier")
-    @Html.EATextFor(m => m.BFCost, "Vehicle Cost")
-</div>
-<div class="form-row">
-    
-    @Html.EASelectListFor(m => m.PayTo)
-    @Html.EATextFor(m => m.Cost)
-    @Html.EATextFor(m => m.SellPrice)
-</div>
-<hr>
-<div class="form-row">
-    @Html.EAAutocompleteFor(m => m.DriverID, "SR", "AutoCompleteDriver", "Driver")
-    @Html.EATextFor(m => m.SuppInvNo)
-    @Html.EATextFor(m => m.CouponCode)
-    @Html.EATextFor(m => m.SuppInvAmt)
-    @Html.EADateFor(m => m.SuppInvDt)
-    @Html.EATextFor(m => m.SuppConfNo)
+ 
 </div>
 
     <div class="form-row">

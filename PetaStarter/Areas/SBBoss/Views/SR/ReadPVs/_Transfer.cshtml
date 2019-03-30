@@ -38,55 +38,7 @@
     @Html.EATextFor(m => m.SuppConfNo)
     @Html.EATextFor(m =>m.ContractNo)
 </div>
-    <div class="form-row">
-        <div class="input-group col mb-3">
-
-            @if (Model?.SRDID > 0)
-    {
-                <div class="input-group col-3 mb-3">
-
-                    @if (ViewBag.IsReadOnly == null)
-    {
-                        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#AssignDriverModal" data-srdid="@Model.SRDID">
-                            @if (Model?.DriverID == null)
-    {
-                                @:  Assign Driver
-                            }
-                            else
-                            {
-                                @: Change Driver
-                            }
-
-                        </button>
-                        <div class="input-group-prepend"><span class="input-group-text" style="color:blue">@ViewBag.DrvNm</span></div>
-
-                    }
-                    else
-                    {
-                        <div class="input-group-prepend"><span class="input-group-text">Driver Name</span></div>
-                        <input type="text" value="@ViewBag.DrvNm" class="form-control" />
-                    }
-
-
-
-                </div>
-            }
-
-            @if (ViewBag.IsReadOnly == null)
-            {
-                if (Model?.DriverID > 0)
-                {
-                    <div class="input-group col mb-3">
-                        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#DrvReviewModal" data-srdid="@Model.SRDID">
-                            Feedback
-                        </button>
-                    </div>
-
-                }
-            }
-        </div>
-    </div>
-
+ 
 
 
     @if (ViewBag.isReadOnly != null)

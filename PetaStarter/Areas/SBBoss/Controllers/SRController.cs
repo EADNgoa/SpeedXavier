@@ -398,7 +398,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             ViewBag.SRID = id;
             ViewBag.Title = "Manage Services";
             ViewBag.SRs = db.FirstOrDefault<ServiceRequestDets>("Select * From ServiceRequest sr inner join Customer c on c.CustomerID=sr.CustID Where SRID=@0", id);
-            ViewBag.SRDets = db.Fetch<SRdetail>("Select * from SRdetails where SRID =@0", id);
+            ViewBag.SRDets = db.Query<SRdetail>("Select srdid,ServiceTypeId from SRdetails where SRID =@0", id);
             List<SelectListItem> ServiceTypeID = Enum.GetValues(typeof(ServiceTypeEnum)).Cast<ServiceTypeEnum>().Select(v => new SelectListItem { Text = v.ToString(), Value = ((int)v).ToString() }).ToList();
             var defaultServType = db.Single<ServiceRequest>(id).ServiceTypeID;
             var selST= ServiceTypeID.First(a => int.Parse(a.Value) == defaultServType);
@@ -414,36 +414,39 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
         //Gets the details of the services saved in this booking folder.
         [EAAuthorize(FunctionName = "Service Requests", Writable = true)]
-        public ActionResult FetchSRdetails(ServiceTypeEnum sType, int srdid)
+        public PartialViewResult FetchSRdetails(ServiceTypeEnum sType, int srdid)
         {
-            PetaPoco.Sql sql = new Sql();
-            switch (sType)
-            {
-                case ServiceTypeEnum.Accomodation:
+            
+            //switch (sType)
+            //{
+            //    case ServiceTypeEnum.Accomodation:
 
-                    break;
-                case ServiceTypeEnum.Packages:
-                    break;
-                case ServiceTypeEnum.Cruise:
-                    break;
-                case ServiceTypeEnum.SightSeeing:
-                    break;
-                case ServiceTypeEnum.CarBike:
-                    break;
-                case ServiceTypeEnum.Insurance:
-                    break;
-                case ServiceTypeEnum.Flight:
-                    break;
-                case ServiceTypeEnum.Visa:
-                    break;
-                case ServiceTypeEnum.Transfer:
-                    sql.Append("")
-                    break;
-                default:
-                    break;
-            }
+            //        break;
+            //    case ServiceTypeEnum.Packages:
+            //        break;
+            //    case ServiceTypeEnum.Cruise:
+            //        break;
+            //    case ServiceTypeEnum.SightSeeing:
+            //        break;
+            //    case ServiceTypeEnum.CarBike:
+            //        break;
+            //    case ServiceTypeEnum.Insurance:
+            //        break;
+            //    case ServiceTypeEnum.Flight:
+            //        break;
+            //    case ServiceTypeEnum.Visa:
+            //        break;
+            //    case ServiceTypeEnum.Transfer:                    
+                    return PartialView($"ReadPVs/_{(sType).ToString()}", db.SingleOrDefault<TransferServiceView>("SELECT sd.cartype, Tdate AS serviceDate, sd.ContractNo, sd.Cost, sd.CouponCode, d.DriverName, CONCAT (dc.CarBrand, ' ', dc.Model, ' ', dc.PlateNo) AS Car, " +
+                        "sd.DropPoint, sd.ECommision, sd.Fdate, sd.FromLoc, sd.HasAc, sd.HasCarrier, sd.Heritage AS RateBasis, sd.IsCanceled, sd.Model, sd.PayTo, sd.PickUpPoint, " +
+                        "sd.Qty AS NoOfVehicles, sd.SellPrice, sd.ServiceTypeID, sd.SRDID, sd.SuppInvNo, sd.SuppConfNo, sd.BFCost, sd.SuppInvDt, sd.SuppInvAmt FROM SRdetails sd " +
+                        "INNER JOIN Driver d ON sd.DriverID = d.DriverID INNER JOIN DriversCars dc ON dc.CarId = NoExtraBeds WHERE SRDID = @0 ORDER BY serviceDate", srdid));
+            //        break;
+            //    default:
+            //        break;
+            //}
         }
-
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         [EAAuthorize(FunctionName = "Service Requests", Writable = true)]
@@ -454,6 +457,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         {
             using (var transaction = db.GetTransaction())
             {
+                item.Tdate = item.Tdate ?? DateTime.Today;
                 try
                 {
                     DateTime? td =(DateTime?)item?.Tdate ;
@@ -765,13 +769,16 @@ namespace Speedbird.Areas.SBBoss.Controllers
         }
         public JsonResult AutoCompleteCar(string term)
         {
-            return GetAutoCompleteData(term, "CarBikeID", "CarBikeName", "CarBike", $"Where CarBikeName like '%{term}%'");
+            return GetAutoCompleteData("CarBikeID", "CarBikeName", "CarBike", $"Where CarBikeName like '%{term}%'");
         }
         public JsonResult AutoCompleteDriver(string term)
         {
-            return GetAutoCompleteData(term, "DriverID", "DriverName", "Driver", $"Where DriverName like '%{term}%'");            
+            return GetAutoCompleteData("DriverID", "DriverName", "Driver", $"Where DriverName like '%{term}%'");            
         }
-
+        public JsonResult AutoCompleteCars(int DriverId)
+        {
+            return GetAutoCompleteData("CarID", " CONCAT (CarBrand, ' ', Model, ' ', PlateNo) ", "DriversCars", $"Where DriverId ={DriverId}");
+        }
 
         public ActionResult FetchSTpartial(int? id, int ServiceTypeId, bool IsReadOnly, int SRID)
         {
