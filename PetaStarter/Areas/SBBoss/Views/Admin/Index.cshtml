@@ -124,8 +124,8 @@
             <table class="table table-striped">
                 <tr>
                     <th>Driver</th>
-                    <th>Brand</th>
-                    <th>Model</th>
+                    <th>Kind</th>
+                    <th>L. Plate No.</th>
                     <th>Ins. Company</th>
                     <th>Ins. End</th>
                     <td></td>
@@ -135,8 +135,8 @@
 
                 <tr>
                     <td>  @(item.DriverName)</td>
-                    <td>  @(item.CarBrand)</td>
-                    <td>  @(item.Model)</td>
+                    <td>  @(item.CarBrand) @(item.Model)</td>
+                    <td>  @(item.PlateNo)</td>
                     <td>  @(item.InsuranceCompany)</td>
                     <td>  @(item.InsuranceEndDate.EAFormat())</td>
                     @if (item.InsuranceEndDate < DateTime.Now)

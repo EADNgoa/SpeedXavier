@@ -42,6 +42,11 @@
                         @Html.EditorFor(model => model.DateOfPurchase, new { htmlAttributes = new { @type = "text", @class = "form-control eadate" } })
                         @Html.ValidationMessageFor(model => model.DateOfPurchase, "", new { @class = "text-danger" })
                     </div>
+                    <div class="input-group col mb-3">
+                        <div class="input-group-prepend"><span class="input-group-text">Licn. Plate No.</span></div>
+                        @Html.EditorFor(model => model.PlateNo, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.PlateNo, "", new { @class = "text-danger" })
+                    </div>
                 </div>
                 <div class="form-row">
                     <div class="input-group col mb-3">
@@ -59,12 +64,10 @@
                         @Html.EditorFor(model => model.InsuranceCompany, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.InsuranceCompany, "", new { @class = "text-danger" })
                     </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
+                    <div  class="input-group col mb-3">
                         <input type="submit" value="Save" class="btn btn-primary" />
                     </div>
-                </div>
+                </div>                
             </div>
         }
 
@@ -87,6 +90,7 @@
                 <th>
                     Bought On
                 </th>
+                <th>L. Plate No.</th>
                 <th>
                     RC Book No.
                 </th>
@@ -109,6 +113,9 @@
                 </td>
                 <td>
                     @(((DateTime)item.DateOfPurchase).EAFormat())
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PlateNo)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.RCBookNo)
