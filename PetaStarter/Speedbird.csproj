@@ -772,14 +772,18 @@
     <Content Include="Areas\SBBoss\Views\OwnedAsset\Index.cshtml" />
     <Content Include="Areas\SBBoss\Views\SR\DetailsDirectBooking.cshtml" />
     <Content Include="Areas\SBBoss\Views\Driver\CarManage.cshtml" />
+
     <Content Include="Areas\SBBoss\Views\SR\WritePVs\_Transfer.cshtml" />
+
     <Content Include="Content\bootstrap.min.css.map" />
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-reboot.min.css.map" />
     <Content Include="Content\bootstrap-reboot.css.map" />
     <Content Include="Content\bootstrap-grid.min.css.map" />
     <Content Include="Content\bootstrap-grid.css.map" />
+
     <Content Include="Areas\SBBoss\Views\SR\WritePVs\_Accomodation.cshtml" />
+
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <Content Include="Areas\SBBoss\Views\RP\DriverR.cshtml" />
     <Content Include="Areas\SBBoss\Views\RP\DriverP.cshtml" />

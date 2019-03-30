@@ -475,6 +475,7 @@ namespace Speedbird
 		[Column] public string Model { get; set; }
 		[Column] public DateTime? DateOfPurchase { get; set; }
 		[Column] public string RCBookNo { get; set; }
+		[Column] public string PlateNo { get; set; }
 		[Column] public DateTime? InsuranceEndDate { get; set; }
 		[Column] public string InsuranceCompany { get; set; }
 	}

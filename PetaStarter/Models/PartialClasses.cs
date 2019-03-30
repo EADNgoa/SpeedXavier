@@ -153,6 +153,7 @@ namespace Speedbird
         public string DriverName { get; set; }
         public string CarBrand { get; set; }
         public string Model { get; set; }
+        public string PlateNo { get; set; }
         public DateTime InsuranceEndDate { get; set; }
         public string InsuranceCompany { get; set; }
 
