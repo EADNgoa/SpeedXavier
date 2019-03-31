@@ -1,15 +1,18 @@
 ﻿@using Speedbird
 @model Speedbird.SRdetail
 
+@Html.EAIdFor(m =>m.SRID,Model?.SRID.HasValue??false)
+@Html.EAIdFor(m =>m.SRDID, Model?.SRID.HasValue ?? false)
+@Html.EAIdFor(m =>m.IsCanceled, Model?.SRID.HasValue ?? false)
 <div class="form-row">
     @Html.EASelectList("CustomerId", (IEnumerable<SelectListItem>)ViewBag.CustomerId, "", "Pax Name")
     @Html.EADateFor(m => m.Fdate,"Transfer Date")
     @Html.EANumberFor(m => m.Qty, "No. of Vehicles")
-    @Html.EATextFor(m => m.FromLoc, "From")
+    @Html.EATextFor(m => m.FromLoc, "From Where")
 </div>
 <div class="form-row">
     @Html.EATextFor(m => m.PickUpPoint)
-    @Html.EATextFor(m => m.ToLoc, "To Location")
+    @Html.EATextFor(m => m.ToLoc, "To Where")
     @Html.EATextFor(m => m.DropPoint)
     @Html.EASelectList("CarType", (IEnumerable<SelectListItem>)ViewBag.CarType, "", "Vehicle Type")
 </div>
@@ -41,7 +44,7 @@
     <div class="form-row">
         <div class="input-group col mb-3">
 
-            @if (Model?.SRDID > 0)
+            @*@if (Model?.SRDID > 0)
     {
                 <div class="input-group col-3 mb-3">
 
@@ -70,9 +73,9 @@
 
 
                 </div>
-            }
+            }*@
 
-            @if (ViewBag.IsReadOnly == null)
+            @*@if (ViewBag.IsReadOnly == null)
             {
                 if (Model?.DriverID > 0)
                 {
@@ -83,13 +86,13 @@
                     </div>
 
                 }
-            }
+            }*@
         </div>
     </div>
 
 
 
-    @if (ViewBag.isReadOnly != null)
+    @*@if (ViewBag.isReadOnly != null)
     {@Html.Action("CustSearch", "SR", new { id = Model.SRDID })
 }
 
@@ -99,7 +102,7 @@
            $('#AssignDriver').load('@Url.Action("_AssignDriver")', { SRID: @Model.SRID, SRDID: @Model.SRDID});
            $('#Review').load('@Url.Action("_DrvReview")', { SRID: @Model.SRID,SRDID: @Model.SRDID});
         </script>
-    }
+    }*@
 
 
     <script>
@@ -126,10 +129,10 @@
                     if (response.length > 0) {
                         $('#NoExtraBeds').html('');
                         var options = '';
-                        options += '<option value="Select">Select</option>';
                         for (var i = 0; i < response.length; i++) {
                             options += '<option value="' + response[i].id + '">' + response[i].value + '</option>';
                         }
+                        options += '<option value="Select">Select</option>';
                         $('#NoExtraBeds').append(options);
                     }
                 });

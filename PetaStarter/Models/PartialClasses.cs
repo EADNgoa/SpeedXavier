@@ -21,6 +21,7 @@ namespace Speedbird
     //Classes for SRDetails
     public class TransferServiceView
     {
+        public string PaxName { get; set; }
         public int cartype { get; set; }
         public DateTime serviceDate { get; set; }
         public string ContractNo { get; set; } 
@@ -32,6 +33,7 @@ namespace Speedbird
         public decimal ECommision { get; set; } 
         public DateTime Fdate { get; set; } 
         public string FromLoc { get; set; } 
+        public string ToLoc { get; set; } 
         public bool HasAc { get; set; } 
         public bool HasCarrier { get; set; } 
         public string RateBasis { get; set; } 
@@ -42,10 +44,11 @@ namespace Speedbird
         public int NoOfVehicles { get; set; } 
         public decimal SellPrice { get; set; } 
         public int ServiceTypeID { get; set; } 
+        public int SRID { get; set; } 
         public int SRDID { get; set; } 
         public string SuppInvNo { get; set; } 
         public string SuppConfNo { get; set; } 
-        public string BFCost { get; set; } 
+        public string VehicleCost { get; set; } 
         public DateTime SuppInvDt { get; set; } 
         public int SuppInvAmt { get; set; }
 
@@ -678,6 +681,7 @@ namespace Speedbird
 
     public enum ServiceTypeEnum
     {
+        Transfer,
         Accomodation,
         Packages,
         Cruise,
@@ -685,8 +689,7 @@ namespace Speedbird
         CarBike,
         Insurance,
         Flight,
-        Visa,
-        Transfer
+        Visa
     }
 
     public enum MealPlanEnum

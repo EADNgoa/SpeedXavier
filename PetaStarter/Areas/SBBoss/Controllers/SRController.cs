@@ -437,10 +437,11 @@ namespace Speedbird.Areas.SBBoss.Controllers
             //    case ServiceTypeEnum.Visa:
             //        break;
             //    case ServiceTypeEnum.Transfer:                    
-                    return PartialView($"ReadPVs/_{(sType).ToString()}", db.SingleOrDefault<TransferServiceView>("SELECT sd.cartype, Tdate AS serviceDate, sd.ContractNo, sd.Cost, sd.CouponCode, d.DriverName, CONCAT (dc.CarBrand, ' ', dc.Model, ' ', dc.PlateNo) AS Car, " +
-                        "sd.DropPoint, sd.ECommision, sd.Fdate, sd.FromLoc, sd.HasAc, sd.HasCarrier, sd.Heritage AS RateBasis, sd.IsCanceled, sd.Model, sd.PayTo, sd.PickUpPoint, " +
-                        "sd.Qty AS NoOfVehicles, sd.SellPrice, sd.ServiceTypeID, sd.SRDID, sd.SuppInvNo, sd.SuppConfNo, sd.BFCost, sd.SuppInvDt, sd.SuppInvAmt FROM SRdetails sd " +
-                        "INNER JOIN Driver d ON sd.DriverID = d.DriverID INNER JOIN DriversCars dc ON dc.CarId = NoExtraBeds WHERE SRDID = @0 ORDER BY serviceDate", srdid));
+                    return PartialView($"ReadPVs/_{(sType).ToString()}", db.SingleOrDefault<TransferServiceView>($"SELECT (select top 1 CONCAT(c.fName, ' ',c.sName) from Customer c, SRD_Cust sc where c.CustomerID=sc.CustomerID and sc.SRDID={srdid}) as PaxName, " +
+                        "sd.srid, sd.cartype, Tdate AS serviceDate, sd.ContractNo, sd.Cost, sd.CouponCode, d.DriverName, CONCAT (dc.CarBrand, ' ', dc.Model, ' ', dc.PlateNo) AS Car, " +
+                        "sd.DropPoint, sd.ECommision, sd.Fdate, sd.FromLoc,sd.ToLoc, sd.HasAc, sd.HasCarrier, sd.Heritage AS RateBasis, sd.IsCanceled, sd.Model, sd.PayTo, sd.PickUpPoint, " +
+                        "sd.Qty AS NoOfVehicles, sd.SellPrice, sd.ServiceTypeID, sd.SRDID, sd.SuppInvNo, sd.SuppConfNo, sd.BFCost as VehicleCost, sd.SuppInvDt, sd.SuppInvAmt FROM SRdetails sd " +
+                        $"LEFT JOIN Driver d ON sd.DriverID = d.DriverID LEFT JOIN DriversCars dc ON dc.CarId = NoExtraBeds WHERE SRDID = {srdid} ORDER BY serviceDate"));
             //        break;
             //    default:
             //        break;
@@ -450,10 +451,10 @@ namespace Speedbird.Areas.SBBoss.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [EAAuthorize(FunctionName = "Service Requests", Writable = true)]
-        public ActionResult SRdetails([Bind(Include = "SRDID,SRID,ServiceTypeID,CarType,ItemID,CouponCode,Model,FromLoc,ToLoc,Fdate,Tdate,SupplierID,Cost,SellPrice,ChildNo," +
+        public ActionResult SRdetails([Bind(Include = "SRDID,SRID, ServiceTypeID,CarType,ItemID,CouponCode,Model,FromLoc,ToLoc,Fdate,Tdate,SupplierID,Cost,SellPrice,ChildNo," +
             "AdultNo,InfantNo,Heritage,HasAc,HasCarrier,GuideLanguageID,DateOfIssue,ContractNo,PayTo,PickUpPoint,DropPoint,DriverID,SuppInvNo,Qty,ParentID,IsReturn," +
             "IsInternational,OptionTypeID,ECommision,IsCanceled,SuppInvDt,SuppConfNo,NoExtraBeds,EBCostPNight,BFCost,LunchCost,DinnerCost,NoExtraService,ExtraServiceCost," +
-            "SuppInvAmt,GDSConfNo")] SRdetail item, string Event,string IsReturn)
+            "SuppInvAmt,GDSConfNo")] SRdetail item, string Event,string IsReturn, int CustomerId)
         {
             using (var transaction = db.GetTransaction())
             {
@@ -461,7 +462,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 try
                 {
                     DateTime? td =(DateTime?)item?.Tdate ;
-                    if(item.SRDID > 0)
+                    if(item.SRDID > 0)//Update existing record when in edit mode
                     {
 
                         if (item.ServiceTypeID == (int)ServiceTypeEnum.Flight)
@@ -472,7 +473,11 @@ namespace Speedbird.Areas.SBBoss.Controllers
                         LogAction(new SRlog { SRID = item.SRID, SRDID=item.SRDID, Event = Event, Type=true});
                         LogAction(new SRlog { SRID = item.SRID, SRDID = item.SRDID, Event = FindDiffs<SRdetail>(item.SRDID,item,"Service") });
                         db.Update(item);
-                        if(item.IsReturn == true)
+
+                        db.Execute($"Update SRD_Cust Set CustomerId ='{CustomerId}' where srdid ={item.SRDID}");
+
+
+                        if (item.IsReturn == true)
                         {
                             db.Execute($"Update Srdetails Set Tdate ='{td.Value.ToString("dd-MM-yyyy")}',FromLoc='{item.ToLoc}',ToLoc ='{item.FromLoc}' where ParentID ={item.SRDID}");
                         }
@@ -492,6 +497,9 @@ namespace Speedbird.Areas.SBBoss.Controllers
                         {//We need to insert this duplicate record so that we can show this return flight in the Daily Diary on the return journey date
                             db.Insert(new SRdetail { FromLoc = item.ToLoc, ToLoc = item.FromLoc, Tdate = td, ParentID = item.SRDID, ServiceTypeID = item.ServiceTypeID });
                         }
+
+                        db.Insert(new SRD_Cust { CustomerID = CustomerId, SRDID = item.SRDID });
+
                         LogAction(new SRlog { SRID = item.SRID, SRDID = item.SRDID, Event = Event, Type = true });
                         LogAction(new SRlog { SRID = item.SRID, SRDID = item.SRDID, Event = "Added " + item.ServiceTypeName });
                     }
@@ -780,8 +788,9 @@ namespace Speedbird.Areas.SBBoss.Controllers
             return GetAutoCompleteData("CarID", " CONCAT (CarBrand, ' ', Model, ' ', PlateNo) ", "DriversCars", $"Where DriverId ={DriverId}");
         }
 
-        public ActionResult FetchSTpartial(int? id, int ServiceTypeId, bool IsReadOnly, int SRID)
+        public ActionResult FetchSTpartial(int? id, int ServiceTypeId,  int SRID, bool IsReadOnly = false)
         {
+            ServiceTypeId = (int)ServiceTypeEnum.Transfer;
             ViewBag.GuideLanguageID = db.Fetch<GuideLanguage>("Select * from GuideLanguage").Select(v => new SelectListItem { Text = v.GuideLanguageName, Value = v.GuideLanguageID.ToString() }).ToList();
             ViewBag.CarType = Enum.GetValues(typeof(CarTypeEnum)).Cast<CarTypeEnum>().Select(v => new SelectListItem { Text = v.ToString(), Value = ((int)v).ToString() }).ToList();
                     

@@ -178,6 +178,11 @@
 
     })
 
+    $(function () {
+        $(".srdEdit").on("click", function () {
+            $("#placeholderEditDiv").load('@Url.Action("FetchSTpartial")', { id: $(this).data("srdid"), ServiceTypeId: $(this).data("stid"), SRID : @ViewBag.SRID, IsReadOnly : false });
+        });
+    })
 
 
     </script>

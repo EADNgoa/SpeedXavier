@@ -1,107 +1,111 @@
 ﻿@using Speedbird
-@model Speedbird.SRdetail
-
-<div class="form-row">
-    @Html.EASelectList("CustomerId", (IEnumerable<SelectListItem>)ViewBag.CustomerId, "", "Pax Name")
-    @Html.EADateFor(m => m.Fdate,"Transfer Date")
-    @Html.EANumberFor(m => m.Qty, "No. of Vehicles")
-    @Html.EATextFor(m => m.FromLoc, "From")
-</div>
-<div class="form-row">
-    @Html.EATextFor(m => m.PickUpPoint)
-    @Html.EATextFor(m => m.ToLoc, "To Location")
-    @Html.EATextFor(m => m.DropPoint)
-    @Html.EASelectList("CarType", (IEnumerable<SelectListItem>)ViewBag.CarType, "", "Vehicle Type")
-</div>
-<div class="form-row">
-    @Html.EASelectList("Heritage", (IEnumerable<SelectListItem>)ViewBag.RateBasis, "", "Rate Basis")
-    @Html.EAChkBox("HasAc")
-    @Html.EAChkBox("HasCarrier")
-    @Html.EANumberFor(m => m.BFCost, "Vehicle Cost")
-</div>
-<div class="form-row">    
-    @Html.EASelectListFor(m => m.PayTo)
-    @Html.EATextFor(m => m.Cost)
-    @Html.EATextFor(m => m.SellPrice)
-    @Html.EASpacer()
-</div>
-<hr>
-<div class="form-row">
-    @Html.EAAutocompleteFor(m => m.DriverID, "SR", "AutoCompleteDriver", "Driver")
-    @Html.EASelectList("NoExtraBeds", new List<SelectListItem> { new SelectListItem { Text = "1st choose Driver", Value = "0" } } , "", "Car")
-    @Html.EATextFor(m => m.SuppInvNo)
-    @Html.EATextFor(m => m.CouponCode)
-</div>
-<div class="form-row">
-    @Html.EATextFor(m => m.SuppInvAmt)
-    @Html.EADateFor(m => m.SuppInvDt)
-    @Html.EATextFor(m => m.SuppConfNo)
-    @Html.EATextFor(m =>m.ContractNo)
-</div>
- 
+@model Speedbird.TransferServiceView
 
 
-    @if (ViewBag.isReadOnly != null)
-    {@Html.Action("CustSearch", "SR", new { id = Model.SRDID })
+<table class="SRDetsTbl" width="100%">
+    <thead>
+        <tr>
+            <th>Pax Name</th>
+            <th>On Date</th>
+            <th>Vehicle Qty</th>
+            <th>From Where</th>
+            <th>Picup Point</th>
+            <th>To Where</th>
+            <th>Drop Point</th>
+            <th>Car</th>
+            <th>Rate Basis</th>
+            <th>Has AC</th>
+            <th>Carrier</th>
+            <th>Car Cost</th>
+            <th>Pay To</th>
+            <th>Cost</th>
+            <th>Com</th>
+            <th>Sell At</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tr>
+        <td>@Model.PaxName</td>
+        <td>@Model.Fdate.EAFormat()</td>
+        <td>@Model.NoOfVehicles</td>
+        <td>@Model.FromLoc</td>
+        <td>@Model.PickUpPoint</td>
+        <td>@Model.ToLoc</td>
+        <td>@Model.DropPoint</td>
+        <td>@Model.cartype</td>
+        <td>@Model.RateBasis</td>
+        <td>@Model.HasAc</td>
+        <td>@Model.HasCarrier</td>
+        <td>@Model.VehicleCost</td>
+        <td>@Model.PayTo</td>
+        <td>@Model.Cost</td>
+        <td>@Model.ECommision</td>
+        <td>@Model.SellPrice</td>
+        <td>
+            <button class="srdEdit" data-srdid="@Model.SRDID" data-stid="@Model.ServiceTypeID" ><i title="Edit" class="fas fa-edit fa-inverse h3 float-right DropShadow"></i></button>
+        </td>
+    </tr>
+</table>
+<table class="SRDetsTbl">
+    <thead>
+        <tr>
+            <th>Driver</th>
+            <th>Car</th>
+            <th>Invoice No.</th>
+            <th>Coupon</th>
+            <th>Inv. Amt.</th>
+            <th>Inv. Date</th>
+            <th>Conf No.</th>
+        </tr>
+    </thead>
+    <tr>
+        <td>@Model.DriverName</td>
+        <td>@Model.Car</td>
+        <td>@Model.SuppInvNo</td>
+        <td>@Model.CouponCode</td>
+        <td>@Model.SuppInvAmt</td>
+        <td>@Model.SuppInvDt.EAFormat()</td>
+        <td>@Model.SuppConfNo</td>
+    </tr>
+</table>
+<br />
+
+
+
+@if (ViewBag.isReadOnly != null)
+{@Html.Action("CustSearch", "SR", new { id = Model.SRDID })
 }
 
-    @if (Model != null)
+@*@if (Model != null)
     {
         <script>
            $('#AssignDriver').load('@Url.Action("_AssignDriver")', { SRID: @Model.SRID, SRDID: @Model.SRDID});
            $('#Review').load('@Url.Action("_DrvReview")', { SRID: @Model.SRID,SRDID: @Model.SRDID});
         </script>
-    }
+    }*@
 
 
-    <script>
+<script>
 
 
+    $(function () {
+        //DateTime picker
 
-        $(function () {
-            //DateTime picker
-            
 
-            $('.eadate').datepicker({
-                dateFormat: "dd-MM-yy",
-                showButtonPanel: true,
-                changeMonth: true,
-                changeYear: true
-            });
-
-            //Disable the browsers default date picker
-            jQuery.validator.methods["date"] = function (value, element) { return true; }
-
-            $("#DriverID").on("change", function () {
-                $.get('@Url.Action("AutoCompleteCars")', { DriverId: $(this).val() }, function (response) {
-                    debugger;
-                    if (response.length > 0) {
-                        $('#NoExtraBeds').html('');
-                        var options = '';
-                        options += '<option value="Select">Select</option>';
-                        for (var i = 0; i < response.length; i++) {
-                            options += '<option value="' + response[i].id + '">' + response[i].value + '</option>';
-                        }
-                        $('#NoExtraBeds').append(options);
-                    }
-                });
-            });
-
+        $('.eadate').datepicker({
+            dateFormat: "dd-MM-yy",
+            showButtonPanel: true,
+            changeMonth: true,
+            changeYear: true
         });
 
+        //Disable the browsers default date picker
+        jQuery.validator.methods["date"] = function (value, element) { return true; }
 
-        $(document).ready(function () {
-            $('*[data-autocombo-url]')
-                .each(function () {
-                    $(this).autocomplete({
-                        source: $(this).data("autocombo-url"),
-                        minLenght: 3,
-                        delay: 500,
-                        select: function (event, ui) {
-                            $("#" + $(this).data("autocomplete-idholder")).val(ui.item.id).trigger('change');
-                        }
-                    });
-                });
-        });
 
-    </script>
+    });
+
+
+
+
+</script>
