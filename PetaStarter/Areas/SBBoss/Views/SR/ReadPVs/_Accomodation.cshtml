@@ -84,27 +84,3 @@
     }*@
 
 
-<script>
-
-
-    $(function () {
-        //DateTime picker
-
-
-        $('.eadate').datepicker({
-            dateFormat: "dd-MM-yy",
-            showButtonPanel: true,
-            changeMonth: true,
-            changeYear: true
-        });
-
-        //Disable the browsers default date picker
-        jQuery.validator.methods["date"] = function (value, element) { return true; }
-
-
-    });
-
-
-
-
-</script>

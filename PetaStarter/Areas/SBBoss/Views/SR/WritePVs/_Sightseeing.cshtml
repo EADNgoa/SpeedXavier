@@ -1,0 +1,80 @@
+﻿@using Speedbird
+@model Speedbird.SRdetail
+
+
+@Html.HiddenFor(model => model.IsCanceled)
+@Html.EAIdFor(model => model.SRDID, Model?.SRDID != null)
+
+<div class="form-row">
+    @Html.EASelectList("CustomerId", (IEnumerable<SelectListItem>)ViewBag.CustomerId, "", "Pax Name")
+    @Html.EANumberFor(m => m.AdultNo, "No. of Adults")
+    @Html.EANumberFor(m => m.ChildNo, "No. of Children")
+    @Html.EASelectListFor(m => m.OptionTypeID, "Half/Full day")
+</div>
+<div class="form-row">
+    @Html.EATextFor(m => m.PickUpPoint, "Pickup From")
+    @Html.EATextFor(m => m.FromLoc, "Pickup Location")
+    @Html.EASelectList("Heritage", new List<SelectListItem> {
+          new SelectListItem { Text = "Private", Value = "Private" },
+          new SelectListItem { Text = "Sic", Value = "Sic" }
+        }, "", "Private/Sic")
+    @Html.EADateTimeFor(m => m.Fdate, "Tour Date")
+</div>
+<div class="form-row">
+    @Html.EANumberFor(m => m.Cost, "Cost per car")
+    @Html.EANumberFor(m => m.BFCost, "Adult sic Cost")
+    @Html.EANumberFor(m => m.LunchCost, "Child sic Cost")
+    @Html.EASelectList("CarType", (IEnumerable<SelectListItem>)ViewBag.CarType, "", "Vehicle Type")
+</div>
+<div class="form-row">
+    @Html.EANumberFor(m=>m.Qty, "No. of cars")
+    @Html.EAChkBox("HasAc", "","Meal Included")
+    @Html.EASelectListFor(m=>m.GuideLanguageID)
+    @Html.EANumberFor(m => m.SellPrice)
+</div>
+
+@{ Html.RenderPartial("WritePVs/_SupplierInfo", Model); }
+
+
+
+<script>
+         $(function () {
+            //DateTime picker
+             $('.eadatetime').datetimepicker({
+                 dateFormat: "dd-MM-yy",
+                 showButtonPanel: true,
+                 changeMonth: true,
+                 changeYear: true,
+                 timeFormat: "hh:mm"
+             });
+
+            $('.eadate').datepicker({
+                dateFormat: "dd-MM-yy",
+                showButtonPanel: true,
+                changeMonth: true,
+                changeYear: true
+            });
+
+            //Disable the browsers default date picker
+            jQuery.validator.methods["date"] = function (value, element) { return true; }
+
+         
+
+        });
+
+
+        $(document).ready(function () {
+            $('*[data-autocombo-url]')
+                .each(function () {
+                    $(this).autocomplete({
+                        source: $(this).data("autocombo-url"),
+                        minLenght: 3,
+                        delay: 500,
+                        select: function (event, ui) {
+                            $("#" + $(this).data("autocomplete-idholder")).val(ui.item.id).trigger('change');
+                        }
+                    });
+                });
+        });
+
+</script>

@@ -1,0 +1,70 @@
+﻿@using Speedbird
+@model Speedbird.SightseeingServiceView
+
+<strong>@Model.SightseeingName</strong>
+<table class="SRDetsTbl" width="100%">
+    <thead>
+        <tr>
+            <th>Pax Name</th>
+            <th>No of Adults</th>
+            <th>No of Kids</th>            
+            <th>Half/Full day</th>
+            <th>Pickup From</th>
+            <th>Pickup At</th>
+            <th>Pvt/Sic</th>
+            <th>Cost per car</th>
+            <th>Car Qty</th>
+            <th>Adult Cost</th>
+            <th>Child Cost</th>
+            <th>Tour On</th>            
+            <th>Car Type</th>
+            <th>Meal inc.</th>
+            <th>Language</th>
+            <th>Inclusions</th>
+            <th>Total Cost</th>
+            <th>Sell Price</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tr>
+        <td>@Model.PaxName</td>
+        <td>@Model.AdultNo</td>
+        <td>@Model.ChildNo </td>
+        <td>@Model.OptionTypeName</td>
+        <td>@Model.PickUpPoint</td>
+        <td>@Model.PickupLocation </td>
+        <td>@Model.Private_Sic </td>
+        <td>@Model.CostPerCar </td>
+        <td>@Model.NoOfCars </td>
+        <td>@Model.AdultCost </td>
+        <td>@Model.ChildCost </td>
+        <td>@Model.TourDate.EAFormat(true) </td>
+        <td>@((CarTypeEnum)Model.CarType)</td>
+        <td>@Model.MealIncluded</td>
+        <td>@Model.GuideLanguageName</td>
+        <td>@ViewBag.Inc</td>
+        <td>@Model.TotalCost </td>
+        <td>@Model.SellPrice </td>
+        <td>
+            <button class="srdEdit" data-srdid="@Model.SRDID" data-stid="@Model.ServiceTypeID"><i title="Edit" class="fas fa-edit fa-inverse h3 float-right DropShadow"></i></button>
+        </td>
+    </tr>
+</table>
+@{Html.RenderPartial("ReadPVs/_SupplierInfo", Model); }
+<br />
+
+
+
+@*@if (ViewBag.isReadOnly != null)
+{@Html.Action("CustSearch", "SR", new { id = Model.SRDID })
+}*@
+
+@*@if (Model != null)
+    {
+        <script>
+           $('#AssignDriver').load('@Url.Action("_AssignDriver")', { SRID: @Model.SRID, SRDID: @Model.SRDID});
+           $('#Review').load('@Url.Action("_DrvReview")', { SRID: @Model.SRID,SRDID: @Model.SRDID});
+        </script>
+    }*@
+
+

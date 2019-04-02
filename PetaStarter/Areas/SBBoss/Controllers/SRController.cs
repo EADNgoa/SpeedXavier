@@ -422,7 +422,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 case ServiceTypeEnum.Accomodation:
                     return PartialView($"ReadPVs/_{(sType).ToString()}", db.SingleOrDefault<AccomodationServiceView>($"select (select top 1 CONCAT(c.fName, ' ',c.sName) from Customer c, SRD_Cust sc where c.CustomerID=sc.CustomerID and sc.SRDID={srdid}) as PaxName, " +
                         $"sd.AdultNo,CarType as ExtraBedCost, ChildNo,ContractNo,cost,sd.CouponCode,ECommision,Fdate as checkin,FromLoc,HasAc,Heritage as ExtraService,InfantNo, " +
-                        $"IsCanceled, a.AccomName, ot.OptionTypeName as RoomeCategory,payto,Pickuppoint as RoomType,qty as NoOfRooms, Sellprice,sd.ServiceTypeID,SRDID,SRID, " +
+                        $"IsCanceled, a.AccomName, ot.OptionTypeName as RoomCategory,payto,Pickuppoint as RoomType,qty as NoOfRooms, Sellprice,sd.ServiceTypeID,SRDID,SRID, " +
                         $"SuppInvNo,SupplierName,sd.SupplierID,Tdate as checkout, SuppInvDt,SuppConfNo,NoExtraBeds,BFCost,LunchCost,DinnerCost,NoExtraService,ExtraServiceCost,SuppInvAmt " +
                         $"from SRdetails sd left join Supplier s on s.supplierid=sd.supplierid left join Accomodation a on sd.ItemID=a.AccomodationID " +
                         $"left join OptionType ot on ot.OptionTypeId=sd.OptionTypeId WHERE SRDID = {srdid} "));
@@ -432,6 +432,12 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 case ServiceTypeEnum.Cruise:
                     break;
                 case ServiceTypeEnum.SightSeeing:
+                    ViewBag.Inc = db.FirstOrDefault<SRlog>("where Type=1 and srdid=@0", srdid).Event;
+                    return PartialView($"ReadPVs/_{(sType).ToString()}", db.SingleOrDefault<SightseeingServiceView>($"select (select top 1 CONCAT(c.fName, ' ',c.sName) from Customer c, SRD_Cust sc where c.CustomerID=sc.CustomerID and sc.SRDID={srdid}) as PaxName, " +
+                        $"AdultNo,ChildNo,p.PackageName as SightseeingName, sd.OptionTypeID, ot.OptionTypeName,PickUpPoint,FromLoc as PickupLocation, Heritage as Private_Sic, cost as CostPerCar," +
+                        $"Qty as NoOfCars, BFCost as AdultCost, LunchCost as ChildCost,Fdate as TourDate, CarType,HasAc as MealIncluded, srid, srdid, IsCanceled, sd.ServiceTypeID, SuppInvNo," +
+                        $"SupplierName,sd.SupplierID, SuppInvDt,SuppConfNo,SuppInvAmt,sd.CouponCode, SellPrice,contractNo,GuideLanguageName  from SRdetails sd left join OptionType ot on ot.OptionTypeID=sd.OptionTypeID " +
+                        $"left join Supplier s on s.supplierid=sd.supplierid left join Package p on sd.ItemID=p.PackageID left join GuideLanguage g on g.GuideLanguageID=sd.GuideLanguageID WHERE SRDID = {srdid} "));
                     break;
                 case ServiceTypeEnum.CarBike:
                     break;
@@ -465,7 +471,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         {
             using (var transaction = db.GetTransaction())
             {
-                item.Tdate = item.Tdate ?? DateTime.Today;
+                
                 try
                 {
                     DateTime? td =(DateTime?)item?.Tdate ;
@@ -827,21 +833,23 @@ namespace Speedbird.Areas.SBBoss.Controllers
                         ViewBag.Hotel = db.SingleOrDefault<Accomodation>(reca.ItemID).AccomName;
                         ViewBag.Supplier = db.SingleOrDefault<Supplier>(reca.ItemID).SupplierName;
                     }
-                    ViewBag.OptionTypeId = base.GetSelectListData("OptionTypeId", "OptionTypeName", "OptionType", "");
+                    ViewBag.OptionTypeId = base.GetSelectListData("OptionTypeId", "OptionTypeName", "OptionType",$"where ServiceTypeId={(int)ServiceTypeEnum.Accomodation}");
                     return PartialView($"WritePVs/_{((ServiceTypeEnum)ServiceTypeId).ToString()}", reca);
                 case ServiceTypeEnum.SightSeeing:
-            ViewBag.GuideLanguageID = db.Fetch<GuideLanguage>("Select * from GuideLanguage").Select(v => new SelectListItem { Text = v.GuideLanguageName, Value = v.GuideLanguageID.ToString() }).ToList();
-                    return PartialView($"_{((ServiceTypeEnum)ServiceTypeId).ToString()}", db.SingleOrDefault<SRdetail>(id));
+                    ViewBag.CarType = Enum.GetValues(typeof(CarTypeEnum)).Cast<CarTypeEnum>().Select(v => new SelectListItem { Text = v.ToString(), Value = ((int)v).ToString() }).ToList();
+                    ViewBag.OptionTypeId = base.GetSelectListData("OptionTypeId", "OptionTypeName", "OptionType", $"where ServiceTypeId={(int) ServiceTypeEnum.SightSeeing}");
+                    ViewBag.GuideLanguageID = db.Fetch<GuideLanguage>("Select * from GuideLanguage").Select(v => new SelectListItem { Text = v.GuideLanguageName, Value = v.GuideLanguageID.ToString() }).ToList();
+                    return PartialView($"WritePVs/_{((ServiceTypeEnum)ServiceTypeId).ToString()}", db.SingleOrDefault<SRdetail>(id));
                 case ServiceTypeEnum.CarBike:
-                    return PartialView($"_{((ServiceTypeEnum)ServiceTypeId).ToString()}", db.SingleOrDefault<SRdetail>(id));
+                    return PartialView($"WritePVs/_{((ServiceTypeEnum)ServiceTypeId).ToString()}", db.SingleOrDefault<SRdetail>(id));
                 case ServiceTypeEnum.Cruise:
-                    return PartialView($"_{((ServiceTypeEnum)ServiceTypeId).ToString()}", db.SingleOrDefault<SRdetail>(id));
+                    return PartialView($"WritePVs/_{((ServiceTypeEnum)ServiceTypeId).ToString()}", db.SingleOrDefault<SRdetail>(id));
                 case ServiceTypeEnum.Packages:
-                    return PartialView($"_{((ServiceTypeEnum)ServiceTypeId).ToString()}", db.SingleOrDefault<SRdetail>(id));
+                    return PartialView($"WritePVs/_{((ServiceTypeEnum)ServiceTypeId).ToString()}", db.SingleOrDefault<SRdetail>(id));
                 case ServiceTypeEnum.Insurance:
-                    return PartialView($"_{((ServiceTypeEnum)ServiceTypeId).ToString()}", db.SingleOrDefault<SRdetail>(id));
+                    return PartialView($"WritePVs/_{((ServiceTypeEnum)ServiceTypeId).ToString()}", db.SingleOrDefault<SRdetail>(id));
                 case ServiceTypeEnum.Visa:
-                    return PartialView($"_{((ServiceTypeEnum)ServiceTypeId).ToString()}", db.SingleOrDefault<SRdetail>(id));
+                    return PartialView($"WritePVs/_{((ServiceTypeEnum)ServiceTypeId).ToString()}", db.SingleOrDefault<SRdetail>(id));
                 case ServiceTypeEnum.Flight:
                     var rec = db.SingleOrDefault<SRdetail>(id);
                     if (id > 0)

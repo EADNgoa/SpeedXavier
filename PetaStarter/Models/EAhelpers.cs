@@ -115,7 +115,7 @@ namespace Speedbird
             return new MvcHtmlString(FetchStdFormWrappers(textBoxFor, MvcHtmlString.Empty, label, editorClass));
         }
 
-        //Text Date
+        //Date
         public static MvcHtmlString EADateFor<TModel, TValue>(this HtmlHelper<TModel> html, Expression<Func<TModel, TValue>> expression, string label = "", string editorClass = "")
         {
             MvcHtmlString validationMessageFor = TextBound(html, expression, ref label);
@@ -127,6 +127,22 @@ namespace Speedbird
         public static MvcHtmlString EADate(this HtmlHelper html, string id, string editorClass = "", string label = "")
         {
             var textBoxFor = html.TextBox(id, "", new { @type = "text", @class = "form-control eadate" });
+            label = TextUnBound(id, label);
+            return new MvcHtmlString(FetchStdFormWrappers(textBoxFor, MvcHtmlString.Empty, label, editorClass));
+        }
+
+        //DateTime
+        public static MvcHtmlString EADateTimeFor<TModel, TValue>(this HtmlHelper<TModel> html, Expression<Func<TModel, TValue>> expression, string label = "", string editorClass = "")
+        {
+            MvcHtmlString validationMessageFor = TextBound(html, expression, ref label);
+            var textBoxFor = html.TextBoxFor(expression, new { @type = "text", @class = "form-control eadatetime" });
+
+            return new MvcHtmlString(FetchStdFormWrappers(textBoxFor, validationMessageFor, label, editorClass));
+        }
+
+        public static MvcHtmlString EADateTime(this HtmlHelper html, string id, string editorClass = "", string label = "")
+        {
+            var textBoxFor = html.TextBox(id, "", new { @type = "text", @class = "form-control eadatetime" });
             label = TextUnBound(id, label);
             return new MvcHtmlString(FetchStdFormWrappers(textBoxFor, MvcHtmlString.Empty, label, editorClass));
         }

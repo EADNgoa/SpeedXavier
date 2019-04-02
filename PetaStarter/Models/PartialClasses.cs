@@ -11,7 +11,7 @@ using Microsoft.AspNet.Identity;
 //using Microsoft.AspNet.Identity.EntityFramework;for dynamic roles
 
 namespace Speedbird
-{   
+{
     public class EASelectListData
     {
         public string id { get; set; }
@@ -25,32 +25,32 @@ namespace Speedbird
         public string PaxName { get; set; }
         public int cartype { get; set; }
         public DateTime serviceDate { get; set; }
-        public string ContractNo { get; set; } 
-        public decimal Cost { get; set; } 
-        public string CouponCode { get; set; } 
-        public string DriverName { get; set; } 
-        public string Car { get; set; } 
-        public string DropPoint { get; set; } 
-        public decimal ECommision { get; set; } 
-        public DateTime Fdate { get; set; } 
-        public string FromLoc { get; set; } 
-        public string ToLoc { get; set; } 
-        public bool HasAc { get; set; } 
-        public bool HasCarrier { get; set; } 
-        public string RateBasis { get; set; } 
-        public string IsCanceled { get; set; } 
-        public string Model { get; set; } 
-        public string PayTo { get; set; } 
-        public string PickUpPoint { get; set; } 
-        public int NoOfVehicles { get; set; } 
-        public decimal SellPrice { get; set; } 
-        public int ServiceTypeID { get; set; } 
-        public int SRID { get; set; } 
-        public int SRDID { get; set; } 
-        public string SuppInvNo { get; set; } 
-        public string SuppConfNo { get; set; } 
-        public string VehicleCost { get; set; } 
-        public DateTime SuppInvDt { get; set; } 
+        public string ContractNo { get; set; }
+        public decimal Cost { get; set; }
+        public string CouponCode { get; set; }
+        public string DriverName { get; set; }
+        public string Car { get; set; }
+        public string DropPoint { get; set; }
+        public decimal ECommision { get; set; }
+        public DateTime Fdate { get; set; }
+        public string FromLoc { get; set; }
+        public string ToLoc { get; set; }
+        public bool HasAc { get; set; }
+        public bool HasCarrier { get; set; }
+        public string RateBasis { get; set; }
+        public string IsCanceled { get; set; }
+        public string Model { get; set; }
+        public string PayTo { get; set; }
+        public string PickUpPoint { get; set; }
+        public int NoOfVehicles { get; set; }
+        public decimal SellPrice { get; set; }
+        public int ServiceTypeID { get; set; }
+        public int SRID { get; set; }
+        public int SRDID { get; set; }
+        public string SuppInvNo { get; set; }
+        public string SuppConfNo { get; set; }
+        public string VehicleCost { get; set; }
+        public DateTime SuppInvDt { get; set; }
         public int SuppInvAmt { get; set; }
 
     }
@@ -62,41 +62,68 @@ namespace Speedbird
         public string SuppInvNo { get; set; }
         public DateTime SuppInvDt { get; set; }
         public int SuppInvAmt { get; set; }
-        public string CouponCode { get; set; } 
+        public string CouponCode { get; set; }
         public string SuppConfNo { get; set; }
         public string ContractNo { get; set; }
     }
-    public class AccomodationServiceView :SupplierInfo
+    public class AccomodationServiceView : SupplierInfo
     {
         public string PaxName { get; set; }
         public int AdultNo { get; set; }
-        public int ExtraBedCost { get; set; } 
-        public int ChildNo { get; set; } 
-        public decimal cost { get; set; } 
-        public decimal ECommision { get; set; } 
-        public DateTime checkin { get; set; } 
-        public string FromLoc { get; set; } 
-        public bool HasAc { get; set; } 
-        public string ExtraService { get; set; } 
-        public int InfantNo { get; set; } 
-        public bool IsCanceled { get; set; } 
-        public string AccomName { get; set; } 
-        public string RoomCategory { get; set; } 
-        public string payto { get; set; } 
-        public string RoomType { get; set; } 
-        public int NoOfRooms { get; set; } 
-        public decimal Sellprice { get; set; } 
-        public int ServiceTypeID { get; set; } 
-        public int SRDID { get; set; } 
-        public int SRID { get; set; }         
-        public DateTime checkout { get; set; }         
-        public int NoExtraBeds { get; set; } 
-        public int BFCost { get; set; } 
-        public int LunchCost { get; set; } 
-        public int DinnerCost { get; set; } 
-        public int NoExtraService { get; set; } 
-        public int ExtraServiceCost { get; set; }         
+        public int ExtraBedCost { get; set; }
+        public int ChildNo { get; set; }
+        public decimal cost { get; set; }
+        public decimal ECommision { get; set; }
+        public DateTime checkin { get; set; }
+        public string FromLoc { get; set; }
+        public bool HasAc { get; set; }
+        public string ExtraService { get; set; }
+        public int InfantNo { get; set; }
+        public bool IsCanceled { get; set; }
+        public string AccomName { get; set; }
+        public string RoomCategory { get; set; }
+        public string payto { get; set; }
+        public string RoomType { get; set; }
+        public int NoOfRooms { get; set; }
+        public decimal Sellprice { get; set; }
+        public int ServiceTypeID { get; set; }
+        public int SRDID { get; set; }
+        public int SRID { get; set; }
+        public DateTime checkout { get; set; }
+        public int NoExtraBeds { get; set; }
+        public int BFCost { get; set; }
+        public int LunchCost { get; set; }
+        public int DinnerCost { get; set; }
+        public int NoExtraService { get; set; }
+        public int ExtraServiceCost { get; set; }
 
+    }
+
+    public class SightseeingServiceView : SupplierInfo
+    {
+        public string PaxName { get; set; }
+        public int AdultNo { get; set; }
+        public int ChildNo { get; set; }
+        public string SightseeingName { get; set; }
+        public int OptionTypeID { get; set; }
+        public string OptionTypeName { get; set; }
+        public string PickUpPoint { get; set; }
+        public string PickupLocation { get; set; }
+        public string Private_Sic { get; set; }
+        public decimal CostPerCar { get; set; }
+        public int NoOfCars { get; set; }
+        public int AdultCost { get; set; }
+        public int ChildCost { get; set; }
+        public DateTime TourDate { get; set; }
+        public int CarType { get; set; }
+        public bool MealIncluded { get; set; }
+        public int SRDID { get; set; }
+        public int SRID { get; set; }
+        public int IsCanceled { get; set; }
+        public int ServiceTypeID { get; set; }
+        public int GuideLanguageName { get; set; }
+        public decimal TotalCost { get { return (CostPerCar * NoOfCars) + (AdultCost * AdultNo) + (ChildCost * ChildNo); } }
+        public decimal SellPrice { get; set; }
     }
 
 
@@ -729,12 +756,12 @@ namespace Speedbird
     {
         Transfer,
         Accomodation,
+        SightSeeing,
+        Flight,
         Packages,
         Cruise,
-        SightSeeing,
         CarBike,
         Insurance,
-        Flight,
         Visa
     }
 

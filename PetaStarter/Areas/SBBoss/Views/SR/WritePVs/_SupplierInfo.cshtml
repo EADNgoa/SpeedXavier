@@ -6,7 +6,7 @@
     @Html.EAAutocompleteFor(m => m.SupplierID, "SR", "AutoCompleteSup", "Supplier",(string)ViewBag.Supplier)
     @Html.EATextFor(m => m.SuppInvNo)
     @Html.EADateFor(m => m.SuppInvDt)
-    @Html.EATextFor(m => m.SuppInvAmt)
+    @Html.EANumberFor(m => m.SuppInvAmt)
 </div>
 <div class="form-row">
     @Html.EATextFor(m => m.CouponCode)
