@@ -116,6 +116,10 @@ namespace Speedbird.Areas.SBBoss.Controllers
             return Json(filteredItems, JsonRequestBehavior.AllowGet);
         }
 
+        internal IEnumerable<SelectListItem> GetSelectListData(string idField, string nameField, string table, string whereClause, int? preSelectedId=0)
+        {
+            return new SelectList(db.Fetch<EASelectListData>($"Select {idField} as id, {nameField} as value from {table} {whereClause}"),"id", "value", preSelectedId);
+        }
         // GET: EA
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
             {

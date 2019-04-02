@@ -1,0 +1,110 @@
+﻿@using Speedbird
+@model Speedbird.AccomodationServiceView
+
+<strong>@Model.AccomName</strong>
+<table class="SRDetsTbl" width="100%">
+    <thead>
+        <tr>
+            <th>Pax Name</th>
+            <th>Adults</th>
+            <th>Children</th>
+            <th>Infants</th>
+            <th>Total Pax</th>
+            <th>Checkin</th>
+            <th>Checkout</th>
+            <th>Nights</th>
+            <th>Rooms</th>
+            <th>Room Type</th>
+            <th>Category</th>
+            <th>Extra Beds</th>
+            <th>EB cost</th>
+            <th>EB total</th>
+            <th>AC/ Non AC</th>
+            <th>Room Rate</th>
+            <th>BF cost</th>
+            <th>Lunch</th>
+            <th>Dinner</th>
+            <th>Cost/Night</th>
+            <th>Extra</th>
+            <th>Extra Qty</th>
+            <th>Extras cost</th>
+            <th>Total extras</th>
+            <th>COM</th>
+            <th>Sell At</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tr>
+        <td>@Model.PaxName</td>
+        <td>@Model.AdultNo</td>
+        <td>@Model.ChildNo </td>
+        <td>@Model.InfantNo </td>
+        <td>@(Model.AdultNo+Model.ChildNo+Model.InfantNo) </td>
+        <td>@Model.checkin.EAFormat() </td>
+        <td>@Model.checkout.EAFormat() </td>
+        <td>@(Model.checkout.Subtract(Model.checkin).TotalDays) </td>
+        <td>@Model.NoOfRooms </td>
+        <td>@Model.RoomType </td>
+        <td>@Model.RoomCategory </td>
+        <td>@Model.NoExtraBeds </td>
+        <td>@Model.ExtraBedCost </td>
+        <td>@(Model.ExtraBedCost*Model.NoExtraBeds) </td>
+        <td>@Model.HasAc </td>
+        <td>@Model.cost </td>
+        <td>@Model.BFCost </td>
+        <td>@Model.LunchCost </td>
+        <td>@Model.DinnerCost </td>
+        <td>@(Model.DinnerCost+Model.LunchCost+Model.BFCost+Model.cost) </td>
+        <td>@Model.ExtraService </td>
+        <td>@Model.NoExtraService </td>
+        <td>@Model.ExtraServiceCost </td>
+        <td>@(Model.ExtraServiceCost*Model.NoExtraService) </td>
+        <td>0 </td>
+        <td>@Model.Sellprice </td>
+        <td>
+            <button class="srdEdit" data-srdid="@Model.SRDID" data-stid="@Model.ServiceTypeID"><i title="Edit" class="fas fa-edit fa-inverse h3 float-right DropShadow"></i></button>
+        </td>
+    </tr>
+</table>
+@{Html.RenderPartial("ReadPVs/_SupplierInfo", Model); }
+<br />
+
+
+
+@*@if (ViewBag.isReadOnly != null)
+{@Html.Action("CustSearch", "SR", new { id = Model.SRDID })
+}*@
+
+@*@if (Model != null)
+    {
+        <script>
+           $('#AssignDriver').load('@Url.Action("_AssignDriver")', { SRID: @Model.SRID, SRDID: @Model.SRDID});
+           $('#Review').load('@Url.Action("_DrvReview")', { SRID: @Model.SRID,SRDID: @Model.SRDID});
+        </script>
+    }*@
+
+
+<script>
+
+
+    $(function () {
+        //DateTime picker
+
+
+        $('.eadate').datepicker({
+            dateFormat: "dd-MM-yy",
+            showButtonPanel: true,
+            changeMonth: true,
+            changeYear: true
+        });
+
+        //Disable the browsers default date picker
+        jQuery.validator.methods["date"] = function (value, element) { return true; }
+
+
+    });
+
+
+
+
+</script>

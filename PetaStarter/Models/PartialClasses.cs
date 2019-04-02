@@ -19,6 +19,7 @@ namespace Speedbird
     }
 
     //Classes for SRDetails
+
     public class TransferServiceView
     {
         public string PaxName { get; set; }
@@ -53,6 +54,51 @@ namespace Speedbird
         public int SuppInvAmt { get; set; }
 
     }
+
+    public class SupplierInfo
+    {
+        public int SupplierID { get; set; }
+        public string SupplierName { get; set; }
+        public string SuppInvNo { get; set; }
+        public DateTime SuppInvDt { get; set; }
+        public int SuppInvAmt { get; set; }
+        public string CouponCode { get; set; } 
+        public string SuppConfNo { get; set; }
+        public string ContractNo { get; set; }
+    }
+    public class AccomodationServiceView :SupplierInfo
+    {
+        public string PaxName { get; set; }
+        public int AdultNo { get; set; }
+        public int ExtraBedCost { get; set; } 
+        public int ChildNo { get; set; } 
+        public decimal cost { get; set; } 
+        public decimal ECommision { get; set; } 
+        public DateTime checkin { get; set; } 
+        public string FromLoc { get; set; } 
+        public bool HasAc { get; set; } 
+        public string ExtraService { get; set; } 
+        public int InfantNo { get; set; } 
+        public bool IsCanceled { get; set; } 
+        public string AccomName { get; set; } 
+        public string RoomCategory { get; set; } 
+        public string payto { get; set; } 
+        public string RoomType { get; set; } 
+        public int NoOfRooms { get; set; } 
+        public decimal Sellprice { get; set; } 
+        public int ServiceTypeID { get; set; } 
+        public int SRDID { get; set; } 
+        public int SRID { get; set; }         
+        public DateTime checkout { get; set; }         
+        public int NoExtraBeds { get; set; } 
+        public int BFCost { get; set; } 
+        public int LunchCost { get; set; } 
+        public int DinnerCost { get; set; } 
+        public int NoExtraService { get; set; } 
+        public int ExtraServiceCost { get; set; }         
+
+    }
+
 
     //EOF Classes for SRDetails
 

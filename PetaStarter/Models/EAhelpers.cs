@@ -178,7 +178,7 @@ namespace Speedbird
         //Read at https://blogs.msdn.microsoft.com/stuartleeks/2012/04/23/asp-net-mvc-jquery-ui-autocomplete/
         //@Html.LabelFor(m=>m.SomeValue) 
         //@Html.AutocompleteFor(m=>m.SomeValue, “Autocomplete”, “Home”)
-        public static MvcHtmlString EAAutocompleteFor<TModel, TProperty>(this HtmlHelper<TModel> html, Expression<Func<TModel, TProperty>> expression, string controllerName, string actionName, string label = "", string editorClass = "")
+        public static MvcHtmlString EAAutocompleteFor<TModel, TProperty>(this HtmlHelper<TModel> html, Expression<Func<TModel, TProperty>> expression, string controllerName, string actionName, string label = "", string value="", string editorClass = "")
         {
             string autocompleteUrl = UrlHelper.GenerateUrl(null, actionName, controllerName,null,html.RouteCollection,html.ViewContext.RequestContext,includeImplicitMvcValues: true);
             string boxName = html.DisplayNameFor(expression).ToString();
@@ -186,7 +186,7 @@ namespace Speedbird
             MvcHtmlString validationMessageFor = TextBound(html, expression, ref label);
             validationMessageFor= validationMessageFor.Concat(html.HiddenFor(expression));
 
-            var textBoxFor= html.TextBox(boxName + "Txt","", new { @type = "text", @class = "form-control" , data_autocombo_url = autocompleteUrl, @data_autocomplete_idholder = boxName  });
+            var textBoxFor= html.TextBox(boxName + "Txt", value ?? "", new { @type = "text", @class = "form-control" , data_autocombo_url = autocompleteUrl, @data_autocomplete_idholder = boxName  });
 
             return new MvcHtmlString(FetchStdFormWrappers(textBoxFor, validationMessageFor, label, editorClass));
         }

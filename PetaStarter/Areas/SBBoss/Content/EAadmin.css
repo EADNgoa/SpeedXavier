@@ -80,8 +80,12 @@ ul.dropdown-menu {
     .SRDetsTbl th {
         background-color: #bec5de;
     }
-        /*EA SR details css EOF*/
-        #navVert {
+
+.ui-autocomplete-input {
+    background-color:#ddd8db;
+}
+/*EA SR details css EOF*/
+#navVert {
     background-image: url("../Custom/sidenav5.jpg");
     background-repeat: no-repeat;
     position: fixed;

@@ -1,7 +1,7 @@
 ﻿@using Speedbird
 @model Speedbird.SRdetail
 
-@Html.EAIdFor(m =>m.SRID,Model?.SRID.HasValue??false)
+
 @Html.EAIdFor(m =>m.SRDID, Model?.SRID.HasValue ?? false)
 @Html.EAIdFor(m =>m.IsCanceled, Model?.SRID.HasValue ?? false)
 <div class="form-row">
@@ -24,13 +24,13 @@
 </div>
 <div class="form-row">    
     @Html.EASelectListFor(m => m.PayTo)
-    @Html.EATextFor(m => m.Cost)
-    @Html.EATextFor(m => m.SellPrice)
+    @Html.EANumberFor(m => m.Cost)
+    @Html.EANumberFor(m => m.SellPrice)
     @Html.EASpacer()
 </div>
 <hr>
 <div class="form-row">
-    @Html.EAAutocompleteFor(m => m.DriverID, "SR", "AutoCompleteDriver", "Driver")
+    @Html.EAAutocompleteFor(m => m.DriverID, "SR", "AutoCompleteDriver", "Driver", (string)ViewBag.Driver)
     @Html.EASelectList("NoExtraBeds", new List<SelectListItem> { new SelectListItem { Text = "1st choose Driver", Value = "0" } } , "", "Car")
     @Html.EATextFor(m => m.SuppInvNo)
     @Html.EATextFor(m => m.CouponCode)
@@ -123,19 +123,34 @@
             //Disable the browsers default date picker
             jQuery.validator.methods["date"] = function (value, element) { return true; }
 
-            $("#DriverID").on("change", function () {
-                $.get('@Url.Action("AutoCompleteCars")', { DriverId: $(this).val() }, function (response) {
-                    debugger;
+            function setDriverCars(driverid) {
+                $.get('@Url.Action("AutoCompleteCars")', { DriverId: driverid }, function (response) {
+                    
+                    $('#NoExtraBeds').html('');
+                    
                     if (response.length > 0) {
-                        $('#NoExtraBeds').html('');
                         var options = '';
                         for (var i = 0; i < response.length; i++) {
-                            options += '<option value="' + response[i].id + '">' + response[i].value + '</option>';
+                            if (response[i].id == @(Model?.NoExtraBeds ??-1)) {
+                                options += '<option selected value="' + response[i].id + '">' + response[i].value + '</option>';
+                            } else {
+                                options += '<option value="' + response[i].id + '">' + response[i].value + '</option>';
+                            }
                         }
-                        options += '<option value="Select">Select</option>';
-                        $('#NoExtraBeds').append(options);
                     }
+                        options += '<option value="Select">No Cars defined</option>';
+                        $('#NoExtraBeds').append(options);
                 });
+            }
+
+            //If in edit mode we may already have the driverid and thus should fetch his cars
+            if ($("#DriverID").val() > 0) {
+                setDriverCars($("#DriverID").val());
+            }
+
+            //fetch driver cars on selection of driver
+            $("#DriverID").on("change", function () {
+                setDriverCars($(this).val());
             });
 
         });

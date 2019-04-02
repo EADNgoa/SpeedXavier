@@ -1,45 +1,89 @@
 ﻿@using Speedbird
 @model Speedbird.SRdetail
 
+
+@Html.HiddenFor(model => model.IsCanceled)
+
+@if (Model?.SRDID != null)
+{@Html.Hidden("SRDID", (int)Model.SRDID)}
+
 <div class="form-row">
- 
+    @Html.EASelectList("CustomerId", (IEnumerable<SelectListItem>)ViewBag.CustomerId, "", "Pax Name")
+    @Html.EAAutocompleteFor(m => m.ItemID, "SR", "AutoCompleteAccom", "Hotel", (string)ViewBag.Hotel)
+    @Html.EADateFor(m => m.Fdate, "Checkin Date")
+    @Html.EADateFor(m => m.Tdate, "Checkout Date")
 </div>
 
-    <div class="form-row">
-        <div class="input-group col mb-3">
+<div class="form-row">
+    @Html.EANumberFor(m => m.AdultNo, "No. of Adults")
+    @Html.EANumberFor(m => m.ChildNo, "No. of Children")
+    @Html.EANumberFor(m => m.InfantNo, "No. of Infants")
+    @Html.EANumberFor(m => m.Qty, "No. of Rooms")
+</div>
+<div class="form-row">
+    @Html.EATextFor(m => m.PickUpPoint, "Room Type")
+    @Html.EASelectListFor(m => m.OptionTypeID, "Room Category")
+    @Html.EANumberFor(m => m.NoExtraBeds, "No. Ext Beds")
+    @Html.EANumberFor(m => m.CarType, "Ext Beds Cost")
+</div>
+<div class="form-row">
+    @Html.EAChkBox("HasAc", "AC/ No AC")
+    @Html.EANumberFor(m => m.BFCost, "Daily Bf Cost")
+    @Html.EANumberFor(m => m.LunchCost, "Daily Ln Cost")
+    @Html.EANumberFor(m => m.DinnerCost, "Daily Dn Cost")
+</div>
+<div class="form-row">
+    @Html.EANumberFor(m => m.Cost, "Room Rate")
+    @Html.EASelectList("Heritage", new List<SelectListItem> {
+   new SelectListItem { Text = "Cake", Value = "0" },
+   new SelectListItem { Text = "Wine", Value = "1" },
+   new SelectListItem { Text = "Bouquet", Value = "2" },
+   new SelectListItem { Text = "Honeymoon Pkg", Value = "3" },
+}, "", "Extra Service")
+    @Html.EANumberFor(m => m.NoExtraService)
+    @Html.EANumberFor(m => m.ExtraServiceCost)
+</div>
+<div class="form-row">
+    @Html.EASelectListFor(m => m.PayTo)
+    @Html.EANumberFor(m => m.SellPrice)
+</div>
 
-            @if (Model?.SRDID > 0)
-    {
-                <div class="input-group col-3 mb-3">
+@{ Html.RenderPartial("WritePVs/_SupplierInfo", Model); }
+<div class="form-row">
+    <div class="input-group col mb-3">
 
-                    @if (ViewBag.IsReadOnly == null)
-    {
-                        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#AssignDriverModal" data-srdid="@Model.SRDID">
-                            @if (Model?.DriverID == null)
-    {
-                                @:  Assign Driver
+        @*@if (Model?.SRDID > 0)
+            {
+                        <div class="input-group col-3 mb-3">
+
+                            @if (ViewBag.IsReadOnly == null)
+            {
+                                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#AssignDriverModal" data-srdid="@Model.SRDID">
+                                    @if (Model?.DriverID == null)
+            {
+                                        @:  Assign Driver
+                                    }
+                                    else
+                                    {
+                                        @: Change Driver
+                                    }
+
+                                </button>
+                                <div class="input-group-prepend"><span class="input-group-text" style="color:blue">@ViewBag.DrvNm</span></div>
+
                             }
                             else
                             {
-                                @: Change Driver
+                                <div class="input-group-prepend"><span class="input-group-text">Driver Name</span></div>
+                                <input type="text" value="@ViewBag.DrvNm" class="form-control" />
                             }
 
-                        </button>
-                        <div class="input-group-prepend"><span class="input-group-text" style="color:blue">@ViewBag.DrvNm</span></div>
-
-                    }
-                    else
-                    {
-                        <div class="input-group-prepend"><span class="input-group-text">Driver Name</span></div>
-                        <input type="text" value="@ViewBag.DrvNm" class="form-control" />
-                    }
 
 
+                        </div>
+                    }*@
 
-                </div>
-            }
-
-            @if (ViewBag.IsReadOnly == null)
+        @*@if (ViewBag.IsReadOnly == null)
             {
                 if (Model?.DriverID > 0)
                 {
@@ -50,32 +94,32 @@
                     </div>
 
                 }
-            }
-        </div>
+            }*@
     </div>
+</div>
 
 
 
-    @if (ViewBag.isReadOnly != null)
-    {@Html.Action("CustSearch", "SR", new { id = Model.SRDID })
-}
-
-    @if (Model != null)
-    {
-        <script>
-           $('#AssignDriver').load('@Url.Action("_AssignDriver")', { SRID: @Model.SRID, SRDID: @Model.SRDID});
-           $('#Review').load('@Url.Action("_DrvReview")', { SRID: @Model.SRID,SRDID: @Model.SRDID});
-        </script>
+@*@if (ViewBag.isReadOnly != null)
+        {@Html.Action("CustSearch", "SR", new { id = Model.SRDID })
     }
 
+        @if (Model != null)
+        {
+            <script>
+               $('#AssignDriver').load('@Url.Action("_AssignDriver")', { SRID: @Model.SRID, SRDID: @Model.SRDID});
+               $('#Review').load('@Url.Action("_DrvReview")', { SRID: @Model.SRID,SRDID: @Model.SRDID});
+            </script>
+        }*@
 
-    <script>
+
+<script>
 
 
 
-        $(function () {
+         $(function () {
             //DateTime picker
-            
+
 
             $('.eadate').datepicker({
                 dateFormat: "dd-MM-yy",
@@ -87,8 +131,36 @@
             //Disable the browsers default date picker
             jQuery.validator.methods["date"] = function (value, element) { return true; }
 
+            $("#SupplierID").on("change", function () {
+                $.get('@Url.Action("AutoCompleteCars")', { DriverId: $(this).val() }, function (response) {
+
+                    if (response.length > 0) {
+                        $('#NoExtraBeds').html('');
+                        var options = '';
+                        for (var i = 0; i < response.length; i++) {
+                            options += '<option value="' + response[i].id + '">' + response[i].value + '</option>';
+                        }
+                        options += '<option value="Select">Select</option>';
+                        $('#NoExtraBeds').append(options);
+                    }
+                });
+            });
+
         });
 
 
+        $(document).ready(function () {
+            $('*[data-autocombo-url]')
+                .each(function () {
+                    $(this).autocomplete({
+                        source: $(this).data("autocombo-url"),
+                        minLenght: 3,
+                        delay: 500,
+                        select: function (event, ui) {
+                            $("#" + $(this).data("autocomplete-idholder")).val(ui.item.id).trigger('change');
+                        }
+                    });
+                });
+        });
 
-    </script>
+</script>

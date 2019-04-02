@@ -13,6 +13,7 @@
     <div id="SRDetTbl">
         @foreach(var sd in (IEnumerable<Speedbird.SRdetail>) ViewBag.SRDets)
         {
+            <div class="h3"> @(((Speedbird.ServiceTypeEnum)sd.ServiceTypeID).ToString())</div>
             @Html.Action("FetchSRdetails", "SR", new { sType = (Speedbird.ServiceTypeEnum) sd.ServiceTypeID, srdid = sd.SRDID })
         }
     </div>
@@ -46,18 +47,12 @@
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
                 @Html.Hidden("SRID", (int)ViewBag.SRID)
-                @Html.HiddenFor(model => model.SupplierID)
-                @Html.HiddenFor(model => model.ItemID)
-                @Html.HiddenFor(model => model.IsCanceled)
-
-                @if (Model?.SRDID != null)
-                {@Html.Hidden("SRDID", (int)Model.SRDID)}
-
+           
 
                 <div class="form-row">
                     <div class="input-group col mb-3">
                         <div class="input-group-prepend"><span class="input-group-text">Service Type</span></div>
-                        @Html.DropDownListFor(model => model.ServiceTypeID, null, htmlAttributes: new { @type = "text", @class = "form-control ServiceType" })
+                        @Html.DropDownListFor(model => model.ServiceTypeID, null, htmlAttributes: new { @type = "text", @class = "form-control ServiceType ServiceTypeID" })
                         @Html.ValidationMessageFor(model => model.ServiceTypeID, "", new { @class = "text-danger" })
                     </div>
                 </div>
@@ -180,7 +175,9 @@
 
     $(function () {
         $(".srdEdit").on("click", function () {
-            $("#placeholderEditDiv").load('@Url.Action("FetchSTpartial")', { id: $(this).data("srdid"), ServiceTypeId: $(this).data("stid"), SRID : @ViewBag.SRID, IsReadOnly : false });
+            $("#placeholderEditDiv").load('@Url.Action("FetchSTpartial")', { id: $(this).data("srdid"), ServiceTypeId: $(this).data("stid"), SRID: @ViewBag.SRID, IsReadOnly: false });
+            $(".ServiceTypeID").val($(this).data("stid"));
+           
         });
     })
 
