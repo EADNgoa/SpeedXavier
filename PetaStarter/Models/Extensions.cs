@@ -30,7 +30,7 @@ namespace Speedbird
         //Extension method for decimal
         public static string EAFormat(this decimal dcml, string currency = "")
         {
-            return $"{currency} {dcml:#,###.00}";
+            return $"{currency} {dcml:#,###.##}";
         }
 
 

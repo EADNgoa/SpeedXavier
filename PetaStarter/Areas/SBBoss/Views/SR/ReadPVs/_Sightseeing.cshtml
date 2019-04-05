@@ -21,6 +21,8 @@
             <th>Meal inc.</th>
             <th>Inclusions</th>
             <th>Total Cost</th>
+            <th>COM</th>
+            <th>Tax</th>
             <th>Sell Price</th>
             <th></th>
         </tr>
@@ -42,6 +44,8 @@
         <td>@Model.MealIncluded</td>
         <td>@ViewBag.Inc</td>
         <td>@Model.TotalCost </td>
+        <td>@Model.ECommision.EAFormat()</td>
+        <td>@Model.Tax.EAFormat()</td>
         <td>@Model.SellPrice </td>
         <td>
             <button class="srdEdit" data-srdid="@Model.SRDID" data-stid="@Model.ServiceTypeID"><i title="Edit" class="fas fa-edit fa-inverse h3 float-right DropShadow"></i></button>

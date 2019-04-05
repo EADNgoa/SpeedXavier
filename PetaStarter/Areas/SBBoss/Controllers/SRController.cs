@@ -423,8 +423,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
                     return PartialView($"ReadPVs/_{(sType).ToString()}", db.SingleOrDefault<AccomodationServiceView>($"select (select top 1 CONCAT(c.fName, ' ',c.sName) from Customer c, SRD_Cust sc where c.CustomerID=sc.CustomerID and sc.SRDID={srdid}) as PaxName, " +
                         $"sd.AdultNo,CarType as ExtraBedCost, ChildNo,ContractNo,cost,sd.CouponCode,ECommision,Fdate as checkin,FromLoc,HasAc,Heritage as ExtraService,InfantNo, " +
                         $"IsCanceled, Model as AccomName, ot.OptionTypeName as RoomCategory,payto,Pickuppoint as RoomType,qty as NoOfRooms, Sellprice,sd.ServiceTypeID,SRDID,SRID, " +
-                        $"SuppInvNo,SupplierName,sd.SupplierID,Tdate as checkout, SuppInvDt,SuppConfNo,NoExtraBeds,BFCost,LunchCost,DinnerCost,NoExtraService,ExtraServiceCost,SuppInvAmt " +
-                        $"from SRdetails sd left join Supplier s on s.supplierid=sd.supplierid left join OptionType ot on ot.OptionTypeId=sd.OptionTypeId WHERE SRDID = {srdid} "));
+                        $"SuppInvNo,SupplierName,sd.SupplierID,Tdate as checkout, SuppInvDt,SuppConfNo,NoExtraBeds,BFCost,LunchCost,DinnerCost,NoExtraService,ExtraServiceCost,SuppInvAmt, " +
+                        $"ECommision,Tax from SRdetails sd left join Supplier s on s.supplierid=sd.supplierid left join OptionType ot on ot.OptionTypeId=sd.OptionTypeId WHERE SRDID = {srdid} "));
                     break;
                 case ServiceTypeEnum.Packages:
                     break;
@@ -435,7 +435,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                     var qry = $"select (select top 1 CONCAT(c.fName, ' ',c.sName) from Customer c, SRD_Cust sc where c.CustomerID=sc.CustomerID and sc.SRDID={srdid}) as PaxName, " +
                         $" AdultNo,ChildNo,Model as SightseeingName, sd.OptionTypeID, ot.OptionTypeName,PickUpPoint,FromLoc as PickupLocation, Heritage as Private_Sic, cost as CostPerCar," +
                         $"Qty as NoOfCars, BFCost as AdultCost, LunchCost as ChildCost,Fdate as TourDate, CarType,HasAc as MealIncluded, srid, srdid, IsCanceled, sd.ServiceTypeID, SuppInvNo," +
-                        $"SupplierName,sd.SupplierID, SuppInvDt,SuppConfNo,SuppInvAmt,sd.CouponCode, SellPrice,contractNo from SRdetails sd left join OptionType ot on ot.OptionTypeID=sd.OptionTypeID " +
+                        $"SupplierName,sd.SupplierID, SuppInvDt,SuppConfNo,SuppInvAmt,sd.CouponCode, SellPrice,contractNo,ECommision,Tax from SRdetails sd left join OptionType ot on ot.OptionTypeID=sd.OptionTypeID " +
                         $"left join Supplier s on s.supplierid=sd.supplierid WHERE SRDID = {srdid} ";
                     var res = db.SingleOrDefault<SightseeingServiceView>(qry);
                     return PartialView($"ReadPVs/_{(sType).ToString()}", res);
@@ -452,7 +452,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                     return PartialView($"ReadPVs/_{(sType).ToString()}", db.SingleOrDefault<TransferServiceView>($"SELECT (select top 1 CONCAT(c.fName, ' ',c.sName) from Customer c, SRD_Cust sc where c.CustomerID=sc.CustomerID and sc.SRDID={srdid}) as PaxName, " +
                         "sd.srid, sd.cartype, Tdate AS serviceDate, sd.ContractNo, sd.Cost, sd.CouponCode, d.DriverName, CONCAT (dc.CarBrand, ' ', dc.Model, ' ', dc.PlateNo) AS Car, " +
                         "sd.DropPoint, sd.ECommision, sd.Fdate, sd.FromLoc,sd.ToLoc, sd.HasAc, sd.HasCarrier, sd.Heritage AS RateBasis, sd.IsCanceled, sd.Model, sd.PayTo, sd.PickUpPoint, " +
-                        "sd.Qty AS NoOfVehicles, sd.SellPrice, sd.ServiceTypeID, sd.SRDID, sd.SuppInvNo, sd.SuppConfNo, sd.BFCost as VehicleCost, sd.SuppInvDt, sd.SuppInvAmt FROM SRdetails sd " +
+                        "sd.Qty AS NoOfVehicles, sd.SellPrice, sd.ServiceTypeID, sd.SRDID, sd.SuppInvNo, sd.SuppConfNo, sd.BFCost as VehicleCost, sd.SuppInvDt, sd.SuppInvAmt,ECommision,Tax FROM SRdetails sd " +
                         $"LEFT JOIN Driver d ON sd.DriverID = d.DriverID LEFT JOIN DriversCars dc ON dc.CarId = NoExtraBeds WHERE SRDID = {srdid} "));
                     break;
                 default:
@@ -475,6 +475,16 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 
                 try
                 {
+                    //Calc the tax and Employee commission
+                    var tax = db.ExecuteScalar<decimal?>("Select Percentage From Taxes Where ServiceTypeID=@0 and WEF<GetDate() order by WEF desc ", item.ServiceTypeID) ?? 0;
+                    item.Tax = item.SellPrice * tax / 100;
+                    var c = db.FirstOrDefault<ServiceCommision>($"Select Perc,Amount  From ServiceCommision Where Serviceid={item.ServiceTypeID} ");
+                    if (c != null)
+                    {
+                        item.ECommision += c.Amount ?? 0;
+                        item.ECommision = (item.SellPrice * (c.Perc ?? 0)) / 100;
+                    }
+
                     DateTime? td =(DateTime?)item?.Tdate ;
                     if(item.SRDID > 0)//Update existing record when in edit mode
                     {
@@ -502,10 +512,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                         {
                             item.Tdate = null;
                         }
-                        if (item.ECommision == null)
-                        {
-                            item.ECommision = -1;
-                        }
+                        
                         db.Insert(item);
                         if (IsReturn == "true")
                         {//We need to insert this duplicate record so that we can show this return flight in the Daily Diary on the return journey date
@@ -634,35 +641,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
             ViewBag.PaxDetail = db.Fetch<PaxDets>("; Exec AmtPerPax @@SRID = @0", id).ToList();
 
-            var services = db.Query<SRdetailDets>("Select SRID,SRDID,ServiceTypeID,Cost,SellPrice,ECommision from SRdetails where SRID=@0",id).ToList();
-           services.ForEach(s=>
-            {
-                var tax = db.ExecuteScalar<decimal?>("Select Percentage From Taxes Where ServiceTypeID=@0 and WEF<GetDate() order by WEF desc ", s.ServiceTypeID)??0;
-                s.Tax = s.SellPrice * tax / 100;                
-                var c = db.FirstOrDefault<ServiceCommision>($"Select Perc,Amount  From ServiceCommision Where Serviceid={s.ServiceTypeID + 1} ");
-
-                if (s.ECommision <0)
-                {
-                    if (c.Perc != null)
-                    {
-                        s.Commision = c.Perc ?? 0;
-                        s.PercComm = "%";
-                        var tot = s.SellPrice * s.Commision / 100;
-                        s.Total = s.SellPrice - s.Tax - tot - s.Cost;
-                    }
-                    else if (c.Amount != null)
-                    {
-                        s.Commision = c.Amount ?? 0;
-                        s.Total = s.SellPrice - s.Tax - s.Commision - s.Cost;
-                    }
-                }
-                else
-                {
-                    s.Commision = s.ECommision;
-                    s.Total = s.SellPrice - s.Tax - s.Commision - s.Cost;
-                }
-
-            });
+            var services = db.Query<SRdetailDets>("Select SRID,SRDID,ServiceTypeID,Tax,Cost,SellPrice,ECommision , SellPrice - Tax - ECommision - Cost as Total from SRdetails where SRID=@0", id).ToList();
+           
             ViewBag.Services = services;
 
             var  rp= db.Fetch<RPDetails>("select rp.CDate as [Date],rp.Note,rp.Type,rs.Amount,rp.IsPayment from RPDets rp left join RP_SR rs on rp.RPDID = rs.RPDID Where rs.SRID = @0",id);

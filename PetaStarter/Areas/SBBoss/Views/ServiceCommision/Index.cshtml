@@ -18,7 +18,7 @@
         
         <table class="table">
             <tr>
-                <th>Sr No</th>
+                
                 <th>
                     ServiceType Name
                 </th>
@@ -30,13 +30,11 @@
                 </th>
                 <th></th>
             </tr>
-            @{int i = 1;}
+            
             @foreach (var item in Model)
             {
             <tr>
-                <td>
-                    @i
-                </td>
+            
                 <td>
                     @Html.DisplayFor(modelItem => item.ServiceName)
                 </td>
@@ -50,7 +48,7 @@
                     <a href="@Url.Action("Manage","ServiceCommision", new {id = item.ServiceID })"><i title="Edit" class="fas fa-edit fa-inverse h3 float-right DropShadow"></i></a>
                 </td>
             </tr>
-                i++;
+            
             }
 
         </table>

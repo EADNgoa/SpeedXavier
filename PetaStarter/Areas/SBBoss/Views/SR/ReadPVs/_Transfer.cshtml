@@ -20,6 +20,7 @@
             <th>Pay To</th>
             <th>Cost</th>
             <th>COM</th>
+            <th>Tax</th>
             <th>Sell At</th>
             <th></th>
         </tr>
@@ -39,10 +40,11 @@
         <td>@Model.VehicleCost</td>
         <td>@Model.PayTo</td>
         <td>@Model.Cost</td>
-        <td>@Model.ECommision</td>
+        <td>@Model.ECommision.EAFormat()</td>
+        <td>@Model.Tax.EAFormat()</td>
         <td>@Model.SellPrice</td>
         <td>
-            <button class="srdEdit" data-srdid="@Model.SRDID" data-stid="@Model.ServiceTypeID" ><i title="Edit" class="fas fa-edit fa-inverse h3 float-right DropShadow"></i></button>
+            <button class="srdEdit" data-srdid="@Model.SRDID" data-stid="@Model.ServiceTypeID"><i title="Edit" class="fas fa-edit fa-inverse h3 float-right DropShadow"></i></button>
         </td>
     </tr>
 </table>

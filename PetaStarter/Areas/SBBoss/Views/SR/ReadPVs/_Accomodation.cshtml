@@ -30,6 +30,7 @@
             <th>Extras cost</th>
             <th>Total extras</th>
             <th>COM</th>
+            <th>Tax</th>
             <th>Sell At</th>
             <th></th>
         </tr>
@@ -39,7 +40,7 @@
         <td>@Model.AdultNo</td>
         <td>@Model.ChildNo </td>
         <td>@Model.InfantNo </td>
-        <td>@(Model.AdultNo+Model.ChildNo+Model.InfantNo) </td>
+        <td>@(Model.AdultNo + Model.ChildNo + Model.InfantNo) </td>
         <td>@Model.checkin.EAFormat() </td>
         <td>@Model.checkout.EAFormat() </td>
         <td>@(Model.checkout.Subtract(Model.checkin).TotalDays) </td>
@@ -48,18 +49,19 @@
         <td>@Model.RoomCategory </td>
         <td>@Model.NoExtraBeds </td>
         <td>@Model.ExtraBedCost </td>
-        <td>@(Model.ExtraBedCost*Model.NoExtraBeds) </td>
+        <td>@(Model.ExtraBedCost * Model.NoExtraBeds) </td>
         <td>@Model.HasAc </td>
         <td>@Model.cost </td>
         <td>@Model.BFCost </td>
         <td>@Model.LunchCost </td>
         <td>@Model.DinnerCost </td>
-        <td>@(Model.DinnerCost+Model.LunchCost+Model.BFCost+Model.cost) </td>
+        <td>@(Model.DinnerCost + Model.LunchCost + Model.BFCost + Model.cost) </td>
         <td>@Model.ExtraService </td>
         <td>@Model.NoExtraService </td>
         <td>@Model.ExtraServiceCost </td>
-        <td>@(Model.ExtraServiceCost*Model.NoExtraService) </td>
-        <td>0 </td>
+        <td>@(Model.ExtraServiceCost * Model.NoExtraService) </td>
+        <td>@Model.ECommision.EAFormat()</td>
+        <td>@Model.Tax.EAFormat()</td>
         <td>@Model.Sellprice </td>
         <td>
             <button class="srdEdit" data-srdid="@Model.SRDID" data-stid="@Model.ServiceTypeID"><i title="Edit" class="fas fa-edit fa-inverse h3 float-right DropShadow"></i></button>
