@@ -8,8 +8,8 @@
 {@Html.Hidden("SRDID", (int)Model.SRDID)}
 
 <div class="form-row">
-    @Html.EASelectList("CustomerId", (IEnumerable<SelectListItem>)ViewBag.CustomerId, "", "Pax Name")
-    @Html.EAAutocompleteFor(m => m.ItemID, "SR", "AutoCompleteAccom", "Hotel", (string)ViewBag.Hotel)
+    @Html.EASelectList("CustomerId", (IEnumerable<SelectListItem>)ViewBag.CustomerList, "", "Pax Name",(string) ViewBag.SelectedCustomerId)
+    @Html.EATextFor(m=>m.Model,"Hotel Name")
     @Html.EADateFor(m => m.Fdate, "Checkin Date")
     @Html.EADateFor(m => m.Tdate, "Checkout Date")
 </div>
@@ -34,14 +34,9 @@
 </div>
 <div class="form-row">
     @Html.EANumberFor(m => m.Cost, "Room Rate")
-    @Html.EASelectList("Heritage", new List<SelectListItem> {
-   new SelectListItem { Text = "Cake", Value = "0" },
-   new SelectListItem { Text = "Wine", Value = "1" },
-   new SelectListItem { Text = "Bouquet", Value = "2" },
-   new SelectListItem { Text = "Honeymoon Pkg", Value = "3" },
-}, "", "Extra Service")
-    @Html.EANumberFor(m => m.NoExtraService)
-    @Html.EANumberFor(m => m.ExtraServiceCost)
+    @Html.EASelectListFor(m =>m.Heritage, "Extra Service")
+    @Html.EANumberFor(m => m.NoExtraService, "Qty Ext Service")
+    @Html.EANumberFor(m => m.ExtraServiceCost, "Ext Cost")
 </div>
 <div class="form-row">
     @Html.EASelectListFor(m => m.PayTo)

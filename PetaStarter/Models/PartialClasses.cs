@@ -69,6 +69,7 @@ namespace Speedbird
     public class AccomodationServiceView : SupplierInfo
     {
         public string PaxName { get; set; }
+        public string AccomName { get; set; }
         public int AdultNo { get; set; }
         public int ExtraBedCost { get; set; }
         public int ChildNo { get; set; }
@@ -80,7 +81,6 @@ namespace Speedbird
         public string ExtraService { get; set; }
         public int InfantNo { get; set; }
         public bool IsCanceled { get; set; }
-        public string AccomName { get; set; }
         public string RoomCategory { get; set; }
         public string payto { get; set; }
         public string RoomType { get; set; }
@@ -102,9 +102,9 @@ namespace Speedbird
     public class SightseeingServiceView : SupplierInfo
     {
         public string PaxName { get; set; }
+        public string SightseeingName { get; set; }
         public int AdultNo { get; set; }
         public int ChildNo { get; set; }
-        public string SightseeingName { get; set; }
         public int OptionTypeID { get; set; }
         public string OptionTypeName { get; set; }
         public string PickUpPoint { get; set; }
@@ -793,7 +793,7 @@ namespace Speedbird
     {
         Web,
         Walk_In,
-        Word_Of_Mouth,
+        Corporate_Client,
         Print_Media,
         Agent
     }

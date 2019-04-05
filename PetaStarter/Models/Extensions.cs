@@ -23,6 +23,10 @@ namespace Speedbird
         {
             return withTime ? $"{dt:dd/MMM/yyyy HH:mm}" : forSQL ? $"{dt:yyyy/MM/dd}" : $"{dt:dd/MMM/yyyy}";
         }
+        public static string EAFormat(this DateTime? dt, bool withTime = false, bool forSQL = false)
+        {
+            return dt.HasValue ? ((DateTime)dt).EAFormat(withTime, forSQL) : "";
+        }
         //Extension method for decimal
         public static string EAFormat(this decimal dcml, string currency = "")
         {

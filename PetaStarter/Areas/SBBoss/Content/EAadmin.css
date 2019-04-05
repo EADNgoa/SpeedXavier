@@ -62,9 +62,19 @@ ul.dropdown-menu {
     margin-right: 0px;
 }
 
+
+.input-group-prepend {
+    display: block !important;
+}
+
 .input-group-text {
     width:130px;
+    /*line-height:0;*/
 }
+
+/*.form-control {
+    height:Calc(1.5em+3px) ;
+}*/
 
 /*EA Compressor*/
 

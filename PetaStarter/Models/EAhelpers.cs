@@ -116,10 +116,11 @@ namespace Speedbird
         }
 
         //Date
+        //Date
         public static MvcHtmlString EADateFor<TModel, TValue>(this HtmlHelper<TModel> html, Expression<Func<TModel, TValue>> expression, string label = "", string editorClass = "")
         {
             MvcHtmlString validationMessageFor = TextBound(html, expression, ref label);
-            var textBoxFor = html.TextBoxFor(expression, new { @type = "text", @class = "form-control eadate" });
+            var textBoxFor = html.TextBoxFor(expression, "{0:dd-MMM-yyyy}", new { @type = "text", @class = "form-control eadate" });
 
             return new MvcHtmlString(FetchStdFormWrappers(textBoxFor, validationMessageFor, label, editorClass));
         }
@@ -135,7 +136,7 @@ namespace Speedbird
         public static MvcHtmlString EADateTimeFor<TModel, TValue>(this HtmlHelper<TModel> html, Expression<Func<TModel, TValue>> expression, string label = "", string editorClass = "")
         {
             MvcHtmlString validationMessageFor = TextBound(html, expression, ref label);
-            var textBoxFor = html.TextBoxFor(expression, new { @type = "text", @class = "form-control eadatetime" });
+            var textBoxFor = html.TextBoxFor(expression, "{0:dd-MMM-yyyy HH:mm}", new { @type = "text", @class = "form-control eadatetime" });
 
             return new MvcHtmlString(FetchStdFormWrappers(textBoxFor, validationMessageFor, label, editorClass));
         }
@@ -147,7 +148,7 @@ namespace Speedbird
             return new MvcHtmlString(FetchStdFormWrappers(textBoxFor, MvcHtmlString.Empty, label, editorClass));
         }
 
-        //Select List
+        //Select List: Use even if Select list items are define in code> Use for ALL 1:1 relations
         public static MvcHtmlString EASelectListFor<TModel, TValue>(this HtmlHelper<TModel> html, Expression<Func<TModel, TValue>> expression, string label = "", string editorClass = "")
         {
             MvcHtmlString validationMessageFor = TextBound(html, expression, ref label);
@@ -156,9 +157,11 @@ namespace Speedbird
             return new MvcHtmlString(FetchStdFormWrappers(textBoxFor, validationMessageFor, label, editorClass));
         }
 
-        public static MvcHtmlString EASelectList(this HtmlHelper html, string id,IEnumerable<SelectListItem> List, string editorClass = "", string label = "")
+                                //Use in Searches or when there is a M:M relationship in the form. The Viewbag List name MUST be different from the id parameter
+        public static MvcHtmlString EASelectList(this HtmlHelper html, string id,IEnumerable<SelectListItem> List, string editorClass = "", string label = "", string selectedValue = "")
         {
-            var textBoxFor = html.DropDownList(id, List, new { @type = "text", @class = "form-control eadate" });
+            var Fist = new SelectList(List, "Value", "Text", selectedValue);
+            var textBoxFor = html.DropDownList(id, Fist, new { @type = "text", @class = "form-control eadate" });
             label = TextUnBound(id, label);
             return new MvcHtmlString(FetchStdFormWrappers(textBoxFor, MvcHtmlString.Empty, label, editorClass));
         }

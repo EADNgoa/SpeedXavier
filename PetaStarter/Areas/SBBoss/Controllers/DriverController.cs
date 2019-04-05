@@ -20,7 +20,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         public ActionResult Index(int? page ,string AN )
         {
             if (AN?.Length > 0) page = 1;
-            return View("Index", base.BaseIndex<Driver>(page, " * ","Driver Where DriverName like '%" + AN + "%'"));
+            return View("Index", base.BaseIndex<Driver>(page, " * ","Driver Where DriverName like '%" + AN + "%' order by DriverName"));
         }
 
         public ActionResult PaymentList(int? page, int? DriverID, DateTime? fd, DateTime? td)

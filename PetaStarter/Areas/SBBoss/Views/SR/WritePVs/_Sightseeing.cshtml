@@ -6,30 +6,28 @@
 @Html.EAIdFor(model => model.SRDID, Model?.SRDID != null)
 
 <div class="form-row">
-    @Html.EASelectList("CustomerId", (IEnumerable<SelectListItem>)ViewBag.CustomerId, "", "Pax Name")
+    @Html.EASelectList("CustomerId", (IEnumerable<SelectListItem>)ViewBag.CustomerList, "", "Pax Name", (string)ViewBag.SelectedCustomerId)
+    @Html.EATextFor(m => m.Model, "Pkg. Name")
     @Html.EANumberFor(m => m.AdultNo, "No. of Adults")
     @Html.EANumberFor(m => m.ChildNo, "No. of Children")
-    @Html.EASelectListFor(m => m.OptionTypeID, "Half/Full day")
+
 </div>
 <div class="form-row">
+    @Html.EASelectListFor(m => m.OptionTypeID, "Half/Full day")
     @Html.EATextFor(m => m.PickUpPoint, "Pickup From")
     @Html.EATextFor(m => m.FromLoc, "Pickup Location")
-    @Html.EASelectList("Heritage", new List<SelectListItem> {
-          new SelectListItem { Text = "Private", Value = "Private" },
-          new SelectListItem { Text = "Sic", Value = "Sic" }
-        }, "", "Private/Sic")
-    @Html.EADateTimeFor(m => m.Fdate, "Tour Date")
+    @Html.EASelectListFor(m =>m.Heritage , "Private/Sic")
 </div>
 <div class="form-row">
+    @Html.EADateTimeFor(m => m.Fdate, "Tour Date")
     @Html.EANumberFor(m => m.Cost, "Cost per car")
     @Html.EANumberFor(m => m.BFCost, "Adult sic Cost")
     @Html.EANumberFor(m => m.LunchCost, "Child sic Cost")
-    @Html.EASelectList("CarType", (IEnumerable<SelectListItem>)ViewBag.CarType, "", "Vehicle Type")
 </div>
 <div class="form-row">
+    @Html.EASelectListFor(m =>m.CarType, "Vehicle Type")
     @Html.EANumberFor(m=>m.Qty, "No. of cars")
-    @Html.EAChkBox("HasAc", "","Meal Included")
-    @Html.EASelectListFor(m=>m.GuideLanguageID)
+    @Html.EAChkBox("HasAc", "","Meal Included")    
     @Html.EANumberFor(m => m.SellPrice)
 </div>
 
@@ -45,7 +43,7 @@
                  showButtonPanel: true,
                  changeMonth: true,
                  changeYear: true,
-                 timeFormat: "hh:mm"
+                 timeFormat: "HH:mm"
              });
 
             $('.eadate').datepicker({

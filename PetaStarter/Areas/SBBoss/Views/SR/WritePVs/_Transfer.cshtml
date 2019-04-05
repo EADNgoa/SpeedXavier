@@ -5,8 +5,8 @@
 @Html.EAIdFor(m =>m.SRDID, Model?.SRID.HasValue ?? false)
 @Html.EAIdFor(m =>m.IsCanceled, Model?.SRID.HasValue ?? false)
 <div class="form-row">
-    @Html.EASelectList("CustomerId", (IEnumerable<SelectListItem>)ViewBag.CustomerId, "", "Pax Name")
-    @Html.EADateFor(m => m.Fdate,"Transfer Date")
+    @Html.EASelectList("CustomerId", (IEnumerable<SelectListItem>)ViewBag.CustomerList, "", "Pax Name", (string)ViewBag.SelectedCustomerId)
+    @Html.EADateFor(m => m.Fdate, "Transfer Date")
     @Html.EANumberFor(m => m.Qty, "No. of Vehicles")
     @Html.EATextFor(m => m.FromLoc, "From Where")
 </div>
@@ -14,10 +14,10 @@
     @Html.EATextFor(m => m.PickUpPoint)
     @Html.EATextFor(m => m.ToLoc, "To Where")
     @Html.EATextFor(m => m.DropPoint)
-    @Html.EASelectList("CarType", (IEnumerable<SelectListItem>)ViewBag.CarType, "", "Vehicle Type")
+    @Html.EASelectListFor(m => m.CarType, "Vehicle Type")
 </div>
 <div class="form-row">
-    @Html.EASelectList("Heritage", (IEnumerable<SelectListItem>)ViewBag.RateBasis, "", "Rate Basis")
+    @Html.EASelectListFor(m => m.Heritage, "Rate Basis")
     @Html.EAChkBox("HasAc")
     @Html.EAChkBox("HasCarrier")
     @Html.EANumberFor(m => m.BFCost, "Vehicle Cost")
