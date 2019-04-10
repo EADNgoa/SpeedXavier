@@ -778,6 +778,10 @@
     <Content Include="Areas\SBBoss\Views\SR\ReadPVs\_SupplierInfo.cshtml" />
     <Content Include="Areas\SBBoss\Views\SR\WritePVs\_Sightseeing.cshtml" />
     <Content Include="Areas\SBBoss\Views\SR\ReadPVs\_Sightseeing.cshtml" />
+    <Content Include="Areas\SBBoss\Views\SR\WritePVs\_Flight.cshtml" />
+    <Content Include="Areas\SBBoss\Views\SR\WritePVs\_CommonHidden.cshtml" />
+    <Content Include="Areas\SBBoss\Views\SR\ReadPVs\_Flight.cshtml" />
+    <Content Include="Areas\SBBoss\Views\SR\ReadPVs\_Fin.cshtml" />
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <Content Include="Areas\SBBoss\Views\RP\DriverR.cshtml" />
     <Content Include="Areas\SBBoss\Views\RP\DriverP.cshtml" />

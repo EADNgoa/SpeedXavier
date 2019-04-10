@@ -6,24 +6,12 @@
 </style>
 @if (Model != null)
 {
-    <div class="alert alert-secondary">
-    <table class="table table-sm table-dark">
-        <tr>
-            <th>
-                <span class="h3">Booking No:      <span class="text-warning"> @Model.BookingNo</span></span>
-            </th>
-            <th>
-                <span class="h3"><span class="text-muted">Booked on:</span> @Model.DT</span>
-            </th>
-            <th>
-                <span class="h3"><span class="text-muted">Status:</span>  @((Speedbird.SRStatusEnum)Model.SRStatusID)</span>
-            </th>
-            <th>
-                <span class="h3"><span class="text-muted">Emp. Name:</span>  @Model.UserName</span>
-            </th>            
-        </tr>
-        
-    </table>
+<div class="alert-primary m-3 row">
+    <span class="col"><strong>Booking No:</strong>      <span class="border-dark"> @Model.BookingNo</span></span>
+    <span class="col"><strong>Booked on:</strong> @Model.DT</span>
+    <span class="col"><strong>Status:</strong>  @((Speedbird.SRStatusEnum)Model.SRStatusID)</span>
+    <span class="col"><strong>Emp. Name:</strong>  @Model.UserName</span>
+    <div class="col"><strong>&nbsp;</strong>&nbsp;</div>
 </div>
 }
 

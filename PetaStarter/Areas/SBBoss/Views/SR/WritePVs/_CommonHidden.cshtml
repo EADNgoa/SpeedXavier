@@ -1,0 +1,8 @@
+﻿@using Speedbird
+@model Speedbird.SRdetail
+
+
+@Html.EAIdFor(m => m.SRDID, Model?.SRDID > 0)
+@Html.EAIdFor(m => m.IsCanceled, Model?.SRID.HasValue ?? false)
+@Html.EAIdFor(m => m.Tax, Model?.SRID.HasValue ?? false)
+@Html.EAIdFor(m => m.ECommision, Model?.SRID.HasValue ?? false)

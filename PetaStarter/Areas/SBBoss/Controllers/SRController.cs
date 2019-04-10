@@ -445,6 +445,11 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 case ServiceTypeEnum.Insurance:
                     break;
                 case ServiceTypeEnum.Flight:
+                    return PartialView($"ReadPVs/_{(sType).ToString()}", db.SingleOrDefault<FlightServiceView>($"SELECT (select top 1 CONCAT(c.fName, ' ',c.sName) from Customer c, SRD_Cust sc where c.CustomerID=sc.CustomerID and sc.SRDID={srdid}) as PaxName, " +
+                        "sd.AdultNo, sd.ChildNo,sd.InfantNo, IsInternational, FromLoc ,ToLoc,CarType as ClassID, Model as AirlineCode, Heritage as FlightNo,Fdate as DepartureOn, Tdate as ArrivalOn, " +
+                        "PickupPoint as TicketNo,GDSConfNo,PayTo as AirlinePNR, Cost,SellPrice,ContractNo,sd.CouponCode,ECommision,IsCanceled, ot.OptionTypeName as Extra, " +
+                        "DropPoint as ExtraDetails, Sellprice,sd.ServiceTypeID,SRDID,SRID, SuppInvNo,SupplierName,sd.SupplierID, SuppInvDt,SuppConfNo,SuppInvAmt, ECommision,Tax " +
+                        $"from SRdetails sd left join Supplier s on s.supplierid=sd.supplierid left join OptionType ot on ot.OptionTypeId=sd.OptionTypeId WHERE SRDID = {srdid} "));
                     break;
                 case ServiceTypeEnum.Visa:
                     break;
@@ -468,7 +473,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         public ActionResult SRdetails([Bind(Include = "SRDID,SRID, ServiceTypeID,CarType,ItemID,CouponCode,Model,FromLoc,ToLoc,Fdate,Tdate,SupplierID,Cost,SellPrice,ChildNo," +
             "AdultNo,InfantNo,Heritage,HasAc,HasCarrier,GuideLanguageID,DateOfIssue,ContractNo,PayTo,PickUpPoint,DropPoint,DriverID,SuppInvNo,Qty,ParentID,IsReturn," +
             "IsInternational,OptionTypeID,ECommision,IsCanceled,SuppInvDt,SuppConfNo,NoExtraBeds,EBCostPNight,BFCost,LunchCost,DinnerCost,NoExtraService,ExtraServiceCost," +
-            "SuppInvAmt,GDSConfNo")] SRdetail item, string Event,string IsReturn, int CustomerId)
+            "SuppInvAmt,GDSConfNo")] SRdetail item, string Event, int CustomerId)
         {
             using (var transaction = db.GetTransaction())
             {
@@ -488,33 +493,21 @@ namespace Speedbird.Areas.SBBoss.Controllers
                     DateTime? td =(DateTime?)item?.Tdate ;
                     if(item.SRDID > 0)//Update existing record when in edit mode
                     {
-
-                        if (item.ServiceTypeID == (int)ServiceTypeEnum.Flight)
-                        {
-                            item.Tdate = null;
-                        }
-
                         LogAction(new SRlog { SRID = item.SRID, SRDID=item.SRDID, Event = Event, Type=true});
                         LogAction(new SRlog { SRID = item.SRID, SRDID = item.SRDID, Event = FindDiffs<SRdetail>(item.SRDID,item,"Service") });
                         db.Update(item);
 
                         db.Execute($"Update SRD_Cust Set CustomerId ='{CustomerId}' where srdid ={item.SRDID}");
 
-
-                        if (item.IsReturn == true)
+                        if (td.HasValue)
                         {
-                            db.Execute($"Update Srdetails Set Tdate ='{td.Value.ToString("dd-MM-yyyy")}',FromLoc='{item.ToLoc}',ToLoc ='{item.FromLoc}' where ParentID ={item.SRDID}");
+                            db.Execute($"Update Srdetails Set Tdate ='{td.EAFormat(true,true)}',FromLoc='{item.ToLoc}',ToLoc ='{item.FromLoc}' where ParentID ={item.SRDID}");
                         }
                     }
                     else //Insert new SRdetail
                     {
-                        if(item.ServiceTypeID == (int)ServiceTypeEnum.Flight)
-                        {
-                            item.Tdate = null;
-                        }
-                        
                         db.Insert(item);
-                        if (IsReturn == "true")
+                        if (td.HasValue)
                         {//We need to insert this duplicate record so that we can show this return flight in the Daily Diary on the return journey date
                             db.Insert(new SRdetail { FromLoc = item.ToLoc, ToLoc = item.FromLoc, Tdate = td, ParentID = item.SRDID, ServiceTypeID = item.ServiceTypeID });
                         }
@@ -786,8 +779,12 @@ namespace Speedbird.Areas.SBBoss.Controllers
         {           
             ViewBag.SRDID = id;
             var reca = db.SingleOrDefault<SRdetail>(id);
-            if (reca !=null )
+            if (reca != null)
+            {
                 ViewBag.SelectedCustomerId = db.SingleOrDefault<SRD_Cust>(id)?.CustomerID.ToString();
+                ViewBag.Supplier = db.SingleOrDefault<Supplier>(reca.SupplierID)?.SupplierName ?? "";
+            }
+
             ViewBag.CustomerList = db.Fetch<Customer>($"Select c.CustomerId, Concat(Fname, ' ',Sname) as FName  from Customer c, sr_cust r where c.CustomerId=r.CustomerId and r.servicerequestid = @0",SRID).Select(u => new SelectListItem
             {
                 Value = u.CustomerID.ToString(),
@@ -798,6 +795,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 ViewBag.IsReadOnly = "disabled";
           
 
+            
+
             switch ((ServiceTypeEnum)ServiceTypeId)
             {
                 case ServiceTypeEnum.Accomodation:
@@ -807,8 +806,6 @@ namespace Speedbird.Areas.SBBoss.Controllers
                             new SelectListItem { Text = "Pay to owner", Value = "Pay to owner" }
                         };
                     ViewBag.PayTo = AccPayTo;
-                    if (reca != null)
-                        ViewBag.Supplier = db.SingleOrDefault<Supplier>(reca.SupplierID)?.SupplierName ?? "";
                     
                     ViewBag.Heritage = new List<SelectListItem> {
                                new SelectListItem { Text = "Cake", Value = "Cake" },
@@ -819,8 +816,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
                     ViewBag.OptionTypeId = base.GetSelectListData("OptionTypeId", "OptionTypeName", "OptionType",$"where ServiceTypeId={(int)ServiceTypeEnum.Accomodation}");
                     return PartialView($"WritePVs/_{((ServiceTypeEnum)ServiceTypeId).ToString()}", reca);
                 case ServiceTypeEnum.SightSeeing:
-                    if (reca != null)
-                        ViewBag.Supplier = db.SingleOrDefault<Supplier>(reca.SupplierID)?.SupplierName ?? "";
+            
+            
                     //    ViewBag.Sightseeing = db.SingleOrDefault<Package>(reca.ItemID).PackageName;
                     ViewBag.Heritage = new List<SelectListItem> {
                                           new SelectListItem { Text = "Private", Value = "Private" },
@@ -841,16 +838,18 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 case ServiceTypeEnum.Visa:
                     return PartialView($"WritePVs/_{((ServiceTypeEnum)ServiceTypeId).ToString()}",reca);
                 case ServiceTypeEnum.Flight:
-                    
+                    ViewBag.OptionTypeId = base.GetSelectListData("OptionTypeId", "OptionTypeName", "OptionType", $"where ServiceTypeId={(int) ServiceTypeEnum.Flight}");
+                    ViewBag.IsInternational = new List<SelectListItem> {
+                               new SelectListItem { Text = "International", Value = "true" },
+                               new SelectListItem { Text = "Domestic", Value = "false" }
+                            };
+                    ViewBag.CarType = new List<SelectListItem> {
+                               new SelectListItem { Text = "Economy", Value = "1" },
+                               new SelectListItem { Text = "Business", Value = "2" }
+                            };
                     if (id > 0)
-                    {
-                        var prec = db.FirstOrDefault<SRdetail>("select Tdate,FromLoc,ToLoc from Srdetails where ParentID =@0", id);
-                        if (prec != null)
-                        {
-                            reca.Tdate = prec.Tdate ?? null;
-                        }
-                    }
-                    return PartialView($"_{((ServiceTypeEnum)ServiceTypeId).ToString()}", reca);
+                        reca.Tdate = db.FirstOrDefault<SRdetail>("where ParentID =@0", id)?.Tdate;     //return flight date                   
+                    return PartialView($"WritePVs/_{((ServiceTypeEnum)ServiceTypeId).ToString()}", reca);
                 case ServiceTypeEnum.Transfer:
                     ViewBag.CarType = Enum.GetValues(typeof(CarTypeEnum)).Cast<CarTypeEnum>().Select(v => new SelectListItem { Text = v.ToString(), Value = ((int)v).ToString() }).ToList();
                     

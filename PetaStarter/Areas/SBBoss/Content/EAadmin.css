@@ -81,18 +81,31 @@ ul.dropdown-menu {
 /*EA SR details css*/
 .SRDetsTbl {
     font-size: 0.8rem;
-    border: 1px solid #3F5C80;
-    width:100%;
+    text-align:center;
 }
     .SRDetsTbl td, .SRDetsTbl th {
         border: 1px solid #3F5C80;
+        padding-right:3px;
     }
     .SRDetsTbl th {
+        border: 1px solid #3F5C80;
         background-color: #bec5de;
     }
 
+.SRDetsFullTable {
+    width:100%;
+}
+
+.SRDetsFinTbl {    
+}
+    .SRDetsFinTbl th {
+        background-color: #f7d8fa;
+    }
+
+
+
 .ui-autocomplete-input {
-    background-color:#ddd8db;
+    background-color: #fef3fd;
 }
 /*EA SR details css EOF*/
 #navVert {

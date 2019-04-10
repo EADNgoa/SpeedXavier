@@ -1,161 +1,120 @@
 ﻿@using Speedbird
 @model Speedbird.SRdetail
 
+@{ Html.RenderPartial("WritePVs/_CommonHidden", Model); }
 
-@Html.HiddenFor(model => model.IsCanceled)
+<table class="SRDetsTbl" width="100%">
+    <thead>
+        <tr>
+            <th>Pax Name     </th>
+            <th>Hotel        </th>
+            <th>Check In     </th>
+            <th>Check Out    </th>
+            <th>Adult Qty    </th>
+            <th>Child Qty    </th>
+            <th>Infant Qty   </th>
+            <th>Room Qty     </th>
+            <th>Room Type    </th>
+            <th>Rm. Category </th>
+            <th>Ext. Bed Qty </th>
+        </tr>
+        <tr>
+            <th>Ext Bed Cost </th>
+            <th>Ac/ Non Ac   </th>
+            <th>BF Cost/Day  </th>
+            <th>Ln Cost/Day  </th>
+            <th>Dn Cost/Day  </th>
+            <th>Room Rate    </th>
+            <th>Ext Service  </th>
+            <th>Qty Ext Srv. </th>
+            <th>Ext Cost     </th>
+            <th>Pay To       </th>
+            <th>Sell Price   </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td> @Html.EASelectListP("CustomerId", (IEnumerable<SelectListItem>)ViewBag.CustomerList, "", "Pax Name", (string)ViewBag.SelectedCustomerId)</td>
+            <td> @Html.EATextForP(m => m.Model, "Hotel Name")                                                                                            </td>
+            <td> @Html.EADateForP(m => m.Fdate, "Checkin Date")                                                                                          </td>
+            <td> @Html.EADateForP(m => m.Tdate, "Checkout Date")                                                                                         </td>
 
-@if (Model?.SRDID != null)
-{@Html.Hidden("SRDID", (int)Model.SRDID)}
+            <td> @Html.EANumberForP(m => m.AdultNo, "No. of Adults")                                                                                     </td>
+            <td> @Html.EANumberForP(m => m.ChildNo, "No. of Children")                                                                                   </td>
+            <td> @Html.EANumberForP(m => m.InfantNo, "No. of Infants")                                                                                   </td>
+            <td> @Html.EANumberForP(m => m.Qty, "No. of Rooms")                                                                                          </td>
 
-<div class="form-row">
-    @Html.EASelectList("CustomerId", (IEnumerable<SelectListItem>)ViewBag.CustomerList, "", "Pax Name",(string) ViewBag.SelectedCustomerId)
-    @Html.EATextFor(m=>m.Model,"Hotel Name")
-    @Html.EADateFor(m => m.Fdate, "Checkin Date")
-    @Html.EADateFor(m => m.Tdate, "Checkout Date")
-</div>
+            <td> @Html.EATextForP(m => m.PickUpPoint, "Room Type")                                                                                       </td>
+            <td> @Html.EASelectListForP(m => m.OptionTypeID, "Room Category")                                                                            </td>
+            <td> @Html.EANumberForP(m => m.NoExtraBeds, "No. Ext Beds")                                                                                  </td>
+        </tr><tr>
+            <td> @Html.EANumberForP(m => m.CarType, "Ext Beds Cost")                                                                                     </td>
+            <td> @Html.EAChkBoxP("HasAc", "AC/ No AC")                                                                                                   </td>
+            <td> @Html.EANumberForP(m => m.BFCost, "Daily Bf Cost")                                                                                      </td>
+            <td> @Html.EANumberForP(m => m.LunchCost, "Daily Ln Cost")                                                                                   </td>
+            <td> @Html.EANumberForP(m => m.DinnerCost, "Daily Dn Cost")                                                                                  </td>
 
-<div class="form-row">
-    @Html.EANumberFor(m => m.AdultNo, "No. of Adults")
-    @Html.EANumberFor(m => m.ChildNo, "No. of Children")
-    @Html.EANumberFor(m => m.InfantNo, "No. of Infants")
-    @Html.EANumberFor(m => m.Qty, "No. of Rooms")
-</div>
-<div class="form-row">
-    @Html.EATextFor(m => m.PickUpPoint, "Room Type")
-    @Html.EASelectListFor(m => m.OptionTypeID, "Room Category")
-    @Html.EANumberFor(m => m.NoExtraBeds, "No. Ext Beds")
-    @Html.EANumberFor(m => m.CarType, "Ext Beds Cost")
-</div>
-<div class="form-row">
-    @Html.EAChkBox("HasAc", "AC/ No AC")
-    @Html.EANumberFor(m => m.BFCost, "Daily Bf Cost")
-    @Html.EANumberFor(m => m.LunchCost, "Daily Ln Cost")
-    @Html.EANumberFor(m => m.DinnerCost, "Daily Dn Cost")
-</div>
-<div class="form-row">
-    @Html.EANumberFor(m => m.Cost, "Room Rate")
-    @Html.EASelectListFor(m =>m.Heritage, "Extra Service")
-    @Html.EANumberFor(m => m.NoExtraService, "Qty Ext Service")
-    @Html.EANumberFor(m => m.ExtraServiceCost, "Ext Cost")
-</div>
-<div class="form-row">
-    @Html.EASelectListFor(m => m.PayTo)
-    @Html.EANumberFor(m => m.SellPrice)
-</div>
+            <td> @Html.EANumberForP(m => m.Cost, "Room Rate")                                                                                            </td>
+            <td> @Html.EASelectListForP(m => m.Heritage, "Extra Service")                                                                                </td>
+            <td> @Html.EANumberForP(m => m.NoExtraService, "Qty Ext Service")                                                                            </td>
+            <td> @Html.EANumberForP(m => m.ExtraServiceCost, "Ext Cost")                                                                                 </td>
 
-@{ Html.RenderPartial("WritePVs/_SupplierInfo", Model); }
-<div class="form-row">
-    <div class="input-group col mb-3">
+            <td> @Html.EASelectListForP(m => m.PayTo)                                                                                                    </td>
+            <td> @Html.EANumberForP(m => m.SellPrice)                                                                                                    </td>
+        </tr>
+        </tbody>
+    </table>
+        @{ Html.RenderPartial("WritePVs/_SupplierInfo", Model); }
 
-        @*@if (Model?.SRDID > 0)
+
+        @*@if (ViewBag.isReadOnly != null)
+            {@Html.Action("CustSearch", "SR", new { id = Model.SRDID })
+        }
+
+            @if (Model != null)
             {
-                        <div class="input-group col-3 mb-3">
-
-                            @if (ViewBag.IsReadOnly == null)
-            {
-                                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#AssignDriverModal" data-srdid="@Model.SRDID">
-                                    @if (Model?.DriverID == null)
-            {
-                                        @:  Assign Driver
-                                    }
-                                    else
-                                    {
-                                        @: Change Driver
-                                    }
-
-                                </button>
-                                <div class="input-group-prepend"><span class="input-group-text" style="color:blue">@ViewBag.DrvNm</span></div>
-
-                            }
-                            else
-                            {
-                                <div class="input-group-prepend"><span class="input-group-text">Driver Name</span></div>
-                                <input type="text" value="@ViewBag.DrvNm" class="form-control" />
-                            }
-
-
-
-                        </div>
-                    }*@
-
-        @*@if (ViewBag.IsReadOnly == null)
-            {
-                if (Model?.DriverID > 0)
-                {
-                    <div class="input-group col mb-3">
-                        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#DrvReviewModal" data-srdid="@Model.SRDID">
-                            Feedback
-                        </button>
-                    </div>
-
-                }
+                <script>
+                   $('#AssignDriver').load('@Url.Action("_AssignDriver")', { SRID: @Model.SRID, SRDID: @Model.SRDID});
+                   $('#Review').load('@Url.Action("_DrvReview")', { SRID: @Model.SRID,SRDID: @Model.SRDID});
+                </script>
             }*@
-    </div>
-</div>
+
+
+        <script>
 
 
 
-@*@if (ViewBag.isReadOnly != null)
-        {@Html.Action("CustSearch", "SR", new { id = Model.SRDID })
-    }
-
-        @if (Model != null)
-        {
-            <script>
-               $('#AssignDriver').load('@Url.Action("_AssignDriver")', { SRID: @Model.SRID, SRDID: @Model.SRDID});
-               $('#Review').load('@Url.Action("_DrvReview")', { SRID: @Model.SRID,SRDID: @Model.SRDID});
-            </script>
-        }*@
+            $(function () {
+                //DateTime picker
 
 
-<script>
-
-
-
-         $(function () {
-            //DateTime picker
-
-
-            $('.eadate').datepicker({
-                dateFormat: "dd-MM-yy",
-                showButtonPanel: true,
-                changeMonth: true,
-                changeYear: true
-            });
-
-            //Disable the browsers default date picker
-            jQuery.validator.methods["date"] = function (value, element) { return true; }
-
-            $("#SupplierID").on("change", function () {
-                $.get('@Url.Action("AutoCompleteCars")', { DriverId: $(this).val() }, function (response) {
-
-                    if (response.length > 0) {
-                        $('#NoExtraBeds').html('');
-                        var options = '';
-                        for (var i = 0; i < response.length; i++) {
-                            options += '<option value="' + response[i].id + '">' + response[i].value + '</option>';
-                        }
-                        options += '<option value="Select">Select</option>';
-                        $('#NoExtraBeds').append(options);
-                    }
+                $('.eadate').datepicker({
+                    dateFormat: "dd-MM-yy",
+                    showButtonPanel: true,
+                    changeMonth: true,
+                    changeYear: true
                 });
+
+                //Disable the browsers default date picker
+                jQuery.validator.methods["date"] = function (value, element) { return true; }
+
+
+
             });
 
-        });
 
-
-        $(document).ready(function () {
-            $('*[data-autocombo-url]')
-                .each(function () {
-                    $(this).autocomplete({
-                        source: $(this).data("autocombo-url"),
-                        minLenght: 3,
-                        delay: 500,
-                        select: function (event, ui) {
-                            $("#" + $(this).data("autocomplete-idholder")).val(ui.item.id).trigger('change');
-                        }
+            $(document).ready(function () {
+                $('*[data-autocombo-url]')
+                    .each(function () {
+                        $(this).autocomplete({
+                            source: $(this).data("autocombo-url"),
+                            minLenght: 3,
+                            delay: 500,
+                            select: function (event, ui) {
+                                $("#" + $(this).data("autocomplete-idholder")).val(ui.item.id).trigger('change');
+                            }
+                        });
                     });
-                });
-        });
+            });
 
-</script>
+        </script>

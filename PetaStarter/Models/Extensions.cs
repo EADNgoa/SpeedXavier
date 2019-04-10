@@ -21,7 +21,11 @@ namespace Speedbird
         //Extension method for Date
         public static string EAFormat(this DateTime dt, bool withTime = false, bool forSQL = false)
         {
-            return withTime ? $"{dt:dd/MMM/yyyy HH:mm}" : forSQL ? $"{dt:yyyy/MM/dd}" : $"{dt:dd/MMM/yyyy}";
+            string strfmt = "";
+            strfmt = (forSQL) ? "yyyy/MM/dd" : "dd/MMM/yyyy";
+            strfmt += (withTime) ? " HH:mm" : "";
+
+            return dt.ToString(strfmt);
         }
         public static string EAFormat(this DateTime? dt, bool withTime = false, bool forSQL = false)
         {
@@ -30,7 +34,7 @@ namespace Speedbird
         //Extension method for decimal
         public static string EAFormat(this decimal dcml, string currency = "")
         {
-            return $"{currency} {dcml:#,###.##}";
+            return $"{currency} {dcml:#,##0.##}";
         }
 
 

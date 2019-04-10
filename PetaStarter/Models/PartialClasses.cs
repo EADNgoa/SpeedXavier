@@ -20,37 +20,13 @@ namespace Speedbird
 
     //Classes for SRDetails
 
-    public class TransferServiceView : SupplierInfo
+    public abstract class SupplierInfo
     {
-        public string PaxName { get; set; }
-        public int cartype { get; set; }
-        public DateTime serviceDate { get; set; }
-        public decimal Cost { get; set; }
-        public string DriverName { get; set; }
-        public string Car { get; set; }
-        public string DropPoint { get; set; }
-        public decimal ECommision { get; set; }
-        public DateTime Fdate { get; set; }
-        public string FromLoc { get; set; }
-        public string ToLoc { get; set; }
-        public bool HasAc { get; set; }
-        public bool HasCarrier { get; set; }
-        public string RateBasis { get; set; }
-        public string IsCanceled { get; set; }
-        public string Model { get; set; }
-        public string PayTo { get; set; }
-        public string PickUpPoint { get; set; }
-        public int NoOfVehicles { get; set; }
-        public decimal SellPrice { get; set; }
-        public int ServiceTypeID { get; set; }
         public int SRID { get; set; }
+        public int ServiceTypeID { get; set; }
         public int SRDID { get; set; }
-        public string VehicleCost { get; set; }
-
-    }
-
-    public class SupplierInfo
-    {
+        public string IsCanceled { get; set; }
+        public string PaxName { get; set; }
         public int SupplierID { get; set; }
         public string SupplierName { get; set; }
         public string SuppInvNo { get; set; }
@@ -59,31 +35,50 @@ namespace Speedbird
         public string CouponCode { get; set; }
         public string SuppConfNo { get; set; }
         public string ContractNo { get; set; }
+        public abstract decimal TotalCost { get; }
         public decimal Tax { get; set; }
+        public decimal ECommision { get; set; }
+        public decimal SellPrice { get; set; }
     }
-    public class AccomodationServiceView : SupplierInfo
+
+    public class TransferServiceView : SupplierInfo
     {
-        public string PaxName { get; set; }
+        public int cartype { get; set; }
+        public DateTime serviceDate { get; set; }
+        public decimal Cost { get; set; }
+        public string DriverName { get; set; }
+        public string Car { get; set; }
+        public string DropPoint { get; set; }
+        public DateTime Fdate { get; set; }
+        public string FromLoc { get; set; }
+        public string ToLoc { get; set; }
+        public bool HasAc { get; set; }
+        public bool HasCarrier { get; set; }
+        public string RateBasis { get; set; }
+        public string Model { get; set; }
+        public string PayTo { get; set; }
+        public string PickUpPoint { get; set; }
+        public int NoOfVehicles { get; set; }
+        public decimal VehicleCost { get; set; }
+        public override decimal TotalCost { get { return Cost; } }
+    }
+
+    public class AccomodationServiceView : SupplierInfo
+    {        
         public string AccomName { get; set; }
         public int AdultNo { get; set; }
         public int ExtraBedCost { get; set; }
         public int ChildNo { get; set; }
-        public decimal cost { get; set; }
-        public decimal ECommision { get; set; }
+        public decimal Cost { get; set; }
         public DateTime checkin { get; set; }
         public string FromLoc { get; set; }
         public bool HasAc { get; set; }
         public string ExtraService { get; set; }
         public int InfantNo { get; set; }
-        public bool IsCanceled { get; set; }
         public string RoomCategory { get; set; }
         public string payto { get; set; }
         public string RoomType { get; set; }
-        public int NoOfRooms { get; set; }
-        public decimal Sellprice { get; set; }
-        public int ServiceTypeID { get; set; }
-        public int SRDID { get; set; }
-        public int SRID { get; set; }
+        public int NoOfRooms { get; set; }        
         public DateTime checkout { get; set; }
         public int NoExtraBeds { get; set; }
         public int BFCost { get; set; }
@@ -91,12 +86,11 @@ namespace Speedbird
         public int DinnerCost { get; set; }
         public int NoExtraService { get; set; }
         public int ExtraServiceCost { get; set; }
-
+        public override decimal TotalCost { get { return Cost + DinnerCost + LunchCost + BFCost + ExtraServiceCost; } }
     }
 
     public class SightseeingServiceView : SupplierInfo
-    {
-        public string PaxName { get; set; }
+    {        
         public string SightseeingName { get; set; }
         public int AdultNo { get; set; }
         public int ChildNo { get; set; }
@@ -112,18 +106,34 @@ namespace Speedbird
         public DateTime TourDate { get; set; }
         public int CarType { get; set; }
         public bool MealIncluded { get; set; }
-        public int SRDID { get; set; }
-        public int SRID { get; set; }
-        public int IsCanceled { get; set; }
-        public int ServiceTypeID { get; set; }
         public int GuideLanguageName { get; set; }
-        public decimal TotalCost { get { return (CostPerCar * NoOfCars) + (AdultCost * AdultNo) + (ChildCost * ChildNo); } }
-        public decimal ECommision { get; set; }
-        public decimal SellPrice { get; set; }
+        public override decimal TotalCost { get { return (CostPerCar * NoOfCars) + (AdultCost * AdultNo) + (ChildCost * ChildNo); } }        
     }
 
-
-    //EOF Classes for SRDetails
+    public class FlightServiceView : SupplierInfo
+    {        
+        public int AdultNo {get; set; }
+        public int ChildNo {get; set; } 
+        public int InfantNo {get; set; } 
+        public bool IsInternational {get; set; } 
+        public string FromLoc {get; set; } 
+        public string ToLoc {get; set; } 
+        public int ClassID {get; set; } 
+        public string Class { get { return (ClassID == 1) ? "Economy" : "Business"; } } 
+        public string AirlineCode {get; set; } 
+        public string FlightNo {get; set; } 
+        public DateTime DepartureOn {get; set; } 
+        public DateTime ArrivalOn {get; set; } 
+        public string TicketNo {get; set; } 
+        public string GDSConfNo {get; set; } 
+        public string AirlinePNR {get; set; } 
+        public decimal Cost {get; set; } 
+        public string Airline {get; set; } 
+        public string Extra {get; set; } 
+        public string ExtraDetails {get; set; }         
+        public override decimal TotalCost { get { return Cost; } }
+    }
+        //EOF Classes for SRDetails
 
     public partial class AgentView
     {
@@ -168,8 +178,6 @@ namespace Speedbird
         public string Note { get; set; }
         public decimal Amount { get; set; }
         public decimal UnUsedAmt { get; set; }
-
-
     }
     public class SRBooking
     {

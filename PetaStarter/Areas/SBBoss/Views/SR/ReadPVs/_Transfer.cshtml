@@ -2,74 +2,74 @@
 @model Speedbird.TransferServiceView
 
 
-<table class="SRDetsTbl" width="100%">
-    <thead>
-        <tr>
-            <th>Pax Name</th>
-            <th>On Date</th>
-            <th>Vehicle Qty</th>
-            <th>From Where</th>
-            <th>Picup Point</th>
-            <th>To Where</th>
-            <th>Drop Point</th>
-            <th>Car</th>
-            <th>Rate Basis</th>
-            <th>Has AC</th>
-            <th>Carrier</th>
-            <th>Car Cost</th>
-            <th>Pay To</th>
-            <th>Cost</th>
-            <th>COM</th>
-            <th>Tax</th>
-            <th>Sell At</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tr>
-        <td>@Model.PaxName</td>
-        <td>@Model.Fdate.EAFormat()</td>
-        <td>@Model.NoOfVehicles</td>
-        <td>@Model.FromLoc</td>
-        <td>@Model.PickUpPoint</td>
-        <td>@Model.ToLoc</td>
-        <td>@Model.DropPoint</td>
-        <td>@((CarTypeEnum)Model.cartype)</td>
-        <td>@Model.RateBasis</td>
-        <td>@Model.HasAc</td>
-        <td>@Model.HasCarrier</td>
-        <td>@Model.VehicleCost</td>
-        <td>@Model.PayTo</td>
-        <td>@Model.Cost</td>
-        <td>@Model.ECommision.EAFormat()</td>
-        <td>@Model.Tax.EAFormat()</td>
-        <td>@Model.SellPrice</td>
-        <td>
-            <button class="srdEdit" data-srdid="@Model.SRDID" data-stid="@Model.ServiceTypeID"><i title="Edit" class="fas fa-edit fa-inverse h3 float-right DropShadow"></i></button>
-        </td>
-    </tr>
-</table>
-<table class="SRDetsTbl">
-    <thead>
-        <tr>
-            <th>Driver</th>
-            <th>Car</th>
-            <th>Invoice No.</th>
-            <th>Coupon</th>
-            <th>Inv. Amt.</th>
-            <th>Inv. Date</th>
-            <th>Conf No.</th>
-        </tr>
-    </thead>
-    <tr>
-        <td>@Model.DriverName</td>
-        <td>@Model.Car</td>
-        <td>@Model.SuppInvNo</td>
-        <td>@Model.CouponCode</td>
-        <td>@Model.SuppInvAmt</td>
-        <td>@Model.SuppInvDt.EAFormat()</td>
-        <td>@Model.SuppConfNo</td>
-    </tr>
-</table>
+<div class="row">
+    <div class="col-10">
+        <table class="SRDetsTbl SRDetsFullTable" width="100%">
+            <thead>
+                <tr>
+                    <th>Pax Name</th>
+                    <th>On Date</th>
+                    <th>Vehicle Qty</th>
+                    <th>From Where</th>
+                    <th>Picup Point</th>
+                    <th>To Where</th>
+                    <th>Drop Point</th>
+                    <th>Car</th>
+                    <th>Rate Basis</th>
+                    <th>Has AC</th>
+                    <th>Carrier</th>
+                    <th>Car Cost</th>
+                    <th>Pay To</th>                    
+                </tr>
+            </thead>
+            <tr>
+                <td>@Model.PaxName</td>
+                <td>@Model.Fdate.EAFormat()</td>
+                <td align="right">@Model.NoOfVehicles</td>
+                <td>@(Model.FromLoc.ToUpper())</td>
+                <td>@Model.PickUpPoint</td>
+                <td>@(Model.ToLoc.ToUpper())</td>
+                <td>@Model.DropPoint</td>
+                <td>@((CarTypeEnum)Model.cartype)</td>
+                <td>@Model.RateBasis</td>
+                <td>@Model.HasAc</td>
+                <td>@Model.HasCarrier</td>
+                <td align="right">@Model.VehicleCost</td>
+                <td>@Model.PayTo</td>                
+            </tr>
+        </table>
+
+
+        <table class="SRDetsTbl">
+            <thead>
+                <tr>
+                    <th>Driver</th>
+                    <th>Car</th>
+                    <th>Invoice No.</th>
+                    <th>Coupon</th>
+                    <th>Inv. Amt.</th>
+                    <th>Inv. Date</th>
+                    <th>Conf No.</th>
+                </tr>
+            </thead>
+            <tr>
+                <td>@Model.DriverName</td>
+                <td>@Model.Car</td>
+                <td>@Model.SuppInvNo</td>
+                <td>@Model.CouponCode</td>
+                <td align="right">@Model.SuppInvAmt</td>
+                <td>@Model.SuppInvDt.EAFormat()</td>
+                <td>@Model.SuppConfNo</td>
+            </tr>
+        </table>
+
+
+
+    </div>
+    <div class="col-2" style="padding-left:0px;">
+        @{Html.RenderPartial("ReadPVs/_Fin", Model); }
+    </div>
+</div>
 <br />
 
 

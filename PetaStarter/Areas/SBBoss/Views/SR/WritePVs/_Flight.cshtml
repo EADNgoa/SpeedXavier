@@ -1,0 +1,124 @@
+﻿@using Speedbird
+@model Speedbird.SRdetail
+
+@{ Html.RenderPartial("WritePVs/_CommonHidden", Model); }
+
+<table class="SRDetsTbl" width="100%">
+    <thead>
+        <tr>
+            <th>Pax Name              </th>
+            <th>Adult Qty              </th>
+            <th>Child Qty              </th>
+            <th>Infant Qty             </th>
+            <th>Intnl/ Dom      </th>
+            <th>From              </th>
+            <th>To                </th>
+            <th>Class                </th>
+            <th>Airline Code         </th>
+            <th>Flight No             </th>
+        </tr>
+        <tr>
+            <th>Departure On          </th>
+            <th>Arrival On            </th>
+            <th>Ticket No             </th>
+            <th>GDS Conf. No            </th>
+            <th>Airline PNR           </th>            
+            <th>Extra                </th>
+            <th>Extra Details         </th>
+            <th>Cost                 </th>            
+            <th>Sell Price            </th>
+           
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>@Html.EASelectListP("CustomerId", (IEnumerable<SelectListItem>)ViewBag.CustomerList, "", "Pax Name", (string)ViewBag.SelectedCustomerId)</td>
+            <td>@Html.EANumberForP(m => m.AdultNo, "No. of Adults")                                                                                     </td>
+            <td>@Html.EANumberForP(m => m.ChildNo, "No. of Children")                                                                                   </td>
+            <td>@Html.EANumberForP(m => m.InfantNo, "No. of Infants")                                                                                   </td>
+
+            <td>@Html.EASelectListForP(m => m.IsInternational, "Int. / Domestic")</td>
+            <td>@Html.EATextForP(m => m.FromLoc, "From")                         </td>
+            <td>@Html.EATextForP(m => m.ToLoc, "To")                             </td>
+            <td>@Html.EASelectListForP(m => m.CarType, "Class")                  </td>
+
+            <td>@Html.EATextForP(m => m.Model, "Airline Code")    </td>
+            <td>@Html.EATextForP(m => m.Heritage, "Flight No")    </td>
+        </tr>
+        <tr>
+            <td>@Html.EADateTimeForP(m => m.Fdate, "Departure on")</td>
+            <td>@Html.EADateTimeForP(m => m.Tdate, "Arrival on")      </td>
+            <td>@Html.EATextForP(m => m.PickUpPoint, "Ticket No.")    </td>
+            <td>@Html.EATextForP(m => m.GDSConfNo)                    </td>
+            <td>@Html.EATextForP(m => m.PayTo, "Airline PNR")         </td>
+
+            <td>@Html.EASelectListForP(m => m.OptionTypeID, "Extra Services")</td>
+            <td>@Html.EATextForP(m => m.DropPoint, "Details")                </td>
+            <td>@Html.EANumberForP(m => m.Cost)                              </td>
+            <td>@Html.EANumberForP(m => m.SellPrice)                         </td>
+           
+        </tr>
+    </tbody>
+</table>
+
+
+@{ Html.RenderPartial("WritePVs/_SupplierInfo", Model); }
+
+
+
+@*@if (ViewBag.isReadOnly != null)
+        {@Html.Action("CustSearch", "SR", new { id = Model.SRDID })
+    }
+
+        @if (Model != null)
+        {
+            <script>
+               $('#AssignDriver').load('@Url.Action("_AssignDriver")', { SRID: @Model.SRID, SRDID: @Model.SRDID});
+               $('#Review').load('@Url.Action("_DrvReview")', { SRID: @Model.SRID,SRDID: @Model.SRDID});
+            </script>
+        }*@
+
+
+<script>
+
+
+
+         $(function () {
+            //DateTime picker
+             $('.eadatetime').datetimepicker({
+                 dateFormat: "dd-MM-yy",
+                 showButtonPanel: true,
+                 changeMonth: true,
+                 changeYear: true,
+                 timeFormat: "HH:mm"
+             });
+
+            $('.eadate').datepicker({
+                dateFormat: "dd-MM-yy",
+                showButtonPanel: true,
+                changeMonth: true,
+                changeYear: true
+            });
+
+            //Disable the browsers default date picker
+            jQuery.validator.methods["date"] = function (value, element) { return true; }
+
+   
+        });
+
+
+        $(document).ready(function () {
+            $('*[data-autocombo-url]')
+                .each(function () {
+                    $(this).autocomplete({
+                        source: $(this).data("autocombo-url"),
+                        minLenght: 3,
+                        delay: 500,
+                        select: function (event, ui) {
+                            $("#" + $(this).data("autocomplete-idholder")).val(ui.item.id).trigger('change');
+                        }
+                    });
+                });
+        });
+
+</script>
