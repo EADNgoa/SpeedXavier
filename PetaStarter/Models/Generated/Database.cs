@@ -976,7 +976,7 @@ namespace Speedbird
 	}
     
 	[TableName("dbo.ServiceCommision")]
-	[PrimaryKey("ServiceID")]
+	[PrimaryKey("ServiceID", AutoIncrement=false)]
 	[ExplicitColumns]
     public partial class ServiceCommision  
     {
@@ -1126,6 +1126,7 @@ namespace Speedbird
     {
 		[Column] public int SRUID { get; set; }
 		[Column] public int? SRID { get; set; }
+		[Column] public int? SRDID { get; set; }
 		[Column] public string Path { get; set; }
 		[Column] public string UploadName { get; set; }
 	}

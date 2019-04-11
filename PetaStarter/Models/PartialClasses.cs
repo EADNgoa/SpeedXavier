@@ -735,6 +735,7 @@ namespace Speedbird
     {
         public int SRUID { get; set; }
         public int SRID { get; set; }
+        public int SRDID { get; set; }
         public int Path { get; set; }
         public string UploadName { get; set; }
         public HttpPostedFileBase UploadedFile { get; set; }

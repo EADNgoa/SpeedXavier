@@ -73,14 +73,14 @@ namespace Speedbird
         public static MvcHtmlString EATextFor<TModel, TValue>(this HtmlHelper<TModel> html, Expression<Func<TModel, TValue>> expression, string label="",  string editorClass="")
         {
             MvcHtmlString validationMessageFor = TextBound(html, expression, ref label);
-            var textBoxFor = html.TextBoxFor(expression, new { @type = "text", @class = "form-control form-control-sm" });
+            var textBoxFor = html.TextBoxFor(expression, new { @type = "text", @class = "form-control" });
 
             return new MvcHtmlString(FetchStdFormWrappers(textBoxFor, validationMessageFor, label, editorClass));
         }
 
         public static MvcHtmlString EAText(this HtmlHelper html, string id, string editorClass="", string label = "")
         {
-            var textBoxFor = html.TextBox(id, "", new { @type = "text", @class = "form-control form-control-sm" });
+            var textBoxFor = html.TextBox(id, "", new { @type = "text", @class = "form-control" });
             label = TextUnBound(id, label);
             return new MvcHtmlString(FetchStdFormWrappers(textBoxFor, MvcHtmlString.Empty, label, editorClass));
         }
@@ -90,14 +90,14 @@ namespace Speedbird
         public static MvcHtmlString EATextAreaFor<TModel, TValue>(this HtmlHelper<TModel> html, Expression<Func<TModel, TValue>> expression, string label = "", string editorClass = "")
         {
             MvcHtmlString validationMessageFor = TextBound(html, expression, ref label);            
-            var textBoxFor = html.TextAreaFor(expression, new { @type = "text", @class = "form-control form-control-sm" });
+            var textBoxFor = html.TextAreaFor(expression, new { @type = "text", @class = "form-control" });
 
             return new MvcHtmlString(FetchStdFormWrappers(textBoxFor, validationMessageFor, label, editorClass));
         }
 
         public static MvcHtmlString EATextArea(this HtmlHelper html, string id, string editorClass = "", string label = "")
         {
-            var textBoxFor = html.TextArea(id, "", new { @type = "text", @class = "form-control form-control-sm" });
+            var textBoxFor = html.TextArea(id, "", new { @type = "text", @class = "form-control" });
             label = TextUnBound(id, label);
             return new MvcHtmlString(FetchStdFormWrappers(textBoxFor, MvcHtmlString.Empty, label, editorClass));
         }
@@ -106,14 +106,14 @@ namespace Speedbird
         public static MvcHtmlString EANumberFor<TModel, TValue>(this HtmlHelper<TModel> html, Expression<Func<TModel, TValue>> expression, string label = "", string editorClass = "")
         {
             MvcHtmlString validationMessageFor = TextBound(html, expression, ref label);
-            var textBoxFor = html.TextBoxFor(expression, new { @type = "number", @class = "form-control form-control-sm" });
+            var textBoxFor = html.TextBoxFor(expression, new { @type = "number", @class = "form-control" });
 
             return new MvcHtmlString(FetchStdFormWrappers(textBoxFor, validationMessageFor, label, editorClass));
         }
 
         public static MvcHtmlString EANumber(this HtmlHelper html, string id, string editorClass = "", string label = "")
         {
-            var textBoxFor = html.TextBox(id, "", new { @type = "number", @class = "form-control form-control-sm" });
+            var textBoxFor = html.TextBox(id, "", new { @type = "number", @class = "form-control" });
             label = TextUnBound(id, label);
             return new MvcHtmlString(FetchStdFormWrappers(textBoxFor, MvcHtmlString.Empty, label, editorClass));
         }
@@ -122,14 +122,14 @@ namespace Speedbird
         public static MvcHtmlString EADateFor<TModel, TValue>(this HtmlHelper<TModel> html, Expression<Func<TModel, TValue>> expression, string label = "", string editorClass = "")
         {
             MvcHtmlString validationMessageFor = TextBound(html, expression, ref label);
-            var textBoxFor = html.TextBoxFor(expression, "{0:dd-MMM-yyyy}", new { @type = "text", @class = "form-control form-control-sm eadate" });
+            var textBoxFor = html.TextBoxFor(expression, "{0:dd-MMM-yyyy}", new { @type = "text", @class = "form-control eadate" });
 
             return new MvcHtmlString(FetchStdFormWrappers(textBoxFor, validationMessageFor, label, editorClass));
         }
 
         public static MvcHtmlString EADate(this HtmlHelper html, string id, string editorClass = "", string label = "")
         {
-            var textBoxFor = html.TextBox(id, "", new { @type = "text", @class = "form-control form-control-sm eadate" });
+            var textBoxFor = html.TextBox(id, "", new { @type = "text", @class = "form-control eadate" });
             label = TextUnBound(id, label);
             return new MvcHtmlString(FetchStdFormWrappers(textBoxFor, MvcHtmlString.Empty, label, editorClass));
         }
@@ -138,14 +138,14 @@ namespace Speedbird
         public static MvcHtmlString EADateTimeFor<TModel, TValue>(this HtmlHelper<TModel> html, Expression<Func<TModel, TValue>> expression, string label = "", string editorClass = "")
         {
             MvcHtmlString validationMessageFor = TextBound(html, expression, ref label);
-            var textBoxFor = html.TextBoxFor(expression, "{0:dd-MMM-yyyy HH:mm}", new { @type = "text", @class = "form-control form-control-sm eadatetime" });
+            var textBoxFor = html.TextBoxFor(expression, "{0:dd-MMM-yyyy HH:mm}", new { @type = "text", @class = "form-control eadatetime" });
 
             return new MvcHtmlString(FetchStdFormWrappers(textBoxFor, validationMessageFor, label, editorClass));
         }
 
         public static MvcHtmlString EADateTime(this HtmlHelper html, string id, string editorClass = "", string label = "")
         {
-            var textBoxFor = html.TextBox(id, "", new { @type = "text", @class = "form-control form-control-sm eadatetime" });
+            var textBoxFor = html.TextBox(id, "", new { @type = "text", @class = "form-control eadatetime" });
             label = TextUnBound(id, label);
             return new MvcHtmlString(FetchStdFormWrappers(textBoxFor, MvcHtmlString.Empty, label, editorClass));
         }
@@ -154,7 +154,7 @@ namespace Speedbird
         public static MvcHtmlString EASelectListFor<TModel, TValue>(this HtmlHelper<TModel> html, Expression<Func<TModel, TValue>> expression, string label = "", string editorClass = "")
         {
             MvcHtmlString validationMessageFor = TextBound(html, expression, ref label);
-            var textBoxFor = html.DropDownListFor(expression,null, new {  @class = "form-control form-control-sm" });
+            var textBoxFor = html.DropDownListFor(expression,null, new {  @class = "form-control" });
 
             return new MvcHtmlString(FetchStdFormWrappers(textBoxFor, validationMessageFor, label, editorClass));
         }
@@ -163,7 +163,7 @@ namespace Speedbird
         public static MvcHtmlString EASelectList(this HtmlHelper html, string id,IEnumerable<SelectListItem> List, string editorClass = "", string label = "", string selectedValue = "")
         {
             var Fist = new SelectList(List, "Value", "Text", selectedValue);
-            var textBoxFor = html.DropDownList(id, Fist, new { @type = "text", @class = "form-control form-control-sm eadate" });
+            var textBoxFor = html.DropDownList(id, Fist, new { @type = "text", @class = "form-control eadate" });
             label = TextUnBound(id, label);
             return new MvcHtmlString(FetchStdFormWrappers(textBoxFor, MvcHtmlString.Empty, label, editorClass));
         }
@@ -172,14 +172,14 @@ namespace Speedbird
         public static MvcHtmlString EAChkBoxFor<TModel, TValue>(this HtmlHelper<TModel> html, Expression<Func<TModel, bool>> expression, string label = "", string editorClass = "")
         {
             MvcHtmlString validationMessageFor = TextBound(html, expression, ref label);
-            var textBoxFor = html.CheckBoxFor(expression, new { @class = "form-control form-control-sm" });
+            var textBoxFor = html.CheckBoxFor(expression, new { @class = "form-control" });
 
             return new MvcHtmlString(FetchStdFormWrappers(textBoxFor, validationMessageFor, label, editorClass));
         }
 
         public static MvcHtmlString EAChkBox(this HtmlHelper html, string id, string editorClass = "", string label = "")
         {
-            var textBoxFor = html.CheckBox(id, new {  @class = "form-control form-control-sm" });
+            var textBoxFor = html.CheckBox(id, new {  @class = "form-control" });
             label = TextUnBound(id, label);
             return new MvcHtmlString(FetchStdFormWrappers(textBoxFor, MvcHtmlString.Empty, label, editorClass));
         }
@@ -191,7 +191,7 @@ namespace Speedbird
         //       Text = u.id,
         //       Value = u.value
         //    });
-        //    var textBoxFor = html.DropDownList(id, eList, new { @type = "text", @class = "form-control form-control-sm eadate" });
+        //    var textBoxFor = html.DropDownList(id, eList, new { @type = "text", @class = "form-control eadate" });
         //    label = TextUnBound(id, label);
         //    return new MvcHtmlString(FetchStdFormWrappers(textBoxFor, MvcHtmlString.Empty, label, editorClass));
         //}
@@ -207,14 +207,14 @@ namespace Speedbird
             MvcHtmlString validationMessageFor = TextBound(html, expression, ref label);
             validationMessageFor= validationMessageFor.Concat(html.HiddenFor(expression));
 
-            var textBoxFor= html.TextBox(boxName + "Txt", value ?? "", new { @type = "text", @class = "form-control form-control-sm" , data_autocombo_url = autocompleteUrl, @data_autocomplete_idholder = boxName  });
+            var textBoxFor= html.TextBox(boxName + "Txt", value ?? "", new { @type = "text", @class = "form-control" , data_autocombo_url = autocompleteUrl, @data_autocomplete_idholder = boxName  });
 
             return new MvcHtmlString(FetchStdFormWrappers(textBoxFor, validationMessageFor, label, editorClass));
         }
 
         public static MvcHtmlString EASpacer(this HtmlHelper html, string editorClass = "", string label = "")
         {
-            var textBoxFor = html.Label( "", new { @type = "text", @class = "form-control form-control-sm" });
+            var textBoxFor = html.Label( "", new { @type = "text", @class = "form-control" });
             label = TextUnBound("", label);
             return new MvcHtmlString(FetchStdFormWrappers(textBoxFor, MvcHtmlString.Empty, label, editorClass));
         }

@@ -19,7 +19,7 @@
                     <th>Has AC</th>
                     <th>Carrier</th>
                     <th>Car Cost</th>
-                    <th>Pay To</th>                    
+                    <th>Pay To</th>
                 </tr>
             </thead>
             <tr>
@@ -35,7 +35,7 @@
                 <td>@Model.HasAc</td>
                 <td>@Model.HasCarrier</td>
                 <td align="right">@Model.VehicleCost</td>
-                <td>@Model.PayTo</td>                
+                <td>@Model.PayTo</td>
             </tr>
         </table>
 
@@ -85,6 +85,10 @@
            $('#Review').load('@Url.Action("_DrvReview")', { SRID: @Model.SRID,SRDID: @Model.SRDID});
         </script>
     }*@
+
+
+
+
 
 
 <script>

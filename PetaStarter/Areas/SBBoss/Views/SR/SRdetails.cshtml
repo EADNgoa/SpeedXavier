@@ -18,9 +18,15 @@
         }
     </div>
 
+    <script type="text/javascript">
+        $(function () {
+            $(".UploadedFile").on("change", function () {
+                $("#ServiceDetsUpld-" + $(this).data("uf")).submit();
+            });
+        });
+    </script>
 
-
-
+<hr />
 
     <div class="section-to-Not-print">
         @if (Model?.SRDID > 0)

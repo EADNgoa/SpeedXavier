@@ -22,6 +22,30 @@
         <td>@Model.ContractNo</td>
     </tr>
 </table>
+
+
+@foreach (var item in ViewBag.ufs)
+{
+    <span class="badge badge-secondary"><a target="_blank" style="color:white !important;" href="/Images/@item.Path">@item.UploadName</a> &nbsp; <a style="color:#fe7575 !important;" href="@Url.Action("Delete","SR",new {pid=item.SRUID , id=item.SRID})">X</a></span>    
+}
+
+@using (Html.BeginForm("SRUpload", "SR", FormMethod.Post, new { id = "ServiceDetsUpld-" + Model.SRDID, enctype = "multipart/form-data" }))
+{
+    <div class="form-inline">
+        @Html.AntiForgeryToken()
+        @Html.Hidden("SRID", (int)Model.SRID)
+        @Html.Hidden("SRDID", (int)Model.SRDID)
+        @Html.EAText("UploadName", "", "File Description")
+
+
+        @Html.TextBox("UploadedFile", "", new { type = "file", @class = "UploadedFile", @data_uf = Model.SRDID })
+    </div>
+}
+
+
+
+
+
 <script>
 
 

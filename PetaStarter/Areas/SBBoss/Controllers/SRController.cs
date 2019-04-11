@@ -416,7 +416,10 @@ namespace Speedbird.Areas.SBBoss.Controllers
         [EAAuthorize(FunctionName = "Service Requests", Writable = true)]
         public PartialViewResult FetchSRdetails(ServiceTypeEnum sType, int srdid)
         {
+            //First Fetch the uploads
+            ViewBag.ufs = db.Query<SRUpload>("Where srdid=@0", srdid);
 
+            //Next get the data of the SR
             switch (sType)
             {
                 case ServiceTypeEnum.Accomodation:
@@ -545,16 +548,17 @@ namespace Speedbird.Areas.SBBoss.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [EAAuthorize(FunctionName = "Service Requests", Writable = true)]
-        public ActionResult SRUpload([Bind(Include = "SRUID,SRID,Path,UploadName,UploadedFile")] SRuploadDets item)
+        public ActionResult SRUpload([Bind(Include = "SRUID,SRID,SRDID,Path,UploadName,UploadedFile")] SRuploadDets item,FormCollection fm )
         {
             SRUpload res = new SRUpload
             {
                 SRID = item.SRID,
+                SRDID = item.SRDID,
                 SRUID = item.SRUID,
                 UploadName = item.UploadName
             };
 
-            if (item.UploadedFile != null)
+            if (item.UploadedFile?.ContentLength > 0)
             {
                 string fn = item.UploadedFile.FileName.Substring(item.UploadedFile.FileName.LastIndexOf('\\') + 1);
                 fn = item.UploadName + "_" + fn;
@@ -564,7 +568,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
                 res.Path = fn;
             }
-            LogAction(new SRlog { SRID = item.SRID, Event = item.UploadName + " Uploaded" });
+            LogAction(new SRlog { SRID = item.SRID, SRDID=item.SRDID, Event = item.UploadName + " Uploaded" });
             return base.BaseSave<SRUpload>(res, item.SRUID > 0, "Manage", new { id = item.SRID, mode = 5 });
 
         }
@@ -585,7 +589,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
         [HttpPost]
         [EAAuthorize(FunctionName = "Service Requests", Writable = true)]
-        public ActionResult SRCustomers(string FName, string SName, string Email, string Phone, int? CID, int? SRID,string Type,string UploadName, HttpPostedFileBase UploadedFile)
+        public ActionResult SRCustomers(string FName, string SName, string Email, string Phone, int? CID, int? SRID,string Type,string UploadName)
         {
             if (CID != null)
             {
@@ -600,17 +604,17 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 LogAction(new SRlog { SRID = SRID.Value, Event = $"Customer {FName} {SName} added" });
             }
 
-            if (UploadedFile != null && UploadName != null)
-            {
-                string fn = UploadedFile.FileName.Substring(UploadedFile.FileName.LastIndexOf('\\') + 1);
-                fn = UploadName + "_" + fn;
+            //if (UploadedFile != null && UploadName != null)
+            //{
+            //    string fn = UploadedFile.FileName.Substring(UploadedFile.FileName.LastIndexOf('\\') + 1);
+            //    fn = UploadName + "_" + fn;
 
-                string SavePath = System.IO.Path.Combine(Server.MapPath("~/Images"), fn);
-                UploadedFile.SaveAs(SavePath);
+            //    string SavePath = System.IO.Path.Combine(Server.MapPath("~/Images"), fn);
+            //    UploadedFile.SaveAs(SavePath);
 
-                db.Insert(new SRUpload { UploadName = UploadName, Path = fn, SRID = SRID });
-                LogAction(new SRlog { SRID = SRID.Value , Event = UploadName+  " Uploaded"});
-            }
+            //    db.Insert(new SRUpload { UploadName = UploadName, Path = fn, SRID = SRID });
+            //    LogAction(new SRlog { SRID = SRID.Value , Event = UploadName+  " Uploaded"});
+            //}
             return RedirectToAction("Manage", new { id = (int)SRID, mode = 4 });
 
         }

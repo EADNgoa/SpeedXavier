@@ -2,7 +2,7 @@
 @model Speedbird.SRdetail
 
 
-<table class="SRDetsTbl" width="100%">
+<table class="SRDetsTbl">
     <thead>
         <tr>
             <th>Supplier   </th>
@@ -11,7 +11,7 @@
             <th>Inv. Amt   </th>
             <th>Coupon Code</th>
             <th>Confirm NO </th>
-            <th>Contract No</th>             
+            <th>Contract No</th>
         </tr>
     </thead>
     <tbody>
@@ -22,7 +22,7 @@
             <td>@Html.EANumberForP(m => m.SuppInvAmt)                                                                     </td>
             <td>@Html.EATextForP(m => m.CouponCode)                                                                       </td>
             <td>@Html.EATextForP(m => m.SuppConfNo)                                                                       </td>
-            <td>@Html.EATextForP(m => m.ContractNo)                                                                       </td>                
+            <td>@Html.EATextForP(m => m.ContractNo)                                                                       </td>
         </tr>
     </tbody>
 </table>
