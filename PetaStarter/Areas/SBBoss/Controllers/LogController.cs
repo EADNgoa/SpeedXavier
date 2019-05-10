@@ -26,7 +26,10 @@ namespace Speedbird.Areas.SBBoss.Controllers
         public ActionResult BossIndex(int? page, DateTime? dt)
         {
             page = 1;
-            return View("BossIndex", base.BaseIndex<UserLogRecDets>(page, " * ", $"UserLogRec u inner join AspNetUsers anu on u.UserID = anu.Id  Where Cast(LogIn as Date)='{DateTime.Now.Date:yyyy-MM-dd}' and Cast(LogIn as Date) like '%" + dt + "%'"));
+            if (dt.HasValue)
+            return View("BossIndex", base.BaseIndex<UserLogRecDets>(page, " * ", $"UserLogRec u inner join AspNetUsers anu on u.UserID = anu.Id  Where Cast(LogIn as Date) like '%{dt:yyyy-MM-dd}%'"));
+            else
+            return View("BossIndex", base.BaseIndex<UserLogRecDets>(page, " * ", $"UserLogRec u inner join AspNetUsers anu on u.UserID = anu.Id  Where Cast(LogIn as Date)='{DateTime.Now.Date:yyyy-MM-dd}'"));
 
         }
 

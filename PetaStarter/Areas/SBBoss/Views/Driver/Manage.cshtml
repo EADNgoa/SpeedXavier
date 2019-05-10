@@ -53,9 +53,9 @@
                     @Html.ValidationMessageFor(model => model.CarModel, "", new { @class = "text-danger" })
                 </div>
             </div>*@
-            <div class="input-group col mb-3">
-                <div class="input-group-prepend"><span class="input-group-text">Location</span></div>
-                <div class="col-md-8">
+            <div class="form-group col mb-3">
+                Location
+                <div class="col-md-10">
                     <select id="LocationId" name="LocationId" class="form-control GeoSelect">
                         @foreach (var o in ViewBag.GeoId)
                         {

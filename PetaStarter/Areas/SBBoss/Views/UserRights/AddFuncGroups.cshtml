@@ -14,16 +14,11 @@
         </div>
     }
     <div class="card-body">
-        
-
-        @using (Html.BeginForm("GetExistingFns", "UserRights", FormMethod.Post, new { id = "fgform"}))
-        {
-            @Html.Hidden("GroupID");
-            <div class="form-inline">
-                @Html.Label("Type a few letters of the group name and then choose a group from the list to edit its permissions", htmlAttributes: new { @class = "control-label col-md-6" })
-                <input type="text" id="GroupName" name="GroupName" style="color:black;" data-autocomplete-idholder="#GroupID" value="" data-autogroup-url="@Url.Action("AutoCompleteGroups")" class="form-control" />
-            </div>
-        }
+        @Html.Hidden("GroupID");
+        <div class="form-inline">
+            @Html.Label("Type a few letters of the group name and then choose a group from the list to edit its permissions", htmlAttributes: new { @class = "control-label col-md-6" })
+            <input type="text" id="GroupName" name="GroupName" style="color:black;" data-autocomplete-idholder="#GroupID" value="" data-autogroup-url="@Url.Action("AutoCompleteGroups")" class="form-control" />
+        </div>        
 
         <br />
 
@@ -49,16 +44,11 @@
                             delay: 500,
                             select: function (event, ui) {
                                 $($(this).data("autocomplete-idholder")).val(ui.item.id);
-
-                                var gp = $('#GroupID').val();
-                                var $form = $("#fgform"),
-                                    url = $form.attr('action');
-                                var posting = $.post(url, { GroupName: $('#GroupName').val(), GroupID: $('#GroupID').val() });
-                                posting.done(function (data) {
-                                    $('#ExistingFunc').load("@Url.Action("GetExistingFns","UserRights")", { GID: gp });
-                                    $('#AvailableFns').show();
-                                    $('#AvailableFns').load("@Url.Action("GetAllOtherFns", "UserRights")", { GID: gp } );
-                                });
+                                var gp = $('#GroupID').val();                                
+                                $('#ExistingFunc').load("@Url.Action("GetExistingFns","UserRights")", { GID: gp });
+                                $('#AvailableFns').show();
+                                $('#AvailableFns').load("@Url.Action("GetAllOtherFns", "UserRights")", { GID: gp } );
+                                
                             }
                         });
                     });

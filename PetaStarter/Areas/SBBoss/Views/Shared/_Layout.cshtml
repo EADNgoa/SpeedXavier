@@ -25,6 +25,7 @@
 
     <div class="container-fluid">
         <div class="col-12" id="EAbody">
+            @{Html.RenderAction("SRQueue", "SR"); }
             @RenderBody()
         </div>
         <ul id="navHorz" class="nav small">
@@ -46,7 +47,7 @@
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         <li>@Html.ActionLink("Change Password", "ChangePassword", "Manage", routeValues: new { @area = "" }, htmlAttributes: new { title = "Manage" })</li>
-                        <li>@Html.ActionLink("Password Reset", "ForgotPassword", "Account")</li>
+                        @*<li>@Html.ActionLink("Password Reset", "ForgotPassword", "Account")</li>*@
                         <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
                     </ul>
                 </li>
@@ -55,9 +56,9 @@
                         Users
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <li><a href="~/Group/Index">User Groups</a></li>
-                        <li><a href="~/UserRights/AddUserGroups">Add Users To Groups</a></li>
-                        <li><a href="~/UserRights/AddFuncGroups">Add Functions To Groups</a></li>
+                        <li><a href="~/SBBoss/Group/Index">User Groups</a></li>
+                        <li><a href="~/SBBoss/UserRights/AddUserGroups">Add Users To Groups</a></li>
+                        <li><a href="~/SBBoss/UserRights/AddFuncGroups">Add Functions To Groups</a></li>
 
                     </ul>
                 </li>
@@ -97,7 +98,7 @@
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink1">
                         <li><a href="~/SBBoss/LeaveApplication">Leave Application</a></li>
-                        <li><a href="~/SBBoss/Log">Log Details</a></li>
+                        <li><a href="~/SBBoss/Log/">Log Details</a></li>
                         <li><a href="~/SBBoss/Holiday">Holidays</a></li>
                         <li><a href="~/SBBoss/LeaveType">Leave Type</a></li>
                         <li><a href="~/SBBoss/LeaveEntitlement">Leave Entitlement</a></li>
@@ -137,7 +138,7 @@
                         Admin
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink1">
-                        <li><a href="~/Config/Manage/1">Configuration</a></li>
+                        @*<li><a href="~/Config/Manage/1">Configuration</a></li>*@
                         <li><a href="~/SBBoss/GeoTree"> GeoTree</a></li>
                         <li><a href="~/SBBoss/Questions"> Questions</a></li>
                         <li><a href="~/SBBoss/Activity"> Activity</a></li>
@@ -148,6 +149,7 @@
                         <li><a href="~/SBBoss/BookingStatus"> Booking Status</a></li>
                         <li><a href="~/SBBoss/Category"> Category</a></li>
                         <li><a href="~/SBBoss/OptionType">Option Type</a></li>
+                        <li><a href="~/SBBoss/LeaveType">Leave Type</a></li>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">

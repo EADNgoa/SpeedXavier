@@ -42,7 +42,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         [EAAuthorize(FunctionName = "Petty Cash", Writable = false)]
         public ActionResult Manage([Bind(Include = "CashInHandRegID,Tdate,NameAndDesg,CashToDeclareStart,CashToDeclareEnd,DetailsOfCashExp,Remarks")] PettyCash item)
         {
-            string UN = db.ExecuteScalar<string>("Select UserName From AspNetUsers where Id=@0",User.Identity.GetUserId());
+            string UN = db.ExecuteScalar<string>("Select RealName From AspNetUsers where Id=@0",User.Identity.GetUserId());
             item.NameAndDesg = UN;
             item.Tdate = DateTime.Now;
             return base.BaseSave<PettyCash>(item, item.CashInHandRegID > 0);

@@ -29,13 +29,13 @@
                 <div class="form-row">
                     @Html.EATextFor(model => model.CarBrand)
                     @Html.EATextFor(model => model.Model)
-                    @Html.EADateFor(model => model.DateOfPurchase)
+                    @Html.EADateFor(model => model.DateOfPurchase, "Bought On")
                     @Html.EATextFor(model => model.PlateNo)                    
                 </div>
                 <div class="form-row">
-                    @Html.EATextFor(model => model.RCBookNo)                    
-                    @Html.EADateFor(model => model.InsuranceEndDate)
-                    @Html.EATextFor(model => model.InsuranceCompany) 
+                    @Html.EATextFor(model => model.RCBookNo, "R.C. Book No.")                    
+                    @Html.EADateFor(model => model.InsuranceEndDate, "Ins. End Dt.")
+                    @Html.EATextFor(model => model.InsuranceCompany, "Ins. Company") 
                     
                     <div  class="input-group col mb-3">
                         <input type="submit" value="Save" class="btn btn-primary" />
