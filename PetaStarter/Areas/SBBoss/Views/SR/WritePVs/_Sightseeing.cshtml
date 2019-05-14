@@ -1,0 +1,93 @@
+﻿@using Speedbird
+@model Speedbird.SRdetail
+
+@{ Html.RenderPartial("WritePVs/_CommonHidden", Model); }
+
+<table class="SRDetsTbl" width="100%">
+    <thead>
+        <tr>
+            <th>Pax Name      </th>
+            <th>Pkg. Name     </th>
+            <th>Adult Qty     </th>
+            <th>Child Qty     </th>
+            <th>Half/ Full day</th>
+            <th>Pick From     </th>
+            <th>Picup Loc     </th>
+            <th>Pvt/Sic     </th>
+            <th>Tour Date     </th>
+            <th>Cost Per Var  </th>
+            <th>Adult Sic Cost</th>
+            <th>Child Sic Cost</th>
+            <th>Vehicle Type  </th>
+            <th>Cars Qty      </th>
+            <th>Meal Incl.    </th>
+            <th>Sell Price    </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>  @Html.EASelectListP("CustomerId", (IEnumerable<SelectListItem>)ViewBag.CustomerList, "", "Pax Name", (string)ViewBag.SelectedCustomerId)</td>
+            <td>  @Html.EATextForP(m => m.Model, "Pkg. Name")                                                                                             </td>
+            <td>  @Html.EANumberForP(m => m.AdultNo, "No. of Adults")                                                                                     </td>
+            <td>  @Html.EANumberForP(m => m.ChildNo, "No. of Children")                                                                                   </td>
+            <td>  @Html.EASelectListForP(m => m.OptionTypeID, "Half/Full day")                                                                            </td>
+            <td>  @Html.EATextForP(m => m.PickUpPoint, "Pickup From")                                                                                     </td>
+            <td>  @Html.EATextForP(m => m.FromLoc, "Pickup Location")                                                                                     </td>
+            <td>  @Html.EASelectListForP(m => m.Heritage, "Private/Sic")                                                                                  </td>
+            <td>  @Html.EADateTimeForP(m => m.Fdate, "Tour Date")                                                                                         </td>
+            <td>  @Html.EANumberForP(m => m.Cost, "Cost per car")                                                                                         </td>
+            <td>  @Html.EANumberForP(m => m.BFCost, "Adult sic Cost")                                                                                     </td>
+            <td>  @Html.EANumberForP(m => m.LunchCost, "Child sic Cost")                                                                                  </td>
+            <td>  @Html.EASelectListForP(m => m.CarType, "Vehicle Type")                                                                                  </td>
+            <td>  @Html.EANumberForP(m => m.Qty, "No. of cars")                                                                                           </td>
+            <td>  @Html.EAChkBoxP("HasAc", "", "Meal Included")                                                                                           </td>
+            <td>  @Html.EANumberForP(m => m.SellPrice)                                                                                                    </td>
+        </tr>
+    </tbody>    
+</table>
+
+@{ Html.RenderPartial("WritePVs/_SupplierInfo", Model); }
+
+
+
+<script>
+    $(function () {
+        //DateTime picker
+        $('.eadatetime').datetimepicker({
+            dateFormat: "dd-MM-yy",
+            showButtonPanel: true,
+            changeMonth: true,
+            changeYear: true,
+            timeFormat: "HH:mm"
+        });
+
+        $('.eadate').datepicker({
+            dateFormat: "dd-MM-yy",
+            showButtonPanel: true,
+            changeMonth: true,
+            changeYear: true
+        });
+
+        //Disable the browsers default date picker
+        jQuery.validator.methods["date"] = function (value, element) { return true; }
+
+
+
+    });
+
+
+    $(document).ready(function () {
+        $('*[data-autocombo-url]')
+            .each(function () {
+                $(this).autocomplete({
+                    source: $(this).data("autocombo-url"),
+                    minLenght: 3,
+                    delay: 500,
+                    select: function (event, ui) {
+                        $("#" + $(this).data("autocomplete-idholder")).val(ui.item.id).trigger('change');
+                    }
+                });
+            });
+    });
+
+</script>

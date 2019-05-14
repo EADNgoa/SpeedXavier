@@ -1,0 +1,89 @@
+﻿@using Speedbird
+@model Speedbird.AccomodationServiceView
+
+<strong>@Model.AccomName</strong>
+<div class="row">
+    <div class="col-10">
+        <table class="SRDetsTbl SRDetsFullTable" width="100%">
+            <thead>
+                <tr>
+                    <th>Pax Name</th>
+                    <th>Adults</th>
+                    <th>Children</th>
+                    <th>Infants</th>
+                    <th>Total Pax</th>
+                    <th>Checkin</th>
+                    <th>Checkout</th>
+                    <th>Nights</th>
+                    <th>Rooms</th>
+                    <th>Room Type</th>
+                    <th>Category</th>
+                    <th>Extra Beds</th>
+                </tr>
+                <tr>
+                    <th>EB cost</th>
+                    <th>EB total</th>
+                    <th>AC/ Non AC</th>
+                    <th>Room Rate</th>
+                    <th>BF cost</th>
+                    <th>Lunch</th>
+                    <th>Dinner</th>
+                    <th>Cost/Night</th>
+                    <th>Extra</th>
+                    <th>Extra Qty</th>
+                    <th>Extras cost</th>
+                    <th>Total extras</th>                    
+
+                </tr>
+            </thead>
+            <tr>
+                <td>@Model.PaxName</td>
+                <td align="right">@Model.AdultNo</td>
+                <td align="right">@Model.ChildNo </td>
+                <td align="right">@Model.InfantNo </td>
+                <td align="right">@(Model.AdultNo + Model.ChildNo + Model.InfantNo) </td>
+                <td>@Model.checkin.EAFormat() </td>
+                <td>@Model.checkout.EAFormat() </td>
+                <td align="right">@(Model.checkout.Subtract(Model.checkin).TotalDays) </td>
+                <td align="right">@Model.NoOfRooms </td>
+                <td>@Model.RoomType </td>
+                <td>@Model.RoomCategory </td>
+                <td align="right">@Model.NoExtraBeds </td>
+            </tr><tr>
+                <td align="right">@Model.ExtraBedCost </td>
+                <td align="right">@(Model.ExtraBedCost * Model.NoExtraBeds) </td>
+                <td>@Model.HasAc </td>
+                <td align="right">@Model.Cost </td>
+                <td align="right">@Model.BFCost </td>
+                <td align="right">@Model.LunchCost </td>
+                <td align="right">@Model.DinnerCost </td>
+                <td align="right">@(Model.TotalCost) </td>
+                <td>@Model.ExtraService </td>
+                <td align="right">@Model.NoExtraService </td>
+                <td align="right">@Model.ExtraServiceCost </td>
+                <td align="right">@(Model.ExtraServiceCost * Model.NoExtraService) </td>                
+            </tr>
+        </table>
+        @{Html.RenderPartial("ReadPVs/_SupplierInfo", Model); }
+    </div>
+    <div class="col-2" style="padding-left:0px;">
+        @{Html.RenderPartial("ReadPVs/_Fin", Model); }
+    </div>
+</div>
+<br />
+
+
+
+@*@if (ViewBag.isReadOnly != null)
+    {@Html.Action("CustSearch", "SR", new { id = Model.SRDID })
+    }*@
+
+@*@if (Model != null)
+    {
+        <script>
+           $('#AssignDriver').load('@Url.Action("_AssignDriver")', { SRID: @Model.SRID, SRDID: @Model.SRDID});
+           $('#Review').load('@Url.Action("_DrvReview")', { SRID: @Model.SRID,SRDID: @Model.SRDID});
+        </script>
+    }*@
+
+

@@ -398,7 +398,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             ViewBag.SRID = id;
             ViewBag.Title = "Manage Services";
             ViewBag.SRs = db.FirstOrDefault<ServiceRequestDets>("Select * From ServiceRequest sr inner join Customer c on c.CustomerID=sr.CustID Where SRID=@0", id);
-            ViewBag.SRDets = db.Fetch<SRdetail>("Select * from SRdetails where SRID =@0", id);
+            ViewBag.SRDets = db.Query<SRdetail>("Select srdid,ServiceTypeId from SRdetails where SRID =@0", id);
             List<SelectListItem> ServiceTypeID = Enum.GetValues(typeof(ServiceTypeEnum)).Cast<ServiceTypeEnum>().Select(v => new SelectListItem { Text = v.ToString(), Value = ((int)v).ToString() }).ToList();
             var defaultServType = db.Single<ServiceRequest>(id).ServiceTypeID;
             var selST= ServiceTypeID.First(a => int.Parse(a.Value) == defaultServType);
@@ -414,80 +414,109 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
         //Gets the details of the services saved in this booking folder.
         [EAAuthorize(FunctionName = "Service Requests", Writable = true)]
-        public ActionResult FetchSRdetails(ServiceTypeEnum sType, int srdid)
+        public PartialViewResult FetchSRdetails(ServiceTypeEnum sType, int srdid)
         {
-            PetaPoco.Sql sql = new Sql();
+            //First Fetch the uploads
+            ViewBag.ufs = db.Query<SRUpload>("Where srdid=@0", srdid);
+
+            //Next get the data of the SR
             switch (sType)
             {
                 case ServiceTypeEnum.Accomodation:
-
+                    return PartialView($"ReadPVs/_{(sType).ToString()}", db.SingleOrDefault<AccomodationServiceView>($"select (select top 1 CONCAT(c.fName, ' ',c.sName) from Customer c, SRD_Cust sc where c.CustomerID=sc.CustomerID and sc.SRDID={srdid}) as PaxName, " +
+                        $"sd.AdultNo,CarType as ExtraBedCost, ChildNo,ContractNo,cost,sd.CouponCode,ECommision,Fdate as checkin,FromLoc,HasAc,Heritage as ExtraService,InfantNo, " +
+                        $"IsCanceled, Model as AccomName, ot.OptionTypeName as RoomCategory,payto,Pickuppoint as RoomType,qty as NoOfRooms, Sellprice,sd.ServiceTypeID,SRDID,SRID, " +
+                        $"SuppInvNo,SupplierName,sd.SupplierID,Tdate as checkout, SuppInvDt,SuppConfNo,NoExtraBeds,BFCost,LunchCost,DinnerCost,NoExtraService,ExtraServiceCost,SuppInvAmt, " +
+                        $"ECommision,Tax from SRdetails sd left join Supplier s on s.supplierid=sd.supplierid left join OptionType ot on ot.OptionTypeId=sd.OptionTypeId WHERE SRDID = {srdid} "));
                     break;
                 case ServiceTypeEnum.Packages:
                     break;
                 case ServiceTypeEnum.Cruise:
                     break;
                 case ServiceTypeEnum.SightSeeing:
+                    ViewBag.Inc = db.FirstOrDefault<SRlog>("where Type=1 and srdid=@0", srdid)?.Event ??"";
+                    var qry = $"select (select top 1 CONCAT(c.fName, ' ',c.sName) from Customer c, SRD_Cust sc where c.CustomerID=sc.CustomerID and sc.SRDID={srdid}) as PaxName, " +
+                        $" AdultNo,ChildNo,Model as SightseeingName, sd.OptionTypeID, ot.OptionTypeName,PickUpPoint,FromLoc as PickupLocation, Heritage as Private_Sic, cost as CostPerCar," +
+                        $"Qty as NoOfCars, BFCost as AdultCost, LunchCost as ChildCost,Fdate as TourDate, CarType,HasAc as MealIncluded, srid, srdid, IsCanceled, sd.ServiceTypeID, SuppInvNo," +
+                        $"SupplierName,sd.SupplierID, SuppInvDt,SuppConfNo,SuppInvAmt,sd.CouponCode, SellPrice,contractNo,ECommision,Tax from SRdetails sd left join OptionType ot on ot.OptionTypeID=sd.OptionTypeID " +
+                        $"left join Supplier s on s.supplierid=sd.supplierid WHERE SRDID = {srdid} ";
+                    var res = db.SingleOrDefault<SightseeingServiceView>(qry);
+                    return PartialView($"ReadPVs/_{(sType).ToString()}", res);
                     break;
                 case ServiceTypeEnum.CarBike:
                     break;
                 case ServiceTypeEnum.Insurance:
                     break;
                 case ServiceTypeEnum.Flight:
+                    return PartialView($"ReadPVs/_{(sType).ToString()}", db.SingleOrDefault<FlightServiceView>($"SELECT (select top 1 CONCAT(c.fName, ' ',c.sName) from Customer c, SRD_Cust sc where c.CustomerID=sc.CustomerID and sc.SRDID={srdid}) as PaxName, " +
+                        "sd.AdultNo, sd.ChildNo,sd.InfantNo, IsInternational, FromLoc ,ToLoc,CarType as ClassID, Model as AirlineCode, Heritage as FlightNo,Fdate as DepartureOn, Tdate as ArrivalOn, " +
+                        "PickupPoint as TicketNo,GDSConfNo,PayTo as AirlinePNR, Cost,SellPrice,ContractNo,sd.CouponCode,ECommision,IsCanceled, ot.OptionTypeName as Extra, " +
+                        "DropPoint as ExtraDetails, Sellprice,sd.ServiceTypeID,SRDID,SRID, SuppInvNo,SupplierName,sd.SupplierID, SuppInvDt,SuppConfNo,SuppInvAmt, ECommision,Tax " +
+                        $"from SRdetails sd left join Supplier s on s.supplierid=sd.supplierid left join OptionType ot on ot.OptionTypeId=sd.OptionTypeId WHERE SRDID = {srdid} "));
                     break;
                 case ServiceTypeEnum.Visa:
                     break;
                 case ServiceTypeEnum.Transfer:
-                    sql.Append("")
+                    return PartialView($"ReadPVs/_{(sType).ToString()}", db.SingleOrDefault<TransferServiceView>($"SELECT (select top 1 CONCAT(c.fName, ' ',c.sName) from Customer c, SRD_Cust sc where c.CustomerID=sc.CustomerID and sc.SRDID={srdid}) as PaxName, " +
+                        "sd.srid, sd.cartype, Tdate AS serviceDate, sd.ContractNo, sd.Cost, sd.CouponCode, d.DriverName, CONCAT (dc.CarBrand, ' ', dc.Model, ' ', dc.PlateNo) AS Car, " +
+                        "sd.DropPoint, sd.ECommision, sd.Fdate, sd.FromLoc,sd.ToLoc, sd.HasAc, sd.HasCarrier, sd.Heritage AS RateBasis, sd.IsCanceled, sd.Model, sd.PayTo, sd.PickUpPoint, " +
+                        "sd.Qty AS NoOfVehicles, sd.SellPrice, sd.ServiceTypeID, sd.SRDID, sd.SuppInvNo, sd.SuppConfNo, sd.BFCost as VehicleCost, sd.SuppInvDt, sd.SuppInvAmt,ECommision,Tax FROM SRdetails sd " +
+                        $"LEFT JOIN Driver d ON sd.DriverID = d.DriverID LEFT JOIN DriversCars dc ON dc.CarId = NoExtraBeds WHERE SRDID = {srdid} "));
                     break;
                 default:
+                    return null;
                     break;
             }
+                    return null;
         }
-
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         [EAAuthorize(FunctionName = "Service Requests", Writable = true)]
-        public ActionResult SRdetails([Bind(Include = "SRDID,SRID,ServiceTypeID,CarType,ItemID,CouponCode,Model,FromLoc,ToLoc,Fdate,Tdate,SupplierID,Cost,SellPrice,ChildNo," +
+        public ActionResult SRdetails([Bind(Include = "SRDID,SRID, ServiceTypeID,CarType,ItemID,CouponCode,Model,FromLoc,ToLoc,Fdate,Tdate,SupplierID,Cost,SellPrice,ChildNo," +
             "AdultNo,InfantNo,Heritage,HasAc,HasCarrier,GuideLanguageID,DateOfIssue,ContractNo,PayTo,PickUpPoint,DropPoint,DriverID,SuppInvNo,Qty,ParentID,IsReturn," +
             "IsInternational,OptionTypeID,ECommision,IsCanceled,SuppInvDt,SuppConfNo,NoExtraBeds,EBCostPNight,BFCost,LunchCost,DinnerCost,NoExtraService,ExtraServiceCost," +
-            "SuppInvAmt,GDSConfNo")] SRdetail item, string Event,string IsReturn)
+            "SuppInvAmt,GDSConfNo")] SRdetail item, string Event, int CustomerId)
         {
             using (var transaction = db.GetTransaction())
             {
+                
                 try
                 {
-                    DateTime? td =(DateTime?)item?.Tdate ;
-                    if(item.SRDID > 0)
+                    //Calc the tax and Employee commission
+                    var tax = db.ExecuteScalar<decimal?>("Select Percentage From Taxes Where ServiceTypeID=@0 and WEF<GetDate() order by WEF desc ", item.ServiceTypeID) ?? 0;
+                    item.Tax = item.SellPrice * tax / 100;
+                    var c = db.FirstOrDefault<ServiceCommision>($"Select Perc,Amount  From ServiceCommision Where Serviceid={item.ServiceTypeID} ");
+                    if (c != null)
                     {
+                        item.ECommision += c.Amount ?? 0;
+                        item.ECommision = (item.SellPrice * (c.Perc ?? 0)) / 100;
+                    }
 
-                        if (item.ServiceTypeID == (int)ServiceTypeEnum.Flight)
-                        {
-                            item.Tdate = null;
-                        }
-
+                    DateTime? td =(DateTime?)item?.Tdate ;
+                    if(item.SRDID > 0)//Update existing record when in edit mode
+                    {
                         LogAction(new SRlog { SRID = item.SRID, SRDID=item.SRDID, Event = Event, Type=true});
                         LogAction(new SRlog { SRID = item.SRID, SRDID = item.SRDID, Event = FindDiffs<SRdetail>(item.SRDID,item,"Service") });
                         db.Update(item);
-                        if(item.IsReturn == true)
+
+                        db.Execute($"Update SRD_Cust Set CustomerId ='{CustomerId}' where srdid ={item.SRDID}");
+
+                        if (td.HasValue)
                         {
-                            db.Execute($"Update Srdetails Set Tdate ='{td.Value.ToString("dd-MM-yyyy")}',FromLoc='{item.ToLoc}',ToLoc ='{item.FromLoc}' where ParentID ={item.SRDID}");
+                            db.Execute($"Update Srdetails Set Tdate ='{td.EAFormat(true,true)}',FromLoc='{item.ToLoc}',ToLoc ='{item.FromLoc}' where ParentID ={item.SRDID}");
                         }
                     }
-                    else
+                    else //Insert new SRdetail
                     {
-                        if(item.ServiceTypeID == (int)ServiceTypeEnum.Flight)
-                        {
-                            item.Tdate = null;
-                        }
-                        if (item.ECommision == null)
-                        {
-                            item.ECommision = -1;
-                        }
                         db.Insert(item);
-                        if (IsReturn == "true")
+                        if (td.HasValue)
                         {//We need to insert this duplicate record so that we can show this return flight in the Daily Diary on the return journey date
                             db.Insert(new SRdetail { FromLoc = item.ToLoc, ToLoc = item.FromLoc, Tdate = td, ParentID = item.SRDID, ServiceTypeID = item.ServiceTypeID });
                         }
+
+                        db.Insert(new SRD_Cust { CustomerID = CustomerId, SRDID = item.SRDID });
+
                         LogAction(new SRlog { SRID = item.SRID, SRDID = item.SRDID, Event = Event, Type = true });
                         LogAction(new SRlog { SRID = item.SRID, SRDID = item.SRDID, Event = "Added " + item.ServiceTypeName });
                     }
@@ -519,16 +548,17 @@ namespace Speedbird.Areas.SBBoss.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [EAAuthorize(FunctionName = "Service Requests", Writable = true)]
-        public ActionResult SRUpload([Bind(Include = "SRUID,SRID,Path,UploadName,UploadedFile")] SRuploadDets item)
+        public ActionResult SRUpload([Bind(Include = "SRUID,SRID,SRDID,Path,UploadName,UploadedFile")] SRuploadDets item,FormCollection fm )
         {
             SRUpload res = new SRUpload
             {
                 SRID = item.SRID,
+                SRDID = item.SRDID,
                 SRUID = item.SRUID,
                 UploadName = item.UploadName
             };
 
-            if (item.UploadedFile != null)
+            if (item.UploadedFile?.ContentLength > 0)
             {
                 string fn = item.UploadedFile.FileName.Substring(item.UploadedFile.FileName.LastIndexOf('\\') + 1);
                 fn = item.UploadName + "_" + fn;
@@ -538,7 +568,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
                 res.Path = fn;
             }
-            LogAction(new SRlog { SRID = item.SRID, Event = item.UploadName + " Uploaded" });
+            LogAction(new SRlog { SRID = item.SRID, SRDID=item.SRDID, Event = item.UploadName + " Uploaded" });
             return base.BaseSave<SRUpload>(res, item.SRUID > 0, "Manage", new { id = item.SRID, mode = 5 });
 
         }
@@ -559,7 +589,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
         [HttpPost]
         [EAAuthorize(FunctionName = "Service Requests", Writable = true)]
-        public ActionResult SRCustomers(string FName, string SName, string Email, string Phone, int? CID, int? SRID,string Type,string UploadName, HttpPostedFileBase UploadedFile)
+        public ActionResult SRCustomers(string FName, string SName, string Email, string Phone, int? CID, int? SRID,string Type,string UploadName)
         {
             if (CID != null)
             {
@@ -574,17 +604,17 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 LogAction(new SRlog { SRID = SRID.Value, Event = $"Customer {FName} {SName} added" });
             }
 
-            if (UploadedFile != null && UploadName != null)
-            {
-                string fn = UploadedFile.FileName.Substring(UploadedFile.FileName.LastIndexOf('\\') + 1);
-                fn = UploadName + "_" + fn;
+            //if (UploadedFile != null && UploadName != null)
+            //{
+            //    string fn = UploadedFile.FileName.Substring(UploadedFile.FileName.LastIndexOf('\\') + 1);
+            //    fn = UploadName + "_" + fn;
 
-                string SavePath = System.IO.Path.Combine(Server.MapPath("~/Images"), fn);
-                UploadedFile.SaveAs(SavePath);
+            //    string SavePath = System.IO.Path.Combine(Server.MapPath("~/Images"), fn);
+            //    UploadedFile.SaveAs(SavePath);
 
-                db.Insert(new SRUpload { UploadName = UploadName, Path = fn, SRID = SRID });
-                LogAction(new SRlog { SRID = SRID.Value , Event = UploadName+  " Uploaded"});
-            }
+            //    db.Insert(new SRUpload { UploadName = UploadName, Path = fn, SRID = SRID });
+            //    LogAction(new SRlog { SRID = SRID.Value , Event = UploadName+  " Uploaded"});
+            //}
             return RedirectToAction("Manage", new { id = (int)SRID, mode = 4 });
 
         }
@@ -608,35 +638,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
             ViewBag.PaxDetail = db.Fetch<PaxDets>("; Exec AmtPerPax @@SRID = @0", id).ToList();
 
-            var services = db.Query<SRdetailDets>("Select SRID,SRDID,ServiceTypeID,Cost,SellPrice,ECommision from SRdetails where SRID=@0",id).ToList();
-           services.ForEach(s=>
-            {
-                var tax = db.ExecuteScalar<decimal?>("Select Percentage From Taxes Where ServiceTypeID=@0 and WEF<GetDate() order by WEF desc ", s.ServiceTypeID)??0;
-                s.Tax = s.SellPrice * tax / 100;                
-                var c = db.FirstOrDefault<ServiceCommision>($"Select Perc,Amount  From ServiceCommision Where Serviceid={s.ServiceTypeID + 1} ");
-
-                if (s.ECommision <0)
-                {
-                    if (c.Perc != null)
-                    {
-                        s.Commision = c.Perc ?? 0;
-                        s.PercComm = "%";
-                        var tot = s.SellPrice * s.Commision / 100;
-                        s.Total = s.SellPrice - s.Tax - tot - s.Cost;
-                    }
-                    else if (c.Amount != null)
-                    {
-                        s.Commision = c.Amount ?? 0;
-                        s.Total = s.SellPrice - s.Tax - s.Commision - s.Cost;
-                    }
-                }
-                else
-                {
-                    s.Commision = s.ECommision;
-                    s.Total = s.SellPrice - s.Tax - s.Commision - s.Cost;
-                }
-
-            });
+            var services = db.Query<SRdetailDets>("Select SRID,SRDID,ServiceTypeID,Tax,Cost,SellPrice,ECommision , SellPrice - Tax - ECommision - Cost as Total from SRdetails where SRID=@0", id).ToList();
+           
             ViewBag.Services = services;
 
             var  rp= db.Fetch<RPDetails>("select rp.CDate as [Date],rp.Note,rp.Type,rs.Amount,rp.IsPayment from RPDets rp left join RP_SR rs on rp.RPDID = rs.RPDID Where rs.SRID = @0",id);
@@ -765,74 +768,98 @@ namespace Speedbird.Areas.SBBoss.Controllers
         }
         public JsonResult AutoCompleteCar(string term)
         {
-            return GetAutoCompleteData(term, "CarBikeID", "CarBikeName", "CarBike", $"Where CarBikeName like '%{term}%'");
+            return GetAutoCompleteData("CarBikeID", "CarBikeName", "CarBike", $"Where CarBikeName like '%{term}%'");
         }
         public JsonResult AutoCompleteDriver(string term)
         {
-            return GetAutoCompleteData(term, "DriverID", "DriverName", "Driver", $"Where DriverName like '%{term}%'");            
+            return GetAutoCompleteData("DriverID", "DriverName", "Driver", $"Where DriverName like '%{term}%'");            
+        }
+        public JsonResult AutoCompleteCars(int DriverId)
+        {
+            return GetAutoCompleteData("CarID", " CONCAT (CarBrand, ' ', Model, ' ', PlateNo) ", "DriversCars", $"Where DriverId ={DriverId}");
         }
 
+        public ActionResult FetchSTpartial(int? id, int ServiceTypeId,  int SRID, bool IsReadOnly = false)
+        {           
+            ViewBag.SRDID = id;
+            var reca = db.SingleOrDefault<SRdetail>(id);
+            if (reca != null)
+            {
+                ViewBag.SelectedCustomerId = db.SingleOrDefault<SRD_Cust>(id)?.CustomerID.ToString();
+                ViewBag.Supplier = db.SingleOrDefault<Supplier>(reca.SupplierID)?.SupplierName ?? "";
+            }
 
-        public ActionResult FetchSTpartial(int? id, int ServiceTypeId, bool IsReadOnly, int SRID)
-        {
-            ViewBag.GuideLanguageID = db.Fetch<GuideLanguage>("Select * from GuideLanguage").Select(v => new SelectListItem { Text = v.GuideLanguageName, Value = v.GuideLanguageID.ToString() }).ToList();
-            ViewBag.CarType = Enum.GetValues(typeof(CarTypeEnum)).Cast<CarTypeEnum>().Select(v => new SelectListItem { Text = v.ToString(), Value = ((int)v).ToString() }).ToList();
-                    
-            ViewBag.CustomerId = db.Fetch<Customer>($"Select c.CustomerId, Concat(Fname, ' ',Sname) as FName  from Customer c, sr_cust r where c.CustomerId=r.CustomerId and r.servicerequestid = @0",SRID).Select(u => new SelectListItem
+            ViewBag.CustomerList = db.Fetch<Customer>($"Select c.CustomerId, Concat(Fname, ' ',Sname) as FName  from Customer c, sr_cust r where c.CustomerId=r.CustomerId and r.servicerequestid = @0",SRID).Select(u => new SelectListItem
             {
                 Value = u.CustomerID.ToString(),
                 Text = u.FName
             });
 
-            ViewBag.SRDID = id;
             if (IsReadOnly)
                 ViewBag.IsReadOnly = "disabled";
           
+
+            
 
             switch ((ServiceTypeEnum)ServiceTypeId)
             {
                 case ServiceTypeEnum.Accomodation:
                     List<SelectListItem> AccPayTo = new List<SelectListItem>()
                     {
-                            new SelectListItem {
-                                Text = "Pay to us", Value = "Pay to us"
-                            },
-                            new SelectListItem {
-                                Text = "Pay to owner", Value = "Pay to owner"
-                            }
+                            new SelectListItem { Text = "Pay to us", Value = "Pay to us" },
+                            new SelectListItem { Text = "Pay to owner", Value = "Pay to owner" }
                         };
                     ViewBag.PayTo = AccPayTo;
-
-                    return PartialView($"WritePVs/_{((ServiceTypeEnum)ServiceTypeId).ToString()}", db.SingleOrDefault<SRdetail>(id));
+                    
+                    ViewBag.Heritage = new List<SelectListItem> {
+                               new SelectListItem { Text = "Cake", Value = "Cake" },
+                               new SelectListItem { Text = "Wine", Value = "Wine" },
+                               new SelectListItem { Text = "Bouquet", Value = "Bouquet" },
+                               new SelectListItem { Text = "Honeymoon Pkg", Value = "Honeymoon Pkg" },
+                            };
+                    ViewBag.OptionTypeId = base.GetSelectListData("OptionTypeId", "OptionTypeName", "OptionType",$"where ServiceTypeId={(int)ServiceTypeEnum.Accomodation}");
+                    return PartialView($"WritePVs/_{((ServiceTypeEnum)ServiceTypeId).ToString()}", reca);
                 case ServiceTypeEnum.SightSeeing:
-                    return PartialView($"_{((ServiceTypeEnum)ServiceTypeId).ToString()}", db.SingleOrDefault<SRdetail>(id));
+            
+            
+                    //    ViewBag.Sightseeing = db.SingleOrDefault<Package>(reca.ItemID).PackageName;
+                    ViewBag.Heritage = new List<SelectListItem> {
+                                          new SelectListItem { Text = "Private", Value = "Private" },
+                                          new SelectListItem { Text = "Sic", Value = "Sic" }
+                                        };
+                    ViewBag.CarType = Enum.GetValues(typeof(CarTypeEnum)).Cast<CarTypeEnum>().Select(v => new SelectListItem { Text = v.ToString(), Value = ((int)v).ToString() }).ToList();
+                    ViewBag.OptionTypeId = base.GetSelectListData("OptionTypeId", "OptionTypeName", "OptionType", $"where ServiceTypeId={(int) ServiceTypeEnum.SightSeeing}");
+                    //ViewBag.GuideLanguageID = db.Fetch<GuideLanguage>("Select * from GuideLanguage").Select(v => new SelectListItem { Text = v.GuideLanguageName, Value = v.GuideLanguageID.ToString() }).ToList();
+                    return PartialView($"WritePVs/_{((ServiceTypeEnum)ServiceTypeId).ToString()}",reca);
                 case ServiceTypeEnum.CarBike:
-                    return PartialView($"_{((ServiceTypeEnum)ServiceTypeId).ToString()}", db.SingleOrDefault<SRdetail>(id));
+                    return PartialView($"WritePVs/_{((ServiceTypeEnum)ServiceTypeId).ToString()}",reca);
                 case ServiceTypeEnum.Cruise:
-                    return PartialView($"_{((ServiceTypeEnum)ServiceTypeId).ToString()}", db.SingleOrDefault<SRdetail>(id));
+                    return PartialView($"WritePVs/_{((ServiceTypeEnum)ServiceTypeId).ToString()}",reca);
                 case ServiceTypeEnum.Packages:
-                    return PartialView($"_{((ServiceTypeEnum)ServiceTypeId).ToString()}", db.SingleOrDefault<SRdetail>(id));
+                    return PartialView($"WritePVs/_{((ServiceTypeEnum)ServiceTypeId).ToString()}",reca);
                 case ServiceTypeEnum.Insurance:
-                    return PartialView($"_{((ServiceTypeEnum)ServiceTypeId).ToString()}", db.SingleOrDefault<SRdetail>(id));
+                    return PartialView($"WritePVs/_{((ServiceTypeEnum)ServiceTypeId).ToString()}",reca);
                 case ServiceTypeEnum.Visa:
-                    return PartialView($"_{((ServiceTypeEnum)ServiceTypeId).ToString()}", db.SingleOrDefault<SRdetail>(id));
+                    return PartialView($"WritePVs/_{((ServiceTypeEnum)ServiceTypeId).ToString()}",reca);
                 case ServiceTypeEnum.Flight:
-                    var rec = db.SingleOrDefault<SRdetail>(id);
+                    ViewBag.OptionTypeId = base.GetSelectListData("OptionTypeId", "OptionTypeName", "OptionType", $"where ServiceTypeId={(int) ServiceTypeEnum.Flight}");
+                    ViewBag.IsInternational = new List<SelectListItem> {
+                               new SelectListItem { Text = "International", Value = "true" },
+                               new SelectListItem { Text = "Domestic", Value = "false" }
+                            };
+                    ViewBag.CarType = new List<SelectListItem> {
+                               new SelectListItem { Text = "Economy", Value = "1" },
+                               new SelectListItem { Text = "Business", Value = "2" }
+                            };
                     if (id > 0)
-                    {
-                        var prec = db.FirstOrDefault<SRdetail>("select Tdate,FromLoc,ToLoc from Srdetails where ParentID =@0", id);
-                        if (prec != null)
-                        {
-                            rec.Tdate = prec.Tdate ?? null;
-                        }
-                    }
-                    return PartialView($"_{((ServiceTypeEnum)ServiceTypeId).ToString()}", rec);
+                        reca.Tdate = db.FirstOrDefault<SRdetail>("where ParentID =@0", id)?.Tdate;     //return flight date                   
+                    return PartialView($"WritePVs/_{((ServiceTypeEnum)ServiceTypeId).ToString()}", reca);
                 case ServiceTypeEnum.Transfer:
-                    var DrvID = db.FirstOrDefault<Driver>("Select DriverID from SRdetails where SRDID=@0", id);
-                    if (DrvID?.DriverID > 0)
-                    {
-                        ViewBag.DrvNm = db.ExecuteScalar<string>("Select DriverName From Driver where DriverID=@0", DrvID.DriverID);
-                    }
+                    ViewBag.CarType = Enum.GetValues(typeof(CarTypeEnum)).Cast<CarTypeEnum>().Select(v => new SelectListItem { Text = v.ToString(), Value = ((int)v).ToString() }).ToList();
+                    
+                    if (reca !=null)
+                        ViewBag.Driver = db.SingleOrDefault<Driver>(reca.DriverID)?.DriverName ?? "";
+                        
                     List<SelectListItem> RateBasis = new List<SelectListItem>()
                     {
                             new SelectListItem {
@@ -853,8 +880,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
                             }
                         };
                     ViewBag.PayTo = TaxiPayTo;
-
-                    return PartialView($"WritePVs/_{((ServiceTypeEnum)ServiceTypeId).ToString()}", db.SingleOrDefault<SRdetail>(id));
+                    
+                    return PartialView($"WritePVs/_{((ServiceTypeEnum)ServiceTypeId).ToString()}", reca);
                 default:
                     return PartialView("_NotFound");
             }

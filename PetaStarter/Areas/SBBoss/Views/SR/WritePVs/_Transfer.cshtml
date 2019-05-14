@@ -1,75 +1,110 @@
 ﻿@using Speedbird
 @model Speedbird.SRdetail
 
-<div class="form-row">
-    @Html.EASelectList("CustomerId", (IEnumerable<SelectListItem>)ViewBag.CustomerId, "", "Pax Name")
-    @Html.EADateFor(m => m.Tdate,"Transfer Dt")
-    @Html.EATextFor(m => m.Qty, "No. of Vehicles")
-    @Html.EATextFor(m => m.FromLoc, "From")
-</div>
-<div class="form-row">
-    @Html.EATextFor(m => m.PickUpPoint)
-    @Html.EATextFor(m => m.ToLoc)
-    @Html.EATextFor(m => m.DropPoint)
-    @Html.EASelectList("CarType", (IEnumerable<SelectListItem>)ViewBag.CarType, "", "Vehicle Type")
-</div>
-<div class="form-row">
-    @Html.EASelectList("Heritage", (IEnumerable<SelectListItem>)ViewBag.RateBasis, "", "Rate Basis")
-    @Html.EAChkBox("HasAc")
-    @Html.EAChkBox("HasCarrier")
-    @Html.EATextFor(m => m.BFCost, "Vehicle Cost")
-</div>
-<div class="form-row">
-    
-    @Html.EASelectListFor(m => m.PayTo)
-    @Html.EATextFor(m => m.Cost)
-    @Html.EATextFor(m => m.SellPrice)
-</div>
-<hr>
-<div class="form-row">
-    @Html.EAAutocompleteFor(m => m.DriverID, "SR", "AutoCompleteDriver", "Driver")
-    @Html.EATextFor(m => m.SuppInvNo)
-    @Html.EATextFor(m => m.CouponCode)
-    @Html.EATextFor(m => m.SuppInvAmt)
-    @Html.EADateFor(m => m.SuppInvDt)
-    @Html.EATextFor(m => m.SuppConfNo)
-</div>
+@{ Html.RenderPartial("WritePVs/_CommonHidden", Model); }
 
-    <div class="form-row">
-        <div class="input-group col mb-3">
+<table class="SRDetsTbl">
+    <thead>
+        <tr>
+            <th>Pax Name    </th>
+            <th>Date        </th>
+            <th>Car Qty     </th>
+            <th>From where  </th>
+            <th>Pickup Pt   </th>
+            <th>To where    </th>
+            <th>Drop Pt     </th>
+            <th>Car type    </th>
+            <th>Rate Basis  </th>
+            <th>Has AC?     </th>
+            <th>Has Carrier?</th>
+            <th>Car Cost  </th>
+            <th>Pay To    </th>
+            <th>Cost      </th>
+            <th>Sell Price</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>@Html.EASelectListP("CustomerId", (IEnumerable<SelectListItem>)ViewBag.CustomerList, "", "Pax Name", (string)ViewBag.SelectedCustomerId)</td>
+            <td>@Html.EADateForP(m => m.Fdate, "Transfer Date")                                                                                         </td>
+            <td>@Html.EANumberForP(m => m.Qty, "No. of Vehicles")                                                                                       </td>
+            <td>@Html.EATextForP(m => m.FromLoc, "From Where")                                                                                          </td>
+            <td>@Html.EATextForP(m => m.PickUpPoint)                                                                                                    </td>
+            <td>@Html.EATextForP(m => m.ToLoc, "To Where")                                                                                              </td>
+            <td>@Html.EATextForP(m => m.DropPoint)                                                                                                      </td>
+            <td>@Html.EASelectListForP(m => m.CarType, "Vehicle Type")                                                                                  </td>
+            <td>@Html.EASelectListForP(m => m.Heritage, "Rate Basis")                                                                                   </td>
+            <td>@Html.EAChkBoxP("HasAc")                                                                                                                </td>
+            <td>@Html.EAChkBoxP("HasCarrier")                                                                                                           </td>
+            <td>@Html.EANumberForP(m => m.BFCost, "Vehicle Cost")                                                                                       </td>
+            <td>@Html.EASelectListForP(m => m.PayTo)                                                                                                    </td>
+            <td>@Html.EANumberForP(m => m.Cost)                                                                                                         </td>
+            <td>@Html.EANumberForP(m => m.SellPrice)                                                                                                    </td>
+        </tr>
+    </tbody>
+</table>
 
-            @if (Model?.SRDID > 0)
-    {
-                <div class="input-group col-3 mb-3">
+<table class="SRDetsTbl" width="100%">
+    <thead>
+        <tr>
+            <th>Driver  </th>
+            <th>Car  </th>
+            <th>Inv No.    </th>
+            <th>Inv. Dt.   </th>
+            <th>Inv. Amt   </th>
+            <th>Coupon Code</th>
+            <th>Confirm NO </th>
+            <th>Contract No</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>@Html.EAAutocompleteForP(m => m.DriverID, "SR", "AutoCompleteDriver", "Driver", (string)ViewBag.Driver)                                   </td>
+            <td>@Html.EASelectListP("NoExtraBeds", new List<SelectListItem> { new SelectListItem { Text = "1st choose Driver", Value = "0" } }, "", "Car") </td>
+            <td>@Html.EATextForP(m => m.SuppInvNo)                                                                                                        </td>
+            <td>@Html.EADateForP(m => m.SuppInvDt)                                                                                                        </td>
+            <td>@Html.EATextForP(m => m.SuppInvAmt)                                                                                                       </td>
+            <td>@Html.EATextForP(m => m.CouponCode)                                                                                                       </td>
+            <td>@Html.EATextForP(m => m.SuppConfNo)                                                                                                       </td>
+            <td>@Html.EATextForP(m => m.ContractNo)                                                                                                       </td>
+        </tr>
+    </tbody>
+</table>
+<div class="form-row">
+    <div class="input-group col mb-3">
 
-                    @if (ViewBag.IsReadOnly == null)
-    {
-                        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#AssignDriverModal" data-srdid="@Model.SRDID">
-                            @if (Model?.DriverID == null)
-    {
-                                @:  Assign Driver
+        @*@if (Model?.SRDID > 0)
+            {
+                        <div class="input-group col-3 mb-3">
+
+                            @if (ViewBag.IsReadOnly == null)
+            {
+                                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#AssignDriverModal" data-srdid="@Model.SRDID">
+                                    @if (Model?.DriverID == null)
+            {
+                                        @:  Assign Driver
+                                    }
+                                    else
+                                    {
+                                        @: Change Driver
+                                    }
+
+                                </button>
+                                <div class="input-group-prepend"><span class="input-group-text" style="color:blue">@ViewBag.DrvNm</span></div>
+
                             }
                             else
                             {
-                                @: Change Driver
+                                <div class="input-group-prepend"><span class="input-group-text">Driver Name</span></div>
+                                <input type="text" value="@ViewBag.DrvNm" class="form-control" />
                             }
 
-                        </button>
-                        <div class="input-group-prepend"><span class="input-group-text" style="color:blue">@ViewBag.DrvNm</span></div>
-
-                    }
-                    else
-                    {
-                        <div class="input-group-prepend"><span class="input-group-text">Driver Name</span></div>
-                        <input type="text" value="@ViewBag.DrvNm" class="form-control" />
-                    }
 
 
+                        </div>
+                    }*@
 
-                </div>
-            }
-
-            @if (ViewBag.IsReadOnly == null)
+        @*@if (ViewBag.IsReadOnly == null)
             {
                 if (Model?.DriverID > 0)
                 {
@@ -80,32 +115,32 @@
                     </div>
 
                 }
-            }
-        </div>
+            }*@
     </div>
+</div>
 
 
 
-    @if (ViewBag.isReadOnly != null)
-    {@Html.Action("CustSearch", "SR", new { id = Model.SRDID })
-}
-
-    @if (Model != null)
-    {
-        <script>
-           $('#AssignDriver').load('@Url.Action("_AssignDriver")', { SRID: @Model.SRID, SRDID: @Model.SRDID});
-           $('#Review').load('@Url.Action("_DrvReview")', { SRID: @Model.SRID,SRDID: @Model.SRDID});
-        </script>
+@*@if (ViewBag.isReadOnly != null)
+        {@Html.Action("CustSearch", "SR", new { id = Model.SRDID })
     }
 
+        @if (Model != null)
+        {
+            <script>
+               $('#AssignDriver').load('@Url.Action("_AssignDriver")', { SRID: @Model.SRID, SRDID: @Model.SRDID});
+               $('#Review').load('@Url.Action("_DrvReview")', { SRID: @Model.SRID,SRDID: @Model.SRDID});
+            </script>
+        }*@
 
-    <script>
+
+<script>
 
 
 
         $(function () {
             //DateTime picker
-            
+
 
             $('.eadate').datepicker({
                 dateFormat: "dd-MM-yy",
@@ -117,8 +152,51 @@
             //Disable the browsers default date picker
             jQuery.validator.methods["date"] = function (value, element) { return true; }
 
+            function setDriverCars(driverid) {
+                $.get('@Url.Action("AutoCompleteCars")', { DriverId: driverid }, function (response) {
+
+                    $('#NoExtraBeds').html('');
+
+                    if (response.length > 0) {
+                        var options = '';
+                        for (var i = 0; i < response.length; i++) {
+                            if (response[i].id == @(Model?.NoExtraBeds ??-1)) {
+                                options += '<option selected value="' + response[i].id + '">' + response[i].value + '</option>';
+                            } else {
+                                options += '<option value="' + response[i].id + '">' + response[i].value + '</option>';
+                            }
+                        }
+                    }
+                        options += '<option value="Select">No Cars defined</option>';
+                        $('#NoExtraBeds').append(options);
+                });
+            }
+
+            //If in edit mode we may already have the driverid and thus should fetch his cars
+            if ($("#DriverID").val() > 0) {
+                setDriverCars($("#DriverID").val());
+            }
+
+            //fetch driver cars on selection of driver
+            $("#DriverID").on("change", function () {
+                setDriverCars($(this).val());
+            });
+
         });
 
 
+        $(document).ready(function () {
+            $('*[data-autocombo-url]')
+                .each(function () {
+                    $(this).autocomplete({
+                        source: $(this).data("autocombo-url"),
+                        minLenght: 3,
+                        delay: 500,
+                        select: function (event, ui) {
+                            $("#" + $(this).data("autocomplete-idholder")).val(ui.item.id).trigger('change');
+                        }
+                    });
+                });
+        });
 
-    </script>
+</script>

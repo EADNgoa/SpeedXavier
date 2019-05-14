@@ -23,7 +23,7 @@
             <div class="col"><strong>Phone: </strong>@LeadCust.Phone</div>
             <div class="col"><strong>Email: </strong>@LeadCust.Email</div>
             <div class="col"><strong>&nbsp;</strong>&nbsp;</div>
-            <div class="col"><strong>&nbsp;</strong>&nbsp;</div>
+            <div class="col"><strong>&nbsp;</strong>&nbsp;</div>            
         </div>
 
         <div class="alert-info row m-3">
@@ -34,7 +34,7 @@
                 <div class="col"><strong>Phone: </strong> @agentDets.PhoneNo</div>            
                 <div class="col"><strong>Email: </strong> @agentDets.Email</div>            
                 <div class="col"><strong>State: </strong> @agentDets.State</div>            
-                <div class="col"><strong>Booker: </strong>@Model.AgentBooker</div>            
+                <div class="col"><strong>Booker: </strong>@Model.AgentBooker</div>                                                   
             }
         </div>
 
@@ -51,7 +51,7 @@
 
             @Html.HiddenFor(model => model.ServiceTypeID)
             <div class="input-group col mb-3">
-                <div class="input-group-prepend"><span class="input-group-text">Agent Name</span></div>
+                @*<div class="input-group-prepend"><span class="input-group-text">Agent Name</span></div>
 
                 @if (ViewBag.AgentName != null)
                 {
@@ -63,7 +63,7 @@
                 {
                     <input type="text" id="UserName" name="UserName" style="color:black;" data-autocomplete-idholder="#AgentID" value="" data-autocombo-url="@Url.Action("AutoCompleteAgent")" class="form-control" />
                 }
-                @Html.ValidationMessageFor(model => model.CustID, "", new { @class = "text-danger" })
+                @Html.ValidationMessageFor(model => model.CustID, "", new { @class = "text-danger" })*@
             </div>
         }
         else
@@ -105,7 +105,7 @@
         {
             <div class="input-group col mb-3">
                 <div class="input-group-prepend"><span class="input-group-text">Requests</span></div>
-                <div class="form-control" style="padding:0px !important">@Html.TextArea("Event", null, htmlAttributes: new { @class = "form-control" })</div>
+                @Html.TextArea("Event", null, htmlAttributes: new { @class = "form-control" })
             </div>
         }
     </div>
@@ -119,7 +119,7 @@
                 @Html.Editor("FName", new { htmlAttributes = new { @class = "form-control" } })
             </div>
             <div class="input-group col mb-3">
-                <div class="input-group-prepend"><span class="input-group-text">Sur Name</span></div>
+                <div class="input-group-prepend"><span class="input-group-text">Surname</span></div>
                 @Html.Editor("SName", new { htmlAttributes = new { @class = "form-control" } })
             </div>
             <div class="input-group col mb-3">
@@ -133,58 +133,58 @@
         </div>
     }
 
-    <div id="ExistingCust">
-        <br />
-        @if (Model?.SRID == 0)
-        {
-            <table class="table table-sm table-striped">
-                <thead class="bg-primary">
-                    <tr>
-                        <th>
+    if (Model?.SRID == 0)
+    {
+        <div id="ExistingCust">
+            <br />
+                <table class="table table-sm table-striped">
+                    <thead class="bg-primary">
+                        <tr>
+                            <th>
 
-                        </th>
-                        <th>
-                            First Name
-                        </th>
-                        <th>
-                            Sur Name
-                        </th>
-                        <th>
-                            Mobile
-                        </th>
-                        <th>
-                            Email
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td colspan="5">&nbsp;</td>
-                    </tr>
+                            </th>
+                            <th>
+                                First Name
+                            </th>
+                            <th>
+                                Surname
+                            </th>
+                            <th>
+                                Mobile
+                            </th>
+                            <th>
+                                Email
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="5">&nbsp;</td>
+                        </tr>
 
-                    <tr>
-                        <td colspan="5">&nbsp;</td>
-                    </tr>
+                        <tr>
+                            <td colspan="5">&nbsp;</td>
+                        </tr>
 
-                    <tr>
-                        <td colspan="5"><center>This Table Will Display Existing Customers.</center></td>
-                    </tr>
-                    <tr>
-                        <td colspan="5">&nbsp;</td>
-                    </tr>
+                        <tr>
+                            <td colspan="5"><center>This Table Will Display Existing Customers.</center></td>
+                        </tr>
+                        <tr>
+                            <td colspan="5">&nbsp;</td>
+                        </tr>
 
-                    <tr>
-                        <td colspan="5">&nbsp;</td>
-                    </tr>
-                    <tr>
-                        <td colspan="5">&nbsp;</td>
-                    </tr>
+                        <tr>
+                            <td colspan="5">&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td colspan="5">&nbsp;</td>
+                        </tr>
 
 
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+        </div>
         }
-    </div>
 
 
 }

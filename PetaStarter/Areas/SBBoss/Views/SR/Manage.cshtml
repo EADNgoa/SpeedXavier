@@ -63,15 +63,15 @@
                         <a href="#Sec_Log" id="NoteBtn"  class="btn btn-secondary heading">Log/ History</a>
                     </div>*@
 
-                <div id="Sec_Dets" class="funcBox mb-5">
+                <div id="Sec_Dets" class="funcBox mb-1">
                     @Html.Action("GetSRInfo", "SR", new { id = (int)ViewBag.SRID, mode = 0 })
                     @Html.Action("FetchDetails", "SR", new { id = (int)ViewBag.SRID })
                 </div>
-                <div id="Sec_SR" class="funcBox mb-5"><h3>Services </h3>@Html.Action("SRdetails", "SR", new { id = (int)ViewBag.SRID, EID = (int)ViewBag.EID })</div>
-                <div id="Sec_Pax" class="funcBox mb-5"><h3>Passengers </h3>@Html.Action("SRCustomers", "SR", new { id = (int)ViewBag.SRID })</div>
-                <div id="Sec_Upld" class="funcBox mb-5"><h3>Uploads / Documents </h3> @Html.Action("SRUpload", "SR", new { id = (int)ViewBag.SRID })</div>
-                <div id="Sec_Fin" class="funcBox mb-5"><h3>Finance </h3> <span class="float-right h3"><span class="text-muted">Customers outstanding:</span> <span id="CustOutstanding">$ 100</span></span> @Html.Action("Reciepts", "SR", new { id = (int)ViewBag.SRID })</div>
-                <div id="Sec_Log" class="funcBox mb-5"><h3>Booking Log </h3>@Html.Action("SRLogs", "SR", new { id = (int)ViewBag.SRID, mode = ViewBag.mode })</div>
+                <div id="Sec_Pax" class="funcBox mb-1"><h3>Passengers </h3>@Html.Action("SRCustomers", "SR", new { id = (int)ViewBag.SRID })</div>
+                <div id="Sec_SR" class="funcBox mb-1"><h3>Services </h3>@Html.Action("SRdetails", "SR", new { id = (int)ViewBag.SRID, EID = (int)ViewBag.EID })</div>
+                <div id="Sec_Upld" class="funcBox mb-1"><h3>Uploads / Documents </h3> @Html.Action("SRUpload", "SR", new { id = (int)ViewBag.SRID })</div>
+                <div id="Sec_Fin" class="funcBox mb-1"><h3>Finance </h3> <span class="float-right h3"><span class="text-muted">Customers outstanding:</span> <span id="CustOutstanding">$ 100</span></span> @Html.Action("Reciepts", "SR", new { id = (int)ViewBag.SRID })</div>
+                <div id="Sec_Log" class="funcBox mb-1"><h3>Booking Log </h3>@Html.Action("SRLogs", "SR", new { id = (int)ViewBag.SRID, mode = ViewBag.mode })</div>
 
                 @*@if (ViewBag.mode == 1)
                     {@Html.Action("FetchDetails", "SR", new { id = (int)ViewBag.SRID })}
@@ -91,7 +91,7 @@
             }
             else
             {
-                <div class="funcBox mb-5">  @Html.Action("FetchDetails", "SR", new { id = 0 })</div>
+                <div class="funcBox mb-1">  @Html.Action("FetchDetails", "SR", new { id = 0 })</div>
                 ViewBag.SRID = 0;
             }
 

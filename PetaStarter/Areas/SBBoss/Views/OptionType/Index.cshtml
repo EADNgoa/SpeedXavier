@@ -46,12 +46,12 @@
                 </th>
                 <th></th>
             </tr>
-            @{int i = 1;}
+            
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>
-                        @i
+                    <td>                        
+                        @Html.DisplayFor(modelItem => item.OptionTypeID)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.OptionTypeName)
@@ -62,8 +62,7 @@
                     <td>
                         <a href="@Url.Action("Manage","OptionType", new {id = item.OptionTypeID })"><i title="Edit" class="fas fa-edit fa-inverse h3 float-right DropShadow"></i></a>
                     </td>
-                </tr>
-                i++;
+                </tr>                
             }
 
         </table>

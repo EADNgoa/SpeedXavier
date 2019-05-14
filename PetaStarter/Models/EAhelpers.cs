@@ -11,12 +11,14 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Mvc.Html;
 
+
 namespace Speedbird
 {
+    
     public static class EAHTMLHelpers
     {
         public static MvcHtmlString EAIdFor<TModel, TValue>(this HtmlHelper<TModel> html, Expression<Func<TModel, TValue>> expression, bool HasId)
-        {            
+        {   
             return (HasId)? html.HiddenFor(expression):MvcHtmlString.Empty ;
         }
         
@@ -30,7 +32,7 @@ namespace Speedbird
         /// <param name="editorClass">Additional css class for main inputbox. Usually mb-3</param>
         /// <returns></returns>
         private static string FetchStdFormWrappers(MvcHtmlString inputBoxFor, MvcHtmlString validationMessageFor, string label = "", string editorClass="mb-3")
-        {                       
+        {
             var innerSpanWrapper = new TagBuilder("span");
             innerSpanWrapper.AddCssClass("input-group-text");
             innerSpanWrapper.InnerHtml = label;
@@ -42,7 +44,7 @@ namespace Speedbird
             var wrapperTagBuilder = new TagBuilder("div");
             wrapperTagBuilder.AddCssClass("input-group col " + editorClass);
             wrapperTagBuilder.InnerHtml = innerDivWrapper + inputBoxFor.ToHtmlString() + validationMessageFor?.ToHtmlString();
-            return wrapperTagBuilder.ToString();
+            return wrapperTagBuilder + validationMessageFor?.ToHtmlString();
         }
 
         //Concatenate MVCHtmlstrings
@@ -58,13 +60,14 @@ namespace Speedbird
             var validationMessageFor = html.ValidationMessageFor(expression);
             return validationMessageFor;
         }
-
         private static string TextUnBound(string id, string label)
         {
             if (label.Length == 0)
                 label = MyExtensions.CamelToSpaceString(id);
             return label;
         }
+        //==========================================================================================================================
+        //Normal form Helpers
 
         //Text box
         public static MvcHtmlString EATextFor<TModel, TValue>(this HtmlHelper<TModel> html, Expression<Func<TModel, TValue>> expression, string label="",  string editorClass="")
@@ -115,11 +118,11 @@ namespace Speedbird
             return new MvcHtmlString(FetchStdFormWrappers(textBoxFor, MvcHtmlString.Empty, label, editorClass));
         }
 
-        //Text Date
+        //Date        
         public static MvcHtmlString EADateFor<TModel, TValue>(this HtmlHelper<TModel> html, Expression<Func<TModel, TValue>> expression, string label = "", string editorClass = "")
         {
             MvcHtmlString validationMessageFor = TextBound(html, expression, ref label);
-            var textBoxFor = html.TextBoxFor(expression, new { @type = "text", @class = "form-control eadate" });
+            var textBoxFor = html.TextBoxFor(expression, "{0:dd-MMM-yyyy}", new { @type = "text", @class = "form-control eadate" });
 
             return new MvcHtmlString(FetchStdFormWrappers(textBoxFor, validationMessageFor, label, editorClass));
         }
@@ -131,7 +134,23 @@ namespace Speedbird
             return new MvcHtmlString(FetchStdFormWrappers(textBoxFor, MvcHtmlString.Empty, label, editorClass));
         }
 
-        //Select List
+        //DateTime
+        public static MvcHtmlString EADateTimeFor<TModel, TValue>(this HtmlHelper<TModel> html, Expression<Func<TModel, TValue>> expression, string label = "", string editorClass = "")
+        {
+            MvcHtmlString validationMessageFor = TextBound(html, expression, ref label);
+            var textBoxFor = html.TextBoxFor(expression, "{0:dd-MMM-yyyy HH:mm}", new { @type = "text", @class = "form-control eadatetime" });
+
+            return new MvcHtmlString(FetchStdFormWrappers(textBoxFor, validationMessageFor, label, editorClass));
+        }
+
+        public static MvcHtmlString EADateTime(this HtmlHelper html, string id, string editorClass = "", string label = "")
+        {
+            var textBoxFor = html.TextBox(id, "", new { @type = "text", @class = "form-control eadatetime" });
+            label = TextUnBound(id, label);
+            return new MvcHtmlString(FetchStdFormWrappers(textBoxFor, MvcHtmlString.Empty, label, editorClass));
+        }
+
+        //Select List: Use even if Select list items are define in code> Use for ALL 1:1 relations
         public static MvcHtmlString EASelectListFor<TModel, TValue>(this HtmlHelper<TModel> html, Expression<Func<TModel, TValue>> expression, string label = "", string editorClass = "")
         {
             MvcHtmlString validationMessageFor = TextBound(html, expression, ref label);
@@ -140,9 +159,11 @@ namespace Speedbird
             return new MvcHtmlString(FetchStdFormWrappers(textBoxFor, validationMessageFor, label, editorClass));
         }
 
-        public static MvcHtmlString EASelectList(this HtmlHelper html, string id,IEnumerable<SelectListItem> List, string editorClass = "", string label = "")
+                                //Use in Searches or when there is a M:M relationship in the form. The Viewbag List name MUST be different from the id parameter
+        public static MvcHtmlString EASelectList(this HtmlHelper html, string id,IEnumerable<SelectListItem> List, string editorClass = "", string label = "", string selectedValue = "")
         {
-            var textBoxFor = html.DropDownList(id, List, new { @type = "text", @class = "form-control eadate" });
+            var Fist = new SelectList(List, "Value", "Text", selectedValue);
+            var textBoxFor = html.DropDownList(id, Fist, new { @type = "text", @class = "form-control eadate" });
             label = TextUnBound(id, label);
             return new MvcHtmlString(FetchStdFormWrappers(textBoxFor, MvcHtmlString.Empty, label, editorClass));
         }
@@ -178,7 +199,7 @@ namespace Speedbird
         //Read at https://blogs.msdn.microsoft.com/stuartleeks/2012/04/23/asp-net-mvc-jquery-ui-autocomplete/
         //@Html.LabelFor(m=>m.SomeValue) 
         //@Html.AutocompleteFor(m=>m.SomeValue, “Autocomplete”, “Home”)
-        public static MvcHtmlString EAAutocompleteFor<TModel, TProperty>(this HtmlHelper<TModel> html, Expression<Func<TModel, TProperty>> expression, string actionName, string controllerName, string label = "", string editorClass = "")
+        public static MvcHtmlString EAAutocompleteFor<TModel, TProperty>(this HtmlHelper<TModel> html, Expression<Func<TModel, TProperty>> expression, string controllerName, string actionName, string label = "", string value="", string editorClass = "")
         {
             string autocompleteUrl = UrlHelper.GenerateUrl(null, actionName, controllerName,null,html.RouteCollection,html.ViewContext.RequestContext,includeImplicitMvcValues: true);
             string boxName = html.DisplayNameFor(expression).ToString();
@@ -186,9 +207,149 @@ namespace Speedbird
             MvcHtmlString validationMessageFor = TextBound(html, expression, ref label);
             validationMessageFor= validationMessageFor.Concat(html.HiddenFor(expression));
 
-            var textBoxFor= html.TextBox(boxName + "Txt","", new { @type = "text", @class = "form-control" , data_autocombo_url = autocompleteUrl, @data_autocomplete_idholder = boxName  });
+            var textBoxFor= html.TextBox(boxName + "Txt", value ?? "", new { @type = "text", @class = "form-control" , data_autocombo_url = autocompleteUrl, @data_autocomplete_idholder = boxName  });
 
             return new MvcHtmlString(FetchStdFormWrappers(textBoxFor, validationMessageFor, label, editorClass));
+        }
+
+        public static MvcHtmlString EASpacer(this HtmlHelper html, string editorClass = "", string label = "")
+        {
+            var textBoxFor = html.Label( "", new { @type = "text", @class = "form-control" });
+            label = TextUnBound("", label);
+            return new MvcHtmlString(FetchStdFormWrappers(textBoxFor, MvcHtmlString.Empty, label, editorClass));
+        }
+        //==========================================================================================================================
+        //"Only the Editor+Validator" form Helpers
+        
+
+        //Text box
+        public static MvcHtmlString EATextForP<TModel, TValue>(this HtmlHelper<TModel> html, Expression<Func<TModel, TValue>> expression, string label = "", string editorClass = "")
+        {
+            MvcHtmlString validationMessageFor = TextBound(html, expression, ref label);
+            var textBoxFor = html.TextBoxFor(expression, new { @type = "text", @class = "form-control form-control-sm" });
+
+            return new MvcHtmlString(textBoxFor.ToHtmlString() + validationMessageFor?.ToHtmlString());
+        }
+
+        public static MvcHtmlString EATextP(this HtmlHelper html, string id, string editorClass = "", string label = "")
+        {
+            var textBoxFor = html.TextBox(id, "", new { @type = "text", @class = "form-control form-control-sm" });
+            label = TextUnBound(id, label);
+            return new MvcHtmlString(FetchStdFormWrappers(textBoxFor, MvcHtmlString.Empty, label, editorClass));
+        }
+
+
+        //Text Area
+        public static MvcHtmlString EATextAreaForP<TModel, TValue>(this HtmlHelper<TModel> html, Expression<Func<TModel, TValue>> expression, string label = "", string editorClass = "")
+        {
+            MvcHtmlString validationMessageFor = TextBound(html, expression, ref label);
+            var textBoxFor = html.TextAreaFor(expression, new { @type = "text", @class = "form-control form-control-sm" });
+
+            return new MvcHtmlString(textBoxFor.ToHtmlString() + validationMessageFor?.ToHtmlString());
+        }
+
+        public static MvcHtmlString EATextAreaP(this HtmlHelper html, string id, string editorClass = "", string label = "")
+        {
+            var textBoxFor = html.TextArea(id, "", new { @type = "text", @class = "form-control form-control-sm" });
+            label = TextUnBound(id, label);
+            return new MvcHtmlString(textBoxFor.ToHtmlString());
+        }
+
+        //Text Numeric
+        public static MvcHtmlString EANumberForP<TModel, TValue>(this HtmlHelper<TModel> html, Expression<Func<TModel, TValue>> expression, string label = "", string editorClass = "")
+        {
+            MvcHtmlString validationMessageFor = TextBound(html, expression, ref label);
+            var textBoxFor = html.TextBoxFor(expression, new { @type = "number", @class = "form-control form-control-sm" });
+
+            return new MvcHtmlString(textBoxFor.ToHtmlString() + validationMessageFor?.ToHtmlString());
+        }
+
+        public static MvcHtmlString EANumberP(this HtmlHelper html, string id, string editorClass = "", string label = "")
+        {
+            var textBoxFor = html.TextBox(id, "", new { @type = "number", @class = "form-control form-control-sm" });
+            label = TextUnBound(id, label);
+            return new MvcHtmlString(textBoxFor.ToHtmlString());
+        }
+
+        //Date        
+        public static MvcHtmlString EADateForP<TModel, TValue>(this HtmlHelper<TModel> html, Expression<Func<TModel, TValue>> expression, string label = "", string editorClass = "")
+        {
+            MvcHtmlString validationMessageFor = TextBound(html, expression, ref label);
+            var textBoxFor = html.TextBoxFor(expression, "{0:dd-MMM-yyyy}", new { @type = "text", @class = "form-control form-control-sm eadate" });
+
+            return new MvcHtmlString(textBoxFor.ToHtmlString() + validationMessageFor?.ToHtmlString());
+        }
+
+        public static MvcHtmlString EADateP(this HtmlHelper html, string id, string editorClass = "", string label = "")
+        {
+            var textBoxFor = html.TextBox(id, "", new { @type = "text", @class = "form-control form-control-sm eadate" });
+            label = TextUnBound(id, label);
+            return new MvcHtmlString(textBoxFor.ToHtmlString());
+        }
+
+        //DateTime
+        public static MvcHtmlString EADateTimeForP<TModel, TValue>(this HtmlHelper<TModel> html, Expression<Func<TModel, TValue>> expression, string label = "", string editorClass = "")
+        {
+            MvcHtmlString validationMessageFor = TextBound(html, expression, ref label);
+            var textBoxFor = html.TextBoxFor(expression, "{0:dd-MMM-yyyy HH:mm}", new { @type = "text", @class = "form-control form-control-sm eadatetime" });
+
+            return new MvcHtmlString(textBoxFor.ToHtmlString() + validationMessageFor?.ToHtmlString());
+        }
+
+        public static MvcHtmlString EADateTimeP(this HtmlHelper html, string id, string editorClass = "", string label = "")
+        {
+            var textBoxFor = html.TextBox(id, "", new { @type = "text", @class = "form-control form-control-sm eadatetime" });
+            label = TextUnBound(id, label);
+            return new MvcHtmlString(textBoxFor.ToHtmlString());
+        }
+
+        //Select List: Use even if Select list items are define in code> Use for ALL 1:1 relations
+        public static MvcHtmlString EASelectListForP<TModel, TValue>(this HtmlHelper<TModel> html, Expression<Func<TModel, TValue>> expression, string label = "", string editorClass = "")
+        {
+            MvcHtmlString validationMessageFor = TextBound(html, expression, ref label);
+            var textBoxFor = html.DropDownListFor(expression, null, new { @class = "form-control form-control-sm" });
+
+            return new MvcHtmlString(textBoxFor.ToHtmlString() + validationMessageFor?.ToHtmlString());
+        }
+
+        //Use in Searches or when there is a M:M relationship in the form. The Viewbag List name MUST be different from the id parameter
+        public static MvcHtmlString EASelectListP(this HtmlHelper html, string id, IEnumerable<SelectListItem> List, string editorClass = "", string label = "", string selectedValue = "")
+        {
+            var Fist = new SelectList(List, "Value", "Text", selectedValue);
+            var textBoxFor = html.DropDownList(id, Fist, new { @type = "text", @class = "form-control form-control-sm eadate" });
+            label = TextUnBound(id, label);
+            return new MvcHtmlString(textBoxFor.ToHtmlString());
+        }
+
+        //Check Box       
+        public static MvcHtmlString EAChkBoxP(this HtmlHelper html, string id, string editorClass = "", string label = "")
+        {
+            var textBoxFor = html.CheckBox(id, new { @class = "form-control form-control-sm" });
+            label = TextUnBound(id, label);
+            return new MvcHtmlString(textBoxFor.ToHtmlString());
+        }
+        
+        //Read at https://blogs.msdn.microsoft.com/stuartleeks/2012/04/23/asp-net-mvc-jquery-ui-autocomplete/
+        //@Html.LabelFor(m=>m.SomeValue) 
+        //@Html.AutocompleteForP(m=>m.SomeValue, “Autocomplete”, “Home”)
+        public static MvcHtmlString EAAutocompleteForP<TModel, TProperty>(this HtmlHelper<TModel> html, Expression<Func<TModel, TProperty>> expression, string controllerName, string actionName, string label = "", string value = "", string editorClass = "")
+        {
+            string autocompleteUrl = UrlHelper.GenerateUrl(null, actionName, controllerName, null, html.RouteCollection, html.ViewContext.RequestContext, includeImplicitMvcValues: true);
+            string boxName = html.DisplayNameFor(expression).ToString();
+
+            MvcHtmlString validationMessageFor = TextBound(html, expression, ref label);
+            validationMessageFor = validationMessageFor.Concat(html.HiddenFor(expression));
+
+            var textBoxFor = html.TextBox(boxName + "Txt", value ?? "", new { @type = "text", @class = "form-control form-control-sm", data_autocombo_url = autocompleteUrl, @data_autocomplete_idholder = boxName });
+
+            return new MvcHtmlString(textBoxFor.ToHtmlString() + validationMessageFor?.ToHtmlString());
+        }
+
+        public static MvcHtmlString EASpacerP(this HtmlHelper html, string editorClass = "", string label = "")
+        {
+            var textBoxFor = html.Label("", new { @type = "text", @class = "form-control form-control-sm" });
+            label = TextUnBound("", label);
+            return new MvcHtmlString(textBoxFor.ToHtmlString());
         }
 
         public static IHtmlString File(this HtmlHelper helper, string id)

@@ -1,0 +1,28 @@
+﻿@using Speedbird
+@model Speedbird.SRdetail
+
+
+<table class="SRDetsTbl">
+    <thead>
+        <tr>
+            <th>Supplier   </th>
+            <th>Inv No.    </th>
+            <th>Inv. Dt.   </th>
+            <th>Inv. Amt   </th>
+            <th>Coupon Code</th>
+            <th>Confirm NO </th>
+            <th>Contract No</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>@Html.EAAutocompleteForP(m => m.SupplierID, "SR", "AutoCompleteSup", "Supplier", (string)ViewBag.Supplier)</td>
+            <td>@Html.EATextForP(m => m.SuppInvNo)                                                                        </td>
+            <td>@Html.EADateForP(m => m.SuppInvDt)                                                                        </td>
+            <td>@Html.EANumberForP(m => m.SuppInvAmt)                                                                     </td>
+            <td>@Html.EATextForP(m => m.CouponCode)                                                                       </td>
+            <td>@Html.EATextForP(m => m.SuppConfNo)                                                                       </td>
+            <td>@Html.EATextForP(m => m.ContractNo)                                                                       </td>
+        </tr>
+    </tbody>
+</table>

@@ -32,6 +32,7 @@ ul.dropdown-menu {
     padding-right: 1.25rem;
     padding-bottom: .5rem;
     padding-left: 1.25rem;
+    background-color:#9c9fa9;
 }
 
 
@@ -57,16 +58,57 @@ ul.dropdown-menu {
 }
 
 .card {
-    margin-top: 50px;
+    margin-top: 35px;
     margin-left: 0px;
     margin-right: 0px;
 }
 
-.input-group-text {
-    width:130px;
+
+.input-group-prepend {
+    display: block !important;
 }
 
+.input-group-text {
+    width:130px;
+    /*line-height:0;*/
+}
+
+/*.form-control {
+    height:Calc(1.5em+3px) ;
+}*/
+
 /*EA Compressor*/
+
+/*EA SR details css*/
+.SRDetsTbl {
+    font-size: 0.8rem;
+    text-align:center;
+}
+    .SRDetsTbl td, .SRDetsTbl th {
+        border: 1px solid #3F5C80;
+        padding-right:3px;
+    }
+    .SRDetsTbl th {
+        border: 1px solid #3F5C80;
+        background-color: #bec5de;
+    }
+
+.SRDetsFullTable {
+    width:100%;
+}
+
+.SRDetsFinTbl {    
+}
+    .SRDetsFinTbl th {
+        background-color: #f7d8fa;
+    }
+
+
+
+.ui-autocomplete-input {
+    background-color: #fef3fd;
+}
+/*EA SR details css EOF*/
 #navVert {
     background-image: url("../Custom/sidenav5.jpg");
     background-repeat: no-repeat;

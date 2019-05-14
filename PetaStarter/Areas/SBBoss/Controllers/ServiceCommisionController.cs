@@ -18,7 +18,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         public ActionResult Index(int? page ,string AN )
         {
             if (AN?.Length > 0) page = 1;
-            return View("Index", base.BaseIndex<ServiceCommision>(page, " * ","ServiceCommision Where ServiceID >0"));
+            return View("Index", base.BaseIndex<ServiceCommision>(page, " * ","ServiceCommision"));
         }
 
 
@@ -28,9 +28,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
         public ActionResult Manage(int? id)
         {
-           // ViewBag.UnitID = new SelectList(db.Fetch<Unit>("Select UnitID,UnitName from Units"), "UnitID", "UnitName");
-            
-            return View(base.BaseCreateEdit<ServiceCommision>(id, "ServiceID"));
+                   
+            return View(db.SingleOrDefault<ServiceCommision>($"where ServiceID = @0", id));
         }
 
         // POST: Clients/Create
@@ -43,7 +42,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         public ActionResult Manage([Bind(Include = "ServiceID,ServiceName,Amount,Perc")] ServiceCommision item)
         {
 
-            return base.BaseSave<ServiceCommision>(item, item.ServiceID > 0);
+            return base.BaseSave<ServiceCommision>(item,true);
         }
 
         protected override void Dispose(bool disposing)

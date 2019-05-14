@@ -1,20 +1,27 @@
 ﻿@model IEnumerable<Speedbird.Queue>
 <style>
     .alert {
+        padding-top:15px;
         padding-bottom:0px;
+        margin-bottom:0px;
+    }
+
+    .col {
+        padding: 0 5px;
     }
 </style>
 
-<br />
+
 @if (Model.Count() > 0)
 {
-    <div class="row alert alert-primary alert-dismissible fade show" role="alert" style="position:absolute; top:15px;left:80px; border:3px groove #ffffec">
+    @*<div class="row alert alert-primary alert-dismissible fade show" role="alert" style="position:absolute; top:15px;left:80px; border:3px groove #ffffec">*@
+    <div class="row">
         @foreach (var item in Model)
         {
             <a href="/SBBoss/SR/SRQueueIndex/?st=@item.ServiceTypeId">
-                <div class="col-sm-auto">
+                <div class="col">
                     <div class="qItem alert alert-warning text-center">
-                        <span class="h5">
+                        <span >
                             @((Speedbird.ServiceTypeEnum)@item.ServiceTypeId)
                             <span class="badge badge-danger">@item.Count</span>
                         </span>
@@ -22,9 +29,9 @@
                 </div>
             </a>
         }
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        @*<button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
-        </button>
+        </button>*@
     </div>
 }
 <script>

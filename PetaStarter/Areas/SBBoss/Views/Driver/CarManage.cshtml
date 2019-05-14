@@ -27,43 +27,16 @@
                 }
 
                 <div class="form-row">
-                    <div class="input-group col mb-3">
-                        <div class="input-group-prepend"><span class="input-group-text">Car Brand</span></div>
-                        @Html.EditorFor(model => model.CarBrand, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.CarBrand, "", new { @class = "text-danger" })
-                    </div>
-                    <div class="input-group col mb-3">
-                        <div class="input-group-prepend"><span class="input-group-text">Car Model</span></div>
-                        @Html.EditorFor(model => model.Model, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.Model, "", new { @class = "text-danger" })
-                    </div>
-                    <div class="input-group col mb-3">
-                        <div class="input-group-prepend"><span class="input-group-text">Car Bought On</span></div>
-                        @Html.EditorFor(model => model.DateOfPurchase, new { htmlAttributes = new { @type = "text", @class = "form-control eadate" } })
-                        @Html.ValidationMessageFor(model => model.DateOfPurchase, "", new { @class = "text-danger" })
-                    </div>
-                    <div class="input-group col mb-3">
-                        <div class="input-group-prepend"><span class="input-group-text">Licn. Plate No.</span></div>
-                        @Html.EditorFor(model => model.PlateNo, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.PlateNo, "", new { @class = "text-danger" })
-                    </div>
+                    @Html.EATextFor(model => model.CarBrand)
+                    @Html.EATextFor(model => model.Model)
+                    @Html.EADateFor(model => model.DateOfPurchase, "Bought On")
+                    @Html.EATextFor(model => model.PlateNo)                    
                 </div>
                 <div class="form-row">
-                    <div class="input-group col mb-3">
-                        <div class="input-group-prepend"><span class="input-group-text">RC Book No.</span></div>
-                        @Html.EditorFor(model => model.RCBookNo, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.RCBookNo, "", new { @class = "text-danger" })
-                    </div>
-                    <div class="input-group col mb-3">
-                        <div class="input-group-prepend"><span class="input-group-text">Insurance End On</span></div>
-                        @Html.EditorFor(model => model.InsuranceEndDate, new { htmlAttributes = new { @type = "text", @class = "form-control eadate" } })
-                        @Html.ValidationMessageFor(model => model.InsuranceEndDate, "", new { @class = "text-danger" })
-                    </div>
-                    <div class="input-group col mb-3">
-                        <div class="input-group-prepend"><span class="input-group-text">Insurance Company</span></div>
-                        @Html.EditorFor(model => model.InsuranceCompany, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.InsuranceCompany, "", new { @class = "text-danger" })
-                    </div>
+                    @Html.EATextFor(model => model.RCBookNo, "R.C. Book No.")                    
+                    @Html.EADateFor(model => model.InsuranceEndDate, "Ins. End Dt.")
+                    @Html.EATextFor(model => model.InsuranceCompany, "Ins. Company") 
+                    
                     <div  class="input-group col mb-3">
                         <input type="submit" value="Save" class="btn btn-primary" />
                     </div>
@@ -112,7 +85,7 @@
                     @Html.DisplayFor(modelItem => item.Model)
                 </td>
                 <td>
-                    @(((DateTime)item.DateOfPurchase).EAFormat())
+                    @(((DateTime?)item.DateOfPurchase).EAFormat())
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.PlateNo)
@@ -123,16 +96,18 @@
 
                 @if (item.InsuranceEndDate < DateTime.Now)
                 {
-                    <td style="background-color: #cc91b4">                 
-                        @(((DateTime)item.InsuranceEndDate).EAFormat())
+                    <td style="background-color: #cc91b4">
+                        @(((DateTime?)item.InsuranceEndDate).EAFormat())
                     </td>}
                 else
                 {
                     <td>
-                        @Html.DisplayFor(modelItem => item.InsuranceCompany)                        
+                        @Html.DisplayFor(modelItem => item.InsuranceEndDate)
                     </td>
                 }
-
+                <td>
+                    @Html.DisplayFor(modelItem => item.InsuranceCompany)
+                </td>
                 <td>
                     <a href="@Url.Action("CarManage","Driver", new {CarId = item.CarId })"><i title="Edit" class="fas fa-edit fa-inverse h3 float-right DropShadow"></i></a>
                 </td>
