@@ -398,7 +398,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             ViewBag.SRID = id;
             ViewBag.Title = "Manage Services";
             ViewBag.SRs = db.FirstOrDefault<ServiceRequestDets>("Select * From ServiceRequest sr inner join Customer c on c.CustomerID=sr.CustID Where SRID=@0", id);
-            ViewBag.SRDets = db.Query<SRdetail>("Select srdid,ServiceTypeId from SRdetails where SRID =@0", id);
+            ViewBag.SRDets = db.Query<SRdetail>("Select srdid,ServiceTypeId from SRdetails where SRID =@0 order by Fdate", id);
             List<SelectListItem> ServiceTypeID = Enum.GetValues(typeof(ServiceTypeEnum)).Cast<ServiceTypeEnum>().Select(v => new SelectListItem { Text = v.ToString(), Value = ((int)v).ToString() }).ToList();
             var defaultServType = db.Single<ServiceRequest>(id).ServiceTypeID;
             var selST= ServiceTypeID.First(a => int.Parse(a.Value) == defaultServType);
@@ -497,7 +497,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                     if(item.SRDID > 0)//Update existing record when in edit mode
                     {
                         LogAction(new SRlog { SRID = item.SRID, SRDID=item.SRDID, Event = Event, Type=true});
-                        LogAction(new SRlog { SRID = item.SRID, SRDID = item.SRDID, Event = FindDiffs<SRdetail>(item.SRDID,item,"Service") });
+                        LogAction(new SRlog { SRID = item.SRID, SRDID = item.SRDID, Event = FindDiffs<SRdetail>(item.SRDID,item,item.SRDID + ": " + item.ServiceTypeName) });
                         db.Update(item);
 
                         db.Execute($"Update SRD_Cust Set CustomerId ='{CustomerId}' where srdid ={item.SRDID}");
@@ -509,16 +509,17 @@ namespace Speedbird.Areas.SBBoss.Controllers
                     }
                     else //Insert new SRdetail
                     {
+                        string logNote = FindDiffs<SRdetail>(0, item, "");
                         db.Insert(item);
-                        if (td.HasValue)
+                        if (td.HasValue && item.ServiceTypeID==(int)ServiceTypeEnum.Flight)
                         {//We need to insert this duplicate record so that we can show this return flight in the Daily Diary on the return journey date
                             db.Insert(new SRdetail { FromLoc = item.ToLoc, ToLoc = item.FromLoc, Tdate = td, ParentID = item.SRDID, ServiceTypeID = item.ServiceTypeID });
                         }
 
                         db.Insert(new SRD_Cust { CustomerID = CustomerId, SRDID = item.SRDID });
-
+                        logNote = item.SRDID + ": " + item.ServiceTypeName + " added:- " + logNote;
                         LogAction(new SRlog { SRID = item.SRID, SRDID = item.SRDID, Event = Event, Type = true });
-                        LogAction(new SRlog { SRID = item.SRID, SRDID = item.SRDID, Event = "Added " + item.ServiceTypeName });
+                        LogAction(new SRlog { SRID = item.SRID, SRDID = item.SRDID, Event = logNote });
                     }
                     
                     transaction.Complete();
@@ -691,14 +692,24 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 ComparisonResult comparisonResult = c.Compare(oldObj, newObj);
                 string res = " ";
                 foreach (var item in comparisonResult.Differences)
-                    res += $"{item.PropertyName}: {item.Object1Value}->{item.Object2Value} +";
+                    res += $"{item.PropertyName} Changed from: {item.Object1Value} to {item.Object2Value}, ";
                 if (res.Length > 1)
-                    return objName + " Changed: " + res.Substring(0, res.Length - 1);
+                    return objName + " :- " + res.Substring(0, res.Length - 1);
                 else
                     return "";
             }
             else
-                return objName+ " Added";
+            {                
+                CompareLogic c = new CompareLogic(new ComparisonConfig { MaxDifferences = 99 });
+                ComparisonResult comparisonResult = c.Compare(Activator.CreateInstance(typeof(T)), newObj);
+                string res = " ";
+                foreach (var item in comparisonResult.Differences)
+                    res += $"{item.PropertyName}: {item.Object2Value}, ";
+                if (res.Length > 1)
+                    return objName + " :- " + res.Substring(0, res.Length - 1);
+                else
+                    return "";
+            }
         }
 
         private void LogAction(SRlog item)

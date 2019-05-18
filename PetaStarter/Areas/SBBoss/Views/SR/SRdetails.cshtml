@@ -13,7 +13,7 @@
     <div id="SRDetTbl">
         @foreach(var sd in (IEnumerable<Speedbird.SRdetail>) ViewBag.SRDets)
         {
-            <div class="h3"> @(((Speedbird.ServiceTypeEnum)sd.ServiceTypeID).ToString())</div>
+        <div class="h3">@sd.SRDID : @(((Speedbird.ServiceTypeEnum)sd.ServiceTypeID).ToString())</div>
             @Html.Action("FetchSRdetails", "SR", new { sType = (Speedbird.ServiceTypeEnum) sd.ServiceTypeID, srdid = sd.SRDID })
         }
     </div>
@@ -123,14 +123,14 @@
 
 
         //Load the dynamic fields based on first Service type automatically
-        $('#placeholderEditDiv').load('@Url.Action("FetchSTpartial", "SR")', { ServiceTypeId: $('#ServiceTypeID').val(),id:$('#SRDID').val() ,IsReadOnly: false, SRID: @ViewBag.SRID });
+        $('#placeholderEditDiv').load('@Url.Action("FetchSTpartial", "SR")', { ServiceTypeId: $('#ServiceTypeID').val(),IsReadOnly: false, SRID: @ViewBag.SRID });
 
         //Then on change of the dropDown load the dynamic fields based on the selected Service type
         $('.ServiceType').on('change', function () {
             var sid = $(this).val();
 
             //Load the Dynamic Fields of the Form based on the selected Service Type
-            $('#placeholderEditDiv').load('@Url.Action("FetchSTpartial", "SR")', { ServiceTypeId: sid, id: $('#SRDID').val() , IsReadOnly: false, SRID: @ViewBag.SRID });
+            $('#placeholderEditDiv').load('@Url.Action("FetchSTpartial", "SR")', { ServiceTypeId: sid,  IsReadOnly: false, SRID: @ViewBag.SRID });
 
             //Fill the Option Type box
             $.get('@Url.Action("GetOptionsOfST", "SR")', { ServiceTypeId: sid } , function (data) {
