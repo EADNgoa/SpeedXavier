@@ -13,7 +13,7 @@
 // 
 //     Connection String Name: `DefaultConnection`
 //     Provider:               `System.Data.SqlClient`
-//     Connection String:      `Data Source=(LocalDb)\MSSQLLocalDB;Initial Catalog=SpeedBirdDBsrn;Integrated Security=True`
+//     Connection String:      `Data Source=(LocalDb)\MSSQLLocalDB;Initial Catalog=SpeedBirdDB;Integrated Security=True`
 //     Schema:                 ``
 //     Include Views:          `False`
 
@@ -976,7 +976,7 @@ namespace Speedbird
 	}
     
 	[TableName("dbo.ServiceCommision")]
-	[PrimaryKey("ServiceID", AutoIncrement=false)]
+	[PrimaryKey("ServiceID")]
 	[ExplicitColumns]
     public partial class ServiceCommision  
     {
@@ -1081,7 +1081,6 @@ namespace Speedbird
 		[Column] public DateTime? SuppInvDt { get; set; }
 		[Column] public string SuppConfNo { get; set; }
 		[Column] public int? NoExtraBeds { get; set; }
-		[Column] public int? EBCostPNight { get; set; }
 		[Column] public int? BFCost { get; set; }
 		[Column] public int? LunchCost { get; set; }
 		[Column] public int? DinnerCost { get; set; }
