@@ -759,15 +759,15 @@ namespace Speedbird
 
     public enum ServiceTypeEnum
     {
-        Transfer,
-        Accomodation,
-        SightSeeing,
-        Flight,
-        Insurance,
-        Packages,
-        Visa,
-        CarBike,
-        Cruise
+        Transfer=0,
+        Accomodation=1,
+        SightSeeing=2,
+        Flight=3,
+        Insurance=4,
+        Packages=5,
+        Visa=6,
+        CarBike=7,
+        Cruise=8
     }
 
     public enum MealPlanEnum

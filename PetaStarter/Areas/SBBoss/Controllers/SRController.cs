@@ -54,7 +54,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
             ViewBag.Title = "Diary";
             AN=AN ?? DateTime.Now.Date;
             
-            return View("SRDiaryDets", base.BaseIndex<SRdetailDets>(1, " * ", $"ServiceRequest sr , SRdetails srd where sr.SRstatusID in ({(int)SRStatusEnum.Confirmed},{(int)SRStatusEnum.Completed}) and sr.srid=srd.SRID and (srd.FDate='{AN:yyyy-MM-dd}' or ('{AN:yyyy-MM-dd}' between srd.Fdate and srd.TDate))"));
+            return View("SRDiaryDets", base.BaseIndex<SRdetailDets>(1, " srd.serviceTypeId, srd.srdid ", $"ServiceRequest sr , SRdetails srd where sr.SRstatusID in ({(int)SRStatusEnum.Confirmed},{(int)SRStatusEnum.Completed}) and sr.srid=srd.SRID " +
+                $"and (convert(date,srd.FDate)='{AN:yyyy-MM-dd}' or ('{AN:yyyy-MM-dd}' between srd.Fdate and srd.TDate))"));
 
         }
 
@@ -376,7 +377,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
                     if (Event?.Length == null)
                     {
-                        Event = "User has Edited the Field";
+                        Event = "User has Edited a Field";
                     }
                     
                     transaction.Complete();
@@ -475,7 +476,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         [EAAuthorize(FunctionName = "Service Requests", Writable = true)]
         public ActionResult SRdetails([Bind(Include = "SRDID,SRID, ServiceTypeID,CarType,ItemID,CouponCode,Model,FromLoc,ToLoc,Fdate,Tdate,SupplierID,Cost,SellPrice,ChildNo," +
             "AdultNo,InfantNo,Heritage,HasAc,HasCarrier,GuideLanguageID,DateOfIssue,ContractNo,PayTo,PickUpPoint,DropPoint,DriverID,SuppInvNo,Qty,ParentID,IsReturn," +
-            "IsInternational,OptionTypeID,ECommision,IsCanceled,SuppInvDt,SuppConfNo,NoExtraBeds,EBCostPNight,BFCost,LunchCost,DinnerCost,NoExtraService,ExtraServiceCost," +
+            "IsInternational,OptionTypeID,ECommision,IsCanceled,SuppInvDt,SuppConfNo,NoExtraBeds,BFCost,LunchCost,DinnerCost,NoExtraService,ExtraServiceCost," +
             "SuppInvAmt,GDSConfNo")] SRdetail item, string Event, int CustomerId)
         {
             using (var transaction = db.GetTransaction())
@@ -685,6 +686,11 @@ namespace Speedbird.Areas.SBBoss.Controllers
         /// <returns></returns>
         private string FindDiffs<T>(int Id, T newObj, string objName)
         {
+            var nameList = new List<SRTranslation>();
+            if (newObj is SRdetail)
+            {
+                nameList = db.Query<SRTranslation>("where ServiceTypeId=@0", newObj.GetType().GetProperty("ServiceTypeID").GetValue(newObj)).ToList();
+            }
             if (Id > 0)
             {
                 var oldObj = db.Single<T>(Id);
@@ -692,7 +698,11 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 ComparisonResult comparisonResult = c.Compare(oldObj, newObj);
                 string res = " ";
                 foreach (var item in comparisonResult.Differences)
-                    res += $"{item.PropertyName} Changed from: {item.Object1Value} to {item.Object2Value}, ";
+                {
+                    string propName = LookupFriendlyName(nameList, item);
+                    if (propName.Length>0)
+                        res += $"{propName} Changed from: {item.Object1Value} to {item.Object2Value}, ";
+                }
                 if (res.Length > 1)
                     return objName + " :- " + res.Substring(0, res.Length - 1);
                 else
@@ -704,12 +714,27 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 ComparisonResult comparisonResult = c.Compare(Activator.CreateInstance(typeof(T)), newObj);
                 string res = " ";
                 foreach (var item in comparisonResult.Differences)
-                    res += $"{item.PropertyName}: {item.Object2Value}, ";
+                {
+                    string propName = LookupFriendlyName(nameList, item);
+                    if (propName.Length > 0)
+                        res += $"{propName}: {item.Object2Value}, ";
+                }
                 if (res.Length > 1)
                     return objName + " :- " + res.Substring(0, res.Length - 1);
                 else
                     return "";
             }
+        }
+
+        private static string LookupFriendlyName(List<SRTranslation> nameList, Difference item)
+        {
+            string[] blockList = new string[] { "SRID", "ServiceTypeID", "tstr", "fstr" }; //we dont want to log these
+            if (blockList.Contains(item.PropertyName))
+                return "";
+
+            string propName = nameList.FirstOrDefault<SRTranslation>(x => x.ColumnName == item.PropertyName)?.FriendlyName ?? MyExtensions.CamelToSpaceString(item.PropertyName);
+            if (propName.Length < 1) propName = MyExtensions.CamelToSpaceString(item.PropertyName);
+            return propName;
         }
 
         private void LogAction(SRlog item)

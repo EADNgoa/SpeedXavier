@@ -11,14 +11,14 @@
         <span class="h5">Search</span>
     </div>
     <div class="card-body">
-        
+
         @using (Html.BeginForm("SRDiaryDets", "SR", FormMethod.Get))
         {
             <div class="row d-print-none">
                 <table>
                     <tr style="text-align:center">
                         <td>&nbsp;Date:</td>
-                        <td> @Html.TextBox("AN", ViewBag.CurrentFilter as string, new { @class = "form-control eadate",@type="text" })</td>
+                        <td> @Html.TextBox("AN", ViewBag.CurrentFilter as string, new { @class = "form-control eadate", @type = "text" })</td>
                         <td><input type="submit" value="Search" class="btn btn-primary" /></td>
                     </tr>
                 </table>
@@ -27,105 +27,27 @@
         }
     </div>
 </div>
-        <div class="card border rounded DropShadow">
-            <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
-                <span class="h3">Daily Dairy</span>
-            </div>
-            <div class="card-body">
-                
-                <table class="table">
-                    <tr role="row">
-                        <th>Bk No</th>
-                        
-                        <th scope="col"> Service Type</th>
-                        <th scope="col"> Start date</th>
-                        <th scope="col">Supplier</th>
-                        <th scope="col">Contract No</th>
-                        <th scope="col">Coupon Code</th>
-                        <th scope="col">Cost Price</th>
-                        <th scope="col">Sell Price</th>
-                        <th width="5%"></th>
-                    </tr>
-                    @{int i = 1; }
-                    @foreach (var item in Model)
-                    {
-                        <tr>
-                            <td>
-                                @item.SRID
-                            </td>
-                        
-                            <td>
-                                @((Speedbird.ServiceTypeEnum)item.ServiceTypeID)
-                            </td>
-                            <td>
-                                @($"{item.Fdate:dd/MMM/yyyy}")
-                            </td>
-                            <td>
-                                @item.SupplierName
-                            </td>
-                            <td>
-                                @item.ContractNo
-                            </td>
-                            <td>
-                                @item.CouponCode
-                            </td>
-                            <td>
-                                @item.Cost
-                            </td>
-                            <td>
-                                @item.SellPrice
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="10">                               
-                                 @{Html.RenderAction("FetchSTpartial", "SR", new { id = item.SRDID, ServiceTypeId = item.ServiceTypeID, IsReadOnly = true, SRID= item.SRID }); }
-                            </td>
-                        </tr>
-                        i++;
-                    }
-                </table>
+<div class="card border rounded DropShadow">
+    <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
+        <span class="h3">Daily Dairy</span>
+    </div>
+    <div class="card-body">
 
-            </div>
+        <div id="SRDetTbl">
+            @foreach (var sd in Model)
+            {
+                <div class="h3">@sd.SRDID : @(((Speedbird.ServiceTypeEnum)sd.ServiceTypeID).ToString())</div>
+                @Html.Action("FetchSRdetails", "SR", new { sType = (Speedbird.ServiceTypeEnum)sd.ServiceTypeID, srdid = sd.SRDID })
+            }
         </div>
 
- 
 
 
-<br />
-
-
-
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}
-<script type="text/javascript" src="~/Content/DataTables/datatables.min.js"></script>
-<script>
-
-
-
-    $(function () {
+    </div>
+</div>
 
 
 
 
 
-        //DateTime picker
-        $('input[type=date]').datetimepicker({
-            dateFormat: "dd-MM-yy",
-            showButtonPanel: true,
-            changeMonth: true,
-            changeYear: true,
 
-        }).attr('type', 'text').attr('autocomplete', 'off');
-        //Disable the browsers default date picker
-        jQuery.validator.methods["date"] = function (value, element) { return true; }
-
-
-      
-
-
-    })
-
-
-
-</script>

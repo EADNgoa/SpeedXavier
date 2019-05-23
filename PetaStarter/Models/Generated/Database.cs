@@ -1119,6 +1119,17 @@ namespace Speedbird
 		[Column] public int? BankID { get; set; }
 	}
     
+	[TableName("dbo.SRTranslation")]
+	[PrimaryKey("SRTranslationId")]
+	[ExplicitColumns]
+    public partial class SRTranslation  
+    {
+		[Column] public int SRTranslationId { get; set; }
+		[Column] public int ServiceTypeId { get; set; }
+		[Column] public string ColumnName { get; set; }
+		[Column] public string FriendlyName { get; set; }
+	}
+    
 	[TableName("dbo.SRUploads")]
 	[PrimaryKey("SRUID")]
 	[ExplicitColumns]
