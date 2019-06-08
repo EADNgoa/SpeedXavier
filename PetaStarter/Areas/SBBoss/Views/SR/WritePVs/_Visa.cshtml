@@ -1,0 +1,107 @@
+﻿@using Speedbird
+@model Speedbird.SRdetail
+
+@{ Html.RenderPartial("WritePVs/_CommonHidden", Model); }
+
+<table class="SRDetsTbl" width="100%">
+    <thead>
+        <tr>
+            <th>Pax Name     </th>
+            <th>Passport No        </th>
+            <th>DOB    </th>
+            <th>Expiry Date    </th>
+            <th>Nationality    </th>
+            <th>Visa Country    </th>
+            <th>From Date  </th>
+            <th>To Date     </th>
+            <th>Cost </th>
+            <th>Total CP </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td> @Html.EASelectListP("CustomerId", (IEnumerable<SelectListItem>)ViewBag.CustomerList, "", "Pax Name", (string)ViewBag.SelectedCustomerId)</td>
+            <td> @Html.EATextForP(m => m.AdultNo, "Passport No")                                                                                            </td>
+            <td> @Html.EADateForP(m => m.DateOfIssue, "DOB")                                                                                          </td>
+            <td> @Html.EADateForP(m => m.ExpiryDate, "Expiry date")                                                                                         </td>
+            <td> @Html.EATextForP(m => m.FromLoc, "Nationality")                                                                                     </td>
+            <td> @Html.EASelectListForP(m => m.Heritage, "Visa Country")                                                                                   </td>
+            <td> @Html.EADateForP(m => m.Fdate, "From date")                                                                                   </td>
+            <td> @Html.EADateForP(m => m.Tdate, "To date")                                                                                          </td>
+            <td> @Html.EATextForP(m => m.Cost, "Cost")                                                                                       </td>
+            <td> @Html.EATextForP(m => m.ExtraServiceCost, "Total CP")                                                                            </td>
+
+        </tr>
+    </tbody>
+</table>
+@{ Html.RenderPartial("WritePVs/_SupplierInfo", Model); }
+
+
+@*@if (ViewBag.isReadOnly != null)
+        {@Html.Action("CustSearch", "SR", new { id = Model.SRDID })
+    }
+
+        @if (Model != null)
+        {
+            <script>
+               $('#AssignDriver').load('@Url.Action("_AssignDriver")', { SRID: @Model.SRID, SRDID: @Model.SRDID});
+               $('#Review').load('@Url.Action("_DrvReview")', { SRID: @Model.SRID,SRDID: @Model.SRDID});
+            </script>
+        }*@
+
+
+<script>
+
+
+
+    $(function () {
+        //DateTime picker
+        $('.eadatetime').datetimepicker({
+            dateFormat: "dd-MM-yy",
+            showButtonPanel: true,
+            changeMonth: true,
+            changeYear: true,
+            timeFormat: "HH:mm"
+        });
+
+        $('.eadate').datepicker({
+            dateFormat: "dd-MM-yy",
+            showButtonPanel: true,
+            changeMonth: true,
+            changeYear: true
+        });
+
+        //Disable the browsers default date picker
+        jQuery.validator.methods["date"] = function (value, element) { return true; }
+
+        ////Auto Days Calcaulation
+        //$('#Tdate').change(function () {
+        //    var start = new Date($('#Fdate').val());
+        //    var end = new Date($('#Tdate').val());
+
+        //    var diff = new Date(end - start);
+        //    var days = 1;
+        //    days = diff / 1000 / 60 / 60 / 24;
+
+        //    $('#ChildNo').val(days);
+
+        //});
+
+    });
+
+
+    $(document).ready(function () {
+        $('*[data-autocombo-url]')
+            .each(function () {
+                $(this).autocomplete({
+                    source: $(this).data("autocombo-url"),
+                    minLenght: 3,
+                    delay: 500,
+                    select: function (event, ui) {
+                        $("#" + $(this).data("autocomplete-idholder")).val(ui.item.id).trigger('change');
+                    }
+                });
+            });
+    });
+
+</script>

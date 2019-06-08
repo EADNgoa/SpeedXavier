@@ -42,7 +42,30 @@
                 <td>@ViewBag.Inc</td>
             </tr>
         </table>
-        @{Html.RenderPartial("ReadPVs/_SupplierInfo", Model); }
+        <table class="SRDetsTbl">
+            <thead>
+                <tr>
+                    <th>Driver</th>
+                    <th>Car</th>
+                    <th>Invoice No.</th>
+                    <th>Coupon</th>
+                    <th>Inv. Amt.</th>
+                    <th>Inv. Date</th>
+                    <th>Conf No.</th>
+                </tr>
+            </thead>
+            <tr>
+                <td>@Model.DriverName</td>
+                <td>@Model.Car</td>
+                <td>@Model.SuppInvNo</td>
+                <td>@Model.CouponCode</td>
+                <td align="right">@Model.SuppInvAmt</td>
+                <td>@Model.SuppInvDt.EAFormat()</td>
+                <td>@Model.SuppConfNo</td>
+            </tr>
+        </table>
+
+        @*@{Html.RenderPartial("ReadPVs/_SupplierInfo", Model); }*@
     </div>
     <div class="col-2" style="padding-left:0px;">
         @{Html.RenderPartial("ReadPVs/_Fin", Model); }

@@ -1089,6 +1089,7 @@ namespace Speedbird
 		[Column] public int? SuppInvAmt { get; set; }
 		[Column] public string GDSConfNo { get; set; }
 		[Column] public decimal? Tax { get; set; }
+		[Column] public DateTime? ExpiryDate { get; set; }
 	}
     
 	[TableName("dbo.SRlogs")]
