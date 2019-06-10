@@ -1,0 +1,102 @@
+﻿@using Speedbird
+@model Speedbird.SRdetail
+
+@{ Html.RenderPartial("WritePVs/_CommonHidden", Model); }
+
+        <table class="SRDetsTbl" width="100%">
+            <thead>
+                <tr>
+                    <th>Pax Name      </th>
+                    <th>D.O.B     </th>
+                    <th>Passport No     </th>
+                    <th>Nationality     </th>
+                    <th>Service Required</th>
+                    <th>Cost    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>  @Html.EASelectListP("CustomerId", (IEnumerable<SelectListItem>)ViewBag.CustomerList, "", "Pax Name", (string)ViewBag.SelectedCustomerId)</td>
+                    <td>  @Html.EADateForP(m => m.Fdate, "Date of Birth")                                                                                             </td>
+                    <td>  @Html.EANumberForP(m => m.ContractNo, "Passport No.")                                                                                     </td>
+                    <td>  @Html.EATextFor(m => m.FromLoc, "Nationality")                                                                                   </td>
+                    <td>  @Html.EATextFor(m => m.Heritage, "Service Required")                                                                            </td>
+                    <td>  @Html.EANumberFor(m => m.Cost, "Cost")                                                                            </td>
+                </tr>
+            </tbody>
+        </table>
+
+        @{ Html.RenderPartial("WritePVs/_SupplierInfo", Model); }
+
+
+
+<script>
+    $(function () {
+        //DateTime picker
+        $('.eadatetime').datetimepicker({
+            dateFormat: "dd-MM-yy",
+            showButtonPanel: true,
+            changeMonth: true,
+            changeYear: true,
+            timeFormat: "HH:mm"
+        });
+
+        $('.eadate').datepicker({
+            dateFormat: "dd-MM-yy",
+            showButtonPanel: true,
+            changeMonth: true,
+            changeYear: true
+        });
+
+     //Disable the browsers default date picker
+            jQuery.validator.methods["date"] = function (value, element) { return true; }
+
+            @*function setDriverCars(driverid) {
+                $.get('@Url.Action("AutoCompleteCars")', { DriverId: driverid }, function (response) {
+
+                    $('#NoExtraBeds').html('');
+
+                    if (response.length > 0) {
+                        var options = '';
+                        for (var i = 0; i < response.length; i++) {
+                            if (response[i].id == @(Model?.NoExtraBeds ??-1)) {
+                                options += '<option selected value="' + response[i].id + '">' + response[i].value + '</option>';
+                            } else {
+                                options += '<option value="' + response[i].id + '">' + response[i].value + '</option>';
+                            }
+                        }
+                    }
+                        options += '<option value="Select">No Cars defined</option>';
+                        $('#NoExtraBeds').append(options);
+                });
+            }*@
+
+            //If in edit mode we may already have the driverid and thus should fetch his cars
+            if ($("#DriverID").val() > 0) {
+                setDriverCars($("#DriverID").val());
+            }
+
+            //fetch driver cars on selection of driver
+            $("#DriverID").on("change", function () {
+                setDriverCars($(this).val());
+            });
+
+
+    });
+
+
+    $(document).ready(function () {
+        $('*[data-autocombo-url]')
+            .each(function () {
+                $(this).autocomplete({
+                    source: $(this).data("autocombo-url"),
+                    minLenght: 3,
+                    delay: 500,
+                    select: function (event, ui) {
+                        $("#" + $(this).data("autocomplete-idholder")).val(ui.item.id).trigger('change');
+                    }
+                });
+            });
+    });
+
+</script>

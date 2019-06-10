@@ -1,0 +1,96 @@
+﻿@using Speedbird
+@model Speedbird.Packagevw
+<div class="row">
+    <div class="col-10">
+        <table class="SRDetsTbl">
+            <thead>
+                <tr>
+                    <th>Pax Name</th>
+                    <th>NoOfPax</th>
+                    <th>Package Type</th>
+                    <th>From Date</th>
+                    <th>To Date</th>
+                    <th>No Of Days</th>
+                    <th>Meal Plan</th>
+                    <th>Start Point</th>
+                    <th>End Point</th>
+                    <th>Name of Tour</th>
+                    <th>Travel Included</th>
+                    <th>Hotel Category</th>
+                    <th>Package Cost</th>
+                    <th>Additional Charge Details</th>
+                    <th>Additional Cost/Person</th>
+                    <th>Net Cost/Person</th>
+                </tr>
+            </thead>
+            <tr>
+                <td>@Model.PaxName</td>
+                <td>@Model.NOOfPax</td>
+                <td>@Model.PackageType</td>
+                <td>@Model.Fdate</td>
+                <td>@Model.Tdate</td>
+                <td>@(Model.Tdate.Subtract(Model.Fdate).TotalDays)</td>
+                <td>@Model.CarType</td>
+                <td>@Model.FromLoc</td>
+                <td>@Model.ToLoc</td>
+                <td>@Model.NameofTour</td>
+                <td>@Model.IsReturn</td>
+                <td>@Model.Cost</td>
+                <td>@Model.AddDtl</td>
+                <td>@Model.AddCost</td>
+                <td>@Model.NetCost</td>
+            </tr>
+        </table>
+        @{Html.RenderPartial("ReadPVs/_SupplierInfo", Model); }
+    </div>
+    <div class="col-2" style="padding-left:0px;">
+        @{Html.RenderPartial("ReadPVs/_Fin", Model); }
+    </div>
+</div>
+
+    @*@foreach (var item in ViewBag.ufs)
+        {
+            <span class="badge badge-secondary"><a target="_blank" style="color:white !important;" href="/Images/@item.Path">@item.UploadName</a> &nbsp; <a style="color:#fe7575 !important;" href="@Url.Action("Delete","SR",new {pid=item.SRUID , id=item.SRID})">X</a></span>
+        }
+
+        @using (Html.BeginForm("SRUpload", "SR", FormMethod.Post, new { id = "ServiceDetsUpld-" + Model.SRDID, enctype = "multipart/form-data" }))
+        {
+            <div class="form-inline">
+                @Html.AntiForgeryToken()
+                @Html.Hidden("SRID", (int)Model.SRID)
+                @Html.Hidden("SRDID", (int)Model.SRDID)
+                @Html.EAText("UploadName", "", "File Description")
+
+
+                @Html.TextBox("UploadedFile", "", new { type = "file", @class = "UploadedFile", @data_uf = Model.SRDID })
+            </div>
+        }*@
+
+
+
+
+
+    <script>
+
+
+        $(function () {
+            //DateTime picker
+
+
+            $('.eadate').datepicker({
+                dateFormat: "dd-MM-yy",
+                showButtonPanel: true,
+                changeMonth: true,
+                changeYear: true
+            });
+
+            //Disable the browsers default date picker
+            jQuery.validator.methods["date"] = function (value, element) { return true; }
+
+
+        });
+
+
+
+
+    </script>

@@ -43,10 +43,36 @@
             <td>  @Html.EAChkBoxP("HasAc", "", "Meal Included")                                                                                           </td>
             <td>  @Html.EANumberForP(m => m.SellPrice)                                                                                                    </td>
         </tr>
-    </tbody>    
+    </tbody>
+</table>
+<table class="SRDetsTbl" width="100%">
+    <thead>
+        <tr>
+            <th>Driver  </th>
+            <th>Car  </th>
+            <th>Inv No.    </th>
+            <th>Inv. Dt.   </th>
+            <th>Inv. Amt   </th>
+            <th>Coupon Code</th>
+            <th>Confirm NO </th>
+            <th>Contract No</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>@Html.EAAutocompleteForP(m => m.DriverID, "SR", "AutoCompleteDriver", "Driver", (string)ViewBag.Driver)                                   </td>
+            <td>@Html.EASelectListP("NoExtraBeds", new List<SelectListItem> { new SelectListItem { Text = "1st choose Driver", Value = "0" } }, "", "Car") </td>
+            <td>@Html.EATextForP(m => m.SuppInvNo)                                                                                                        </td>
+            <td>@Html.EADateForP(m => m.SuppInvDt)                                                                                                        </td>
+            <td>@Html.EATextForP(m => m.SuppInvAmt)                                                                                                       </td>
+            <td>@Html.EATextForP(m => m.CouponCode)                                                                                                       </td>
+            <td>@Html.EATextForP(m => m.SuppConfNo)                                                                                                       </td>
+            <td>@Html.EATextForP(m => m.ContractNo)                                                                                                       </td>
+        </tr>
+    </tbody>
 </table>
 
-@{ Html.RenderPartial("WritePVs/_SupplierInfo", Model); }
+@*@{ Html.RenderPartial("WritePVs/_SupplierInfo", Model); }*@
 
 
 
@@ -68,9 +94,38 @@
             changeYear: true
         });
 
-        //Disable the browsers default date picker
-        jQuery.validator.methods["date"] = function (value, element) { return true; }
+     //Disable the browsers default date picker
+            jQuery.validator.methods["date"] = function (value, element) { return true; }
 
+            function setDriverCars(driverid) {
+                $.get('@Url.Action("AutoCompleteCars")', { DriverId: driverid }, function (response) {
+
+                    $('#NoExtraBeds').html('');
+
+                    if (response.length > 0) {
+                        var options = '';
+                        for (var i = 0; i < response.length; i++) {
+                            if (response[i].id == @(Model?.NoExtraBeds ??-1)) {
+                                options += '<option selected value="' + response[i].id + '">' + response[i].value + '</option>';
+                            } else {
+                                options += '<option value="' + response[i].id + '">' + response[i].value + '</option>';
+                            }
+                        }
+                    }
+                        options += '<option value="Select">No Cars defined</option>';
+                        $('#NoExtraBeds').append(options);
+                });
+            }
+
+            //If in edit mode we may already have the driverid and thus should fetch his cars
+            if ($("#DriverID").val() > 0) {
+                setDriverCars($("#DriverID").val());
+            }
+
+            //fetch driver cars on selection of driver
+            $("#DriverID").on("change", function () {
+                setDriverCars($(this).val());
+            });
 
 
     });

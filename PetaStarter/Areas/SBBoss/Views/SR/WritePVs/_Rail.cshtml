@@ -1,0 +1,114 @@
+﻿@using Speedbird
+@model Speedbird.SRdetail
+
+@{ Html.RenderPartial("WritePVs/_CommonHidden", Model); }
+
+<table class="SRDetsTbl" width="100%">
+    <thead>
+        <tr>
+            <th>Pax Name</th>
+            <th>Age</th>
+            <th>Date of travel</th>
+            <th>From</th>
+            <th>To</th>
+            <th>Train Name</th>
+            <th>Train No</th>
+            <th>Departure Time</th>
+            <th>Arrival Time</th>
+            <th>Class</th>
+            <th>Booking Type</th>
+            <th>Ticket No</th>
+            <th>Ticket Cost</th>
+            <th>Additional Cost</th>
+            <th>Additional Details</th>
+            <th>Total Cost</th>
+            <th>Sell Price</th>
+        </tr>
+    </thead>
+    <tr>
+        <td>@Html.EASelectListP("CustomerId", (IEnumerable<SelectListItem>)ViewBag.CustomerList, "", "Pax Name", (string)ViewBag.SelectedCustomerId)</td>
+        <td> @Html.EANumberForP(m => m.ChildNo, "Age")</td>
+        <td>@Html.EADateForP(m => m.DateOfIssue, "DOT")
+        <td>@Html.EATextForP(m => m.FromLoc, "From")
+        <td>@Html.EATextForP(m => m.ToLoc, "To")
+        <td>@Html.EATextForP(m => m.Model, "Bus Name") </td>
+        <td>@Html.EANumberForP(m => m.InfantNo, "Bus No")
+        <td>@Html.EADateTimeForP(m => m.Fdate, "Dept Time")</td>
+        <td>@Html.EADateTimeForP(m => m.Tdate, "Arrival Time")</td>
+        <td>@Html.EATextForP(m => m.Heritage, "Class")</td>
+        <td>@Html.EASelectListForP(m => m.CarType, "Booking Type")</td>
+        <td>@Html.EANumberForP(m => m.AdultNo, "Ticket No")</td>
+        <td>@Html.EATextForP(m => m.Cost, "Ticket Cost")</td>
+        <td>@Html.EATextForP(m => m.LunchCost, "Additional Cost")</td>
+        <td>@Html.EATextForP(m => m.CouponCode, "Additional Details")</td>
+        <td>@Html.EATextForP(m => m.BFCost, "Total Cost")</td>
+        <td> @Html.EANumberForP(m => m.SellPrice)</td>
+    </tr>
+</table>
+
+@{ Html.RenderPartial("WritePVs/_SupplierInfo", Model); }
+
+@*@foreach (var item in ViewBag.ufs)
+{
+    <span class="badge badge-secondary"><a target="_blank" style="color:white !important;" href="/Images/@item.Path">@item.UploadName</a> &nbsp; <a style="color:#fe7575 !important;" href="@Url.Action("Delete","SR",new {pid=item.SRUID , id=item.SRID})">X</a></span>
+}
+
+@using (Html.BeginForm("SRUpload", "SR", FormMethod.Post, new { id = "ServiceDetsUpld-" + Model.SRDID, enctype = "multipart/form-data" }))
+{
+    <div class="form-inline">
+        @Html.AntiForgeryToken()
+        @Html.Hidden("SRID", (int)Model.SRID)
+        @Html.Hidden("SRDID", (int)Model.SRDID)
+        @Html.EAText("UploadName", "", "File Description")
+
+
+        @Html.TextBox("UploadedFile", "", new { type = "file", @class = "UploadedFile", @data_uf = Model.SRDID })
+    </div>
+}*@
+
+
+
+
+
+<script>
+
+
+    $(function () {
+        //DateTime picker
+        $('.eadatetime').datetimepicker({
+            dateFormat: "dd-MM-yy",
+            showButtonPanel: true,
+            changeMonth: true,
+            changeYear: true,
+            timeFormat: "HH:mm"
+        });
+
+        $('.eadate').datepicker({
+            dateFormat: "dd-MM-yy",
+            showButtonPanel: true,
+            changeMonth: true,
+            changeYear: true
+        });
+
+        //Disable the browsers default date picker
+        jQuery.validator.methods["date"] = function (value, element) { return true; }
+
+        $(document).ready(function () {
+            $('*[data-autocombo-url]')
+                .each(function () {
+                    $(this).autocomplete({
+                        source: $(this).data("autocombo-url"),
+                        minLenght: 3,
+                        delay: 500,
+                        select: function (event, ui) {
+                            $("#" + $(this).data("autocomplete-idholder")).val(ui.item.id).trigger('change');
+                        }
+                    });
+                });
+        });
+    });
+
+
+
+
+</script>
