@@ -89,8 +89,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 }
                 if (AgentName?.Length >0)
                 {
-                string cha = "@";
-                NPbkngs.Append($" and LOWER(anu.UserName) like '%{cha}%'",AgentName);
+                
+                NPbkngs.Append($" and LOWER(anu.UserName) like '%{AgentName}%'");
                 }
             NPbkngs.Append(" order by sr.BookingNo desc");
           var bkngs = db.Query<SRBooking>(NPbkngs).Where(a=>a.OA > 0).ToList();
@@ -168,12 +168,12 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 }
             }
 
-            var NPbkngs = new PetaPoco.Sql("Select (select sum(Amount) from RP_SR where SRID=sd.SRID and SRDID=sd.SupplierID) as PaidAmt,sd.SRID,sd.SupplierID,s.SupplierName as UserName,Sum(sd.Cost) as OA From SRdetails sd inner join Supplier s on s.SupplierID=sd.SupplierID inner join ServiceRequest sr on sr.SRID =sd.SRID Where sd.SupplierID is not null and sr.PayStatusID <>@0",PayType.Cancelled);
+            var NPbkngs = new PetaPoco.Sql("Select sr.BookingNo, (select sum(Amount) from RP_SR where SRID=sd.SRID and SRDID=sd.SupplierID) as PaidAmt,sd.SRID,sd.SupplierID,s.SupplierName as UserName,Sum(sd.Cost) as OA From SRdetails sd inner join Supplier s on s.SupplierID=sd.SupplierID inner join ServiceRequest sr on sr.SRID =sd.SRID Where sd.SupplierID is not null and sr.PayStatusID <>@0", PayType.Cancelled);
             if (SupplierID != null)
             {
                 NPbkngs.Append($" and sd.SupplierID = {SupplierID}");
             }
-            NPbkngs.Append(" Group By sd.SupplierID,sd.SRID,s.SupplierName");
+            NPbkngs.Append(" Group By sr.BookingNo,sd.SupplierID,sd.SRID,s.SupplierName");
             var bkngs = db.Query<SRBooking>(NPbkngs).Where(a => a.OA > 0).ToList();
          
             ViewBag.UnUsedP = db.Fetch<RPDetails>("Select rp.RPDID,rp.Amount,rp.Type,(Select Coalesce(Sum(Amount),0) from RP_SR Where RPDID = rp.RPDID) as UnUsedAmt from RPdets rp  where AmtUsed is Null and IsPayment =@0",true);
@@ -240,7 +240,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 }
             }
 
-            var NPbkngs = new PetaPoco.Sql($"select sd.SRID,sr.BookingNo,d.DriverID,d.DriverName as UserName,PayTo,sum(SellPrice) as SellPrice ,sum(Cost) as OA," +
+            var NPbkngs = new PetaPoco.Sql($"select sd.SRID,sr.BookingNo,d.DriverID,d.DriverName as UserName,PayTo,sum(SellPrice) as SellPrice ,sum(SellPrice-Cost) as OA," +
                 $"(select coalesce (sum(Amount),0) from DRP_SR where SRID = sd.SRID ) as PaidAmt " +
                 $"from SRdetails sd inner join ServiceRequest sr on sd.SRID=sr.SRID inner join Driver d on d.DriverID=sd.DriverID where ");
 

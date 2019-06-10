@@ -41,7 +41,7 @@
         padding-top: 8px;
         background-color: #428bca;
         font-size: 18px;
-        font-weight:700;
+        font-weight: 700;
         text-align: center;
     }
 
@@ -137,95 +137,111 @@
 
 <div class="container-fluid">
     <div class="row justify-content-center">
-       <div class="col-10">
-        <center>
-            <h3>
-                Best Tours and Excursions in @ViewBag.Loc
-            </h3>
-        </center>
+        <div class="col-10">
+            <center>
+                <h3>
+                    Best Tours and Excursions in @ViewBag.Loc
+                </h3>
+            </center>
 
 
-           <div id="Container">
-               <center>
-                   <a href="/Home/LoadPackages/?st=@Speedbird.ServiceTypeEnum.Accomodation&&loc=@ViewBag.Loc">
-                       <div class="card ServiceTypes" style="width: 20rem;">
-                           <img class="card-img-top" src="/Images/@ViewBag.Accomodation.PictureName" alt="Card image cap">
-                           @*<div class="FloatBadge">
-                               @ViewBag.Loc
-                           </div>*@
-                           <div class="card-block">
-                               <h4 class="card-title">Accomodation</h4>
-                           </div>
-                       </div>
-                   </a>
-                   <a href="/Home/LoadPackages/?st=@Speedbird.ServiceTypeEnum.Packages&&loc=@ViewBag.Loc">
-                       <div class="card ServiceTypes" style="width: 20rem;">
-                           <img class="card-img-top" src="/Images/@ViewBag.Package.PictureName" alt="Card image cap">
-                           <div class="card-block">
-                               @*<div class="FloatBadge">
-                                   @ViewBag.Loc
-                               </div>*@
-                               <h4 class="card-title">Packages</h4>
-                           </div>
-                       </div>
-                   </a>
-                   <a href="/Home/LoadPackages/?st=@Speedbird.ServiceTypeEnum.CarBike&&loc=@ViewBag.Loc">
+            <div id="Container">
+                <center>
+                    @if (ViewBag.Accomodation != null)
+                    {
+                        <a href="/Home/LoadPackages/?st=@Speedbird.ServiceTypeEnum.Accomodation&&loc=@ViewBag.Loc">
+                            <div class="card ServiceTypes" style="width: 20rem;">
+                                <img class="card-img-top" src="/Images/@ViewBag.Accomodation.PictureName" alt="Card image cap">
+                                <div class="card-block">
+                                    <h4 class="card-title">Accomodation</h4>
+                                </div>
+                            </div>
+                        </a>
+                    }
+                    @if (ViewBag.Packages != null)
+                    {
+                        <a href="/Home/LoadPackages/?st=@Speedbird.ServiceTypeEnum.Packages&&loc=@ViewBag.Loc">
+                            <div class="card ServiceTypes" style="width: 20rem;">
+                                <img class="card-img-top" src="/Images/@ViewBag.Package.PictureName" alt="Card image cap">
+                                <div class="card-block">
+                                    @*<div class="FloatBadge">
+                            @ViewBag.Loc
+                        </div>*@
+                                    <h4 class="card-title">Packages</h4>
+                                </div>
+                            </div>
+                        </a>
+                    }
+                    @if (ViewBag.CarBike != null)
+                    {
+                        <a href="/Home/LoadPackages/?st=@Speedbird.ServiceTypeEnum.CarBike&&loc=@ViewBag.Loc">
 
-                       <div class="card ServiceTypes" style="width: 20rem;">
-                           <img class="card-img-top" src="/Images/@ViewBag.CarBike.PictureName" alt="Card image cap">
-                           @*<div class="FloatBadge">
-                               @ViewBag.Loc
-                           </div>*@
-                           <div class="card-block">
-                               <h4 class="card-title">Car / Bike Rentals</h4>
-                           </div>
-                       </div>
-                   </a>
-                   <a href="#">
+                            <div class="card ServiceTypes" style="width: 20rem;">
+                                <img class="card-img-top" src="/Images/@ViewBag.CarBike.PictureName" alt="Card image cap">
+                                @*<div class="FloatBadge">
+                        @ViewBag.Loc
+                    </div>*@
+                                <div class="card-block">
+                                    <h4 class="card-title">Car / Bike Rentals</h4>
+                                </div>
+                            </div>
+                        </a>
+                    }
+                    @if (ViewBag.Transfer != null)
+                    {
+                        <a href="/Home/LoadPackages/?st=@Speedbird.ServiceTypeEnum.Transfer&&loc=@ViewBag.Loc">
 
-                       <div class="card ServiceTypes" style="width: 20rem;">
-                           <img class="card-img-top" src="/Images/@ViewBag.CarBike.PictureName" alt="Card image cap">
-                           @*<div class="FloatBadge">
-                               @ViewBag.Loc
-                           </div>*@
-                           <div class="card-block">
-                               <h4 class="card-title">Taxi Hire</h4>
-                           </div>
-                       </div>
-                   </a>
-                   @if (ViewBag.loc != "Goa")
-        {
-           <a href="/Home/LoadPackages/?st=@Speedbird.ServiceTypeEnum.SightSeeing&&loc=@ViewBag.Loc">
+                            <div class="card ServiceTypes" style="width: 20rem;">
+                                <img class="card-img-top" src="/Images/@ViewBag.Transfer.PictureName" alt="Card image cap">
+                                @*<div class="FloatBadge">
+                        @ViewBag.Loc
+                    </div>*@
+                                <div class="card-block">
+                                    <h4 class="card-title">Taxi Hire</h4>
+                                </div>
+                            </div>
+                        </a>
+                    }
+                    @if (ViewBag.loc != "Goa")
+                    {
 
-               <div class="card ServiceTypes" style="width: 20rem;">
-                   <img class="card-img-top" src="/Images/@ViewBag.SightSeeing.PictureName" alt="Card image cap">
-                   @*<div class="FloatBadge">
-                       @ViewBag.Loc
-                   </div>*@
-                   <div class="card-block">
-                       <h4 class="card-title">Sight Seeing</h4>
-                   </div>
-               </div>
-           </a>
-if (ViewBag.loc == "International")
-{
-           <a href="/Home/LoadPackages/?st=@Speedbird.ServiceTypeEnum.Cruise&&loc=@ViewBag.Loc">
+                        if (ViewBag.SightSeeing != null)
+                        {
+                            <a href="/Home/LoadPackages/?st=@Speedbird.ServiceTypeEnum.SightSeeing&&loc=@ViewBag.Loc">
 
-               <div class="card ServiceTypes" style="width: 20rem;">
-                   <img class="card-img-top" src="/Images/@ViewBag.Cruise.PictureName" alt="Card image cap">
-                   @*<div class="FloatBadge">
-                       @ViewBag.Loc
-                   </div>*@
-                   <div class="card-block">
-                       <h4 class="card-title">Cruise</h4>
-                   </div>
-               </div>
-           </a>
-}
-}
+                                <div class="card ServiceTypes" style="width: 20rem;">
+                                    <img class="card-img-top" src="/Images/@ViewBag.SightSeeing.PictureName" alt="Card image cap">
+                                    @*<div class="FloatBadge">
+                            @ViewBag.Loc
+                        </div>*@
+                                    <div class="card-block">
+                                        <h4 class="card-title">Sight Seeing</h4>
+                                    </div>
+                                </div>
+                            </a>
+                        }
+                        if (ViewBag.loc == "International")
+                        {
+                            if (ViewBag.Cruise != null)
+                            {
+                                <a href="/Home/LoadPackages/?st=@Speedbird.ServiceTypeEnum.Cruise&&loc=@ViewBag.Loc">
 
-               </center>
-           </div>
+                                    <div class="card ServiceTypes" style="width: 20rem;">
+                                        <img class="card-img-top" src="/Images/@ViewBag.Cruise.PictureName" alt="Card image cap">
+                                        @*<div class="FloatBadge">
+                                @ViewBag.Loc
+                            </div>*@
+                                        <div class="card-block">
+                                            <h4 class="card-title">Cruise</h4>
+                                        </div>
+                                    </div>
+                                </a>
+                            }
+                        }
+                    }
+
+                    </center>
+            </div>
         </div>
     </div>
 

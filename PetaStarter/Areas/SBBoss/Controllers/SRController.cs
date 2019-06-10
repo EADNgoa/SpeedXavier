@@ -909,7 +909,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                     List<SelectListItem> TaxiPayTo = new List<SelectListItem>()
                     {
                             new SelectListItem {
-                                Text = "Pay to us", Value = "Pay to us"
+                                Text = "Payed to us", Value = "Payed to us"
                             },
                             new SelectListItem {
                                 Text = "Pay to driver", Value = "Pay to driver"
