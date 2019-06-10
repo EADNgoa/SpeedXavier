@@ -190,17 +190,18 @@
 }
 
 
-<div class="input-group col ">
-    @if (Model?.SRID == null)
-    {
-        <input type="submit" data-route="QSave" class="btn btn-primary SaveDetailFrm" value="Save Enquiry" /> @*Route to Queue*@
-        <input type="submit" data-route="BFSave" class="btn btn-info SaveDetailFrm ml-5" value="Make Booking Folder" /> @*Route to Booking Folder*@
-    }
-    else
-    {
-        <input type="submit" data-route="BFSave" class="btn btn-info SaveDetailFrm ml-5" value="Save" /> @*Route to Booking Folder*@
-    }
-</div>
+        <div class="input-group col ">
+            @if (Model?.SRID == null)
+            {
+                <input type="submit" data-route="QSave" class="btn btn-primary SaveDetailFrm" value="Save Enquiry" /> @*Route to Queue*@
+                <input type="submit" data-route="BFSave" class="btn btn-info SaveDetailFrm ml-5" value="Make Booking Folder" /> @*Route to Booking Folder*@
+            }
+            else
+            {
+                <input type="submit" data-route="BFSave" class="btn btn-info SaveDetailFrm ml-5" value="Save" />
+                <input type="submit" data-route="BFDelete" class="btn btn-warning DeleteBooking ml-5" value="Delete" />@*Route to Booking Folder*@
+            }
+        </div>
 
 <script>
 
@@ -222,13 +223,38 @@
                     }
                 });
             }
-        }
+    }
+
+    var deletefrm = function (routeTo) {
+            var detFrm = $('#detFrm');
+
+            //Save the details form if it exists else just move on.
+            if (typeof (detFrm[0]) == 'object') {
+                $.ajax({
+                    url: detFrm.action,
+                    type: 'post',
+                    data: $(detFrm).serialize() + '&routeto=' + routeTo,
+                    success: function (d) {
+                        if (routeTo == 'BFDelete') {
+                            window.location.assign('@Url.Action("manage")' + '/' + d.srid);
+                        } else {
+                            window.location.assign('@Url.Action("manage")');
+                        };
+                    }
+                });
+            }
+    }
 
         $(document).ready(function () {
 
             //Submit form
             $('.SaveDetailFrm').on('click', function () {
                 savefrm($(this).data('route'));
+            });
+
+            //Delete form
+            $('.DeleteBooking').on('click', function () {
+                deletefrm($(this).data('route'));
             });
         });
 

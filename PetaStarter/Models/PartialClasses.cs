@@ -1001,7 +1001,8 @@ namespace Speedbird
         Not_Paid,
         Part_Paid,
         Full_Paid,
-        Cancelled
+        Cancelled,
+        Deleted
 
     }
     public enum AmtType

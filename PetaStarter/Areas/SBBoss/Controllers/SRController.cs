@@ -23,7 +23,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         [EAAuthorize(FunctionName = "Service Requests", Writable = false)]
         public ActionResult Index(int? page, string AN)
         {
-            ViewBag.Title = "Service Requests";
+            ViewBag.Title = "Service Requests";      
             ViewBag.SRStatusID = Enum.GetValues(typeof(SRStatusEnum)).Cast<SRStatusEnum>().Where(v => v > SRStatusEnum.NoAction).Select(v => new SelectListItem { Text = v.ToString(), Value = ((int)v).ToString() }).ToList();
             ViewBag.PayStatusID = Enum.GetValues(typeof(PayType)).Cast<PayType>().Select(v => new SelectListItem { Text = v.ToString(), Value = ((int)v).ToString() }).ToList();
             return View();
@@ -322,7 +322,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [EAAuthorize(FunctionName = "Service Requests", Writable = true)]
-        public ActionResult Manage([Bind(Include = "SRID,BookingNo,CustID,SRStatusID,EmpID,BookingTypeID,EnquirySource,AgentID,TDate,PayStatusID,ServiceTypeID,AgentBooker")] ServiceRequest item, string Event, int? CID, string FName, string SName, string Email, string Phone, string routeto,bool isLead=false)
+        public ActionResult Manage([Bind(Include = "SRID,BookingNo,CustID,SRStatusID,EmpID,BookingTypeID,EnquirySource,AgentID,TDate,PayStatusID,ServiceTypeID,AgentBooker,ExpiryDate")] ServiceRequest item, string Event, int? CID, string FName, string SName, string Email, string Phone, string routeto,bool isLead=false)
         {
             using (var transaction = db.GetTransaction())
             {
@@ -335,6 +335,16 @@ namespace Speedbird.Areas.SBBoss.Controllers
                     if (item.SRStatusID == null) //New 
                     {
                         item.SRStatusID = routeto=="BFSave" ? (int)SRStatusEnum.Unconfirmed : (int)SRStatusEnum.New; //make Enq or Direct BF                        
+                    }
+
+                    if (item.SRStatusID != null) //New 
+                    {
+                        item.SRStatusID = routeto == "BFDelete" ? (int)SRStatusEnum.Deleted : (int)SRStatusEnum.New; //make Enq or Direct BF                        
+                    }
+
+                    if (item.PayStatusID != null) //New 
+                    {
+                        item.PayStatusID = routeto == "BFDelete" ? (int)PayType.Deleted : (int)PayType.Not_Paid; //make Enq or Direct BF                        
                     }
 
                     if (item.CustID == null)

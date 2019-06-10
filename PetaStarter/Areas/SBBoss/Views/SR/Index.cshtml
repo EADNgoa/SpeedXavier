@@ -9,7 +9,7 @@
         <a href="@Url.Action("Manage","SR", new { DirectBF=true})"><i class="fas fa-plus-circle fa-inverse h3 float-right DropShadow"></i></a>
     </div>
     <div class="card-body">
-        
+
 
         <table id="SRTbl" class="table table-sm table-striped">
             <thead class="thead-light">
@@ -18,6 +18,7 @@
                     <th class="bg-danger text-white text-center" scope="col">Not paid</th>
                     <th class="bg-warning text-center" scope="col">Part-Paid</th>
                     <th class="bg-secondary text-white text-center" scope="col">Canceled</th>
+                    <th class="bg-dark text-white text-center" scope="col">Deleted</th>
 
                 </tr>
                 <tr role="row">
@@ -25,24 +26,24 @@
                     <th></th>
 
                     <th><input type="text" class="form-control" placeholder="Filter Pax Name"></th>
-                    
+
                     <th><input type="text" class="form-control" placeholder="Filter Phone"></th>
                     <th><input type="text" class="form-control" placeholder="Filter Email"></th>
-                    
+
                     <th><input type="text" class="form-control" placeholder="Agent Name"></th>
                     <th><input type="text" class="form-control" placeholder="Emp Name"></th>
-                    <th>@Html.DropDownList("SRStatus",(IEnumerable<SelectListItem>)ViewBag.SRStatusID, new { @class = "form-control"})</th>
-                    <th>@Html.DropDownList("PayStatus",(IEnumerable<SelectListItem>)ViewBag.PayStatusID, new { @class = "form-control"})</th>
+                    <th>@Html.DropDownList("SRStatus", (IEnumerable<SelectListItem>)ViewBag.SRStatusID, new { @class = "form-control" })</th>
+                    <th>@Html.DropDownList("PayStatus", (IEnumerable<SelectListItem>)ViewBag.PayStatusID, new { @class = "form-control" })</th>
 
 
                 </tr>
                 <tr role="row">
                     <th scope="col" width="80px">No.</th>
                     <th scope="col">Date/Time</th>
-                    <th scope="col">Name</th>                    
+                    <th scope="col">Name</th>
                     <th scope="col">Phone</th>
                     <th scope="col">Email</th>
-                    
+
                     <th scope="col">Agent Name</th>
                     <th scope="col">Emp Name</th>
                     <th scope="col">Status</th>
@@ -82,13 +83,13 @@
             columns: [
                 { data: "BookingNo" },
                 { data: "DT" },
-                { data: "CName" },                
+                { data: "CName" },
                 { data: "Phone" },
-                { data: "Email" },                
+                { data: "Email" },
                 { data: "AgentName" },
                 { data: "UserName" },
                 { data: "Status" },
-    
+
 
 
             ],
@@ -115,13 +116,17 @@
                             if (full.PayStatusID ==  @((int)Speedbird.PayType.Not_Paid)) {
                                 return '<a href="/SBBoss/SR/manage/' + full.SRID + '"><i class="fas bg-danger fa-edit fa-inverse h3 float-right DropShadow"></i></a>';
                             }
+                            if (full.PayStatusID ==  @((int)Speedbird.PayType.Deleted)) {
+                                return '<a href="/SBBoss/SR/manage/' + full.SRID + '"><i class="fas bg-dark fa-edit fa-inverse h3 float-right DropShadow"></i></a>';
+                            }
                         }
-                        
+
+
                     },
 
 
                 },
-            
+
 
                 {
                 targets: 'no-sort',
