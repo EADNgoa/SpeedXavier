@@ -19,15 +19,15 @@
             </thead>
             <tr>
                 <td>@Model.PaxName</td>
-                <td>@Model.DOB</td>
+                <td>@Model.DOB.EAFormat()</td>
                 <td>@DateTime.Today</td>
                 <td>@Model.Destination</td>
                 <td>@Model.PolicyName</td>
                 <td>@Model.PolicyType</td>
                 <td>@Model.NoOfDays</td>
-                <td>@Model.ValidFrom</td>
-                <td>@Model.ValidTo</td>
-                <td>@Model.Cost</td>
+                <td>@Model.ValidFrom.EAFormat()</td>
+                <td>@Model.ValidTo.EAFormat()</td>
+                <td align="right">@Model.Cost</td>
             </tr>
         </table>
         @{Html.RenderPartial("ReadPVs/_SupplierInfo", Model); }

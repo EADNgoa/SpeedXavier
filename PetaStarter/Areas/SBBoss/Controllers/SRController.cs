@@ -322,7 +322,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [EAAuthorize(FunctionName = "Service Requests", Writable = true)]
-        public ActionResult Manage([Bind(Include = "SRID,BookingNo,CustID,SRStatusID,EmpID,BookingTypeID,EnquirySource,AgentID,TDate,PayStatusID,ServiceTypeID,AgentBooker,ExpiryDate")] ServiceRequest item, string Event, int? CID, string FName, string SName, string Email, string Phone, string routeto,bool isLead=false)
+        public ActionResult Manage([Bind(Include = "SRID,BookingNo,CustID,SRStatusID,EmpID,BookingTypeID,EnquirySource,AgentID,TDate,PayStatusID,ServiceTypeID,AgentBooker")] ServiceRequest item, string Event, int? CID, string FName, string SName, string Email, string Phone, string routeto,bool isLead=false)
         {
             using (var transaction = db.GetTransaction())
             {
@@ -552,7 +552,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         public ActionResult SRdetails([Bind(Include = "SRDID,SRID, ServiceTypeID,CarType,ItemID,CouponCode,Model,FromLoc,ToLoc,Fdate,Tdate,SupplierID,Cost,SellPrice,ChildNo," +
             "AdultNo,InfantNo,Heritage,HasAc,HasCarrier,GuideLanguageID,DateOfIssue,ContractNo,PayTo,PickUpPoint,DropPoint,DriverID,SuppInvNo,Qty,ParentID,IsReturn," +
             "IsInternational,OptionTypeID,ECommision,IsCanceled,SuppInvDt,SuppConfNo,NoExtraBeds,BFCost,LunchCost,DinnerCost,NoExtraService,ExtraServiceCost," +
-            "SuppInvAmt,GDSConfNo")] SRdetail item, string Event, int CustomerId)
+            "SuppInvAmt,GDSConfNo,ExpiryDate")] SRdetail item, string Event, int CustomerId)
         {
             using (var transaction = db.GetTransaction())
             {

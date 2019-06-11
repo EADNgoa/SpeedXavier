@@ -26,20 +26,20 @@
             <tr>
                 <td>@Model.PaxName</td>
                 <td>@Model.Age</td>
-                <td>@Model.DOT</td>
+                <td>@Model.DOT.EAFormat()</td>
                 <td>@Model.FromLoc</td>
                 <td>@Model.ToLoc</td>
                 <td>@Model.TrainName</td>
                 <td>@Model.TrainNo</td>
-                <td>@Model.Arrival</td>
-                <td>@Model.Departure</td>
+                <td>@Model.Arrival.EAFormat(true)</td>
+                <td>@Model.Departure.EAFormat(true)</td>
                 <td>@((BookingTypeEnum)Model.CarType)</td>
                 <td>@Model.Class</td>
                 <td>@Model.TicketNo</td>
-                <td>@Model.Cost</td>
-                <td>@Model.AddCost</td>
+                <td align="right">@Model.Cost</td>
+                <td align="right">@Model.AddCost</td>
                 <td>@Model.AddDetl</td>
-                <td>@Model.FullCost</td>
+                <td align="right">@Model.FullCost</td>
             </tr>
         </table>
         @{Html.RenderPartial("ReadPVs/_SupplierInfo", Model); }

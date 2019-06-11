@@ -22,17 +22,17 @@
             </thead>
             <tr>
                 <td>@Model.PaxName</td>
-                <td>@Model.Departuredate</td>
+                <td>@Model.Departuredate.EAFormat()</td>
                 <td>@Model.Passengers</td>
                 <td>@Model.Cabins</td>
                 <td>@Model.CabinType</td>
                 <td>@Model.FromPort</td>
                 <td>@Model.ViaPoint</td>
                 <td>@Model.ToPort</td>
-                <td>@Model.ReturnDate</td>
-                <td>@(Model.ReturnDate - Model.Departuredate)</td>
+                <td>@Model.ReturnDate.EAFormat()</td>
+                <td>@(Model.ReturnDate.Subtract(Model.Departuredate).TotalDays)</td>
                 <td>@Model.MealPlan</td>
-                <td>@Model.Cost</td>
+                <td align="right">@Model.Cost</td>
                 <td>@Model.CruiseName</td>
             </tr>
         </table>

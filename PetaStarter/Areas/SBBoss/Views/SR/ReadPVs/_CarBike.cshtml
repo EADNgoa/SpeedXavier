@@ -25,13 +25,13 @@
                 <td>@Model.PaxName</td>
                 <td>@((CarTypeEnum)Model.CarType)</td>
                 <td>@Model.Car</td>
-                <td>@Model.Fdate</td>
-                <td>@Model.Tdate</td>
+                <td>@Model.Fdate.EAFormat()</td>
+                <td>@Model.Tdate.EAFormat()</td>
                 <td>@Model.FromLoc</td>
                 <td>@Model.PickUpPoint</td>
                 <td>@Model.ToLoc</td>
                 <td>@Model.DropPoint</td>
-                <td>@Model.Cost</td>
+                <td align="right">@Model.Cost</td>
                 <td>@Model.Qty</td>
                 <td>@Model.NoExtraBeds</td>
                 <td>@(Model.Cost * Model.Qty * Model.NoExtraBeds)</td>
