@@ -30,8 +30,8 @@
                 <td>@Model.Fdate.EAFormat()</td>
                 <td>@Model.Tdate.EAFormat()</td>
                 <td>@(Model.Tdate.Subtract(Model.Fdate).TotalDays)</td>
-                <td>@Model.Cost</td>
-                <td>@Model.ExtraServiceCost</td>
+                <td align="right">@Model.Cost</td>
+                <td align="right">@Model.ExtraServiceCost</td>
             </tr>
         </table>
         @{Html.RenderPartial("ReadPVs/_SupplierInfo", Model); }

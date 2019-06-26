@@ -27,18 +27,18 @@
                 <td>@Model.PaxName</td>
                 <td>@Model.NOOfPax</td>
                 <td>@Model.PackageType</td>
-                <td>@Model.Fdate</td>
-                <td>@Model.Tdate</td>
+                <td>@Model.Fdate.EAFormat()</td>
+                <td>@Model.Tdate.EAFormat()</td>
                 <td>@(Model.Tdate.Subtract(Model.Fdate).TotalDays)</td>
                 <td>@Model.CarType</td>
                 <td>@Model.FromLoc</td>
                 <td>@Model.ToLoc</td>
                 <td>@Model.NameofTour</td>
                 <td>@Model.IsReturn</td>
-                <td>@Model.Cost</td>
+                <td align="right">@Model.Cost</td>
                 <td>@Model.AddDtl</td>
-                <td>@Model.AddCost</td>
-                <td>@Model.NetCost</td>
+                <td align="right">@Model.AddCost</td>
+                <td align="right">@Model.NetCost</td>
             </tr>
         </table>
         @{Html.RenderPartial("ReadPVs/_SupplierInfo", Model); }

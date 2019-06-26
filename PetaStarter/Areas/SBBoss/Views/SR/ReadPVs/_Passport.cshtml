@@ -16,11 +16,11 @@
             </thead>
             <tr>
                 <td>@Model.PaxName</td>
-                <td align="right">@Model.DOB</td>
-                <td align="right">@Model.PassPortNo </td>
+                <td>@Model.DOB.EAFormat()</td>
+                <td>@Model.PassPortNo </td>
                 <td>@Model.Nationality</td>
                 <td>@Model.Heritage</td>
-                <td>@Model.Cost </td>
+                <td align="right">@Model.Cost </td>
             </tr>
         </table>
         @{Html.RenderPartial("ReadPVs/_SupplierInfo", Model); }
