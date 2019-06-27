@@ -892,6 +892,15 @@ namespace Speedbird
         public string UploadName { get; set; }
         public HttpPostedFileBase UploadedFile { get; set; }
     }
+
+    public class Refund
+    {
+        public int SRID { get; set; }
+        public int SRDID { get; set; }
+        public decimal ProdCanxCost { get; set; }
+        public decimal SBCanxCost { get; set; }
+        public string Note { get; set; }
+    }
     public class SRlogsDets
     {
         public int SRLID { get; set; }

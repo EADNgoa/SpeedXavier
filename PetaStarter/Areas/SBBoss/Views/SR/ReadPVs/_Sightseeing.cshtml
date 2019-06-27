@@ -65,7 +65,43 @@
             </tr>
         </table>
 
-        @*@{Html.RenderPartial("ReadPVs/_SupplierInfo", Model); }*@
+
+        @foreach (var item in ViewBag.ufs)
+        {
+            <span class="badge badge-secondary"><a target="_blank" style="color:white !important;" href="/Images/@item.Path">@item.UploadName</a> &nbsp; <a style="color:#fe7575 !important;" href="@Url.Action("Delete","SR",new {pid=item.SRUID , id=item.SRID})">X</a></span>
+        }
+
+        <div class="row">
+            <div class="col">
+                @using (Html.BeginForm("SRUpload", "SR", FormMethod.Post, new { @class = "form-inline", id = "ServiceDetsUpld-" + Model.SRDID, enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.Hidden("SRID", (int)Model.SRID)
+                    @Html.Hidden("SRDID", (int)Model.SRDID)
+                    @Html.EAText("UploadName", "", "File Description")
+
+
+                    @Html.TextBox("UploadedFile", "", new { type = "file", @class = "UploadedFile", @data_uf = Model.SRDID })
+                }
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                @using (Html.BeginForm("SRCanxService", "SR", FormMethod.Post, new { @class = "form-inline", id = "CanxService-" + Model.SRDID }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.Hidden("SRID", (int)Model.SRID)
+                    @Html.Hidden("SRDID", (int)Model.SRDID)
+                    @Html.EAText("ProdCanxCost", "", "Prod. Canx Cost")
+                    @Html.EAText("SBCanxCost", "", "SB Canx Cost")<br />
+                    @Html.EAText("Note", "", "Note")
+                    <input type="submit" value="Cancel Service" class="btn alert-danger" />
+                }
+            </div>
+        </div>
+
+
     </div>
     <div class="col-2" style="padding-left:0px;">
         @{Html.RenderPartial("ReadPVs/_Fin", Model); }

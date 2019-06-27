@@ -337,15 +337,13 @@ namespace Speedbird.Areas.SBBoss.Controllers
                         item.SRStatusID = routeto=="BFSave" ? (int)SRStatusEnum.Unconfirmed : (int)SRStatusEnum.New; //make Enq or Direct BF                        
                     }
 
-                    if (item.SRStatusID != null) //New 
+                    if (routeto == "BFDelete")
                     {
-                        item.SRStatusID = routeto == "BFDelete" ? (int)SRStatusEnum.Deleted : (int)SRStatusEnum.New; //make Enq or Direct BF                        
+                        item.SRStatusID = (int)SRStatusEnum.Deleted;
+                        item.PayStatusID = (int)PayType.Deleted;
+                        LogAction(new SRlog { SRID = item.SRID, Event = "Booking deleted" });
                     }
 
-                    if (item.PayStatusID != null) //New 
-                    {
-                        item.PayStatusID = routeto == "BFDelete" ? (int)PayType.Deleted : (int)PayType.Not_Paid; //make Enq or Direct BF                        
-                    }
 
                     if (item.CustID == null)
                         item.CustID=CID;
@@ -620,8 +618,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             SRuploadDets ci = new SRuploadDets() { };
             return PartialView(ci);
         }
-
-
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         [EAAuthorize(FunctionName = "Service Requests", Writable = true)]
@@ -649,6 +646,69 @@ namespace Speedbird.Areas.SBBoss.Controllers
             return base.BaseSave<SRUpload>(res, item.SRUID > 0, "Manage", new { id = item.SRID, mode = 5 });
 
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [EAAuthorize(FunctionName = "Service Requests", Writable = true)]
+        public ActionResult SRCanxService([Bind(Include = "SRID,SRDID,ProdCanxCost,SBCanxCost,Note")] Refund item)
+        {
+            using (var transaction = db.GetTransaction())
+            {
+                //If the user cancels a service give him a refund by first minusing the Product and SB canx costs.
+                var SRDetails = db.Single<SRdetail>(item.SRDID);
+                decimal refundAmt = (SRDetails.SellPrice ?? 0) - item.ProdCanxCost - item.SBCanxCost;
+
+                if (SRDetails.ServiceTypeID == (int)ServiceTypeEnum.Transfer || SRDetails.ServiceTypeID == (int)ServiceTypeEnum.SightSeeing)
+                {
+                    var drpdets = new DRPdet() { Date = DateTime.Today, Amount = -refundAmt, Note = item.Note, AmtUsed = true, IsPayment = true, Cdate = DateTime.Today };
+                    var res= db.Insert(drpdets);
+
+                    var drp_sr = new DRP_SR() { Amount = -refundAmt, SRID = item.SRID, SRDID = item.SRDID, DRPDID=(int)res };
+                    db.Insert(drp_sr);
+                }
+                else
+                {
+                    var rpdets = new RPdet() { Date = DateTime.Today, Amount = -refundAmt, Note = item.Note, AmtUsed = true, IsPayment = true, Cdate = DateTime.Today };
+                    var res= db.Insert(rpdets);
+
+                    var rp_sr = new RP_SR() { Amount = -refundAmt, SRID = item.SRID, SRDID=item.SRDID, RPDID=(int)res };
+                    db.Insert(rp_sr);
+                }
+
+                //If the supplier has been paid then adjust his payment amount too.
+                var supPayRecs = db.Query<DRP_SR>("where SRID=@0", item.SRID);
+                var supPay = supPayRecs.Sum(s => s.Amount) ?? 0; //Amount already paid to supplier for this booking
+
+                //Set the cost of this Service to ProdCanxCost
+                SRDetails.Cost = item.ProdCanxCost;
+                db.Update(SRDetails);
+
+                //Amt that the supplier needs to refund: Min(already paid to sup, Service cost) - Prod Canx.
+                //if supOwedAmt +ve: Supplier has to redund SB, else SB to pay supplier.
+                var supOwedAmt = Math.Min(supPay, (SRDetails.Cost??0)) - item.ProdCanxCost;
+                //if (supOwedAmt>0)
+                //{
+                //    var tmpsupOwedAmt = supOwedAmt;
+                //    foreach (var rec in supPayRecs)
+                //    {
+                //        var valToSubtract = Math.Min((rec.Amount ?? 0), supOwedAmt);
+
+                //        valToSubtract= (valToSubtract>0)?valToSubtract:
+
+                //        tmpsupOwedAmt -= valToSubtract;
+                //        rec.Amount -= valToSubtract;
+                //        db.Update(rec);
+                //    }
+                //} 
+
+                SRDetails.IsCanceled = true;
+                LogAction(new SRlog { SRID = item.SRID, SRDID = item.SRDID, Event = $"Refund of {refundAmt} given for {SRDetails.ServiceTypeName}: {item.SRDID} . Supplier refund amount is {supOwedAmt}" });
+                transaction.Complete();
+                return RedirectToAction("Manage", new { id = item.SRID, mode = 5 });
+            }
+
+        }
+
         [EAAuthorize(FunctionName = "Service Requests", Writable = true)]
         public ActionResult SRCustomers(int? id, int? sid, int? EID, int? cid)
         {
@@ -707,10 +767,23 @@ namespace Speedbird.Areas.SBBoss.Controllers
             ViewBag.FCredit = db.ExecuteScalar<decimal>("Select Coalesce(sum(SellPrice),0) from SRdetails Where isCanceled=0 and SRID =@0", id);
 
             //Get actuals (from suppliers and drivers)
-            ViewBag.ADebit = db.ExecuteScalar<decimal?>("Select Coalesce(sum(c.Amount),0) from RP_SR c inner join RPdets m on  m.RPDID=c.RPDID Where c.SRID =@0 and m.IsPayment=1", id) +
-                db.ExecuteScalar<decimal>("Select Coalesce(sum(c.Amount),0) from DRP_SR c inner join DRPdets m on  m.DRPDID=c.DRPDID Where c.SRID =@0 and m.IsPayment=1 ", id);
-            ViewBag.ACredit = db.ExecuteScalar<decimal?>("Select Coalesce(sum(c.Amount),0) from RP_SR c inner join RPdets m on  m.RPDID=c.RPDID Where c.SRID =@0 and m.IsPayment=0", id) +
+            var ADebit = db.ExecuteScalar<decimal?>("Select Coalesce(sum(c.Amount),0) from RP_SR c inner join RPdets m on  m.RPDID=c.RPDID Where c.SRID =@0 and m.IsPayment=1", id) +
+                db.ExecuteScalar<decimal>("Select Coalesce(sum(c.Amount),0) from DRP_SR c inner join DRPdets m on  m.DRPDID=c.DRPDID Where c.SRID =@0 and m.IsPayment=1 ", id);            
+
+            var ACredit = db.ExecuteScalar<decimal?>("Select Coalesce(sum(c.Amount),0) from RP_SR c inner join RPdets m on  m.RPDID=c.RPDID Where c.SRID =@0 and m.IsPayment=0", id) +
                 db.ExecuteScalar<decimal>("Select Coalesce(sum(c.Amount),0) from DRP_SR c inner join DRPdets m on  m.DRPDID=c.DRPDID Where c.SRID =@0 and m.IsPayment=0 ", id);
+
+            var SRdetail = db.FirstOrDefault<SRdetail>(" where servicetypeId=0 and srid=@0",id); //if pay to driver then set that the supplier is paid off.
+            
+            List<RPDetails> payDriver = new List<RPDetails>();
+            if (SRdetail?.PayTo.Contains("driver")??false)
+            {
+                ADebit = ADebit + SRdetail.Cost;
+                ACredit = ACredit + SRdetail.Cost;
+                payDriver= new List<RPDetails> { new RPDetails { Date=SRdetail.Fdate?? DateTime.Today, Type = 0, Amount = SRdetail.Cost ?? 0, IsPayment = true } };
+            }
+            ViewBag.ADebit = ADebit;
+            ViewBag.ACredit = ACredit;
 
 
             ViewBag.PaxDetail = db.Fetch<PaxDets>("; Exec AmtPerPax @@SRID = @0", id).ToList();
@@ -722,7 +795,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             var  rp= db.Fetch<RPDetails>("select rp.CDate as [Date],rp.Note,rp.Type,rs.Amount,rp.IsPayment from RPDets rp left join RP_SR rs on rp.RPDID = rs.RPDID Where rs.SRID = @0",id);
             var drp = db.Fetch<RPDetails>("select rp.CDate as [Date],rp.Note,rp.Type,rs.Amount,rp.IsPayment from DRPDets rp left join DRP_SR rs on rp.DRPDID = rs.DRPDID Where rs.SRID = @0", id);
             ViewBag.Reciepts = rp.Concat(drp).Where(d => d.IsPayment == false);
-            ViewBag.Payments = rp.Concat(drp).Where(r => r.IsPayment == true);
+            ViewBag.Payments = rp.Concat(drp).Concat(payDriver).Where(r => r.IsPayment == true);
 
 
             return PartialView();

@@ -488,6 +488,7 @@ namespace Speedbird
 		[Column] public int DRPDID { get; set; }
 		[Column] public int SRID { get; set; }
 		[Column] public decimal? Amount { get; set; }
+		[Column] public int? SRDID { get; set; }
 	}
     
 	[TableName("dbo.DRPdets")]
@@ -976,7 +977,7 @@ namespace Speedbird
 	}
     
 	[TableName("dbo.ServiceCommision")]
-	[PrimaryKey("ServiceID")]
+	[PrimaryKey("ServiceID", AutoIncrement=false)]
 	[ExplicitColumns]
     public partial class ServiceCommision  
     {
@@ -1081,6 +1082,7 @@ namespace Speedbird
 		[Column] public DateTime? SuppInvDt { get; set; }
 		[Column] public string SuppConfNo { get; set; }
 		[Column] public int? NoExtraBeds { get; set; }
+		[Column] public int? EBCostPNight { get; set; }
 		[Column] public int? BFCost { get; set; }
 		[Column] public int? LunchCost { get; set; }
 		[Column] public int? DinnerCost { get; set; }

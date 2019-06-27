@@ -168,7 +168,9 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 }
             }
 
-            var NPbkngs = new PetaPoco.Sql("Select sr.BookingNo, (select sum(Amount) from RP_SR where SRID=sd.SRID and SRDID=sd.SupplierID) as PaidAmt,sd.SRID,sd.SupplierID,s.SupplierName as UserName,Sum(sd.Cost) as OA From SRdetails sd inner join Supplier s on s.SupplierID=sd.SupplierID inner join ServiceRequest sr on sr.SRID =sd.SRID Where sd.SupplierID is not null and sr.PayStatusID <>@0", PayType.Cancelled);
+            var NPbkngs = new PetaPoco.Sql("Select sr.BookingNo, (select sum(Amount) from RP_SR where SRID=sd.SRID and SRDID=sd.SupplierID) as PaidAmt,sd.SRID,sd.SupplierID," +
+                "s.SupplierName as UserName,Sum(sd.Cost) as OA From SRdetails sd inner join Supplier s on s.SupplierID=sd.SupplierID inner join ServiceRequest sr on sr.SRID =sd.SRID " +
+                "Where sd.SupplierID is not null and sr.PayStatusID <>@0", PayType.Cancelled);
             if (SupplierID != null)
             {
                 NPbkngs.Append($" and sd.SupplierID = {SupplierID}");
@@ -212,10 +214,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
                         if ((ManAmt < OA && usedAmt <= TotalAmt) || (OA <= TotalAmt && ManAmt <= TotalAmt && usedAmt <= TotalAmt && ManAmt <= OA))
                         {
                             var PExist = db.ExecuteScalar<decimal?>("Select Coalesce(Amount,0) From DRP_SR Where DRPDID =@0 and  SRID = @1", id, SRID) ?? 0;
-                            if (PExist != 0)
+                            if (PExist != 0) //if there is an existing DRP-SR for this booking update it
                             {
-
-
                                 if (ManAmt <= OA && OA <= TotalAmt && PExist < (OA + ActualOA))
                                     db.Execute("Delete from DRP_SR Where SRID=@0 and DRPDID =@1", SRID, id);
                             }
