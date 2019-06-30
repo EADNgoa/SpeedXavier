@@ -45,8 +45,8 @@ namespace Speedbird
 		{
 			Repository GetInstance();
 		}
-		
-		public static IFactory Factory { get; set; }
+                     
+        public static IFactory Factory { get; set; }
         public static Repository GetInstance()
         {
 			if (_instance!=null)
@@ -94,8 +94,85 @@ namespace Speedbird
     {
 		[Column] public Guid OperationKey { get; set; }
 	}
-    
-	[TableName("dbo.Accomodation")]
+
+
+    [TableName("dbo.AbstTable")]
+    [PrimaryKey("AbstId")]
+    [ExplicitColumns]
+    public partial class AbstTable 
+    {
+
+
+
+        [Column] public int AbstId { get; set; }
+
+
+
+
+
+
+
+
+
+
+
+
+        [Column] public string Name { get; set; }
+
+
+
+
+
+        [Column] public int? Type { get; set; }
+
+
+
+
+
+
+
+
+
+
+
+
+        [Column] public string Value { get; set; }
+
+
+
+
+
+        [Column] public int? recursionLevel { get; set; }
+
+
+
+
+
+
+
+
+
+
+
+
+        [Column] public string ParentTableName { get; set; }
+
+
+
+
+
+        [Column] public int? ParentId { get; set; }
+        [Column] public int? AttrElemId { get; set; }
+
+
+
+
+
+
+    }
+
+
+    [TableName("dbo.Accomodation")]
 	[PrimaryKey("AccomodationID")]
 	[ExplicitColumns]
     public partial class Accomodation  

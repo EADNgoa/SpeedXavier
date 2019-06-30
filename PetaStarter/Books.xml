@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bookstore>
+
+  <book category="web" cover="paperback">
+    <title lang="en">Learning XML</title>
+    <author>Erik T. Ray</author>
+    <price>
+		<title lang="en">Learning XML</title>
+		<Samurai>
+			<book category="cooking">
+			<title lang="en">Everyday Italian</title>
+			<author>Giada De Laurentiis</author>
+			<year>2005</year>
+			<price>30.00</price>
+		  </book>	
+		2003</Samurai>
+		<Samurai>
+			<book category="Tcookingcooking">
+			<title lang="en">TTT Everyday Italian</title>
+			<author>TTT De Laurentiis</author>
+			<year>3005</year>
+			<price>31.00</price>
+		  </book>	
+		3003</Samurai>
+		<author>Erik T. Ray</author>
+	39.95
+	</price>
+    <year>2003</year>
+  </book>
+ 
+</bookstore>

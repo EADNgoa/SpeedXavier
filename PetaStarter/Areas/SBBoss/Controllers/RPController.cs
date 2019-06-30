@@ -193,6 +193,14 @@ namespace Speedbird.Areas.SBBoss.Controllers
             return View(base.BaseCreateEdit<RPdet>(id, "RPDID"));
 
         }
+
+
+        //OA: Amt pending to be paid for the booking
+        //ManAmt: Partial amt entered in fin sceen
+        //TotalAmt: What is left out of the lumpsum money recieved
+
+        //UsedAmt:amt already paid for this booking
+        //ActualOA: Total cost of the booking
         [EAAuthorize(FunctionName = "Reciept", Writable = false)]
         public ActionResult DReciept(string DriverName, bool? IsSearch, decimal? OA, int? id, decimal? ManAmt, int? SRID, decimal? TotalAmt,int? check)
         {
