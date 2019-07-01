@@ -1,64 +1,73 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<bookstore>
-<book category="cooking">
-     <title lang="en">everyday italian</title>
-     <author>giada de laurentiis</author>
-     <year>2005</year>
-     <price>30.00</price></book>
-<book category="children">
-     <title lang="en">harry potter</title>
-     <author>j k. rowling</author>
-     <year>2005</year>
-     <price>29.99</price></book>
-<book category="web">
-     <title lang="en">xquery kick start</title>
-     <author>james mcgovern</author>
-     <year>2003</year>
-     <price>49.99</price></book>
+<?xml version="1.0" encoding="UTF-8" ?>
+<bookstore billboardSize="83" design="classic">
+    <feeling>Technical</feeling>
+    <staff>Kiosk auto</staff>
+    <facilities>Wifi</facilities>
+    <book category="cooking">
+        <title lang="en">everyday italian</title>
+        <author>giada de laurentiis</author>
+        <year>2005</year>
+        <price>30.00</price>
+    </book>
+    <book category="children">
+        <title lang="en">harry potter</title>
+        <author>j k. rowling</author>
+        <year>2005</year>
+        <price>29.99</price>
+    </book>
+    <book category="web">
+        <title lang="en">xquery kick start</title>
+        <author>james mcgovern</author>
+        <year>2003</year>
+        <price>49.99</price>
+    </book>
 
-  <book category="web" cover="paperback">
-    <title lang="en">Learning XML</title>
-    <author>Erik T. Ray</author>
-    <price>
-		<title lang="en">Learning XML</title>
-		<year>
-			<book category="cooking">
-			<title lang="en">Everyday Italian</title>
-			<author>Giada De Laurentiis</author>
-			<year>2005</year>
-			<price>30.00</price>
-		  </book>	
-		2003</year>
-		<author>Erik T. Ray</author>
-	39.95
-	</price>
-    <year>2003</year>
-  </book>
-  <book category="web" cover="paperback">
-    <title lang="en">Learning XML</title>
-    <author>Erik T. Ray</author>
-    <price>
-		<title lang="en">Learning XML</title>
-		<Year>
-			<book category="cooking">
-			<title lang="en">Everyday Italian</title>
-			<author>Giada De Laurentiis</author>
-			<year>2005</year>
-			<price>30.00</price>
-		  </book>	
-		2003</Year>
-		<Year>
-			<book category="Tcookingcooking">
-			<title lang="en">TTT Everyday Italian</title>
-			<author>TTT De Laurentiis</author>
-			<year>3005</year>
-			<price>31.00</price>
-		  </book>	
-		3003</Year>
-		<author>Erik T. Ray</author>
-	39.95
-	</price>
-    <year>2003</year>
-  </book>
- 
+    <book category="web" cover="paperback">
+        <title lang="en">Learning XML</title>
+        <author>Erik T. Ray</author>
+        <price>
+            <title lang="en">Learning XML</title>
+            <year>
+                <book category="cooking">
+                    <title lang="en">Everyday Italian</title>
+                    <author>Giada De Laurentiis</author>
+                    <year>2005</year>
+                    <price>30.00</price>
+                </book>
+                2003
+            </year>
+            <author>Erik T. Ray</author>
+            39.95
+        </price>
+        <year>2003</year>
+    </book>
+    <book category="web" cover="paperback">
+        <title lang="en">Learning XML</title>
+        <author>Erik T. Ray</author>
+        <price>
+            <title lang="en">Learning XML</title>
+            <Year>
+                <book category="cooking">
+                    <title lang="en">Everyday Italian</title>
+                    <author>Giada De Laurentiis</author>
+                    <year>2005</year>
+                    <price>30.00</price>
+                </book>
+                2003
+            </Year>
+            <Year>
+                <book category="Tcookingcooking">
+                    <title lang="en">TTT Everyday Italian</title>
+                    <author>TTT De Laurentiis</author>
+                    <year>3005</year>
+                    <price>31.00</price>
+                </book>
+                3003
+            </Year>
+            <author>Erik T. Ray</author>
+            39.95
+        </price>
+        <year>2003</year>
+    </book>
+
 </bookstore>

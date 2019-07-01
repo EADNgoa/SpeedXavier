@@ -53,19 +53,27 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 foreach (var id in insIds)
                 {
                     var insData = new Dictionary<string, string>();
-                    Debug.WriteLine(id);
+                    
                     insData = db.Query<AbstTable>("select Name, Value from AbstTable where parentId=@0 and type<>@1", id, (int)EnumFldType.ParentElement).ToDictionary(key => key.Name??t.TblName, Val => Val.Value);
                     
                     StringBuilder insStmt = new StringBuilder($"INSERT INTO {t.TblName}_{t.RecursionLevel} ({t.TblName}Id, ");
-                    StringBuilder insValues = new StringBuilder($" VALUES ({id}, ");
+                    StringBuilder insValues = new StringBuilder($" VALUES ({id}, "); //Pk from original import table
+
                     t.TblFields.ForEach(f => {
                         insStmt.Append($"{f.Name}_{f.Type}, ");
-                        insValues.Append($"'{((insData.ContainsKey(f.Name)) ? insData[f.Name]: "")}', ");
+                        insValues.Append($"'{((insData.ContainsKey(f.Name)) ? insData[f.Name].Trim(): "")}', ");
                     });
 
-                    insStmt.Append($"[{t.ParentTblName}_Id])");                                      
-                    insValues.Append($"{db.Single<AbstTable>(id).ParentId})");
-
+                    if (t.RecursionLevel == 0)
+                    {
+                        insStmt.Replace(",", ")", insStmt.ToString().LastIndexOf(","), 1);
+                        insValues.Replace(",", ")", insValues.ToString().LastIndexOf(","), 1);
+                    }
+                    else
+                    {
+                        insStmt.Append($"[{t.ParentTblName}_Id])");
+                        insValues.Append($"{db.Single<AbstTable>(id).ParentId})");//Fk from original import table
+                    }
                     t.InsertSQL.Add(insStmt.Append(insValues.ToString()).ToString());
                 }
             });
@@ -83,7 +91,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         private List<TableDef> MakeSQLTables()
         {
             //Fetch the list of potential tables to create
-            var tableDefs = db.Query<TableDef>("select [Name] as TblName,recursionLevel from AbstTable where [type]="+ (int)EnumFldType.ParentElement+" and " +
+            var tableDefs = db.Query<TableDef>($"select [Name] as TblName,recursionLevel from AbstTable where ([type]={ (int)EnumFldType.ParentElement} or [type]={(int)EnumFldType.Root}) and " +
                 "AbstId in (Select distinct ParentId from AbstTable where type<>1) " + //1 is attributes 
                 "group by[Name], recursionLevel").ToList();
 
@@ -114,7 +122,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 });
 
                 //make FK to Parent for all below the kids of root. 
-                if (t.RecursionLevel>1)
+                if (t.RecursionLevel>0)
                 { 
                     string pureParentName = t.ParentTblName.Substring(0, t.ParentTblName.LastIndexOf('_'));
                     createSQL.Append($"[{t.ParentTblName}_Id] INT NULL, " +
