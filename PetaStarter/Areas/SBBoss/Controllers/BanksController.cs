@@ -82,8 +82,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
             tableDefs.OrderBy(o => o.RecursionLevel).ToList().ForEach(t => {
                 t.InsertSQL.ForEach(sq =>
                 {
-                    Debug.WriteLine(sq);
-                    //db.Execute(sq);
+                    //Debug.WriteLine(sq);
+                    db.Execute(sq);
                 });
             });
         }
