@@ -8,6 +8,7 @@ namespace Speedbird
     {
         public void Configuration(IAppBuilder app)
         {
+            Microsoft.ApplicationInsights.Extensibility.TelemetryConfiguration.Active.DisableTelemetry = true;
             ConfigureAuth(app);
         }
     }
