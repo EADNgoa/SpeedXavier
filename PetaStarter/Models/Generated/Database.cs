@@ -32,8 +32,12 @@ namespace Speedbird
 		{
 			CommonConstruct();
 		}
-
-		public Repository(string connectionStringName) 
+        public Repository(string connectionString, string providerName = null)
+            : base(connectionString, providerName)
+        {
+            CommonConstruct();
+        }
+        public Repository(string connectionStringName) 
 			: base(connectionStringName)
 		{
 			CommonConstruct();
