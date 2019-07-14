@@ -225,7 +225,8 @@ namespace Speedbird
         public int DinnerCost { get; set; }
         public int NoExtraService { get; set; }
         public int ExtraServiceCost { get; set; }
-        public override decimal TotalCost { get { return Cost + DinnerCost + LunchCost + BFCost + ExtraServiceCost; } }
+        public int EBCostPNight { get; set; }
+        public override decimal TotalCost { get { return EBCostPNight + DinnerCost + LunchCost + BFCost + ExtraServiceCost; } }
     }
 
         public class SightseeingServiceView : SupplierInfo

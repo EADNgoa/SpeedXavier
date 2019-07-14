@@ -80,7 +80,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
 
 
-            var sql = new PetaPoco.Sql($"Select SRID, BookingNo,TDate, CONCAT(c.FName, ' ', c.SName) as CName, c.Phone, c.email, u.email as AgentName, substring(e.RealName,1,10) as UserName, SRStatusID, PayStatusID " +
+            var sql = new PetaPoco.Sql($"Select SRID, BookingNo,TDate, CONCAT(c.FName, ' ', c.SName) as CName, c.Phone, c.email, u.realName as AgentName, substring(e.RealName,1,10) as UserName, SRStatusID, PayStatusID " +
                 $"from ServiceRequest s left join AspNetUsers u on u.id=s.AgentId left join AspNetUsers e on s.EmpId=e.Id ");
             var fromsql = new PetaPoco.Sql(", Customer c ");                
             var wheresql = new PetaPoco.Sql(" where c.CustomerID=s.CustID and SRStatusId >@0", (int)SRStatusEnum.NoAction);
@@ -436,7 +436,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                         $"sd.AdultNo,CarType as ExtraBedCost, ChildNo,ContractNo,cost,sd.CouponCode,ECommision,Fdate as checkin,FromLoc,HasAc,Heritage as ExtraService,InfantNo, " +
                         $"IsCanceled, Model as AccomName, ot.OptionTypeName as RoomCategory,payto,Pickuppoint as RoomType,qty as NoOfRooms, Sellprice,sd.ServiceTypeID,SRDID,SRID, " +
                         $"SuppInvNo,SupplierName,sd.SupplierID,Tdate as checkout, SuppInvDt,SuppConfNo,NoExtraBeds,BFCost,LunchCost,DinnerCost,NoExtraService,ExtraServiceCost,SuppInvAmt, " +
-                        $"ECommision,Tax from SRdetails sd left join Supplier s on s.supplierid=sd.supplierid left join OptionType ot on ot.OptionTypeId=sd.OptionTypeId WHERE SRDID = {srdid} "));
+                        $"ECommision,Tax,EBCostPNight from SRdetails sd left join Supplier s on s.supplierid=sd.supplierid left join OptionType ot on ot.OptionTypeId=sd.OptionTypeId WHERE SRDID = {srdid} "));
                     break;
                 case ServiceTypeEnum.Packages:
                     return PartialView($"ReadPVs/_{(sType).ToString()}", db.SingleOrDefault<Packagevw>($"SELECT (select top 1 CONCAT(c.fName, ' ',c.sName) from Customer c, SRD_Cust sc " +
@@ -551,7 +551,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         public ActionResult SRdetails([Bind(Include = "SRDID,SRID, ServiceTypeID,CarType,ItemID,CouponCode,Model,FromLoc,ToLoc,Fdate,Tdate,SupplierID,Cost,SellPrice,ChildNo," +
             "AdultNo,InfantNo,Heritage,HasAc,HasCarrier,GuideLanguageID,DateOfIssue,ContractNo,PayTo,PickUpPoint,DropPoint,DriverID,SuppInvNo,Qty,ParentID,IsReturn," +
             "IsInternational,OptionTypeID,ECommision,IsCanceled,SuppInvDt,SuppConfNo,NoExtraBeds,BFCost,LunchCost,DinnerCost,NoExtraService,ExtraServiceCost," +
-            "SuppInvAmt,GDSConfNo,ExpiryDate")] SRdetail item, string Event, int CustomerId)
+            "SuppInvAmt,GDSConfNo,ExpiryDate,EBCostPNight")] SRdetail item, string Event, int CustomerId)
         {
             using (var transaction = db.GetTransaction())
             {
@@ -566,6 +566,14 @@ namespace Speedbird.Areas.SBBoss.Controllers
                     {
                         item.ECommision += c.Amount ?? 0;
                         item.ECommision = (item.SellPrice * (c.Perc ?? 0)) / 100;
+                    }
+
+
+                    //For Accomodation calc the total cost
+                    if (item.ServiceTypeID==(int)ServiceTypeEnum.Accomodation)
+                    {
+                        var NoNights = int.Parse((item.Tdate - item.Fdate).Value.TotalDays.ToString());
+                        item.Cost = ((item.EBCostPNight * item.Qty) * NoNights) + (item.NoExtraBeds??0 * item.CarType??0) + ((item.BFCost??0 + item.LunchCost ??0+ item.DinnerCost??0) * NoNights);
                     }
 
                     DateTime? td =(DateTime?)item?.Tdate ;
@@ -584,7 +592,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                     }
                     else //Insert new SRdetail
                     {
-                        string logNote = FindDiffs<SRdetail>(0, item, "");
+                        string logNote = FindDiffs<SRdetail>(0, item, "");                        
                         db.Insert(item);
                         if (td.HasValue && item.ServiceTypeID==(int)ServiceTypeEnum.Flight)
                         {//We need to insert this duplicate record so that we can show this return flight in the Daily Diary on the return journey date
