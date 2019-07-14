@@ -3,6 +3,8 @@
 	[DRPDID] INT NOT NULL, 
     [SRID] Int NOT NULL 
     PRIMARY KEY ([DRPDID],[SRID]), 
-    [Amount] DECIMAL(18, 2) NULL
+    [Amount] DECIMAL(18, 2) NULL, 
+    [SRDID] INT NULL, 
+    CONSTRAINT [FK_DRP_SR_SRdetails] FOREIGN KEY ([SRDID]) REFERENCES [SRdetails]([SRDID])
 
 )

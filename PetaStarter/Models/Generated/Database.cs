@@ -95,6 +95,21 @@ namespace Speedbird
 		[Column] public Guid OperationKey { get; set; }
 	}
     
+	[TableName("dbo.AbstTable")]
+	[PrimaryKey("AbstId")]
+	[ExplicitColumns]
+    public partial class AbstTable  
+    {
+		[Column] public int AbstId { get; set; }
+		[Column] public string Name { get; set; }
+		[Column] public int? Type { get; set; }
+		[Column] public string Value { get; set; }
+		[Column] public int? recursionLevel { get; set; }
+		[Column] public string ParentTableName { get; set; }
+		[Column] public int? ParentId { get; set; }
+		[Column] public int? AttrElemId { get; set; }
+	}
+    
 	[TableName("dbo.Accomodation")]
 	[PrimaryKey("AccomodationID")]
 	[ExplicitColumns]
@@ -977,7 +992,7 @@ namespace Speedbird
 	}
     
 	[TableName("dbo.ServiceCommision")]
-	[PrimaryKey("ServiceID", AutoIncrement=false)]
+	[PrimaryKey("ServiceID")]
 	[ExplicitColumns]
     public partial class ServiceCommision  
     {
@@ -1082,7 +1097,6 @@ namespace Speedbird
 		[Column] public DateTime? SuppInvDt { get; set; }
 		[Column] public string SuppConfNo { get; set; }
 		[Column] public int? NoExtraBeds { get; set; }
-		[Column] public int? EBCostPNight { get; set; }
 		[Column] public int? BFCost { get; set; }
 		[Column] public int? LunchCost { get; set; }
 		[Column] public int? DinnerCost { get; set; }

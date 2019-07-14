@@ -59,12 +59,12 @@ namespace Speedbird
         public decimal NetCost { get; set; }
         public decimal AddCost { get; set; }
         public string AddDtl { get; set; }
-        public override decimal TotalCost { get { return Cost; } }
+        public override decimal TotalCost { get { return Cost + AddCost + NetCost; } }
     }
 
     public class Visavw : SupplierInfo
     {
-        public int PassportNo { get; set; }
+        public string PassportNo { get; set; }
         public DateTime Tdate { get; set; }
         public DateTime Fdate { get; set; }
         public DateTime ExpiryDate { get; set; }
@@ -73,9 +73,11 @@ namespace Speedbird
         public decimal Cost { get; set; }
         public string PayTo { get; set; }
         public int Duration { get; set; }
+        public int OptionTypeID { get; set; }
+        public string OptionTypeName { get; set; }
         public string VisaCountry { get; set; }
         public decimal ExtraServiceCost { get; set; }
-        public override decimal TotalCost { get { return Cost; } }
+        public override decimal TotalCost { get { return Cost + ExtraServiceCost; } }
     }
 
     
@@ -132,7 +134,7 @@ namespace Speedbird
         public decimal AddCost { get; set; }
         public decimal FullCost { get; set; }
         public string AddDetl { get; set; }
-        public override decimal TotalCost { get { return Cost; } }
+        public override decimal TotalCost { get { return Cost + FullCost + AddCost; } }
     }
 
     public class Railvw : SupplierInfo
@@ -154,7 +156,7 @@ namespace Speedbird
         public decimal AddCost { get; set; }
         public decimal FullCost { get; set; }
         public string AddDetl { get; set; }
-        public override decimal TotalCost { get { return Cost; } }
+        public override decimal TotalCost { get { return Cost + FullCost + AddCost; } }
     }
 
 
@@ -197,7 +199,7 @@ namespace Speedbird
         public string PickUpPoint { get; set; }
         public int NoOfVehicles { get; set; }
         public decimal VehicleCost { get; set; }
-        public override decimal TotalCost { get { return Cost; } }
+        public override decimal TotalCost { get { return Cost + VehicleCost; } }
     }
 
     public class AccomodationServiceView : SupplierInfo
@@ -257,6 +259,7 @@ namespace Speedbird
         public decimal Cost { get; set; }
         public string Heritage { get; set; }
         public override decimal TotalCost { get { return Cost; } }
+        public decimal SellPrice { get; set; }
     }
 
     public class FlightServiceView : SupplierInfo
