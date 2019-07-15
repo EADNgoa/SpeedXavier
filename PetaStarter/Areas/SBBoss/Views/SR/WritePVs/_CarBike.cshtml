@@ -24,7 +24,7 @@
     </thead>
     <tr>
         <td>@Html.EASelectListP("CustomerId", (IEnumerable<SelectListItem>)ViewBag.CustomerList, "", "Pax Name", (string)ViewBag.SelectedCustomerId)</td>
-        <td> @Html.EATextForP(m => m.Model, "Pkg. Name")</td>
+        <td> @Html.EATextForP(m => m.Model, "Model")</td>
         <td>@Html.EASelectListForP(m => m.CarType, "Vehicle Type")
         <td>@Html.EADateForP(m => m.Fdate, "From Date")
         <td>@Html.EADateForP(m => m.Tdate, "To Date")
@@ -33,7 +33,7 @@
         <td>@Html.EATextForP(m => m.ToLoc, "Drop Location")                                                                                              </td>
         <td>@Html.EATextForP(m => m.DropPoint, "Drop Address")
         <td>@Html.EATextForP(m => m.Cost, "Net Rate per day")
-        <td>@Html.EANumberForP(m => m.Qty, "No. of days")
+        <td>@Html.EANumberForP(m => m.Qty, "No. of Vehicles")
         <td>@Html.EANumberForP(m => m.NoExtraBeds, "No. of Vehicles Required")
         <td>@Html.EANumberForP(m => m.SellPrice)</td>
         <td> @Html.EASelectListForP(m => m.PayTo)</td>
