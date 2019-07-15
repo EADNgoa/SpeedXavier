@@ -23,9 +23,11 @@ namespace Speedbird.Areas.SBBoss.Controllers
             this.db = new Repository(@"Data Source=(LocalDb)\MSSQLLocalDB;Initial Catalog=Fintastic;Integrated Security=True", "System.Data.SqlClient");
         }
 
-        public ActionResult Fat()
+        public ActionResult ImportXmlToSql()
         {
-            XDocument doc = XDocument.Load("http://localhost:53040/Eadtsx.xml");
+            
+            XDocument doc = XDocument.Load("http://localhost:53040/sqltoaccess.xml");
+            //XDocument doc = XDocument.Load("http://localhost:53040/Eadtsx.xml");
 
             //truncate the temp table
             db.Execute("truncate table AbstTable");
@@ -50,7 +52,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 Debug.Write(e.Message);
                 throw e;
             }
-            return View();
+            return Json(new object() , JsonRequestBehavior.AllowGet);
         }
         
         private void FillSQLtables(List<TableDef> tableDefs)
@@ -95,7 +97,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 t.InsertSQL.ForEach(sq =>
                 {
                     Debug.Print(sq);
-                    //db.Execute(sq);
+                    db.Execute(sq);
                 });
             });
         }
@@ -196,7 +198,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             //With our statements ready, lets now make our tables
             tableDefs.OrderBy(o=>o.RecursionLevel).ToList().ForEach(t => {
                 Debug.Print(t.CreateSQL);
-                //db.Execute(t.CreateSQL);
+                db.Execute(t.CreateSQL);
             });
 
             return tableDefs;

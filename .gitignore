@@ -262,3 +262,5 @@ __pycache__/
 /PetaStarter/Images
 /PetaStarter/Icons
 /PetaStarter/App_Readme/Compare-NET-Objects-Help.txt
+/PetaStarter/sqltoaccess.dtsx
+*.xml
