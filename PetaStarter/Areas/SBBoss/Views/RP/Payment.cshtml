@@ -9,7 +9,7 @@
 <div class="card border rounded DropShadow">
     <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
         <span class="h3">@ViewBag.Title</span>
-        <a href="@Url.Action("DReciept","Rp", new {check=1 })"><i class="fas fa-undo-alt fa-inverse h3 float-right DropShadow"></i></a>
+        <a href="@Url.Action("Payment","Rp")"><i class="fas fa-undo-alt fa-inverse h3 float-right DropShadow"></i></a>
 
     </div>
     <div class="card-body">
@@ -216,6 +216,19 @@ else
        
     });
 
+    $(document).ready(function () {
+        $('*[data-autocombo-url]')
+            .each(function () {
+                $(this).autocomplete({
+                    source: $(this).data("autocombo-url"),
+                    minLenght: 3,
+                    delay: 500,
+                    select: function (event, ui) {
+                        $($(this).data("autocomplete-idholder")).val(ui.item.id);
+                    }
+                });
+            });
+    });
 
 </script>
 

@@ -1,0 +1,49 @@
+﻿@using Speedbird
+@model Speedbird.PassportView
+
+<div class="row">
+    <div class="col-10">
+        <table class="SRDetsTbl SRDetsFullTable" width="100%">
+            <thead>
+                <tr>
+                    <th>Pax Name</th>
+                    <th>DOB</th>
+                    <th>Passport No.</th>
+                    <th>Nationality</th>
+                    <th>Service Required</th>
+                    <th>Cost</th>
+                </tr>
+            </thead>
+            <tr>
+                <td>@Model.PaxName</td>
+                <td>@Model.DOB.EAFormat()</td>
+                <td>@Model.PassPortNo </td>
+                <td>@Model.Nationality</td>
+                <td>@Model.Heritage</td>
+                <td align="right">@Model.Cost </td>
+            </tr>
+        </table>
+        @{Html.RenderPartial("ReadPVs/_SupplierInfo", Model); }
+    </div>
+    <div class="col-2" style="padding-left:0px;">
+        @{Html.RenderPartial("ReadPVs/_Fin", Model); }
+    </div>
+</div>
+
+<br />
+
+
+
+@*@if (ViewBag.isReadOnly != null)
+    {@Html.Action("CustSearch", "SR", new { id = Model.SRDID })
+    }*@
+
+@*@if (Model != null)
+    {
+        <script>
+           $('#AssignDriver').load('@Url.Action("_AssignDriver")', { SRID: @Model.SRID, SRDID: @Model.SRDID});
+           $('#Review').load('@Url.Action("_DrvReview")', { SRID: @Model.SRID,SRDID: @Model.SRDID});
+        </script>
+    }*@
+
+

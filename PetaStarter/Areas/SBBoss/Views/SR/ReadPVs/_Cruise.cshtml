@@ -1,0 +1,90 @@
+﻿@using Speedbird
+@model Speedbird.Cruisevw
+<div class="row">
+    <div class="col-10">
+        <table class="SRDetsTbl">
+            <thead>
+                <tr>
+                    <th>Pax Name</th>
+                    <th>Dept. Date</th>
+                    <th>Passengers</th>
+                    <th>No. of Cabins</th>
+                    <th>Cabin type</th>
+                    <th>From Port</th>
+                    <th>Via Point</th>
+                    <th>To Port</th>
+                    <th>Return Date</th>
+                    <th>No. of Nights</th>
+                    <th>Meal Plan</th>
+                    <th>Net cost/person</th>
+                    <th>Name od cruise trip</th>
+                </tr>
+            </thead>
+            <tr>
+                <td>@Model.PaxName</td>
+                <td>@Model.Departuredate.EAFormat()</td>
+                <td>@Model.Passengers</td>
+                <td>@Model.Cabins</td>
+                <td>@Model.CabinType</td>
+                <td>@Model.FromPort</td>
+                <td>@Model.ViaPoint</td>
+                <td>@Model.ToPort</td>
+                <td>@Model.ReturnDate.EAFormat()</td>
+                <td>@(Model.ReturnDate.Subtract(Model.Departuredate).TotalDays)</td>
+                <td>@Model.MealPlan</td>
+                <td align="right">@Model.Cost</td>
+                <td>@Model.CruiseName</td>
+            </tr>
+        </table>
+        @{Html.RenderPartial("ReadPVs/_SupplierInfo", Model); }
+    </div>
+    <div class="col-2" style="padding-left:0px;">
+        @{Html.RenderPartial("ReadPVs/_Fin", Model); }
+    </div>
+</div>
+@*@foreach (var item in ViewBag.ufs)
+    {
+        <span class="badge badge-secondary"><a target="_blank" style="color:white !important;" href="/Images/@item.Path">@item.UploadName</a> &nbsp; <a style="color:#fe7575 !important;" href="@Url.Action("Delete","SR",new {pid=item.SRUID , id=item.SRID})">X</a></span>
+    }
+
+    @using (Html.BeginForm("SRUpload", "SR", FormMethod.Post, new { id = "ServiceDetsUpld-" + Model.SRDID, enctype = "multipart/form-data" }))
+    {
+        <div class="form-inline">
+            @Html.AntiForgeryToken()
+            @Html.Hidden("SRID", (int)Model.SRID)
+            @Html.Hidden("SRDID", (int)Model.SRDID)
+            @Html.EAText("UploadName", "", "File Description")
+
+
+            @Html.TextBox("UploadedFile", "", new { type = "file", @class = "UploadedFile", @data_uf = Model.SRDID })
+        </div>
+    }*@
+
+
+
+
+
+<script>
+
+
+    $(function () {
+        //DateTime picker
+
+
+        $('.eadate').datepicker({
+            dateFormat: "dd-MM-yy",
+            showButtonPanel: true,
+            changeMonth: true,
+            changeYear: true
+        });
+
+        //Disable the browsers default date picker
+        jQuery.validator.methods["date"] = function (value, element) { return true; }
+
+
+    });
+
+
+
+
+</script>

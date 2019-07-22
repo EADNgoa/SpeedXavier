@@ -1,0 +1,99 @@
+﻿@using Speedbird
+@model Speedbird.SRdetail
+
+@{ Html.RenderPartial("WritePVs/_CommonHidden", Model); }
+
+<table class="SRDetsTbl" width="100%">
+    <thead>
+        <tr>
+            <th>Pax Name</th>
+            <th>Dept. Date</th>
+            <th>Passengers</th>
+            <th>No. of Cabins</th>
+            <th>Cabin type</th>
+            <th>From Port</th>
+            <th>Via Point</th>
+            <th>To Port</th>
+            <th>Return Date</th>
+            <th>Meal Plan</th>
+            <th>Net cost/person</th>
+            <th>Name of cruise trip</th>
+        </tr>
+    </thead>
+    <tr>
+        <td>@Html.EASelectListP("CustomerId", (IEnumerable<SelectListItem>)ViewBag.CustomerList, "", "Pax Name", (string)ViewBag.SelectedCustomerId)</td>
+        <td>@Html.EADateForP(m => m.Fdate, "Departure Date")</td>
+        <td> @Html.EANumberForP(m => m.Qty, "No of Passengers")</td>
+        <td>@Html.EANumberForP(m => m.NoExtraBeds, "No. of Cabins")</td>
+        <td>@Html.EATextForP(m => m.Model, "Cabin Type")</td>
+        <td>@Html.EATextForP(m => m.PickUpPoint, "From Port")                                                                                          </td>
+        <td>@Html.EATextForP(m => m.FromLoc, "Via Location")                                                                                              </td>
+        <td>@Html.EATextForP(m => m.DropPoint, "To Port")</td>
+        <td>@Html.EADateForP(m => m.Tdate, "Return Date")</td>
+        <td>@Html.EATextForP(m => m.CouponCode, "Meal Plan")</td>
+        <td>@Html.EANumberForP(m => m.Cost, "Net Rate per day")</td>
+        <td>@Html.EATextForP(m => m.ContractNo, "Name ans cruise")</td>
+    </tr>
+</table>
+
+@{ Html.RenderPartial("WritePVs/_SupplierInfo", Model); }
+
+@*@foreach (var item in ViewBag.ufs)
+{
+    <span class="badge badge-secondary"><a target="_blank" style="color:white !important;" href="/Images/@item.Path">@item.UploadName</a> &nbsp; <a style="color:#fe7575 !important;" href="@Url.Action("Delete","SR",new {pid=item.SRUID , id=item.SRID})">X</a></span>
+}
+
+@using (Html.BeginForm("SRUpload", "SR", FormMethod.Post, new { id = "ServiceDetsUpld-" + Model.SRDID, enctype = "multipart/form-data" }))
+{
+    <div class="form-inline">
+        @Html.AntiForgeryToken()
+        @Html.Hidden("SRID", (int)Model.SRID)
+        @Html.Hidden("SRDID", (int)Model.SRDID)
+        @Html.EAText("UploadName", "", "File Description")
+
+
+        @Html.TextBox("UploadedFile", "", new { type = "file", @class = "UploadedFile", @data_uf = Model.SRDID })
+    </div>
+}*@
+
+
+
+
+
+<script>
+
+
+    $(function () {
+        //DateTime picker
+
+
+        $('.eadate').datepicker({
+            dateFormat: "dd-MM-yy",
+            showButtonPanel: true,
+            changeMonth: true,
+            changeYear: true
+        });
+
+        //Disable the browsers default date picker
+        jQuery.validator.methods["date"] = function (value, element) { return true; }
+
+        $(document).ready(function () {
+            $('*[data-autocombo-url]')
+                .each(function () {
+                    $(this).autocomplete({
+                        source: $(this).data("autocombo-url"),
+                        minLenght: 3,
+                        delay: 500,
+                        select: function (event, ui) {
+                            $("#" + $(this).data("autocomplete-idholder")).val(ui.item.id).trigger('change');
+                        }
+                    });
+                });
+        });
+
+    });
+
+
+
+
+</script>

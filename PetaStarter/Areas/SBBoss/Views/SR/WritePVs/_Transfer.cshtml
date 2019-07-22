@@ -16,8 +16,7 @@
             <th>Car type    </th>
             <th>Rate Basis  </th>
             <th>Has AC?     </th>
-            <th>Has Carrier?</th>
-            <th>Car Cost  </th>
+            <th>Has Carrier?</th>            
             <th>Pay To    </th>
             <th>Cost      </th>
             <th>Sell Price</th>
@@ -26,8 +25,8 @@
     <tbody>
         <tr>
             <td>@Html.EASelectListP("CustomerId", (IEnumerable<SelectListItem>)ViewBag.CustomerList, "", "Pax Name", (string)ViewBag.SelectedCustomerId)</td>
-            <td>@Html.EADateForP(m => m.Fdate, "Transfer Date")                                                                                         </td>
-            <td>@Html.EANumberForP(m => m.Qty, "No. of Vehicles")                                                                                       </td>
+            <td>@Html.EADateForP(m => m.Fdate, "Transfer Date")</td>
+            <td>@Html.EANumberForP(m => m.Qty, "No. of Vehicles")</td>
             <td>@Html.EATextForP(m => m.FromLoc, "From Where")                                                                                          </td>
             <td>@Html.EATextForP(m => m.PickUpPoint)                                                                                                    </td>
             <td>@Html.EATextForP(m => m.ToLoc, "To Where")                                                                                              </td>
@@ -35,8 +34,7 @@
             <td>@Html.EASelectListForP(m => m.CarType, "Vehicle Type")                                                                                  </td>
             <td>@Html.EASelectListForP(m => m.Heritage, "Rate Basis")                                                                                   </td>
             <td>@Html.EAChkBoxP("HasAc")                                                                                                                </td>
-            <td>@Html.EAChkBoxP("HasCarrier")                                                                                                           </td>
-            <td>@Html.EANumberForP(m => m.BFCost, "Vehicle Cost")                                                                                       </td>
+            <td>@Html.EAChkBoxP("HasCarrier")                                                                                                           </td>            
             <td>@Html.EASelectListForP(m => m.PayTo)                                                                                                    </td>
             <td>@Html.EANumberForP(m => m.Cost)                                                                                                         </td>
             <td>@Html.EANumberForP(m => m.SellPrice)                                                                                                    </td>

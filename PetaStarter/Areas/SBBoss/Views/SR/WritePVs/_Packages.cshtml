@@ -1,0 +1,117 @@
+﻿@using Speedbird
+@model Speedbird.SRdetail
+
+@{ Html.RenderPartial("WritePVs/_CommonHidden", Model); }
+
+<table class="SRDetsTbl" width="100%">
+    <thead>
+        <tr>
+            <th>Pax Name</th>
+            <th>NoOfPax</th>
+            <th>Package Type</th>
+            <th>From Date</th>
+            <th>To Date</th>
+            <th>Meal Plan</th>
+            <th>Start Point</th>
+            <th>End Point</th>
+            <th>Name of Tour</th>
+            <th>Travel Included</th>
+            <th>Hotel Category</th>
+            <th>Package Cost</th>
+            <th>Additional Charge Details</th>
+            <th>Additional Cost/Person</th>
+            <th>Net Cost/Person</th>
+        </tr>
+    </thead>
+    <tr>
+        <td>@Html.EASelectListP("CustomerId", (IEnumerable<SelectListItem>)ViewBag.CustomerList, "", "Pax Name", (string)ViewBag.SelectedCustomerId)</td>
+        <td> @Html.EANumberForP(m => m.ChildNo, "NoOfPax")</td>
+        <td>@Html.EATextForP(m => m.Model, "Package Type")</td>
+        <td>@Html.EADateForP(m => m.Fdate, "FromDate")</td>
+        <td>@Html.EADateForP(m => m.Tdate, "ToDate")</td>
+        <td>@Html.EASelectListForP(m => m.CarType, "Meal Plan")</td>
+        <td>@Html.EATextForP(m => m.FromLoc, "Start Point")  </td>
+        <td>@Html.EATextForP(m => m.ToLoc, "End Point")</td>
+        <td>@Html.EATextForP(m => m.CouponCode, "Name Of Tour")</td>
+        <td>@Html.EASelectListForP(m => m.IsReturn, "Travel Included")</td>
+        <td>@Html.EATextForP(m => m.DropPoint, "Hotel Category")</td>
+        <td>@Html.EANumberForP(m => m.Cost, "Package Cost")</td>
+        <td>@Html.EATextForP(m => m.Heritage, "Additional Detail")</td>
+        <td>@Html.EANumberForP(m => m.LunchCost, "Additional Cost/Person")</td>
+        <td>@Html.EANumberForP(m => m.BFCost, "Net Cost/Person")</td>
+    </tr>
+</table>
+
+@{ Html.RenderPartial("WritePVs/_SupplierInfo", Model); }
+
+@*@foreach (var item in ViewBag.ufs)
+{
+    <span class="badge badge-secondary"><a target="_blank" style="color:white !important;" href="/Images/@item.Path">@item.UploadName</a> &nbsp; <a style="color:#fe7575 !important;" href="@Url.Action("Delete","SR",new {pid=item.SRUID , id=item.SRID})">X</a></span>
+}
+
+@using (Html.BeginForm("SRUpload", "SR", FormMethod.Post, new { id = "ServiceDetsUpld-" + Model.SRDID, enctype = "multipart/form-data" }))
+{
+    <div class="form-inline">
+        @Html.AntiForgeryToken()
+        @Html.Hidden("SRID", (int)Model.SRID)
+        @Html.Hidden("SRDID", (int)Model.SRDID)
+        @Html.EAText("UploadName", "", "File Description")
+
+
+        @Html.TextBox("UploadedFile", "", new { type = "file", @class = "UploadedFile", @data_uf = Model.SRDID })
+    </div>
+}*@
+
+
+
+
+
+<script>
+
+
+    $(function () {
+
+        ////Auto Days Calcaulation
+        //$('#Tdate').change(function () {
+        //    var start = new Date($('#Fdate').val());
+        //    var end = new Date($('#Tdate').val());
+         
+        //    var diff = new Date(end - start);
+        //    var days = 1;
+        //    days = diff / 1000 / 60 / 60 / 24;
+
+        //    $('#AdultNo').val(days);
+
+        //});
+
+        //DateTime picker
+        $('.eadate').datepicker({
+            dateFormat: "dd-MM-yy",
+            showButtonPanel: true,
+            changeMonth: true,
+            changeYear: true
+        });
+
+        //Disable the browsers default date picker
+        jQuery.validator.methods["date"] = function (value, element) { return true; }
+
+        $(document).ready(function () {
+            $('*[data-autocombo-url]')
+                .each(function () {
+                    $(this).autocomplete({
+                        source: $(this).data("autocombo-url"),
+                        minLenght: 3,
+                        delay: 500,
+                        select: function (event, ui) {
+                            $("#" + $(this).data("autocomplete-idholder")).val(ui.item.id).trigger('change');
+                        }
+                    });
+                });
+        });
+
+    });
+
+
+
+
+</script>

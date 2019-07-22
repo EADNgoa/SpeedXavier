@@ -18,7 +18,6 @@
                     <th>Rate Basis</th>
                     <th>Has AC</th>
                     <th>Carrier</th>
-                    <th>Car Cost</th>
                     <th>Pay To</th>
                 </tr>
             </thead>
@@ -34,7 +33,6 @@
                 <td>@Model.RateBasis</td>
                 <td>@Model.HasAc</td>
                 <td>@Model.HasCarrier</td>
-                <td align="right">@Model.VehicleCost</td>
                 <td>@Model.PayTo</td>
             </tr>
         </table>
@@ -62,7 +60,39 @@
                 <td>@Model.SuppConfNo</td>
             </tr>
         </table>
+        @foreach (var item in ViewBag.ufs)
+        {
+            <span class="badge badge-secondary"><a target="_blank" style="color:white !important;" href="/Images/@item.Path">@item.UploadName</a> &nbsp; <a style="color:#fe7575 !important;" href="@Url.Action("Delete","SR",new {pid=item.SRUID , id=item.SRID})">X</a></span>
+        }
 
+        <div class="row">
+            <div class="col">
+                @using (Html.BeginForm("SRUpload", "SR", FormMethod.Post, new { @class = "form-inline", id = "ServiceDetsUpld-" + Model.SRDID, enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.Hidden("SRID", (int)Model.SRID)
+                    @Html.Hidden("SRDID", (int)Model.SRDID)
+                    @Html.EAText("UploadName", "", "File Description")
+
+
+                    @Html.TextBox("UploadedFile", "", new { type = "file", @class = "UploadedFile", @data_uf = Model.SRDID })
+                }
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                @using (Html.BeginForm("SRCanxService", "SR", FormMethod.Post, new { @class = "form-inline", id = "CanxService-" + Model.SRDID }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.Hidden("SRID", (int)Model.SRID)
+                    @Html.Hidden("SRDID", (int)Model.SRDID)
+                    @Html.EAText("ProdCanxCost", "", "Prod. Canx Cost")
+                    @Html.EAText("SBCanxCost", "", "SB Canx Cost")<br />
+                    @Html.EAText("Note", "", "Note")
+                    <input type="submit" value="Cancel Service" class="btn alert-danger" />
+                }
+            </div>
+        </div>
 
 
     </div>
