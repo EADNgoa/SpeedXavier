@@ -22,7 +22,7 @@
     <tbody>
         <tr>
             <td> @Html.EASelectListP("CustomerId", (IEnumerable<SelectListItem>)ViewBag.CustomerList, "", "Pax Name", (string)ViewBag.SelectedCustomerId)</td>
-            <td> @Html.EATextForP(m => m.AdultNo, "Passport No")                                                                                            </td>
+            <td> @Html.EANumberForP(m => m.AdultNo, "Passport No")                                                                                            </td>
             <td> @Html.EADateForP(m => m.DateOfIssue, "DOB")                                                                                          </td>
             <td> @Html.EADateForP(m => m.ExpiryDate, "Expiry date")                                                                                         </td>
             <td> @Html.EATextForP(m => m.FromLoc, "Nationality")                                                                                     </td>
