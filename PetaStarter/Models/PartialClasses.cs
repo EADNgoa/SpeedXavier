@@ -18,6 +18,22 @@ namespace Speedbird
         public string value { get; set; }
     }
 
+    public class AtomResponse
+    {
+        public string postingmmp_txn { get; set; }
+        public string postingmer_txn { get; set; }
+        public string postinamount { get; set; }
+        public string postingprod { get; set; }
+        public string postingdate { get; set; }
+        public string postingbank_txn { get; set; }
+        public string postingf_code { get; set; }
+        public string postingbank_name { get; set; }
+        public string postingclientcode { get; set; }
+        public string signature { get; set; }
+        public string postingdiscriminator { get; set; }
+
+    }
+
     //Classes for SRDetails
 
     public abstract class SupplierInfo
