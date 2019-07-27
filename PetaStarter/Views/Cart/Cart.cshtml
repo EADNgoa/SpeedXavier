@@ -342,9 +342,10 @@
                 <div class="cart-banners"><div class="title">Shopping Cart Contents <a class="cart-banners-btn">Add Others</a></div></div>
                 <div class="card" id="card">
                     <div class="card-body" id="card-body">
-                  
+              
                         <div class="container-fluid">
                             @{ decimal total = 0; }
+                            @{ decimal discountedtotal = 0; }
                             @foreach (var item in Model)
                             {
                                 @Html.Hidden("CartID", item.CartID)
@@ -378,12 +379,14 @@
                                                         <td>&nbsp;</td>
                                                     }
                                                     @{ total += item.OrigPrice;}
+                                                    @{ discountedtotal += item.DiscountedPrice;}
                                                     <td colspan="2" class="price">Rs @item.OrigPrice/-</td>
                                                 </tr>
                                                 <tr><th>Confirmation</th><td>Quick</td><td>&nbsp;</td></tr>
                                             </tbody>
 
                                             @Html.Hidden("#Total", total)
+                                            @Html.Hidden("#DiscountedTotal", discountedtotal)
                                         </table>
 
 
@@ -405,13 +408,15 @@
                         </div>
                     </div>
                 </div>
+
+
                 <div class="container-fluid">
                     <div class="row">
                         <div class="item-banners" style="color:#1d4d71;font-size:18px;">
                             <center>
                                 @if (Model.Any(a => a.CouponCode != null))
                                 {
-                                    @:<p style="color:green" id="applied">*Coupon Successfully Applied</p>
+                                    <p style="color:green" id="applied">*Coupon Successfully Applied</p>
                                 }
                                 else
                                 {
@@ -442,22 +447,20 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="container-fluid">
                     <div class="row">
-
-
                         <div class="item-banners" style="color:white;font-size:24px; background-color:#009ee0 !important; text-align:right;padding-right:20px;font-weight:bold;">
                             <small>Total</small>
                             <span id="totAmt">
-                                @if (ViewBag.Amt != null)
+                                @if (Model.Any(a => a.CouponCode != null && a.DiscountedPrice != null))
                                 {
-                                    @(ViewBag.Amt)
+                                    @(discountedtotal)
                                 }
                                 else
                                 {
                                     @(total)
                                 }
-
                             </span>
                         </div>
                     </div>
@@ -624,7 +627,7 @@
                                 </div>
                             </div>*@
                         <br /><br />
-                        <button id="paybtn" type="submit">CLICK TO PAY</button>
+                        <button id="paybtn" class="paybtn" type="submit">CLICK TO PAY</button>
                     </div>
                     @*}*@
                 </div>
@@ -681,33 +684,29 @@
         CartID = [];
 
 
-        
-            $('#paybtn').click(function (e) {
-            $.post('@Url.Action("PaymentIntegrate","Cart")', {dc: $("#dp2").val(),tot: $("#Tot").val()});
+        $("#coupsub").click(function () {
+
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("UpdateCoupon", "Cart")",
+                data: { dc :$("#dp2").val() },
+                success: function (d) {
+                    $("#disc-div").hide();
+                    $('#coup-click').html("<p style='color:green'>*Coupon Successfully Applied</p>");
+                    location.reload(true);
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    console.log(textStatus);
+                }
+            });
+        });
+
+        $('.paybtn').click(function (e) {
+            e.preventDefault();
+            $.post('@Url.Action("PaymentIntegrate","Cart")');
             });
 
-
-
-        $("#coupsub").click(function () {
-            $.post("@Url.Action("UpdateCoupon", "Cart")", { dc: $("#dp2").val() });
-
-            $("#disc-div").hide();
-
-            $('#totAmt').html("");
-            $('#coup-click').html("<p style='color:green'>*Coupon Successfully Applied</p>");
-
-            $('#totAmt').load(
-                '@Url.Action("SearchCoupon", "Cart")',
-                {
-                    dc: $("#dp2").val(),
-                    tot: $("#Tot").val()
-                }
-            );
-
-      
         });
 
 
-
-    });
 </script>

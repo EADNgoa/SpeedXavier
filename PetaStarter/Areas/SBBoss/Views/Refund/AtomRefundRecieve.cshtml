@@ -1,0 +1,47 @@
+﻿@model  Speedbird.AtomRefundRecieve
+@{
+    /**/
+
+    ViewBag.Title = "Refund Response";
+}
+
+
+<style>
+    table tr td {
+        text-align: center;
+        font-weight: bold;
+    }
+
+    .navbar {
+        display: none;
+    }
+
+    footer {
+        display: none;
+    }
+</style>
+
+<h2 class="text-center">@ViewBag.Title</h2>
+<table align="center" class="table table-responsive">
+
+    <tr>
+        <td>Merchant Id : @Model.merchantid</td>
+    </tr>
+    <tr>
+        <td>Atom Transaction Id : @Model.txnid</td>
+    </tr>
+    <tr>
+        <td>Amount : @Model.amt</td>
+    </tr>
+    <tr>
+        <td>Status Code: @Model.statuscode</td>
+    </tr>
+    <tr>
+        <td>Status Messege : @Model.statusmsg</td>
+    </tr>
+    <tr>
+        <td>AtomRefundID : @Model.atomrefundid</td>
+    </tr>
+</table>
+
+

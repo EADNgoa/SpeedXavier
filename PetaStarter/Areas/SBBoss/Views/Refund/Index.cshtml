@@ -1,0 +1,18 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+
+@using (Html.BeginForm("RefundReport", "Refund", FormMethod.Post))
+{
+    <input type="submit" value="Refund" class="btn btn-primary" />
+}
+
+
+@using (Html.BeginForm("Settlementapi", "Refund", FormMethod.Post))
+{
+    <input type="submit" value="Settle" class="btn btn-primary" />
+}

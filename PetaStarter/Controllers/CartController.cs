@@ -33,7 +33,12 @@ namespace Speedbird.Controllers
                 {
                     c.ServiceName = db.ExecuteScalar<string>("Select CarBikeName From CarBike where CarBikeID=@0", c.ServiceID);
                 }
+
+                //ViewBag.DiscountedTotal = db.ExecuteScalar<decimal>("Select Sum(DiscountedPrice) as DiscountedPrice from Cart Where Id=@0", (string)User.Identity.GetUserId());
+
             });
+            
+
             return View(CartItems);
         }
 
@@ -216,90 +221,45 @@ namespace Speedbird.Controllers
         //}
 
         [HttpPost]
-        public ActionResult PaymentIntegrate(Cart cr,string dc, decimal? tot)
+        public ActionResult PaymentIntegrate()
         {
 
             decimal amt = 0;
             var Amount = db.ExecuteScalar<decimal>("Select Sum(OrigPrice) as OrigPrice from Cart Where Id=@0", (string)User.Identity.GetUserId());
+            var DiscountAmount = db.ExecuteScalar<decimal>("Select Sum(DiscountedPrice) as OrigPrice from Cart Where Id=@0", (string)User.Identity.GetUserId());
+            
+            var cart = db.Query<Cart>("Select CouponCode from Cart Where Id=@0", (string)User.Identity.GetUserId());
 
-            if (cr.CouponCode != null)
+            foreach (var crt in cart)
             {
-                decimal disc = 0;
-                decimal OrigTot = 0;
-
-                DiscountCoupon CheckVal = new DiscountCoupon();
-                var CartItems = db.Query<CartDets>("Select * from Cart c Where Id= @0", (string)User.Identity.GetUserId()).ToList();
-                CartItems.ForEach(c =>
+                if (crt.CouponCode != null)
                 {
-                    if (c.ServiceTypeID == (int)ServiceTypeEnum.Accomodation)
-                    {
-                        var IfApplic = db.FirstOrDefault<Accomodation>("Select CouponCode from Accomodation where CouponCode=@0", dc);
-                        if (IfApplic != null)
-                        {
-                            CheckVal = db.First<DiscountCoupon>("Select * from DiscountCoupon where CouponCode=@0 and ValidFrom <= @1 and ValidTo >=@2", dc, DateTime.Now, DateTime.Now);
-                            if (CheckVal != null)
-                            {
-                                var DiscPerc = CheckVal.Perc;
-                                amt = c.OrigPrice * DiscPerc / 100 ?? 0;
-                                disc = c.OrigPrice - amt;
-
-                                if (c.CouponCode == null)
-                                {
-                                    db.Execute($"update Cart Set OrigPrice={disc},CouponCode='{dc}' Where CartID={c.CartID}");
-                                }
-                                OrigTot += disc;
-                            }
-
-
-
-                        }
-                    }
-                    if (c.ServiceTypeID == (int)ServiceTypeEnum.Packages || c.ServiceTypeID == (int)ServiceTypeEnum.SightSeeing || c.ServiceTypeID == (int)ServiceTypeEnum.Cruise)
-                    {
-                        var IfApplic = db.FirstOrDefault<Package>("Select CouponCode from Package where CouponCode=@0", dc);
-                        if (IfApplic != null)
-                        {
-                            CheckVal = db.First<DiscountCoupon>("Select * from DiscountCoupon dc where CouponCode=@0 and ValidFrom<=@1 and ValidTo >=@2", dc, DateTime.Now, DateTime.Now);
-                            if (CheckVal != null)
-                            {
-                                var DiscPerc = CheckVal.Perc;
-                                amt = c.OrigPrice * DiscPerc / 100 ?? 0;
-                                disc = c.OrigPrice - amt;
-                                if (c.CouponCode == null)
-                                {
-                                    db.Execute($"update Cart Set OrigPrice={disc},CouponCode='{dc}' Where CartID={c.CartID}");
-                                }
-                                OrigTot += disc;
-                            }
-                        }
-                    }
-                    if (c.ServiceTypeID == (int)ServiceTypeEnum.CarBike)
-                    {
-                        var IfApplic = db.FirstOrDefault<CarBike>("Select CouponCode from CarBike where CouponCode=@0", dc);
-                        if (IfApplic != null)
-                        {
-                            CheckVal = db.First<DiscountCoupon>("Select * from DiscountCoupon where CouponCode=@0 and ValidFrom <= @1 and ValidTo >=@2", dc, DateTime.Now, DateTime.Now);
-                            if (CheckVal != null)
-                            {
-                                var DiscPerc = CheckVal.Perc;
-                                amt = c.OrigPrice * DiscPerc / 100 ?? 0;
-                                disc = c.OrigPrice - amt;
-                                if (c.CouponCode == null)
-                                {
-                                    db.Execute($"update Cart Set OrigPrice={disc},CouponCode='{dc}' Where CartID={c.CartID}");
-                                }
-                                OrigTot += disc;
-                            }
-
-                        }
-                    }
-                });
-                amt = OrigTot;
+                    amt = DiscountAmount;
+                }
+                else
+                {
+                    amt = Amount;
+                }
             }
-            else
+           
+
+            string ProductID = "NSE";
+            string TransactionServiceCharge = "0";
+            var config = db.Query<Config>("Select * from Config");
+            foreach (var product in config)
             {
-                amt = Amount;
+                if (product.ProductId == "NSE")
+                {
+                    ProductID = "NSE";
+                }
+                else
+                {
+                    ProductID = "CSE";
+                }
+
+                TransactionServiceCharge = "0";
             }
+
 
             string strClientCode, strClientCodeEncoded;
             byte[] b;
@@ -309,9 +269,7 @@ namespace Speedbird.Controllers
             string MerchantLogin = "197";
             string MerchantPass = "Test@123";
             string TransactionType = "NBFundtransfer";
-            string ProductID = "NSE";
             string TransactionID = "123";
-            string TransactionServiceCharge = "0";
             string TransactionAmount = amt.ToString();
             string TransactionCurrency = "INR";
             DateTime TransactionDateTime = DateTime.UtcNow;
@@ -418,106 +376,67 @@ namespace Speedbird.Controllers
         //    return View();
         //}
 
-        [HttpPost]
-        public ActionResult UpdateCoupon(string dc)
-        {
-            db.Execute("Update cr Set cr.CouponCode = @0 from Cart as cr " +
-                  "INNER join AspNetUsers as au on cr.Id = au.Id WHERE au.Id = @1", dc,(string)User.Identity.GetUserId());
-            return RedirectToAction("Cart");
-        }
+        //public ActionResult SearchCoupon()
+        //{
+        //    return RedirectToAction("Cart");
+        //}
 
-        public ActionResult SearchCoupon(string dc, decimal? tot)
+        [HttpPost]
+        public void UpdateCoupon(string dc)
         {
             decimal disc = 0;
             decimal OrigTot = 0;
             decimal amt = 0;
-           
-            try
+
+            var CartItems = db.Query<Cart>("Select * from Cart c Where Id= @0", (string)User.Identity.GetUserId()).ToList();
+            foreach (var c in CartItems)
             {
-                
-                DiscountCoupon CheckVal = new DiscountCoupon();
-                var CartItems = db.Query<CartDets>("Select * from Cart c Where Id= @0", (string)User.Identity.GetUserId()).ToList();
-                CartItems.ForEach(c =>
+                var CouponExist = db.SingleOrDefault<DiscountCoupon>("Select * from DiscountCoupon where CouponCode=@0 and ValidFrom <= @1 and ValidTo >=@1", dc, DateTime.Now);
+
+                var DiscPerc = CouponExist.Perc;
+                amt = c.OrigPrice * DiscPerc / 100 ?? 0;
+                disc = (decimal)c.OrigPrice - amt;
+                OrigTot += disc;
+                db.Execute("Update cr Set cr.CouponCode = @0 from Cart as cr " +
+                   "INNER join AspNetUsers as au on cr.Id = au.Id WHERE au.Id = @1", dc, (string)User.Identity.GetUserId());
+
+                if (c.ServiceTypeID == (int)ServiceTypeEnum.Accomodation)
+                {                 
+                    var DiscountCoupon = db.FirstOrDefault<Accomodation>("Select CouponCode from Accomodation where CouponCode=@0", dc);
+                    if (DiscountCoupon != null)
+                    {
+                        db.Execute("Update cr Set cr.DiscountedPrice = @0 from Cart as cr where cr.OrigPrice =@1", disc, c.OrigPrice);
+
+                    }
+                }
+                if (c.ServiceTypeID == (int)ServiceTypeEnum.Packages || c.ServiceTypeID == (int)ServiceTypeEnum.SightSeeing || c.ServiceTypeID == (int)ServiceTypeEnum.Cruise)
                 {
-                    if (c.ServiceTypeID == (int)ServiceTypeEnum.Accomodation)
+                    var DiscountCoupon = db.FirstOrDefault<Package>("Select CouponCode from Package where CouponCode=@0", dc);
+                    if (DiscountCoupon != null)
                     {
-                        var IfApplic = db.FirstOrDefault<Accomodation>("Select CouponCode from Accomodation where CouponCode=@0", dc);
-                        if (IfApplic != null)
-                        {
-                            CheckVal = db.First<DiscountCoupon>("Select * from DiscountCoupon where CouponCode=@0 and ValidFrom <= @1 and ValidTo >=@2", dc, DateTime.Now, DateTime.Now);
-                            if (CheckVal != null)
-                            {
-                                var DiscPerc = CheckVal.Perc;
-                                amt = c.OrigPrice * DiscPerc / 100 ?? 0;
-                                disc = c.OrigPrice - amt;
-
-                                if (c.CouponCode == null)
-                                {
-                                    db.Execute($"update Cart Set OrigPrice={disc},CouponCode='{dc}' Where CartID={c.CartID}");
-                                }
-                                OrigTot += disc;
-                            }
-
-
-
-                        }
+                        db.Execute("Update cr Set cr.DiscountedPrice = @0 from Cart as cr where cr.CouponCode =@1", OrigTot, dc);
                     }
-                    if (c.ServiceTypeID == (int)ServiceTypeEnum.Packages || c.ServiceTypeID == (int)ServiceTypeEnum.SightSeeing || c.ServiceTypeID == (int)ServiceTypeEnum.Cruise)
+                }
+                if (c.ServiceTypeID == (int)ServiceTypeEnum.CarBike)
+                {
+                    var DiscountCoupon = db.FirstOrDefault<CarBike>("Select CouponCode from CarBike where CouponCode=@0", dc);
+                    if (DiscountCoupon != null)
                     {
-                        var IfApplic = db.FirstOrDefault<Package>("Select CouponCode from Package where CouponCode=@0", dc);
-                        if (IfApplic != null)
+                        if (DiscountCoupon != null)
                         {
-                            CheckVal = db.First<DiscountCoupon>("Select * from DiscountCoupon dc where CouponCode=@0 and ValidFrom<=@1 and ValidTo >=@2", dc, DateTime.Now, DateTime.Now);
-                            if (CheckVal != null)
-                            {
-                                var DiscPerc = CheckVal.Perc;
-                                amt = c.OrigPrice * DiscPerc / 100 ?? 0;
-                                disc = c.OrigPrice - amt;
-                                if (c.CouponCode == null)
-                                {
-                                    db.Execute($"update Cart Set OrigPrice={disc},CouponCode='{dc}' Where CartID={c.CartID}");
-                                }
-                                OrigTot += disc;
-                            }
+                            db.Execute("Update cr Set cr.DiscountedPrice = @0 from Cart as cr where cr.CouponCode =@1", OrigTot, dc);
                         }
+
                     }
-                    if (c.ServiceTypeID == (int)ServiceTypeEnum.CarBike)
-                    {
-                        var IfApplic = db.FirstOrDefault<CarBike>("Select CouponCode from CarBike where CouponCode=@0", dc);
-                        if (IfApplic != null)
-                        {
-                            CheckVal = db.First<DiscountCoupon>("Select * from DiscountCoupon where CouponCode=@0 and ValidFrom <= @1 and ValidTo >=@2", dc, DateTime.Now, DateTime.Now);
-                            if (CheckVal != null)
-                            {
-                                var DiscPerc = CheckVal.Perc;
-                                amt = c.OrigPrice * DiscPerc / 100 ?? 0;
-                                disc = c.OrigPrice - amt;
-                                if (c.CouponCode == null)
-                                {
-                                    db.Execute($"update Cart Set OrigPrice={disc},CouponCode='{dc}' Where CartID={c.CartID}");
-                                }
-                                OrigTot += disc;
-                            }
-
-                        }
-                    }
-                });
-                ViewBag.Amt = OrigTot;
-
-                return PartialView();
+                }
+                
             }
-            catch (Exception e)
-            {
-                ViewBag.Amt = db.ExecuteScalar<decimal>("Select Sum(OrigPrice) as OrigPrice from Cart Where Id=@0", (string)User.Identity.GetUserId());
-                Console.WriteLine("{0} Exception caught.", e);
-            }
-            if (OrigTot != 0)
-            {
-                ViewBag.Amt = OrigTot;
-            }
-            return PartialView();
 
+            //return RedirectToAction("Cart");
         }
+
+
+
         public ActionResult Delete(int? id)
         {
             db.Execute("Delete from Cart Where CartID=@0", id);

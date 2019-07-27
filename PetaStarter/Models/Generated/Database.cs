@@ -368,6 +368,7 @@ namespace Speedbird
 		[Column] public int? NoOfGuest { get; set; }
 		[Column] public decimal? OrigPrice { get; set; }
 		[Column] public string CouponCode { get; set; }
+		[Column] public decimal? DiscountedPrice { get; set; }
 	}
     
 	[TableName("dbo.Category")]
@@ -378,6 +379,16 @@ namespace Speedbird
 		[Column] public int CategoryID { get; set; }
 		[Column] public string CategoryName { get; set; }
 		[Column] public string ImagePath { get; set; }
+	}
+    
+	[TableName("dbo.Config")]
+	[PrimaryKey("ConfigId", AutoIncrement=false)]
+	[ExplicitColumns]
+    public partial class Config  
+    {
+		[Column] public int ConfigId { get; set; }
+		[Column] public string ProductId { get; set; }
+		[Column] public decimal? TransServiceCharge { get; set; }
 	}
     
 	[TableName("dbo.Cruise")]

@@ -202,6 +202,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Areas\SBBoss\Controllers\EmployeeController.cs" />
     <Compile Include="Areas\SBBoss\Controllers\OwnedAssetController.cs" />
+    <Compile Include="Areas\SBBoss\Controllers\RefundController.cs" />
     <Compile Include="Areas\SBBoss\Controllers\SupplierController.cs" />
     <Compile Include="Areas\SBBoss\Controllers\AgentController.cs" />
     <Compile Include="Areas\SBBoss\Controllers\GroupController.cs" />
@@ -798,6 +799,8 @@
     <Content Include="Areas\SBBoss\Views\SR\ReadPVs\_Rail.cshtml" />
     <Content Include="Areas\SBBoss\Views\SR\ReadPVs\_Packages.cshtml" />
     <Content Include="Areas\SBBoss\Views\SR\WritePVs\_Packages.cshtml" />
+    <Content Include="Areas\SBBoss\Views\Refund\Index.cshtml" />
+    <Content Include="Areas\SBBoss\Views\Refund\AtomRefundRecieve.cshtml" />
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <Content Include="Areas\SBBoss\Views\RP\DriverR.cshtml" />
     <Content Include="Areas\SBBoss\Views\RP\DriverP.cshtml" />

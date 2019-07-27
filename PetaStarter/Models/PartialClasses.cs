@@ -34,6 +34,16 @@ namespace Speedbird
 
     }
 
+    public class AtomRefundRecieve
+    {
+        public string merchantid { get; set; }
+        public string txnid { get; set; }
+        public string statuscode { get; set; }
+        public string statusmsg { get; set; }
+        public string atomrefundid { get; set; }
+        public string amt { get; set; }
+    }
+
     //Classes for SRDetails
 
     public abstract class SupplierInfo
@@ -848,6 +858,8 @@ namespace Speedbird
         public DateTime CheckOut { get; set; }
         public int NoOfGuest { get; set; }
         public decimal OrigPrice { get; set; }
+
+        public decimal DiscountedPrice { get; set; }
         public string Pic { get; set; }
         public string ServiceName { get; set; }
         public string CouponCode { get; set; }
