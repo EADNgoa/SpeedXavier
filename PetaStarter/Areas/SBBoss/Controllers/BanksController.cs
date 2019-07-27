@@ -18,6 +18,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
     public class BanksController : Controller
     {
         protected Repository db;
+        protected int newImportId;
         public BanksController()
         {
             this.db = new Repository(@"Data Source=(LocalDb)\MSSQLLocalDB;Initial Catalog=Fintastic;Integrated Security=True", "System.Data.SqlClient");
@@ -25,10 +26,14 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
         public ActionResult ImportXmlToSql()
         {
-            
-            XDocument doc = XDocument.Load("http://localhost:53040/sqltoaccess.xml");
-            //XDocument doc = XDocument.Load("http://localhost:53040/Eadtsx.xml");
 
+            //string fileForImport = @"http://localhost:53040/sqltoaccess.xml";
+            string fileForImport = @"http://localhost:53040/Eadtsx.xml";
+            //string fileForImport = @"http://localhost:53040/DerivedCoulmn.xml";
+            XDocument doc = XDocument.Load(fileForImport);
+            fileForImport = fileForImport.TrimStart(@"http://localhost:53040/".ToCharArray());
+            newImportId = int.Parse(db.Insert(new ImportLog() { FileName = fileForImport, ImportDate = DateTime.UtcNow }).ToString());
+            
             //truncate the temp table
             db.Execute("truncate table AbstTable");
             //Log the root element
@@ -104,13 +109,13 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
         private void MakeInsertStmt(TableDef t, int id, Dictionary<string, string> insData)
         {
-            StringBuilder insStmt = new StringBuilder($"INSERT INTO [{t.TblName}] ([{t.TblName}Id], ");
-            StringBuilder insValues = new StringBuilder($" VALUES ({id}, "); //Pk from original import table
+            StringBuilder insStmt = new StringBuilder($"INSERT INTO [{t.TblName}] (ImportId , [{t.TblName}Id], ");
+            StringBuilder insValues = new StringBuilder($" VALUES ({newImportId}, {id}, "); //Pk from original import table
 
             t.TblFields.ForEach(f =>
             {
                 insStmt.Append($"[{f.Name}_{f.Type}], ");
-                insValues.Append($"'{((insData.ContainsKey(f.Name)) ? insData[f.Name].Trim() : "")}', ");
+                insValues.Append($"'{((insData.ContainsKey(f.Name)) ? insData[f.Name].Trim().Replace("'","''") : "")}', ");
             });
 
             if (t.RecursionLevel == 0)
@@ -175,30 +180,35 @@ namespace Speedbird.Areas.SBBoss.Controllers
             //tableDefs.Where(t => t.FieldCnt > 0).ToList().ForEach(t =>
             tableDefs.ToList().ForEach(t =>
             {
-                StringBuilder createSQL = new StringBuilder($"CREATE TABLE [{t.TblName}] (");
+                if (db.Query<string>($"select table_schema from INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME='{t.TblName}'").Count()==0)
+                {
+                    StringBuilder createSQL = new StringBuilder($"CREATE TABLE [{t.TblName}] (ImportId int NOT NULL, ");
 
-                createSQL.Append($"[{t.TblName}Id] INT NOT NULL PRIMARY KEY, "); //make PK
+                    createSQL.Append($"[{t.TblName}Id] INT NOT NULL, PRIMARY KEY (ImportId, [{t.TblName}Id]), "); //make composite PK
 
-                //Fill table fields
-                t.TblFields.ForEach(f => {
-                    createSQL.Append($"[{f.Name}_{f.Type}] VARCHAR({f.MaxFieldLen}) NULL, "); //Postfix fields with numbers according to EnumFldType
-                });
+                    //Fill table fields
+                    t.TblFields.ForEach(f =>
+                    {
+                        createSQL.Append($"[{f.Name}_{f.Type}] VARCHAR(max) NULL, "); //Postfix fields with numbers according to EnumFldType
+                    });
 
-                //make FK to Parent for all below the kids of root. 
-                if (t.RecursionLevel>0)
-                { 
-                    //string pureParentName = t.ParentTblName.Substring(0, t.ParentTblName.LastIndexOf('_'));
-                    createSQL.Append($"[{t.ParentTblName}_Id] INT NULL, " +
-                        $" CONSTRAINT [FK_{t.TblName}-{t.ParentTblName}] FOREIGN KEY ([{t.ParentTblName}_Id]) REFERENCES [{t.ParentTblName}]([{t.ParentTblName}Id])"); 
+                    //make FK to Parent for all below the kids of root. 
+                    if (t.RecursionLevel > 0)
+                    {
+                        //string pureParentName = t.ParentTblName.Substring(0, t.ParentTblName.LastIndexOf('_'));
+                        createSQL.Append($"[{t.ParentTblName}_Id] INT NULL, " +
+                            $" CONSTRAINT [FK_{t.TblName}-{t.ParentTblName}] FOREIGN KEY (ImportId, [{t.ParentTblName}_Id]) REFERENCES [{t.ParentTblName}](ImportId,[{t.ParentTblName}Id])");
+                    }
+                    createSQL.Append(" )"); //Closing bracket of create stmt
+                    t.CreateSQL = createSQL.ToString(); 
                 }
-                createSQL.Append(" )"); //Closing bracket of create stmt
-                t.CreateSQL = createSQL.ToString();
             });
 
             //With our statements ready, lets now make our tables
             tableDefs.OrderBy(o=>o.RecursionLevel).ToList().ForEach(t => {
                 Debug.Print(t.CreateSQL);
-                db.Execute(t.CreateSQL);
+                if (t.CreateSQL != null)
+                { db.Execute(t.CreateSQL); }
             });
 
             return tableDefs;

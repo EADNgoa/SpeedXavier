@@ -99,6 +99,15 @@ namespace Speedbird
 		[Column] public Guid OperationKey { get; set; }
 	}
 
+    [TableName("dbo.ImportLog")]
+    [PrimaryKey("ImportLogId")]
+    [ExplicitColumns]
+    public partial class ImportLog
+    {
+        [Column] public int ImportLogId { get; set; }
+        [Column] public string FileName { get; set; }
+        [Column] public DateTime ImportDate { get; set; }
+    }
 
     [TableName("dbo.AbstTable")]
     [PrimaryKey("AbstId")]
