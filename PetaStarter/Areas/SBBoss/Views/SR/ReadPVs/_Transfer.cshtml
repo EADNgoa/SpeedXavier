@@ -28,7 +28,7 @@
                 <td>@Model.NoOfVehicles</td>
                 <td>@(Model.FromLoc.ToUpper())</td>
                 <td>@Model.PickUpPoint</td>
-                <td>@Model.PickupTime</td>
+                <td>@Model.PickupTime.EAFormat(withTime:true)</td>
                 <td>@(Model.ToLoc.ToUpper())</td>
                 <td>@Model.DropPoint</td>
                 <td>@((CarTypeEnum)Model.cartype)</td>
