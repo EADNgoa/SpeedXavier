@@ -183,7 +183,7 @@ namespace Speedbird
     public class TransferServiceView : SupplierInfo
     {
         public int cartype { get; set; }
-        public DateTime serviceDate { get; set; }
+        public DateTime PickupTime { get; set; }
         public decimal Cost { get; set; }
         public string DriverName { get; set; }
         public string Car { get; set; }

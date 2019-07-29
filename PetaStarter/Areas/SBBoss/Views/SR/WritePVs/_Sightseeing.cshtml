@@ -21,6 +21,7 @@
             <th>Vehicle Type  </th>
             <th>Cars Qty      </th>
             <th>Meal Incl.    </th>
+            <th>Pay To</th>
             <th>Sell Price    </th>
         </tr>
     </thead>
@@ -41,7 +42,8 @@
             <td>  @Html.EASelectListForP(m => m.CarType, "Vehicle Type")                                                                                  </td>
             <td>  @Html.EANumberForP(m => m.Qty, "No. of cars")                                                                                           </td>
             <td>  @Html.EAChkBoxP("HasAc", "", "Meal Included")                                                                                           </td>
-            <td>  @Html.EANumberForP(m => m.SellPrice)                                                                                                    </td>
+            <td> @Html.EASelectListForP(m => m.PayTo)</td>
+            <td>  @Html.EANumberForP(m => m.SellPrice)</td>
         </tr>
     </tbody>
 </table>
