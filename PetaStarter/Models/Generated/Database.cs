@@ -13,7 +13,7 @@
 // 
 //     Connection String Name: `DefaultConnection`
 //     Provider:               `System.Data.SqlClient`
-//     Connection String:      `Data Source=(LocalDb)\MSSQLLocalDB;Initial Catalog=SpeedBirdDB;Integrated Security=True`
+//     Connection String:      `Data Source=(LocalDb)\MSSQLLocalDB;Initial Catalog=Fintastic;Integrated Security=True`
 //     Schema:                 ``
 //     Include Views:          `False`
 
@@ -33,7 +33,7 @@ namespace Speedbird
 			CommonConstruct();
 		}
         public Repository(string connectionString, string providerName = null)
-            : base(connectionString, providerName)
+           : base(connectionString, providerName)
         {
             CommonConstruct();
         }
@@ -49,8 +49,8 @@ namespace Speedbird
 		{
 			Repository GetInstance();
 		}
-                     
-        public static IFactory Factory { get; set; }
+		
+		public static IFactory Factory { get; set; }
         public static Repository GetInstance()
         {
 			if (_instance!=null)
@@ -77,1223 +77,1176 @@ namespace Speedbird
 		}
         
 	}
-	
 
-    
-	[TableName("dbo.__MigrationHistory")]
-	[PrimaryKey("MigrationId", AutoIncrement=false)]
-	[ExplicitColumns]
-    public partial class __MigrationHistory  
+
+    [TableName("dbo.__MigrationHistory")]
+    [PrimaryKey("MigrationId", AutoIncrement = false)]
+    [ExplicitColumns]
+    public partial class __MigrationHistory
     {
-		[Column] public string MigrationId { get; set; }
-		[Column] public string ContextKey { get; set; }
-		[Column] public byte[] Model { get; set; }
-		[Column] public string ProductVersion { get; set; }
-	}
-    
-	[TableName("dbo.__RefactorLog")]
+        [Column] public string MigrationId { get; set; }
+        [Column] public string ContextKey { get; set; }
+        [Column] public byte[] Model { get; set; }
+        [Column] public string ProductVersion { get; set; }
+    }
+
+
+    [TableName("dbo.__RefactorLog")]
 	[PrimaryKey("OperationKey", AutoIncrement=false)]
 	[ExplicitColumns]
     public partial class __RefactorLog  
     {
 		[Column] public Guid OperationKey { get; set; }
 	}
-
-    [TableName("dbo.ImportLog")]
-    [PrimaryKey("ImportLogId")]
-    [ExplicitColumns]
-    public partial class ImportLog
+    
+	[TableName("dbo.AbstTable")]
+	[PrimaryKey("AbstId", AutoIncrement=false)]
+	[ExplicitColumns]
+    public partial class AbstTable  
     {
-        [Column] public int ImportLogId { get; set; }
-        [Column] public string FileName { get; set; }
-        [Column] public DateTime ImportDate { get; set; }
-    }
-
-    [TableName("dbo.AbstTable")]
-    [PrimaryKey("AbstId")]
-    [ExplicitColumns]
-    public partial class AbstTable 
+		[Column] public int AbstId { get; set; }
+		[Column] public int ImportLogId { get; set; }
+		[Column] public string Name { get; set; }
+		[Column] public int? Type { get; set; }
+		[Column] public string Value { get; set; }
+		[Column] public int? recursionLevel { get; set; }
+		[Column] public string ParentTableName { get; set; }
+		[Column] public int? ParentId { get; set; }
+		[Column] public int? AttrElemId { get; set; }
+	}
+    
+	[TableName("dbo.ImportLog")]
+	[PrimaryKey("ImportLogId")]
+	[ExplicitColumns]
+    public partial class ImportLog  
     {
-
-
-
-        [Column] public int AbstId { get; set; }
-
-
-
-
-
-
-
-
-
-
-
-
-        [Column] public string Name { get; set; }
-
-
-
-
-
-        [Column] public int? Type { get; set; }
-
-
-
-
-
-
-
-
-
-
-
-
-        [Column] public string Value { get; set; }
-
-
-
-
-
-        [Column] public int? recursionLevel { get; set; }
-
-
-
-
-
-
-
-
-
-
-
-
-        [Column] public string ParentTableName { get; set; }
-
-
-
-
-
-        [Column] public int? ParentId { get; set; }
-        [Column] public int? AttrElemId { get; set; }
-
-
-
-
-
-
-    }
+		[Column] public int ImportLogId { get; set; }
+		[Column] public string FileName { get; set; }
+		[Column] public DateTime? ImportDate { get; set; }
+	}
+    
+	[TableName("dbo.sysdiagrams")]
+	[PrimaryKey("diagram_id")]
+	[ExplicitColumns]
+    public partial class sysdiagram  
+    {
+		[Column] public string name { get; set; }
+		[Column] public int principal_id { get; set; }
+		[Column] public int diagram_id { get; set; }
+		[Column] public int? version { get; set; }
+		[Column] public byte[] definition { get; set; }
+	}
 
 
     [TableName("dbo.Accomodation")]
-	[PrimaryKey("AccomodationID")]
-	[ExplicitColumns]
-    public partial class Accomodation  
-    {
-		[Column] public int AccomodationID { get; set; }
-		[Column] public string AccomName { get; set; }
-		[Column] public string Description { get; set; }
-		[Column] public int? GeoTreeID { get; set; }
-		[Column] public string lat { get; set; }
-		[Column] public string longt { get; set; }
-		[Column] public string CouponCode { get; set; }
-		[Column] public string SupplierNotepad { get; set; }
-		[Column] public bool? SelfOwned { get; set; }
-	}
-    
-	[TableName("dbo.Activity")]
-	[PrimaryKey("ActivityID")]
-	[ExplicitColumns]
-    public partial class Activity  
-    {
-		[Column] public int ActivityID { get; set; }
-		[Column] public string ActivityName { get; set; }
-		[Column] public string ImagePath { get; set; }
-	}
-    
-	[TableName("dbo.Agent")]
-	[PrimaryKey("AgentId", AutoIncrement=false)]
-	[ExplicitColumns]
-    public partial class Agent  
-    {
-		[Column] public string AgentId { get; set; }
-		[Column] public string ContactName { get; set; }
-		[Column] public string PhoneNo { get; set; }
-		[Column] public string Email { get; set; }
-		[Column] public string Address { get; set; }
-		[Column] public string PAN { get; set; }
-		[Column] public string GST { get; set; }
-		[Column] public string RCbook { get; set; }
-		[Column] public string BkAccNo { get; set; }
-		[Column] public string BkName { get; set; }
-		[Column] public string BkIFSC { get; set; }
-		[Column] public string BkAddress { get; set; }
-		[Column] public string State { get; set; }
-	}
-    
-	[TableName("dbo.AgentDiscount")]
-	[PrimaryKey("AgentDiscountID")]
-	[ExplicitColumns]
-    public partial class AgentDiscount  
-    {
-		[Column] public int AgentDiscountID { get; set; }
-		[Column] public string UserID { get; set; }
-		[Column] public int? ServiceTypeID { get; set; }
-		[Column] public decimal? Amount { get; set; }
-		[Column] public decimal? Percentage { get; set; }
-		[Column] public bool? IsApproved { get; set; }
-	}
-    
-	[TableName("dbo.AspNetRoles")]
-	[PrimaryKey("Id", AutoIncrement=false)]
-	[ExplicitColumns]
-    public partial class AspNetRole  
-    {
-		[Column] public string Id { get; set; }
-		[Column] public string Name { get; set; }
-	}
-    
-	[TableName("dbo.AspNetUserClaims")]
-	[PrimaryKey("Id")]
-	[ExplicitColumns]
-    public partial class AspNetUserClaim  
-    {
-		[Column] public int Id { get; set; }
-		[Column] public string UserId { get; set; }
-		[Column] public string ClaimType { get; set; }
-		[Column] public string ClaimValue { get; set; }
-	}
-    
-	[TableName("dbo.AspNetUserLogins")]
-	[PrimaryKey("LoginProvider", AutoIncrement=false)]
-	[ExplicitColumns]
-    public partial class AspNetUserLogin  
-    {
-		[Column] public string LoginProvider { get; set; }
-		[Column] public string ProviderKey { get; set; }
-		[Column] public string UserId { get; set; }
-	}
-    
-	[TableName("dbo.AspNetUserRoles")]
-	[PrimaryKey("UserId", AutoIncrement=false)]
-	[ExplicitColumns]
-    public partial class AspNetUserRole  
-    {
-		[Column] public string UserId { get; set; }
-		[Column] public string RoleId { get; set; }
-	}
-    
-	[TableName("dbo.AspNetUsers")]
-	[PrimaryKey("Id", AutoIncrement=false)]
-	[ExplicitColumns]
-    public partial class AspNetUser  
-    {
-		[Column] public string Id { get; set; }
-		[Column] public string Email { get; set; }
-		[Column] public bool EmailConfirmed { get; set; }
-		[Column] public string PasswordHash { get; set; }
-		[Column] public string SecurityStamp { get; set; }
-		[Column] public string PhoneNumber { get; set; }
-		[Column] public bool PhoneNumberConfirmed { get; set; }
-		[Column] public bool TwoFactorEnabled { get; set; }
-		[Column] public DateTime? LockoutEndDateUtc { get; set; }
-		[Column] public bool LockoutEnabled { get; set; }
-		[Column] public int AccessFailedCount { get; set; }
-		[Column] public string UserName { get; set; }
-		[Column] public DateTime DateCreated { get; set; }
-		[Column] public bool Disabled { get; set; }
-		[Column] public DateTime? LastLogin { get; set; }
-		[Column] public int? UserType { get; set; }
-		[Column] public string RealName { get; set; }
-	}
-    
-	[TableName("dbo.Attraaction")]
-	[PrimaryKey("AttractionID")]
-	[ExplicitColumns]
-    public partial class Attraaction  
-    {
-		[Column] public int AttractionID { get; set; }
-		[Column] public string AttractionName { get; set; }
-		[Column] public string ImagePath { get; set; }
-		[Column] public string Description { get; set; }
-	}
-    
-	[TableName("dbo.Attribute")]
-	[PrimaryKey("AttributeId")]
-	[ExplicitColumns]
-    public partial class Attribute  
-    {
-		[Column] public int AttributeId { get; set; }
-		[Column] public string AttributeText { get; set; }
-		[Column] public string fatext { get; set; }
-		[Column] public string Color { get; set; }
-	}
-    
-	[TableName("dbo.BankAccount")]
-	[PrimaryKey("BankAccountID")]
-	[ExplicitColumns]
-    public partial class BankAccount  
-    {
-		[Column] public int BankAccountID { get; set; }
-		[Column] public DateTime? TDate { get; set; }
-		[Column] public decimal? AmountIn { get; set; }
-		[Column] public decimal? AmountOut { get; set; }
-		[Column] public string SRID { get; set; }
-		[Column] public string TransNo { get; set; }
-		[Column] public string UserID { get; set; }
-		[Column] public int? SupplierID { get; set; }
-		[Column] public string Comment { get; set; }
-		[Column] public int? BankID { get; set; }
-	}
-    
-	[TableName("dbo.Banks")]
-	[PrimaryKey("BankID")]
-	[ExplicitColumns]
-    public partial class Bank  
-    {
-		[Column] public int BankID { get; set; }
-		[Column] public string BankName { get; set; }
-		[Column] public string Address { get; set; }
-		[Column] public string AccNo { get; set; }
-	}
-    
-	[TableName("dbo.BookedCustomer")]
-	[PrimaryKey("BCID")]
-	[ExplicitColumns]
-    public partial class BookedCustomer  
-    {
-		[Column] public int BCID { get; set; }
-		[Column] public int? CartID { get; set; }
-		[Column] public int? BookingID { get; set; }
-		[Column] public int? CustomerID { get; set; }
-	}
-    
-	[TableName("dbo.Booking")]
-	[PrimaryKey("BookingID")]
-	[ExplicitColumns]
-    public partial class Booking  
-    {
-		[Column] public int BookingID { get; set; }
-		[Column] public string UserID { get; set; }
-		[Column] public DateTime? BookDate { get; set; }
-		[Column] public int? StatusID { get; set; }
-	}
-    
-	[TableName("dbo.BookingDetail")]
-	[PrimaryKey("BookingDetailID")]
-	[ExplicitColumns]
-    public partial class BookingDetail  
-    {
-		[Column] public int BookingDetailID { get; set; }
-		[Column] public int? BookingID { get; set; }
-		[Column] public int? ServiceID { get; set; }
-		[Column] public int? ServiceTypeID { get; set; }
-		[Column] public int? OptionTypeID { get; set; }
-		[Column] public int? Qty { get; set; }
-		[Column] public DateTime? CheckIn { get; set; }
-		[Column] public DateTime? CheckOut { get; set; }
-		[Column] public int? NoOfGuests { get; set; }
-		[Column] public decimal? Price { get; set; }
-		[Column] public string BlockedReason { get; set; }
-	}
-    
-	[TableName("dbo.BookingStatus")]
-	[PrimaryKey("BookingStatusID")]
-	[ExplicitColumns]
-    public partial class BookingStatus  
-    {
-		[Column] public int BookingStatusID { get; set; }
-		[Column] public string BookingStatusName { get; set; }
-	}
-    
-	[TableName("dbo.CarBike")]
-	[PrimaryKey("CarBikeID")]
-	[ExplicitColumns]
-    public partial class CarBike  
-    {
-		[Column] public int CarBikeID { get; set; }
-		[Column] public string CarBikeName { get; set; }
-		[Column] public int GeoTreeId { get; set; }
-		[Column] public string Description { get; set; }
-		[Column] public int? NoPax { get; set; }
-		[Column] public int? NoSmallBags { get; set; }
-		[Column] public int? NoLargeBags { get; set; }
-		[Column] public bool HasAc { get; set; }
-		[Column] public bool HasCarrier { get; set; }
-		[Column] public bool InclHelmet { get; set; }
-		[Column] public string CouponCode { get; set; }
-		[Column] public bool IsBike { get; set; }
-		[Column] public string SupplierNotepad { get; set; }
-		[Column] public bool? SelfOwned { get; set; }
-	}
-    
-	[TableName("dbo.Cart")]
-	[PrimaryKey("CartID")]
-	[ExplicitColumns]
-    public partial class Cart  
-    {
-		[Column] public int CartID { get; set; }
-		[Column] public string Id { get; set; }
-		[Column] public int? ServiceID { get; set; }
-		[Column] public int? ServiceTypeID { get; set; }
-		[Column] public int? OptionTypeID { get; set; }
-		[Column] public int? Qty { get; set; }
-		[Column] public DateTime? CheckIn { get; set; }
-		[Column] public DateTime? CheckOut { get; set; }
-		[Column] public int? NoOfGuest { get; set; }
-		[Column] public decimal? OrigPrice { get; set; }
-		[Column] public string CouponCode { get; set; }
-	}
-    
-	[TableName("dbo.Category")]
-	[PrimaryKey("CategoryID")]
-	[ExplicitColumns]
-    public partial class Category  
-    {
-		[Column] public int CategoryID { get; set; }
-		[Column] public string CategoryName { get; set; }
-		[Column] public string ImagePath { get; set; }
-	}
-    
-	[TableName("dbo.Cruise")]
-	[PrimaryKey("CruiseID")]
-	[ExplicitColumns]
-    public partial class Cruise  
-    {
-		[Column] public int CruiseID { get; set; }
-		[Column] public string CruiseName { get; set; }
-		[Column] public string Description { get; set; }
-		[Column] public int? Duration { get; set; }
-		[Column] public string Itinerary { get; set; }
-		[Column] public int? StarRating { get; set; }
-	}
-    
-	[TableName("dbo.Cruise_GeoTree")]
-	[PrimaryKey("CruiseID", AutoIncrement=false)]
-	[ExplicitColumns]
-    public partial class Cruise_GeoTree  
-    {
-		[Column] public int CruiseID { get; set; }
-		[Column] public int GeoTreeID { get; set; }
-	}
-    
-	[TableName("dbo.Customer")]
-	[PrimaryKey("CustomerID")]
-	[ExplicitColumns]
-    public partial class Customer  
-    {
-		[Column] public int CustomerID { get; set; }
-		[Column] public string FName { get; set; }
-		[Column] public string SName { get; set; }
-		[Column] public string Email { get; set; }
-		[Column] public string Phone { get; set; }
-		[Column] public string IdPicture { get; set; }
-		[Column] public string Type { get; set; }
-	}
-    
-	[TableName("dbo.CustomerQuery")]
-	[PrimaryKey("CustomerQueryID")]
-	[ExplicitColumns]
-    public partial class CustomerQuery  
-    {
-		[Column] public int CustomerQueryID { get; set; }
-		[Column] public string FName { get; set; }
-		[Column] public string SName { get; set; }
-		[Column] public string Email { get; set; }
-		[Column] public string Phone { get; set; }
-		[Column] public string IdPicture { get; set; }
-		[Column("Query")] public string _Query { get; set; }
-		[Column] public int? ServiceID { get; set; }
-		[Column] public int? ServiceTypeID { get; set; }
-		[Column] public DateTime? CheckIn { get; set; }
-		[Column] public DateTime? CheckOut { get; set; }
-		[Column] public int? NoPax { get; set; }
-		[Column] public int? Qty { get; set; }
-		[Column] public DateTime? Tdate { get; set; }
-		[Column] public int? Glang { get; set; }
-		[Column] public string Gtime { get; set; }
-		[Column] public string ServiceName { get; set; }
-	}
-    
-	[TableName("dbo.CustQueryReply")]
-	[PrimaryKey("CustQueryReplyID")]
-	[ExplicitColumns]
-    public partial class CustQueryReply  
-    {
-		[Column] public int CustQueryReplyID { get; set; }
-		[Column] public int? CustomerQueryID { get; set; }
-		[Column] public DateTime? ReplyDate { get; set; }
-		[Column] public string Reply { get; set; }
-	}
-    
-	[TableName("dbo.DiscountCoupon")]
-	[PrimaryKey("DiscountCouponID")]
-	[ExplicitColumns]
-    public partial class DiscountCoupon  
-    {
-		[Column] public int DiscountCouponID { get; set; }
-		[Column] public string CouponCode { get; set; }
-		[Column] public DateTime? ValidFrom { get; set; }
-		[Column] public DateTime? ValidTo { get; set; }
-		[Column] public decimal? Amount { get; set; }
-		[Column] public decimal? Perc { get; set; }
-	}
-    
-	[TableName("dbo.Driver")]
-	[PrimaryKey("DriverID")]
-	[ExplicitColumns]
-    public partial class Driver  
-    {
-		[Column] public int DriverID { get; set; }
-		[Column] public string DriverName { get; set; }
-		[Column] public string Phone { get; set; }
-		[Column] public string Address { get; set; }
-		[Column] public string EmerContactName { get; set; }
-		[Column] public string EmerContactNo { get; set; }
-		[Column] public string CarModel { get; set; }
-		[Column] public int? LocationId { get; set; }
-	}
-    
-	[TableName("dbo.DriversCars")]
-	[PrimaryKey("CarId")]
-	[ExplicitColumns]
-    public partial class DriversCar  
-    {
-		[Column] public int CarId { get; set; }
-		[Column] public int DriverId { get; set; }
-		[Column] public string CarBrand { get; set; }
-		[Column] public string Model { get; set; }
-		[Column] public DateTime? DateOfPurchase { get; set; }
-		[Column] public string RCBookNo { get; set; }
-		[Column] public string PlateNo { get; set; }
-		[Column] public DateTime? InsuranceEndDate { get; set; }
-		[Column] public string InsuranceCompany { get; set; }
-	}
-    
-	[TableName("dbo.DRP_SR")]
-	[PrimaryKey("DRPDID", AutoIncrement=false)]
-	[ExplicitColumns]
-    public partial class DRP_SR  
-    {
-		[Column] public int DRPDID { get; set; }
-		[Column] public int SRID { get; set; }
-		[Column] public decimal? Amount { get; set; }
-		[Column] public int? SRDID { get; set; }
-	}
-    
-	[TableName("dbo.DRPdets")]
-	[PrimaryKey("DRPDID")]
-	[ExplicitColumns]
-    public partial class DRPdet  
-    {
-		[Column] public int DRPDID { get; set; }
-		[Column] public int? BankName { get; set; }
-		[Column] public string ChequeNo { get; set; }
-		[Column] public DateTime? Date { get; set; }
-		[Column] public decimal? Amount { get; set; }
-		[Column] public string TransactionNo { get; set; }
-		[Column] public string Note { get; set; }
-		[Column] public int? SRID { get; set; }
-		[Column] public int? Type { get; set; }
-		[Column] public bool? AmtUsed { get; set; }
-		[Column] public bool? IsPayment { get; set; }
-		[Column] public DateTime? Cdate { get; set; }
-	}
-    
-	[TableName("dbo.Facility")]
-	[PrimaryKey("FacilityID")]
-	[ExplicitColumns]
-    public partial class Facility  
-    {
-		[Column] public int FacilityID { get; set; }
-		[Column] public string FacilityName { get; set; }
-	}
-    
-	[TableName("dbo.Facility_Accomodation")]
-	[PrimaryKey("FacilityID", AutoIncrement=false)]
-	[ExplicitColumns]
-    public partial class Facility_Accomodation  
-    {
-		[Column] public int FacilityID { get; set; }
-		[Column] public int AccomodationID { get; set; }
-	}
-    
-	[TableName("dbo.FeedBack")]
-	[PrimaryKey("FeedBackID")]
-	[ExplicitColumns]
-    public partial class FeedBack  
-    {
-		[Column] public int FeedBackID { get; set; }
-		[Column] public int? QuestionID { get; set; }
-		[Column] public int? SRDID { get; set; }
-		[Column] public int? StarRating { get; set; }
-	}
-    
-	[TableName("dbo.FunctionGroups")]
-	[PrimaryKey("FunctionID", AutoIncrement=false)]
-	[ExplicitColumns]
-    public partial class FunctionGroup  
-    {
-		[Column] public int FunctionID { get; set; }
-		[Column] public int GroupID { get; set; }
-		[Column] public bool Writable { get; set; }
-	}
-    
-	[TableName("dbo.GeoTree")]
-	[PrimaryKey("GeoTreeID")]
-	[ExplicitColumns]
-    public partial class GeoTree  
-    {
-		[Column] public int GeoTreeID { get; set; }
-		[Column] public string GeoName { get; set; }
-		[Column] public int? GeoParentID { get; set; }
-		[Column] public int? GeoLevel { get; set; }
-		[Column] public string ImagePath { get; set; }
-	}
-    
-	[TableName("dbo.Groups")]
-	[PrimaryKey("GroupID")]
-	[ExplicitColumns]
-    public partial class Group  
-    {
-		[Column] public int GroupID { get; set; }
-		[Column] public string GroupName { get; set; }
-	}
-    
-	[TableName("dbo.GuideLanguage")]
-	[PrimaryKey("GuideLanguageID")]
-	[ExplicitColumns]
-    public partial class GuideLanguage  
-    {
-		[Column] public int GuideLanguageID { get; set; }
-		[Column] public string GuideLanguageName { get; set; }
-	}
-    
-	[TableName("dbo.Holidays")]
-	[PrimaryKey("HolidayID")]
-	[ExplicitColumns]
-    public partial class Holiday  
-    {
-		[Column] public int HolidayID { get; set; }
-		[Column] public DateTime? HDate { get; set; }
-		[Column] public string HolidayName { get; set; }
-	}
-    
-	[TableName("dbo.Icons")]
-	[PrimaryKey("IconId")]
-	[ExplicitColumns]
-    public partial class Icon  
-    {
-		[Column] public int IconId { get; set; }
-		[Column] public int ServiceId { get; set; }
-		[Column] public int ServiceTypeId { get; set; }
-		[Column] public string IconPath { get; set; }
-	}
-    
-	[TableName("dbo.InsectLog")]
-	[PrimaryKey("CritterTime", AutoIncrement=false)]
-	[ExplicitColumns]
-    public partial class InsectLog  
-    {
-		[Column] public DateTime CritterTime { get; set; }
-		[Column] public string Controller { get; set; }
-		[Column] public string Action { get; set; }
-		[Column] public string Message { get; set; }
-		[Column] public string Stack { get; set; }
-	}
-    
-	[TableName("dbo.LateBreak")]
-	[PrimaryKey("LateBreakID", AutoIncrement=false)]
-	[ExplicitColumns]
-    public partial class LateBreak  
-    {
-		[Column] public int LateBreakID { get; set; }
-	}
-    
-	[TableName("dbo.LeaveApplications")]
-	[PrimaryKey("LeaveApplicationID")]
-	[ExplicitColumns]
-    public partial class LeaveApplication  
-    {
-		[Column] public int LeaveApplicationID { get; set; }
-		[Column] public DateTime? ApplicationDate { get; set; }
-		[Column] public string UserID { get; set; }
-		[Column] public int? LeaveTypeID { get; set; }
-		[Column] public DateTime? LeaveStartDate { get; set; }
-		[Column] public decimal? NoOfDays { get; set; }
-		[Column] public int? StatusID { get; set; }
-		[Column] public string StatusBy { get; set; }
-		[Column] public DateTime? StatusDate { get; set; }
-	}
-    
-	[TableName("dbo.LeaveBalance")]
-	[PrimaryKey("LeaveBalanceID")]
-	[ExplicitColumns]
-    public partial class LeaveBalance  
-    {
-		[Column] public int LeaveBalanceID { get; set; }
-		[Column] public string UserID { get; set; }
-		[Column] public int LeaveTypeID { get; set; }
-		[Column] public int LeaveYear { get; set; }
-		[Column] public decimal? LeaveDays { get; set; }
-		[Column] public int? Attendance { get; set; }
-	}
-    
-	[TableName("dbo.LeaveEntitlement")]
-	[PrimaryKey("LeaveEntitlementID")]
-	[ExplicitColumns]
-    public partial class LeaveEntitlement  
-    {
-		[Column] public int LeaveEntitlementID { get; set; }
-		[Column] public int LeaveYear { get; set; }
-		[Column] public int LeaveTypeID { get; set; }
-		[Column] public decimal? LeaveDays { get; set; }
-	}
-    
-	[TableName("dbo.LeaveType")]
-	[PrimaryKey("LeaveTypeID")]
-	[ExplicitColumns]
-    public partial class LeaveType  
-    {
-		[Column] public int LeaveTypeID { get; set; }
-		[Column] public string LeaveTypeName { get; set; }
-	}
-    
-	[TableName("dbo.MiceDetails")]
-	[PrimaryKey("MiceID")]
-	[ExplicitColumns]
-    public partial class MiceDetail  
-    {
-		[Column] public int MiceID { get; set; }
-		[Column] public string GuestName { get; set; }
-		[Column] public DateTime? TDate { get; set; }
-		[Column] public string Phone { get; set; }
-		[Column] public string Email { get; set; }
-		[Column] public string AgentName { get; set; }
-		[Column] public string Detail { get; set; }
-		[Column] public bool? IsRead { get; set; }
-	}
-    
-	[TableName("dbo.OptionType")]
-	[PrimaryKey("OptionTypeID")]
-	[ExplicitColumns]
-    public partial class OptionType  
-    {
-		[Column] public int OptionTypeID { get; set; }
-		[Column] public string OptionTypeName { get; set; }
-		[Column] public int? ServiceTypeID { get; set; }
-	}
-    
-	[TableName("dbo.OwnAssetBill")]
-	[PrimaryKey("OwnAssetBillID")]
-	[ExplicitColumns]
-    public partial class OwnAssetBill  
-    {
-		[Column] public int OwnAssetBillID { get; set; }
-		[Column] public int? ServiceTypeID { get; set; }
-		[Column] public int? ServiceID { get; set; }
-		[Column] public DateTime? BillDate { get; set; }
-		[Column] public string BillNo { get; set; }
-		[Column] public decimal? Amount { get; set; }
-		[Column] public string BillImage { get; set; }
-	}
-    
-	[TableName("dbo.OwnCarTrip")]
-	[PrimaryKey("OwnCarTripID")]
-	[ExplicitColumns]
-    public partial class OwnCarTrip  
-    {
-		[Column] public int OwnCarTripID { get; set; }
-		[Column] public int? CarBikeID { get; set; }
-		[Column] public int? DriverID { get; set; }
-		[Column] public DateTime? TripStart { get; set; }
-		[Column] public int? StartKms { get; set; }
-		[Column] public int? EndKms { get; set; }
-	}
-    
-	[TableName("dbo.Package")]
-	[PrimaryKey("PackageID")]
-	[ExplicitColumns]
-    public partial class Package  
-    {
-		[Column] public int PackageID { get; set; }
-		[Column] public int? ServiceTypeID { get; set; }
-		[Column] public string PackageName { get; set; }
-		[Column] public string Description { get; set; }
-		[Column] public int? Duration { get; set; }
-		[Column] public string Itinerary { get; set; }
-		[Column] public int? Dificulty { get; set; }
-		[Column] public int? GroupSize { get; set; }
-		[Column] public int? GuideLanguageID { get; set; }
-		[Column] public string StartTime { get; set; }
-		[Column] public string Inclusion { get; set; }
-		[Column] public string Exclusion { get; set; }
-		[Column] public string Highlights { get; set; }
-		[Column] public string CouponCode { get; set; }
-		[Column] public string SupplierNotepad { get; set; }
-		[Column] public string MeetAndInfo { get; set; }
-	}
-    
-	[TableName("dbo.Package_Activity")]
-	[PrimaryKey("PackageID", AutoIncrement=false)]
-	[ExplicitColumns]
-    public partial class Package_Activity  
-    {
-		[Column] public int PackageID { get; set; }
-		[Column] public int ActivityID { get; set; }
-	}
-    
-	[TableName("dbo.Package_Attraction")]
-	[PrimaryKey("PackageID", AutoIncrement=false)]
-	[ExplicitColumns]
-    public partial class Package_Attraction  
-    {
-		[Column] public int PackageID { get; set; }
-		[Column] public int AttractionID { get; set; }
-	}
-    
-	[TableName("dbo.Package_Attribute")]
-	[PrimaryKey("PackageID", AutoIncrement=false)]
-	[ExplicitColumns]
-    public partial class Package_Attribute  
-    {
-		[Column] public int PackageID { get; set; }
-		[Column] public int AttributeID { get; set; }
-		[Column] public int ServiceTypeId { get; set; }
-	}
-    
-	[TableName("dbo.Package_Category")]
-	[PrimaryKey("PackageID", AutoIncrement=false)]
-	[ExplicitColumns]
-    public partial class Package_Category  
-    {
-		[Column] public int PackageID { get; set; }
-		[Column] public int CategoryID { get; set; }
-	}
-    
-	[TableName("dbo.Package_GeoTree")]
-	[PrimaryKey("PackageID", AutoIncrement=false)]
-	[ExplicitColumns]
-    public partial class Package_GeoTree  
-    {
-		[Column] public int PackageID { get; set; }
-		[Column] public int GeoTreeID { get; set; }
-	}
-    
-	[TableName("dbo.Package_Language")]
-	[PrimaryKey("PackageId", AutoIncrement=false)]
-	[ExplicitColumns]
-    public partial class Package_Language  
-    {
-		[Column] public int PackageId { get; set; }
-		[Column] public int GuideLanguageId { get; set; }
-	}
-    
-	[TableName("dbo.Package_Supplier")]
-	[PrimaryKey("PackageID", AutoIncrement=false)]
-	[ExplicitColumns]
-    public partial class Package_Supplier  
-    {
-		[Column] public int PackageID { get; set; }
-		[Column] public int SupplierID { get; set; }
-		[Column] public string ContractNo { get; set; }
-		[Column] public int? ServiceTypeID { get; set; }
-	}
-    
-	[TableName("dbo.PackageValidity")]
-	[PrimaryKey("PVId")]
-	[ExplicitColumns]
-    public partial class PackageValidity  
-    {
-		[Column] public int PVId { get; set; }
-		[Column] public int ServiceID { get; set; }
-		[Column] public DateTime ValidFrom { get; set; }
-		[Column] public DateTime ValidTo { get; set; }
-		[Column] public int? ServiceTypeID { get; set; }
-	}
-    
-	[TableName("dbo.PCdetails")]
-	[PrimaryKey("PCDID")]
-	[ExplicitColumns]
-    public partial class PCdetail  
-    {
-		[Column] public int PCDID { get; set; }
-		[Column] public int? PettyCashID { get; set; }
-		[Column] public string Category { get; set; }
-		[Column] public string Details { get; set; }
-		[Column] public decimal? Cost { get; set; }
-		[Column] public int? SupplierID { get; set; }
-		[Column] public string InvoiceNo { get; set; }
-		[Column] public string BillImage { get; set; }
-		[Column] public int? SRID { get; set; }
-	}
-    
-	[TableName("dbo.PettyCash")]
-	[PrimaryKey("CashInHandRegID")]
-	[ExplicitColumns]
-    public partial class PettyCash  
-    {
-		[Column] public int CashInHandRegID { get; set; }
-		[Column] public DateTime? Tdate { get; set; }
-		[Column] public string NameAndDesg { get; set; }
-		[Column] public decimal? CashToDeclareStart { get; set; }
-		[Column] public string DetailsOfCashExp { get; set; }
-		[Column] public decimal? CashToDeclareEnd { get; set; }
-		[Column] public string Remarks { get; set; }
-	}
-    
-	[TableName("dbo.Picture")]
-	[PrimaryKey("PictureID")]
-	[ExplicitColumns]
-    public partial class Picture  
-    {
-		[Column] public int PictureID { get; set; }
-		[Column] public int? ServiceTypeID { get; set; }
-		[Column] public string PictureName { get; set; }
-		[Column] public int? ServiceID { get; set; }
-	}
-    
-	[TableName("dbo.PriceInclusions")]
-	[PrimaryKey("PriceInclusionId")]
-	[ExplicitColumns]
-    public partial class PriceInclusion  
-    {
-		[Column] public int PriceInclusionId { get; set; }
-		[Column] public int PriceId { get; set; }
-		[Column] public decimal Amount { get; set; }
-		[Column] public string Description { get; set; }
-		[Column] public int? MealPlanId { get; set; }
-	}
-    
-	[TableName("dbo.Prices")]
-	[PrimaryKey("PriceID")]
-	[ExplicitColumns]
-    public partial class Price  
-    {
-		[Column] public int PriceID { get; set; }
-		[Column] public int? ServiceID { get; set; }
-		[Column] public int? OptionTypeID { get; set; }
-		[Column] public DateTime? WEF { get; set; }
-		[Column("Price")] public decimal? _Price { get; set; }
-		[Column] public decimal? WeekendPrice { get; set; }
-	}
-    
-	[TableName("dbo.Questions")]
-	[PrimaryKey("QuestionID")]
-	[ExplicitColumns]
-    public partial class Question  
-    {
-		[Column] public int QuestionID { get; set; }
-		[Column] public string FQuestion { get; set; }
-	}
-    
-	[TableName("dbo.Rating")]
-	[PrimaryKey("RatingID")]
-	[ExplicitColumns]
-    public partial class Rating  
-    {
-		[Column] public int RatingID { get; set; }
-		[Column] public int? Value { get; set; }
-		[Column] public int? SRDID { get; set; }
-		[Column] public string Note { get; set; }
-	}
-    
-	[TableName("dbo.Reminders")]
-	[PrimaryKey("ReminderID")]
-	[ExplicitColumns]
-    public partial class Reminder  
-    {
-		[Column] public int ReminderID { get; set; }
-		[Column] public int? SRDID { get; set; }
-		[Column("Reminder")] public DateTime? _Reminder { get; set; }
-		[Column] public string Note { get; set; }
-	}
-    
-	[TableName("dbo.Review")]
-	[PrimaryKey("ReviewID")]
-	[ExplicitColumns]
-    public partial class Review  
-    {
-		[Column] public int ReviewID { get; set; }
-		[Column] public string UserID { get; set; }
-		[Column] public int? ServiceID { get; set; }
-		[Column] public int? ServiceTypeID { get; set; }
-		[Column] public DateTime? ReviewDate { get; set; }
-		[Column("Review")] public string _Review { get; set; }
-		[Column] public bool? IsVisible { get; set; }
-	}
-    
-	[TableName("dbo.ReviewReplies")]
-	[PrimaryKey("ReviewReplyID")]
-	[ExplicitColumns]
-    public partial class ReviewReply  
-    {
-		[Column] public int ReviewReplyID { get; set; }
-		[Column] public int? ReviewID { get; set; }
-		[Column] public string UserID { get; set; }
-		[Column] public DateTime? ReviewDate { get; set; }
-		[Column] public string Reply { get; set; }
-		[Column] public bool? IsVisible { get; set; }
-	}
-    
-	[TableName("dbo.RP_SR")]
-	[PrimaryKey("RPDID", AutoIncrement=false)]
-	[ExplicitColumns]
-    public partial class RP_SR  
-    {
-		[Column] public int RPDID { get; set; }
-		[Column] public int SRID { get; set; }
-		[Column] public decimal? Amount { get; set; }
-		[Column] public int? SRDID { get; set; }
-	}
-    
-	[TableName("dbo.RPdets")]
-	[PrimaryKey("RPDID")]
-	[ExplicitColumns]
-    public partial class RPdet  
-    {
-		[Column] public int RPDID { get; set; }
-		[Column] public int? BankName { get; set; }
-		[Column] public string ChequeNo { get; set; }
-		[Column] public DateTime? Date { get; set; }
-		[Column] public decimal? Amount { get; set; }
-		[Column] public string TransactionNo { get; set; }
-		[Column] public string Note { get; set; }
-		[Column] public int? SRID { get; set; }
-		[Column] public int? Type { get; set; }
-		[Column] public bool? AmtUsed { get; set; }
-		[Column] public bool? IsPayment { get; set; }
-		[Column] public DateTime? Cdate { get; set; }
-	}
-    
-	[TableName("dbo.ServiceCommision")]
-	[PrimaryKey("ServiceID", AutoIncrement=false)]
-	[ExplicitColumns]
-    public partial class ServiceCommision  
-    {
-		[Column] public int ServiceID { get; set; }
-		[Column] public string ServiceName { get; set; }
-		[Column] public decimal? Amount { get; set; }
-		[Column] public decimal? Perc { get; set; }
-	}
-    
-	[TableName("dbo.ServiceDiscount")]
-	[PrimaryKey("SDID")]
-	[ExplicitColumns]
-    public partial class ServiceDiscount  
-    {
-		[Column] public int SDID { get; set; }
-		[Column] public int? ServiceID { get; set; }
-		[Column] public int? ServiceTypeID { get; set; }
-		[Column] public string CouponCode { get; set; }
-	}
-    
-	[TableName("dbo.ServiceRequest")]
-	[PrimaryKey("SRID")]
-	[ExplicitColumns]
-    public partial class ServiceRequest  
-    {
-		[Column] public int SRID { get; set; }
-		[Column] public int? BookingNo { get; set; }
-		[Column] public int? CustID { get; set; }
-		[Column] public string UserID { get; set; }
-		[Column] public int? SRStatusID { get; set; }
-		[Column] public string EmpID { get; set; }
-		[Column] public int? EnquirySource { get; set; }
-		[Column] public int? PayStatusID { get; set; }
-		[Column] public int? BookingTypeID { get; set; }
-		[Column] public string AgentID { get; set; }
-		[Column] public int? ServiceTypeID { get; set; }
-		[Column] public DateTime? TDate { get; set; }
-		[Column] public string IgnoreReason { get; set; }
-		[Column] public DateTime? RemindAt { get; set; }
-		[Column] public string AgentBooker { get; set; }
-	}
-    
-	[TableName("dbo.SR_Cust")]
-	[PrimaryKey("ServiceRequestID", AutoIncrement=false)]
-	[ExplicitColumns]
-    public partial class SR_Cust  
-    {
-		[Column] public int ServiceRequestID { get; set; }
-		[Column] public int CustomerID { get; set; }
-		[Column] public bool IsLead { get; set; }
-	}
-    
-	[TableName("dbo.SRD_Cust")]
-	[PrimaryKey("SRDID", AutoIncrement=false)]
-	[ExplicitColumns]
-    public partial class SRD_Cust  
-    {
-		[Column] public int SRDID { get; set; }
-		[Column] public int CustomerID { get; set; }
-	}
-    
-	[TableName("dbo.SRdetails")]
-	[PrimaryKey("SRDID")]
-	[ExplicitColumns]
-    public partial class SRdetail  
-    {
-		[Column] public int SRDID { get; set; }
-		[Column] public int? SRID { get; set; }
-		[Column] public int? ServiceTypeID { get; set; }
-		[Column] public int? CarType { get; set; }
-		[Column] public int? ItemID { get; set; }
-		[Column] public string CouponCode { get; set; }
-		[Column] public string Model { get; set; }
-		[Column] public string FromLoc { get; set; }
-		[Column] public string ToLoc { get; set; }
-		[Column] public DateTime? Fdate { get; set; }
-		[Column] public DateTime? Tdate { get; set; }
-		[Column] public int? SupplierID { get; set; }
-		[Column] public decimal? Cost { get; set; }
-		[Column] public decimal? SellPrice { get; set; }
-		[Column] public int? ChildNo { get; set; }
-		[Column] public int? AdultNo { get; set; }
-		[Column] public int? InfantNo { get; set; }
-		[Column] public string Heritage { get; set; }
-		[Column] public bool HasAc { get; set; }
-		[Column] public bool HasCarrier { get; set; }
-		[Column] public int? GuideLanguageID { get; set; }
-		[Column] public DateTime? DateOfIssue { get; set; }
-		[Column] public string ContractNo { get; set; }
-		[Column] public string PayTo { get; set; }
-		[Column] public string PickUpPoint { get; set; }
-		[Column] public string DropPoint { get; set; }
-		[Column] public int? DriverID { get; set; }
-		[Column] public string SuppInvNo { get; set; }
-		[Column] public decimal? Qty { get; set; }
-		[Column] public int? ParentID { get; set; }
-		[Column] public bool IsReturn { get; set; }
-		[Column] public bool IsInternational { get; set; }
-		[Column] public int? OptionTypeID { get; set; }
-		[Column] public decimal? ECommision { get; set; }
-		[Column] public bool IsCanceled { get; set; }
-		[Column] public DateTime? SuppInvDt { get; set; }
-		[Column] public string SuppConfNo { get; set; }
-		[Column] public int? NoExtraBeds { get; set; }
-		[Column] public int? EBCostPNight { get; set; }
-		[Column] public int? BFCost { get; set; }
-		[Column] public int? LunchCost { get; set; }
-		[Column] public int? DinnerCost { get; set; }
-		[Column] public int? NoExtraService { get; set; }
-		[Column] public int? ExtraServiceCost { get; set; }
-		[Column] public int? SuppInvAmt { get; set; }
-		[Column] public string GDSConfNo { get; set; }
-		[Column] public decimal? Tax { get; set; }
-		[Column] public DateTime? ExpiryDate { get; set; }
-	}
-    
-	[TableName("dbo.SRlogs")]
-	[PrimaryKey("SRLID")]
-	[ExplicitColumns]
-    public partial class SRlog  
-    {
-		[Column] public int SRLID { get; set; }
-		[Column] public int? SRDID { get; set; }
-		[Column] public DateTime? LogDateTime { get; set; }
-		[Column] public string UserID { get; set; }
-		[Column] public bool? Type { get; set; }
-		[Column] public string Event { get; set; }
-		[Column] public int? SRID { get; set; }
-	}
-    
-	[TableName("dbo.SRReciepts")]
-	[PrimaryKey("RecieptID")]
-	[ExplicitColumns]
-    public partial class SRReciept  
-    {
-		[Column] public int RecieptID { get; set; }
-		[Column] public int? SRID { get; set; }
-		[Column] public DateTime? RecieptDate { get; set; }
-		[Column] public decimal? Amount { get; set; }
-		[Column] public int? PayMode { get; set; }
-		[Column] public int? BankID { get; set; }
-	}
-    
-	[TableName("dbo.SRTranslation")]
-	[PrimaryKey("SRTranslationId")]
-	[ExplicitColumns]
-    public partial class SRTranslation  
-    {
-		[Column] public int SRTranslationId { get; set; }
-		[Column] public int ServiceTypeId { get; set; }
-		[Column] public string ColumnName { get; set; }
-		[Column] public string FriendlyName { get; set; }
-	}
-    
-	[TableName("dbo.SRUploads")]
-	[PrimaryKey("SRUID")]
-	[ExplicitColumns]
-    public partial class SRUpload  
-    {
-		[Column] public int SRUID { get; set; }
-		[Column] public int? SRID { get; set; }
-		[Column] public int? SRDID { get; set; }
-		[Column] public string Path { get; set; }
-		[Column] public string UploadName { get; set; }
-	}
-    
-	[TableName("dbo.Supplier")]
-	[PrimaryKey("SupplierID")]
-	[ExplicitColumns]
-    public partial class Supplier  
-    {
-		[Column] public int SupplierID { get; set; }
-		[Column] public string SupplierName { get; set; }
-	}
-    
-	[TableName("dbo.Taxes")]
-	[PrimaryKey("TaxId")]
-	[ExplicitColumns]
-    public partial class Tax  
-    {
-		[Column] public int TaxId { get; set; }
-		[Column] public int ServiceTypeId { get; set; }
-		[Column] public DateTime? WEF { get; set; }
-		[Column] public decimal Percentage { get; set; }
-		[Column] public string TaxName { get; set; }
-	}
-    
-	[TableName("dbo.UserFunctions")]
-	[PrimaryKey("FunctionID")]
-	[ExplicitColumns]
-    public partial class UserFunction  
-    {
-		[Column] public int FunctionID { get; set; }
-		[Column] public string FunctionName { get; set; }
-		[Column] public string Module { get; set; }
-	}
-    
-	[TableName("dbo.UserGroups")]
-	[PrimaryKey("UserID", AutoIncrement=false)]
-	[ExplicitColumns]
-    public partial class UserGroup  
-    {
-		[Column] public string UserID { get; set; }
-		[Column] public int GroupID { get; set; }
-	}
-    
-	[TableName("dbo.UserLogRec")]
-	[PrimaryKey("UserLogID")]
-	[ExplicitColumns]
-    public partial class UserLogRec  
-    {
-		[Column] public int UserLogID { get; set; }
-		[Column] public string UserID { get; set; }
-		[Column] public DateTime? LogIn { get; set; }
-		[Column] public DateTime? LogOut { get; set; }
-	}
-    
-	[TableName("dbo.Visa")]
-	[PrimaryKey("VisaID")]
-	[ExplicitColumns]
-    public partial class Visa  
-    {
-		[Column] public int VisaID { get; set; }
-		[Column] public string VisaCountry { get; set; }
-		[Column] public string FlagPicture { get; set; }
-		[Column] public string EmbassyAddress { get; set; }
-		[Column] public string Details { get; set; }
-	}
+    [PrimaryKey("AccomodationID")]
+    [ExplicitColumns]
+    public partial class Accomodation
+    {
+        [Column] public int AccomodationID { get; set; }
+        [Column] public string AccomName { get; set; }
+        [Column] public string Description { get; set; }
+        [Column] public int? GeoTreeID { get; set; }
+        [Column] public string lat { get; set; }
+        [Column] public string longt { get; set; }
+        [Column] public string CouponCode { get; set; }
+        [Column] public string SupplierNotepad { get; set; }
+        [Column] public bool? SelfOwned { get; set; }
+    }
+
+    [TableName("dbo.Activity")]
+    [PrimaryKey("ActivityID")]
+    [ExplicitColumns]
+    public partial class Activity
+    {
+        [Column] public int ActivityID { get; set; }
+        [Column] public string ActivityName { get; set; }
+        [Column] public string ImagePath { get; set; }
+    }
+
+    [TableName("dbo.Agent")]
+    [PrimaryKey("AgentId", AutoIncrement = false)]
+    [ExplicitColumns]
+    public partial class Agent
+    {
+        [Column] public string AgentId { get; set; }
+        [Column] public string ContactName { get; set; }
+        [Column] public string PhoneNo { get; set; }
+        [Column] public string Email { get; set; }
+        [Column] public string Address { get; set; }
+        [Column] public string PAN { get; set; }
+        [Column] public string GST { get; set; }
+        [Column] public string RCbook { get; set; }
+        [Column] public string BkAccNo { get; set; }
+        [Column] public string BkName { get; set; }
+        [Column] public string BkIFSC { get; set; }
+        [Column] public string BkAddress { get; set; }
+        [Column] public string State { get; set; }
+    }
+
+    [TableName("dbo.AgentDiscount")]
+    [PrimaryKey("AgentDiscountID")]
+    [ExplicitColumns]
+    public partial class AgentDiscount
+    {
+        [Column] public int AgentDiscountID { get; set; }
+        [Column] public string UserID { get; set; }
+        [Column] public int? ServiceTypeID { get; set; }
+        [Column] public decimal? Amount { get; set; }
+        [Column] public decimal? Percentage { get; set; }
+        [Column] public bool? IsApproved { get; set; }
+    }
+
+    [TableName("dbo.AspNetRoles")]
+    [PrimaryKey("Id", AutoIncrement = false)]
+    [ExplicitColumns]
+    public partial class AspNetRole
+    {
+        [Column] public string Id { get; set; }
+        [Column] public string Name { get; set; }
+    }
+
+    [TableName("dbo.AspNetUserClaims")]
+    [PrimaryKey("Id")]
+    [ExplicitColumns]
+    public partial class AspNetUserClaim
+    {
+        [Column] public int Id { get; set; }
+        [Column] public string UserId { get; set; }
+        [Column] public string ClaimType { get; set; }
+        [Column] public string ClaimValue { get; set; }
+    }
+
+    [TableName("dbo.AspNetUserLogins")]
+    [PrimaryKey("LoginProvider", AutoIncrement = false)]
+    [ExplicitColumns]
+    public partial class AspNetUserLogin
+    {
+        [Column] public string LoginProvider { get; set; }
+        [Column] public string ProviderKey { get; set; }
+        [Column] public string UserId { get; set; }
+    }
+
+    [TableName("dbo.AspNetUserRoles")]
+    [PrimaryKey("UserId", AutoIncrement = false)]
+    [ExplicitColumns]
+    public partial class AspNetUserRole
+    {
+        [Column] public string UserId { get; set; }
+        [Column] public string RoleId { get; set; }
+    }
+
+    [TableName("dbo.AspNetUsers")]
+    [PrimaryKey("Id", AutoIncrement = false)]
+    [ExplicitColumns]
+    public partial class AspNetUser
+    {
+        [Column] public string Id { get; set; }
+        [Column] public string Email { get; set; }
+        [Column] public bool EmailConfirmed { get; set; }
+        [Column] public string PasswordHash { get; set; }
+        [Column] public string SecurityStamp { get; set; }
+        [Column] public string PhoneNumber { get; set; }
+        [Column] public bool PhoneNumberConfirmed { get; set; }
+        [Column] public bool TwoFactorEnabled { get; set; }
+        [Column] public DateTime? LockoutEndDateUtc { get; set; }
+        [Column] public bool LockoutEnabled { get; set; }
+        [Column] public int AccessFailedCount { get; set; }
+        [Column] public string UserName { get; set; }
+        [Column] public DateTime DateCreated { get; set; }
+        [Column] public bool Disabled { get; set; }
+        [Column] public DateTime? LastLogin { get; set; }
+        [Column] public int? UserType { get; set; }
+        [Column] public string RealName { get; set; }
+    }
+
+    [TableName("dbo.Attraaction")]
+    [PrimaryKey("AttractionID")]
+    [ExplicitColumns]
+    public partial class Attraaction
+    {
+        [Column] public int AttractionID { get; set; }
+        [Column] public string AttractionName { get; set; }
+        [Column] public string ImagePath { get; set; }
+        [Column] public string Description { get; set; }
+    }
+
+    [TableName("dbo.Attribute")]
+    [PrimaryKey("AttributeId")]
+    [ExplicitColumns]
+    public partial class Attribute
+    {
+        [Column] public int AttributeId { get; set; }
+        [Column] public string AttributeText { get; set; }
+        [Column] public string fatext { get; set; }
+        [Column] public string Color { get; set; }
+    }
+
+    [TableName("dbo.BankAccount")]
+    [PrimaryKey("BankAccountID")]
+    [ExplicitColumns]
+    public partial class BankAccount
+    {
+        [Column] public int BankAccountID { get; set; }
+        [Column] public DateTime? TDate { get; set; }
+        [Column] public decimal? AmountIn { get; set; }
+        [Column] public decimal? AmountOut { get; set; }
+        [Column] public string SRID { get; set; }
+        [Column] public string TransNo { get; set; }
+        [Column] public string UserID { get; set; }
+        [Column] public int? SupplierID { get; set; }
+        [Column] public string Comment { get; set; }
+        [Column] public int? BankID { get; set; }
+    }
+
+    [TableName("dbo.Banks")]
+    [PrimaryKey("BankID")]
+    [ExplicitColumns]
+    public partial class Bank
+    {
+        [Column] public int BankID { get; set; }
+        [Column] public string BankName { get; set; }
+        [Column] public string Address { get; set; }
+        [Column] public string AccNo { get; set; }
+    }
+
+    [TableName("dbo.BookedCustomer")]
+    [PrimaryKey("BCID")]
+    [ExplicitColumns]
+    public partial class BookedCustomer
+    {
+        [Column] public int BCID { get; set; }
+        [Column] public int? CartID { get; set; }
+        [Column] public int? BookingID { get; set; }
+        [Column] public int? CustomerID { get; set; }
+    }
+
+    [TableName("dbo.Booking")]
+    [PrimaryKey("BookingID")]
+    [ExplicitColumns]
+    public partial class Booking
+    {
+        [Column] public int BookingID { get; set; }
+        [Column] public string UserID { get; set; }
+        [Column] public DateTime? BookDate { get; set; }
+        [Column] public int? StatusID { get; set; }
+    }
+
+    [TableName("dbo.BookingDetail")]
+    [PrimaryKey("BookingDetailID")]
+    [ExplicitColumns]
+    public partial class BookingDetail
+    {
+        [Column] public int BookingDetailID { get; set; }
+        [Column] public int? BookingID { get; set; }
+        [Column] public int? ServiceID { get; set; }
+        [Column] public int? ServiceTypeID { get; set; }
+        [Column] public int? OptionTypeID { get; set; }
+        [Column] public int? Qty { get; set; }
+        [Column] public DateTime? CheckIn { get; set; }
+        [Column] public DateTime? CheckOut { get; set; }
+        [Column] public int? NoOfGuests { get; set; }
+        [Column] public decimal? Price { get; set; }
+        [Column] public string BlockedReason { get; set; }
+    }
+
+    [TableName("dbo.BookingStatus")]
+    [PrimaryKey("BookingStatusID")]
+    [ExplicitColumns]
+    public partial class BookingStatus
+    {
+        [Column] public int BookingStatusID { get; set; }
+        [Column] public string BookingStatusName { get; set; }
+    }
+
+    [TableName("dbo.CarBike")]
+    [PrimaryKey("CarBikeID")]
+    [ExplicitColumns]
+    public partial class CarBike
+    {
+        [Column] public int CarBikeID { get; set; }
+        [Column] public string CarBikeName { get; set; }
+        [Column] public int GeoTreeId { get; set; }
+        [Column] public string Description { get; set; }
+        [Column] public int? NoPax { get; set; }
+        [Column] public int? NoSmallBags { get; set; }
+        [Column] public int? NoLargeBags { get; set; }
+        [Column] public bool HasAc { get; set; }
+        [Column] public bool HasCarrier { get; set; }
+        [Column] public bool InclHelmet { get; set; }
+        [Column] public string CouponCode { get; set; }
+        [Column] public bool IsBike { get; set; }
+        [Column] public string SupplierNotepad { get; set; }
+        [Column] public bool? SelfOwned { get; set; }
+    }
+
+    [TableName("dbo.Cart")]
+    [PrimaryKey("CartID")]
+    [ExplicitColumns]
+    public partial class Cart
+    {
+        [Column] public int CartID { get; set; }
+        [Column] public string Id { get; set; }
+        [Column] public int? ServiceID { get; set; }
+        [Column] public int? ServiceTypeID { get; set; }
+        [Column] public int? OptionTypeID { get; set; }
+        [Column] public int? Qty { get; set; }
+        [Column] public DateTime? CheckIn { get; set; }
+        [Column] public DateTime? CheckOut { get; set; }
+        [Column] public int? NoOfGuest { get; set; }
+        [Column] public decimal? OrigPrice { get; set; }
+        [Column] public string CouponCode { get; set; }
+    }
+
+    [TableName("dbo.Category")]
+    [PrimaryKey("CategoryID")]
+    [ExplicitColumns]
+    public partial class Category
+    {
+        [Column] public int CategoryID { get; set; }
+        [Column] public string CategoryName { get; set; }
+        [Column] public string ImagePath { get; set; }
+    }
+
+    [TableName("dbo.Cruise")]
+    [PrimaryKey("CruiseID")]
+    [ExplicitColumns]
+    public partial class Cruise
+    {
+        [Column] public int CruiseID { get; set; }
+        [Column] public string CruiseName { get; set; }
+        [Column] public string Description { get; set; }
+        [Column] public int? Duration { get; set; }
+        [Column] public string Itinerary { get; set; }
+        [Column] public int? StarRating { get; set; }
+    }
+
+    [TableName("dbo.Cruise_GeoTree")]
+    [PrimaryKey("CruiseID", AutoIncrement = false)]
+    [ExplicitColumns]
+    public partial class Cruise_GeoTree
+    {
+        [Column] public int CruiseID { get; set; }
+        [Column] public int GeoTreeID { get; set; }
+    }
+
+    [TableName("dbo.Customer")]
+    [PrimaryKey("CustomerID")]
+    [ExplicitColumns]
+    public partial class Customer
+    {
+        [Column] public int CustomerID { get; set; }
+        [Column] public string FName { get; set; }
+        [Column] public string SName { get; set; }
+        [Column] public string Email { get; set; }
+        [Column] public string Phone { get; set; }
+        [Column] public string IdPicture { get; set; }
+        [Column] public string Type { get; set; }
+    }
+
+    [TableName("dbo.CustomerQuery")]
+    [PrimaryKey("CustomerQueryID")]
+    [ExplicitColumns]
+    public partial class CustomerQuery
+    {
+        [Column] public int CustomerQueryID { get; set; }
+        [Column] public string FName { get; set; }
+        [Column] public string SName { get; set; }
+        [Column] public string Email { get; set; }
+        [Column] public string Phone { get; set; }
+        [Column] public string IdPicture { get; set; }
+        [Column("Query")] public string _Query { get; set; }
+        [Column] public int? ServiceID { get; set; }
+        [Column] public int? ServiceTypeID { get; set; }
+        [Column] public DateTime? CheckIn { get; set; }
+        [Column] public DateTime? CheckOut { get; set; }
+        [Column] public int? NoPax { get; set; }
+        [Column] public int? Qty { get; set; }
+        [Column] public DateTime? Tdate { get; set; }
+        [Column] public int? Glang { get; set; }
+        [Column] public string Gtime { get; set; }
+        [Column] public string ServiceName { get; set; }
+    }
+
+    [TableName("dbo.CustQueryReply")]
+    [PrimaryKey("CustQueryReplyID")]
+    [ExplicitColumns]
+    public partial class CustQueryReply
+    {
+        [Column] public int CustQueryReplyID { get; set; }
+        [Column] public int? CustomerQueryID { get; set; }
+        [Column] public DateTime? ReplyDate { get; set; }
+        [Column] public string Reply { get; set; }
+    }
+
+    [TableName("dbo.DiscountCoupon")]
+    [PrimaryKey("DiscountCouponID")]
+    [ExplicitColumns]
+    public partial class DiscountCoupon
+    {
+        [Column] public int DiscountCouponID { get; set; }
+        [Column] public string CouponCode { get; set; }
+        [Column] public DateTime? ValidFrom { get; set; }
+        [Column] public DateTime? ValidTo { get; set; }
+        [Column] public decimal? Amount { get; set; }
+        [Column] public decimal? Perc { get; set; }
+    }
+
+    [TableName("dbo.Driver")]
+    [PrimaryKey("DriverID")]
+    [ExplicitColumns]
+    public partial class Driver
+    {
+        [Column] public int DriverID { get; set; }
+        [Column] public string DriverName { get; set; }
+        [Column] public string Phone { get; set; }
+        [Column] public string Address { get; set; }
+        [Column] public string EmerContactName { get; set; }
+        [Column] public string EmerContactNo { get; set; }
+        [Column] public string CarModel { get; set; }
+        [Column] public int? LocationId { get; set; }
+    }
+
+    [TableName("dbo.DriversCars")]
+    [PrimaryKey("CarId")]
+    [ExplicitColumns]
+    public partial class DriversCar
+    {
+        [Column] public int CarId { get; set; }
+        [Column] public int DriverId { get; set; }
+        [Column] public string CarBrand { get; set; }
+        [Column] public string Model { get; set; }
+        [Column] public DateTime? DateOfPurchase { get; set; }
+        [Column] public string RCBookNo { get; set; }
+        [Column] public string PlateNo { get; set; }
+        [Column] public DateTime? InsuranceEndDate { get; set; }
+        [Column] public string InsuranceCompany { get; set; }
+    }
+
+    [TableName("dbo.DRP_SR")]
+    [PrimaryKey("DRPDID", AutoIncrement = false)]
+    [ExplicitColumns]
+    public partial class DRP_SR
+    {
+        [Column] public int DRPDID { get; set; }
+        [Column] public int SRID { get; set; }
+        [Column] public decimal? Amount { get; set; }
+        [Column] public int? SRDID { get; set; }
+    }
+
+    [TableName("dbo.DRPdets")]
+    [PrimaryKey("DRPDID")]
+    [ExplicitColumns]
+    public partial class DRPdet
+    {
+        [Column] public int DRPDID { get; set; }
+        [Column] public int? BankName { get; set; }
+        [Column] public string ChequeNo { get; set; }
+        [Column] public DateTime? Date { get; set; }
+        [Column] public decimal? Amount { get; set; }
+        [Column] public string TransactionNo { get; set; }
+        [Column] public string Note { get; set; }
+        [Column] public int? SRID { get; set; }
+        [Column] public int? Type { get; set; }
+        [Column] public bool? AmtUsed { get; set; }
+        [Column] public bool? IsPayment { get; set; }
+        [Column] public DateTime? Cdate { get; set; }
+    }
+
+    [TableName("dbo.Facility")]
+    [PrimaryKey("FacilityID")]
+    [ExplicitColumns]
+    public partial class Facility
+    {
+        [Column] public int FacilityID { get; set; }
+        [Column] public string FacilityName { get; set; }
+    }
+
+    [TableName("dbo.Facility_Accomodation")]
+    [PrimaryKey("FacilityID", AutoIncrement = false)]
+    [ExplicitColumns]
+    public partial class Facility_Accomodation
+    {
+        [Column] public int FacilityID { get; set; }
+        [Column] public int AccomodationID { get; set; }
+    }
+
+    [TableName("dbo.FeedBack")]
+    [PrimaryKey("FeedBackID")]
+    [ExplicitColumns]
+    public partial class FeedBack
+    {
+        [Column] public int FeedBackID { get; set; }
+        [Column] public int? QuestionID { get; set; }
+        [Column] public int? SRDID { get; set; }
+        [Column] public int? StarRating { get; set; }
+    }
+
+    [TableName("dbo.FunctionGroups")]
+    [PrimaryKey("FunctionID", AutoIncrement = false)]
+    [ExplicitColumns]
+    public partial class FunctionGroup
+    {
+        [Column] public int FunctionID { get; set; }
+        [Column] public int GroupID { get; set; }
+        [Column] public bool Writable { get; set; }
+    }
+
+    [TableName("dbo.GeoTree")]
+    [PrimaryKey("GeoTreeID")]
+    [ExplicitColumns]
+    public partial class GeoTree
+    {
+        [Column] public int GeoTreeID { get; set; }
+        [Column] public string GeoName { get; set; }
+        [Column] public int? GeoParentID { get; set; }
+        [Column] public int? GeoLevel { get; set; }
+        [Column] public string ImagePath { get; set; }
+    }
+
+    [TableName("dbo.Groups")]
+    [PrimaryKey("GroupID")]
+    [ExplicitColumns]
+    public partial class Group
+    {
+        [Column] public int GroupID { get; set; }
+        [Column] public string GroupName { get; set; }
+    }
+
+    [TableName("dbo.GuideLanguage")]
+    [PrimaryKey("GuideLanguageID")]
+    [ExplicitColumns]
+    public partial class GuideLanguage
+    {
+        [Column] public int GuideLanguageID { get; set; }
+        [Column] public string GuideLanguageName { get; set; }
+    }
+
+    [TableName("dbo.Holidays")]
+    [PrimaryKey("HolidayID")]
+    [ExplicitColumns]
+    public partial class Holiday
+    {
+        [Column] public int HolidayID { get; set; }
+        [Column] public DateTime? HDate { get; set; }
+        [Column] public string HolidayName { get; set; }
+    }
+
+    [TableName("dbo.Icons")]
+    [PrimaryKey("IconId")]
+    [ExplicitColumns]
+    public partial class Icon
+    {
+        [Column] public int IconId { get; set; }
+        [Column] public int ServiceId { get; set; }
+        [Column] public int ServiceTypeId { get; set; }
+        [Column] public string IconPath { get; set; }
+    }
+
+    [TableName("dbo.InsectLog")]
+    [PrimaryKey("CritterTime", AutoIncrement = false)]
+    [ExplicitColumns]
+    public partial class InsectLog
+    {
+        [Column] public DateTime CritterTime { get; set; }
+        [Column] public string Controller { get; set; }
+        [Column] public string Action { get; set; }
+        [Column] public string Message { get; set; }
+        [Column] public string Stack { get; set; }
+    }
+
+    [TableName("dbo.LateBreak")]
+    [PrimaryKey("LateBreakID", AutoIncrement = false)]
+    [ExplicitColumns]
+    public partial class LateBreak
+    {
+        [Column] public int LateBreakID { get; set; }
+    }
+
+    [TableName("dbo.LeaveApplications")]
+    [PrimaryKey("LeaveApplicationID")]
+    [ExplicitColumns]
+    public partial class LeaveApplication
+    {
+        [Column] public int LeaveApplicationID { get; set; }
+        [Column] public DateTime? ApplicationDate { get; set; }
+        [Column] public string UserID { get; set; }
+        [Column] public int? LeaveTypeID { get; set; }
+        [Column] public DateTime? LeaveStartDate { get; set; }
+        [Column] public decimal? NoOfDays { get; set; }
+        [Column] public int? StatusID { get; set; }
+        [Column] public string StatusBy { get; set; }
+        [Column] public DateTime? StatusDate { get; set; }
+    }
+
+    [TableName("dbo.LeaveBalance")]
+    [PrimaryKey("LeaveBalanceID")]
+    [ExplicitColumns]
+    public partial class LeaveBalance
+    {
+        [Column] public int LeaveBalanceID { get; set; }
+        [Column] public string UserID { get; set; }
+        [Column] public int LeaveTypeID { get; set; }
+        [Column] public int LeaveYear { get; set; }
+        [Column] public decimal? LeaveDays { get; set; }
+        [Column] public int? Attendance { get; set; }
+    }
+
+    [TableName("dbo.LeaveEntitlement")]
+    [PrimaryKey("LeaveEntitlementID")]
+    [ExplicitColumns]
+    public partial class LeaveEntitlement
+    {
+        [Column] public int LeaveEntitlementID { get; set; }
+        [Column] public int LeaveYear { get; set; }
+        [Column] public int LeaveTypeID { get; set; }
+        [Column] public decimal? LeaveDays { get; set; }
+    }
+
+    [TableName("dbo.LeaveType")]
+    [PrimaryKey("LeaveTypeID")]
+    [ExplicitColumns]
+    public partial class LeaveType
+    {
+        [Column] public int LeaveTypeID { get; set; }
+        [Column] public string LeaveTypeName { get; set; }
+    }
+
+    [TableName("dbo.MiceDetails")]
+    [PrimaryKey("MiceID")]
+    [ExplicitColumns]
+    public partial class MiceDetail
+    {
+        [Column] public int MiceID { get; set; }
+        [Column] public string GuestName { get; set; }
+        [Column] public DateTime? TDate { get; set; }
+        [Column] public string Phone { get; set; }
+        [Column] public string Email { get; set; }
+        [Column] public string AgentName { get; set; }
+        [Column] public string Detail { get; set; }
+        [Column] public bool? IsRead { get; set; }
+    }
+
+    [TableName("dbo.OptionType")]
+    [PrimaryKey("OptionTypeID")]
+    [ExplicitColumns]
+    public partial class OptionType
+    {
+        [Column] public int OptionTypeID { get; set; }
+        [Column] public string OptionTypeName { get; set; }
+        [Column] public int? ServiceTypeID { get; set; }
+    }
+
+    [TableName("dbo.OwnAssetBill")]
+    [PrimaryKey("OwnAssetBillID")]
+    [ExplicitColumns]
+    public partial class OwnAssetBill
+    {
+        [Column] public int OwnAssetBillID { get; set; }
+        [Column] public int? ServiceTypeID { get; set; }
+        [Column] public int? ServiceID { get; set; }
+        [Column] public DateTime? BillDate { get; set; }
+        [Column] public string BillNo { get; set; }
+        [Column] public decimal? Amount { get; set; }
+        [Column] public string BillImage { get; set; }
+    }
+
+    [TableName("dbo.OwnCarTrip")]
+    [PrimaryKey("OwnCarTripID")]
+    [ExplicitColumns]
+    public partial class OwnCarTrip
+    {
+        [Column] public int OwnCarTripID { get; set; }
+        [Column] public int? CarBikeID { get; set; }
+        [Column] public int? DriverID { get; set; }
+        [Column] public DateTime? TripStart { get; set; }
+        [Column] public int? StartKms { get; set; }
+        [Column] public int? EndKms { get; set; }
+    }
+
+    [TableName("dbo.Package")]
+    [PrimaryKey("PackageID")]
+    [ExplicitColumns]
+    public partial class Package
+    {
+        [Column] public int PackageID { get; set; }
+        [Column] public int? ServiceTypeID { get; set; }
+        [Column] public string PackageName { get; set; }
+        [Column] public string Description { get; set; }
+        [Column] public int? Duration { get; set; }
+        [Column] public string Itinerary { get; set; }
+        [Column] public int? Dificulty { get; set; }
+        [Column] public int? GroupSize { get; set; }
+        [Column] public int? GuideLanguageID { get; set; }
+        [Column] public string StartTime { get; set; }
+        [Column] public string Inclusion { get; set; }
+        [Column] public string Exclusion { get; set; }
+        [Column] public string Highlights { get; set; }
+        [Column] public string CouponCode { get; set; }
+        [Column] public string SupplierNotepad { get; set; }
+        [Column] public string MeetAndInfo { get; set; }
+    }
+
+    [TableName("dbo.Package_Activity")]
+    [PrimaryKey("PackageID", AutoIncrement = false)]
+    [ExplicitColumns]
+    public partial class Package_Activity
+    {
+        [Column] public int PackageID { get; set; }
+        [Column] public int ActivityID { get; set; }
+    }
+
+    [TableName("dbo.Package_Attraction")]
+    [PrimaryKey("PackageID", AutoIncrement = false)]
+    [ExplicitColumns]
+    public partial class Package_Attraction
+    {
+        [Column] public int PackageID { get; set; }
+        [Column] public int AttractionID { get; set; }
+    }
+
+    [TableName("dbo.Package_Attribute")]
+    [PrimaryKey("PackageID", AutoIncrement = false)]
+    [ExplicitColumns]
+    public partial class Package_Attribute
+    {
+        [Column] public int PackageID { get; set; }
+        [Column] public int AttributeID { get; set; }
+        [Column] public int ServiceTypeId { get; set; }
+    }
+
+    [TableName("dbo.Package_Category")]
+    [PrimaryKey("PackageID", AutoIncrement = false)]
+    [ExplicitColumns]
+    public partial class Package_Category
+    {
+        [Column] public int PackageID { get; set; }
+        [Column] public int CategoryID { get; set; }
+    }
+
+    [TableName("dbo.Package_GeoTree")]
+    [PrimaryKey("PackageID", AutoIncrement = false)]
+    [ExplicitColumns]
+    public partial class Package_GeoTree
+    {
+        [Column] public int PackageID { get; set; }
+        [Column] public int GeoTreeID { get; set; }
+    }
+
+    [TableName("dbo.Package_Language")]
+    [PrimaryKey("PackageId", AutoIncrement = false)]
+    [ExplicitColumns]
+    public partial class Package_Language
+    {
+        [Column] public int PackageId { get; set; }
+        [Column] public int GuideLanguageId { get; set; }
+    }
+
+    [TableName("dbo.Package_Supplier")]
+    [PrimaryKey("PackageID", AutoIncrement = false)]
+    [ExplicitColumns]
+    public partial class Package_Supplier
+    {
+        [Column] public int PackageID { get; set; }
+        [Column] public int SupplierID { get; set; }
+        [Column] public string ContractNo { get; set; }
+        [Column] public int? ServiceTypeID { get; set; }
+    }
+
+    [TableName("dbo.PackageValidity")]
+    [PrimaryKey("PVId")]
+    [ExplicitColumns]
+    public partial class PackageValidity
+    {
+        [Column] public int PVId { get; set; }
+        [Column] public int ServiceID { get; set; }
+        [Column] public DateTime ValidFrom { get; set; }
+        [Column] public DateTime ValidTo { get; set; }
+        [Column] public int? ServiceTypeID { get; set; }
+    }
+
+    [TableName("dbo.PCdetails")]
+    [PrimaryKey("PCDID")]
+    [ExplicitColumns]
+    public partial class PCdetail
+    {
+        [Column] public int PCDID { get; set; }
+        [Column] public int? PettyCashID { get; set; }
+        [Column] public string Category { get; set; }
+        [Column] public string Details { get; set; }
+        [Column] public decimal? Cost { get; set; }
+        [Column] public int? SupplierID { get; set; }
+        [Column] public string InvoiceNo { get; set; }
+        [Column] public string BillImage { get; set; }
+        [Column] public int? SRID { get; set; }
+    }
+
+    [TableName("dbo.PettyCash")]
+    [PrimaryKey("CashInHandRegID")]
+    [ExplicitColumns]
+    public partial class PettyCash
+    {
+        [Column] public int CashInHandRegID { get; set; }
+        [Column] public DateTime? Tdate { get; set; }
+        [Column] public string NameAndDesg { get; set; }
+        [Column] public decimal? CashToDeclareStart { get; set; }
+        [Column] public string DetailsOfCashExp { get; set; }
+        [Column] public decimal? CashToDeclareEnd { get; set; }
+        [Column] public string Remarks { get; set; }
+    }
+
+    [TableName("dbo.Picture")]
+    [PrimaryKey("PictureID")]
+    [ExplicitColumns]
+    public partial class Picture
+    {
+        [Column] public int PictureID { get; set; }
+        [Column] public int? ServiceTypeID { get; set; }
+        [Column] public string PictureName { get; set; }
+        [Column] public int? ServiceID { get; set; }
+    }
+
+    [TableName("dbo.PriceInclusions")]
+    [PrimaryKey("PriceInclusionId")]
+    [ExplicitColumns]
+    public partial class PriceInclusion
+    {
+        [Column] public int PriceInclusionId { get; set; }
+        [Column] public int PriceId { get; set; }
+        [Column] public decimal Amount { get; set; }
+        [Column] public string Description { get; set; }
+        [Column] public int? MealPlanId { get; set; }
+    }
+
+    [TableName("dbo.Prices")]
+    [PrimaryKey("PriceID")]
+    [ExplicitColumns]
+    public partial class Price
+    {
+        [Column] public int PriceID { get; set; }
+        [Column] public int? ServiceID { get; set; }
+        [Column] public int? OptionTypeID { get; set; }
+        [Column] public DateTime? WEF { get; set; }
+        [Column("Price")] public decimal? _Price { get; set; }
+        [Column] public decimal? WeekendPrice { get; set; }
+    }
+
+    [TableName("dbo.Questions")]
+    [PrimaryKey("QuestionID")]
+    [ExplicitColumns]
+    public partial class Question
+    {
+        [Column] public int QuestionID { get; set; }
+        [Column] public string FQuestion { get; set; }
+    }
+
+    [TableName("dbo.Rating")]
+    [PrimaryKey("RatingID")]
+    [ExplicitColumns]
+    public partial class Rating
+    {
+        [Column] public int RatingID { get; set; }
+        [Column] public int? Value { get; set; }
+        [Column] public int? SRDID { get; set; }
+        [Column] public string Note { get; set; }
+    }
+
+    [TableName("dbo.Reminders")]
+    [PrimaryKey("ReminderID")]
+    [ExplicitColumns]
+    public partial class Reminder
+    {
+        [Column] public int ReminderID { get; set; }
+        [Column] public int? SRDID { get; set; }
+        [Column("Reminder")] public DateTime? _Reminder { get; set; }
+        [Column] public string Note { get; set; }
+    }
+
+    [TableName("dbo.Review")]
+    [PrimaryKey("ReviewID")]
+    [ExplicitColumns]
+    public partial class Review
+    {
+        [Column] public int ReviewID { get; set; }
+        [Column] public string UserID { get; set; }
+        [Column] public int? ServiceID { get; set; }
+        [Column] public int? ServiceTypeID { get; set; }
+        [Column] public DateTime? ReviewDate { get; set; }
+        [Column("Review")] public string _Review { get; set; }
+        [Column] public bool? IsVisible { get; set; }
+    }
+
+    [TableName("dbo.ReviewReplies")]
+    [PrimaryKey("ReviewReplyID")]
+    [ExplicitColumns]
+    public partial class ReviewReply
+    {
+        [Column] public int ReviewReplyID { get; set; }
+        [Column] public int? ReviewID { get; set; }
+        [Column] public string UserID { get; set; }
+        [Column] public DateTime? ReviewDate { get; set; }
+        [Column] public string Reply { get; set; }
+        [Column] public bool? IsVisible { get; set; }
+    }
+
+    [TableName("dbo.RP_SR")]
+    [PrimaryKey("RPDID", AutoIncrement = false)]
+    [ExplicitColumns]
+    public partial class RP_SR
+    {
+        [Column] public int RPDID { get; set; }
+        [Column] public int SRID { get; set; }
+        [Column] public decimal? Amount { get; set; }
+        [Column] public int? SRDID { get; set; }
+    }
+
+    [TableName("dbo.RPdets")]
+    [PrimaryKey("RPDID")]
+    [ExplicitColumns]
+    public partial class RPdet
+    {
+        [Column] public int RPDID { get; set; }
+        [Column] public int? BankName { get; set; }
+        [Column] public string ChequeNo { get; set; }
+        [Column] public DateTime? Date { get; set; }
+        [Column] public decimal? Amount { get; set; }
+        [Column] public string TransactionNo { get; set; }
+        [Column] public string Note { get; set; }
+        [Column] public int? SRID { get; set; }
+        [Column] public int? Type { get; set; }
+        [Column] public bool? AmtUsed { get; set; }
+        [Column] public bool? IsPayment { get; set; }
+        [Column] public DateTime? Cdate { get; set; }
+    }
+
+    [TableName("dbo.ServiceCommision")]
+    [PrimaryKey("ServiceID", AutoIncrement = false)]
+    [ExplicitColumns]
+    public partial class ServiceCommision
+    {
+        [Column] public int ServiceID { get; set; }
+        [Column] public string ServiceName { get; set; }
+        [Column] public decimal? Amount { get; set; }
+        [Column] public decimal? Perc { get; set; }
+    }
+
+    [TableName("dbo.ServiceDiscount")]
+    [PrimaryKey("SDID")]
+    [ExplicitColumns]
+    public partial class ServiceDiscount
+    {
+        [Column] public int SDID { get; set; }
+        [Column] public int? ServiceID { get; set; }
+        [Column] public int? ServiceTypeID { get; set; }
+        [Column] public string CouponCode { get; set; }
+    }
+
+    [TableName("dbo.ServiceRequest")]
+    [PrimaryKey("SRID")]
+    [ExplicitColumns]
+    public partial class ServiceRequest
+    {
+        [Column] public int SRID { get; set; }
+        [Column] public int? BookingNo { get; set; }
+        [Column] public int? CustID { get; set; }
+        [Column] public string UserID { get; set; }
+        [Column] public int? SRStatusID { get; set; }
+        [Column] public string EmpID { get; set; }
+        [Column] public int? EnquirySource { get; set; }
+        [Column] public int? PayStatusID { get; set; }
+        [Column] public int? BookingTypeID { get; set; }
+        [Column] public string AgentID { get; set; }
+        [Column] public int? ServiceTypeID { get; set; }
+        [Column] public DateTime? TDate { get; set; }
+        [Column] public string IgnoreReason { get; set; }
+        [Column] public DateTime? RemindAt { get; set; }
+        [Column] public string AgentBooker { get; set; }
+    }
+
+    [TableName("dbo.SR_Cust")]
+    [PrimaryKey("ServiceRequestID", AutoIncrement = false)]
+    [ExplicitColumns]
+    public partial class SR_Cust
+    {
+        [Column] public int ServiceRequestID { get; set; }
+        [Column] public int CustomerID { get; set; }
+        [Column] public bool IsLead { get; set; }
+    }
+
+    [TableName("dbo.SRD_Cust")]
+    [PrimaryKey("SRDID", AutoIncrement = false)]
+    [ExplicitColumns]
+    public partial class SRD_Cust
+    {
+        [Column] public int SRDID { get; set; }
+        [Column] public int CustomerID { get; set; }
+    }
+
+    [TableName("dbo.SRdetails")]
+    [PrimaryKey("SRDID")]
+    [ExplicitColumns]
+    public partial class SRdetail
+    {
+        [Column] public int SRDID { get; set; }
+        [Column] public int? SRID { get; set; }
+        [Column] public int? ServiceTypeID { get; set; }
+        [Column] public int? CarType { get; set; }
+        [Column] public int? ItemID { get; set; }
+        [Column] public string CouponCode { get; set; }
+        [Column] public string Model { get; set; }
+        [Column] public string FromLoc { get; set; }
+        [Column] public string ToLoc { get; set; }
+        [Column] public DateTime? Fdate { get; set; }
+        [Column] public DateTime? Tdate { get; set; }
+        [Column] public int? SupplierID { get; set; }
+        [Column] public decimal? Cost { get; set; }
+        [Column] public decimal? SellPrice { get; set; }
+        [Column] public int? ChildNo { get; set; }
+        [Column] public int? AdultNo { get; set; }
+        [Column] public int? InfantNo { get; set; }
+        [Column] public string Heritage { get; set; }
+        [Column] public bool HasAc { get; set; }
+        [Column] public bool HasCarrier { get; set; }
+        [Column] public int? GuideLanguageID { get; set; }
+        [Column] public DateTime? DateOfIssue { get; set; }
+        [Column] public string ContractNo { get; set; }
+        [Column] public string PayTo { get; set; }
+        [Column] public string PickUpPoint { get; set; }
+        [Column] public string DropPoint { get; set; }
+        [Column] public int? DriverID { get; set; }
+        [Column] public string SuppInvNo { get; set; }
+        [Column] public decimal? Qty { get; set; }
+        [Column] public int? ParentID { get; set; }
+        [Column] public bool IsReturn { get; set; }
+        [Column] public bool IsInternational { get; set; }
+        [Column] public int? OptionTypeID { get; set; }
+        [Column] public decimal? ECommision { get; set; }
+        [Column] public bool IsCanceled { get; set; }
+        [Column] public DateTime? SuppInvDt { get; set; }
+        [Column] public string SuppConfNo { get; set; }
+        [Column] public int? NoExtraBeds { get; set; }
+        [Column] public int? EBCostPNight { get; set; }
+        [Column] public int? BFCost { get; set; }
+        [Column] public int? LunchCost { get; set; }
+        [Column] public int? DinnerCost { get; set; }
+        [Column] public int? NoExtraService { get; set; }
+        [Column] public int? ExtraServiceCost { get; set; }
+        [Column] public int? SuppInvAmt { get; set; }
+        [Column] public string GDSConfNo { get; set; }
+        [Column] public decimal? Tax { get; set; }
+        [Column] public DateTime? ExpiryDate { get; set; }
+    }
+
+    [TableName("dbo.SRlogs")]
+    [PrimaryKey("SRLID")]
+    [ExplicitColumns]
+    public partial class SRlog
+    {
+        [Column] public int SRLID { get; set; }
+        [Column] public int? SRDID { get; set; }
+        [Column] public DateTime? LogDateTime { get; set; }
+        [Column] public string UserID { get; set; }
+        [Column] public bool? Type { get; set; }
+        [Column] public string Event { get; set; }
+        [Column] public int? SRID { get; set; }
+    }
+
+    [TableName("dbo.SRReciepts")]
+    [PrimaryKey("RecieptID")]
+    [ExplicitColumns]
+    public partial class SRReciept
+    {
+        [Column] public int RecieptID { get; set; }
+        [Column] public int? SRID { get; set; }
+        [Column] public DateTime? RecieptDate { get; set; }
+        [Column] public decimal? Amount { get; set; }
+        [Column] public int? PayMode { get; set; }
+        [Column] public int? BankID { get; set; }
+    }
+
+    [TableName("dbo.SRTranslation")]
+    [PrimaryKey("SRTranslationId")]
+    [ExplicitColumns]
+    public partial class SRTranslation
+    {
+        [Column] public int SRTranslationId { get; set; }
+        [Column] public int ServiceTypeId { get; set; }
+        [Column] public string ColumnName { get; set; }
+        [Column] public string FriendlyName { get; set; }
+    }
+
+    [TableName("dbo.SRUploads")]
+    [PrimaryKey("SRUID")]
+    [ExplicitColumns]
+    public partial class SRUpload
+    {
+        [Column] public int SRUID { get; set; }
+        [Column] public int? SRID { get; set; }
+        [Column] public int? SRDID { get; set; }
+        [Column] public string Path { get; set; }
+        [Column] public string UploadName { get; set; }
+    }
+
+    [TableName("dbo.Supplier")]
+    [PrimaryKey("SupplierID")]
+    [ExplicitColumns]
+    public partial class Supplier
+    {
+        [Column] public int SupplierID { get; set; }
+        [Column] public string SupplierName { get; set; }
+    }
+
+    [TableName("dbo.Taxes")]
+    [PrimaryKey("TaxId")]
+    [ExplicitColumns]
+    public partial class Tax
+    {
+        [Column] public int TaxId { get; set; }
+        [Column] public int ServiceTypeId { get; set; }
+        [Column] public DateTime? WEF { get; set; }
+        [Column] public decimal Percentage { get; set; }
+        [Column] public string TaxName { get; set; }
+    }
+
+    [TableName("dbo.UserFunctions")]
+    [PrimaryKey("FunctionID")]
+    [ExplicitColumns]
+    public partial class UserFunction
+    {
+        [Column] public int FunctionID { get; set; }
+        [Column] public string FunctionName { get; set; }
+        [Column] public string Module { get; set; }
+    }
+
+    [TableName("dbo.UserGroups")]
+    [PrimaryKey("UserID", AutoIncrement = false)]
+    [ExplicitColumns]
+    public partial class UserGroup
+    {
+        [Column] public string UserID { get; set; }
+        [Column] public int GroupID { get; set; }
+    }
+
+    [TableName("dbo.UserLogRec")]
+    [PrimaryKey("UserLogID")]
+    [ExplicitColumns]
+    public partial class UserLogRec
+    {
+        [Column] public int UserLogID { get; set; }
+        [Column] public string UserID { get; set; }
+        [Column] public DateTime? LogIn { get; set; }
+        [Column] public DateTime? LogOut { get; set; }
+    }
+
+    [TableName("dbo.Visa")]
+    [PrimaryKey("VisaID")]
+    [ExplicitColumns]
+    public partial class Visa
+    {
+        [Column] public int VisaID { get; set; }
+        [Column] public string VisaCountry { get; set; }
+        [Column] public string FlagPicture { get; set; }
+        [Column] public string EmbassyAddress { get; set; }
+        [Column] public string Details { get; set; }
+    }
 }

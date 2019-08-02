@@ -19,6 +19,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
     {
         protected Repository db;
         protected int newImportId;
+        protected int newAbstTableId;
         public BanksController()
         {
             this.db = new Repository(@"Data Source=(LocalDb)\MSSQLLocalDB;Initial Catalog=Fintastic;Integrated Security=True", "System.Data.SqlClient");
@@ -31,6 +32,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             XDocument doc = XDocument.Load(fileForImport);
             fileForImport = fileForImport.TrimStart(@"http://localhost:53040/".ToCharArray());
             newImportId = int.Parse(db.Insert(new ImportLog() { FileName = fileForImport, ImportDate = DateTime.UtcNow }).ToString());
+            newAbstTableId = 1;
             
             //truncate the temp table
             db.Execute("truncate table AbstTable");
@@ -75,6 +77,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
                     //MixedMode: Parent has elements as well as text
                     db.Insert(new AbstTable
                     {
+                        ImportLogId=newImportId,
+                        AbstId= newAbstTableId++,
                         recursionLevel = level,
                         Type = GetTypeInt("Text"),
                         ParentTableName = input.Name.LocalName,
@@ -92,6 +96,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
             //LogParent the parents data
             int newId = (int)db.Insert(new AbstTable
             {
+                ImportLogId = newImportId,
+                AbstId = newAbstTableId++,
                 Name = (elemType == "ParentElement")? $"{elemName}_{level}_{elem.Parent?.Name.LocalName ?? ""}": elemName,
                 recursionLevel = level,
                 Type = GetTypeInt(elemType),
@@ -108,6 +114,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 {
                     db.Insert(new AbstTable
                     {
+                        ImportLogId = newImportId,
+                        AbstId = newAbstTableId++,
                         Name = x.Name.LocalName,
                         Value = x.Value,
                         recursionLevel = level+1,
@@ -123,6 +131,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 {
                     db.Insert(new AbstTable
                     {
+                        ImportLogId = newImportId,
+                        AbstId = newAbstTableId++,
                         Name = x.Name.LocalName,
                         Value = x.Value,
                         recursionLevel = level,
