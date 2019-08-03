@@ -22,12 +22,13 @@ namespace Speedbird.Areas.SBBoss.Controllers
         protected int newAbstTableId;
         public BanksController()
         {
-            this.db = new Repository(@"Data Source=(LocalDb)\MSSQLLocalDB;Initial Catalog=Fintastic;Integrated Security=True", "System.Data.SqlClient");
+            this.db = new Repository(@"Data Source=(LocalDb)\MSSQLLocalDB;Initial Catalog=DtsxToSql;Integrated Security=True", "System.Data.SqlClient");
         }
 
         public ActionResult ImportXmlToSql()
-        {               
+        {
             string fileForImport = @"http://localhost:53040/Eadtsx.xml";
+            //string fileForImport = @"http://localhost:53040/FileSystemTask.xml";
          
             XDocument doc = XDocument.Load(fileForImport);
             fileForImport = fileForImport.TrimStart(@"http://localhost:53040/".ToCharArray());
@@ -60,9 +61,9 @@ namespace Speedbird.Areas.SBBoss.Controllers
             return Json(new object() , JsonRequestBehavior.AllowGet);
         }
         
-        public void EAXmlDig(XElement input, int level, int parentId)
+        public void EAXmlDig(XElement input, int level, int Parent_Id)
         {
-            int newId = LogNode(input, level++, parentId, input.HasElements ? "ParentElement" : "Element",db.SingleOrDefault<AbstTable>(parentId).Name ??"");
+            int newId = LogNode(input, level++, Parent_Id, input.HasElements ? "ParentElement" : "Element",db.SingleOrDefault<AbstTable>(Parent_Id).Name ??"");
             
             //Parent Element            
             var elemList = input.Elements().ToList();
@@ -77,32 +78,32 @@ namespace Speedbird.Areas.SBBoss.Controllers
                     //MixedMode: Parent has elements as well as text
                     db.Insert(new AbstTable
                     {
-                        ImportLogId=newImportId,
-                        AbstId= newAbstTableId++,
+                        ImportLog_Id=newImportId,
+                        Abst_Id= newAbstTableId++,
                         recursionLevel = level,
                         Type = GetTypeInt("Text"),
                         ParentTableName = input.Name.LocalName,
-                        ParentId = newId,
+                        Parent_Id = newId,
                         Value = input.LastNode.ToString().Replace("\r\n\t", "")
                     });
                 }
             }
         }
 
-        public int LogNode(XElement elem, int level, int parentId, string elemType, string parentName)
+        public int LogNode(XElement elem, int level, int Parent_Id, string elemType, string parentName)
         {
             string elemName = elem.Name.ToString().Replace("\r\n\t", "").Replace("{www.microsoft.com/SqlServer/Dts}", "");
             
             //LogParent the parents data
             int newId = (int)db.Insert(new AbstTable
             {
-                ImportLogId = newImportId,
-                AbstId = newAbstTableId++,
+                ImportLog_Id = newImportId,
+                Abst_Id = newAbstTableId++,
                 Name = (elemType == "ParentElement")? $"{elemName}_{level}_{elem.Parent?.Name.LocalName ?? ""}": elemName,
                 recursionLevel = level,
                 Type = GetTypeInt(elemType),
                 ParentTableName = parentName,
-                ParentId = parentId,
+                Parent_Id = Parent_Id,
                 Value= elem.HasElements?"": elem.Value
             });
 
@@ -114,15 +115,15 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 {
                     db.Insert(new AbstTable
                     {
-                        ImportLogId = newImportId,
-                        AbstId = newAbstTableId++,
+                        ImportLog_Id = newImportId,
+                        Abst_Id = newAbstTableId++,
                         Name = x.Name.LocalName,
                         Value = x.Value,
                         recursionLevel = level+1,
                         Type = GetTypeInt("Attribute"),
                         ParentTableName = elemName,
-                        ParentId = newId,
-                        AttrElemId = newId
+                        Parent_Id = newId,
+                        AttrElem_Id = newId
                     });
                 });
             } else
@@ -131,15 +132,15 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 {
                     db.Insert(new AbstTable
                     {
-                        ImportLogId = newImportId,
-                        AbstId = newAbstTableId++,
+                        ImportLog_Id = newImportId,
+                        Abst_Id = newAbstTableId++,
                         Name = x.Name.LocalName,
                         Value = x.Value,
                         recursionLevel = level,
                         Type = GetTypeInt("Attribute"),
                         ParentTableName = parentName,
-                        ParentId = parentId,
-                        AttrElemId = newId
+                        Parent_Id = Parent_Id,
+                        AttrElem_Id = newId
                     });
                 });
             }
@@ -155,8 +156,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
             //Now that we know which the Homo tables are, we must format their names too.
             db.Execute(";WITH HomoLeaves AS " +
                     "(SELECT [Name] AS TblName, recursionLevel, 1 AS IsHomoLeaf, ParentTableName " +
-                    "FROM AbstTable WHERE type = 0 AND parentId IN " +
-                    "   (SELECT ParentId FROM AbstTable GROUP BY ParentId HAVING count(parentId) > 1)	" +
+                    "FROM AbstTable WHERE type = 0 AND Parent_Id IN " +
+                    "   (SELECT Parent_Id FROM AbstTable GROUP BY Parent_Id HAVING count(Parent_Id) > 1)	" +
                     "GROUP BY [Name], recursionLevel, ParentTableName) " +
                 "UPDATE C SET [Name] = CONCAT ([Name], '_', C.recursionLevel, '-', C.ParentTableName) " +
                     "FROM AbstTable C JOIN HomoLeaves O ON C.recursionLevel = O.recursionLevel AND C.Name = O.TblName " +
@@ -165,11 +166,11 @@ namespace Speedbird.Areas.SBBoss.Controllers
             
             //Fetch the list of potential tables to create: Hetro union Homogeneous tables
             var tableDefs = db.Query<TableDef>($"select [Name] as TblName,recursionLevel, 0 as IsHomoLeaf, ParentTableName as ParentTblName  from AbstTable where ([type]={ (int)EnumFldType.ParentElement} or [type]={(int)EnumFldType.Root}) and " +
-                "AbstId in (Select distinct ParentId from AbstTable where type<>1) " + //1 is attributes 
-                "group by[Name], recursionLevel, ParentTableName" +
+                "Abst_Id in (Select distinct Parent_Id from AbstTable where type<>1) " + //1 is attributes 
+                "group by [Name], recursionLevel, ParentTableName" +
                 " UNION " +
-                $"select [Name] as TblName,recursionLevel, 1 as IsHomoLeaf, ParentTableName as ParentTblName from AbstTable where type={ (int)EnumFldType.Element} and parentId in " +
-                $"(select ParentId from AbstTable group by ParentId having count(parentId)>1 ) group by [Name], recursionLevel, ParentTableName").ToList();
+                $"select [Name] as TblName,recursionLevel, 1 as IsHomoLeaf, ParentTableName as ParentTblName from AbstTable where type={ (int)EnumFldType.Element} and Parent_Id in " +
+                $"(select Parent_Id from AbstTable group by Parent_Id having count(Parent_Id)>1 ) group by [Name], recursionLevel, ParentTableName").ToList();
 
             //Sometimes homoLeaf's PARENT tables dont have kids and so get re-added as homoleaf tables. Here below we remove those duplicate leaf tables
             var HetrotableDefs = tableDefs.Where(t => t.IsHomoLeaf==false).ToList();
@@ -177,29 +178,26 @@ namespace Speedbird.Areas.SBBoss.Controllers
             HomotableDefs = HomotableDefs.Except(HetrotableDefs, new TableDefEqualityComparer()).ToList();
             tableDefs = HetrotableDefs.Concat(HomotableDefs).ToList();
 
-            //Fetch the list of fields for each table //and then get the table parent
+            //Fetch the list of fields for each table 
             tableDefs.ForEach(t =>
             {
-                t.TblFields = db.Fetch<FieldLst>("select Name, Type, max(len([Value])) as MaxFieldLen from " +
+                t.TblFields = db.Fetch<FieldDef>("select Name, Type, max(len([Value])) as MaxFieldLen from " +
                 $"(select ISNULL(Name, '{t.TblName}') as Name, Type, Value from AbstTable where ParentTableName = '{t.TblName}' and recursionLevel = {t.RecursionLevel+ 1} " +//n + 1 for child elements
                 "union " +
-                $"select Name, Type, Value from AbstTable where AttrElemId in (select AbstId from AbstTable where Name = '{t.TblName}' and recursionLevel = {t.RecursionLevel})) as tmpTbl " + //n for attributes
+                $"select Name, Type, Value from AbstTable where AttrElem_Id in (select Abst_Id from AbstTable where Name = '{t.TblName}' and recursionLevel = {t.RecursionLevel})) as tmpTbl " + //n for attributes
                 "group by Name,Type " +
-                "having max(len([Value])) > 0");
-
-                //t.ParentTblName = db.ExecuteScalar<string>($"select top 1 CONCAT(ParentTableName,'_',{t.RecursionLevel - 1}) as ParentTableName from AbstTable where Name='{t.TblName}' and recursionLevel={t.RecursionLevel}");
+                "having max(len([Value])) > 0");                
             });
 
-            //Some Parents may have only other parents as their children. They have no leaf or attribute nodes. Hence dont make tables from them.
-            //Generate the Create Table statements
-            //tableDefs.Where(t => t.FieldCnt > 0).ToList().ForEach(t =>
+            
+            //Generate the Create Table statements            
             tableDefs.ToList().ForEach(t =>
             {
-                if (db.Query<string>($"select table_schema from INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME='{t.TblName}'").Count()==0)
+                if (db.Query<string>($"select table_schema from INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME='{t.TblName}'").Count()==0) //Ensure we dont try to make the same table twice (when importing multiple xmls)
                 {
-                    StringBuilder createSQL = new StringBuilder($"CREATE TABLE [{t.TblName}] (ImportLogId int NOT NULL, ");
+                    StringBuilder createSQL = new StringBuilder($"CREATE TABLE [{t.TblName}] (ImportLog_Id int NOT NULL, ");
 
-                    createSQL.Append($"[{t.TblName}Id] INT NOT NULL, PRIMARY KEY (ImporLogtId, [{t.TblName}Id]), "); //make composite PK
+                    createSQL.Append($"[{t.TblName}_Id] INT NOT NULL, PRIMARY KEY (ImportLog_Id, [{t.TblName}_Id]), "); //make composite PK
 
                     //Fill table fields
                     t.TblFields.ForEach(f =>
@@ -212,11 +210,27 @@ namespace Speedbird.Areas.SBBoss.Controllers
                     {
                         //string pureParentName = t.ParentTblName.Substring(0, t.ParentTblName.LastIndexOf('_'));
                         createSQL.Append($"[{t.ParentTblName}_Id] INT NULL, " +
-                            $" CONSTRAINT [FK_{t.TblName}-{t.ParentTblName}] FOREIGN KEY ([{t.ParentTblName}_Id]) REFERENCES [{t.ParentTblName}](ImportId,[{t.ParentTblName}Id]), " +
-                            $" CONSTRAINT [FK_{t.TblName}-ImportLog] FOREIGN KEY (ImportLogId) REFERENCES [ImportLog](ImportLogId)");
+                            $" CONSTRAINT [FK_{t.TblName}-{t.ParentTblName}] FOREIGN KEY (ImportLog_Id, [{t.ParentTblName}_Id]) REFERENCES [{t.ParentTblName}](ImportLog_Id, [{t.ParentTblName}_Id]), " +
+                            $" CONSTRAINT [FK_{t.TblName}-ImportLog] FOREIGN KEY (ImportLog_Id) REFERENCES [ImportLog](ImportLog_Id)");
                     }
                     createSQL.Append(" )"); //Closing bracket of create stmt
                     t.CreateSQL = createSQL.ToString(); 
+                } else //add new fields if any to the table
+                {
+                    //First fetch the existing fields in the table
+                    var fieldsInTable = db.Query<FieldDef>("select col.name as Name, (CASE t.name WHEN 'int' THEN 0 ELSE 1 END ) as Type,  col.max_length as MaxFieldLen " +
+                        "from sys.tables as tab inner join sys.columns as col on tab.object_id = col.object_id " +
+                        "left join sys.types as t on col.user_type_id = t.user_type_id " +
+                        $"where tab.name = '{t.TblName}' " +
+                        "order by col.name, Type").ToList();
+
+                    var newFields = t.TblFields.Except<FieldDef>(fieldsInTable, new FieldDefEqualityComparer()).ToList();  //make a list of only the new fields
+                    //fieldsInTable = fieldsInTable.Except<FieldDef>(t.TblFields, new FieldDefEqualityComparer());  //make a list of only the new fields
+
+                    foreach (var fld in newFields)
+                    {
+                        t.CreateSQL = $"ALTER TABLE {t.TblName} ADD {fld.Name} VARCHAR(MAX)";
+                    }
                 }
             });
 
@@ -236,32 +250,32 @@ namespace Speedbird.Areas.SBBoss.Controllers
             tableDefs.Where(t=>t.IsHomoLeaf==false).ToList().ForEach(t => {
 
                 //get the Ids of each row to be inserted
-                List<int> insIds = db.Query<int>($"SELECT distinct ParentId from AbstTable where recursionLevel={t.RecursionLevel + 1} and ParentTableName='{t.TblName}' ").ToList();
+                List<int> insIds = db.Query<int>($"SELECT distinct Parent_Id from AbstTable where recursionLevel={t.RecursionLevel + 1} and ParentTableName='{t.TblName}' ").ToList();
 
                 foreach (var id in insIds)
                 {
                     var insData = new Dictionary<string, string>();
-                    Debug.Print($"parentId={id} and type<>{(int)EnumFldType.ParentElement}");
+                    Debug.Print($"Parent_Id={id} and type<>{(int)EnumFldType.ParentElement}");
 
-                    if (db.Query<int>($"select COUNT(name) as Cont from AbstTable where parentId={id} and type<>{(int)EnumFldType.ParentElement} group by name having COUNT(name)>1").Any())
+                    if (db.Query<int>($"select COUNT(name) as Cont from AbstTable where Parent_Id={id} and type<>{(int)EnumFldType.ParentElement} group by name having COUNT(name)>1").Any())
                     {//This happens when there are many leaf elements of the same name under a parent
                         //first insert the parent's attributes. TODO: case when this type of parent has hetrogenous kids in addition to the homogeneous ones. 
-                        insData = db.Query<AbstTable>("select Name, Value from AbstTable where AttrElemId=ParentId and parentId=@0 and type<>@1", id, (int)EnumFldType.ParentElement).ToDictionary(key => key.Name ?? t.TblName, Val => Val.Value);
+                        insData = db.Query<AbstTable>("select Name, Value from AbstTable where AttrElem_Id=Parent_Id and Parent_Id=@0 and type<>@1", id, (int)EnumFldType.ParentElement).ToDictionary(key => key.Name ?? t.TblName, Val => Val.Value);
                         MakeInsertStmt(t, id, insData);
 
                         //Next take care of the homogeneous kids
-                        var homoLeafTbl = db.First<TableDef>("select distinct Name as TblName, RecursionLevel from AbstTable where parentId=" + id + " and AttrElemId is null");//Gets the homoleaf table name
+                        var homoLeafTbl = db.First<TableDef>("select distinct Name as TblName, RecursionLevel from AbstTable where Parent_Id=" + id + " and AttrElem_Id is null");//Gets the homoleaf table name
                         TableDef hlt = tableDefs.First(th => th.IsHomoLeaf == true && th.TblName == homoLeafTbl.TblName && th.RecursionLevel == homoLeafTbl.RecursionLevel);
 
-                        var homoInsIds = db.Query<int>($"select AbstId from AbstTable where parentId={id} and AttrElemId is null").ToList();
+                        var homoInsIds = db.Query<int>($"select Abst_Id from AbstTable where Parent_Id={id} and AttrElem_Id is null").ToList();
                         homoInsIds.ForEach (hi => {
-                            insData = db.Query<AbstTable>($"select * from AbstTable where parentId={id} and ParentId<>AttrElemId and AttrElemId={hi}").ToDictionary(key => key.Name ?? t.TblName, Val => Val.Value);
+                            insData = db.Query<AbstTable>($"select * from AbstTable where Parent_Id={id} and Parent_Id<>AttrElem_Id and AttrElem_Id={hi}").ToDictionary(key => key.Name ?? t.TblName, Val => Val.Value);
                             MakeInsertStmt(hlt, hi, insData);
                         }) ;
                     }
                     else
                     {
-                        insData = db.Query<AbstTable>("select Name, Value from AbstTable where parentId=@0 and type<>@1", id, (int)EnumFldType.ParentElement).ToDictionary(key => key.Name ?? t.TblName, Val => Val.Value);
+                        insData = db.Query<AbstTable>("select Name, Value from AbstTable where Parent_Id=@0 and type<>@1", id, (int)EnumFldType.ParentElement).ToDictionary(key => key.Name ?? t.TblName, Val => Val.Value);
                         MakeInsertStmt(t, id, insData);
                     }
                 }
@@ -279,7 +293,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
         private void MakeInsertStmt(TableDef t, int id, Dictionary<string, string> insData)
         {
-            StringBuilder insStmt = new StringBuilder($"INSERT INTO [{t.TblName}] (ImportId , [{t.TblName}Id], ");
+            StringBuilder insStmt = new StringBuilder($"INSERT INTO [{t.TblName}] (ImportLog_Id , [{t.TblName}_Id], ");
             StringBuilder insValues = new StringBuilder($" VALUES ({newImportId}, {id}, "); //Pk from original import table
 
             t.TblFields.ForEach(f =>
@@ -296,7 +310,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             else
             {
                 insStmt.Append($"[{t.ParentTblName}_Id])");
-                insValues.Append($"{db.Single<AbstTable>(id).ParentId})");//Fk from original import table
+                insValues.Append($"{db.Single<AbstTable>(id).Parent_Id})");//Fk from original import table
             }
             
             t.InsertSQL.Add(insStmt.Append(insValues.ToString()).ToString());
@@ -317,7 +331,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         }
 
 
-        public class FieldLst
+        public class FieldDef
         {
             public string Name { get; set; }
             public int Type { get; set; }
@@ -331,7 +345,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             public int RecursionLevel { get; set; }
             public string ParentTblName { get; set; }
             public int ParntTblId { get; set; }
-            public List<FieldLst> TblFields { get; set; }
+            public List<FieldDef> TblFields { get; set; }
             public int FieldCnt { get { return TblFields.Count; }  }
             public string CreateSQL { get; set; }
             public List<string> InsertSQL { get; set; }
@@ -354,6 +368,26 @@ namespace Speedbird.Areas.SBBoss.Controllers
             {
                 return obj.TblName.GetHashCode();
             }
+        }
+
+        public class FieldDefEqualityComparer : IEqualityComparer<FieldDef>
+        {
+            public bool Equals(FieldDef x, FieldDef y)
+            {                
+                return (y.Name == GetOriginalFldName(x));
+            }
+
+            private static string GetOriginalFldName(FieldDef y)
+            {
+                string ystr = y.Name;
+                return ystr.IndexOf('_') > 0 ? ystr.Substring(0, ystr.IndexOf('_')) : ystr;                
+            }
+
+            public int GetHashCode(FieldDef obj)
+            {
+                return GetOriginalFldName(obj).GetHashCode();
+            }
+
         }
 
         protected override void Dispose(bool disposing)
