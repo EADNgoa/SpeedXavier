@@ -16,6 +16,9 @@
         <author>j k. rowling</author>
         <year>2005</year>
         <price>29.99</price>
+		<Cilyon Cmake="8a">aom</Cilyon>
+		<Cilyon Cmake="7c">m</Cilyon>
+		<Cilyon Cmake="10a">com</Cilyon>
     </book>
     <book category="web">
         <title lang="en">xquery kick start</title>
@@ -29,7 +32,7 @@
         <author>Erik T. Ray</author>
         <price>
             <title lang="en">Learning XML</title>
-            <year>
+            <TextDad>
                 <book category="cooking">
                     <title lang="en">Everyday Italian</title>
                     <author>Giada De Laurentiis</author>
@@ -37,7 +40,7 @@
                     <price>30.00</price>
                 </book>
                 2003
-            </year>
+            </TextDad>
             <author>Erik T. Ray</author>
             39.95
         </price>

@@ -159,7 +159,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                     "FROM AbstTable WHERE type = 0 AND Parent_Id IN " +
                     "   (SELECT Parent_Id FROM AbstTable GROUP BY Parent_Id HAVING count(Parent_Id) > 1)	" +
                     "GROUP BY [Name], recursionLevel, ParentTableName, Parent_Id HAVING count(Name) > 1) " +
-                "UPDATE C SET [Name] = CONCAT ([Name], '_', C.recursionLevel, '-', C.ParentTableName) " +
+                $"UPDATE C SET Type={(int)EnumFldType.HomoElement}, [Name] = CONCAT ([Name], '_', C.recursionLevel, '-', C.ParentTableName) " +
                     "FROM AbstTable C JOIN HomoLeaves O ON C.recursionLevel = O.recursionLevel AND C.Name = O.TblName " +
                     "AND C.ParentTableName = O.ParentTableName and C.Parent_Id=O.Parent_Id");
 
@@ -169,7 +169,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 "Abst_Id in (Select distinct Parent_Id from AbstTable where type<>1) " + //1 is attributes 
                 "group by [Name], recursionLevel, ParentTableName" +
                 " UNION " +
-                $"select [Name] as TblName,recursionLevel, 1 as IsHomoLeaf, ParentTableName as ParentTblName from AbstTable where type={ (int)EnumFldType.Element} and Parent_Id in " +
+                $"select [Name] as TblName,recursionLevel, 1 as IsHomoLeaf, ParentTableName as ParentTblName from AbstTable where type={ (int)EnumFldType.HomoElement} and Parent_Id in " +
                 $"(select Parent_Id from AbstTable group by Parent_Id having count(Parent_Id)>1 ) group by [Name], recursionLevel, ParentTableName, Parent_Id HAVING count(Name) > 1").ToList();
 
             //Sometimes homoLeaf's PARENT tables dont have kids and so get re-added as homoleaf tables. Here below we remove those duplicate leaf tables
@@ -182,7 +182,9 @@ namespace Speedbird.Areas.SBBoss.Controllers
             tableDefs.ForEach(t =>
             {
                 t.TblFields = db.Fetch<FieldDef>("select Name, Type, max(len([Value])) as MaxFieldLen from " +
-                $"(select ISNULL(Name, '{t.TblName}') as Name, Type, Value from AbstTable where ParentTableName = '{t.TblName}' and recursionLevel = {t.RecursionLevel+ 1} " +//n + 1 for child elements
+                $"(select ISNULL(Name, '{t.TblName}') as Name, Type, Value from AbstTable where ParentTableName = '{t.TblName}' and recursionLevel = {t.RecursionLevel+ 1} and type<>{(int)EnumFldType.HomoElement} " + //n + 1 for child elements
+                $" 	and (AttrElem_Id is null or AttrElem_Id NOT in (select Abst_Id from AbstTable where type=5)) " +//exclude attributes of homo tables in fields of its parent
+                $"union select ISNULL(Name, '{t.TblName}') as Name, Type, Value from AbstTable where Name is null and type={(int)EnumFldType.Text} and ParentTableName = substring('{t.TblName}', 0, CHARINDEX('_', '{t.TblName}')) and recursionLevel = {t.RecursionLevel + 1} and type<>{(int)EnumFldType.HomoElement} " +
                 "union " +
                 $"select Name, Type, Value from AbstTable where AttrElem_Id in (select Abst_Id from AbstTable where Name = '{t.TblName}' and recursionLevel = {t.RecursionLevel})) as tmpTbl " + //n for attributes
                 "group by Name,Type " +
@@ -221,18 +223,17 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 } else //add new fields if any to the table
                 {
                     //First fetch the existing fields in the table
-                    var fieldsInTable = db.Query<FieldDef>("select col.name as Name, (CASE t.name WHEN 'int' THEN 0 ELSE 1 END ) as Type,  col.max_length as MaxFieldLen " +
+                    var fieldsInDBTable = db.Query<FieldDef>("select col.name as Name, (CASE t.name WHEN 'int' THEN 0 ELSE 1 END ) as Type,  col.max_length as MaxFieldLen " +
                         "from sys.tables as tab inner join sys.columns as col on tab.object_id = col.object_id " +
                         "left join sys.types as t on col.user_type_id = t.user_type_id " +
                         $"where tab.name = '{t.TblName}' " +
                         "order by col.name, Type").ToList();
 
-                    var newFields = t.TblFields.Except<FieldDef>(fieldsInTable, new FieldDefEqualityComparer()).ToList();  //make a list of only the new fields
-                    //fieldsInTable = fieldsInTable.Except<FieldDef>(t.TblFields, new FieldDefEqualityComparer());  //make a list of only the new fields
+                    var newFields = t.TblFields.Except<FieldDef>(fieldsInDBTable, new FieldDefEqualityComparer()).ToList();  //make a list of only the new fields                    
 
                     foreach (var fld in newFields)
                     {
-                        t.CreateSQL = $"ALTER TABLE {t.TblName} ADD {fld.Name} VARCHAR(MAX)";
+                        t.CreateSQL = $"ALTER TABLE {t.TblName} ADD {fld.Name}_{fld.Type} VARCHAR(MAX)";
                     }
                 }
             });
@@ -268,13 +269,17 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
                         //Next take care of the homogeneous kids
                         var homoLeafTbl = db.First<TableDef>("select distinct Name as TblName, RecursionLevel from AbstTable where Parent_Id=" + id + " and AttrElem_Id is null");//Gets the homoleaf table name
-                        TableDef hlt = tableDefs.First(th => th.IsHomoLeaf == true && th.TblName == homoLeafTbl.TblName && th.RecursionLevel == homoLeafTbl.RecursionLevel);
+                        TableDef hlt = tableDefs.FirstOrDefault(th => th.IsHomoLeaf == true && th.TblName == homoLeafTbl.TblName && th.RecursionLevel == homoLeafTbl.RecursionLevel);
 
-                        var homoInsIds = db.Query<int>($"select Abst_Id from AbstTable where Parent_Id={id} and AttrElem_Id is null").ToList();
-                        homoInsIds.ForEach (hi => {
-                            insData = db.Query<AbstTable>($"select * from AbstTable where Parent_Id={id} and Parent_Id<>AttrElem_Id and AttrElem_Id={hi}").ToDictionary(key => key.Name ?? t.TblName, Val => Val.Value);
-                            MakeInsertStmt(hlt, hi, insData);
-                        }) ;
+                        if (hlt!=null)
+                        {
+                            var homoInsIds = db.Query<int>($"select Abst_Id from AbstTable where Parent_Id={id} and AttrElem_Id is null").ToList();
+                            homoInsIds.ForEach(hi =>
+                            {
+                                insData = db.Query<AbstTable>($"select * from AbstTable where Parent_Id={id} and Parent_Id<>AttrElem_Id and AttrElem_Id={hi}").ToDictionary(key => key.Name ?? t.TblName, Val => Val.Value);
+                                MakeInsertStmt(hlt, hi, insData);
+                            }); 
+                        }
                     }
                     else
                     {
@@ -330,7 +335,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
             Attribute,
             Text,
             Root,
-            ParentElement
+            ParentElement,
+            HomoElement
         }
 
 
@@ -376,8 +382,9 @@ namespace Speedbird.Areas.SBBoss.Controllers
         public class FieldDefEqualityComparer : IEqualityComparer<FieldDef>
         {
             public bool Equals(FieldDef x, FieldDef y)
-            {                
-                return (y.Name == GetOriginalFldName(x));
+            {
+                var res = (GetOriginalFldName(y) == GetOriginalFldName(x));
+                return res;
             }
 
             private static string GetOriginalFldName(FieldDef y)
