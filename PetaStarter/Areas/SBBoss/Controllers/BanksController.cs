@@ -27,7 +27,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
         public ActionResult ImportXmlToSql()
         {
-            string fileForImport = @"http://localhost:53040/Eadtsx.xml";
+            string fileForImport = @"http://localhost:53040/Books.xml";
             //string fileForImport = @"http://localhost:53040/FileSystemTask.xml";
          
             XDocument doc = XDocument.Load(fileForImport);
@@ -155,13 +155,13 @@ namespace Speedbird.Areas.SBBoss.Controllers
             //The names of the hetro tables have already been put into the Name_Id_ParentName format when filling AbstTable.
             //Now that we know which the Homo tables are, we must format their names too.
             db.Execute(";WITH HomoLeaves AS " +
-                    "(SELECT [Name] AS TblName, recursionLevel, 1 AS IsHomoLeaf, ParentTableName " +
+                    "(SELECT [Name] AS TblName, recursionLevel, 1 AS IsHomoLeaf, ParentTableName, Parent_Id " +
                     "FROM AbstTable WHERE type = 0 AND Parent_Id IN " +
                     "   (SELECT Parent_Id FROM AbstTable GROUP BY Parent_Id HAVING count(Parent_Id) > 1)	" +
-                    "GROUP BY [Name], recursionLevel, ParentTableName) " +
+                    "GROUP BY [Name], recursionLevel, ParentTableName, Parent_Id HAVING count(Name) > 1) " +
                 "UPDATE C SET [Name] = CONCAT ([Name], '_', C.recursionLevel, '-', C.ParentTableName) " +
                     "FROM AbstTable C JOIN HomoLeaves O ON C.recursionLevel = O.recursionLevel AND C.Name = O.TblName " +
-                    "AND C.ParentTableName = O.ParentTableName");
+                    "AND C.ParentTableName = O.ParentTableName and C.Parent_Id=O.Parent_Id");
 
             
             //Fetch the list of potential tables to create: Hetro union Homogeneous tables
@@ -170,7 +170,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 "group by [Name], recursionLevel, ParentTableName" +
                 " UNION " +
                 $"select [Name] as TblName,recursionLevel, 1 as IsHomoLeaf, ParentTableName as ParentTblName from AbstTable where type={ (int)EnumFldType.Element} and Parent_Id in " +
-                $"(select Parent_Id from AbstTable group by Parent_Id having count(Parent_Id)>1 ) group by [Name], recursionLevel, ParentTableName").ToList();
+                $"(select Parent_Id from AbstTable group by Parent_Id having count(Parent_Id)>1 ) group by [Name], recursionLevel, ParentTableName, Parent_Id HAVING count(Name) > 1").ToList();
 
             //Sometimes homoLeaf's PARENT tables dont have kids and so get re-added as homoleaf tables. Here below we remove those duplicate leaf tables
             var HetrotableDefs = tableDefs.Where(t => t.IsHomoLeaf==false).ToList();
@@ -186,8 +186,11 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 "union " +
                 $"select Name, Type, Value from AbstTable where AttrElem_Id in (select Abst_Id from AbstTable where Name = '{t.TblName}' and recursionLevel = {t.RecursionLevel})) as tmpTbl " + //n for attributes
                 "group by Name,Type " +
-                "having max(len([Value])) > 0");                
+                "having max(len([Value])) > 0");
+
+                Debug.Print(db.LastSQL);
             });
+
 
             
             //Generate the Create Table statements            

@@ -5,7 +5,9 @@
     <facilities>Wifi</facilities>
     <book category="cooking">
         <title lang="en">everyday italian</title>
-        <author>giada de laurentiis</author>
+        <author>aom</author>
+		<author>m</author>
+		<author>com</author>
         <year>2005</year>
         <price>30.00</price>
     </book>
