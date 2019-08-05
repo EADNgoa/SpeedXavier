@@ -12,6 +12,7 @@ using System.Text;
 //using System.Web;
 using System.Web.Mvc;
 using System.Xml.Linq;
+using System.IO;
 
 namespace Speedbird.Areas.SBBoss.Controllers
 {
@@ -25,13 +26,43 @@ namespace Speedbird.Areas.SBBoss.Controllers
             this.db = new Repository(@"Data Source=(LocalDb)\MSSQLLocalDB;Initial Catalog=DtsxToSql;Integrated Security=True", "System.Data.SqlClient");
         }
 
-        public ActionResult ImportXmlToSql()
+        public string ImportFilesFromDir()
         {
-            string fileForImport = @"http://localhost:53040/Books.xml";
-            //string fileForImport = @"http://localhost:53040/FileSystemTask.xml";
+            var xmlPath = Server.MapPath(@"~/Dtsx/");
+            string[] xmlFiles = Directory.GetFiles(xmlPath, "*.xml");
+            var SuccessUpload = new List<string>();
+            var FailedUpload = new List<string>();
+
+            foreach (string xFile in xmlFiles)
+            {
+                try
+                {
+                    string fileName = xFile.Substring(xFile.LastIndexOf("\\") + 1);
+                    Debug.Print(fileName.PadRight(30, '*'));
+                    ImportXmlToSql(fileName);
+                    SuccessUpload.Add(fileName);
+                    
+                }
+                catch (Exception e)
+                {
+                    FailedUpload.Add(xFile.Substring(xFile.LastIndexOf("\\")) + " because " + e.Message);
+
+                }
+            }
+
+            string res = $"The following {SuccessUpload.Count} files were successfully uploaded: {String.Join(", \n ", SuccessUpload)} \n ";
+            if (FailedUpload.Count > 0)
+                res += $"Errrors were encountered uploading the following {FailedUpload.Count} files: {String.Join(", \n", FailedUpload)} ";
+            return res;
+        }
+
+        public void ImportXmlToSql(string xFile)
+        {
+            string fileForImport = @"http://localhost:53040/Dtsx/"+ xFile;
+            
          
             XDocument doc = XDocument.Load(fileForImport);
-            fileForImport = fileForImport.TrimStart(@"http://localhost:53040/".ToCharArray());
+            fileForImport = fileForImport.TrimStart(@"http://localhost:53040/Dtsx/".ToCharArray());
             newImportId = int.Parse(db.Insert(new ImportLog() { FileName = fileForImport, ImportDate = DateTime.UtcNow }).ToString());
             newAbstTableId = 1;
             
@@ -58,7 +89,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 Debug.Write(e.Message);
                 throw e;
             }
-            return Json(new object() , JsonRequestBehavior.AllowGet);
+            
         }
         
         public void EAXmlDig(XElement input, int level, int Parent_Id)
@@ -193,7 +224,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 "group by Name,Type " +
                 "having max(len([Value])) > 0");
 
-                Debug.Print(db.LastSQL);
+                //Debug.Print(db.LastSQL);
             });
 
 
@@ -236,16 +267,24 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
                     foreach (var fld in newFields)
                     {
-                        t.CreateSQL = $"ALTER TABLE {t.TblName} ADD {fld.Name}_{fld.Type} VARCHAR(MAX)";
+                        t.AlterSQL.Add($"ALTER TABLE [{t.TblName}] ADD [{fld.Name}_{fld.Type}] VARCHAR(MAX)");
                     }
                 }
             });
 
             //With our statements ready, lets now make our tables
             tableDefs.OrderBy(o=>o.RecursionLevel).ToList().ForEach(t => {
-                Debug.Print(t.CreateSQL);
                 if (t.CreateSQL != null)
-                { db.Execute(t.CreateSQL); }
+                {
+                    Debug.Print(t.CreateSQL);
+                    db.Execute(t.CreateSQL);
+
+                }
+                t.AlterSQL.ForEach(sq =>
+                {
+                    Debug.Print(sq);
+                    db.Execute(sq);
+                });
             });
 
             return tableDefs;
@@ -262,7 +301,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 foreach (var id in insIds)
                 {
                     var insData = new Dictionary<string, string>();
-                    Debug.Print($"Parent_Id={id} and type<>{(int)EnumFldType.ParentElement}");
+                    //Debug.Print($"Parent_Id={id} and type<>{(int)EnumFldType.ParentElement}");
 
                     if (db.Query<int>($"select COUNT(name) as Cont from AbstTable where Parent_Id={id} and type<>{(int)EnumFldType.ParentElement} group by name having COUNT(name)>1").Any())
                     {//This happens when there are many leaf elements of the same name under a parent
@@ -367,10 +406,12 @@ namespace Speedbird.Areas.SBBoss.Controllers
             public int FieldCnt { get { return TblFields.Count; }  }
             public string CreateSQL { get; set; }
             public List<string> InsertSQL { get; set; }
+            public List<string> AlterSQL { get; set; }
 
             public TableDef()
             {
                 InsertSQL = new List<string>();
+                AlterSQL = new List<string>();
             }
         }
 
