@@ -16,15 +16,21 @@
         <author>j k. rowling</author>
         <year>2005</year>
         <price>29.99</price>
-		<Cilyon Cmake="8a">aom</Cilyon>
-		<Cilyon Cmake="7c">m</Cilyon>
-		<Cilyon Cmake="10a">com</Cilyon>
+		<Cilyon lompr = "y" Cmake="8a">aom</Cilyon>
+		<Cilyon lompr = "x" Cmake="7c">m</Cilyon>
+		<Cilyon lompr = "z" Cmake="10a">com</Cilyon>
     </book>
     <book category="web">
         <title lang="en">xquery kick start</title>
         <author>james mcgovern</author>
         <year>2003</year>
         <price>49.99</price>
+		<paloma>
+			<abc>10</abc>
+		</paloma>
+		<loma dog="top">
+			<ac>10</ac>
+		</loma>
     </book>
 
     <book category="web" cover="paperback">
@@ -33,12 +39,12 @@
         <price>
             <title lang="en">Learning XML</title>
             <TextDad>
-                <book category="cooking">
+                <booke category="cooking">
                     <title lang="en">Everyday Italian</title>
                     <author>Giada De Laurentiis</author>
                     <year>2005</year>
                     <price>30.00</price>
-                </book>
+                </booke>
                 2003
             </TextDad>
             <author>Erik T. Ray</author>
@@ -52,21 +58,21 @@
         <price>
             <title lang="en">Learning XML</title>
             <Year>
-                <book category="cooking">
+                <yrbook category="cooking">
                     <title lang="en">Everyday Italian</title>
                     <author>Giada De Laurentiis</author>
                     <year>2005</year>
                     <price>30.00</price>
-                </book>
+                </yrbook>
                 2003
             </Year>
             <Year>
-                <book category="Tcookingcooking">
+                <yrbook category="Tcookingcooking">
                     <title lang="en">TTT Everyday Italian</title>
                     <author>TTT De Laurentiis</author>
                     <year>3005</year>
                     <price>31.00</price>
-                </book>
+                </yrbook>
                 3003
             </Year>
             <author>Erik T. Ray</author>

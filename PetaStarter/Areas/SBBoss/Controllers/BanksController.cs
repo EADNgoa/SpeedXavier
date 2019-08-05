@@ -178,6 +178,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
             HomotableDefs = HomotableDefs.Except(HetrotableDefs, new TableDefEqualityComparer()).ToList();
             tableDefs = HetrotableDefs.Concat(HomotableDefs).ToList();
 
+
+
             //Fetch the list of fields for each table 
             tableDefs.ForEach(t =>
             {
@@ -185,6 +187,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 $"(select ISNULL(Name, '{t.TblName}') as Name, Type, Value from AbstTable where ParentTableName = '{t.TblName}' and recursionLevel = {t.RecursionLevel+ 1} and type<>{(int)EnumFldType.HomoElement} " + //n + 1 for child elements
                 $" 	and (AttrElem_Id is null or AttrElem_Id NOT in (select Abst_Id from AbstTable where type=5)) " +//exclude attributes of homo tables in fields of its parent
                 $"union select ISNULL(Name, '{t.TblName}') as Name, Type, Value from AbstTable where Name is null and type={(int)EnumFldType.Text} and ParentTableName = substring('{t.TblName}', 0, CHARINDEX('_', '{t.TblName}')) and recursionLevel = {t.RecursionLevel + 1} and type<>{(int)EnumFldType.HomoElement} " +
+                $"union select '{t.TblName}' as Name, Type, Value from AbstTable where ParentTableName='{t.ParentTblName}' and type={(int)EnumFldType.HomoElement} and recursionLevel={t.RecursionLevel} " +//to store the text value in Homofield
                 "union " +
                 $"select Name, Type, Value from AbstTable where AttrElem_Id in (select Abst_Id from AbstTable where Name = '{t.TblName}' and recursionLevel = {t.RecursionLevel})) as tmpTbl " + //n for attributes
                 "group by Name,Type " +
@@ -263,21 +266,27 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
                     if (db.Query<int>($"select COUNT(name) as Cont from AbstTable where Parent_Id={id} and type<>{(int)EnumFldType.ParentElement} group by name having COUNT(name)>1").Any())
                     {//This happens when there are many leaf elements of the same name under a parent
-                        //first insert the parent's attributes. TODO: case when this type of parent has hetrogenous kids in addition to the homogeneous ones. 
-                        insData = db.Query<AbstTable>("select Name, Value from AbstTable where AttrElem_Id=Parent_Id and Parent_Id=@0 and type<>@1", id, (int)EnumFldType.ParentElement).ToDictionary(key => key.Name ?? t.TblName, Val => Val.Value);
+                        //first insert the parent's data. TODO: case when this type of parent has hetrogenous kids in addition to the homogeneous ones.                         
+                        insData=db.Query<AbstTable>("select Name, Value from AbstTable where Parent_Id=@0 and type<>@1 and type<>@2 " +
+                            "and (AttrElem_Id is null or AttrElem_Id not in (select Abst_Id from AbstTable where Parent_Id=@0 and Type=@2))", //exclude attributes of homo child tables
+                            id, (int)EnumFldType.ParentElement, (int)EnumFldType.HomoElement).ToDictionary(key => key.Name ?? t.TblName, Val => Val.Value);
                         MakeInsertStmt(t, id, insData);
 
                         //Next take care of the homogeneous kids
-                        var homoLeafTbl = db.First<TableDef>("select distinct Name as TblName, RecursionLevel from AbstTable where Parent_Id=" + id + " and AttrElem_Id is null");//Gets the homoleaf table name
+                        var homoLeafTbl = db.First<TableDef>($"select distinct Name as TblName, RecursionLevel from AbstTable where type={(int)EnumFldType.HomoElement} and Parent_Id={id} and AttrElem_Id is null");//Gets the homoleaf table name
                         TableDef hlt = tableDefs.FirstOrDefault(th => th.IsHomoLeaf == true && th.TblName == homoLeafTbl.TblName && th.RecursionLevel == homoLeafTbl.RecursionLevel);
 
                         if (hlt!=null)
                         {
-                            var homoInsIds = db.Query<int>($"select Abst_Id from AbstTable where Parent_Id={id} and AttrElem_Id is null").ToList();
+                            var homoInsIds = db.Query<AbstTable>($"select * from AbstTable where Parent_Id={id} and AttrElem_Id is null and Name = '{hlt.TblName}'").ToList();
                             homoInsIds.ForEach(hi =>
                             {
-                                insData = db.Query<AbstTable>($"select * from AbstTable where Parent_Id={id} and Parent_Id<>AttrElem_Id and AttrElem_Id={hi}").ToDictionary(key => key.Name ?? t.TblName, Val => Val.Value);
-                                MakeInsertStmt(hlt, hi, insData);
+                                insData.Clear();
+
+                                //Fetch its attributes
+                                insData =db.Query<AbstTable>($"select * from AbstTable where Parent_Id={id} and Parent_Id<>AttrElem_Id and AttrElem_Id={hi.Abst_Id}").ToDictionary(key => key.Name ?? t.TblName, Val => Val.Value);
+                                insData.Add(hi.Name, hi.Value??"");//the value of the homo leaf
+                                MakeInsertStmt(hlt, hi.Abst_Id, insData);
                             }); 
                         }
                     }
