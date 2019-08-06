@@ -28,7 +28,7 @@
                 <td>@Model.NoOfVehicles</td>
                 <td>@(Model.FromLoc.ToUpper())</td>
                 <td>@Model.PickUpPoint</td>
-                <td>@Model.PickupTime.EAFormat(withTime:true)</td>
+                <td>@Model.PickupTime.EAFormatTime(withTime:true)</td>
                 <td>@(Model.ToLoc.ToUpper())</td>
                 <td>@Model.DropPoint</td>
                 <td>@((CarTypeEnum)Model.cartype)</td>
@@ -137,12 +137,7 @@
             changeYear: true
         });
 
-        $('.eadatetime').datetimepicker({
-            dateFormat: "dd-MM-yy",
-            ampm: true,
-            timeFormat: "dd-MM-yy hh:mm:ss tt"
-            
-        });
+
         //Disable the browsers default date picker
         jQuery.validator.methods["date"] = function (value, element) { return true; }
 

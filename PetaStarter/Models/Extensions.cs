@@ -33,6 +33,21 @@ namespace Speedbird
             return dt.HasValue ? ((DateTime)dt).EAFormat(withTime, forSQL) : "";
         }
 
+        //Extension method for Time
+        public static string EAFormatTime(this DateTime dt, bool withTime = false, bool forSQL = false)
+        {
+            string strfmt = "";
+            strfmt += (withTime) ? " hh:mm:ss tt" : "";
+
+            return dt.ToString(strfmt);
+        }
+
+        public static string EAFormatTime(this DateTime? dt, bool withTime = false, bool forSQL = false)
+        {
+            return dt.HasValue ? ((DateTime)dt).EAFormat(withTime, forSQL) : "";
+        }
+
+
 
 
         //Extension method for decimal
