@@ -15,6 +15,11 @@ using static PetaStarter.Areas.SBBoss.Models.DataTablesModels;
 using System.Collections;
 using KellermanSoftware.CompareNetObjects;
 using PetaPoco;
+using System.Text;
+using System.Collections.Specialized;
+using System.IO;
+using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace Speedbird.Areas.SBBoss.Controllers
 {
@@ -712,11 +717,24 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
                 SRDetails.IsCanceled = true;
                 LogAction(new SRlog { SRID = item.SRID, SRDID = item.SRDID, Event = $"Refund of {refundAmt} given for {SRDetails.ServiceTypeName}: {item.SRDID} . Supplier refund amount is {supOwedAmt}" });
+
+                var client = new HttpClient();
+                client.BaseAddress = new Uri("https://paynetzuat.atomtech.in/paynetz/rfts");
+                var responseTask = client.GetAsync("student");
+                responseTask.Wait();
+
+                var result = responseTask.Result;
+
+
                 transaction.Complete();
-                return RedirectToAction("Manage", new { id = item.SRID, mode = 5 });
+                return Redirect("https://paynetzuat.atomtech.in/paynetz/rfts");
+
+                //return RedirectToAction("Manage", new { id = item.SRID, mode = 5 });
             }
 
         }
+
+        
 
         [EAAuthorize(FunctionName = "Service Requests", Writable = true)]
         public ActionResult SRCustomers(int? id, int? sid, int? EID, int? cid)

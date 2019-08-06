@@ -18,6 +18,13 @@ namespace Speedbird
         public string value { get; set; }
     }
 
+    public class ServiceCustomervw
+    {
+        public string FullName { get; set; }
+        public string Email { get; set; }
+        public string Phone { get; set; }
+    }
+
     public class AtomResponse
     {
         public string postingmmp_txn { get; set; }

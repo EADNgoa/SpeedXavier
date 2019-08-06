@@ -10,18 +10,26 @@
     }
 </style>
 
-    <div id="SRDetTbl">
-        @foreach(var sd in (IEnumerable<Speedbird.SRdetail>) ViewBag.SRDets)
-        {
-        <div class="h3">@sd.SRDID : @(((Speedbird.ServiceTypeEnum)sd.ServiceTypeID).ToString())</div>
-            @Html.Action("FetchSRdetails", "SR", new { sType = (Speedbird.ServiceTypeEnum) sd.ServiceTypeID, srdid = sd.SRDID })
-        }
-    </div>
+<div id="SRDetTbl">
+    
+    @foreach (var sd in (IEnumerable<Speedbird.SRdetail>)ViewBag.SRDets)
+    {
+        <div class="h3">@sd.SRDID : @(((Speedbird.ServiceTypeEnum)sd.ServiceTypeID).ToString())&nbsp;<input type="button" id="refund" class="btn btn-primary" value="Refund" /></div>
+        @Html.Action("FetchSRdetails", "SR", new { sType = (Speedbird.ServiceTypeEnum)sd.ServiceTypeID, srdid = sd.SRDID })
+
+    }
+
+</div>
 
     <script type="text/javascript">
         $(function () {
             $(".UploadedFile").on("change", function () {
                 $("#ServiceDetsUpld-" + $(this).data("uf")).submit();
+            });
+
+            $("#refund_box").hide();
+            $("#refund").on("click", function () {
+                $("#refund_box").toggle();
             });
         });
     </script>

@@ -191,7 +191,7 @@
             <img class="d-block img-fluid" src="/Images/c5.jpg" alt="Third slide">
         </div>*@
 
-
+        @Html.Hidden("SRID", (int?)ViewBag.SRID)
         <div class="carousel-caption d-none d-md-block">
             <center>
                 <h1 class="item-1">How can we help?</h1>
@@ -331,6 +331,9 @@
         window.location.href = "/Home/LoadPackages/?st=Packages&LocId=" + DestValues[0];
     });
 
+    $(function () {
+        $.post('@Url.Action("Cart","Cart")', { SRID: @ViewBag.SRID})
+    });
 
 </script>
 

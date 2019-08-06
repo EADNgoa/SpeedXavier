@@ -342,13 +342,14 @@
                 <div class="cart-banners"><div class="title">Shopping Cart Contents <a class="cart-banners-btn">Add Others</a></div></div>
                 <div class="card" id="card">
                     <div class="card-body" id="card-body">
-              
+
                         <div class="container-fluid">
                             @{ decimal total = 0; }
                             @{ decimal discountedtotal = 0; }
                             @foreach (var item in Model)
                             {
                                 @Html.Hidden("CartID", item.CartID)
+
                                 <div class="row">
                                     <div class="col-md-5">
                                         <img src="/Images/@item.Pic" style="width:100%;height:330px; margin: 16px 0 0 0; border-top: 1px solid #00afec;" />
@@ -467,167 +468,172 @@
                 </div>
                 <div class="container-fluid">
                     @*@using (Html.BeginForm("PaymentIntegrate", "Cart", FormMethod.Post))
-                        {*@
+                    {*@
                     <div class="row">
                         @*<div class="item-banners" style="color:white; background-color:#009ee0 !important; text-align:left;padding-right:20px;font-weight:normal;">
-                                <div class="title">BILLING INFORMATION</div>
-                            </div>
-                            <table class="table">
-                                <tr>
-                                    <th class="paylabel">
-                                        @Html.Label("First Name", htmlAttributes: new { @class = "control-label " })
-                                    </th>
-                                    <td class="">
-                                        <input type="text" class="form-control col-md-6 payform" name="fname" />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th class="paylabel">
-                                        @Html.Label("Surname", htmlAttributes: new { @class = "control-label " })
-                                    </th>
-                                    <td class="">
-                                        <input type="text" class="form-control col-md-6 payform" name="" />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th class="paylabel">
-                                        @Html.Label("Country", htmlAttributes: new { @class = "control-label " })
-                                    </th>
-                                    <td class="">
-                                        <input type="text" class="form-control col-md-6 payform" name="" />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th class="paylabel">
-                                        @Html.Label("Address 1", htmlAttributes: new { @class = "control-label " })
-                                    </th>
-                                    <td class="">
-                                        <input type="text" class="form-control col-md-6 payform" name="" />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th class="paylabel">
-                                        @Html.Label("City", htmlAttributes: new { @class = "control-label " })
-                                    </th>
-                                    <td class="">
-                                        <input type="text" class="form-control col-md-6 payform" name="" />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th class="paylabel">
-                                        @Html.Label("State", htmlAttributes: new { @class = "control-label " })
-                                    </th>
-                                    <td class="">
-                                        <input type="text" class="form-control col-md-6 payform" name="" />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th class="paylabel">
-                                        @Html.Label("Zip Code", htmlAttributes: new { @class = "control-label " })
-                                    </th>
-                                    <td class="">
-                                        <input type="text" class="form-control col-md-6 payform" name="" />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th class="paylabel">
-                                        @Html.Label("Telephone", htmlAttributes: new { @class = "control-label " })
-                                    </th>
-                                    <td class="">
-                                        <input type="text" class="form-control col-md-6 payform" name="" />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th class="paylabel">
-                                        @Html.Label("Email-Address", htmlAttributes: new { @class = "control-label " })
-                                    </th>
-                                    <td class="">
-                                        <input type="text" class="form-control col-md-6 payform" name="" />
-                                    </td>
-                                </tr>
-                            </table>
-                            <div class="item-banners" style="color:white; background-color:#009ee0 !important; text-align:left;padding-right:20px;font-weight:normal;">
-                                <div class="title">PAYMENT </div>
-                            </div>
-                            <table class="table">
-                                <tr>
-                                    <th class="paylabel">
-                                        @Html.Label("Credit Card", htmlAttributes: new { @class = "control-label " })
-                                    </th>
-                                    <td class="form-inline">
-                                        <input type="radio" class="form-control col-md-2 " name="" style="zoom:1.5;" />
-                                        <img src="/Images/visa.gif" style="float:left;" />
-                                        <img src="/Images/mastercard.gif" style="float:left;" />
-                                        <img src="/Images/amex.gif" style="float:left;" />
-                                    </td>
+            <div class="title">BILLING INFORMATION</div>
+        </div>
+        <table class="table">
+            <tr>
+                <th class="paylabel">
+                    @Html.Label("First Name", htmlAttributes: new { @class = "control-label " })
+                </th>
+                <td class="">
+                    <input type="text" class="form-control col-md-6 payform" name="fname" />
+                </td>
+            </tr>
+            <tr>
+                <th class="paylabel">
+                    @Html.Label("Surname", htmlAttributes: new { @class = "control-label " })
+                </th>
+                <td class="">
+                    <input type="text" class="form-control col-md-6 payform" name="" />
+                </td>
+            </tr>
+            <tr>
+                <th class="paylabel">
+                    @Html.Label("Country", htmlAttributes: new { @class = "control-label " })
+                </th>
+                <td class="">
+                    <input type="text" class="form-control col-md-6 payform" name="" />
+                </td>
+            </tr>
+            <tr>
+                <th class="paylabel">
+                    @Html.Label("Address 1", htmlAttributes: new { @class = "control-label " })
+                </th>
+                <td class="">
+                    <input type="text" class="form-control col-md-6 payform" name="" />
+                </td>
+            </tr>
+            <tr>
+                <th class="paylabel">
+                    @Html.Label("City", htmlAttributes: new { @class = "control-label " })
+                </th>
+                <td class="">
+                    <input type="text" class="form-control col-md-6 payform" name="" />
+                </td>
+            </tr>
+            <tr>
+                <th class="paylabel">
+                    @Html.Label("State", htmlAttributes: new { @class = "control-label " })
+                </th>
+                <td class="">
+                    <input type="text" class="form-control col-md-6 payform" name="" />
+                </td>
+            </tr>
+            <tr>
+                <th class="paylabel">
+                    @Html.Label("Zip Code", htmlAttributes: new { @class = "control-label " })
+                </th>
+                <td class="">
+                    <input type="text" class="form-control col-md-6 payform" name="" />
+                </td>
+            </tr>
+            <tr>
+                <th class="paylabel">
+                    @Html.Label("Telephone", htmlAttributes: new { @class = "control-label " })
+                </th>
+                <td class="">
+                    <input type="text" class="form-control col-md-6 payform" name="" />
+                </td>
+            </tr>
+            <tr>
+                <th class="paylabel">
+                    @Html.Label("Email-Address", htmlAttributes: new { @class = "control-label " })
+                </th>
+                <td class="">
+                    <input type="text" class="form-control col-md-6 payform" name="" />
+                </td>
+            </tr>
+        </table>
+        <div class="item-banners" style="color:white; background-color:#009ee0 !important; text-align:left;padding-right:20px;font-weight:normal;">
+            <div class="title">PAYMENT </div>
+        </div>
+        <table class="table">
+            <tr>
+                <th class="paylabel">
+                    @Html.Label("Credit Card", htmlAttributes: new { @class = "control-label " })
+                </th>
+                <td class="form-inline">
+                    <input type="radio" class="form-control col-md-2 " name="" style="zoom:1.5;" />
+                    <img src="/Images/visa.gif" style="float:left;" />
+                    <img src="/Images/mastercard.gif" style="float:left;" />
+                    <img src="/Images/amex.gif" style="float:left;" />
+                </td>
 
-                                </tr>
-                                <tr>
-                                    <th class="paylabel">
-                                        @Html.Label("Pay With Paypal", htmlAttributes: new { @class = "control-label " })
-                                    </th>
-                                    <td class="form-inline">
-                                        <input type="radio" class="form-control col-md-2 payform" name="" style="zoom:1.5; " />
-                                        <img src="/Images/paypal.png" style="float:left;width:70px;height:55px;" />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th class="paylabel">
-                                        @Html.Label("Card Owner", htmlAttributes: new { @class = "control-label " })
-                                    </th>
-                                    <td class="">
-                                        <input type="text" class="form-control col-md-6 payform" name="" />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th class="paylabel">
-                                        @Html.Label("Card Number", htmlAttributes: new { @class = "control-label " })
-                                    </th>
-                                    <td class="">
-                                        <input type="text" class="form-control col-md-6 payform" name="" />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th class="paylabel">
-                                        @Html.Label("Expiration", htmlAttributes: new { @class = "control-label " })
-                                    </th>
-                                    <td class="form-inline" colspan="4">
-                                        <input type="text" class="form-control " style="width:50px !important" name="" />&nbsp;/&nbsp;
-                                        <input type="text" class=" form-control" name="" style="width:50px !important" />
+            </tr>
+            <tr>
+                <th class="paylabel">
+                    @Html.Label("Pay With Paypal", htmlAttributes: new { @class = "control-label " })
+                </th>
+                <td class="form-inline">
+                    <input type="radio" class="form-control col-md-2 payform" name="" style="zoom:1.5; " />
+                    <img src="/Images/paypal.png" style="float:left;width:70px;height:55px;" />
+                </td>
+            </tr>
+            <tr>
+                <th class="paylabel">
+                    @Html.Label("Card Owner", htmlAttributes: new { @class = "control-label " })
+                </th>
+                <td class="">
+                    <input type="text" class="form-control col-md-6 payform" name="" />
+                </td>
+            </tr>
+            <tr>
+                <th class="paylabel">
+                    @Html.Label("Card Number", htmlAttributes: new { @class = "control-label " })
+                </th>
+                <td class="">
+                    <input type="text" class="form-control col-md-6 payform" name="" />
+                </td>
+            </tr>
+            <tr>
+                <th class="paylabel">
+                    @Html.Label("Expiration", htmlAttributes: new { @class = "control-label " })
+                </th>
+                <td class="form-inline" colspan="4">
+                    <input type="text" class="form-control " style="width:50px !important" name="" />&nbsp;/&nbsp;
+                    <input type="text" class=" form-control" name="" style="width:50px !important" />
 
-                                    </td>
+                </td>
 
-                                </tr>
+            </tr>
 
-                                <tr>
-                                    <td>
-                                        <br />
+            <tr>
+                <td>
+                    <br />
 
-                                        <input type="checkbox" name="act" value="" class="form-check-inline" style="zoom:1.5;">
+                    <input type="checkbox" name="act" value="" class="form-check-inline" style="zoom:1.5;">
 
-                                    </td>
-                                    <td style="font-size:20px">
+                </td>
+                <td style="font-size:20px">
 
-                                        I have read and accept ItalyXP's Terms and Conditions<br /> and the Privacy Policy.
-                                    </td>
-                                </tr>
+                    I have read and accept ItalyXP's Terms and Conditions<br /> and the Privacy Policy.
+                </td>
+            </tr>
 
-                            </table>
+        </table>
 
-                            <div id="total-block">
-                                <div class="price" style=" padding-right:250px!important;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">
-                                    @if (ViewBag.Amt != null)
-                                    {
-                                        @(ViewBag.Amt)
-                                    }
-                                    else
-                                    {
-                                        @(total)
-                                    }
-                                </div>
-                            </div>*@
+        <div id="total-block">
+            <div class="price" style=" padding-right:250px!important;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">
+                @if (ViewBag.Amt != null)
+                {
+                    @(ViewBag.Amt)
+                }
+                else
+                {
+                    @(total)
+                }
+            </div>
+        </div>*@
                         <br /><br />
-                        <button id="paybtn" class="paybtn" type="submit">CLICK TO PAY</button>
+                        @Html.Hidden("CustomerId", (int?)ViewBag.CustId)
+                        @using (Html.BeginForm("PaymentIntegrate", "Cart", FormMethod.Post, new { CustID = ViewBag.CustId }))
+                        {
+
+                            <button id="paybtn" class="paybtn" type="submit">CLICK TO PAY</button>
+                        }
                     </div>
                     @*}*@
                 </div>
@@ -701,10 +707,9 @@
             });
         });
 
-        $('.paybtn').click(function (e) {
-            e.preventDefault();
-            $.post('@Url.Action("PaymentIntegrate","Cart")');
-            });
+        @*$('.paybtn').click(function () {
+            $.post('@Url.Action("PaymentIntegrate","Cart")', { ServiceRequestId: @ViewBag.ServiceRequestId, CustId : @ViewBag.CustId});
+            });*@
 
         });
 

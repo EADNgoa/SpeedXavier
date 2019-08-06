@@ -12,7 +12,7 @@ namespace Speedbird.Controllers
 {
     public class CartController : EAController
     {
-        public ActionResult Cart()
+        public ActionResult Cart(int? SRID)
         {
             var CartItems = db.Query<CartDets>("Select * from Cart c Where Id= @0", (string)User.Identity.GetUserId()).ToList();
             CartItems.ForEach(c =>
@@ -35,10 +35,10 @@ namespace Speedbird.Controllers
                 }
 
                 //ViewBag.DiscountedTotal = db.ExecuteScalar<decimal>("Select Sum(DiscountedPrice) as DiscountedPrice from Cart Where Id=@0", (string)User.Identity.GetUserId());
-
+              
             });
-            
 
+            ViewBag.SRID = (int)SRID;
             return View(CartItems);
         }
 
@@ -82,7 +82,7 @@ namespace Speedbird.Controllers
                 if (CustomerID == null)
                 {
                     var cust = new Customer { FName = fname, SName = sname, Email = email, Phone = phno };
-
+            
                     if (UploadedFile != null)
                     {
                         string fn = UploadedFile.FileName.Substring(UploadedFile.FileName.LastIndexOf('\\') + 1);
@@ -100,6 +100,7 @@ namespace Speedbird.Controllers
                 {
                     db.Execute($"Update Customer Set FName='{fname}',SName='{sname}',Phone={phno} where CustomerID={CustomerID}");
                 }
+               
                 return RedirectToAction("Cart");
             }
             if (chckbtn == "Query")
@@ -124,6 +125,7 @@ namespace Speedbird.Controllers
                     // var cust = new ServiceRequest { FName = fname, SName = sname, Email = email, Phone = phno,_Query=Query,ServiceID=ServiceID,ServiceTypeID=ServiceTypeID ,CheckIn=CheckIn,CheckOut=CheckOut,NoPax=nums,Qty=Qty,Tdate=DateTime.Now, Glang=Glang, Gtime=Gtime,ServiceName=ServiceName};
                     var sr = new ServiceRequest { BookingTypeID = (int)BookingTypeEnum.Online, EnquirySource = (int)EnquirySourceEnum.Web, ServiceTypeID = ServiceTypeID, PayStatusID = (int)PayType.Not_Paid, SRStatusID = (int)SRStatusEnum.Unconfirmed };
 
+
                     var cust = new Customer { FName = fname, SName = sname, Email = email, Phone = phno };
                     if (UploadedFile != null)
                     {
@@ -135,6 +137,7 @@ namespace Speedbird.Controllers
                     }
                     db.Insert(cust);
                     sr.CustID = cust.CustomerID;
+
                     db.Insert(sr);
                     db.Insert(new SRdetail
                     {
@@ -148,9 +151,10 @@ namespace Speedbird.Controllers
                         AdultNo = nums,
                     });
                     db.Insert(new SR_Cust { ServiceRequestID = sr.SRID, CustomerID = cust.CustomerID });
+                    ViewBag.ServiceRequestId = sr.SRID;
                 }
             }
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Home", new { SRID = ViewBag.ServiceRequestId });
         }
 
         private string SaveImage(Sql sql, string v, int customerID, HttpPostedFileBase uploadedFile)
@@ -221,7 +225,7 @@ namespace Speedbird.Controllers
         //}
 
         [HttpPost]
-        public ActionResult PaymentIntegrate()
+        public ActionResult PaymentIntegrate(int? ServiceRequestId, int? CustId)
         {
 
             decimal amt = 0;
@@ -241,41 +245,39 @@ namespace Speedbird.Controllers
                     amt = Amount;
                 }
             }
-           
 
-            string ProductID = "NSE";
-            string TransactionServiceCharge = "0";
-            var config = db.Query<Config>("Select * from Config");
-            foreach (var product in config)
-            {
-                if (product.ProductId == "NSE")
-                {
-                    ProductID = "NSE";
-                }
-                else
-                {
-                    ProductID = "CSE";
-                }
+            var productid = db.FirstOrDefault<Config>("Select ProductId from Config");
+            var transcharge = db.FirstOrDefault<Config>("Select TransServiceCharge from Config");
 
-                TransactionServiceCharge = "0";
-            }
+            //var customer = db.SingleOrDefault<ServiceCustomervw>("select FName,CONCAT(cu.FName, ' ', cu.SName) as FullName, cu.Email, cu.Phone,src.IsLead from ServiceRequest srq " +
+            //    "left join Customer cu on cu.CustomerID = srq.CustID " +
+            //    "left join SR_Cust src on src.ServiceRequestID = srq.ServiceTypeID " +
+            //    "where srq.UserID = @0 and IsLead = 1",(string)User.Identity.GetUserId());
 
+            var customer = db.SingleOrDefault<ServiceCustomervw>("select FName,CONCAT(cu.FName, ' ', cu.SName) as FullName, cu.Email, cu.Phone,src.IsLead from ServiceRequest srq " +
+    "left join Customer cu on cu.CustomerID = srq.CustID " +
+    "left join SR_Cust src on src.ServiceRequestID = srq.ServiceTypeID " +
+    "where srq.UserID = @0 and IsLead = 1", (string)User.Identity.GetUserId());
 
+            string ProductID = productid.ProductId;
+            string TransactionServiceCharge = transcharge.TransServiceCharge.ToString();
             string strClientCode, strClientCodeEncoded;
             byte[] b;
-            string strResponse = "";
+
 
             UriBuilder Url = new UriBuilder("https://paynetzuat.atomtech.in/paynetz/epi/fts");
             string MerchantLogin = "197";
             string MerchantPass = "Test@123";
             string TransactionType = "NBFundtransfer";
-            string TransactionID = "123";
+            string TransactionID = "M123";
             string TransactionAmount = amt.ToString();
             string TransactionCurrency = "INR";
-            DateTime TransactionDateTime = DateTime.UtcNow;
-            //string BankID = "2001";
-            string CustomerAccountNo = "100000036600";
-            string ClientCode = "ESB07874"; //newly added
+            string TransactionDateTime = DateTime.Now.ToString();
+            string CustomerAccountNo = "1234567890";
+            string ClientCode = User.Identity.GetUserId();
+            string CustomerName = customer.FullName;
+            string CustomerEmail = customer.Email;
+            string CustomerPhone = customer.Phone;
 
             string ru = "http://localhost:53040/Cart/AtomResponseReciever";
             try
@@ -298,7 +300,7 @@ namespace Speedbird.Controllers
                     $"&prodid={ProductID}&amt={TransactionAmount}" +
                     $"&txncurr={TransactionCurrency}&txnscamt={TransactionServiceCharge}" +
                     $"&clientcode={ClientCode}&txnid={TransactionID}&date={TransactionDateTime}" +
-                    $"&custacc={CustomerAccountNo}&udf1=bobsmith&udf9=ABCD&udf3=9999999999" +
+                    $"&custacc={CustomerAccountNo}&udf1={CustomerName}&udf2={CustomerEmail}&udf3={CustomerPhone}" +
                     $"&ru={ru}&signature={signature}";
 
                 return Redirect(Url.ToString());
