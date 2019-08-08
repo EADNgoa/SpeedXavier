@@ -13,6 +13,7 @@ using System.Text;
 using System.Web.Mvc;
 using System.Xml.Linq;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace Speedbird.Areas.SBBoss.Controllers
 {
@@ -69,7 +70,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             //truncate the temp table
             db.Execute("truncate table AbstTable");
             //Log the root element
-            var root = doc.Elements().First();
+            var root = doc.Elements().First();                        
             int newId = LogNode(root, 0, 0, "Root","");
             try
             {
@@ -123,8 +124,15 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
         public int LogNode(XElement elem, int level, int Parent_Id, string elemType, string parentName)
         {
-            string elemName = elem.Name.ToString().Replace("\r\n\t", "").Replace("{www.microsoft.com/SqlServer/Dts}", "");
-            
+            var nsStripper = RemoveBetween(elem.Name.ToString(), '{', '}');
+            string elemName = nsStripper.Key;
+            string ns = nsStripper.Value;
+            //string elemName = elem.Name.ToString().Replace("\r\n\t", "").Replace("{www.microsoft.com/SqlServer/Dts}", "");
+            //elem.Attributes().Where(e => e.IsNamespaceDeclaration).Remove();
+            //elemName = elem.Name.ToString().Replace("\r\n\t", "").Replace(@"{http://schemas.xmlsoap.org/soap/encoding/}", "");
+            //elemName = elem.Name.ToString().Replace("\r\n\t", "").Replace(@"{http://schemas.xmlsoap.org/soap/envelope/}", "");
+            //elemName = elem.Name.ToString().Replace("\r\n\t", "").Replace("{www.microsoft.com/sqlserver/dts/tasks/sqltask}", "");
+
             //LogParent the parents data
             int newId = (int)db.Insert(new AbstTable
             {
@@ -201,7 +209,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 "group by [Name], recursionLevel, ParentTableName" +
                 " UNION " +
                 $"select [Name] as TblName,recursionLevel, 1 as IsHomoLeaf, ParentTableName as ParentTblName from AbstTable where type={ (int)EnumFldType.HomoElement} and Parent_Id in " +
-                $"(select Parent_Id from AbstTable group by Parent_Id having count(Parent_Id)>1 ) group by [Name], recursionLevel, ParentTableName, Parent_Id HAVING count(Name) > 1").ToList();
+                $"(select Parent_Id from AbstTable group by Parent_Id having count(Parent_Id)>1 ) group by [Name], recursionLevel, ParentTableName, Parent_Id HAVING count(Name) > 1 order by recursionLevel").ToList();
 
             //Sometimes homoLeaf's PARENT tables dont have kids and so get re-added as homoleaf tables. Here below we remove those duplicate leaf tables
             var HetrotableDefs = tableDefs.Where(t => t.IsHomoLeaf==false).ToList();
@@ -216,7 +224,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             {
                 t.TblFields = db.Fetch<FieldDef>("select Name, Type, max(len([Value])) as MaxFieldLen from " +
                 $"(select ISNULL(Name, '{t.TblName}') as Name, Type, Value from AbstTable where ParentTableName = '{t.TblName}' and recursionLevel = {t.RecursionLevel+ 1} and type<>{(int)EnumFldType.HomoElement} " + //n + 1 for child elements
-                $" 	and (AttrElem_Id is null or AttrElem_Id NOT in (select Abst_Id from AbstTable where type=5)) " +//exclude attributes of homo tables in fields of its parent
+                $" 	and (AttrElem_Id is null or AttrElem_Id NOT in (select Abst_Id from AbstTable where type={(int)EnumFldType.HomoElement})) " +//exclude attributes of homo tables in fields of its parent
                 $"union select ISNULL(Name, '{t.TblName}') as Name, Type, Value from AbstTable where Name is null and type={(int)EnumFldType.Text} and ParentTableName = substring('{t.TblName}', 0, CHARINDEX('_', '{t.TblName}')) and recursionLevel = {t.RecursionLevel + 1} and type<>{(int)EnumFldType.HomoElement} " +
                 $"union select '{t.TblName}' as Name, Type, Value from AbstTable where ParentTableName='{t.ParentTblName}' and type={(int)EnumFldType.HomoElement} and recursionLevel={t.RecursionLevel} " +//to store the text value in Homofield
                 "union " +
@@ -253,7 +261,9 @@ namespace Speedbird.Areas.SBBoss.Controllers
                             $" CONSTRAINT [FK_{t.TblName}-ImportLog] FOREIGN KEY (ImportLog_Id) REFERENCES [ImportLog](ImportLog_Id)");
                     }
                     createSQL.Append(" )"); //Closing bracket of create stmt
-                    t.CreateSQL = createSQL.ToString(); 
+                    t.CreateSQL = createSQL.ToString();
+                    Debug.Print(t.CreateSQL);
+                    db.Execute(t.CreateSQL);
                 } else //add new fields if any to the table
                 {
                     //First fetch the existing fields in the table
@@ -267,25 +277,28 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
                     foreach (var fld in newFields)
                     {
-                        t.AlterSQL.Add($"ALTER TABLE [{t.TblName}] ADD [{fld.Name}_{fld.Type}] VARCHAR(MAX)");
+                        string altStmt = $"ALTER TABLE [{t.TblName}] ADD [{fld.Name}_{fld.Type}] VARCHAR(MAX)";
+                        t.AlterSQL.Add(altStmt);
+                        Debug.Print(altStmt);
+                        db.Execute(altStmt);
                     }
                 }
             });
 
             //With our statements ready, lets now make our tables
-            tableDefs.OrderBy(o=>o.RecursionLevel).ToList().ForEach(t => {
-                if (t.CreateSQL != null)
-                {
-                    Debug.Print(t.CreateSQL);
-                    db.Execute(t.CreateSQL);
+            //tableDefs.OrderBy(o=>o.RecursionLevel).ToList().ForEach(t => {
+            //    if (t.CreateSQL != null)
+            //    {
+            //        Debug.Print(t.CreateSQL);
+            //        //db.Execute(t.CreateSQL);
 
-                }
-                t.AlterSQL.ForEach(sq =>
-                {
-                    Debug.Print(sq);
-                    db.Execute(sq);
-                });
-            });
+            //    }
+            //    t.AlterSQL.ForEach(sq =>
+            //    {
+            //        Debug.Print(sq);
+            //        //db.Execute(sq);
+            //    });
+            //});
 
             return tableDefs;
         }
@@ -323,8 +336,16 @@ namespace Speedbird.Areas.SBBoss.Controllers
                                 insData.Clear();
 
                                 //Fetch its attributes
-                                insData =db.Query<AbstTable>($"select * from AbstTable where Parent_Id={id} and Parent_Id<>AttrElem_Id and AttrElem_Id={hi.Abst_Id}").ToDictionary(key => key.Name ?? t.TblName, Val => Val.Value);
-                                insData.Add(hi.Name, hi.Value??"");//the value of the homo leaf
+                                try
+                                {
+                                    insData = db.Query<AbstTable>($"select * from AbstTable where Parent_Id={id} and Parent_Id<>AttrElem_Id and AttrElem_Id={hi.Abst_Id}").ToDictionary(key => key.Name ?? t.TblName, Val => Val.Value);
+                                    insData.Add(hi.Name, hi.Value ?? "");//the value of the homo leaf
+                                }
+                                catch (Exception e)
+                                {
+
+                                    throw e;
+                                }
                                 MakeInsertStmt(hlt, hi.Abst_Id, insData);
                             }); 
                         }
@@ -449,6 +470,26 @@ namespace Speedbird.Areas.SBBoss.Controllers
             }
 
         }
+
+        public KeyValuePair<string,string> RemoveBetween(string s, char begin, char end)
+        {
+            Regex regex = new Regex(string.Format("\\{0}.*?\\{1}", begin, end));
+            var nsKey = regex.Replace(s, string.Empty);
+            var nsStr = regex.Match(s).Value;
+
+            if (nsStr.Length > 0)
+            {
+                if (!db.Exists<NameSpaceTracker>($"where Namespace='{nsStr}'"))
+                {
+                    int newNsId=int.Parse(db.Insert(new NameSpaceTracker { NameSpace = nsStr }).ToString());
+                    //nsKey = $"ns{newNsId}|{nsKey}";
+                }
+                //else
+                    //nsKey = $"ns{db.First<NameSpaceTracker>($"where Namespace='{nsStr}'").NS_Id}|{nsKey}";
+            }
+
+            return new KeyValuePair<string, string>(nsKey, nsStr);
+        }        
 
         protected override void Dispose(bool disposing)
         {

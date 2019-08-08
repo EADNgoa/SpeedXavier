@@ -124,7 +124,15 @@ namespace Speedbird
 		[Column] public string FileName { get; set; }
 		[Column] public DateTime? ImportDate { get; set; }
 	}
-    
+
+    [TableName("dbo.NameSpaceTracker")]
+    [PrimaryKey("NS_Id")]
+    [ExplicitColumns]
+    public partial class NameSpaceTracker
+    {
+        [Column] public int NS_Id { get; set; }
+        [Column] public string NameSpace { get; set; }
+    }
 
     [TableName("dbo.Accomodation")]
     [PrimaryKey("AccomodationID")]
