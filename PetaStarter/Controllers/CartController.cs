@@ -249,7 +249,7 @@ namespace Speedbird.Controllers
                     string MerchantLogin = config.MerchantId;
                     string MerchantPass = config.Pwd;
                     string TransactionType = "NBFundtransfer";
-                    string TransactionID = item.SRID.ToString();
+                    string TransactionID = "M" + item.SRID.ToString();
                     string TransactionAmount = amt.ToString();
                     string TransactionCurrency = "INR";
                     string ProductID = config.ProductId;
@@ -277,6 +277,7 @@ namespace Speedbird.Controllers
                     signature = byteToHexString(bt).ToLower();
                     ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
 
+                    //Building payment url
                     Url.Query = $"login={MerchantLogin}&pass={MerchantPass}&ttype={TransactionType}" +
                         $"&prodid={ProductID}&amt={TransactionAmount}" +
                         $"&txncurr={TransactionCurrency}&txnscamt={TransactionServiceCharge}" +
@@ -284,11 +285,14 @@ namespace Speedbird.Controllers
                         $"&custacc={CustomerAccountNo}&udf1={CustomerName}&udf2={CustomerEmail}&udf3={CustomerPhone}" +
                         $"&ru={ru}&signature={signature}";
 
+                    //Deleting records with respect to current user in cart
                     var delc = db.Execute("Delete From Cart Where Id=@0", (string)User.Identity.GetUserId());
                     transaction.Complete();
 
+                    //selecting SRDID from srdetails 
                     var SRDID = db.SingleOrDefault<int>("select SRDID from SRdetails where SRID = @0", item.SRID);
 
+                    //inserting request url in payment assets
                     db.Insert(new PaymentAsset { RequestUrl = Url.ToString(),UserID = User.Identity.GetUserId(), SRID = item.SRID,SRDID = SRDID, TDate = DateTime.Now });
 
                     return Redirect(Url.ToString());
@@ -366,22 +370,25 @@ namespace Speedbird.Controllers
         {
             try
             {
-                var srid = db.SingleOrDefault<PaymentAsset>("select SRID from PaymentAssets where UserId = @0 and RMmp_txn is null", (string)User.Identity.GetUserId());
-
+                //removing first letter of merchant text want to use it as SRID
+                string srid =  mer_txn.Substring(1);
+                
+                //updating remaining field in payment assets with response
                 db.Execute($"Update PaymentAssets Set RMmp_txn={mmp_txn},RMer_txn='{mer_txn}',RAmount={amt}, " +
                     $"RProdid='{prod}',Rdate='{date}',Rbank_txn={bank_txn},Rf_code='{f_code}',Rbank_name='{bank_name}'," +
                     $"Rclientcode='{clientcode}',Rsignature='{signature}',Rdiscriminator='{discriminator}' " +
-                    $"where SRID={srid.SRID} and RMmp_txn is null");
+                    $"where SRID={srid}");
 
-
+                //payment response 
                 var TranResponse = db.Query<PaymentAsset>("select srq.SRID,pa.RMmp_txn,pa.RMer_txn,pa.RAmount,pa.RProdid, " +
                     "pa.Rdate,pa.Rbank_txn,Rf_code, Rbank_name, Rdiscriminator, pa.UserID from PaymentAssets pa " +
                     "left join ServiceRequest srq on srq.SRID = pa.SRID " +
-                    "left join AspNetUsers au on au.Id = pa.UserID where srq.SRID = @0", srid.SRID);
+                    "left join AspNetUsers au on au.Id = pa.UserID where srq.SRID = @0", srid);
 
+                //customers booking details
                 ViewBag.CustomerInfo = db.Fetch<Customer>("select c.CustomerID,c.FName,c.SName,c.Email,c.Phone," +
                     "c.IdPicture,srq.SRID from SR_Cust src left join Customer c on c.CustomerID = src.CustomerID " +
-                    "left join ServiceRequest srq on srq.SRID = src.ServiceRequestID where srq.SRID =@0", srid.SRID); 
+                    "left join ServiceRequest srq on srq.SRID = src.ServiceRequestID where srq.SRID =@0", srid); 
 
                 return View("ThankYou", TranResponse);
             }
