@@ -382,13 +382,15 @@ namespace Speedbird
 	}
     
 	[TableName("dbo.Config")]
-	[PrimaryKey("ConfigId", AutoIncrement=false)]
+	[PrimaryKey("ConfigId")]
 	[ExplicitColumns]
     public partial class Config  
     {
 		[Column] public int ConfigId { get; set; }
 		[Column] public string ProductId { get; set; }
 		[Column] public decimal? TransServiceCharge { get; set; }
+		[Column] public string MerchantId { get; set; }
+		[Column] public string Pwd { get; set; }
 	}
     
 	[TableName("dbo.Cruise")]
@@ -846,6 +848,30 @@ namespace Speedbird
 		[Column] public DateTime ValidFrom { get; set; }
 		[Column] public DateTime ValidTo { get; set; }
 		[Column] public int? ServiceTypeID { get; set; }
+	}
+    
+	[TableName("dbo.PaymentAssets")]
+	[PrimaryKey("TId")]
+	[ExplicitColumns]
+    public partial class PaymentAsset  
+    {
+		[Column] public int TId { get; set; }
+		[Column] public string RequestUrl { get; set; }
+		[Column] public int? SRID { get; set; }
+		[Column] public int? SRDID { get; set; }
+		[Column] public string UserID { get; set; }
+		[Column] public DateTime? TDate { get; set; }
+		[Column] public string RMmp_txn { get; set; }
+		[Column] public string RMer_txn { get; set; }
+		[Column] public string RAmount { get; set; }
+		[Column] public string RProdid { get; set; }
+		[Column] public string Rdate { get; set; }
+		[Column] public string Rbank_txn { get; set; }
+		[Column] public string Rf_code { get; set; }
+		[Column] public string Rbank_name { get; set; }
+		[Column] public string Rclientcode { get; set; }
+		[Column] public string Rsignature { get; set; }
+		[Column] public string Rdiscriminator { get; set; }
 	}
     
 	[TableName("dbo.PCdetails")]

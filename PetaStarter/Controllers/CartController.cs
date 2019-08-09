@@ -2,6 +2,7 @@
 using PetaPoco;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -12,7 +13,7 @@ namespace Speedbird.Controllers
 {
     public class CartController : EAController
     {
-        public ActionResult Cart(int? SRID)
+        public ActionResult Cart()
         {
             var CartItems = db.Query<CartDets>("Select * from Cart c Where Id= @0", (string)User.Identity.GetUserId()).ToList();
             CartItems.ForEach(c =>
@@ -35,10 +36,9 @@ namespace Speedbird.Controllers
                 }
 
                 //ViewBag.DiscountedTotal = db.ExecuteScalar<decimal>("Select Sum(DiscountedPrice) as DiscountedPrice from Cart Where Id=@0", (string)User.Identity.GetUserId());
-              
+
             });
 
-            ViewBag.SRID = (int)SRID;
             return View(CartItems);
         }
 
@@ -46,7 +46,7 @@ namespace Speedbird.Controllers
 
         [HttpPost]
         public ActionResult AddToCart(int? ServiceID, int? ServiceTypeID, System.Web.HttpPostedFileBase UploadedFile, DateTime? CheckIn, DateTime? CheckOut, int? nums, int? Qty, string fname, string sname, string email, string phno, int? CustomerID, string chckbtn, string Query, string Gtime, int? Glang)
-        {
+            {
             if (chckbtn == "cart")
             {
 
@@ -82,7 +82,7 @@ namespace Speedbird.Controllers
                 if (CustomerID == null)
                 {
                     var cust = new Customer { FName = fname, SName = sname, Email = email, Phone = phno };
-            
+
                     if (UploadedFile != null)
                     {
                         string fn = UploadedFile.FileName.Substring(UploadedFile.FileName.LastIndexOf('\\') + 1);
@@ -100,7 +100,7 @@ namespace Speedbird.Controllers
                 {
                     db.Execute($"Update Customer Set FName='{fname}',SName='{sname}',Phone={phno} where CustomerID={CustomerID}");
                 }
-               
+
                 return RedirectToAction("Cart");
             }
             if (chckbtn == "Query")
@@ -151,10 +151,10 @@ namespace Speedbird.Controllers
                         AdultNo = nums,
                     });
                     db.Insert(new SR_Cust { ServiceRequestID = sr.SRID, CustomerID = cust.CustomerID });
-                    ViewBag.ServiceRequestId = sr.SRID;
+
                 }
             }
-            return RedirectToAction("Index", "Home", new { SRID = ViewBag.ServiceRequestId });
+            return RedirectToAction("Index", "Home");
         }
 
         private string SaveImage(Sql sql, string v, int customerID, HttpPostedFileBase uploadedFile)
@@ -162,154 +162,144 @@ namespace Speedbird.Controllers
             throw new NotImplementedException();
         }
 
-        //[HttpPost]
-        //public ActionResult BooKCartItems()
-        //{
-        //    using (var transaction = db.GetTransaction())
-        //    {
-        //        var CartItems = db.Query<CartDets>("Select * from Cart c Where Id= @0", (string)User.Identity.GetUserId()).ToList();
-
-        //        try
-        //        {
-        //            var item = new ServiceRequest { TDate = DateTime.Now, UserID = User.Identity.GetUserId(), SRStatusID = (int)SRStatusEnum.Confirmed,PayStatusID=(int)PayType.Full_Paid,BookingTypeID=(int)BookingTypeEnum.Online,EnquirySource=(int)EnquirySourceEnum.Web };
-        //            db.Insert(item);
-        //            CartItems.ForEach(c =>
-        //            {
-
-        //                var Bcust = db.FirstOrDefault<BookedCustomer>("select * from BookedCustomer where CartID=@0", c.CartID);
-        //                if (Bcust!=null && Bcust.CustomerID!= null)
-        //                {
-        //                    item.CustID = Bcust.CustomerID;
-        //                    db.Update(item);
-        //                   var del= db.Execute($"Delete From BookedCustomer Where BCID={Bcust.BCID}");
-
-        //                    db.Insert(new SR_Cust {ServiceRequestID=item.SRID,CustomerID=(int)Bcust.CustomerID });
-
-        //                }
-        //                var bd = new SRdetail
-        //                {
-        //                   /* BookingID = item.BookingID,
-        //                    ServiceID = c.ServiceID,
-        //                    ServiceTypeID = c.ServiceTypeID,
-        //                    OptionTypeID = c.OptionTypeID,
-        //                    Qty = c.Qty,
-        //                    CheckIn = c.CheckIn,
-        //                    CheckOut = c.CheckOut,
-        //                    NoOfGuests = c.NoOfGuest,
-        //                    Price = c.OrigPrice*/
-
-        //                    SRID=item.SRID,
-        //                    ItemID=c.ServiceID,
-        //                    ServiceTypeID=c.ServiceTypeID,
-        //                    OptionTypeID=c.OptionTypeID,
-        //                    Qty=c.Qty,
-        //                    Fdate=c.CheckIn,
-        //                    Tdate=c.CheckOut,
-        //                    AdultNo=c.NoOfGuest,
-        //                    SellPrice=c.OrigPrice
-
-        //                };
-        //                db.Insert(bd);
-        //             var delc= db.Execute("Delete From Cart Where CartID=@0", c.CartID);
-        //            });
-        //            transaction.Complete();
-
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            db.AbortTransaction();
-        //            throw ex;
-        //        }
-        //        return RedirectToAction("ThankYou");
-        //    }
-        //}
-
         [HttpPost]
-        public ActionResult PaymentIntegrate(int? ServiceRequestId, int? CustId)
+        public ActionResult BooKCartItems()
         {
 
-            decimal amt = 0;
-            var Amount = db.ExecuteScalar<decimal>("Select Sum(OrigPrice) as OrigPrice from Cart Where Id=@0", (string)User.Identity.GetUserId());
-            var DiscountAmount = db.ExecuteScalar<decimal>("Select Sum(DiscountedPrice) as OrigPrice from Cart Where Id=@0", (string)User.Identity.GetUserId());
-            
-            var cart = db.Query<Cart>("Select CouponCode from Cart Where Id=@0", (string)User.Identity.GetUserId());
-
-            foreach (var crt in cart)
+            using (var transaction = db.GetTransaction())
             {
-                if (crt.CouponCode != null)
+                var CartItems = db.Query<CartDets>("Select * from Cart c Where Id= @0", (string)User.Identity.GetUserId()).ToList();
+
+                try
                 {
-                    amt = DiscountAmount;
+                    var item = new ServiceRequest { TDate = DateTime.Now, UserID = User.Identity.GetUserId(), SRStatusID = (int)SRStatusEnum.Confirmed, PayStatusID = (int)PayType.Full_Paid, BookingTypeID = (int)BookingTypeEnum.Online, EnquirySource = (int)EnquirySourceEnum.Web };
+                    db.Insert(item);
+                    CartItems.ForEach(c =>
+                    {
+
+                        var Bcust = db.FirstOrDefault<BookedCustomer>("select * from BookedCustomer where CartID=@0", c.CartID);
+                        if (Bcust != null && Bcust.CustomerID != null)
+                        {
+                            item.CustID = Bcust.CustomerID;
+                            db.Update(item);
+                            var del = db.Execute($"Delete From BookedCustomer Where BCID={Bcust.BCID}");
+
+                            db.Insert(new SR_Cust { ServiceRequestID = item.SRID, CustomerID = (int)Bcust.CustomerID, IsLead = true });
+
+                        }
+                        var bd = new SRdetail
+                        {
+                            /* BookingID = item.BookingID,
+                             ServiceID = c.ServiceID,
+                             ServiceTypeID = c.ServiceTypeID,
+                             OptionTypeID = c.OptionTypeID,
+                             Qty = c.Qty,
+                             CheckIn = c.CheckIn,
+                             CheckOut = c.CheckOut,
+                             NoOfGuests = c.NoOfGuest,
+                             Price = c.OrigPrice*/
+
+                            SRID = item.SRID,
+                            ItemID = c.ServiceID,
+                            ServiceTypeID = c.ServiceTypeID,
+                            OptionTypeID = c.OptionTypeID,
+                            Qty = c.Qty,
+                            Fdate = c.CheckIn,
+                            Tdate = c.CheckOut,
+                            AdultNo = c.NoOfGuest,
+                            SellPrice = c.OrigPrice
+
+                        };
+                        db.Insert(bd);
+
+                    });
+
+                    //fetching customer info with current servicerequestid
+                    var customer = db.SingleOrDefault<ServiceCustomervw>("select CONCAT(cu.FName, ' ', cu.SName) as FullName, cu.Email, cu.Phone, src.IsLead from SR_Cust src " +
+                            "left join Customer cu on cu.CustomerID = src.CustomerID " +
+                            "left join ServiceRequest srq on srq.SRID = src.ServiceRequestID " +
+                            "where src.ServiceRequestID = @0 and IsLead = 1", item.SRID);
+
+                    decimal amt = 0;
+                    //getting all couponcode from cart
+                    var cart = db.Fetch<Cart>("Select CouponCode from Cart Where Id=@0", (string)User.Identity.GetUserId());
+
+                    //getting all total amount from cart
+                    var Amount = db.ExecuteScalar<decimal>("Select Sum(OrigPrice) as OrigPrice from Cart Where Id=@0", (string)User.Identity.GetUserId());
+          
+                    foreach (var crt in cart)
+                    {
+                        if (crt.CouponCode != null)
+                        {
+                            var DiscountAmount = db.ExecuteScalar<decimal>("Select Sum(DiscountedPrice) as DiscountedPrice from Cart Where Id=@0", (string)User.Identity.GetUserId());
+                            amt = DiscountAmount;
+                        }
+                        else
+                        {
+                            amt = Amount;
+                        }
+                    }
+                    //getting productid and transactioncharge
+                    var config = db.FirstOrDefault<Config>("Select * from Config");
+
+                    string strClientCode, strClientCodeEncoded;
+                    byte[] b;
+
+                    UriBuilder Url = new UriBuilder("https://paynetzuat.atomtech.in/paynetz/epi/fts");
+                    string MerchantLogin = config.MerchantId;
+                    string MerchantPass = config.Pwd;
+                    string TransactionType = "NBFundtransfer";
+                    string TransactionID = item.SRID.ToString();
+                    string TransactionAmount = amt.ToString();
+                    string TransactionCurrency = "INR";
+                    string ProductID = config.ProductId;
+                    string TransactionServiceCharge = config.TransServiceCharge.ToString();
+                    string TransactionDateTime = DateTime.Now.ToString();
+                    string CustomerAccountNo = "1234567890";
+                    string ClientCode = User.Identity.GetUserId();
+                    string CustomerName = customer.FullName;
+                    string CustomerEmail = customer.Email;
+                    string CustomerPhone = customer.Phone;
+
+                    string ru = "http://localhost:53040/Cart/ThankYou";
+
+                    b = Encoding.UTF8.GetBytes(ClientCode);
+                    strClientCode = Convert.ToBase64String(b);
+                    strClientCodeEncoded = HttpUtility.UrlEncode(strClientCode);
+                    //string reqHashKey = requestkey;
+                    string reqHashKey = "KEY123657234";
+                    //string respHashKey = "KEYRESP123657234";
+                    string signature = "";
+                    byte[] bytes = Encoding.UTF8.GetBytes(reqHashKey);
+                    string strsignature = MerchantLogin + MerchantPass + TransactionType + ProductID + TransactionID + TransactionAmount + TransactionCurrency;
+                    byte[] bt = new System.Security.Cryptography.HMACSHA512(bytes).ComputeHash(Encoding.UTF8.GetBytes(strsignature));
+                    //byte[] b = new HMACSHA512(bytes).ComputeHash(Encoding.UTF8.GetBytes(prodid));
+                    signature = byteToHexString(bt).ToLower();
+                    ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+
+                    Url.Query = $"login={MerchantLogin}&pass={MerchantPass}&ttype={TransactionType}" +
+                        $"&prodid={ProductID}&amt={TransactionAmount}" +
+                        $"&txncurr={TransactionCurrency}&txnscamt={TransactionServiceCharge}" +
+                        $"&clientcode={ClientCode}&txnid={TransactionID}&date={TransactionDateTime}" +
+                        $"&custacc={CustomerAccountNo}&udf1={CustomerName}&udf2={CustomerEmail}&udf3={CustomerPhone}" +
+                        $"&ru={ru}&signature={signature}";
+
+                    var delc = db.Execute("Delete From Cart Where Id=@0", (string)User.Identity.GetUserId());
+                    transaction.Complete();
+
+                    var SRDID = db.SingleOrDefault<int>("select SRDID from SRdetails where SRID = @0", item.SRID);
+
+                    db.Insert(new PaymentAsset { RequestUrl = Url.ToString(),UserID = User.Identity.GetUserId(), SRID = item.SRID,SRDID = SRDID, TDate = DateTime.Now });
+
+                    return Redirect(Url.ToString());
+    
                 }
-                else
+                catch (Exception ex)
                 {
-                    amt = Amount;
+                    db.AbortTransaction();
+                    throw ex;
                 }
             }
-
-            var productid = db.FirstOrDefault<Config>("Select ProductId from Config");
-            var transcharge = db.FirstOrDefault<Config>("Select TransServiceCharge from Config");
-
-            //var customer = db.SingleOrDefault<ServiceCustomervw>("select FName,CONCAT(cu.FName, ' ', cu.SName) as FullName, cu.Email, cu.Phone,src.IsLead from ServiceRequest srq " +
-            //    "left join Customer cu on cu.CustomerID = srq.CustID " +
-            //    "left join SR_Cust src on src.ServiceRequestID = srq.ServiceTypeID " +
-            //    "where srq.UserID = @0 and IsLead = 1",(string)User.Identity.GetUserId());
-
-            var customer = db.SingleOrDefault<ServiceCustomervw>("select FName,CONCAT(cu.FName, ' ', cu.SName) as FullName, cu.Email, cu.Phone,src.IsLead from ServiceRequest srq " +
-    "left join Customer cu on cu.CustomerID = srq.CustID " +
-    "left join SR_Cust src on src.ServiceRequestID = srq.ServiceTypeID " +
-    "where srq.UserID = @0 and IsLead = 1", (string)User.Identity.GetUserId());
-
-            string ProductID = productid.ProductId;
-            string TransactionServiceCharge = transcharge.TransServiceCharge.ToString();
-            string strClientCode, strClientCodeEncoded;
-            byte[] b;
-
-
-            UriBuilder Url = new UriBuilder("https://paynetzuat.atomtech.in/paynetz/epi/fts");
-            string MerchantLogin = "197";
-            string MerchantPass = "Test@123";
-            string TransactionType = "NBFundtransfer";
-            string TransactionID = "M123";
-            string TransactionAmount = amt.ToString();
-            string TransactionCurrency = "INR";
-            string TransactionDateTime = DateTime.Now.ToString();
-            string CustomerAccountNo = "1234567890";
-            string ClientCode = User.Identity.GetUserId();
-            string CustomerName = customer.FullName;
-            string CustomerEmail = customer.Email;
-            string CustomerPhone = customer.Phone;
-
-            string ru = "http://localhost:53040/Cart/AtomResponseReciever";
-            try
-            {
-                b = Encoding.UTF8.GetBytes(ClientCode);
-                strClientCode = Convert.ToBase64String(b);
-                strClientCodeEncoded = HttpUtility.UrlEncode(strClientCode);
-                //string reqHashKey = requestkey;
-                string reqHashKey = "KEY123657234";
-                //string respHashKey = "KEYRESP123657234";
-                string signature = "";
-                byte[] bytes = Encoding.UTF8.GetBytes(reqHashKey);
-                string strsignature = MerchantLogin + MerchantPass + TransactionType + ProductID + TransactionID + TransactionAmount + TransactionCurrency;
-                byte[] bt = new System.Security.Cryptography.HMACSHA512(bytes).ComputeHash(Encoding.UTF8.GetBytes(strsignature));
-                //byte[] b = new HMACSHA512(bytes).ComputeHash(Encoding.UTF8.GetBytes(prodid));
-                signature = byteToHexString(bt).ToLower();
-                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
-
-                Url.Query = $"login={MerchantLogin}&pass={MerchantPass}&ttype={TransactionType}" +
-                    $"&prodid={ProductID}&amt={TransactionAmount}" +
-                    $"&txncurr={TransactionCurrency}&txnscamt={TransactionServiceCharge}" +
-                    $"&clientcode={ClientCode}&txnid={TransactionID}&date={TransactionDateTime}" +
-                    $"&custacc={CustomerAccountNo}&udf1={CustomerName}&udf2={CustomerEmail}&udf3={CustomerPhone}" +
-                    $"&ru={ru}&signature={signature}";
-
-                return Redirect(Url.ToString());
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-
         }
 
         public static string byteToHexString(byte[] byData)
@@ -330,60 +320,80 @@ namespace Speedbird.Controllers
             return sb.ToString();
         }
 
-        public ActionResult AtomResponseReciever(string mmp_txn, string mer_txn, string amt, string prod, string date, string bank_txn, string f_code, string bank_name, string clientcode, string signature, string discriminator)
+        //public ActionResult AtomResponseReciever(string mmp_txn, string mer_txn, string amt, string prod, string date, string bank_txn, string f_code, string bank_name, string clientcode, string signature, string discriminator)
+        //{
+        //    try
+        //    {
+
+        //        string strsignature = null;
+        //        string respHashKey = "KEYRESP123657234";
+        //        string ressignature = "";
+
+        //        var atom = new AtomResponse()
+        //        {
+        //            postingmmp_txn = mmp_txn,
+        //            postingmer_txn = mer_txn,
+        //            postinamount = amt,
+        //            postingdate = date,
+        //            postingprod = prod,
+        //            postingbank_txn = bank_txn,
+        //            postingf_code = f_code,
+        //            postingbank_name = bank_name,
+        //            postingclientcode = clientcode,
+        //            signature = signature,
+        //            postingdiscriminator = discriminator
+        //        };
+
+        //        strsignature = atom.postingmmp_txn + atom.postingmer_txn + atom.postingf_code + atom.postingprod + atom.postingdiscriminator + atom.postinamount + atom.postingbank_txn;
+
+        //        byte[] bytes = Encoding.UTF8.GetBytes(respHashKey);
+        //        byte[] b = new System.Security.Cryptography.HMACSHA512(bytes).ComputeHash(Encoding.UTF8.GetBytes(strsignature));
+
+        //        ressignature = byteToHexString(b).ToLower();
+
+        //        return View("AtomResponseReciever", atom);
+
+        //    }
+
+        //    catch (Exception ex)
+        //    {
+        //        throw ex;
+        //    }
+        //}
+
+
+        public ActionResult ThankYou(string mmp_txn, string mer_txn, string amt, string prod, string date, string bank_txn, string f_code, string bank_name, string clientcode, string signature, string discriminator)
         {
             try
             {
+                var srid = db.SingleOrDefault<PaymentAsset>("select SRID from PaymentAssets where UserId = @0 and RMmp_txn is null", (string)User.Identity.GetUserId());
 
-                string strsignature = null;
-                string respHashKey = "KEYRESP123657234";
-                string ressignature = "";
+                db.Execute($"Update PaymentAssets Set RMmp_txn={mmp_txn},RMer_txn='{mer_txn}',RAmount={amt}, " +
+                    $"RProdid='{prod}',Rdate='{date}',Rbank_txn={bank_txn},Rf_code='{f_code}',Rbank_name='{bank_name}'," +
+                    $"Rclientcode='{clientcode}',Rsignature='{signature}',Rdiscriminator='{discriminator}' " +
+                    $"where SRID={srid.SRID} and RMmp_txn is null");
 
-                var atom = new AtomResponse()
-                {
-                    postingmmp_txn = mmp_txn,
-                    postingmer_txn = mer_txn,
-                    postinamount = amt,
-                    postingdate = date,
-                    postingprod = prod,
-                    postingbank_txn = bank_txn,
-                    postingf_code = f_code,
-                    postingbank_name = bank_name,
-                    postingclientcode = clientcode,
-                    signature = signature,
-                    postingdiscriminator = discriminator
-                };
 
-                strsignature = atom.postingmmp_txn + atom.postingmer_txn + atom.postingf_code + atom.postingprod + atom.postingdiscriminator + atom.postinamount + atom.postingbank_txn;
+                var TranResponse = db.Query<PaymentAsset>("select srq.SRID,pa.RMmp_txn,pa.RMer_txn,pa.RAmount,pa.RProdid, " +
+                    "pa.Rdate,pa.Rbank_txn,Rf_code, Rbank_name, Rdiscriminator, pa.UserID from PaymentAssets pa " +
+                    "left join ServiceRequest srq on srq.SRID = pa.SRID " +
+                    "left join AspNetUsers au on au.Id = pa.UserID where srq.SRID = @0", srid.SRID);
 
-                byte[] bytes = Encoding.UTF8.GetBytes(respHashKey);
-                byte[] b = new System.Security.Cryptography.HMACSHA512(bytes).ComputeHash(Encoding.UTF8.GetBytes(strsignature));
+                ViewBag.CustomerInfo = db.Fetch<Customer>("select c.CustomerID,c.FName,c.SName,c.Email,c.Phone," +
+                    "c.IdPicture,srq.SRID from SR_Cust src left join Customer c on c.CustomerID = src.CustomerID " +
+                    "left join ServiceRequest srq on srq.SRID = src.ServiceRequestID where srq.SRID =@0", srid.SRID); 
 
-                ressignature = byteToHexString(b).ToLower();
-
-                return View("AtomResponseReciever", atom);
-
+                return View("ThankYou", TranResponse);
             }
 
             catch (Exception ex)
             {
                 throw ex;
             }
+
         }
 
-
-        //public ActionResult ThankYou()
-        //{
-
-        //    return View();
-        //}
-
-        //public ActionResult SearchCoupon()
-        //{
-        //    return RedirectToAction("Cart");
-        //}
-
-        [HttpPost]
+    [HttpPost]
         public void UpdateCoupon(string dc)
         {
             decimal disc = 0;
@@ -403,7 +413,7 @@ namespace Speedbird.Controllers
                    "INNER join AspNetUsers as au on cr.Id = au.Id WHERE au.Id = @1", dc, (string)User.Identity.GetUserId());
 
                 if (c.ServiceTypeID == (int)ServiceTypeEnum.Accomodation)
-                {                 
+                {
                     var DiscountCoupon = db.FirstOrDefault<Accomodation>("Select CouponCode from Accomodation where CouponCode=@0", dc);
                     if (DiscountCoupon != null)
                     {
@@ -431,7 +441,7 @@ namespace Speedbird.Controllers
 
                     }
                 }
-                
+
             }
 
             //return RedirectToAction("Cart");

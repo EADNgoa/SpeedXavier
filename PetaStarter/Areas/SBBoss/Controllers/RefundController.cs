@@ -18,165 +18,134 @@ namespace Speedbird.Areas.SBBoss.Controllers
             return View();
         }
 
-        //[HttpPost]
-        //public ActionResult Indexs(FormCollection formCollection)
+        //public ActionResult AtomRefundRecieve()
         //{
-
-        //    string strpwd, strpwdEncoded;
-        //    byte[] b;
-
-        //    UriBuilder Url = new UriBuilder("https://paynetzuat.atomtech.in/paynetz/rfts");
-        //    string merchantid = "197";
-        //    string pwd = "Test@123";
-        //    string atomtxnid = "100004489745";
-        //    string refundamt = "150.00";
-        //    string txndate = DateTime.Today.ToString("yyyy-MM-dd");
-        //    string merefundref = "test123";
-
-        //    b = Encoding.UTF8.GetBytes(pwd);
-        //    strpwd = Convert.ToBase64String(b);
-        //    strpwdEncoded = HttpUtility.UrlEncode(strpwd);
-
-        //    Url.Query = $"merchantid={merchantid}&pwd={strpwdEncoded}&atomtxnid={atomtxnid}" +
-        //        $"&refundamt={refundamt}&txndate={txndate}" +
-        //        $"&merefundref={merefundref}";
-        //    return Redirect(Url.ToString());
+        //    return View();
         //}
 
+        [HttpPost]
+        public ActionResult Refund()
+        {
+
+            string merchantid = "197";
+            string pwd = "Test@123";
+            string atomtxnid = "100004493434";
+            string refundamt = "50.00";
+            string txndate = DateTime.Today.ToString("yyyy-MM-dd");
+            string merefundref = "test123";
+            string strpwd, strpwdEncoded;
+            byte[] b;
+
+            b = Encoding.UTF8.GetBytes(pwd);
+            strpwd = Convert.ToBase64String(b);
+            strpwdEncoded = HttpUtility.UrlEncode(strpwd);
+
+            var refundvw = new Refundvw()
+            {
+                merchantid = merchantid,
+                pwd = strpwdEncoded,
+                atomtxnid = atomtxnid,
+                refundamt = refundamt,
+                txndate = txndate,
+                merefundref = merefundref,
+            };
+
+
+            using (var client = new HttpClient())
+            {
+
+                client.BaseAddress = new Uri("https://paynetzuat.atomtech.in/paynetz/rfts");
+                //HTTP POST
+                var responseTask = client.PostAsJsonAsync(client.BaseAddress, refundvw);
+
+                responseTask.Wait();
+                var result = responseTask.Result;
+                ViewBag.Messege = null;
+                if (result.IsSuccessStatusCode == true)
+                {
+                    Console.Write("Success");
+                }
+
+            }
+
+
+            return View();
+            //ModelState.AddModelError(string.Empty, "Server Error. Please contact administrator.");
+            //return RedirectToAction("ThankYou", "Cart");
+        }
 
         //[HttpPost]
-        //public async System.Threading.Tasks.Task<ActionResult> IndexsAsync(string url)
+        //public async System.Threading.Tasks.Task<bool> RefundAsync(string url)
         //{
 
-        //string merchantid = "197";
+        //    url = "https://paynetzuat.atomtech.in/paynetz/rfts";
+        //    string merchantid = "197";
         //string pwd = "Test@123";
-        //string atomtxnid = "100004489745";
-        //string refundamt = "200.00";
+        //string atomtxnid = "100004493434";
+        //string refundamt = "50.00";
         //string txndate = DateTime.Today.ToString("yyyy-MM-dd");
         //string merefundref = "test123";
         //string strpwd, strpwdEncoded;
         //byte[] b;
 
         //b = Encoding.UTF8.GetBytes(pwd);
-        //strpwd = Convert.ToBase64String(b);
-        //strpwdEncoded = HttpUtility.UrlEncode(strpwd);
+        //    strpwd = Convert.ToBase64String(b);
+        //    strpwdEncoded = HttpUtility.UrlEncode(strpwd);
+
+        //    //var refundvw = new Refundvw()
+        //    //{
+        //    //    merchantid = merchantid,
+        //    //    pwd = strpwdEncoded,
+        //    //    atomtxnid = atomtxnid,
+        //    //    refundamt = refundamt,
+        //    //    txndate = txndate,
+        //    //    merefundref = merefundref,
+        //    //};
+
+        //    IEnumerable<KeyValuePair<string, string>> queries = new List<KeyValuePair<string, string>>();
+        //    {
+        //        new KeyValuePair<string, string>("merchantid", merchantid);
+        //        new KeyValuePair<string, string>("pwd", strpwdEncoded);
+        //        new KeyValuePair<string, string>("atomtxnid", atomtxnid);
+        //        new KeyValuePair<string, string>("refundamt", refundamt);
+        //        new KeyValuePair<string, string>("txndate", txndate);
+        //        new KeyValuePair<string, string>("merefundref", merefundref);
+        //    };
+
+        //    HttpContent q = new FormUrlEncodedContent(queries);
+
+        //    using (HttpClient client = new HttpClient())
+        //    {
+        //        using (HttpResponseMessage msg = await client.PostAsJsonAsync(url, q))
+        //        {
+        //            using (HttpContent content = msg.Content)
+        //            {
+        //                string mycontent = await content.ReadAsStringAsync();
+        //                if (msg.IsSuccessStatusCode == true)
+        //                {
+        //                    Redirect(url);
+        //                    Console.Write("Success");
+        //                }
+        //            }
+        //        }
+        //    }
+
+        //    return true;
+
         //}
-        //IEnumerable<KeyValuePair<string, string>> queries = new List<KeyValuePair<string, string>>();
-        //{
-        //    new KeyValuePair<string, string>("merchantid", "197");
-        //    new KeyValuePair<string, string>("pwd", "Test@123");
-        //    new KeyValuePair<string, string>("atomtxnid", "100004489745");
-        //    new KeyValuePair<string, string>("refundamt", "200.00");
-        //    new KeyValuePair<string, string>("txndate", "2019-08-02");
-        //    new KeyValuePair<string, string>("merefundref", "test123");
-        //};
 
-        [HttpPost]
-        public async System.Threading.Tasks.Task<ActionResult> PostRequestAsync(string url)
+
+
+
+        public class Refundvw
         {
-            url = "https://paynetzuat.atomtech.in/paynetz/rfts";
-
-            string merchantid = "197";
-            string pwd = "Test@123";
-            string atomtxnid = "100004489745";
-            string refundamt = "200.00";
-            string txndate = DateTime.Today.ToString("yyyy-MM-dd");
-            string merefundref = "test123";
-            string strpwd, strpwdEncoded;
-            byte[] b;
-
-            b = Encoding.UTF8.GetBytes(pwd);
-            strpwd = Convert.ToBase64String(b);
-            strpwdEncoded = HttpUtility.UrlEncode(strpwd);
-
-            List<string> queries = new List<string>();
-            {
-                queries.Add(merchantid);
-                queries.Add(strpwdEncoded);
-                queries.Add(atomtxnid);
-                queries.Add(refundamt);
-                queries.Add(txndate);
-                queries.Add(merefundref);
-            }
-
-            HttpContent q = new FormUrlEncodedContent(queries);
-            HttpContent q = new StringContent(queries.ToString());
-            using (HttpClient client = new HttpClient())
-            {
-                using (HttpResponseMessage response = await client.PostAsync(url, q))
-                {
-                    using (HttpContent content = response.Content)
-                    {
-                        string mycontent = await content.ReadAsStringAsync();
-                        HttpContentHeaders headers = content.Headers;
-                        return Redirect(headers.ToString());
-                    }
-                }
-            }
-
-            using (var client = new HttpClient())
-            {
-                HttpContent q = new StringContent(queries.ToString());
-                string Url = "https://paynetzuat.atomtech.in/paynetz/rfts";
-                var response = client.PostAsync(Url, q).Result;
-                if (response.IsSuccessStatusCode)
-                {
-                    Console.Write("Success");
-                }
-                else
-                {
-                    Console.Write("Error");
-                }
-                return Redirect(response.RequestMessage.RequestUri.OriginalString);
-            }
-
+            public string merchantid { get; set; }
+            public string pwd { get; set; }
+            public string atomtxnid { get; set; }
+            public string txndate { get; set; }
+            public string refundamt { get; set; }
+            public string merefundref { get; set; }
         }
-
-        [HttpPost]
-        public async System.Threading.Tasks.Task<ActionResult> PostRequest(string url)
-        {
-            url = "https://paynetzuat.atomtech.in/paynetz/rfts";
-
-            string merchantid = "197";
-            string pwd = "Test@123";
-            string atomtxnid = "100004489745";
-            string refundamt = "200.00";
-            string txndate = DateTime.Today.ToString("yyyy-MM-dd");
-            string merefundref = "test123";
-            string strpwd, strpwdEncoded;
-            byte[] b;
-
-            b = Encoding.UTF8.GetBytes(pwd);
-            strpwd = Convert.ToBase64String(b);
-            strpwdEncoded = HttpUtility.UrlEncode(strpwd);
-
-            List<string> queries = new List<string>();
-            {
-                queries.Add(merchantid);
-                queries.Add(strpwdEncoded);
-                queries.Add(atomtxnid);
-                queries.Add(refundamt);
-                queries.Add(txndate);
-                queries.Add(merefundref);
-            }
-
-            using (var client = new HttpClient())
-            {
-                HttpContent q = new StringContent(queries.ToString());
-                string Url = "https://paynetzuat.atomtech.in/paynetz/rfts";
-                var response = client.PostAsync(Url, q).Result;
-                if (response.IsSuccessStatusCode)
-                {
-                    Console.Write("Success");
-                }
-                else
-                {
-                    Console.Write("Error");
-                }
-                return Redirect(response.RequestMessage.RequestUri.OriginalString);
-            }
-
-        }
-
     }
-}
+
+}   

@@ -25,30 +25,16 @@ namespace Speedbird
         public string Phone { get; set; }
     }
 
-    public class AtomResponse
-    {
-        public string postingmmp_txn { get; set; }
-        public string postingmer_txn { get; set; }
-        public string postinamount { get; set; }
-        public string postingprod { get; set; }
-        public string postingdate { get; set; }
-        public string postingbank_txn { get; set; }
-        public string postingf_code { get; set; }
-        public string postingbank_name { get; set; }
-        public string postingclientcode { get; set; }
-        public string signature { get; set; }
-        public string postingdiscriminator { get; set; }
-
-    }
-
-    public class AtomRefundRecieve
+    public class Refundvw
     {
         public string merchantid { get; set; }
-        public string txnid { get; set; }
+        public string pwd { get; set; }
+        public string atomtxnid { get; set; }
+        public string txndate { get; set; }
+        public string refundamt { get; set; }
+        public string merefundref { get; set; }
         public string statuscode { get; set; }
         public string statusmsg { get; set; }
-        public string atomrefundid { get; set; }
-        public string amt { get; set; }
     }
 
     //Classes for SRDetails

@@ -68,6 +68,10 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.7\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -200,6 +204,7 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Areas\SBBoss\Controllers\ConfigController.cs" />
     <Compile Include="Areas\SBBoss\Controllers\EmployeeController.cs" />
     <Compile Include="Areas\SBBoss\Controllers\OwnedAssetController.cs" />
     <Compile Include="Areas\SBBoss\Controllers\RefundController.cs" />
@@ -801,6 +806,8 @@
     <Content Include="Areas\SBBoss\Views\SR\WritePVs\_Packages.cshtml" />
     <Content Include="Areas\SBBoss\Views\Refund\Index.cshtml" />
     <Content Include="Areas\SBBoss\Views\Refund\AtomRefundRecieve.cshtml" />
+    <Content Include="Areas\SBBoss\Views\Config\Index.cshtml" />
+    <Content Include="Areas\SBBoss\Views\Config\Manage.cshtml" />
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <Content Include="Areas\SBBoss\Views\RP\DriverR.cshtml" />
     <Content Include="Areas\SBBoss\Views\RP\DriverP.cshtml" />

@@ -158,6 +158,7 @@
     <Build Include="dbo\Tables\SRReceipts.sql" />
     <Build Include="dbo\Tables\SRTranslation.sql" />
     <Build Include="dbo\Tables\Config.sql" />
+    <Build Include="dbo\Tables\PaymentAssets.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="SpeedBirdDB.refactorlog" />

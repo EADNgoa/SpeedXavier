@@ -700,4 +700,81 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="ConfigId" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="2001c3da-2385-480d-81ce-81eb270d6e24" ChangeDateTime="08/08/2019 05:40:50">
+    <Property Name="ElementName" Value="[dbo].[PaymentAssets].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[PaymentAssets]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="TId" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="4f8c6707-13f8-4ca5-9057-41f1c9f358f1" ChangeDateTime="08/08/2019 05:44:39">
+    <Property Name="ElementName" Value="[dbo].[PaymentAssets].[amt]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[PaymentAssets]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Amount" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="2afac307-eb90-41cb-98a4-0b7829c41f06" ChangeDateTime="08/08/2019 05:44:42">
+    <Property Name="ElementName" Value="[dbo].[PaymentAssets].[mer_txn]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[PaymentAssets]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Mer_txn" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="723c50b2-f9cb-4428-a422-f48d095995c7" ChangeDateTime="08/08/2019 05:44:45">
+    <Property Name="ElementName" Value="[dbo].[PaymentAssets].[mmp_txn]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[PaymentAssets]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Mmp_txn" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="462e702e-25b8-47df-a7fb-48e0754aa2e2" ChangeDateTime="08/08/2019 05:44:50">
+    <Property Name="ElementName" Value="[dbo].[PaymentAssets].[prodid]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[PaymentAssets]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Prodid" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="e2fe0cd4-eac0-46b9-a79c-e3ec8cf55b33" ChangeDateTime="08/08/2019 05:45:23">
+    <Property Name="ElementName" Value="[dbo].[PaymentAssets].[Prodid]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[PaymentAssets]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="RProdid" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="ad70abcb-e6eb-4a27-a657-f46c60ba8e04" ChangeDateTime="08/08/2019 05:45:25">
+    <Property Name="ElementName" Value="[dbo].[PaymentAssets].[Amount]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[PaymentAssets]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="RAmount" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="80f32e67-4d49-4f7f-a9b8-c395a8c80ce7" ChangeDateTime="08/08/2019 05:45:27">
+    <Property Name="ElementName" Value="[dbo].[PaymentAssets].[Mer_txn]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[PaymentAssets]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="RMer_txn" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="cf633830-478c-4478-b255-8e0c006c63bd" ChangeDateTime="08/08/2019 05:45:29">
+    <Property Name="ElementName" Value="[dbo].[PaymentAssets].[Mmp_txn]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[PaymentAssets]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="RMmp_txn" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="d921b352-8f58-4649-b61e-eaf736bd9668" ChangeDateTime="08/08/2019 05:47:10">
+    <Property Name="ElementName" Value="[dbo].[PaymentAssets].[R]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[PaymentAssets]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Rsignature" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="ebe2dfac-6e76-4885-b94d-0073e8110511" ChangeDateTime="08/08/2019 05:50:56">
+    <Property Name="ElementName" Value="[dbo].[PaymentAssets].[UserId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[PaymentAssets]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="UserID" />
+  </Operation>
 </Operations>

@@ -664,7 +664,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [EAAuthorize(FunctionName = "Service Requests", Writable = true)]
-        public ActionResult SRCanxService([Bind(Include = "SRID,SRDID,ProdCanxCost,SBCanxCost,Note")] Refund item)
+        public bool SRCanxService([Bind(Include = "SRID,SRDID,ProdCanxCost,SBCanxCost,Note")] Refund item)
         {
             using (var transaction = db.GetTransaction())
             {
@@ -718,18 +718,46 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 SRDetails.IsCanceled = true;
                 LogAction(new SRlog { SRID = item.SRID, SRDID = item.SRDID, Event = $"Refund of {refundAmt} given for {SRDetails.ServiceTypeName}: {item.SRDID} . Supplier refund amount is {supOwedAmt}" });
 
+                var config = db.FirstOrDefault<Config>("select merchantid,pwd from Config");
+                var atomtxn = db.SingleOrDefault<PaymentAsset>("select RMmp_txn from PaymentAssets where SRID = @0", item.SRID);
+
+                string strpwd, strpwdEncoded;
+                byte[] b;
+
+                b = Encoding.UTF8.GetBytes(config.Pwd);
+                strpwd = Convert.ToBase64String(b);
+                strpwdEncoded = HttpUtility.UrlEncode(strpwd);
+
+            
+                var refunds = new Refundvw();
+                {
+                    refunds.merchantid = config.MerchantId;
+                    refunds.pwd = strpwd;
+                    refunds.refundamt = refundAmt.ToString();
+                    refunds.atomtxnid = "100004493590";
+                    refunds.txndate = DateTime.Today.ToString("yyyy-MM-dd");
+                    refunds.merefundref = "test123";
+                };
                 var client = new HttpClient();
                 client.BaseAddress = new Uri("https://paynetzuat.atomtech.in/paynetz/rfts");
-                var responseTask = client.GetAsync("student");
+                var responseTask = client.PostAsJsonAsync(client.BaseAddress, refunds);
                 responseTask.Wait();
-
                 var result = responseTask.Result;
-
-
+                ViewBag.Messege = null;
+                if (result.IsSuccessStatusCode == true)
+                {
+                    Console.Write("Success");
+                    ViewBag.Messege = "Refund Initiated Successfully";
+                    Redirect(client.BaseAddress.ToString());
+                }
+                else if(result.IsSuccessStatusCode == false)
+                {
+                    ViewBag.Messege = "Refund Initiation Failed";
+                }
+                
                 transaction.Complete();
-                return Redirect("https://paynetzuat.atomtech.in/paynetz/rfts");
-
-                //return RedirectToAction("Manage", new { id = item.SRID, mode = 5 });
+                return true;
+                //return RedirectToAction("Manage", new { id = item.SRID, mode = 5, refundresponse = ViewBag.Messege });
             }
 
         }

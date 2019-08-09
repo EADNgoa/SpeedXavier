@@ -1,0 +1,23 @@
+﻿CREATE TABLE [dbo].[PaymentAssets]
+(
+	[TId] INT NOT NULL PRIMARY KEY IDENTITY, 
+    [RequestUrl] VARCHAR(MAX) NULL, 
+    [SRID] INT NULL, 
+    [SRDID] INT NULL, 
+    [UserID] NVARCHAR (128) NULL, 
+    [TDate] DATETIME NULL, 
+    [RMmp_txn] VARCHAR(100) NULL, 
+    [RMer_txn] VARCHAR(100) NULL, 
+    [RAmount] VARCHAR(100) NULL, 
+    [RProdid] VARCHAR(100) NULL, 
+    [Rdate] VARCHAR(100) NULL, 
+    [Rbank_txn] VARCHAR(100) NULL, 
+    [Rf_code] VARCHAR(100) NULL, 
+    [Rbank_name] VARCHAR(100) NULL, 
+    [Rclientcode] VARCHAR(100) NULL, 
+    [Rsignature] VARCHAR(Max) NULL, 
+    [Rdiscriminator] VARCHAR(100) NULL, 
+    CONSTRAINT [FK_PaymentAssets_ToSR] FOREIGN KEY ([SRID]) REFERENCES [dbo].[ServiceRequest] ([SRID]),
+	CONSTRAINT [FK_PaymentAssets_ToWebUser] FOREIGN KEY ([UserID]) REFERENCES [dbo].[AspNetUsers] ([Id]),
+	CONSTRAINT [FK_PaymentAssets_ToSRdetails] FOREIGN KEY ([SRDID]) REFERENCES [dbo].[SRdetails] ([SRDID]),
+)
