@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -24,55 +25,49 @@ namespace Speedbird.Areas.SBBoss.Controllers
         //}
 
         [HttpPost]
-        public ActionResult Refund()
+        public async Task<ActionResult> RefundAsync()
         {
-
-            string merchantid = "197";
-            string pwd = "Test@123";
-            string atomtxnid = "100004493434";
-            string refundamt = "50.00";
-            string txndate = DateTime.Today.ToString("yyyy-MM-dd");
-            string merefundref = "test123";
-            string strpwd, strpwdEncoded;
-            byte[] b;
-
-            b = Encoding.UTF8.GetBytes(pwd);
-            strpwd = Convert.ToBase64String(b);
-            strpwdEncoded = HttpUtility.UrlEncode(strpwd);
-
-            var refundvw = new Refundvw()
-            {
-                merchantid = merchantid,
-                pwd = strpwdEncoded,
-                atomtxnid = atomtxnid,
-                refundamt = refundamt,
-                txndate = txndate,
-                merefundref = merefundref,
-            };
-
 
             using (var client = new HttpClient())
             {
+                var values = new List<KeyValuePair<string, string>>();
 
-                client.BaseAddress = new Uri("https://paynetzuat.atomtech.in/paynetz/rfts");
-                //HTTP POST
-                var responseTask = client.PostAsJsonAsync(client.BaseAddress, refundvw);
+                values.Add(new KeyValuePair<string, string>("merchantid", "197"));
+                values.Add(new KeyValuePair<string, string>("pwd", "VGVzdEAxMjM="));
+                values.Add(new KeyValuePair<string, string>("atomtxnid", "100004487215"));
+                values.Add(new KeyValuePair<string, string>("refundamt", "100.00"));
+                values.Add(new KeyValuePair<string, string>("txndate", DateTime.Today.ToString("yyyy-MM-dd")));
+                values.Add(new KeyValuePair<string, string>("merefundref", "25631"));
+                
+                var content = new FormUrlEncodedContent(values);
 
-                responseTask.Wait();
-                var result = responseTask.Result;
-                ViewBag.Messege = null;
-                if (result.IsSuccessStatusCode == true)
-                {
-                    Console.Write("Success");
-                }
+                var response = await client.PostAsync("https://paynetzuat.atomtech.in/paynetz/rfts", content);
 
+                var responseString = await response.Content.ReadAsStringAsync();
             }
+            //using (var client = new HttpClient())
+            //{
 
+            //    client.BaseAddress = new Uri("https://paynetzuat.atomtech.in/paynetz/rfts");
+            //    //HTTP POST
+            //    var responseTask = client.PostAsJsonAsync(client.BaseAddress, refundvw);
 
+            //    responseTask.Wait();
+            //    var result = responseTask.Result;
+            //    ViewBag.Messege = null;
+            //    if (result.IsSuccessStatusCode == true)
+            //    {
+            //        Console.Write("Success");
+            //    }
             return View();
+
+        }
+
+
+            //return View();
             //ModelState.AddModelError(string.Empty, "Server Error. Please contact administrator.");
             //return RedirectToAction("ThankYou", "Cart");
-        }
+    }
 
         //[HttpPost]
         //public async System.Threading.Tasks.Task<bool> RefundAsync(string url)
@@ -137,15 +132,15 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
 
 
-        public class Refundvw
-        {
-            public string merchantid { get; set; }
-            public string pwd { get; set; }
-            public string atomtxnid { get; set; }
-            public string txndate { get; set; }
-            public string refundamt { get; set; }
-            public string merefundref { get; set; }
-        }
-    }
+        //public class Refundvw
+        //{
+        //    public string merchantid { get; set; }
+        //    public string pwd { get; set; }
+        //    public string atomtxnid { get; set; }
+        //    public string txndate { get; set; }
+        //    public string refundamt { get; set; }
+        //    public string merefundref { get; set; }
+        //}
+    
 
 }   
