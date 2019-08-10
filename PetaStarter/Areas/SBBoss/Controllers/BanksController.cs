@@ -42,7 +42,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                     Debug.Print(fileName.PadRight(30, '*'));
                     ImportXmlToSql(fileName);
                     SuccessUpload.Add(fileName);
-                    
+
                 }
                 catch (Exception e)
                 {
@@ -173,7 +173,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                     {
                         ImportLog_Id = newImportId,
                         Abst_Id = newAbstTableId++,
-                        Name = x.Name.LocalName,
+                        Name = $"{x.Name.LocalName}*{x.Parent.Name.LocalName}",
                         Value = x.Value,
                         recursionLevel = level,
                         Type = GetTypeInt("Attribute"),
