@@ -267,12 +267,12 @@ namespace Speedbird
 		[Column] public int? SRDID { get; set; }
 		[Column] public string UserId { get; set; }
 		[Column] public string RefundAmt { get; set; }
-		[Column] public DateTime? TransactionDate { get; set; }
 		[Column] public string AtomTxnId { get; set; }
 		[Column] public string MerchantReferanceId { get; set; }
 		[Column] public string AtomRefundId { get; set; }
 		[Column] public string StatusCode { get; set; }
 		[Column] public string StatusMessege { get; set; }
+		[Column] public string CustomerInfo { get; set; }
 	}
     
 	[TableName("dbo.Attraaction")]

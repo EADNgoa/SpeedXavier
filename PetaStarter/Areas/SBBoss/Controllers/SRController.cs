@@ -720,6 +720,12 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 SRDetails.IsCanceled = true;
                 LogAction(new SRlog { SRID = item.SRID, SRDID = item.SRDID, Event = $"Refund of {refundAmt} given for {SRDetails.ServiceTypeName}: {item.SRDID} . Supplier refund amount is {supOwedAmt}" });
 
+                //fetching customer info with current servicerequestid
+                var customer = db.SingleOrDefault<ServiceCustomervw>("select CONCAT(cu.FName, ' ', cu.SName) as FullName, cu.Email, cu.Phone, src.IsLead from SR_Cust src " +
+                        "left join Customer cu on cu.CustomerID = src.CustomerID " +
+                        "left join ServiceRequest srq on srq.SRID = src.ServiceRequestID " +
+                        "where src.ServiceRequestID = @0 and IsLead = 1", item.SRID);
+
                 var config = db.FirstOrDefault<Config>("select merchantid,pwd from config");
                 var atomtxn = db.SingleOrDefault<AtomPaymentLog>("select rmmp_txn,TDate from AtomPaymentLogs where srid = @0", item.SRID);
 
@@ -774,8 +780,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
                 
                 //inserting Logs in Refund table
-                db.Insert(new AtomRefundLog { AtomRefundId = reader.ATOMREFUNDID, MerchantReferanceId = merrefundref, AtomTxnId = reader.TXNID, RefundAmt = reader.AMOUNT ,StatusCode = reader.STATUSCODE, StatusMessege = reader.STATUSMESSAGE, Tdate = DateTime.Now, SRID = item.SRID, SRDID = item.SRDID,UserId = User.Identity.GetUserId() });
-                ViewBag.Response = reader.STATUSMESSAGE + "with TransactionId" + reader.TXNID + ",Amount" + reader.AMOUNT + "and RefundID" + reader.ATOMREFUNDID + User.Identity.GetUserName();
+                db.Insert(new AtomRefundLog { AtomRefundId = reader.ATOMREFUNDID, MerchantReferanceId = merrefundref, AtomTxnId = reader.TXNID, RefundAmt = reader.AMOUNT ,StatusCode = reader.STATUSCODE, StatusMessege = reader.STATUSMESSAGE, Tdate = DateTime.Now, SRID = item.SRID, SRDID = item.SRDID,UserId = User.Identity.GetUserId(), CustomerInfo = customer.FullName });
+                ViewBag.Response = reader.STATUSMESSAGE + " with TransactionId = " + reader.TXNID + ",Amount " + reader.AMOUNT + "and RefundID = " + reader.ATOMREFUNDID + " of Customer " + customer.FullName;
                 transaction.Complete();
                 return RedirectToAction("Manage", new { id = item.SRID, mode = 5, ViewBag.Response });
             }
