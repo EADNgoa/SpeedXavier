@@ -346,6 +346,7 @@
                         <div class="container-fluid">
                             @{ decimal total = 0; }
                             @{ decimal discountedtotal = 0; }
+                            @{ int Servicetypeid = 0; }
                             @foreach (var item in Model)
                             {
                                 @Html.Hidden("CartID", item.CartID)
@@ -381,6 +382,7 @@
                                                     }
                                                     @{ total += item.OrigPrice;}
                                                     @{ discountedtotal += item.DiscountedPrice;}
+                                                    @{ Servicetypeid = item.ServiceTypeID;}
                                                     <td colspan="2" class="price">Rs @item.OrigPrice/-</td>
                                                 </tr>
                                                 <tr><th>Confirmation</th><td>Quick</td><td>&nbsp;</td></tr>
@@ -388,6 +390,8 @@
 
                                             @Html.Hidden("#Total", total)
                                             @Html.Hidden("#DiscountedTotal", discountedtotal)
+
+
                                         </table>
 
 
@@ -409,7 +413,6 @@
                         </div>
                     </div>
                 </div>
-
 
                 <div class="container-fluid">
                     <div class="row">
@@ -468,7 +471,7 @@
                 </div>
                 <div class="container-fluid">
                     @*@using (Html.BeginForm("PaymentIntegrate", "Cart", FormMethod.Post))
-                    {*@
+                        {*@
                     <div class="row">
                         @*<div class="item-banners" style="color:white; background-color:#009ee0 !important; text-align:left;padding-right:20px;font-weight:normal;">
             <div class="title">BILLING INFORMATION</div>
@@ -628,9 +631,10 @@
             </div>
         </div>*@
                         <br /><br />
-
-                        @using (Html.BeginForm("BookCartItems", "Cart", FormMethod.Post))
+                        @Html.Hidden("#ServiceTypeID", Servicetypeid)
+                        @using (Html.BeginForm("BookCartItems", "Cart", new { ServiceTypeID = (int)Servicetypeid }, FormMethod.Post))
                         {
+
 
                             <button id="paybtn" class="paybtn" type="submit">CLICK TO PAY</button>
                         }
@@ -707,8 +711,8 @@
             });
         });
 
-        @*$('.paybtn').click(function () {
-            $.post('@Url.Action("PaymentIntegrate","Cart")', { ServiceRequestId: @ViewBag.ServiceRequestId, CustId : @ViewBag.CustId});
+        @*$('#paybtn').click(function () {
+            $.post('@Url.Action("BookCartItems","Cart")', { : $("#ServiceTypeID").val()});
             });*@
 
         });

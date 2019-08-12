@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
+using System.Xml.Serialization;
 //using System.Web.Mvc; for dynamic roles
 //using Microsoft.AspNet.Identity;for dynamic roles
 //using Speedbird.Models;for dynamic roles
@@ -25,17 +26,39 @@ namespace Speedbird
         public string Phone { get; set; }
     }
 
+    [Serializable()]
+    [XmlRoot("REFUND")]
+    public class REFUND
+    {
+        [System.Xml.Serialization.XmlElement("MERCHANTID")]
+        public string MERCHANTID { get; set; }
+
+        [System.Xml.Serialization.XmlElement("TXNID")]
+        public string TXNID { get; set; }
+
+        [System.Xml.Serialization.XmlElement("AMOUNT")]
+        public string AMOUNT { get; set; }
+
+        [System.Xml.Serialization.XmlElement("STATUSCODE")]
+        public string STATUSCODE { get; set; }
+
+        [System.Xml.Serialization.XmlElement("STATUSMESSAGE")]
+        public string STATUSMESSAGE { get; set; }
+
+        [System.Xml.Serialization.XmlElement("ATOMREFUNDID")]
+        public string ATOMREFUNDID { get; set; }
+    }
+
     public class Refundvw
     {
         public string merchantid { get; set; }
-        public string pwd { get; set; }
-        public string atomtxnid { get; set; }
-        public string txndate { get; set; }
-        public string refundamt { get; set; }
-        public string merefundref { get; set; }
+        public string txnid { get; set; }
+        public string amount { get; set; }
         public string statuscode { get; set; }
         public string statusmsg { get; set; }
+        public string refundid { get; set; }
     }
+
 
     //Classes for SRDetails
 
@@ -918,7 +941,7 @@ namespace Speedbird
         public HttpPostedFileBase UploadedFile { get; set; }
     }
 
-    public class Refund
+    public class Refunds
     {
         public int SRID { get; set; }
         public int SRDID { get; set; }

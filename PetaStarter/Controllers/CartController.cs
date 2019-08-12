@@ -49,7 +49,6 @@ namespace Speedbird.Controllers
             {
             if (chckbtn == "cart")
             {
-
                 Cart item = new Cart();
                 if (ServiceTypeID == (int)ServiceTypeEnum.Accomodation)
                 {
@@ -163,7 +162,7 @@ namespace Speedbird.Controllers
         }
 
         [HttpPost]
-        public ActionResult BooKCartItems()
+        public ActionResult BooKCartItems(int? ServiceTypeID)
         {
 
             using (var transaction = db.GetTransaction())
@@ -172,7 +171,7 @@ namespace Speedbird.Controllers
 
                 try
                 {
-                    var item = new ServiceRequest { TDate = DateTime.Now, UserID = User.Identity.GetUserId(), SRStatusID = (int)SRStatusEnum.Confirmed, PayStatusID = (int)PayType.Full_Paid, BookingTypeID = (int)BookingTypeEnum.Online, EnquirySource = (int)EnquirySourceEnum.Web };
+                    var item = new ServiceRequest { TDate = DateTime.Now, UserID = User.Identity.GetUserId(), SRStatusID = (int)SRStatusEnum.Confirmed, PayStatusID = (int)PayType.Full_Paid, BookingTypeID = (int)BookingTypeEnum.Online, EnquirySource = (int)EnquirySourceEnum.Web, ServiceTypeID = (int)ServiceTypeID };
                     db.Insert(item);
                     CartItems.ForEach(c =>
                     {
@@ -293,7 +292,7 @@ namespace Speedbird.Controllers
                     var SRDID = db.SingleOrDefault<int>("select SRDID from SRdetails where SRID = @0", item.SRID);
 
                     //inserting request url in payment assets
-                    db.Insert(new PaymentAsset { RequestUrl = Url.ToString(),UserID = User.Identity.GetUserId(), SRID = item.SRID,SRDID = SRDID, TDate = DateTime.Now });
+                    db.Insert(new AtomPaymentLog { RequestUrl = Url.ToString(),UserID = User.Identity.GetUserId(), SRID = item.SRID,SRDID = SRDID, TDate = DateTime.Now });
 
                     return Redirect(Url.ToString());
     
@@ -374,14 +373,14 @@ namespace Speedbird.Controllers
                 string srid =  mer_txn.Substring(1);
                 
                 //updating remaining field in payment assets with response
-                db.Execute($"Update PaymentAssets Set RMmp_txn={mmp_txn},RMer_txn='{mer_txn}',RAmount={amt}, " +
+                db.Execute($"Update AtomPaymentLogs Set RMmp_txn={mmp_txn},RMer_txn='{mer_txn}',RAmount={amt}, " +
                     $"RProdid='{prod}',Rdate='{date}',Rbank_txn={bank_txn},Rf_code='{f_code}',Rbank_name='{bank_name}'," +
                     $"Rclientcode='{clientcode}',Rsignature='{signature}',Rdiscriminator='{discriminator}' " +
                     $"where SRID={srid}");
 
                 //payment response 
-                var TranResponse = db.Query<PaymentAsset>("select srq.SRID,pa.RMmp_txn,pa.RMer_txn,pa.RAmount,pa.RProdid, " +
-                    "pa.Rdate,pa.Rbank_txn,Rf_code, Rbank_name, Rdiscriminator, pa.UserID from PaymentAssets pa " +
+                var TranResponse = db.Query<AtomPaymentLog>("select srq.SRID,pa.RMmp_txn,pa.RMer_txn,pa.RAmount,pa.RProdid, " +
+                    "pa.Rdate,pa.Rbank_txn,Rf_code, Rbank_name, Rdiscriminator, pa.UserID from AtomPaymentLogs pa " +
                     "left join ServiceRequest srq on srq.SRID = pa.SRID " +
                     "left join AspNetUsers au on au.Id = pa.UserID where srq.SRID = @0", srid);
 

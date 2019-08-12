@@ -5,7 +5,7 @@
 <div id="refund_box">
     <div class="row">
         <div class="col">
-            @using (Html.BeginForm("SRCanxService", "SR", FormMethod.Post, new { @class = "form-inline", id = "CanxService-" + Model.SRDID }))
+            @using (Html.BeginForm("SRCanxServiceAsync", "SR", FormMethod.Post, new { @class = "form-inline", id = "CanxService-" + Model.SRDID }))
             {
                 @Html.AntiForgeryToken()
                 @Html.Hidden("SRID", (int)Model.SRID)

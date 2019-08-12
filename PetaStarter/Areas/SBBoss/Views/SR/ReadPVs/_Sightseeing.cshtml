@@ -2,6 +2,23 @@
 @model Speedbird.SightseeingServiceView
 
 <strong>@Model.SightseeingName</strong>
+<div id="refund_box">
+    <div class="row">
+        <div class="col">
+            @using (Html.BeginForm("SRCanxServiceAsync", "SR", FormMethod.Post, new { @class = "form-inline", id = "CanxService-" + Model.SRDID }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.Hidden("SRID", (int)Model.SRID)
+                @Html.Hidden("SRDID", (int)Model.SRDID)
+                @Html.EAText("ProdCanxCost", "", "Prod. Canx Cost")
+                @Html.EAText("SBCanxCost", "", "SB Canx Cost")<br />
+                @Html.EAText("Note", "", "Note")
+                <input type="submit" value="Cancel Service" class="btn alert-danger" />
+            }
+        </div>
+    </div>
+</div>
+
 <div class="row">
     <div class="col-10">
         <table class="SRDetsTbl SRDetsFullTable" width="100%">
@@ -64,7 +81,7 @@
                 <td>@Model.SuppConfNo</td>
             </tr>
         </table>
-     
+
 
 
         @foreach (var item in ViewBag.ufs)
@@ -87,20 +104,6 @@
             </div>
         </div>
 
-        <div class="row">
-            <div class="col">
-                @using (Html.BeginForm("SRCanxService", "SR", FormMethod.Post, new { @class = "form-inline", id = "CanxService-" + Model.SRDID }))
-                {
-                    @Html.AntiForgeryToken()
-                    @Html.Hidden("SRID", (int)Model.SRID)
-                    @Html.Hidden("SRDID", (int)Model.SRDID)
-                    @Html.EAText("ProdCanxCost", "", "Prod. Canx Cost")
-                    @Html.EAText("SBCanxCost", "", "SB Canx Cost")<br />
-                    @Html.EAText("Note", "", "Note")
-                    <input type="submit" value="Cancel Service" class="btn alert-danger" />
-                }
-            </div>
-        </div>
 
 
     </div>

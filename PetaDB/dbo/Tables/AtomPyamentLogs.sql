@@ -1,4 +1,4 @@
-﻿CREATE TABLE [dbo].[PaymentAssets]
+﻿CREATE TABLE [dbo].[AtomPaymentLogs]
 (
 	[TId] INT NOT NULL PRIMARY KEY IDENTITY, 
     [RequestUrl] VARCHAR(MAX) NULL, 
@@ -17,7 +17,7 @@
     [Rclientcode] VARCHAR(100) NULL, 
     [Rsignature] VARCHAR(Max) NULL, 
     [Rdiscriminator] VARCHAR(100) NULL, 
-    CONSTRAINT [FK_PaymentAssets_ToSR] FOREIGN KEY ([SRID]) REFERENCES [dbo].[ServiceRequest] ([SRID]),
-	CONSTRAINT [FK_PaymentAssets_ToWebUser] FOREIGN KEY ([UserID]) REFERENCES [dbo].[AspNetUsers] ([Id]),
-	CONSTRAINT [FK_PaymentAssets_ToSRdetails] FOREIGN KEY ([SRDID]) REFERENCES [dbo].[SRdetails] ([SRDID]),
+    CONSTRAINT [FK_AtomPaymentLogs_ToSR] FOREIGN KEY ([SRID]) REFERENCES [dbo].[ServiceRequest] ([SRID]),
+	CONSTRAINT [FK_AtomPaymentLogs_ToWebUser] FOREIGN KEY ([UserID]) REFERENCES [dbo].[AspNetUsers] ([Id]),
+	CONSTRAINT [FK_AtomPaymentLogs_ToSRdetails] FOREIGN KEY ([SRDID]) REFERENCES [dbo].[SRdetails] ([SRDID]),
 )
