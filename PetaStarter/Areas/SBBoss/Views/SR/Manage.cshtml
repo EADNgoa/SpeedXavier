@@ -10,7 +10,7 @@
 
         .funcBox h3 {
             border-bottom: 5px double navy;
-            display: inline-block;            
+            display: inline-block;
         }
 
     .heading {
@@ -22,6 +22,8 @@
         font-size: 20px;
     }
 </style>
+
+
 
 @*Assign Review Modal*@
 <div class="modal fade" id="ACModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -48,7 +50,7 @@
     </div>
 
     <div class="card-body">
-        
+        <span>@ViewBag.Messege</span>
 
         <div id="TabContent">
             @if (ViewBag.SRID != null)//Edit mode
@@ -68,7 +70,13 @@
                     @Html.Action("FetchDetails", "SR", new { id = (int)ViewBag.SRID })
                 </div>
                 <div id="Sec_Pax" class="funcBox mb-1"><h3>Passengers </h3>@Html.Action("SRCustomers", "SR", new { id = (int)ViewBag.SRID })</div>
-                <div id="Sec_SR" class="funcBox mb-1"><h3>Services </h3>@Html.Action("SRdetails", "SR", new { id = (int)ViewBag.SRID, EID = (int)ViewBag.EID })</div>
+                <div id="Sec_SR" class="funcBox mb-1">
+                    <h3>Services </h3><br />@if (ViewBag.Response != null)
+                    {
+                        <span class="alert alert-primary">@ViewBag.Response</span>
+                    }
+                    @Html.Action("SRdetails", "SR", new { id = (int)ViewBag.SRID, EID = (int)ViewBag.EID })
+                </div>
                 <div id="Sec_Upld" class="funcBox mb-1"><h3>Uploads / Documents </h3> @Html.Action("SRUpload", "SR", new { id = (int)ViewBag.SRID })</div>
                 <div id="Sec_Fin" class="funcBox mb-1"><h3>Finance </h3> <span class="float-right h3"><span class="text-muted">Customers outstanding:</span> <span id="CustOutstanding">$ 100</span></span> @Html.Action("Reciepts", "SR", new { id = (int)ViewBag.SRID })</div>
                 <div id="Sec_Log" class="funcBox mb-1"><h3>Booking Log </h3>@Html.Action("SRLogs", "SR", new { id = (int)ViewBag.SRID, mode = ViewBag.mode })</div>
@@ -225,6 +233,11 @@
             }
         });
 
+
+        $("#refund_box").hide();
+        $("#refund").on("click", function () {
+            $("#refund_box").toggle();
+        });
 
     });
 </script>

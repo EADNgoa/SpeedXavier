@@ -2,19 +2,21 @@
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 
 <style>
-    .btn{
-        width:120px !important;
+    .btn {
+        width: 120px !important;
     }
-    #dp2{
-        width:400px;
-        height:50px;
+
+    #dp2 {
+        width: 400px;
+        height: 50px;
     }
-    a{
-        color:red
+
+    a {
+        color: red
     }
     /*Reused from info page*/
-    ul,p{
-        margin-left:50px;
+    ul, p {
+        margin-left: 50px;
     }
 
     /*reused*/
@@ -33,6 +35,7 @@
         font-weight: bold;
         padding-left: 50px;
     }
+
     #paybtn {
         background-color: #a4ba00;
         background-image: none;
@@ -51,20 +54,24 @@
         text-transform: uppercase;
         display: inline-block;
     }
-    label{
-      margin-left:30px;
+
+    label {
+        margin-left: 30px;
     }
-    .payform{
-        width:300px !important;
+
+    .payform {
+        width: 300px !important;
     }
+
     .paylabel {
-        text-align:left;
+        text-align: left;
         font-size: 14px;
         margin-bottom: 5px;
         font-weight: bold;
         font-family: "Quattrocento Sans",serif;
         color: #333;
     }
+
     .w3-button {
         color: #00afec;
         display: inline-block;
@@ -76,17 +83,18 @@
         text-transform: uppercase;
         border: 1px solid #00afec !important;
         border-radius: 4px;
-        width:360px;
+        width: 360px;
         font-size: 18px;
         height: 40px;
-        margin-right:10px;
+        margin-right: 10px;
     }
+
     .table, th, td {
         border-top: 0px !important;
         text-align: left;
-        padding:5px !important;
-
+        padding: 5px !important;
     }
+
     td {
         font-family: "Quattrocento Sans",serif;
     }
@@ -132,11 +140,12 @@
         margin: 20px;
         width: 95.5%;
     }
+
     #card-body {
         border-bottom: 1px solid #00afec;
         border-top: 1px solid #00afec;
-        border-right:0;
-        border-left:0;
+        border-right: 0;
+        border-left: 0;
     }
 
 
@@ -157,7 +166,7 @@
         width: 100%;
         height: 70px;
         font-size: 18px;
-        overflow:hidden;
+        overflow: hidden;
     }
 
     #cart-block {
@@ -167,6 +176,7 @@
         background-color: white;
         margin-left: 100px;
     }
+
     #total-block {
         border: 10px solid #009ee0;
         height: 142px;
@@ -176,7 +186,6 @@
         text-align: center;
         width: 70%;
         margin-top: 10px;
-    
     }
 
     .cart-banners {
@@ -336,287 +345,301 @@
 
                         <div class="container-fluid">
                             @{ decimal total = 0; }
+                            @{ decimal discountedtotal = 0; }
+                            @{ int Servicetypeid = 0; }
                             @foreach (var item in Model)
                             {
-                                @Html.Hidden("CartID",item.CartID)
-                            <div class="row">
-                                <div class="col-md-5">
-                                    <img src="/Images/@item.Pic" style="width:100%;height:330px; margin: 16px 0 0 0; border-top: 1px solid #00afec;" />
+                                @Html.Hidden("CartID", item.CartID)
 
-                                </div>
-                                <div class="col-md-7">
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <img src="/Images/@item.Pic" style="width:100%;height:330px; margin: 16px 0 0 0; border-top: 1px solid #00afec;" />
 
-                                    <table class="table table-light">
-                                        <tbody>
-                                            <tr>
-                                                <th class="heading" colspan="4">@item.ServiceName</th>
+                                    </div>
+                                    <div class="col-md-7">
 
-                                            </tr>
-                                            <tr><th>Check In</th><td>@item.CheckIn</td><td>&nbsp;</td></tr>
-                                            <tr><th>Check Out</th><td>@item.CheckOut</td><td colspan="2" class="price"><i class="fa fa-users " style="font-size:48px;"></i> <small style="color:#333">5</small></td></tr>
-                                            <tr>
-                                                @if (item.ServiceTypeID == (int)ServiceTypeEnum.Packages || item.ServiceTypeID == (int)ServiceTypeEnum.SightSeeing)
-                                                {
-                                                 <th>Language</th>
+                                        <table class="table table-light">
+                                            <tbody>
+                                                <tr>
+                                                    <th class="heading" colspan="4">@item.ServiceName</th>
 
-                                                    foreach (var l in item.lang)
+                                                </tr>
+                                                <tr><th>Check In</th><td>@item.CheckIn</td><td>&nbsp;</td></tr>
+                                                <tr><th>Check Out</th><td>@item.CheckOut</td><td colspan="2" class="price"><i class="fa fa-users " style="font-size:48px;"></i> <small style="color:#333">5</small></td></tr>
+                                                <tr>
+                                                    @if (item.ServiceTypeID == (int)ServiceTypeEnum.Packages || item.ServiceTypeID == (int)ServiceTypeEnum.SightSeeing)
                                                     {
-                                                <td>@l.GuideLanguageName </td>}
-                                                }
-                                                else
-                                                {
-                                                <td>&nbsp;</td><td>&nbsp;</td>
-                                                }
-                                                @{ total += item.OrigPrice;}
-                                                <td colspan="2" class="price">Rs @item.OrigPrice/-</td>
-                                            </tr>
-                                            <tr><th>Confirmation</th><td>Quick</td><td>&nbsp;</td></tr>
-                                        </tbody>
+                                                        <th>Language</th>
+
+                                                        foreach (var l in item.lang)
+                                                        {
+                                                            <td>@l.GuideLanguageName </td>}
+                                                    }
+                                                    else
+                                                    {
+                                                        <td>&nbsp;</td>
+                                                        <td>&nbsp;</td>
+                                                    }
+                                                    @{ total += item.OrigPrice;}
+                                                    @{ discountedtotal += item.DiscountedPrice;}
+                                                    @{ Servicetypeid = item.ServiceTypeID;}
+                                                    <td colspan="2" class="price">Rs @item.OrigPrice/-</td>
+                                                </tr>
+                                                <tr><th>Confirmation</th><td>Quick</td><td>&nbsp;</td></tr>
+                                            </tbody>
+
+                                            @Html.Hidden("#Total", total)
+                                            @Html.Hidden("#DiscountedTotal", discountedtotal)
 
 
-                                    </table>
+                                        </table>
 
 
+                                    </div>
+
+                                    <div class="item-banners">
+                                        <center>
+                                            @using (Html.BeginForm("Delete", "Cart", FormMethod.Post))
+                                            {
+                                                <button class="w3-button w3-padding-small" type="submit">Wish List</button>
+                                                @Html.Hidden("id", item.CartID);
+                                                <button class="w3-button w3-padding-small" type="submit">Remove From List</button>
+                                            }
+                                        </center>
+
+                                    </div>
                                 </div>
-
-                                <div class="item-banners">
-                                    <center>
-                                             @using (Html.BeginForm("Delete", "Cart", FormMethod.Post))
-                                  {
-                                 <button class="w3-button w3-padding-small" type="submit">Wish List</button>
-                                 @Html.Hidden("id",item.CartID);
-                                    <button class="w3-button w3-padding-small" type="submit">Remove From List</button>
-                                  }
-                                    </center>
-                                   
-                                </div>
-                            </div>
                             }
                         </div>
                     </div>
                 </div>
+
                 <div class="container-fluid">
                     <div class="row">
                         <div class="item-banners" style="color:#1d4d71;font-size:18px;">
                             <center>
-                               @if (Model.Any(a=>a.CouponCode!=null))
-                               {
-                                   @:<p style="color:green" id="applied">*Coupon Successfully Applied</p>
-                               }
-                               else
-                               {
-                                <a id="coup-click"> Do You Have a Coupon? Click Here</a>
+                                @if (Model.Any(a => a.CouponCode != null))
+                                {
+                                    <p style="color:green" id="applied">*Coupon Successfully Applied</p>
+                                }
+                                else
+                                {
+                                    <a id="coup-click"> Do You Have a Coupon? Click Here</a>
 
-                               }
+                                }
                             </center>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="container" id="disc-div">                    
-                                <center>
-                                    <form>
-                                       
+                        <div class="container" id="disc-div">
+                            <center>
+                                <form>
 
-                                        <table>
-                                            <tr>
-                                                <td>
-                                                    <input id="dp2" type="text" class="form-control clickable " placeholder="Enter You Code Here. . .">
-                                                </td>
-                                                <td>
-                                                    <input type="button" class="form-control btn btn-success" value="Apply" id="coupsub" />
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </form>
-                                </center>                        
+
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                <input id="dp2" type="text" class="form-control clickable " placeholder="Enter You Code Here. . .">
+                                            </td>
+                                            <td>
+                                                <input type="button" class="coupon form-control btn btn-success" value="Apply" id="coupsub" />
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </form>
+                            </center>
                         </div>
                     </div>
                 </div>
+
                 <div class="container-fluid">
                     <div class="row">
-                      
-                  
                         <div class="item-banners" style="color:white;font-size:24px; background-color:#009ee0 !important; text-align:right;padding-right:20px;font-weight:bold;">
                             <small>Total</small>
-                            <span id="totAmt"> 
-                                @if(ViewBag.Amt != null)
+                            <span id="totAmt">
+                                @if (Model.Any(a => a.CouponCode != null && a.DiscountedPrice != null))
                                 {
-                                    @(ViewBag.Amt)
+                                    @(discountedtotal)
                                 }
                                 else
                                 {
                                     @(total)
                                 }
-
                             </span>
                         </div>
                     </div>
                 </div>
                 <div class="container-fluid">
-                      @using (Html.BeginForm("BookCartItems", "Cart", FormMethod.Post))
-                      {
+                    @*@using (Html.BeginForm("PaymentIntegrate", "Cart", FormMethod.Post))
+                        {*@
                     <div class="row">
-                        <div class="item-banners" style="color:white; background-color:#009ee0 !important; text-align:left;padding-right:20px;font-weight:normal;">
-                            <div class="title">BILLING INFORMATION</div>
-                        </div>
-                        <table class="table">
-                            <tr>
-                                <th class="paylabel">
-                                    @Html.Label("First Name", htmlAttributes: new { @class = "control-label " })
-                                </th>
-                                <td class="">
-                                    <input type="text" class="form-control col-md-6 payform" name="fname" />
-                                </td>
-                            </tr>
-                            <tr>
-                                <th class="paylabel">
-                                    @Html.Label("Surname", htmlAttributes: new { @class = "control-label " })
-                                </th>
-                                <td class="">
-                                    <input type="text" class="form-control col-md-6 payform" name="" />
-                                </td>
-                            </tr>
-                            <tr>
-                                <th class="paylabel">
-                                    @Html.Label("Country", htmlAttributes: new { @class = "control-label " })
-                                </th>
-                                <td class="">
-                                    <input type="text" class="form-control col-md-6 payform" name="" />
-                                </td>
-                            </tr>
-                            <tr>
-                                <th class="paylabel">
-                                    @Html.Label("Address 1", htmlAttributes: new { @class = "control-label " })
-                                </th>
-                                <td class="">
-                                    <input type="text" class="form-control col-md-6 payform" name="" />
-                                </td>
-                            </tr>
-                            <tr>
-                                <th class="paylabel">
-                                    @Html.Label("City", htmlAttributes: new { @class = "control-label " })
-                                </th>
-                                <td class="">
-                                    <input type="text" class="form-control col-md-6 payform" name="" />
-                                </td>
-                            </tr>
-                            <tr>
-                                <th class="paylabel">
-                                    @Html.Label("State", htmlAttributes: new { @class = "control-label " })
-                                </th>
-                                <td class="">
-                                    <input type="text" class="form-control col-md-6 payform" name="" />
-                                </td>
-                            </tr>
-                            <tr>
-                                <th class="paylabel">
-                                    @Html.Label("Zip Code", htmlAttributes: new { @class = "control-label " })
-                                </th>
-                                <td class="">
-                                    <input type="text" class="form-control col-md-6 payform" name="" />
-                                </td>
-                            </tr>
-                            <tr>
-                                <th class="paylabel">
-                                    @Html.Label("Telephone", htmlAttributes: new { @class = "control-label " })
-                                </th>
-                                <td class="">
-                                    <input type="text" class="form-control col-md-6 payform" name="" />
-                                </td>
-                            </tr>
-                            <tr>
-                                <th class="paylabel">
-                                    @Html.Label("Email-Address", htmlAttributes: new { @class = "control-label " })
-                                </th>
-                                <td class="">
-                                    <input type="text" class="form-control col-md-6 payform" name="" />
-                                </td>
-                            </tr>
-                        </table>
-                        <div class="item-banners" style="color:white; background-color:#009ee0 !important; text-align:left;padding-right:20px;font-weight:normal;">
-                            <div class="title">PAYMENT </div>
-                        </div>
-                        <table class="table">
-                            <tr>
-                                <th class="paylabel">
-                                    @Html.Label("Credit Card", htmlAttributes: new { @class = "control-label " })
-                                </th>
-                                <td class="form-inline">
-                                    <input type="radio" class="form-control col-md-2 " name="" style="zoom:1.5;" />
-                                    <img src="/Images/visa.gif" style="float:left;" />
-                                    <img src="/Images/mastercard.gif" style="float:left;" />
-                                    <img src="/Images/amex.gif" style="float:left;" />
-                                </td>
+                        @*<div class="item-banners" style="color:white; background-color:#009ee0 !important; text-align:left;padding-right:20px;font-weight:normal;">
+            <div class="title">BILLING INFORMATION</div>
+        </div>
+        <table class="table">
+            <tr>
+                <th class="paylabel">
+                    @Html.Label("First Name", htmlAttributes: new { @class = "control-label " })
+                </th>
+                <td class="">
+                    <input type="text" class="form-control col-md-6 payform" name="fname" />
+                </td>
+            </tr>
+            <tr>
+                <th class="paylabel">
+                    @Html.Label("Surname", htmlAttributes: new { @class = "control-label " })
+                </th>
+                <td class="">
+                    <input type="text" class="form-control col-md-6 payform" name="" />
+                </td>
+            </tr>
+            <tr>
+                <th class="paylabel">
+                    @Html.Label("Country", htmlAttributes: new { @class = "control-label " })
+                </th>
+                <td class="">
+                    <input type="text" class="form-control col-md-6 payform" name="" />
+                </td>
+            </tr>
+            <tr>
+                <th class="paylabel">
+                    @Html.Label("Address 1", htmlAttributes: new { @class = "control-label " })
+                </th>
+                <td class="">
+                    <input type="text" class="form-control col-md-6 payform" name="" />
+                </td>
+            </tr>
+            <tr>
+                <th class="paylabel">
+                    @Html.Label("City", htmlAttributes: new { @class = "control-label " })
+                </th>
+                <td class="">
+                    <input type="text" class="form-control col-md-6 payform" name="" />
+                </td>
+            </tr>
+            <tr>
+                <th class="paylabel">
+                    @Html.Label("State", htmlAttributes: new { @class = "control-label " })
+                </th>
+                <td class="">
+                    <input type="text" class="form-control col-md-6 payform" name="" />
+                </td>
+            </tr>
+            <tr>
+                <th class="paylabel">
+                    @Html.Label("Zip Code", htmlAttributes: new { @class = "control-label " })
+                </th>
+                <td class="">
+                    <input type="text" class="form-control col-md-6 payform" name="" />
+                </td>
+            </tr>
+            <tr>
+                <th class="paylabel">
+                    @Html.Label("Telephone", htmlAttributes: new { @class = "control-label " })
+                </th>
+                <td class="">
+                    <input type="text" class="form-control col-md-6 payform" name="" />
+                </td>
+            </tr>
+            <tr>
+                <th class="paylabel">
+                    @Html.Label("Email-Address", htmlAttributes: new { @class = "control-label " })
+                </th>
+                <td class="">
+                    <input type="text" class="form-control col-md-6 payform" name="" />
+                </td>
+            </tr>
+        </table>
+        <div class="item-banners" style="color:white; background-color:#009ee0 !important; text-align:left;padding-right:20px;font-weight:normal;">
+            <div class="title">PAYMENT </div>
+        </div>
+        <table class="table">
+            <tr>
+                <th class="paylabel">
+                    @Html.Label("Credit Card", htmlAttributes: new { @class = "control-label " })
+                </th>
+                <td class="form-inline">
+                    <input type="radio" class="form-control col-md-2 " name="" style="zoom:1.5;" />
+                    <img src="/Images/visa.gif" style="float:left;" />
+                    <img src="/Images/mastercard.gif" style="float:left;" />
+                    <img src="/Images/amex.gif" style="float:left;" />
+                </td>
 
-                            </tr>
-                            <tr>
-                                <th class="paylabel">
-                                    @Html.Label("Pay With Paypal", htmlAttributes: new { @class = "control-label " })
-                                </th>
-                                <td class="form-inline">
-                                    <input type="radio" class="form-control col-md-2 payform" name="" style="zoom:1.5; " />
-                                    <img src="/Images/paypal.png" style="float:left;width:70px;height:55px;" />
-                                </td>
-                            </tr>
-                            <tr>
-                                <th class="paylabel">
-                                    @Html.Label("Card Owner", htmlAttributes: new { @class = "control-label " })
-                                </th>
-                                <td class="">
-                                    <input type="text" class="form-control col-md-6 payform" name="" />
-                                </td>
-                            </tr>
-                            <tr>
-                                <th class="paylabel">
-                                    @Html.Label("Card Number", htmlAttributes: new { @class = "control-label " })
-                                </th>
-                                <td class="">
-                                    <input type="text" class="form-control col-md-6 payform" name="" />
-                                </td>
-                            </tr>
-                            <tr>
-                                <th class="paylabel">
-                                    @Html.Label("Expiration", htmlAttributes: new { @class = "control-label " })
-                                </th>
-                                <td class="form-inline" colspan="4">
-                                    <input type="text" class="form-control " style="width:50px !important" name="" />&nbsp;/&nbsp;
-                                    <input type="text" class=" form-control" name="" style="width:50px !important" />
+            </tr>
+            <tr>
+                <th class="paylabel">
+                    @Html.Label("Pay With Paypal", htmlAttributes: new { @class = "control-label " })
+                </th>
+                <td class="form-inline">
+                    <input type="radio" class="form-control col-md-2 payform" name="" style="zoom:1.5; " />
+                    <img src="/Images/paypal.png" style="float:left;width:70px;height:55px;" />
+                </td>
+            </tr>
+            <tr>
+                <th class="paylabel">
+                    @Html.Label("Card Owner", htmlAttributes: new { @class = "control-label " })
+                </th>
+                <td class="">
+                    <input type="text" class="form-control col-md-6 payform" name="" />
+                </td>
+            </tr>
+            <tr>
+                <th class="paylabel">
+                    @Html.Label("Card Number", htmlAttributes: new { @class = "control-label " })
+                </th>
+                <td class="">
+                    <input type="text" class="form-control col-md-6 payform" name="" />
+                </td>
+            </tr>
+            <tr>
+                <th class="paylabel">
+                    @Html.Label("Expiration", htmlAttributes: new { @class = "control-label " })
+                </th>
+                <td class="form-inline" colspan="4">
+                    <input type="text" class="form-control " style="width:50px !important" name="" />&nbsp;/&nbsp;
+                    <input type="text" class=" form-control" name="" style="width:50px !important" />
 
-                                </td>
+                </td>
 
-                            </tr>
+            </tr>
 
-                            <tr>
-                                <td>
-                                    <br />
+            <tr>
+                <td>
+                    <br />
 
-                                    <input type="checkbox" name="act" value="" class="form-check-inline" style="zoom:1.5;">
+                    <input type="checkbox" name="act" value="" class="form-check-inline" style="zoom:1.5;">
 
-                                </td>
-                                <td style="font-size:20px">
+                </td>
+                <td style="font-size:20px">
 
-                                    I have read and accept ItalyXP's Terms and Conditions<br /> and the Privacy Policy.
-                                </td>
-                            </tr>
+                    I have read and accept ItalyXP's Terms and Conditions<br /> and the Privacy Policy.
+                </td>
+            </tr>
 
-                        </table>
-                      
-                        <div id="total-block"><div class="price" style=" padding-right:250px!important;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">
-                              @if (ViewBag.Amt != null)
-                              {
-                                    @(ViewBag.Amt)
-                              }
-                              else
-                              {
-                                    @(total)
-                              }
-                             </div>
+        </table>
+
+        <div id="total-block">
+            <div class="price" style=" padding-right:250px!important;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">
+                @if (ViewBag.Amt != null)
+                {
+                    @(ViewBag.Amt)
+                }
+                else
+                {
+                    @(total)
+                }
+            </div>
+        </div>*@
                         <br /><br />
-                        <button id="paybtn" type="submit">CLICK TO PAY</button>
-                        </div>
-                        
-                    </div>   
-                      }
+                        @Html.Hidden("#ServiceTypeID", Servicetypeid)
+                        @using (Html.BeginForm("BookCartItems", "Cart", new { ServiceTypeID = (int)Servicetypeid }, FormMethod.Post))
+                        {
+
+
+                            <button id="paybtn" class="paybtn" type="submit">CLICK TO PAY</button>
+                        }
+                    </div>
+                    @*}*@
                 </div>
                 <br />
                 <br />
@@ -669,24 +692,30 @@
             $("#disc-div").toggle();
         });
         CartID = [];
-     
+
+
         $("#coupsub").click(function () {
-            $("#disc-div").hide();
 
-            $('#totAmt').html("");
-            $('#coup-click').html("<p style='color:green'>*Coupon Successfully Applied</p>");
-
-         
-
-             
-
-            $('#totAmt').load(
-                '@Url.Action("SearchCoupon", "Cart")',
-                {
-                    dc: $("#dp2").val(),
-                    tot: $("#Tot").val()
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("UpdateCoupon", "Cart")",
+                data: { dc :$("#dp2").val() },
+                success: function (d) {
+                    $("#disc-div").hide();
+                    $('#coup-click').html("<p style='color:green'>*Coupon Successfully Applied</p>");
+                    location.reload(true);
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    console.log(textStatus);
                 }
-            );
+            });
         });
-    });
+
+        @*$('#paybtn').click(function () {
+            $.post('@Url.Action("BookCartItems","Cart")', { : $("#ServiceTypeID").val()});
+            });*@
+
+        });
+
+
 </script>

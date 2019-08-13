@@ -15,6 +15,12 @@ using static PetaStarter.Areas.SBBoss.Models.DataTablesModels;
 using System.Collections;
 using KellermanSoftware.CompareNetObjects;
 using PetaPoco;
+using System.Text;
+using System.Collections.Specialized;
+using System.IO;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Xml.Serialization;
 
 namespace Speedbird.Areas.SBBoss.Controllers
 {
@@ -309,12 +315,13 @@ namespace Speedbird.Areas.SBBoss.Controllers
         }
 
         [EAAuthorize(FunctionName = "Service Requests", Writable = true)]
-        public ActionResult Manage(int? id, int EID = 0, bool DirectBF=false) 
+        public ActionResult Manage(string Response,int? id, int EID = 0, bool DirectBF=false) 
         {
            
             ViewBag.EID = EID;
             ViewBag.SRID = id;
             ViewBag.DirectBF = DirectBF;
+            ViewBag.Response = Response;
             ViewBag.Title = (id.HasValue && id.Value > 0 || DirectBF) ? "Booking Folder" : "Enquiry";
             return View();
         }
@@ -659,7 +666,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [EAAuthorize(FunctionName = "Service Requests", Writable = true)]
-        public ActionResult SRCanxService([Bind(Include = "SRID,SRDID,ProdCanxCost,SBCanxCost,Note")] Refund item)
+        public async System.Threading.Tasks.Task<ActionResult> SRCanxServiceAsync([Bind(Include = "SRID,SRDID,ProdCanxCost,SBCanxCost,Note")] Refunds item)
         {
             using (var transaction = db.GetTransaction())
             {
@@ -712,11 +719,76 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
                 SRDetails.IsCanceled = true;
                 LogAction(new SRlog { SRID = item.SRID, SRDID = item.SRDID, Event = $"Refund of {refundAmt} given for {SRDetails.ServiceTypeName}: {item.SRDID} . Supplier refund amount is {supOwedAmt}" });
+
+                //fetching customer info with current servicerequestid
+                var customer = db.SingleOrDefault<ServiceCustomervw>("select CONCAT(cu.FName, ' ', cu.SName) as FullName, cu.Email, cu.Phone, src.IsLead from SR_Cust src " +
+                        "left join Customer cu on cu.CustomerID = src.CustomerID " +
+                        "left join ServiceRequest srq on srq.SRID = src.ServiceRequestID " +
+                        "where src.ServiceRequestID = @0 and IsLead = 1", item.SRID);
+
+                var config = db.FirstOrDefault<Config>("select merchantid,pwd from config");
+                var atomtxn = db.SingleOrDefault<AtomPaymentLog>("select rmmp_txn,TDate from AtomPaymentLogs where srid = @0", item.SRID);
+
+                string strpwd, strpwdencoded;
+                byte[] b;
+
+                b = Encoding.UTF8.GetBytes(config.Pwd);
+                strpwd = Convert.ToBase64String(b);
+                strpwdencoded = HttpUtility.UrlEncode(strpwd);
+
+                string merchantid = config.MerchantId;
+                string atomtxnid = atomtxn.RMmp_txn;
+                string refundamt = refundAmt.ToString();
+                string txndate = atomtxn.TDate.Value.ToString("yyyy-MM-dd");
+                string merrefundref = "M" + item.SRID;
+
+
+                var client = new HttpClient();
+               
+                    var values = new List<KeyValuePair<string, string>>();
+
+                    values.Add(new KeyValuePair<string, string>("merchantid", merchantid));
+                    values.Add(new KeyValuePair<string, string>("pwd", strpwdencoded));
+                    values.Add(new KeyValuePair<string, string>("atomtxnid", atomtxnid));
+                    values.Add(new KeyValuePair<string, string>("refundamt", refundamt));
+                    values.Add(new KeyValuePair<string, string>("txndate", txndate));
+                    values.Add(new KeyValuePair<string, string>("merefundref", merrefundref));
+
+                    var content = new FormUrlEncodedContent(values);
+
+                    var response = await client.PostAsync("https://paynetzuat.atomtech.in/paynetz/rfts", content);
+
+                    var responseString = await response.Content.ReadAsStringAsync();
+
+                    string responses = responseString.Replace("\n", String.Empty);
+
+
+                    XmlSerializer xmlSer = new XmlSerializer(typeof(REFUND));
+
+                    StringReader stringReader = new StringReader(responseString);
+                    REFUND reader = (REFUND)xmlSer.Deserialize(stringReader);
+
+                    //var refundvw = new Refundvw();
+                    //{
+                    //    refundvw.merchantid = reader.MERCHANTID;
+                    //    refundvw.txnid = reader.TXNID;
+                    //    refundvw.amount = reader.AMOUNT;
+                    //    refundvw.statuscode = reader.STATUSCODE;
+                    //    refundvw.statusmsg = reader.STATUSMESSAGE;
+                    //    refundvw.refundid = reader.ATOMREFUNDID;
+                    //}
+
+                
+                //inserting Logs in Refund table
+                db.Insert(new AtomRefundLog { AtomRefundId = reader.ATOMREFUNDID, MerchantReferanceId = merrefundref, AtomTxnId = reader.TXNID, RefundAmt = reader.AMOUNT ,StatusCode = reader.STATUSCODE, StatusMessege = reader.STATUSMESSAGE, Tdate = DateTime.Now, SRID = item.SRID, SRDID = item.SRDID,UserId = User.Identity.GetUserId(), CustomerInfo = customer.FullName });
+                ViewBag.Response = reader.STATUSMESSAGE + " with TransactionId = " + reader.TXNID + ",Amount " + reader.AMOUNT + "and RefundID = " + reader.ATOMREFUNDID + " of Customer " + customer.FullName;
                 transaction.Complete();
-                return RedirectToAction("Manage", new { id = item.SRID, mode = 5 });
+                return RedirectToAction("Manage", new { id = item.SRID, mode = 5, ViewBag.Response });
             }
 
         }
+
+        
 
         [EAAuthorize(FunctionName = "Service Requests", Writable = true)]
         public ActionResult SRCustomers(int? id, int? sid, int? EID, int? cid)
