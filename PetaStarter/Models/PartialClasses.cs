@@ -72,7 +72,7 @@ namespace Speedbird
         public int SupplierID { get; set; }
         public string SupplierName { get; set; }
         public string SuppInvNo { get; set; }
-        public DateTime SuppInvDt { get; set; }
+        public DateTime? SuppInvDt { get; set; }
         public int SuppInvAmt { get; set; }
         public string CouponCode { get; set; }
         public string SuppConfNo { get; set; }
@@ -86,9 +86,9 @@ namespace Speedbird
     public class Packagevw : SupplierInfo
     {
         public int NOOfPax { get; set; }
-        public DateTime Tdate { get; set; }
-        public DateTime Fdate { get; set; }
-        public DateTime DOB { get; set; }
+        public DateTime? Tdate { get; set; }
+        public DateTime? Fdate { get; set; }
+        public DateTime? DOB { get; set; }
         public string PackageType { get; set; }
         public string FromLoc { get; set; }
         public string ToLoc { get; set; }
@@ -107,10 +107,10 @@ namespace Speedbird
     public class Visavw : SupplierInfo
     {
         public string PassportNo { get; set; }
-        public DateTime Tdate { get; set; }
-        public DateTime Fdate { get; set; }
-        public DateTime ExpiryDate { get; set; }
-        public DateTime DOB { get; set; }
+        public DateTime? Tdate { get; set; }
+        public DateTime? Fdate { get; set; }
+        public DateTime? ExpiryDate { get; set; }
+        public DateTime? DOB { get; set; }
         public string Nationality { get; set; }
         public decimal Cost { get; set; }
         public string PayTo { get; set; }
@@ -125,13 +125,13 @@ namespace Speedbird
     
     public class Insurancevw : SupplierInfo
     {
-        public DateTime DOB { get; set; }
+        public DateTime? DOB { get; set; }
         public string Destination { get; set; }
         public string PolicyType { get; set; }
         public string PolicyName { get; set; }
         public int NoOfDays { get; set; }
-        public DateTime ValidFrom { get; set; }
-        public DateTime ValidTo { get; set; }
+        public DateTime? ValidFrom { get; set; }
+        public DateTime? ValidTo { get; set; }
         public decimal Cost { get; set; }
         public override decimal TotalCost { get { return Cost; } }
     }
@@ -145,8 +145,8 @@ namespace Speedbird
         public decimal Passengers { get; set; }
         public string CabinType { get; set; }
         public string Cabins { get; set; }
-        public DateTime Departuredate { get; set; }
-        public DateTime ReturnDate { get; set; }
+        public DateTime? Departuredate { get; set; }
+        public DateTime? ReturnDate { get; set; }
         public string FromPort { get; set; }
         public string ViaPoint { get; set; }
         public string ToPort { get; set; }
@@ -160,14 +160,14 @@ namespace Speedbird
 
     public class Busvw : SupplierInfo
     {
-        public DateTime DOT { get; set; }
+        public DateTime? DOT { get; set; }
         public string PickUpPoint { get; set; }
         public string BusName { get; set; }
         public int Age { get; set; }
         public string FromLoc { get; set; }
         public string ToLoc { get; set; }
-        public DateTime Arrival { get; set; }
-        public DateTime Departure { get; set; }
+        public DateTime? Arrival { get; set; }
+        public DateTime? Departure { get; set; }
         public int BusNo { get; set; }
         public int OptionTypeID { get; set; }
         public int CarType { get; set; }
@@ -181,14 +181,14 @@ namespace Speedbird
 
     public class Railvw : SupplierInfo
     {
-        public DateTime DOT { get; set; }
+        public DateTime? DOT { get; set; }
         public string PickUpPoint { get; set; }
         public string TrainName { get; set; }
         public int Age { get; set; }
         public string FromLoc { get; set; }
         public string ToLoc { get; set; }
-        public DateTime Arrival { get; set; }
-        public DateTime Departure { get; set; }
+        public DateTime? Arrival { get; set; }
+        public DateTime? Departure { get; set; }
         public int TrainNo { get; set; }
         public string Class { get; set; }
         public int OptionTypeID { get; set; }
@@ -211,8 +211,8 @@ namespace Speedbird
         public int NoOfCars { get; set; }
         public decimal Qty { get; set; }
         public string Car { get; set; }
-        public DateTime Fdate { get; set; }
-        public DateTime Tdate { get; set; }
+        public DateTime? Fdate { get; set; }
+        public DateTime? Tdate { get; set; }
         public string FromLoc { get; set; }
         public string ToLoc { get; set; }
         public int CarType { get; set; }
@@ -225,12 +225,12 @@ namespace Speedbird
     public class TransferServiceView : SupplierInfo
     {
         public int cartype { get; set; }
-        public DateTime serviceDate { get; set; }
+        public DateTime? serviceDate { get; set; }
         public decimal Cost { get; set; }
         public string DriverName { get; set; }
         public string Car { get; set; }
         public string DropPoint { get; set; }
-        public DateTime Fdate { get; set; }
+        public DateTime? Fdate { get; set; }
         public string FromLoc { get; set; }
         public string ToLoc { get; set; }
         public bool HasAc { get; set; }
@@ -251,7 +251,7 @@ namespace Speedbird
         public int ExtraBedCost { get; set; }
         public int ChildNo { get; set; }
         public decimal Cost { get; set; }
-        public DateTime checkin { get; set; }
+        public DateTime? checkin { get; set; }
         public string FromLoc { get; set; }
         public bool HasAc { get; set; }
         public string ExtraService { get; set; }
@@ -260,7 +260,7 @@ namespace Speedbird
         public string payto { get; set; }
         public string RoomType { get; set; }
         public int NoOfRooms { get; set; }        
-        public DateTime checkout { get; set; }
+        public DateTime? checkout { get; set; }
         public int NoExtraBeds { get; set; }
         public int BFCost { get; set; }
         public int LunchCost { get; set; }
@@ -287,7 +287,7 @@ namespace Speedbird
         public int NoOfCars { get; set; }
         public int AdultCost { get; set; }
         public int ChildCost { get; set; }
-        public DateTime TourDate { get; set; }
+        public DateTime? TourDate { get; set; }
         public int CarType { get; set; }
         public bool MealIncluded { get; set; }
         public int GuideLanguageName { get; set; }
@@ -296,7 +296,7 @@ namespace Speedbird
 
     public class PassportView : SupplierInfo
     {
-        public DateTime DOB { get; set; }
+        public DateTime? DOB { get; set; }
         public int PassPortNo { get; set; }
         public string Nationality { get; set; }
         public decimal Cost { get; set; }
@@ -317,8 +317,8 @@ namespace Speedbird
         public string Class { get { return (ClassID == 1) ? "Economy" : "Business"; } } 
         public string AirlineCode {get; set; } 
         public string FlightNo {get; set; } 
-        public DateTime DepartureOn {get; set; } 
-        public DateTime ArrivalOn {get; set; } 
+        public DateTime? DepartureOn {get; set; } 
+        public DateTime? ArrivalOn {get; set; } 
         public string TicketNo {get; set; } 
         public string GDSConfNo {get; set; } 
         public string AirlinePNR {get; set; } 
