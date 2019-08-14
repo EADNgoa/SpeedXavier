@@ -1,0 +1,51 @@
+﻿@using Speedbird
+@model Speedbird.AccomodationServiceView
+
+
+<div class="row">
+    <div class="col-12">
+        <table class="SRDetsTbl SRDetsFullTable" width="100%">
+            <thead>
+                <tr>
+                    <th>Folder No</th>
+                    <th>Booked On</th>
+                    <th>Pax Name</th>
+                    <th>Pax No</th>
+                    <th>Agent</th>
+                    <th>Hotel</th>
+                    <th>Checkin</th>
+                    <th>Checkout</th>
+                    <th>Room Type</th>
+                    <th>No Of Rooms</th>
+                    <th>Adult</th>
+                    <th>Child</th>
+                    <th>Commision</th>
+                    <th>Cost Price</th>
+                    <th>Sellprice</th>
+                    <th>Done By</th>
+                </tr>
+
+            </thead>
+            <tr>
+                <td>@Model.BookingNo</td>
+                <td>@Model.TDate.EAFormat(withTime: false)</td>
+                <td>@Model.PaxName </td>
+                <td>@(Model.AdultNo + Model.ChildNo + Model.InfantNo) </td>
+                <td>@Model.AgentBooker </td>
+                <td>@Model.AccomName </td>
+                <td>@Model.checkin.EAFormat() </td>
+                <td>@Model.checkout.EAFormat() </td>
+                <td>@Model.RoomType</td>
+                <td>@Model.NoOfRooms </td>
+                <td>@Model.AdultNo </td>
+                <td>@Model.ChildNo </td>
+                <td>@Model.ECommision</td>
+                <td>@Model.Cost</td>
+                <td>@Model.SellPrice</td>
+                <td>@User.Identity.GetRealName()</td>
+            </tr>
+        </table>
+    </div>
+
+</div>
+<br />

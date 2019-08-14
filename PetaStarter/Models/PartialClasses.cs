@@ -102,6 +102,12 @@ namespace Speedbird
         public decimal AddCost { get; set; }
         public string AddDtl { get; set; }
         public override decimal TotalCost { get { return Cost + AddCost + NetCost; } }
+        public int AgentID { get; set; }
+        public string AgentBooker { get; set; }
+        public int BookingNo { get; set; }
+        public DateTime TDate { get; set; }
+        
+
     }
 
     public class Visavw : SupplierInfo
@@ -120,6 +126,10 @@ namespace Speedbird
         public string VisaCountry { get; set; }
         public decimal ExtraServiceCost { get; set; }
         public override decimal TotalCost { get { return Cost + ExtraServiceCost; } }
+        public int AgentID { get; set; }
+        public string AgentBooker { get; set; }
+        public int BookingNo { get; set; }
+        public DateTime TDate { get; set; }
     }
 
     
@@ -134,6 +144,10 @@ namespace Speedbird
         public DateTime? ValidTo { get; set; }
         public decimal Cost { get; set; }
         public override decimal TotalCost { get { return Cost; } }
+        public int AgentID { get; set; }
+        public string AgentBooker { get; set; }
+        public int BookingNo { get; set; }
+        public DateTime TDate { get; set; }
     }
 
     public class Cruisevw : SupplierInfo
@@ -155,6 +169,10 @@ namespace Speedbird
         public decimal Cost { get; set; }
         public string CruiseName { get; set; }
         public override decimal TotalCost { get { return Cost; } }
+        public int AgentID { get; set; }
+        public string AgentBooker { get; set; }
+        public int BookingNo { get; set; }
+        public DateTime TDate { get; set; }
     }
 
 
@@ -177,6 +195,10 @@ namespace Speedbird
         public decimal FullCost { get; set; }
         public string AddDetl { get; set; }
         public override decimal TotalCost { get { return Cost + FullCost + AddCost; } }
+        public int AgentID { get; set; }
+        public string AgentBooker { get; set; }
+        public int BookingNo { get; set; }
+        public DateTime TDate { get; set; }
     }
 
     public class Railvw : SupplierInfo
@@ -199,6 +221,10 @@ namespace Speedbird
         public decimal FullCost { get; set; }
         public string AddDetl { get; set; }
         public override decimal TotalCost { get { return Cost + FullCost + AddCost; } }
+        public int AgentID { get; set; }
+        public string AgentBooker { get; set; }
+        public int BookingNo { get; set; }
+        public DateTime TDate { get; set; }
     }
 
 
@@ -220,6 +246,10 @@ namespace Speedbird
         public int NoExtraBeds { get; set; }
         public string PayTo { get; set; }
         public override decimal TotalCost { get { return Cost; } }
+        public int AgentID { get; set; }
+        public string AgentBooker { get; set; }
+        public int BookingNo { get; set; }
+        public DateTime TDate { get; set; }
     }
 
     public class TransferServiceView : SupplierInfo
@@ -242,6 +272,10 @@ namespace Speedbird
         public int NoOfVehicles { get; set; }
         public decimal VehicleCost { get; set; }
         public override decimal TotalCost { get { return Cost + VehicleCost; } }
+        public int AgentID { get; set; }
+        public string AgentBooker { get; set; }
+        public int BookingNo { get; set; }
+        public DateTime TDate { get; set; }
     }
 
     public class AccomodationServiceView : SupplierInfo
@@ -259,6 +293,7 @@ namespace Speedbird
         public string RoomCategory { get; set; }
         public string payto { get; set; }
         public string RoomType { get; set; }
+        public int CarType { get; set; }
         public int NoOfRooms { get; set; }        
         public DateTime checkout { get; set; }
         public int NoExtraBeds { get; set; }
@@ -269,6 +304,10 @@ namespace Speedbird
         public int ExtraServiceCost { get; set; }
         public int EBCostPNight { get; set; }
         public override decimal TotalCost { get { return EBCostPNight + DinnerCost + LunchCost + BFCost + ExtraServiceCost; } }
+        public int AgentID { get; set; }
+        public string AgentBooker { get; set; }
+        public int BookingNo { get; set; }
+        public DateTime TDate { get; set; }
     }
 
         public class SightseeingServiceView : SupplierInfo
@@ -291,7 +330,11 @@ namespace Speedbird
         public int CarType { get; set; }
         public bool MealIncluded { get; set; }
         public int GuideLanguageName { get; set; }
-        public override decimal TotalCost { get { return (CostPerCar * NoOfCars) + (AdultCost * AdultNo) + (ChildCost * ChildNo); } }        
+        public override decimal TotalCost { get { return (CostPerCar * NoOfCars) + (AdultCost * AdultNo) + (ChildCost * ChildNo); } }
+        public int AgentID { get; set; }
+        public string AgentBooker { get; set; }
+        public int BookingNo { get; set; }
+        public DateTime TDate { get; set; }
     }
 
     public class PassportView : SupplierInfo
@@ -302,7 +345,10 @@ namespace Speedbird
         public decimal Cost { get; set; }
         public string Heritage { get; set; }
         public override decimal TotalCost { get { return Cost; } }
-        public decimal SellPrice { get; set; }
+        public int AgentID { get; set; }
+        public string AgentBooker { get; set; }
+        public int BookingNo { get; set; }
+        public DateTime TDate { get; set; }
     }
 
     public class FlightServiceView : SupplierInfo
@@ -327,6 +373,10 @@ namespace Speedbird
         public string Extra {get; set; } 
         public string ExtraDetails {get; set; }         
         public override decimal TotalCost { get { return Cost; } }
+        public int AgentID { get; set; }
+        public string AgentBooker { get; set; }
+        public int BookingNo { get; set; }
+        public DateTime TDate { get; set; }
     }
         //EOF Classes for SRDetails
 

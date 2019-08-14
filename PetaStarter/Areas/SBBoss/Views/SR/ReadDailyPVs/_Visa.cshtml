@@ -1,0 +1,88 @@
+﻿@using Speedbird
+@model Speedbird.Visavw
+
+
+<div class="row">
+    <div class="col-10">
+        <table class="SRDetsTbl" width="100%">
+            <thead>
+                <tr>
+                    <th>Pax Name     </th>
+                    <th>Passport No        </th>
+                    <th>DOB    </th>
+                    <th>Expiry Date    </th>
+                    <th>Nationality    </th>
+                    <th>Visa Country    </th>
+                    <th>From Date  </th>
+                    <th>To Date     </th>
+                    <th>Duration    </th>
+                    <th>Cost </th>
+                    <th>Total CP </th>
+                </tr>
+            </thead>
+            <tr>
+                <td>@Model.PaxName</td>
+                <td>@Model.PassportNo</td>
+                <td>@Model.DOB.EAFormat()</td>
+                <td>@Model.ExpiryDate.EAFormat()</td>
+                <td>@Model.Nationality</td>
+                <td>@Model.VisaCountry</td>
+                <td>@Model.Fdate.EAFormat()</td>
+                <td>@Model.Tdate.EAFormat()</td>
+                <td>@(Model.Tdate.Subtract(Model.Fdate).TotalDays)</td>
+                <td align="right">@Model.Cost</td>
+                <td align="right">@Model.ExtraServiceCost</td>
+            </tr>
+        </table>
+        @{Html.RenderPartial("ReadPVs/_SupplierInfo", Model); }
+
+    </div>
+    <div class="col-2" style="padding-left:0px;">
+        @{Html.RenderPartial("ReadPVs/_Fin", Model); }
+    </div>
+</div>
+<br />
+
+
+
+@*@if (ViewBag.isReadOnly != null)
+    {@Html.Action("CustSearch", "SR", new { id = Model.SRDID })
+    }*@
+
+@*@if (Model != null)
+    {
+        <script>
+           $('#AssignDriver').load('@Url.Action("_AssignDriver")', { SRID: @Model.SRID, SRDID: @Model.SRDID});
+           $('#Review').load('@Url.Action("_DrvReview")', { SRID: @Model.SRID,SRDID: @Model.SRDID});
+        </script>
+    }*@
+
+
+
+
+
+
+<script>
+
+
+    $(function () {
+        //DateTime picker
+
+
+        $('.eadate').datepicker({
+            dateFormat: "dd-MM-yy",
+            showButtonPanel: true,
+            changeMonth: true,
+            changeYear: true
+        });
+
+        //Disable the browsers default date picker
+        jQuery.validator.methods["date"] = function (value, element) { return true; }
+
+
+    });
+
+
+
+
+</script>

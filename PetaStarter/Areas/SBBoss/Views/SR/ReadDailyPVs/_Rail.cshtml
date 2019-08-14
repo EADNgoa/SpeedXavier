@@ -1,6 +1,5 @@
 ﻿@using Speedbird
-@model Speedbird.SupplierInfo
-
+@model Speedbird.Railvw
 <div id="refund_box">
     <div class="row">
         <div class="col">
@@ -17,30 +16,55 @@
         </div>
     </div>
 </div>
-<table class="SRDetsTbl">
-    <thead>
-        <tr>
-            <th>Supplier</th>
-            <th>Invoice No.</th>
-            <th>Inv. Date</th>
-            <th>Inv. Amt.</th>
-            <th>Coupon</th>
-            <th>Conf No.</th>
-            <th>Contract</th>
-        </tr>
-    </thead>
-    <tr>
-        <td>@Model.SupplierName</td>
-        <td>@Model.SuppInvNo</td>
-        <td>@Model.SuppInvDt.EAFormat()</td>
-        <td>@Model.SuppInvAmt</td>
-        <td>@Model.CouponCode</td>
-        <td>@Model.SuppConfNo</td>
-        <td>@Model.ContractNo</td>
-    </tr>
-</table>
 
-
+<div class="row">
+    <div class="col-10">
+        <table class="SRDetsTbl">
+            <thead>
+                <tr>
+                    <th>Pax Name</th>
+                    <th>Age</th>
+                    <th>Date of travel</th>
+                    <th>From</th>
+                    <th>To</th>
+                    <th>Bus Name</th>
+                    <th>Bus No</th>
+                    <th>Departure Time</th>
+                    <th>Arrival Time</th>
+                    <th>Class</th>
+                    <th>Booking Type</th>
+                    <th>Ticket No</th>
+                    <th>Ticket Cost</th>
+                    <th>Additional Cost</th>
+                    <th>Additional Details</th>
+                    <th>Total Cost</th>
+                </tr>
+            </thead>
+            <tr>
+                <td>@Model.PaxName</td>
+                <td>@Model.Age</td>
+                <td>@Model.DOT.EAFormat()</td>
+                <td>@Model.FromLoc</td>
+                <td>@Model.ToLoc</td>
+                <td>@Model.TrainName</td>
+                <td>@Model.TrainNo</td>
+                <td>@Model.Arrival.EAFormat(true)</td>
+                <td>@Model.Departure.EAFormat(true)</td>
+                <td>@((BookingTypeEnum)Model.CarType)</td>
+                <td>@Model.Class</td>
+                <td>@Model.TicketNo</td>
+                <td align="right">@Model.Cost</td>
+                <td align="right">@Model.AddCost</td>
+                <td>@Model.AddDetl</td>
+                <td align="right">@Model.FullCost</td>
+            </tr>
+        </table>
+        @{Html.RenderPartial("ReadPVs/_SupplierInfo", Model); }
+    </div>
+    <div class="col-2" style="padding-left:0px;">
+        @{Html.RenderPartial("ReadPVs/_Fin", Model); }
+    </div>
+</div>
 @foreach (var item in ViewBag.ufs)
 {
     <span class="badge badge-secondary"><a target="_blank" style="color:white !important;" href="/Images/@item.Path">@item.UploadName</a> &nbsp; <a style="color:#fe7575 !important;" href="@Url.Action("Delete","SR",new {pid=item.SRUID , id=item.SRID})">X</a></span>
@@ -66,6 +90,7 @@
 
 
 
+
 <script>
 
 
@@ -83,11 +108,6 @@
         //Disable the browsers default date picker
         jQuery.validator.methods["date"] = function (value, element) { return true; }
 
-
-        $("#refund_box").hide();
-        $("#refund").on("click", function () {
-            $("#refund_box").toggle();
-        });
 
     });
 
