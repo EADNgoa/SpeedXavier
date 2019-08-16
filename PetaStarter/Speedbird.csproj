@@ -809,14 +809,12 @@
     <Content Include="Areas\SBBoss\Views\SR\ReadDailyPVs\_Bus.cshtml" />
     <Content Include="Areas\SBBoss\Views\SR\ReadDailyPVs\_CarBike.cshtml" />
     <Content Include="Areas\SBBoss\Views\SR\ReadDailyPVs\_Cruise.cshtml" />
-    <Content Include="Areas\SBBoss\Views\SR\ReadDailyPVs\_Fin.cshtml" />
     <Content Include="Areas\SBBoss\Views\SR\ReadDailyPVs\_Flight.cshtml" />
     <Content Include="Areas\SBBoss\Views\SR\ReadDailyPVs\_Insurance.cshtml" />
     <Content Include="Areas\SBBoss\Views\SR\ReadDailyPVs\_Packages.cshtml" />
     <Content Include="Areas\SBBoss\Views\SR\ReadDailyPVs\_Passport.cshtml" />
     <Content Include="Areas\SBBoss\Views\SR\ReadDailyPVs\_Rail.cshtml" />
     <Content Include="Areas\SBBoss\Views\SR\ReadDailyPVs\_Sightseeing.cshtml" />
-    <Content Include="Areas\SBBoss\Views\SR\ReadDailyPVs\_SupplierInfo.cshtml" />
     <Content Include="Areas\SBBoss\Views\SR\ReadDailyPVs\_Transfer.cshtml" />
     <Content Include="Areas\SBBoss\Views\SR\ReadDailyPVs\_Visa.cshtml" />
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />

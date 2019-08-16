@@ -1,6 +1,5 @@
 ﻿@using Speedbird
 @model Speedbird.PassportView
-
 <div class="row">
     <div class="col-10">
         <table class="SRDetsTbl SRDetsFullTable" width="100%">
@@ -45,5 +44,3 @@
            $('#Review').load('@Url.Action("_DrvReview")', { SRID: @Model.SRID,SRDID: @Model.SRDID});
         </script>
     }*@
-
-

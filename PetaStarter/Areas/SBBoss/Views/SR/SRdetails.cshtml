@@ -14,7 +14,7 @@
     
     @foreach (var sd in (IEnumerable<Speedbird.SRdetail>)ViewBag.SRDets)
     {
-        <div class="h3">@sd.SRDID : @(((Speedbird.ServiceTypeEnum)sd.ServiceTypeID).ToString())&nbsp;<input type="button" id="refund" class="btn btn-primary" value="Refund" /></div>
+        <div class="h3">@sd.SRDID : @(((Speedbird.ServiceTypeEnum)sd.ServiceTypeID).ToString())&nbsp;<input type="button" class="refund btn btn-primary" value="Refund" /></div>
         @Html.Action("FetchSRdetails", "SR", new { sType = (Speedbird.ServiceTypeEnum)sd.ServiceTypeID, srdid = sd.SRDID })
 
     }
@@ -178,6 +178,11 @@
             modal.find('#SRDID').val(recipient);
             modal.find('#CID').focus();
         })
+
+        $(".refund_box").hide();
+        $(".refund").on("click", function () {
+            $(".refund_box").toggle();
+        });
 
 
     })

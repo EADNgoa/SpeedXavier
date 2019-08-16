@@ -1,6 +1,5 @@
 ﻿@using Speedbird
 @model Speedbird.AccomodationServiceView
-
 <strong>@Model.AccomName</strong>
 <div class="row">
     <div class="col-10">
@@ -32,7 +31,7 @@
                     <th>Extra</th>
                     <th>Extra Qty</th>
                     <th>Extras cost</th>
-                    <th>Total extras</th>                    
+                    <th>Total extras</th>
 
                 </tr>
             </thead>
@@ -49,19 +48,21 @@
                 <td>@Model.RoomType </td>
                 <td>@Model.RoomCategory </td>
                 <td align="right">@Model.NoExtraBeds </td>
-            </tr><tr>
+            </tr>
+            <tr>
                 <td align="right">@Model.ExtraBedCost </td>
                 <td align="right">@(Model.ExtraBedCost * Model.NoExtraBeds) </td>
                 <td>@Model.HasAc </td>
-                <td align="right">@Model.Cost </td>
+                <td align="right">@(Model.EBCostPNight) </td>
+
                 <td align="right">@Model.BFCost </td>
                 <td align="right">@Model.LunchCost </td>
                 <td align="right">@Model.DinnerCost </td>
-                <td align="right">@(Model.EBCostPNight) </td>
+                <td align="right">@Model.TotalCost </td>
                 <td>@Model.ExtraService </td>
                 <td align="right">@Model.NoExtraService </td>
                 <td align="right">@Model.ExtraServiceCost </td>
-                <td align="right">@(Model.ExtraServiceCost * Model.NoExtraService) </td>                
+                <td align="right">@(Model.ExtraServiceCost * Model.NoExtraService) </td>
             </tr>
         </table>
         @{Html.RenderPartial("ReadPVs/_SupplierInfo", Model); }
@@ -85,5 +86,3 @@
            $('#Review').load('@Url.Action("_DrvReview")', { SRID: @Model.SRID,SRDID: @Model.SRDID});
         </script>
     }*@
-
-

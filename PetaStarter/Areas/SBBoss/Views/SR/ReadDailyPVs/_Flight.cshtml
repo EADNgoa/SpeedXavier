@@ -1,12 +1,16 @@
 ﻿@using Speedbird
-@model Speedbird.FlightServiceView
+@model Speedbird.FlightServiceDaily
 
 <div class="row">
-    <div class="col-10">
+    <div class="col-12">
         <table class="SRDetsTbl SRDetsFullTable" width="100%">
             <thead>
                 <tr>
-                    <th>Pax Name              </th>
+                    <th>Folder No</th>
+                    <th>Booked On</th>
+                    <th>Pax Name</th>
+                    <th>Pax No</th>
+                    <th>Agent</th>
                     <th>Adult Qty              </th>
                     <th>Child Qty              </th>
                     <th>Infant Qty             </th>
@@ -15,8 +19,6 @@
                     <th>To                   </th>
                     <th>Class                </th>
                     <th>Airline Code         </th>
-                </tr>
-                <tr>
                     <th>Flight No             </th>
                     <th>Departure On          </th>
                     <th>Arrival On            </th>
@@ -25,11 +27,18 @@
                     <th>Airline PNR           </th>
                     <th>Extra                </th>
                     <th>Extra Details         </th>
-                    <th></th>                                    
+                    <th>CP        </th>
+                    <th>Sell Price</th>
+                    <th>COM</th>
+                    <th>Done By</th>
                 </tr>
             </thead>
             <tr>
+                <td>@Model.BookingNo</td>
+                <td>@Model.TDate.EAFormat(withTime: false)</td>
                 <td>@Model.PaxName</td>
+                <td>@(Model.AdultNo + Model.ChildNo + Model.InfantNo)</td>
+                <td>@Model.ContactName</td>
                 <td align="right">@Model.AdultNo</td>
                 <td align="right">@Model.ChildNo </td>
                 <td align="right">@Model.InfantNo </td>
@@ -38,8 +47,6 @@
                 <td>@(Model.ToLoc.ToUpper()) </td>
                 <td>@Model.Class </td>
                 <td>@Model.AirlineCode </td>
-            </tr>
-            <tr>
                 <td>@Model.FlightNo</td>
                 <td align="right">@Model.DepartureOn.EAFormat(true) </td>
                 <td align="right">@Model.ArrivalOn.EAFormat(true) </td>
@@ -48,13 +55,19 @@
                 <td>@Model.AirlinePNR</td>
                 <td>@Model.Extra </td>
                 <td>@Model.ExtraDetails </td>
-                <td></td>                
+                <td>@Model.TotalCost </td>
+                <td>@Model.SellPrice </td>
+                <td>@(Model.SellPrice - Model.TotalCost)</td>
+                @if (Model.EnquirySource == (int)EnquirySourceEnum.Corporate_Client)
+                {
+                    <td>@Model.RealName</td>
+                }
+                else if (Model.EnquirySource == (int)EnquirySourceEnum.Web)
+                {
+                    <td>Web</td>
+                }
             </tr>
         </table>
-        @{Html.RenderPartial("ReadPVs/_SupplierInfo", Model); }
-    </div>
-    <div class="col-2" style="padding-left:0px;">
-        @{Html.RenderPartial("ReadPVs/_Fin", Model); }                
     </div>
 </div>
 <br />

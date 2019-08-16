@@ -1163,6 +1163,8 @@ namespace Speedbird
 		[Column] public decimal? Tax { get; set; }
 		[Column] public DateTime? ExpiryDate { get; set; }
 		[Column] public decimal? EBCostPNight { get; set; }
+		[Column] public string Name { get; set; }
+		[Column] public string AdditionalDetails { get; set; }
 	}
     
 	[TableName("dbo.SRlogs")]

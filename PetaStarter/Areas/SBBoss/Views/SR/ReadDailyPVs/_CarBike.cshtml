@@ -1,11 +1,15 @@
 ﻿@using Speedbird
-@model Speedbird.CarBikevw
+@model Speedbird.CarDaily
 <div class="row">
-    <div class="col-10">
+    <div class="col-12">
         <table class="SRDetsTbl">
             <thead>
                 <tr>
+                    <th>Folder No</th>
+                    <th>Booked On</th>
                     <th>Pax Name</th>
+                    <th>Pax No</th>
+                    <th>Agent</th>
                     <th>Vehicle Type</th>
                     <th>Model</th>
                     <th>From Date</th>
@@ -19,12 +23,20 @@
                     <th>No Of Vehicles</th>
                     <th>Net Cost</th>
                     <th>Pay To</th>
+                    <th>CP</th>
+                    <th>Sell Price</th>
+                    <th>COM</th>
+                    <th>Done By</th>
                 </tr>
             </thead>
             <tr>
+                <td>@Model.BookingNo</td>
+                <td>@Model.TDate.EAFormat(withTime: false)</td>
                 <td>@Model.PaxName</td>
+                <td>@Model.PaxNo</td>
+                <td>@Model.ContactName</td>
                 <td>@((CarTypeEnum)Model.CarType)</td>
-                <td>@Model.Car</td>
+                <td>@Model.Model</td>
                 <td>@Model.Fdate.EAFormat()</td>
                 <td>@Model.Tdate.EAFormat()</td>
                 <td>@Model.FromLoc</td>
@@ -36,12 +48,19 @@
                 <td>@Model.NoExtraBeds</td>
                 <td>@(Model.Cost * Model.Qty * Model.NoExtraBeds)</td>
                 <td>@Model.PayTo</td>
+                <td>@Model.TotalCost</td>
+                <td>@Model.SellPrice</td>
+                <td>@(Model.SellPrice - Model.TotalCost)</td>
+                @if (Model.EnquirySource == (int)EnquirySourceEnum.Corporate_Client)
+                {
+                    <td>@Model.RealName</td>
+                }
+                else if (Model.EnquirySource == (int)EnquirySourceEnum.Web)
+                {
+                    <td>Web</td>
+                }
             </tr>
         </table>
-        @{Html.RenderPartial("ReadPVs/_SupplierInfo", Model); }
-    </div>
-    <div class="col-2" style="padding-left:0px;">
-        @{Html.RenderPartial("ReadPVs/_Fin", Model); }
     </div>
 </div>
 

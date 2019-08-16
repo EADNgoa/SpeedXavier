@@ -1,5 +1,5 @@
 ﻿@using Speedbird
-@model Speedbird.AccomodationServiceView
+@model Speedbird.AccomodationServiceDaily
 
 
 <div class="row">
@@ -19,9 +19,9 @@
                     <th>No Of Rooms</th>
                     <th>Adult</th>
                     <th>Child</th>
-                    <th>Commision</th>
-                    <th>Cost Price</th>
+                    <th>CP</th>
                     <th>Sellprice</th>
+                    <th>Commision</th>
                     <th>Done By</th>
                 </tr>
 
@@ -31,7 +31,7 @@
                 <td>@Model.TDate.EAFormat(withTime: false)</td>
                 <td>@Model.PaxName </td>
                 <td>@(Model.AdultNo + Model.ChildNo + Model.InfantNo) </td>
-                <td>@Model.AgentBooker </td>
+                <td>@Model.ContactName </td>
                 <td>@Model.AccomName </td>
                 <td>@Model.checkin.EAFormat() </td>
                 <td>@Model.checkout.EAFormat() </td>
@@ -39,10 +39,18 @@
                 <td>@Model.NoOfRooms </td>
                 <td>@Model.AdultNo </td>
                 <td>@Model.ChildNo </td>
-                <td>@Model.ECommision</td>
-                <td>@Model.Cost</td>
+                <td>@Model.TotalCost</td>
                 <td>@Model.SellPrice</td>
-                <td>@User.Identity.GetRealName()</td>
+                <td>@(Model.SellPrice - Model.TotalCost)</td>
+                @if (Model.EnquirySource == (int)EnquirySourceEnum.Corporate_Client)
+                {
+                    <td>@Model.RealName</td>
+                }
+                else if (Model.EnquirySource == (int)EnquirySourceEnum.Web)
+                {
+                    <td>Web</td>
+                }
+
             </tr>
         </table>
     </div>

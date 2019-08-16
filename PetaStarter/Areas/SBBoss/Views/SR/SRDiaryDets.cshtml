@@ -36,7 +36,7 @@
         <div id="SRDetTbl">
             @foreach (var sd in Model)
             {
-                <div class="h3"><a target="_blank" href="Manage/@sd.SRID">@sd.SRDID : @(((Speedbird.ServiceTypeEnum)sd.ServiceTypeID).ToString())</a></div>
+                <div class="h3"><a target="_blank" href="@Url.Action("Manage","SR")/@sd.SRID">@sd.SRDID : @(((Speedbird.ServiceTypeEnum)sd.ServiceTypeID).ToString())</a></div>
                 @Html.Action("FetchDailyRecords", "SR", new { sType = (Speedbird.ServiceTypeEnum)sd.ServiceTypeID, srdid = sd.SRDID })
             }
         </div>

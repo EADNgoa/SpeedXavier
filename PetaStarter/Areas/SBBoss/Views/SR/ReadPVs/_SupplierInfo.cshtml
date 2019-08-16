@@ -1,7 +1,7 @@
 ﻿@using Speedbird
 @model Speedbird.SupplierInfo
 
-<div id="refund_box">
+<div class="refund_box + @Model.SRID">
     <div class="row">
         <div class="col">
             @using (Html.BeginForm("SRCanxServiceAsync", "SR", FormMethod.Post, new { @class = "form-inline", id = "CanxService-" + Model.SRDID }))
@@ -84,9 +84,9 @@
         jQuery.validator.methods["date"] = function (value, element) { return true; }
 
 
-        $("#refund_box").hide();
+        $(".refund_box").hide();
         $("#refund").on("click", function () {
-            $("#refund_box").toggle();
+            $(".refund_box").toggle();
         });
 
     });

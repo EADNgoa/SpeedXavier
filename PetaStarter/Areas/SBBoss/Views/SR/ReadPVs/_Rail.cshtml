@@ -1,22 +1,5 @@
 ﻿@using Speedbird
 @model Speedbird.Railvw
-<div id="refund_box">
-    <div class="row">
-        <div class="col">
-            @using (Html.BeginForm("SRCanxServiceAsync", "SR", FormMethod.Post, new { @class = "form-inline", id = "CanxService-" + Model.SRDID }))
-            {
-                @Html.AntiForgeryToken()
-                @Html.Hidden("SRID", (int)Model.SRID)
-                @Html.Hidden("SRDID", (int)Model.SRDID)
-                @Html.EAText("ProdCanxCost", "", "Prod. Canx Cost")
-                @Html.EAText("SBCanxCost", "", "SB Canx Cost")<br />
-                @Html.EAText("Note", "", "Note")
-                <input type="submit" value="Cancel Service" class="btn alert-danger" />
-            }
-        </div>
-    </div>
-</div>
-
 <div class="row">
     <div class="col-10">
         <table class="SRDetsTbl">
@@ -48,15 +31,15 @@
                 <td>@Model.ToLoc</td>
                 <td>@Model.TrainName</td>
                 <td>@Model.TrainNo</td>
-                <td>@Model.Arrival.EAFormat(true)</td>
-                <td>@Model.Departure.EAFormat(true)</td>
+                <td>@Model.Arrival.EAFormat(withTime:true)</td>
+                <td>@Model.Departure.EAFormat(withTime: true)</td>
                 <td>@((BookingTypeEnum)Model.CarType)</td>
                 <td>@Model.Class</td>
                 <td>@Model.TicketNo</td>
                 <td align="right">@Model.Cost</td>
                 <td align="right">@Model.AddCost</td>
                 <td>@Model.AddDetl</td>
-                <td align="right">@Model.FullCost</td>
+                <td align="right">@Model.TotalCost</td>
             </tr>
         </table>
         @{Html.RenderPartial("ReadPVs/_SupplierInfo", Model); }
@@ -110,8 +93,5 @@
 
 
     });
-
-
-
 
 </script>

@@ -414,7 +414,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             ViewBag.SRID = id;
             ViewBag.Title = "Manage Services";
             ViewBag.SRs = db.FirstOrDefault<ServiceRequestDets>("Select * From ServiceRequest sr inner join Customer c on c.CustomerID=sr.CustID Where SRID=@0", id);
-            ViewBag.SRDets = db.Query<SRdetail>("Select srdid,ServiceTypeId from SRdetails where SRID =@0 order by Fdate", id);
+            ViewBag.SRDets = db.Fetch<SRdetail>("Select srdid,ServiceTypeId from SRdetails where SRID =@0 order by Fdate", id);
             List<SelectListItem> ServiceTypeID = Enum.GetValues(typeof(ServiceTypeEnum)).Cast<ServiceTypeEnum>().Select(v => new SelectListItem { Text = v.ToString(), Value = ((int)v).ToString() }).ToList();
             var defaultServType = db.Single<ServiceRequest>(id).ServiceTypeID;
             var selST= ServiceTypeID.First(a => int.Parse(a.Value) == defaultServType);
@@ -439,51 +439,63 @@ namespace Speedbird.Areas.SBBoss.Controllers
             switch (sType)
             {
                 case ServiceTypeEnum.Accomodation:
-                    return PartialView($"ReadPVs/_{(sType).ToString()}", db.SingleOrDefault<AccomodationServiceView>($"select (select top 1 CONCAT(c.fName, ' ',c.sName) from Customer c, SRD_Cust sc where c.CustomerID=sc.CustomerID and sc.SRDID={srdid}) as PaxName, " +
-                        $"sd.AdultNo,CarType as ExtraBedCost, ChildNo,ContractNo,cost,sd.CouponCode,ECommision,Fdate as checkin,FromLoc,HasAc,Heritage as ExtraService,InfantNo, " +
-                        $"IsCanceled, Model as AccomName, ot.OptionTypeName as RoomCategory,payto,Pickuppoint as RoomType,qty as NoOfRooms, Sellprice,sd.ServiceTypeID,SRDID,SRID, " +
-                        $"SuppInvNo,SupplierName,sd.SupplierID,Tdate as checkout, SuppInvDt,SuppConfNo,NoExtraBeds,BFCost,LunchCost,DinnerCost,NoExtraService,ExtraServiceCost,SuppInvAmt, " +
-                        $"ECommision,Tax,EBCostPNight from SRdetails sd left join Supplier s on s.supplierid=sd.supplierid left join OptionType ot on ot.OptionTypeId=sd.OptionTypeId WHERE SRDID = {srdid} "));
+                    return PartialView($"ReadPVs/_{(sType).ToString()}", db.SingleOrDefault<AccomodationServiceView>($"select (select top 1 CONCAT(c.fName, ' ',c.sName) from Customer c, " +
+                        $"SRD_Cust sc where c.CustomerID = sc.CustomerID and sc.SRDID = { srdid}) as PaxName," +
+                        $"Model as AccomName, Fdate as checkin, Tdate as checkout, sd.AdultNo, ChildNo, InfantNo," +
+                        $"Qty as NoOfRooms, Pickuppoint as RoomType, ot.OptionTypeId, ot.OptionTypeName as RoomCategory," +
+                        $"NoExtraBeds, CarType as ExtraBedCost, HasAc, BFCost, LunchCost, DinnerCost, EBCostPNight, " +
+                        $"Heritage as ExtraService,NoExtraService, ExtraServiceCost, PayTo,SellPrice, " +
+                        $"SuppInvNo, SupplierName, sd.SupplierID, SuppInvDt, SuppConfNo, SuppInvAmt," +
+                        $"ContractNo, cost, sd.CouponCode, ECommision, SRID,SRDID From SRdetails sd " +
+                        $"left join Supplier s on s.supplierid = sd.supplierid " +
+                        $"left join OptionType ot on ot.OptionTypeId = sd.OptionTypeId " +
+                        $"WHERE SRDID = { srdid}"));
                     break;
                 case ServiceTypeEnum.Packages:
                     return PartialView($"ReadPVs/_{(sType).ToString()}", db.SingleOrDefault<Packagevw>($"SELECT (select top 1 CONCAT(c.fName, ' ',c.sName) from Customer c, SRD_Cust sc " +
-                        $"where c.CustomerID = sc.CustomerID and sc.SRDID = {srdid}) as PaxName, sd.ChildNo as NOOfPax, " +
-                        $"sd.Model as PackageType, sd.Fdate, sd.Tdate, " +
-                        $"sd.AdultNo as NoOfDays, ot.OptionTypeID, CarType,sd.IsReturn, sd.FromLoc, " +
-                        $"sd.ToLoc, sd.CouponCode as NameofTour, ot.OptionTypeID, sd.DropPoint as HotelCat, " +
-                        $"sd.Cost, sd.Heritage as AddDtl, sd.LunchCost as AddCost, sd.BFCost as NetCost, Sellprice, " +
-                        $"SRDID, SRID, SuppInvNo, ContractNo,SupplierName, sd.SupplierID, SuppInvDt, SuppConfNo, SuppInvAmt " +
+                        $"where c.CustomerID = sc.CustomerID and sc.SRDID = { srdid}) as PaxName, sd.ChildNo as NOOfPax, " +
+                        $"sd.Model as PackageType, sd.Fdate, sd.Tdate, sd.FromLoc, sd.ToLoc, sd.AdditionalDetails as NameofTour," +
+                        $"sd.IsReturn, sd.DropPoint as HotelCat, sd.Cost, sd.CarType, sd.Heritage as AddDtl," +
+                        $"sd.LunchCost as AddCost, sd.BFCost as NetCost," +
+                        $"Sellprice, SRDID, SRID, SuppInvNo, SupplierName, ContractNo, sd.CouponCode," +
+                        $"sd.SupplierID, sd.CouponCode, SuppInvDt, SuppConfNo, SuppInvAmt " +
                         $"FROM SRdetails sd left join Supplier s on s.supplierid = sd.supplierid " +
-                        $"left join OptionType ot on ot.OptionTypeID = sd.OptionTypeID WHERE SRDID = {srdid} "));
+                        $"left join OptionType ot on ot.OptionTypeID = sd.OptionTypeID WHERE SRDID = {srdid}"));
                     break;
                 case ServiceTypeEnum.Cruise:
-                    return PartialView($"ReadPVs/_{(sType).ToString()}", db.SingleOrDefault<Cruisevw>($"select (select top 1 CONCAT(c.fName, ' ',c.sName) from Customer c, " +
-                        $"SRD_Cust sc where c.CustomerID = sc.CustomerID and sc.SRDID = {srdid}) as PaxName, " +
-                        $"sd.Qty as Passengers, sd.NoExtraBeds as Cabins, sd.Model as CabinType, sd.Fdate as Departuredate, sd.Tdate as ReturnDate, " +
-                        $"sd.PickUpPoint as FromPort, sd.FromLoc as ViaPoint, sd.DropPoint as ToPort, CouponCode as MealPlan, ot.OptionTypeID,sd.ServiceTypeID,Sellprice, SRDID, SRID," +
-                        $"SuppInvNo, SupplierName, ContractNo, sd.CouponCode, sd.SupplierID, sd.CouponCode, SuppInvDt, SuppConfNo, SuppInvAmt, " +
-                        $"sd.Cost, sd.ContractNo as CruiseName from SRdetails sd " +
-                        $"left JOIN Supplier su ON su.SupplierID = sd.SupplierID " +
-                        $"left join OptionType ot on ot.OptionTypeId = sd.OptionTypeId WHERE SRDID = {srdid}"));
+                    return PartialView($"ReadPVs/_{(sType).ToString()}", db.SingleOrDefault<Cruisevw>($"select (select top 1 CONCAT(c.fName, ' ',c.sName) from Customer c, SRD_Cust sc " +
+                        $"where c.CustomerID = sc.CustomerID and sc.SRDID = { srdid}) as PaxName, " +
+                        $"sd.Fdate as Departuredate,sd.Qty as Passengers,sd.NoExtraBeds as Cabins, " +
+                        $"sd.Model as CabinType,sd.PickUpPoint as FromPort,sd.FromLoc as ViaPoint,sd.DropPoint as ToPort," +
+                        $"sd.Tdate as ReturnDate, Heritage as MealPlan,sd.Cost,  sd.Name as CruiseName," +
+                        $"ot.OptionTypeId, ot.OptionTypeName,Sellprice, SRDID, SRID,SuppInvNo, SupplierName, ContractNo, sd.CouponCode," +
+                        $"sd.SupplierID, sd.CouponCode, SuppInvDt, SuppConfNo, SuppInvAmt from SRdetails sd " +
+                        $"left JOIN Supplier su ON su.SupplierID = sd.SupplierID left join OptionType ot on ot.OptionTypeId = sd.OptionTypeId WHERE SRDID = { srdid }"));
                     break;
                 case ServiceTypeEnum.SightSeeing:
                     ViewBag.Inc = db.FirstOrDefault<SRlog>("where Type=1 and srdid=@0", srdid)?.Event ??"";
-                    var qry = $"select (select top 1 CONCAT(c.fName, ' ',c.sName) from Customer c, SRD_Cust sc where c.CustomerID=sc.CustomerID and sc.SRDID={srdid}) as PaxName, " +
-                        $" AdultNo,ChildNo,sd.Model as SightseeingName, sd.OptionTypeID, ot.OptionTypeName,PickUpPoint,FromLoc as PickupLocation, Heritage as Private_Sic, cost as CostPerCar, " +
-                        $"Qty as NoOfCars, BFCost as AdultCost, LunchCost as ChildCost,Fdate as TourDate,d.DriverID,d.DriverName, CONCAT (dc.CarBrand, ' ', dc.Model, ' ', dc.PlateNo) as Car, CarType,HasAc as MealIncluded, srid, srdid, IsCanceled, sd.ServiceTypeID, SuppInvNo, " +
-                        $"SupplierName,sd.SupplierID, SuppInvDt,SuppConfNo,SuppInvAmt,sd.CouponCode, SellPrice,contractNo,ECommision,Tax from SRdetails sd left join OptionType ot on ot.OptionTypeID=sd.OptionTypeID " +
-                        $"LEFT JOIN Driver d ON sd.DriverID = d.DriverID left JOIN Supplier su ON su.SupplierID = sd.SupplierID LEFT JOIN DriversCars dc ON dc.CarId = NoExtraBeds WHERE SRDID = {srdid} ";
+                    var qry = $"select (select top 1 CONCAT(c.fName, ' ',c.sName) from Customer c, SRD_Cust sc " +
+                        $"where c.CustomerID = sc.CustomerID and sc.SRDID ={ srdid}) as PaxName, " +
+                        $"sd.Model as SightseeingName,AdultNo,ChildNo,sd.OptionTypeID, ot.OptionTypeName," +
+                        $"PickUpPoint,FromLoc as PickupLocation,Heritage as Private_Sic,Fdate as TourDate, cost as CostPerCar," +
+                        $"BFCost as AdultCost, LunchCost as ChildCost,Qty as NoOfCars,CarType,HasAc as MealIncluded, " +
+                        $"d.DriverID,d.DriverName, CONCAT(dc.CarBrand, ' ', dc.Model, ' ', dc.PlateNo) as Car, " +
+                        $"srid, srdid, IsCanceled, sd.ServiceTypeID,SellPrice,SuppInvNo, SuppInvDt,SuppConfNo, SuppInvAmt,sd.CouponCode," +
+                        $"contractNo,SupplierName,sd.SupplierID, ECommision,Tax " +
+                        $"from SRdetails sd left join OptionType ot on ot.OptionTypeID = sd.OptionTypeID " +
+                        $"LEFT JOIN Driver d ON sd.DriverID = d.DriverID left JOIN Supplier su ON su.SupplierID = sd.SupplierID " +
+                        $"LEFT JOIN DriversCars dc ON dc.CarId = NoExtraBeds WHERE SRDID = { srdid } ";
                     var res = db.SingleOrDefault<SightseeingServiceView>(qry);
                     return PartialView($"ReadPVs/_{(sType).ToString()}", res);
                     break;
                 case ServiceTypeEnum.CarBike:
                     return PartialView($"ReadPVs/_{(sType).ToString()}", db.SingleOrDefault<CarBikevw>($"select (select top 1 CONCAT(c.fName, ' ',c.sName) from Customer c, " +
-                        $"SRD_Cust sc where c.CustomerID = sc.CustomerID and sc.SRDID = {srdid}) as PaxName, " +
-                        $"CONCAT(dc.CarBrand, ' ', dc.Model, ' ', dc.PlateNo) AS Car, sd.PickUpPoint, sd.DropPoint, " +
-                        $"sd.Fdate, sd.Tdate, sd.FromLoc, sd.ToLoc, sd.Cost, sd.CarType, sd.NoExtraBeds, sd.Qty, sd.PayTo, " +
-                        $"Sellprice, sd.ServiceTypeID, ContractNo,SRDID, SRID, SuppInvNo, SupplierName, " +
-                        $"sd.CouponCode, sd.SupplierID, sd.CouponCode, sd.SuppInvDt, " +
-                        $"sd.SuppConfNo, sd.SuppInvAmt from SRdetails sd left JOIN Supplier su ON su.SupplierID = sd.SupplierID " +
+                        $"SRD_Cust sc where c.CustomerID = sc.CustomerID and sc.SRDID = {srdid}) as PaxName," +
+                        $"sd.Model, sd.CarType, sd.Fdate, sd.Tdate, sd.FromLoc, sd.PickUpPoint, sd.ToLoc, sd.DropPoint," +
+                        $"sd.Cost, sd.Qty, sd.BFCost, sd.PayTo, Sellprice, sd.ServiceTypeID, ContractNo, SRDID, SRID, SuppInvNo, SupplierName," +
+                        $"sd.CouponCode, sd.SupplierID, sd.CouponCode, sd.SuppInvDt, ot.OptionTypeId, ot.OptionTypeName, " +
+                        $"sd.SuppConfNo, sd.SuppInvAmt from SRdetails sd " +
+                        $"left JOIN Supplier su ON su.SupplierID = sd.SupplierID " +
                         $"left join OptionType ot on ot.OptionTypeId = sd.OptionTypeId " +
                         $"LEFT JOIN DriversCars dc ON dc.CarId = NoExtraBeds WHERE SRDID = {srdid}"));
                     break;
@@ -491,59 +503,66 @@ namespace Speedbird.Areas.SBBoss.Controllers
                     return PartialView($"ReadPVs/_{(sType).ToString()}", db.SingleOrDefault<Insurancevw>($"SELECT (select top 1 CONCAT(c.fName, ' ',c.sName) from Customer c, SRD_Cust sc " +
                         $"where c.CustomerID = sc.CustomerID and sc.SRDID = {srdid}) as PaxName, " +
                         $"sd.DateOfIssue as DOB, sd.PickUpPoint as Destination, sd.Model as PolicyName, sd.ToLoc as PolicyType, sd.NoExtraBeds as NoofDays, " +
-                        $"sd.Fdate as ValidFrom, sd.Tdate as ValidTo, sd.Cost, Sellprice, sd.ServiceTypeID, SRDID, SRID, " +
+                        $"sd.Fdate as ValidFrom, sd.Tdate as ValidTo, sd.Cost, Sellprice, " +
                         $"sd.ServiceTypeID, SRDID, SRID, CouponCode,ContractNo,SuppInvNo, SupplierName, sd.SupplierID, SuppInvDt, SuppConfNo, SuppInvAmt FROM SRdetails sd " +
                         $"left join Supplier s on s.supplierid = sd.supplierid WHERE SRDID = {srdid}"));
                     break;
                 case ServiceTypeEnum.Flight:
-                    return PartialView($"ReadPVs/_{(sType).ToString()}", db.SingleOrDefault<FlightServiceView>($"SELECT (select top 1 CONCAT(c.fName, ' ',c.sName) from Customer c, SRD_Cust sc where c.CustomerID=sc.CustomerID and sc.SRDID={srdid}) as PaxName, " +
-                        "sd.AdultNo, sd.ChildNo,sd.InfantNo, IsInternational, FromLoc ,ToLoc,CarType as ClassID, Model as AirlineCode, Heritage as FlightNo,Fdate as DepartureOn, Tdate as ArrivalOn, " +
-                        "PickupPoint as TicketNo,GDSConfNo,PayTo as AirlinePNR, Cost,ContractNo,sd.CouponCode,ECommision,IsCanceled, ot.OptionTypeName as Extra, " +
-                        "DropPoint as ExtraDetails, Sellprice,sd.ServiceTypeID,SRDID,SRID, SuppInvNo,SupplierName,sd.SupplierID, SuppInvDt,SuppConfNo,SuppInvAmt, ECommision,Tax " +
-                        $"from SRdetails sd left join Supplier s on s.supplierid=sd.supplierid left join OptionType ot on ot.OptionTypeId=sd.OptionTypeId WHERE SRDID = {srdid} "));
+                    return PartialView($"ReadPVs/_{(sType).ToString()}", db.SingleOrDefault<FlightServiceView>($"SELECT (select top 1 CONCAT(c.fName, ' ',c.sName) from Customer c, SRD_Cust sc " +
+                        $"where c.CustomerID = sc.CustomerID and sc.SRDID ={ srdid}) as PaxName, " +
+                        $"sd.AdultNo, sd.ChildNo,sd.InfantNo, IsInternational, FromLoc ,ToLoc,CarType as ClassID, " +
+                        $"Model as AirlineCode, Heritage as FlightNo,Fdate as DepartureOn, Tdate as ArrivalOn, " +
+                        $"PickupPoint as TicketNo,GDSConfNo,PayTo as AirlinePNR,sd.CouponCode,ECommision,IsCanceled, ot.OptionTypeId," +
+                        $"ot.OptionTypeName as Extra,DropPoint as ExtraDetails,Cost, Sellprice,sd.ServiceTypeID,SRDID,SRID," +
+                        $"SuppInvNo,SupplierName,sd.SupplierID, SuppInvDt,SuppConfNo,SuppInvAmt, ECommision,Tax,ContractNo " +
+                        $"from SRdetails sd left join Supplier s on s.supplierid = sd.supplierid " +
+                        $"left join OptionType ot on ot.OptionTypeId = sd.OptionTypeId WHERE SRDID = { srdid }"));
                     break;
                 case ServiceTypeEnum.Visa:
                     return PartialView($"ReadPVs/_{(sType).ToString()}", db.SingleOrDefault<Visavw>($"SELECT (select top 1 CONCAT(c.fName, ' ',c.sName) from Customer c, SRD_Cust sc " +
-                        $"where c.CustomerID = sc.CustomerID and sc.SRDID = {srdid}) as PaxName, " +
-                        $"sd.AdultNo as PassportNo, sd.DateOfIssue as DOB, sd.ExpiryDate, " +
-                        $"sd.FromLoc as Nationality,sd.Tdate,sd.Heritage as VisaCountry, sd.Fdate, sd.Cost, sd.ChildNo as Duration, " +
-                        $"sd.ServiceTypeID,Sellprice, sd.ExtraServiceCost,SRDID, SRID, SuppInvNo, CouponCode,ContractNo,SupplierName, sd.SupplierID, SuppInvDt, SuppConfNo, SuppInvAmt FROM SRdetails sd " +
-                        $"left join Supplier s on s.supplierid = sd.supplierid " +
-                        $" WHERE SRDID = {srdid}"));
+                        $"where c.CustomerID = sc.CustomerID and sc.SRDID = { srdid}) as PaxName, sd.Name as PassportNo, " +
+                        $"sd.DateOfIssue as DOB, sd.ExpiryDate,sd.FromLoc as Nationality,sd.Heritage as VisaCountry, " +
+                        $"sd.Fdate,sd.Tdate, sd.Cost, sd.ExtraServiceCost,sd.ServiceTypeID,Sellprice,SRDID, SRID, " +
+                        $"SuppInvNo, CouponCode, ContractNo,SupplierName,sd.SupplierID, SuppInvDt, SuppConfNo, SuppInvAmt FROM SRdetails sd " +
+                        $"left join Supplier s on s.supplierid = sd.supplierid WHERE SRDID = { srdid }"));
                     break;
                 case ServiceTypeEnum.Transfer:
-                    return PartialView($"ReadPVs/_{(sType).ToString()}", db.SingleOrDefault<TransferServiceView>($"SELECT (select top 1 CONCAT(c.fName, ' ',c.sName) from Customer c, SRD_Cust sc where c.CustomerID=sc.CustomerID and sc.SRDID={srdid}) as PaxName, " +
-                        "sd.srid, sd.cartype, Tdate AS serviceDate, sd.ContractNo, sd.Cost, sd.CouponCode, d.DriverName, CONCAT (dc.CarBrand, ' ', dc.Model, ' ', dc.PlateNo) AS Car, " +
-                        "sd.DropPoint, sd.ECommision, sd.Fdate, sd.FromLoc,sd.ToLoc, sd.HasAc, sd.HasCarrier, sd.Heritage AS RateBasis, sd.IsCanceled, sd.Model, sd.PayTo, sd.PickUpPoint, " +
-                        "sd.Qty AS NoOfVehicles, Sellprice, sd.ServiceTypeID, sd.SRDID, sd.SuppInvNo, sd.SuppConfNo, sd.BFCost as VehicleCost, sd.SuppInvDt, sd.SuppInvAmt,ECommision,Tax FROM SRdetails sd " +
-                        $"LEFT JOIN Driver d ON sd.DriverID = d.DriverID LEFT JOIN DriversCars dc ON dc.CarId = NoExtraBeds WHERE SRDID = {srdid} "));
+                    return PartialView($"ReadPVs/_{(sType).ToString()}", db.SingleOrDefault<TransferServiceView>($"SELECT (select top 1 CONCAT(c.fName, ' ',c.sName) from Customer c, SRD_Cust sc " +
+                        $"where c.CustomerID = sc.CustomerID and sc.SRDID ={ srdid}) as PaxName,sd.Fdate,sd.Qty AS NoOfVehicles, sd.FromLoc,sd.PickUpPoint,sd.ToLoc," +
+                        $"sd.DropPoint,sd.cartype,sd.Heritage AS RateBasis, sd.HasAc, sd.HasCarrier," +
+                        $"sd.PayTo, sd.Cost,Sellprice, sd.ServiceTypeID, sd.SRDID, sd.SuppInvNo," +
+                        $"sd.ContractNo,  sd.CouponCode,sd.ECommision, sd.SuppConfNo," +
+                        $"sd.SuppInvDt, sd.SuppInvAmt,ECommision,Tax,d.DriverName, SRID,SRDID," +
+                        $"CONCAT(dc.CarBrand, ' ', dc.Model, ' ', dc.PlateNo) AS Car, sd.IsCanceled FROM SRdetails sd " +
+                        $"LEFT JOIN Driver d ON sd.DriverID = d.DriverID " +
+                        $"LEFT JOIN DriversCars dc ON dc.CarId = NoExtraBeds WHERE SRDID = { srdid } "));
                     break;
                 case ServiceTypeEnum.Passport:
                     return PartialView($"ReadPVs/_{(sType).ToString()}", db.SingleOrDefault<PassportView>($"SELECT (select top 1 CONCAT(c.fName, ' ',c.sName) from Customer c, SRD_Cust sc where c.CustomerID=sc.CustomerID and sc.SRDID={srdid}) as PaxName, " +
-                        "sd.Fdate as DOB, sd.srid, sd.FromLoc as Nationality, sd.ContractNo as PassPortNo, sd.Heritage, sd.Cost,sd.ServiceTypeID, Sellprice, " +
-                        "SRDID, SRID, SuppInvNo, SupplierName, sd.SupplierID,CouponCode, ContractNo,SuppInvDt, SuppConfNo, SuppInvAmt FROM SRdetails sd " +
-                        "left join Supplier s on s.supplierid = sd.supplierid " +
-                        $"WHERE SRDID = {srdid} "));
+                        $"sd.Fdate as DOB, sd.FromLoc as Nationality, sd.Model as PassPortNo, sd.Heritage, sd.Cost, sd.ServiceTypeID, Sellprice, " +
+                        $"SRDID, SRID, SuppInvNo, SupplierName, sd.SupplierID, CouponCode, ContractNo, SuppInvDt, SuppConfNo, SuppInvAmt FROM SRdetails sd " +
+                        $"left join Supplier s on s.supplierid = sd.supplierid WHERE SRDID = { srdid} ")); 
                     break;
                 case ServiceTypeEnum.Bus:
                     return PartialView($"ReadPVs/_{(sType).ToString()}", db.SingleOrDefault<Busvw>($"SELECT (select top 1 CONCAT(c.fName, ' ',c.sName) from Customer c, SRD_Cust sc " +
-                        $"where c.CustomerID = sc.CustomerID and sc.SRDID = {srdid}) as PaxName, sd.ChildNo as Age," +
-                        $"sd.DateOfIssue as DOT, sd.FromLoc, sd.ToLoc, sd.Model as BusName,ot.OptionTypeID, sd.InfantNo as BusNo, sd.AdultNo as TicketNo, " +
-                        $"sd.Fdate as Arrival, sd.Tdate as Departure, sd.Cost, sd.LunchCost as AddCost,sd.CouponCode as AddDetl, sd.BFCost as FullCost, Sellprice,CarType," +
-                        $"sd.ServiceTypeID, SRDID, SRID, SuppInvNo, ContractNo,SupplierName, CouponCode,sd.SupplierID, SuppInvDt, SuppConfNo, SuppInvAmt " +
+                        $"where c.CustomerID = sc.CustomerID and sc.SRDID = { srdid}) as PaxName, sd.ChildNo as Age, " +
+                        $"sd.DateOfIssue as DOT, sd.FromLoc, sd.ToLoc, sd.Model as BusName,ot.OptionTypeID,ot.OptionTypeName," +
+                        $"sd.InfantNo as BusNo, sd.AdultNo as TicketNo, sd.Fdate as Arrival, sd.Tdate as Departure, sd.Cost, sd.LunchCost as AddCost," +
+                        $"sd.Heritage as AddDetl, Sellprice,CarType,sd.ServiceTypeID, SRDID, SRID, SuppInvNo, ContractNo,SupplierName, CouponCode," +
+                        $"sd.SupplierID, SuppInvDt, SuppConfNo, SuppInvAmt " +
                         $"FROM SRdetails sd left join Supplier s on s.supplierid = sd.supplierid " +
-                        $"left join OptionType ot on ot.OptionTypeId = sd.OptionTypeId WHERE SRDID = {srdid}"));
+                        $"left join OptionType ot on ot.OptionTypeId = sd.OptionTypeId WHERE SRDID = { srdid }"));
                     break;
                 case ServiceTypeEnum.Rail:
                     return PartialView($"ReadPVs/_{(sType).ToString()}", db.SingleOrDefault<Railvw>($"SELECT (select top 1 CONCAT(c.fName, ' ',c.sName) from Customer c, SRD_Cust sc " +
-                        $"where c.CustomerID = sc.CustomerID and sc.SRDID = {srdid}) as PaxName, sd.ChildNo as Age, " +
-                        $"sd.DateOfIssue as DOT, sd.FromLoc, sd.ToLoc, sd.Model as TrainName,sd.InfantNo as TrainNo,CarType, " +
-                        $"sd.AdultNo as TicketNo, sd.Heritage as Class, " +
-                        $"sd.Fdate as Arrival, sd.Tdate as Departure, sd.Cost as TicketCost, sd.LunchCost as AddCost," +
-                        $"sd.BFCost as TotalCost, Sellprice, SRDID,CouponCode, ContractNo, " +
-                        $"sd.ServiceTypeID, SRDID, SRID, SuppInvNo, SupplierName, sd.SupplierID, SuppInvDt, SuppConfNo, SuppInvAmt " +
+                        $"where c.CustomerID = sc.CustomerID and sc.SRDID = { srdid}) as PaxName, sd.ChildNo as Age, " +
+                        $"sd.DateOfIssue as DOT, sd.FromLoc, sd.ToLoc,sd.AdditionalDetails as AddDetl,ot.OptionTypeID,ot.OptionTypeName," +
+                        $"sd.Model as TrainName,sd.InfantNo as TrainNo,sd.Fdate as Arrival, sd.Tdate as Departure,CarType, " +
+                        $"sd.Heritage as Class,sd.AdultNo as TicketNo,sd.Cost, sd.LunchCost as AddCost," +
+                        $"Sellprice, SRDID,CouponCode, ContractNo, sd.ServiceTypeID, SRDID, SRID, " +
+                        $"SuppInvNo, SupplierName, sd.SupplierID, SuppInvDt, SuppConfNo, SuppInvAmt " +
                         $"FROM SRdetails sd left join Supplier s on s.supplierid = sd.supplierid " +
-                        $"left join OptionType ot on ot.OptionTypeId = sd.OptionTypeId WHERE SRDID = {srdid}"));
+                        $"left join OptionType ot on ot.OptionTypeId = sd.OptionTypeId WHERE SRDID = { srdid }"));
                     break;
                 default:
                     return null;
@@ -562,136 +581,159 @@ namespace Speedbird.Areas.SBBoss.Controllers
             switch (sType)
             {
                 case ServiceTypeEnum.Accomodation:
-                    return PartialView($"ReadDailyPVs/_{(sType).ToString()}", db.SingleOrDefault<AccomodationServiceView>($"select (select top  1 CONCAT(c.fName, ' ',c.sName) from Customer c, SRD_Cust sc where c.CustomerID = sc.CustomerID and sc.SRDID = {srdid}) as PaxName," +
+                    return PartialView($"ReadDailyPVs/_{(sType).ToString()}", db.SingleOrDefault<AccomodationServiceDaily>($"select (select top  1 CONCAT(c.fName, ' ',c.sName) from Customer c, SRD_Cust sc where c.CustomerID = sc.CustomerID and sc.SRDID = {srdid}) as PaxName," +
                         $"ag.AgentID,ag.ContactName,srq.BookingNo,srq.TDate,sd.AdultNo, CarType as ExtraBedCost, ChildNo, ContractNo, cost, sd.CouponCode, ECommision, sd.Fdate as checkin, sd.Tdate as checkout, FromLoc, " +
                         $"HasAc, Heritage as ExtraService, InfantNo,IsCanceled, Model as AccomName, ot.OptionTypeName as RoomCategory, " +
                         $"payto, Pickuppoint as RoomType, qty as NoOfRooms, Sellprice, sd.ServiceTypeID, " +
-                        $"SRDID, srq.SRID,ECommision, aus.Id, aus.RealName from SRdetails sd " +
-                        $"left join ServiceRequest srq on srq.SRID = sd.SRID" +
-                        $"left join AspNetUsers aus on aus.Id = srq.EmpID" +
+                        $"SRDID, srq.SRID,srq.EnquirySource,ECommision, aus.Id, aus.RealName from SRdetails sd " +
+                        $"left join ServiceRequest srq on srq.SRID = sd.SRID " +
+                        $"left join AspNetUsers aus on aus.Id = srq.EmpID " +
                         $"left join Agent ag on ag.AgentId = srq.AgentID " +
                         $"left join OptionType ot on ot.OptionTypeId = sd.OptionTypeId " +
                         $"WHERE SRDID = {srdid}"));
                     break;
                 case ServiceTypeEnum.Packages:
-                    return PartialView($"ReadDailyPVs/_{(sType).ToString()}", db.SingleOrDefault<Packagevw>($"select (select top 1  CONCAT(c.fName, ' ',c.sName) from Customer c, SRD_Cust sc where c.CustomerID = sc.CustomerID and sc.SRDID = {srdid}) as PaxName," +
-                        $"ag.AgentID,ag.ContactName,srq.BookingNo,srq.TDate,sd.ChildNo as NOOfPax,sd.Model as PackageType, sd.Fdate, sd.Tdate, " +
-                        $"sd.AdultNo as NoOfDays, ot.OptionTypeID, CarType,sd.IsReturn, sd.FromLoc, " +
-                        $"sd.ToLoc, sd.CouponCode as NameofTour, ot.OptionTypeID, sd.DropPoint as HotelCat, " +
-                        $"sd.Cost, sd.Heritage as AddDtl, sd.LunchCost as AddCost, sd.BFCost as NetCost, Sellprice, " +
-                        $"SRDID, srq.SRID FROM SRdetails sd " +
+                    return PartialView($"ReadDailyPVs/_{(sType).ToString()}", db.SingleOrDefault<PackageDaily>($"select (select top 1 CONCAT(c.fName, ' ',c.sName) from Customer c, " +
+                        $"SRD_Cust sc where c.CustomerID = sc.CustomerID and sc.SRDID = { srdid}) as PaxName," +
+                        $"(select COUNT(c.CustomerID) from Customer c, SRD_Cust sc " +
+                        $"where c.CustomerID = sc.CustomerID and sc.SRDID = { srdid}) as PaxNo, " +
+                        $"ag.AgentID,ag.ContactName,srq.BookingNo,srq.TDate,sd.ChildNo as NOOfPax, sd.Model as PackageType, sd.Fdate, sd.Tdate," +
+                        $"CarType, sd.IsReturn, sd.FromLoc,sd.ToLoc, sd.AdditionalDetails as NameofTour, sd.DropPoint as HotelCat," +
+                        $"sd.Cost, sd.Heritage as AddDtl, sd.LunchCost as AddCost, sd.BFCost as NetCost, Sellprice, SRDID, srq.SRID, SuppInvNo, SupplierName, ContractNo, sd.CouponCode," +
+                        $"sd.SupplierID, sd.CouponCode, SuppInvDt, SuppConfNo, SuppInvAmt, srq.EnquirySource, aus.Id, aus.RealName from SRdetails sd " +
                         $"left join ServiceRequest srq on srq.SRID = sd.SRID " +
                         $"left join AspNetUsers aus on aus.Id = srq.EmpID " +
                         $"left join Agent ag on ag.AgentId = srq.AgentID " +
-                        $"left join OptionType ot on ot.OptionTypeID = sd.OptionTypeID " +
-                        $"WHERE SRDID = {srdid} "));
+                        $"left join OptionType ot on ot.OptionTypeId = sd.OptionTypeId WHERE SRDID = { srdid }"));
                     break;
                 case ServiceTypeEnum.Cruise:
-                    return PartialView($"ReadDailyPVs/_{(sType).ToString()}", db.SingleOrDefault<Cruisevw>($"select (select top 1 CONCAT(c.fName, ' ',c.sName) from Customer c, " +
-                        $"SRD_Cust sc where c.CustomerID = sc.CustomerID and sc.SRDID = {srdid}) as PaxName," +
-                        $"ag.AgentID,ag.ContactName,srq.BookingNo,srq.TDate,sd.Qty as Passengers, sd.NoExtraBeds as Cabins, sd.Model as CabinType, sd.Fdate as Departuredate, sd.Tdate as ReturnDate, " +
-                        $"sd.PickUpPoint as FromPort, sd.FromLoc as ViaPoint, sd.DropPoint as ToPort, CouponCode as MealPlan, ot.OptionTypeID,sd.ServiceTypeID,Sellprice, SRDID, srq.SRID," +
-                        $"sd.Cost, sd.ContractNo as CruiseName from SRdetails sd " +
+                    return PartialView($"ReadDailyPVs/_{(sType).ToString()}", db.SingleOrDefault<CruiseDaily>($"select (select top 1 CONCAT(c.fName, ' ',c.sName) from Customer c, " +
+                        $"SRD_Cust sc where c.CustomerID = sc.CustomerID and sc.SRDID = { srdid}) as PaxName," +
+                        $"(select COUNT(c.CustomerID) from Customer c, SRD_Cust sc " +
+                        $"where c.CustomerID = sc.CustomerID and sc.SRDID = { srdid}) as PaxNo, " +
+                        $"ag.AgentID,ag.ContactName,srq.BookingNo,srq.TDate,sd.Qty as Passengers, " +
+                        $"sd.NoExtraBeds as Cabins, sd.Model as CabinType, sd.Fdate as Departuredate, sd.Tdate as ReturnDate, " +
+                        $"sd.PickUpPoint as FromPort, sd.FromLoc as ViaPoint, sd.DropPoint as ToPort, " +
+                        $"Heritage as MealPlan, ot.OptionTypeID,ot.OptionTypeName,sd.ServiceTypeID,Sellprice, SRDID, srq.SRID,srq.EnquirySource," +
+                        $"sd.Cost, sd.Name as CruiseName,aus.Id,aus.RealName from SRdetails sd " +
                         $"left join ServiceRequest srq on srq.SRID = sd.SRID " +
                         $"left join AspNetUsers aus on aus.Id = srq.EmpID " +
                         $"left join Agent ag on ag.AgentId = srq.AgentID " +
-                        $"left join OptionType ot on ot.OptionTypeId = sd.OptionTypeId WHERE SRDID = {srdid}"));
+                        $"left join OptionType ot on ot.OptionTypeId = sd.OptionTypeId WHERE SRDID = { srdid }"));
                     break;
                 case ServiceTypeEnum.SightSeeing:
                     ViewBag.Inc = db.FirstOrDefault<SRlog>("where Type=1 and srdid=@0", srdid)?.Event ?? "";
                     var qry = $"select (select top 1 CONCAT(c.fName, ' ',c.sName) from Customer c, SRD_Cust sc where c.CustomerID=sc.CustomerID and sc.SRDID={srdid}) as PaxName, " +
                         $" ag.AgentID,ag.ContactName,srq.BookingNo,srq.TDate,AdultNo,ChildNo,sd.Model as SightseeingName, sd.OptionTypeID, ot.OptionTypeName,PickUpPoint,FromLoc as PickupLocation, Heritage as Private_Sic, cost as CostPerCar, " +
-                        $"Qty as NoOfCars, BFCost as AdultCost, LunchCost as ChildCost,Fdate as TourDate,d.DriverID,d.DriverName, CONCAT (dc.CarBrand, ' ', dc.Model, ' ', dc.PlateNo) as Car, CarType,HasAc as MealIncluded, srid, srdid, IsCanceled, sd.ServiceTypeID, SuppInvNo, " +
-                        "SellPrice,contractNo,ECommision,Tax from SRdetails sd " +
+                        $"Qty as NoOfCars, BFCost as AdultCost, LunchCost as ChildCost,Fdate as TourDate,d.DriverID,d.DriverName, CONCAT (dc.CarBrand, ' ', dc.Model, ' ', dc.PlateNo) as Car, CarType,HasAc as MealIncluded, srq.srid,srq.EnquirySource, srdid, IsCanceled, sd.ServiceTypeID, " +
+                        "SellPrice,contractNo,ECommision,Tax,aus.Id,aus.RealName from SRdetails sd " +
                         "left join OptionType ot on ot.OptionTypeID=sd.OptionTypeID " +
                         $"left join ServiceRequest srq on srq.SRID = sd.SRID " +
                         $"left join AspNetUsers aus on aus.Id = srq.EmpID " +
                         $"left join Agent ag on ag.AgentId = srq.AgentID " +
                         $"LEFT JOIN Driver d ON sd.DriverID = d.DriverID LEFT JOIN DriversCars dc ON dc.CarId = NoExtraBeds WHERE SRDID = {srdid} ";
-                    var res = db.SingleOrDefault<SightseeingServiceView>(qry);
+                    var res = db.SingleOrDefault<SightseeingServiceViewDaily>(qry);
                     return PartialView($"ReadDailyPVs/_{(sType).ToString()}", res);
                     break;
                 case ServiceTypeEnum.CarBike:
-                    return PartialView($"ReadDailyPVs/_{(sType).ToString()}", db.SingleOrDefault<CarBikevw>($"select (select top 1 CONCAT(c.fName, ' ',c.sName) from Customer c, " +
-                        $"SRD_Cust sc where c.CustomerID = sc.CustomerID and sc.SRDID = {srdid}) as PaxName, " +
-                        $"CONCAT(dc.CarBrand, ' ', dc.Model, ' ', dc.PlateNo) AS Car, ag.AgentID,ag.ContactName,srq.BookingNo,srq.TDate,sd.PickUpPoint, sd.DropPoint, " +
-                        $"sd.Fdate, sd.Tdate, sd.FromLoc, sd.ToLoc, sd.Cost, sd.CarType, sd.NoExtraBeds, sd.Qty, sd.PayTo, " +
-                        $"Sellprice, sd.ServiceTypeID, ContractNo,SRDID, srq.SRID " +
-                        $"from SRdetails sd " +
-                        $"left join ServiceRequest srq on srq.SRID = sd.SRID " +
-                        $"left join AspNetUsers aus on aus.Id = srq.EmpID " +
-                        $"left join Agent ag on ag.AgentId = srq.AgentID " +
-                        $"left join OptionType ot on ot.OptionTypeId = sd.OptionTypeId " +
-                        $"LEFT JOIN DriversCars dc ON dc.CarId = NoExtraBeds WHERE SRDID = {srdid}"));
+                    return PartialView($"ReadDailyPVs/_{(sType).ToString()}", db.SingleOrDefault<CarDaily>($"select (select top 1 CONCAT(c.fName, ' ',c.sName) from Customer c, SRD_Cust sc where c.CustomerID = sc.CustomerID and sc.SRDID = {srdid}) as PaxName," +
+                        $"(select COUNT(c.CustomerID) from Customer c, SRD_Cust sc where c.CustomerID = sc.CustomerID and sc.SRDID = {srdid}) as PaxNo," +
+                        $"ag.AgentID,ag.ContactName,srq.BookingNo,srq.TDate,sd.Model, sd.CarType, sd.Fdate, sd.Tdate, sd.FromLoc, sd.PickUpPoint, sd.ToLoc, sd.DropPoint," +
+                        $"sd.Cost, sd.Qty, sd.BFCost, sd.PayTo, Sellprice, sd.ServiceTypeID, ContractNo, SRDID, srq.SRID, SuppInvNo, " +
+                        $"SupplierName,ag.AgentID,ag.ContactName,srq.BookingNo,srq.TDate," +
+                        $"sd.CouponCode, sd.SupplierID, sd.CouponCode, sd.SuppInvDt, ot.OptionTypeId, ot.OptionTypeName, " +
+                        $"sd.SuppConfNo, sd.SuppInvAmt,aus.Id,aus.RealName from SRdetails sd " +
+                        $"left JOIN Supplier su ON su.SupplierID = sd.SupplierID left join OptionType ot on ot.OptionTypeId = sd.OptionTypeId " +
+                        $"LEFT JOIN DriversCars dc ON dc.CarId = NoExtraBeds left join ServiceRequest srq on srq.SRID = sd.SRID " +
+                        $"left join AspNetUsers aus on aus.Id = srq.EmpID left join Agent ag on ag.AgentId = srq.AgentID " +
+                        $"WHERE SRDID = {srdid}"));
                     break;
                 case ServiceTypeEnum.Insurance:
-                    return PartialView($"ReadPVs/_{(sType).ToString()}", db.SingleOrDefault<Insurancevw>($"SELECT (select top 1 CONCAT(c.fName, ' ',c.sName) from Customer c, SRD_Cust sc " +
-                        $"where c.CustomerID = sc.CustomerID and sc.SRDID = {srdid}) as PaxName,ag.AgentID,ag.ContactName,srq.BookingNo,srq.TDate, " +
+                    return PartialView($"ReadDailyPVs/_{(sType).ToString()}", db.SingleOrDefault<InsuranceDaily>($"SELECT (select top 1 CONCAT(c.fName, ' ',c.sName) from Customer c, SRD_Cust sc " +
+                        $"where c.CustomerID = sc.CustomerID and sc.SRDID = {srdid}) as PaxName," +
+                        $"(select COUNT(c.CustomerID) from Customer c, SRD_Cust sc " +
+                        $"where c.CustomerID = sc.CustomerID and sc.SRDID = {srdid}) as PaxNo," +
+                        $"ag.AgentID,ag.ContactName,srq.BookingNo,srq.TDate, " +
                         $"sd.DateOfIssue as DOB, sd.PickUpPoint as Destination, sd.Model as PolicyName, sd.ToLoc as PolicyType, sd.NoExtraBeds as NoofDays, " +
-                        $"sd.Fdate as ValidFrom, sd.Tdate as ValidTo, sd.Cost, Sellprice, sd.ServiceTypeID, SRDID, SRID, " +
-                        $"sd.ServiceTypeID, SRDID, srq.SRID FROM SRdetails sd " +
+                        $"sd.Fdate as ValidFrom, sd.Tdate as ValidTo, sd.Cost, Sellprice, sd.ServiceTypeID, SRDID, srq.SRID, " +
+                        $"sd.ServiceTypeID, SRDID, srq.SRID,srq.EnquirySource,aus.Id,aus.RealName FROM SRdetails sd " +
                         $"left join ServiceRequest srq on srq.SRID = sd.SRID " +
                         $"left join AspNetUsers aus on aus.Id = srq.EmpID " +
                         $"left join Agent ag on ag.AgentId = srq.AgentID " +
                         $" WHERE SRDID = {srdid}"));
                     break;
                 case ServiceTypeEnum.Flight:
-                    return PartialView($"ReadDailyPVs/_{(sType).ToString()}", db.SingleOrDefault<FlightServiceView>($"SELECT (select top 1 CONCAT(c.fName, ' ',c.sName) from Customer c, SRD_Cust sc where c.CustomerID=sc.CustomerID and sc.SRDID={srdid}) as PaxName, " +
-                        "ag.AgentID,ag.ContactName,srq.BookingNo,srq.TDate,sd.AdultNo, sd.ChildNo,sd.InfantNo, IsInternational, FromLoc ,ToLoc,CarType as ClassID, Model as AirlineCode, Heritage as FlightNo,Fdate as DepartureOn, Tdate as ArrivalOn, " +
-                        "PickupPoint as TicketNo,GDSConfNo,PayTo as AirlinePNR, Cost,ContractNo,sd.CouponCode,ECommision,IsCanceled, ot.OptionTypeName as Extra, " +
-                        "DropPoint as ExtraDetails, Sellprice,sd.ServiceTypeID,SRDID,srq.SRID,ECommision" +
-                        $"from SRdetails sd " +
+                    return PartialView($"ReadDailyPVs/_{(sType).ToString()}", db.SingleOrDefault<FlightServiceDaily>($"SELECT (select top 1 CONCAT(c.fName, ' ',c.sName) from Customer c, SRD_Cust sc where c.CustomerID=sc.CustomerID and sc.SRDID={srdid}) as PaxName, " +
+                        $"(select COUNT(c.CustomerID) from Customer c, SRD_Cust sc " +
+                        $"where c.CustomerID = sc.CustomerID and sc.SRDID = {srdid}) as PaxNo," +
+                        "ag.AgentID,ag.ContactName,srq.BookingNo,srq.TDate,sd.AdultNo, sd.ChildNo,sd.InfantNo, IsInternational, FromLoc ,ToLoc,CarType as ClassID, Model as AirlineCode, Heritage as FlightNo,Fdate as DepartureOn, sd.Tdate as ArrivalOn, " +
+                        "PickupPoint as TicketNo,GDSConfNo,PayTo as AirlinePNR, Cost,ContractNo,sd.CouponCode,IsCanceled, ot.OptionTypeName as Extra, " +
+                        "DropPoint as ExtraDetails, Sellprice,sd.ServiceTypeID,SRDID,srq.SRID,srq.EnquirySource," +
+                        $" aus.Id,aus.RealName from SRdetails sd " +
                         $"left join ServiceRequest srq on srq.SRID = sd.SRID " +
                         $"left join AspNetUsers aus on aus.Id = srq.EmpID " +
                         $"left join Agent ag on ag.AgentId = srq.AgentID " +
                         $"left join OptionType ot on ot.OptionTypeId=sd.OptionTypeId WHERE SRDID = {srdid} "));
                     break;
                 case ServiceTypeEnum.Visa:
-                    return PartialView($"ReadDailyPVs/_{(sType).ToString()}", db.SingleOrDefault<Visavw>($"SELECT (select top 1 CONCAT(c.fName, ' ',c.sName) from Customer c, SRD_Cust sc " +
-                        $"where c.CustomerID = sc.CustomerID and sc.SRDID = {srdid}) as PaxName, " +
-                        $"ag.AgentID,ag.ContactName,srq.BookingNo,srq.TDate,sd.AdultNo as PassportNo, sd.DateOfIssue as DOB, sd.ExpiryDate, " +
-                        $"sd.FromLoc as Nationality,sd.Tdate,sd.Heritage as VisaCountry, sd.Fdate, sd.Cost, sd.ChildNo as Duration, " +
-                        $"sd.ServiceTypeID,Sellprice, sd.ExtraServiceCost,SRDID, srq.SRID FROM SRdetails sd " +
-                          $"left join ServiceRequest srq on srq.SRID = sd.SRID " +
+                    return PartialView($"ReadDailyPVs/_{(sType).ToString()}", db.SingleOrDefault<VisaDaily>($"SELECT (select top 1 CONCAT(c.fName, ' ',c.sName) from Customer c, SRD_Cust sc where c.CustomerID = sc.CustomerID and sc.SRDID = {srdid}) as PaxName, " +
+                        $"(select COUNT(c.CustomerID) from Customer c, SRD_Cust sc where c.CustomerID = sc.CustomerID and sc.SRDID = {srdid}) as PaxNo, ag.AgentID,ag.ContactName,srq.BookingNo,srq.TDate, " +
+                        $"sd.Name as PassportNo,sd.DateOfIssue as DOB, sd.ExpiryDate,sd.FromLoc as Nationality,sd.Heritage as VisaCountry," +
+                        $"sd.Fdate,sd.Tdate, sd.Cost, sd.ExtraServiceCost,sd.ServiceTypeID,Sellprice,SRDID, srq.SRID, " +
+                        $"SuppInvNo, CouponCode, ContractNo,SupplierName,sd.SupplierID, SuppInvDt, SuppConfNo, SuppInvAmt,srq.EnquirySource,aus.Id,aus.RealName FROM SRdetails sd " +
+                        $"left join Supplier s on s.supplierid = sd.supplierid " +
+                        $"left join ServiceRequest srq on srq.SRID = sd.SRID " +
                         $"left join AspNetUsers aus on aus.Id = srq.EmpID " +
-                        $"left join Agent ag on ag.AgentId = srq.AgentID " +
-                        $" WHERE SRDID = {srdid}"));
+                        $"left join Agent ag on ag.AgentId = srq.AgentID WHERE SRDID = {srdid}"));
                     break;
                 case ServiceTypeEnum.Transfer:
-                    return PartialView($"ReadDailyPVs/_{(sType).ToString()}", db.SingleOrDefault<TransferServiceView>($"SELECT (select top 1 CONCAT(c.fName, ' ',c.sName) from Customer c, SRD_Cust sc where c.CustomerID=sc.CustomerID and sc.SRDID={srdid}) as PaxName, " +
-                        "sd.srid, sd.cartype, Tdate AS serviceDate, sd.ContractNo, sd.Cost, sd.CouponCode, d.DriverName, CONCAT (dc.CarBrand, ' ', dc.Model, ' ', dc.PlateNo) AS Car, " +
-                        "sd.DropPoint, sd.ECommision, sd.Fdate, sd.FromLoc,sd.ToLoc, sd.HasAc, sd.HasCarrier, sd.Heritage AS RateBasis, sd.IsCanceled, sd.Model, sd.PayTo, sd.PickUpPoint, " +
-                        "sd.Qty AS NoOfVehicles, Sellprice, sd.ServiceTypeID, sd.SRDID, sd.BFCost as VehicleCost,ECommision,FROM SRdetails sd " +
-                        $"LEFT JOIN Driver d ON sd.DriverID = d.DriverID LEFT JOIN DriversCars dc ON dc.CarId = NoExtraBeds WHERE SRDID = {srdid} "));
+                    return PartialView($"ReadDailyPVs/_{(sType).ToString()}", db.SingleOrDefault<TransferServiceDaily>($"SELECT (select top 1 CONCAT(c.fName, ' ',c.sName) from Customer c, SRD_Cust sc where c.CustomerID=sc.CustomerID and sc.SRDID={srdid}) as PaxName, " +
+                        $"(select COUNT(c.CustomerID) from Customer c, SRD_Cust sc " +
+                        $"where c.CustomerID = sc.CustomerID and sc.SRDID = {srdid}) as PaxNo, " +
+                        $"ag.AgentID, ag.ContactName, srq.BookingNo, srq.TDate, srq.srid, srq.EnquirySource,sd.cartype, sd.ContractNo, sd.Cost, " +
+                        $"sd.CouponCode, d.DriverName, CONCAT(dc.CarBrand, ' ', dc.Model, ' ', dc.PlateNo) AS Car," +
+                        $"sd.DropPoint, sd.Fdate, sd.FromLoc, sd.ToLoc, sd.HasAc, sd.HasCarrier, sd.Heritage AS RateBasis, sd.IsCanceled, sd.Model, sd.PayTo, sd.PickUpPoint," +
+                        $"sd.Qty AS NoOfVehicles, Sellprice, sd.ServiceTypeID, sd.SRDID, aus.Id, aus.RealName FROM SRdetails sd " +
+                        $"LEFT JOIN Driver d ON sd.DriverID = d.DriverID LEFT JOIN DriversCars dc ON dc.CarId = NoExtraBeds " +
+                        $"left join ServiceRequest srq on srq.SRID = sd.SRID left join AspNetUsers aus on aus.Id = srq.EmpID " +
+                        $"left join Agent ag on ag.AgentId = srq.AgentID WHERE SRDID = {srdid}"));
                     break;
                 case ServiceTypeEnum.Passport:
-                    return PartialView($"ReadDailyPVs/_{(sType).ToString()}", db.SingleOrDefault<PassportView>($"SELECT (select top 1 CONCAT(c.fName, ' ',c.sName) from Customer c, SRD_Cust sc where c.CustomerID=sc.CustomerID and sc.SRDID={srdid}) as PaxName, " +
-                        "ag.AgentID,ag.ContactName,srq.BookingNo,srq.TDate,sd.Fdate as DOB, sd.srid, sd.FromLoc as Nationality, sd.ContractNo as PassPortNo, sd.Heritage, sd.Cost,sd.ServiceTypeID, Sellprice, " +
-                        "SRDID, srq.SRID FROM SRdetails sd " +
+                    return PartialView($"ReadDailyPVs/_{(sType).ToString()}", db.SingleOrDefault<PassportDaily>($"SELECT (select top 1 CONCAT(c.fName, ' ',c.sName) from Customer c, SRD_Cust sc where c.CustomerID=sc.CustomerID and sc.SRDID={srdid}) as PaxName, " +
+                        $"(select COUNT(c.CustomerID) from Customer c, SRD_Cust sc " +
+                        $"where c.CustomerID = sc.CustomerID and sc.SRDID = {srdid}) as PaxNo," +
+                        "ag.AgentID,ag.ContactName,srq.BookingNo,srq.TDate,sd.Fdate as DOB, sd.srid, sd.FromLoc as Nationality, sd.Model as PassPortNo, sd.Heritage, sd.Cost,sd.ServiceTypeID, Sellprice, " +
+                        "SRDID, srq.SRID,srq.EnquirySource,aus.Id,aus.RealName FROM SRdetails sd " +
                         $"left join ServiceRequest srq on srq.SRID = sd.SRID " +
                         $"left join AspNetUsers aus on aus.Id = srq.EmpID " +
                         $"left join Agent ag on ag.AgentId = srq.AgentID " +
                         $"WHERE SRDID = {srdid} "));
                     break;
                 case ServiceTypeEnum.Bus:
-                    return PartialView($"ReadDailyPVs/_{(sType).ToString()}", db.SingleOrDefault<Busvw>($"SELECT (select top 1 CONCAT(c.fName, ' ',c.sName) from Customer c, SRD_Cust sc " +
-                        $"where c.CustomerID = sc.CustomerID and sc.SRDID = {srdid}) as PaxName, ag.AgentID,ag.ContactName,srq.BookingNo,srq.TDate,sd.ChildNo as Age," +
+                    return PartialView($"ReadDailyPVs/_{(sType).ToString()}", db.SingleOrDefault<BusDaily>($"SELECT (select top 1 CONCAT(c.fName, ' ',c.sName) from Customer c, SRD_Cust sc " +
+                        $"where c.CustomerID = sc.CustomerID and sc.SRDID = {srdid}) as PaxName, " +
+                        $"(select COUNT(c.CustomerID) from Customer c, SRD_Cust sc " +
+                        $"where c.CustomerID = sc.CustomerID and sc.SRDID = {srdid}) as PaxNo," +
+                        $"ag.AgentID,ag.ContactName,srq.BookingNo,srq.TDate,sd.ChildNo as Age," +
                         $"sd.DateOfIssue as DOT, sd.FromLoc, sd.ToLoc, sd.Model as BusName,ot.OptionTypeID, sd.InfantNo as BusNo, sd.AdultNo as TicketNo, " +
-                        $"sd.Fdate as Arrival, sd.Tdate as Departure, sd.Cost, sd.LunchCost as AddCost,sd.CouponCode as AddDetl, sd.BFCost as FullCost, Sellprice,CarType," +
-                        $"sd.ServiceTypeID, SRDID, srq.SRID FROM SRdetails sd " +
+                        $"sd.Fdate as Arrival, sd.Tdate as Departure, sd.Cost, sd.LunchCost as AddCost,sd.Heritage as AddDetl, Sellprice,CarType," +
+                        $"sd.ServiceTypeID, SRDID, srq.SRID,srq.EnquirySource,aus.Id,aus.RealName FROM SRdetails sd " +
                        $"left join ServiceRequest srq on srq.SRID = sd.SRID " +
                         $"left join AspNetUsers aus on aus.Id = srq.EmpID " +
                         $"left join Agent ag on ag.AgentId = srq.AgentID " +
                         $"left join OptionType ot on ot.OptionTypeId = sd.OptionTypeId WHERE SRDID = {srdid}"));
                     break;
                 case ServiceTypeEnum.Rail:
-                    return PartialView($"ReadDailyPVs/_{(sType).ToString()}", db.SingleOrDefault<Railvw>($"SELECT (select top 1 CONCAT(c.fName, ' ',c.sName) from Customer c, SRD_Cust sc " +
-                        $"where c.CustomerID = sc.CustomerID and sc.SRDID = {srdid}) as PaxName, ag.AgentID,ag.ContactName,srq.BookingNo,srq.TDate,sd.ChildNo as Age, " +
+                    return PartialView($"ReadDailyPVs/_{(sType).ToString()}", db.SingleOrDefault<RailDaily>($"SELECT (select top 1 CONCAT(c.fName, ' ',c.sName) from Customer c, SRD_Cust sc " +
+                        $"where c.CustomerID = sc.CustomerID and sc.SRDID = {srdid}) as PaxName, " +
+                        $"(select COUNT(c.CustomerID) from Customer c, SRD_Cust sc " +
+                        $"where c.CustomerID = sc.CustomerID and sc.SRDID = {srdid}) as PaxNo," +
+                        $"ag.AgentID,ag.ContactName,srq.BookingNo,srq.TDate,sd.ChildNo as Age, " +
                         $"sd.DateOfIssue as DOT, sd.FromLoc, sd.ToLoc, sd.Model as TrainName,sd.InfantNo as TrainNo,CarType, " +
                         $"sd.AdultNo as TicketNo, sd.Heritage as Class, " +
                         $"sd.Fdate as Arrival, sd.Tdate as Departure, sd.Cost as TicketCost, sd.LunchCost as AddCost," +
-                        $"sd.BFCost as TotalCost, Sellprice, SRDID,ContractNo, " +
-                        $"sd.ServiceTypeID, SRDID, srq.SRID" +
+                        $"sd.BFCost as TotalCost, Sellprice,ContractNo, " +
+                        $"sd.ServiceTypeID, SRDID, srq.SRID,srq.EnquirySource,aus.Id,aus.RealName " +
                         $"FROM SRdetails sd " +
                         $"left join ServiceRequest srq on srq.SRID = sd.SRID " +
                         $"left join AspNetUsers aus on aus.Id = srq.EmpID " +
@@ -711,7 +753,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         public ActionResult SRdetails([Bind(Include = "SRDID,SRID, ServiceTypeID,CarType,ItemID,CouponCode,Model,FromLoc,ToLoc,Fdate,Tdate,SupplierID,Cost,SellPrice,ChildNo," +
             "AdultNo,InfantNo,Heritage,HasAc,HasCarrier,GuideLanguageID,DateOfIssue,ContractNo,PayTo,PickUpPoint,DropPoint,DriverID,SuppInvNo,Qty,ParentID,IsReturn," +
             "IsInternational,OptionTypeID,ECommision,IsCanceled,SuppInvDt,SuppConfNo,NoExtraBeds,BFCost,LunchCost,DinnerCost,NoExtraService,ExtraServiceCost," +
-            "SuppInvAmt,GDSConfNo,ExpiryDate,EBCostPNight")] SRdetail item, string Event, int CustomerId)
+            "SuppInvAmt,GDSConfNo,ExpiryDate,EBCostPNight,Name,AdditionalDetails")] SRdetail item, string Event, int CustomerId)
         {
             using (var transaction = db.GetTransaction())
             {

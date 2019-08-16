@@ -1,13 +1,16 @@
 ﻿@using Speedbird
-@model Speedbird.Cruisevw
+@model Speedbird.CruiseDaily
 <div class="row">
-    <div class="col-10">
+    <div class="col-12">
         <table class="SRDetsTbl">
             <thead>
                 <tr>
+                    <th>Folder No</th>
+                    <th>Booked On</th>
                     <th>Pax Name</th>
+                    <th>Pax No</th>
+                    <th>Agent</th>
                     <th>Dept. Date</th>
-                    <th>Passengers</th>
                     <th>No. of Cabins</th>
                     <th>Cabin type</th>
                     <th>From Port</th>
@@ -18,12 +21,19 @@
                     <th>Meal Plan</th>
                     <th>Net cost/person</th>
                     <th>Name od cruise trip</th>
+                    <th>CP</th>
+                    <th>Sell Price</th>
+                    <th>COM</th>
+                    <th>Done By</th>
                 </tr>
             </thead>
             <tr>
+                <td>@Model.BookingNo</td>
+                <td>@Model.TDate.EAFormat(withTime: false)</td>
                 <td>@Model.PaxName</td>
-                <td>@Model.Departuredate.EAFormat()</td>
                 <td>@Model.Passengers</td>
+                <td>@Model.ContactName</td>
+                <td>@Model.Departuredate.EAFormat()</td>
                 <td>@Model.Cabins</td>
                 <td>@Model.CabinType</td>
                 <td>@Model.FromPort</td>
@@ -34,12 +44,19 @@
                 <td>@Model.MealPlan</td>
                 <td align="right">@Model.Cost</td>
                 <td>@Model.CruiseName</td>
+                <td>@Model.TotalCost</td>
+                <td>@Model.SellPrice</td>
+                <td>@(Model.SellPrice - Model.TotalCost)</td>
+                @if (Model.EnquirySource == (int)EnquirySourceEnum.Corporate_Client)
+                {
+                    <td>@Model.RealName</td>
+                }
+                else if (Model.EnquirySource == (int)EnquirySourceEnum.Web)
+                {
+                    <td>Web</td>
+                }
             </tr>
         </table>
-        @{Html.RenderPartial("ReadPVs/_SupplierInfo", Model); }
-    </div>
-    <div class="col-2" style="padding-left:0px;">
-        @{Html.RenderPartial("ReadPVs/_Fin", Model); }
     </div>
 </div>
 @*@foreach (var item in ViewBag.ufs)
