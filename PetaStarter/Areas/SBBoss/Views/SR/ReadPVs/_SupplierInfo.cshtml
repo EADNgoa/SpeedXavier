@@ -1,22 +1,6 @@
 ﻿@using Speedbird
 @model Speedbird.SupplierInfo
 
-<div class="refund_box + @Model.SRID">
-    <div class="row">
-        <div class="col">
-            @using (Html.BeginForm("SRCanxServiceAsync", "SR", FormMethod.Post, new { @class = "form-inline", id = "CanxService-" + Model.SRDID }))
-            {
-                @Html.AntiForgeryToken()
-                @Html.Hidden("SRID", (int)Model.SRID)
-                @Html.Hidden("SRDID", (int)Model.SRDID)
-                @Html.EAText("ProdCanxCost", "", "Prod. Canx Cost")
-                @Html.EAText("SBCanxCost", "", "SB Canx Cost")<br />
-                @Html.EAText("Note", "", "Note")
-                <input type="submit" value="Cancel Service" class="btn alert-danger" />
-            }
-        </div>
-    </div>
-</div>
 <table class="SRDetsTbl">
     <thead>
         <tr>
@@ -61,6 +45,23 @@
     </div>
 </div>
 
+<div class="refund_box" id="@Model.SRDID">
+    <div class="row">
+        <div class="col">
+            @using (Html.BeginForm("SRCanxServiceAsync", "SR", FormMethod.Post, new { @class = "form-inline", id = "CanxService-" + Model.SRDID }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.Hidden("SRID", (int)Model.SRID)
+                @Html.Hidden("SRDID", (int)Model.SRDID)
+                @Html.EAText("ProdCanxCost", "", "Prod. Canx Cost")
+                @Html.EAText("SBCanxCost", "", "SB Canx Cost")<br />
+                @Html.EAText("Note", "", "Note")
+                <input type="submit" value="Cancel Service" class="btn alert-danger" />
+            }
+        </div>
+    </div>
+</div>
+
 
 
 
@@ -83,15 +84,5 @@
         //Disable the browsers default date picker
         jQuery.validator.methods["date"] = function (value, element) { return true; }
 
-
-        $(".refund_box").hide();
-        $("#refund").on("click", function () {
-            $(".refund_box").toggle();
-        });
-
     });
-
-
-
-
 </script>

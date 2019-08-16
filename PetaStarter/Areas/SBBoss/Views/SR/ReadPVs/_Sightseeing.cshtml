@@ -1,5 +1,6 @@
 ﻿@using Speedbird
 @model Speedbird.SightseeingServiceView
+
 <div class="row">
     <div class="col-10">
         <table class="SRDetsTbl SRDetsFullTable" width="100%">
@@ -84,7 +85,22 @@
                 }
             </div>
         </div>
-
+        <div class="refund_box" id="@Model.SRDID">
+            <div class="row">
+                <div class="col">
+                    @using (Html.BeginForm("SRCanxServiceAsync", "SR", FormMethod.Post, new { @class = "form-inline", id = "CanxService-" + Model.SRDID }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.Hidden("SRID", (int)Model.SRID)
+                        @Html.Hidden("SRDID", (int)Model.SRDID)
+                        @Html.EAText("ProdCanxCost", "", "Prod. Canx Cost")
+                        @Html.EAText("SBCanxCost", "", "SB Canx Cost")<br />
+                        @Html.EAText("Note", "", "Note")
+                        <input type="submit" value="Cancel Service" class="btn alert-danger" />
+                    }
+                </div>
+            </div>
+        </div>
 
 
     </div>
@@ -93,7 +109,6 @@
     </div>
 </div>
 <br />
-
 
 
 @*@if (ViewBag.isReadOnly != null)

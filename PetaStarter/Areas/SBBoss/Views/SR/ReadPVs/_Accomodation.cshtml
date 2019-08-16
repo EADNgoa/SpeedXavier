@@ -19,6 +19,22 @@
                     <th>Category</th>
                     <th>Extra Beds</th>
                 </tr>
+            </thead>
+            <tr>
+                <td>@Model.PaxName</td>
+                <td align="right">@Model.AdultNo</td>
+                <td align="right">@Model.ChildNo </td>
+                <td align="right">@Model.InfantNo </td>
+                <td align="right">@(Model.AdultNo + Model.ChildNo + Model.InfantNo) </td>
+                <td>@Model.checkin.EAFormat() </td>
+                <td>@Model.checkout.EAFormat() </td>
+                <td align="right">@(Model.checkout.Subtract(Model.checkin).TotalDays) </td>
+                <td align="right">@Model.NoOfRooms </td>
+                <td>@Model.RoomType </td>
+                <td>@Model.RoomCategory </td>
+                <td align="right">@Model.NoExtraBeds </td>
+            </tr>
+            <thead>
                 <tr>
                     <th>EB cost</th>
                     <th>EB total</th>
@@ -35,20 +51,6 @@
 
                 </tr>
             </thead>
-            <tr>
-                <td>@Model.PaxName</td>
-                <td align="right">@Model.AdultNo</td>
-                <td align="right">@Model.ChildNo </td>
-                <td align="right">@Model.InfantNo </td>
-                <td align="right">@(Model.AdultNo + Model.ChildNo + Model.InfantNo) </td>
-                <td>@Model.checkin.EAFormat() </td>
-                <td>@Model.checkout.EAFormat() </td>
-                <td align="right">@(Model.checkout.Subtract(Model.checkin).TotalDays) </td>
-                <td align="right">@Model.NoOfRooms </td>
-                <td>@Model.RoomType </td>
-                <td>@Model.RoomCategory </td>
-                <td align="right">@Model.NoExtraBeds </td>
-            </tr>
             <tr>
                 <td align="right">@Model.ExtraBedCost </td>
                 <td align="right">@(Model.ExtraBedCost * Model.NoExtraBeds) </td>

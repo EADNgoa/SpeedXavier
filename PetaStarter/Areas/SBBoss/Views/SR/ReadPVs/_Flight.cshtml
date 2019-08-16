@@ -15,17 +15,6 @@
                     <th>Class                </th>
                     <th>Airline Code         </th>
                 </tr>
-                <tr>
-                    <th>Flight No             </th>
-                    <th>Departure On          </th>
-                    <th>Arrival On            </th>
-                    <th>Ticket No.             </th>
-                    <th>GDSConf No.            </th>
-                    <th>Airline PNR           </th>
-                    <th>Extra                </th>
-                    <th>Extra Details         </th>
-                    <th></th>                                    
-                </tr>
             </thead>
             <tr>
                 <td>@Model.PaxName</td>
@@ -38,6 +27,19 @@
                 <td>@Model.Class </td>
                 <td>@Model.AirlineCode </td>
             </tr>
+            <thead>
+                <tr>
+                    <th>Flight No             </th>
+                    <th>Departure On          </th>
+                    <th>Arrival On            </th>
+                    <th>Ticket No.             </th>
+                    <th>GDSConf No.            </th>
+                    <th>Airline PNR           </th>
+                    <th>Extra                </th>
+                    <th>Extra Details         </th>
+                    <th></th>
+                </tr>
+            </thead>
             <tr>
                 <td>@Model.FlightNo</td>
                 <td align="right">@Model.DepartureOn.EAFormat(true) </td>
@@ -47,13 +49,13 @@
                 <td>@Model.AirlinePNR</td>
                 <td>@Model.Extra </td>
                 <td>@Model.ExtraDetails </td>
-                <td></td>                
+                <td></td>
             </tr>
         </table>
         @{Html.RenderPartial("ReadPVs/_SupplierInfo", Model); }
     </div>
     <div class="col-2" style="padding-left:0px;">
-        @{Html.RenderPartial("ReadPVs/_Fin", Model); }                
+        @{Html.RenderPartial("ReadPVs/_Fin", Model); }
     </div>
 </div>
 <br />
@@ -61,8 +63,8 @@
 
 
 @*@if (ViewBag.isReadOnly != null)
-{@Html.Action("CustSearch", "SR", new { id = Model.SRDID })
-}*@
+    {@Html.Action("CustSearch", "SR", new { id = Model.SRDID })
+    }*@
 
 @*@if (Model != null)
     {

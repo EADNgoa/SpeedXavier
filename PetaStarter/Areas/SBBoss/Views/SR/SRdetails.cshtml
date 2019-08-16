@@ -11,99 +11,102 @@
 </style>
 
 <div id="SRDetTbl">
-    
+
     @foreach (var sd in (IEnumerable<Speedbird.SRdetail>)ViewBag.SRDets)
     {
-        <div class="h3">@sd.SRDID : @(((Speedbird.ServiceTypeEnum)sd.ServiceTypeID).ToString())&nbsp;<input type="button" class="refund btn btn-primary" value="Refund" /></div>
+        <div class="h3">
+            @sd.SRDID : @(((Speedbird.ServiceTypeEnum)sd.ServiceTypeID).ToString())&nbsp;
+            <input type="button" class="refund btn btn-primary" data-id="@sd.SRDID" value="Refund" />
+        </div>
         @Html.Action("FetchSRdetails", "SR", new { sType = (Speedbird.ServiceTypeEnum)sd.ServiceTypeID, srdid = sd.SRDID })
 
     }
 
 </div>
 
-    <script type="text/javascript">
-        $(function () {
-            $(".UploadedFile").on("change", function () {
-                $("#ServiceDetsUpld-" + $(this).data("uf")).submit();
-            });
+<script type="text/javascript">
+    $(function () {
+        $(".UploadedFile").on("change", function () {
+            $("#ServiceDetsUpld-" + $(this).data("uf")).submit();
         });
-    </script>
+    });
+</script>
 
 <hr />
 
-    <div class="section-to-Not-print">
-        @if (Model?.SRDID > 0)
-        {
-            <div class="row">
-                <div class="col">
-                    <center>
-                        <button type="button" class="btn btn-link btn-lg" data-toggle="modal" data-target="#AssignCustModal" data-srdid="@Model.SRDID">
-                            Add Customer
-                        </button>
-                    </center>
-                </div>
-            </div>
-        }
-
-
-        @using (Html.BeginForm("SRdetails", "SR", FormMethod.Post, new { id = "ServiceDets" }))
-        {
-            @Html.AntiForgeryToken()
-
-            <div class="form-horizontal ">
-
-
-                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
-                @Html.Hidden("SRID", (int)ViewBag.SRID)
-           
-
-                <div class="form-row">
-                    <div class="input-group col mb-3">
-                        <div class="input-group-prepend"><span class="input-group-text">Service Type</span></div>
-                        @Html.DropDownListFor(model => model.ServiceTypeID, null, htmlAttributes: new { @type = "text", @class = "form-control ServiceType ServiceTypeID" })
-                        @Html.ValidationMessageFor(model => model.ServiceTypeID, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-
-
-                @*Dynamic Form-rows based on Selected Service Type*@
-                <div id="placeholderEditDiv"></div>
-                @*Dynamic Form-rows based on Selected Service Type*@
-
-                <div class="form-row">
-                    <div class="input-group col-1 align-content-end">
-                        <input type="submit" value="Save" class="btn btn-primary" />
-                    </div>
-                    <div class="input-group col-11 mb-3">
-                        <div class="input-group-prepend"><span class="input-group-text">Notes</span></div>
-                        <div class="form-control" style="padding:0px !important">@Html.TextArea("Event", null, htmlAttributes: new { @class = "form-control", @rows = "1" })</div>
-                    </div>
-
-                </div>
-            </div>
-        }
-    </div>
-
-    <div class="invisible">
-        <div id="placeholderDiv"></div>
-    </div>
-
-    @section Scripts {
-        @Scripts.Render("~/bundles/jqueryval")
-    }
-    <script type="text/javascript" src="~/Content/DataTables/datatables.min.js"></script>
-    <script type="text/javascript" src="~/Scripts/Jquery.form.js"></script>
-
+<div class="section-to-Not-print">
     @if (Model?.SRDID > 0)
     {
-        <script>
+        <div class="row">
+            <div class="col">
+                <center>
+                    <button type="button" class="btn btn-link btn-lg" data-toggle="modal" data-target="#AssignCustModal" data-srdid="@Model.SRDID">
+                        Add Customer
+                    </button>
+                </center>
+            </div>
+        </div>
+    }
+
+
+    @using (Html.BeginForm("SRdetails", "SR", FormMethod.Post, new { id = "ServiceDets" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal ">
+
+
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            @Html.Hidden("SRID", (int)ViewBag.SRID)
+
+
+            <div class="form-row">
+                <div class="input-group col mb-3">
+                    <div class="input-group-prepend"><span class="input-group-text">Service Type</span></div>
+                    @Html.DropDownListFor(model => model.ServiceTypeID, null, htmlAttributes: new { @type = "text", @class = "form-control ServiceType ServiceTypeID" })
+                    @Html.ValidationMessageFor(model => model.ServiceTypeID, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+
+
+            @*Dynamic Form-rows based on Selected Service Type*@
+            <div id="placeholderEditDiv"></div>
+            @*Dynamic Form-rows based on Selected Service Type*@
+
+            <div class="form-row">
+                <div class="input-group col-1 align-content-end">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+                <div class="input-group col-11 mb-3">
+                    <div class="input-group-prepend"><span class="input-group-text">Notes</span></div>
+                    <div class="form-control" style="padding:0px !important">@Html.TextArea("Event", null, htmlAttributes: new { @class = "form-control", @rows = "1" })</div>
+                </div>
+
+            </div>
+        </div>
+    }
+</div>
+
+<div class="invisible">
+    <div id="placeholderDiv"></div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+<script type="text/javascript" src="~/Content/DataTables/datatables.min.js"></script>
+<script type="text/javascript" src="~/Scripts/Jquery.form.js"></script>
+
+@if (Model?.SRDID > 0)
+{
+    <script>
     $('#AssignCust').load('@Url.Action("_AssignCust")', { SRDID: @Model.SRDID,SRID:@Model.SRID });
 
-        </script>
-    }
-    <script>
+    </script>
+}
+<script>
 
         $('.eadatetime').datetimepicker({
             dateFormat: "dd-MM-yy",
@@ -122,78 +125,78 @@
 
         });
 
-    $(function () {
+        $(function () {
 
 
-        //Load the dynamic fields based on first Service type automatically
-        $('#placeholderEditDiv').load('@Url.Action("FetchSTpartial", "SR")', { ServiceTypeId: $('#ServiceTypeID').val(),IsReadOnly: false, SRID: @ViewBag.SRID });
+            //Load the dynamic fields based on first Service type automatically
+            $('#placeholderEditDiv').load('@Url.Action("FetchSTpartial", "SR")', { ServiceTypeId: $('#ServiceTypeID').val(), IsReadOnly: false, SRID: @ViewBag.SRID });
 
-        //Then on change of the dropDown load the dynamic fields based on the selected Service type
-        $('.ServiceType').on('change', function () {
-            var sid = $(this).val();
+            //Then on change of the dropDown load the dynamic fields based on the selected Service type
+            $('.ServiceType').on('change', function () {
+                var sid = $(this).val();
 
-            //Load the Dynamic Fields of the Form based on the selected Service Type
-            $('#placeholderEditDiv').load('@Url.Action("FetchSTpartial", "SR")', { ServiceTypeId: sid,  IsReadOnly: false, SRID: @ViewBag.SRID });
+                //Load the Dynamic Fields of the Form based on the selected Service Type
+                $('#placeholderEditDiv').load('@Url.Action("FetchSTpartial", "SR")', { ServiceTypeId: sid, IsReadOnly: false, SRID: @ViewBag.SRID });
 
-            //Fill the Option Type box
-            $.get('@Url.Action("GetOptionsOfST", "SR")', { ServiceTypeId: sid } , function (data) {
-                $('#OptionTypeID').find('option').remove();
+                //Fill the Option Type box
+                $.get('@Url.Action("GetOptionsOfST", "SR")', { ServiceTypeId: sid }, function (data) {
+                    $('#OptionTypeID').find('option').remove();
 
-                $.each(data.results, function (index, value) {
-                    $('<option>').val(value.id).text(value.text).appendTo('#OptionTypeID');
+                    $.each(data.results, function (index, value) {
+                        $('<option>').val(value.id).text(value.text).appendTo('#OptionTypeID');
 
-                });
-            });
-        });
-
-        //DateTime picker
-
-        //Disable the browsers default date picker
-        jQuery.validator.methods["date"] = function (value, element) { return true; }
-
-
-        $(document).ready(function () {
-            $('*[data-autocombo-url]')
-                .each(function () {
-                    $(this).autocomplete({
-                        source: $(this).data("autocombo-url"),
-                        minLenght: 3,
-                        delay: 500,
-                        select: function (event, ui) {
-                            $($(this).data("autocomplete-idholder")).val(ui.item.id);
-                        }
                     });
                 });
+            });
+
+            //DateTime picker
+
+            //Disable the browsers default date picker
+            jQuery.validator.methods["date"] = function (value, element) { return true; }
+
+
+            $(document).ready(function () {
+                $('*[data-autocombo-url]')
+                    .each(function () {
+                        $(this).autocomplete({
+                            source: $(this).data("autocombo-url"),
+                            minLenght: 3,
+                            delay: 500,
+                            select: function (event, ui) {
+                                $($(this).data("autocomplete-idholder")).val(ui.item.id);
+                            }
+                        });
+                    });
+            });
+
+
+
+
+
+            $('#ACModal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget) // Button that triggered the modal
+                var recipient = button.data('srdid') // Extract info from data-* attributes
+                $('#AssignCust').load('@Url.Action("_AssignCust")', { SRDID: recipient, SRID: @ViewBag.SRID });
+                var modal = $(this);
+                modal.find('#SRDID').val(recipient);
+                modal.find('#CID').focus();
+            })
+
+            $(".refund_box").hide();
+            $('.refund').click(function () {
+                $("#" + $(this).data('id')).toggle();
+            });
+
+
         });
-
-
-
-
-
-        $('#ACModal').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget) // Button that triggered the modal
-            var recipient = button.data('srdid') // Extract info from data-* attributes
-            $('#AssignCust').load('@Url.Action("_AssignCust")', { SRDID: recipient, SRID: @ViewBag.SRID });
-            var modal = $(this);
-            modal.find('#SRDID').val(recipient);
-            modal.find('#CID').focus();
-        })
-
-        $(".refund_box").hide();
-        $(".refund").on("click", function () {
-            $(".refund_box").toggle();
-        });
-
-
-    })
 
     $(function () {
         $(".srdEdit").on("click", function () {
             $("#placeholderEditDiv").load('@Url.Action("FetchSTpartial")', { id: $(this).data("srdid"), ServiceTypeId: $(this).data("stid"), SRID: @ViewBag.SRID, IsReadOnly: false });
             $(".ServiceTypeID").val($(this).data("stid"));
-           
+
         });
     })
 
 
-    </script>
+</script>
