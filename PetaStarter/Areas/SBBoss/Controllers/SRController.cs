@@ -588,6 +588,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                         $"SRDID, srq.SRID,srq.EnquirySource,ECommision, aus.Id, aus.RealName from SRdetails sd " +
                         $"left join ServiceRequest srq on srq.SRID = sd.SRID " +
                         $"left join AspNetUsers aus on aus.Id = srq.EmpID " +
+                        $"left join Supplier s on s.supplierid = sd.supplierid " +
                         $"left join Agent ag on ag.AgentId = srq.AgentID " +
                         $"left join OptionType ot on ot.OptionTypeId = sd.OptionTypeId " +
                         $"WHERE SRDID = {srdid}"));
@@ -597,11 +598,12 @@ namespace Speedbird.Areas.SBBoss.Controllers
                         $"SRD_Cust sc where c.CustomerID = sc.CustomerID and sc.SRDID = { srdid}) as PaxName," +
                         $"(select COUNT(c.CustomerID) from Customer c, SRD_Cust sc " +
                         $"where c.CustomerID = sc.CustomerID and sc.SRDID = { srdid}) as PaxNo, " +
-                        $"ag.AgentID,ag.ContactName,srq.BookingNo,srq.TDate,sd.ChildNo as NOOfPax, sd.Model as PackageType, sd.Fdate, sd.Tdate," +
+                        $"ag.AgentID,ag.ContactName,srq.BookingNo,srq.TDate as TransDate,sd.ChildNo as NOOfPax, sd.Model as PackageType, sd.Fdate, sd.Tdate," +
                         $"CarType, sd.IsReturn, sd.FromLoc,sd.ToLoc, sd.AdditionalDetails as NameofTour, sd.DropPoint as HotelCat," +
                         $"sd.Cost, sd.Heritage as AddDtl, sd.LunchCost as AddCost, sd.BFCost as NetCost, Sellprice, SRDID, srq.SRID, SuppInvNo, SupplierName, ContractNo, sd.CouponCode," +
                         $"sd.SupplierID, sd.CouponCode, SuppInvDt, SuppConfNo, SuppInvAmt, srq.EnquirySource, aus.Id, aus.RealName from SRdetails sd " +
                         $"left join ServiceRequest srq on srq.SRID = sd.SRID " +
+                        $"left join Supplier s on s.supplierid = sd.supplierid " +
                         $"left join AspNetUsers aus on aus.Id = srq.EmpID " +
                         $"left join Agent ag on ag.AgentId = srq.AgentID " +
                         $"left join OptionType ot on ot.OptionTypeId = sd.OptionTypeId WHERE SRDID = { srdid }"));
@@ -617,6 +619,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                         $"Heritage as MealPlan, ot.OptionTypeID,ot.OptionTypeName,sd.ServiceTypeID,Sellprice, SRDID, srq.SRID,srq.EnquirySource," +
                         $"sd.Cost, sd.Name as CruiseName,aus.Id,aus.RealName from SRdetails sd " +
                         $"left join ServiceRequest srq on srq.SRID = sd.SRID " +
+                        $"left join Supplier s on s.supplierid = sd.supplierid " +
                         $"left join AspNetUsers aus on aus.Id = srq.EmpID " +
                         $"left join Agent ag on ag.AgentId = srq.AgentID " +
                         $"left join OptionType ot on ot.OptionTypeId = sd.OptionTypeId WHERE SRDID = { srdid }"));
@@ -638,11 +641,11 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 case ServiceTypeEnum.CarBike:
                     return PartialView($"ReadDailyPVs/_{(sType).ToString()}", db.SingleOrDefault<CarDaily>($"select (select top 1 CONCAT(c.fName, ' ',c.sName) from Customer c, SRD_Cust sc where c.CustomerID = sc.CustomerID and sc.SRDID = {srdid}) as PaxName," +
                         $"(select COUNT(c.CustomerID) from Customer c, SRD_Cust sc where c.CustomerID = sc.CustomerID and sc.SRDID = {srdid}) as PaxNo," +
-                        $"ag.AgentID,ag.ContactName,srq.BookingNo,srq.TDate,sd.Model, sd.CarType, sd.Fdate, sd.Tdate, sd.FromLoc, sd.PickUpPoint, sd.ToLoc, sd.DropPoint," +
+                        $"ag.AgentID,ag.ContactName,srq.BookingNo,srq.TDate as TransDate,sd.Model, sd.CarType, sd.Fdate, sd.Tdate, sd.FromLoc, sd.PickUpPoint, sd.ToLoc, sd.DropPoint," +
                         $"sd.Cost, sd.Qty, sd.BFCost, sd.PayTo, Sellprice, sd.ServiceTypeID, ContractNo, SRDID, srq.SRID, SuppInvNo, " +
                         $"SupplierName,ag.AgentID,ag.ContactName,srq.BookingNo,srq.TDate," +
                         $"sd.CouponCode, sd.SupplierID, sd.CouponCode, sd.SuppInvDt, ot.OptionTypeId, ot.OptionTypeName, " +
-                        $"sd.SuppConfNo, sd.SuppInvAmt,aus.Id,aus.RealName from SRdetails sd " +
+                        $"sd.SuppConfNo, sd.SuppInvAmt,srq.EnquirySource,aus.Id,aus.RealName from SRdetails sd " +
                         $"left JOIN Supplier su ON su.SupplierID = sd.SupplierID left join OptionType ot on ot.OptionTypeId = sd.OptionTypeId " +
                         $"LEFT JOIN DriversCars dc ON dc.CarId = NoExtraBeds left join ServiceRequest srq on srq.SRID = sd.SRID " +
                         $"left join AspNetUsers aus on aus.Id = srq.EmpID left join Agent ag on ag.AgentId = srq.AgentID " +
@@ -658,6 +661,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                         $"sd.Fdate as ValidFrom, sd.Tdate as ValidTo, sd.Cost, Sellprice, sd.ServiceTypeID, SRDID, srq.SRID, " +
                         $"sd.ServiceTypeID, SRDID, srq.SRID,srq.EnquirySource,aus.Id,aus.RealName FROM SRdetails sd " +
                         $"left join ServiceRequest srq on srq.SRID = sd.SRID " +
+                        $"left join Supplier s on s.supplierid = sd.supplierid " +
                         $"left join AspNetUsers aus on aus.Id = srq.EmpID " +
                         $"left join Agent ag on ag.AgentId = srq.AgentID " +
                         $" WHERE SRDID = {srdid}"));
@@ -671,13 +675,14 @@ namespace Speedbird.Areas.SBBoss.Controllers
                         "DropPoint as ExtraDetails, Sellprice,sd.ServiceTypeID,SRDID,srq.SRID,srq.EnquirySource," +
                         $" aus.Id,aus.RealName from SRdetails sd " +
                         $"left join ServiceRequest srq on srq.SRID = sd.SRID " +
+                        $"left join Supplier s on s.supplierid = sd.supplierid " +
                         $"left join AspNetUsers aus on aus.Id = srq.EmpID " +
                         $"left join Agent ag on ag.AgentId = srq.AgentID " +
                         $"left join OptionType ot on ot.OptionTypeId=sd.OptionTypeId WHERE SRDID = {srdid} "));
                     break;
                 case ServiceTypeEnum.Visa:
                     return PartialView($"ReadDailyPVs/_{(sType).ToString()}", db.SingleOrDefault<VisaDaily>($"SELECT (select top 1 CONCAT(c.fName, ' ',c.sName) from Customer c, SRD_Cust sc where c.CustomerID = sc.CustomerID and sc.SRDID = {srdid}) as PaxName, " +
-                        $"(select COUNT(c.CustomerID) from Customer c, SRD_Cust sc where c.CustomerID = sc.CustomerID and sc.SRDID = {srdid}) as PaxNo, ag.AgentID,ag.ContactName,srq.BookingNo,srq.TDate, " +
+                        $"(select COUNT(c.CustomerID) from Customer c, SRD_Cust sc where c.CustomerID = sc.CustomerID and sc.SRDID = {srdid}) as PaxNo, ag.AgentID,ag.ContactName,srq.BookingNo,srq.TDate as TransDate, " +
                         $"sd.Name as PassportNo,sd.DateOfIssue as DOB, sd.ExpiryDate,sd.FromLoc as Nationality,sd.Heritage as VisaCountry," +
                         $"sd.Fdate,sd.Tdate, sd.Cost, sd.ExtraServiceCost,sd.ServiceTypeID,Sellprice,SRDID, srq.SRID, " +
                         $"SuppInvNo, CouponCode, ContractNo,SupplierName,sd.SupplierID, SuppInvDt, SuppConfNo, SuppInvAmt,srq.EnquirySource,aus.Id,aus.RealName FROM SRdetails sd " +
@@ -702,7 +707,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                     return PartialView($"ReadDailyPVs/_{(sType).ToString()}", db.SingleOrDefault<PassportDaily>($"SELECT (select top 1 CONCAT(c.fName, ' ',c.sName) from Customer c, SRD_Cust sc where c.CustomerID=sc.CustomerID and sc.SRDID={srdid}) as PaxName, " +
                         $"(select COUNT(c.CustomerID) from Customer c, SRD_Cust sc " +
                         $"where c.CustomerID = sc.CustomerID and sc.SRDID = {srdid}) as PaxNo," +
-                        "ag.AgentID,ag.ContactName,srq.BookingNo,srq.TDate,sd.Fdate as DOB, sd.srid, sd.FromLoc as Nationality, sd.Model as PassPortNo, sd.Heritage, sd.Cost,sd.ServiceTypeID, Sellprice, " +
+                        "ag.AgentID,ag.ContactName,srq.BookingNo,srq.TDate,sd.Fdate, sd.srid, sd.FromLoc as Nationality, sd.Model as PassPortNo, sd.Heritage, sd.Cost,sd.ServiceTypeID, Sellprice, " +
                         "SRDID, srq.SRID,srq.EnquirySource,aus.Id,aus.RealName FROM SRdetails sd " +
                         $"left join ServiceRequest srq on srq.SRID = sd.SRID " +
                         $"left join AspNetUsers aus on aus.Id = srq.EmpID " +
@@ -728,14 +733,11 @@ namespace Speedbird.Areas.SBBoss.Controllers
                         $"where c.CustomerID = sc.CustomerID and sc.SRDID = {srdid}) as PaxName, " +
                         $"(select COUNT(c.CustomerID) from Customer c, SRD_Cust sc " +
                         $"where c.CustomerID = sc.CustomerID and sc.SRDID = {srdid}) as PaxNo," +
-                        $"ag.AgentID,ag.ContactName,srq.BookingNo,srq.TDate,sd.ChildNo as Age, " +
-                        $"sd.DateOfIssue as DOT, sd.FromLoc, sd.ToLoc, sd.Model as TrainName,sd.InfantNo as TrainNo,CarType, " +
-                        $"sd.AdultNo as TicketNo, sd.Heritage as Class, " +
-                        $"sd.Fdate as Arrival, sd.Tdate as Departure, sd.Cost as TicketCost, sd.LunchCost as AddCost," +
-                        $"sd.BFCost as TotalCost, Sellprice,ContractNo, " +
-                        $"sd.ServiceTypeID, SRDID, srq.SRID,srq.EnquirySource,aus.Id,aus.RealName " +
-                        $"FROM SRdetails sd " +
-                        $"left join ServiceRequest srq on srq.SRID = sd.SRID " +
+                        $"ag.AgentID,ag.ContactName,srq.BookingNo,srq.TDate,sd.ChildNo as Age," +
+                        $"sd.DateOfIssue as DOT, sd.FromLoc, sd.ToLoc, sd.Model as TrainName,ot.OptionTypeID, sd.InfantNo as TrainNo, sd.AdultNo as TicketNo, " +
+                        $"sd.Fdate as Arrival, sd.Tdate as Departure, sd.Cost, sd.LunchCost as AddCost,sd.Heritage as Class,AdditionalDetails, Sellprice,CarType," +
+                        $"sd.ServiceTypeID, SRDID, srq.SRID,srq.EnquirySource,aus.Id,aus.RealName FROM SRdetails sd " +
+                       $"left join ServiceRequest srq on srq.SRID = sd.SRID " +
                         $"left join AspNetUsers aus on aus.Id = srq.EmpID " +
                         $"left join Agent ag on ag.AgentId = srq.AgentID " +
                         $"left join OptionType ot on ot.OptionTypeId = sd.OptionTypeId WHERE SRDID = {srdid}"));

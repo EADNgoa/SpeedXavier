@@ -31,7 +31,7 @@
             </thead>
             <tr>
                 <td>@Model.BookingNo</td>
-                <td>@Model.TDate.EAFormat(withTime: false)</td>
+                <td>@Model.TransDate.EAFormat(withTime: false)</td>
                 <td>@Model.PaxName</td>
                 <td>@Model.PaxNo</td>
                 <td>@Model.ContactName</td>
@@ -51,7 +51,7 @@
                 <td>@Model.TotalCost</td>
                 <td>@Model.SellPrice</td>
                 <td>@(Model.SellPrice - Model.TotalCost)</td>
-                @if (Model.EnquirySource == (int)EnquirySourceEnum.Corporate_Client)
+                @if(Model.EnquirySource == (int)EnquirySourceEnum.Corporate_Client)
                 {
                     <td>@Model.RealName</td>
                 }

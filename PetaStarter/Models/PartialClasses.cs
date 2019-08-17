@@ -356,7 +356,7 @@ namespace Speedbird
         public int? PaxNo { get; set; }
         public string Id { get; set; }
         public string RealName { get; set; }
-        public DateTime? TDate { get; set; }
+        public DateTime? TransDate { get; set; }
     }
 
     public class VisaDaily : SupplierInfo
@@ -380,7 +380,7 @@ namespace Speedbird
         public int? BookingNo { get; set; }
         public int? EnquirySource { get; set; }
         public int? PaxNo { get; set; }
-        public DateTime? TDate { get; set; }
+        public DateTime? TransDate { get; set; }
         public string Id { get; set; }
         public string RealName { get; set; }
     }
@@ -483,7 +483,7 @@ namespace Speedbird
         public int TicketNo { get; set; }
         public decimal Cost { get; set; }
         public decimal AddCost { get; set; }
-        public string AddDetl { get; set; }
+        public string AdditionalDetails { get; set; }
         public override decimal TotalCost { get { return Cost + AddCost; } }
         public string AgentID { get; set; }
         public string ContactName { get; set; }
@@ -517,7 +517,7 @@ namespace Speedbird
         public int? BookingNo { get; set; }
         public int? EnquirySource { get; set; }
         public int? PaxNo { get; set; }
-        public DateTime? TDate { get; set; }
+        public DateTime? TransDate { get; set; }
         public string Id { get; set; }
         public string RealName { get; set; }
     }
@@ -619,7 +619,7 @@ namespace Speedbird
 
     public class PassportDaily : SupplierInfo
     {
-        public DateTime? DOB { get; set; }
+        public DateTime? Fdate { get; set; }
         public string PassPortNo { get; set; }
         public string Nationality { get; set; }
         public decimal Cost { get; set; }
