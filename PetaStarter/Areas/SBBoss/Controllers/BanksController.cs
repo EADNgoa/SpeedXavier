@@ -34,22 +34,23 @@ namespace Speedbird.Areas.SBBoss.Controllers
             var SuccessUpload = new List<string>();
             var FailedUpload = new List<string>();
 
-            foreach (string xFile in xmlFiles)
-            {
-                try
-                {
-                    string fileName = xFile.Substring(xFile.LastIndexOf("\\") + 1);
-                    Debug.Print(fileName.PadRight(30, '*'));
-                    ImportXmlToSql(fileName);
-                    SuccessUpload.Add(fileName);
+            //foreach (string xFile in xmlFiles)
+            //{
+            //    try
+            //    {
+            //        string fileName = xFile.Substring(xFile.LastIndexOf("\\") + 1);
+            //        Debug.Print(fileName.PadRight(30, '*'));
+            //        ImportXmlToSql(fileName);
+            //        SuccessUpload.Add(fileName);
 
-                }
-                catch (Exception e)
-                {
-                    FailedUpload.Add(xFile.Substring(xFile.LastIndexOf("\\")) + " because " + e.Message);
+            //    }
+            //    catch (Exception e)
+            //    {
+            //        FailedUpload.Add(xFile.Substring(xFile.LastIndexOf("\\")) + " because " + e.Message);
 
-                }
-            }
+            //    }
+            //}
+            ImportXmlToSql("SD_DataSources_DataDestination_Categories.xml");
 
             string res = $"The following {SuccessUpload.Count} files were successfully uploaded: {String.Join(", \n ", SuccessUpload)} \n ";
             if (FailedUpload.Count > 0)
@@ -138,7 +139,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             {
                 ImportLog_Id = newImportId,
                 Abst_Id = newAbstTableId++,
-                Name = (elemType == "ParentElement")? $"{elemName}_{level}_{elem.Parent?.Name.LocalName ?? ""}": elemName,
+                Name = elemName,
                 recursionLevel = level,
                 Type = GetTypeInt(elemType),
                 ParentTableName = parentName,
@@ -198,7 +199,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                     "FROM AbstTable WHERE type = 0 AND Parent_Id IN " +
                     "   (SELECT Parent_Id FROM AbstTable GROUP BY Parent_Id HAVING count(Parent_Id) > 1)	" +
                     "GROUP BY [Name], recursionLevel, ParentTableName, Parent_Id HAVING count(Name) > 1) " +
-                $"UPDATE C SET Type={(int)EnumFldType.HomoElement}, [Name] = CONCAT ([Name], '_', C.recursionLevel, '-', C.ParentTableName) " +
+                $"UPDATE C SET Type={(int)EnumFldType.HomoElement} " +
                     "FROM AbstTable C JOIN HomoLeaves O ON C.recursionLevel = O.recursionLevel AND C.Name = O.TblName " +
                     "AND C.ParentTableName = O.ParentTableName and C.Parent_Id=O.Parent_Id");
 
@@ -232,13 +233,13 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 "group by Name,Type " +
                 "having max(len([Value])) > 0");
 
-                //Debug.Print(db.LastSQL);
+                Debug.Print(db.LastSQL);
             });
 
 
             
             //Generate the Create Table statements            
-            tableDefs.ToList().ForEach(t =>
+            tableDefs.OrderBy(t=>t.RecursionLevel).ToList().ForEach(t =>
             {
                 if (db.Query<string>($"select table_schema from INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME='{t.TblName}'").Count()==0) //Ensure we dont try to make the same table twice (when importing multiple xmls)
                 {
@@ -281,6 +282,32 @@ namespace Speedbird.Areas.SBBoss.Controllers
                         t.AlterSQL.Add(altStmt);
                         Debug.Print(altStmt);
                         db.Execute(altStmt);
+                    }
+
+                    //Ensure an FK to its parent exists
+                    if (!fieldsInDBTable.Any(f =>f.Name==(t.ParentTblName+"_Id")) && t.ParentTblName.Length>0)
+                    {
+                        string altStmtFld = $"ALTER TABLE [{t.TblName}] ADD [{t.ParentTblName}_Id] INT NULL";
+                        t.AlterSQL.Add(altStmtFld);
+                        Debug.Print(altStmtFld);
+                        db.Execute(altStmtFld);
+
+                        string altStmt = $"ALTER TABLE [{t.TblName}] ADD CONSTRAINT [FK_{t.TblName}-{t.ParentTblName}] FOREIGN KEY (ImportLog_Id, [{t.ParentTblName}_Id]) REFERENCES [{t.ParentTblName}](ImportLog_Id, [{t.ParentTblName}_Id])";
+                        t.AlterSQL.Add(altStmt);
+                        Debug.Print(altStmt);
+                        db.Execute(altStmt);
+                        if (!fieldsInDBTable.Any(f => f.Name == "ImportLog_Id"))
+                            {
+                                string altStmtImptf = $"ALTER TABLE [{t.TblName}] ADD [{t.ParentTblName}_Id] INT NULL";
+                                t.AlterSQL.Add(altStmtImptf);
+                                Debug.Print(altStmtImptf);
+                                db.Execute(altStmtImptf);
+
+                                string altStmtImpl = $"ALTER TABLE [{t.TblName}] ADD CONSTRAINT [FK_{t.TblName}-ImportLog] FOREIGN KEY (ImportLog_Id) REFERENCES [ImportLog](ImportLog_Id)";
+                                t.AlterSQL.Add(altStmtImpl);
+                                Debug.Print(altStmtImpl);
+                                db.Execute(altStmtImpl);
+                        }
                     }
                 }
             });
@@ -441,7 +468,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             public bool Equals(TableDef x, TableDef y)
             {
                 bool res = (x.TblName == y.TblName && x.RecursionLevel == y.RecursionLevel && x.ParentTblName==y.ParentTblName);
-                Debug.Print($"{res} for {x.TblName}={y.TblName} and {x.RecursionLevel}={y.RecursionLevel} and {x.ParentTblName}={y.ParentTblName}");
+                //Debug.Print($"{res} for {x.TblName}={y.TblName} and {x.RecursionLevel}={y.RecursionLevel} and {x.ParentTblName}={y.ParentTblName}");
                 return res;
             }
             public int GetHashCode(TableDef obj)
