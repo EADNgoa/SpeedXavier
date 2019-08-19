@@ -1,0 +1,69 @@
+﻿@using Speedbird
+@model Speedbird.SightseeingServiceViewDaily
+
+<strong>@Model.SightseeingName</strong>
+<div class="row">
+    <div class="col-12">
+        <table class="SRDetsTbl SRDetsFullTable" width="100%">
+            <thead>
+                <tr>
+                    <th>Folder No</th>
+                    <th>Booked On</th>
+                    <th>Pax Name</th>
+                    <th>Pax No</th>
+                    <th>Agent</th>
+                    <th>No of Adults</th>
+                    <th>No of Kids</th>
+                    <th>Half/Full day</th>
+                    <th>Pickup From</th>
+                    <th>Pickup At</th>
+                    <th>Pvt/Sic</th>
+                    <th>Cost per car</th>
+                    <th>Car Qty</th>
+                    <th>Adult Cost</th>
+                    <th>Child Cost</th>
+                    <th>Tour On</th>
+                    <th>Car Type</th>
+                    <th>Meal inc.</th>
+                    <th>Inclsions</th>
+                    <th>CP</th>
+                    <th>Sell Price</th>
+                    <th>COM</th>
+                    <th>Done By</th>
+                </tr>
+            </thead>
+            <tr>
+                <td>@Model.BookingNo</td>
+                <td>@Model.TDate.EAFormat(withTime: false)</td>
+                <td>@Model.PaxName</td>
+                <td>@(Model.AdultNo + Model.ChildNo)</td>
+                <td>@Model.ContactName</td>
+                <td align="right">@Model.AdultNo</td>
+                <td align="right">@Model.ChildNo </td>
+                <td>@Model.OptionTypeName</td>
+                <td>@Model.PickUpPoint</td>
+                <td>@Model.PickupLocation </td>
+                <td>@Model.Private_Sic </td>
+                <td align="right">@Model.CostPerCar </td>
+                <td align="right">@Model.NoOfCars </td>
+                <td align="right">@Model.AdultCost </td>
+                <td align="right">@Model.ChildCost </td>
+                <td>@Model.TourDate.EAFormat(true) </td>
+                <td>@((CarTypeEnum)Model.CarType)</td>
+                <td>@Model.MealIncluded</td>
+                <td>@ViewBag.Inc</td>
+                <td>@Model.TotalCost</td>
+                <td>@Model.SellPrice</td>
+                <td>@(Model.SellPrice - Model.TotalCost)</td>
+                @if (Model.EnquirySource == (int)EnquirySourceEnum.Corporate_Client)
+                {
+                    <td>@Model.RealName</td>
+                }
+                else if (Model.EnquirySource == (int)EnquirySourceEnum.Web)
+                {
+                    <td>Web</td>
+                }
+            </tr>
+        </table>
+</div>
+</div>

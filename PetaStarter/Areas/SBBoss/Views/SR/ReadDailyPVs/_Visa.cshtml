@@ -1,11 +1,17 @@
 ﻿@using Speedbird
-@model Speedbird.Visavw
+@model Speedbird.VisaDaily
+
+
 <div class="row">
-    <div class="col-10">
+    <div class="col-12">
         <table class="SRDetsTbl" width="100%">
             <thead>
                 <tr>
-                    <th>Pax Name     </th>
+                    <th>Folder No</th>
+                    <th>Booked On</th>
+                    <th>Pax Name</th>
+                    <th>Pax No</th>
+                    <th>Agent</th>
                     <th>Passport No        </th>
                     <th>DOB    </th>
                     <th>Expiry Date    </th>
@@ -15,11 +21,18 @@
                     <th>To Date     </th>
                     <th>Duration    </th>
                     <th>Cost </th>
-                    <th>Total CP </th>
+                    <th>CP </th>
+                    <th>Sell Price </th>
+                    <th>COM </th>
+                    <th>Done By </th>
                 </tr>
             </thead>
             <tr>
+                <td>@Model.BookingNo</td>
+                <td>@Model.TransDate.EAFormat(withTime: false)</td>
                 <td>@Model.PaxName</td>
+                <td>@Model.PaxNo</td>
+                <td>@Model.ContactName</td>
                 <td>@Model.PassportNo</td>
                 <td>@Model.DOB.EAFormat()</td>
                 <td>@Model.ExpiryDate.EAFormat()</td>
@@ -29,36 +42,22 @@
                 <td>@Model.Tdate.EAFormat()</td>
                 <td>@(Model.Tdate.Subtract(Model.Fdate).TotalDays)</td>
                 <td align="right">@Model.Cost</td>
-                <td align="right">@Model.ExtraServiceCost</td>
+                <td align="right">@Model.TotalCost</td>
+                <td align="right">@Model.SellPrice</td>
+                <td align="right">@(Model.SellPrice - Model.TotalCost)</td>
+                @if (Model.EnquirySource == (int)EnquirySourceEnum.Corporate_Client)
+                {
+                    <td>@Model.RealName</td>
+                }
+                else if (Model.EnquirySource == (int)EnquirySourceEnum.Web)
+                {
+                    <td>Web</td>
+                }
             </tr>
         </table>
-        @{Html.RenderPartial("ReadPVs/_SupplierInfo", Model); }
-
-    </div>
-    <div class="col-2" style="padding-left:0px;">
-        @{Html.RenderPartial("ReadPVs/_Fin", Model); }
     </div>
 </div>
 <br />
-
-
-
-@*@if (ViewBag.isReadOnly != null)
-    {@Html.Action("CustSearch", "SR", new { id = Model.SRDID })
-    }*@
-
-@*@if (Model != null)
-    {
-        <script>
-           $('#AssignDriver').load('@Url.Action("_AssignDriver")', { SRID: @Model.SRID, SRDID: @Model.SRDID});
-           $('#Review').load('@Url.Action("_DrvReview")', { SRID: @Model.SRID,SRDID: @Model.SRDID});
-        </script>
-    }*@
-
-
-
-
-
 
 <script>
 

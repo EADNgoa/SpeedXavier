@@ -48,6 +48,8 @@
     [Tax] DECIMAL(10, 2) NULL, 
     [ExpiryDate] DATE NULL, 
     [EBCostPNight] DECIMAL(10, 2) NULL, 
+    [Name] VARCHAR(50) NULL, 
+    [AdditionalDetails] VARCHAR(50) NULL, 
     CONSTRAINT [FK_SRdetails_ToSR] FOREIGN KEY ([SRID]) REFERENCES [ServiceRequest]([SRID]), 
     CONSTRAINT [FK_SRdetails_ToSupplier] FOREIGN KEY ([SupplierID]) REFERENCES [Supplier]([SupplierID]), 
     CONSTRAINT [FK_SRdetails_ToGuideLanguage] FOREIGN KEY ([GuideLanguageID]) REFERENCES [GuideLanguage]([GuideLanguageID]), 

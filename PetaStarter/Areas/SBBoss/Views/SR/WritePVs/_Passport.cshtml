@@ -18,7 +18,7 @@
                 <tr>
                     <td>  @Html.EASelectListP("CustomerId", (IEnumerable<SelectListItem>)ViewBag.CustomerList, "", "Pax Name", (string)ViewBag.SelectedCustomerId)</td>
                     <td>  @Html.EADateForP(m => m.Fdate, "Date of Birth")                                                                                             </td>
-                    <td>  @Html.EANumberForP(m => m.ContractNo, "Passport No.")                                                                                     </td>
+                    <td>  @Html.EATextForP(m => m.Model, "Passport No.")                                                                                     </td>
                     <td>  @Html.EATextFor(m => m.FromLoc, "Nationality")                                                                                   </td>
                     <td>  @Html.EATextFor(m => m.Heritage, "Service Required")                                                                            </td>
                     <td>  @Html.EANumberFor(m => m.Cost, "Cost")                                                                            </td>
