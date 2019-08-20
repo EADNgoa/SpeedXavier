@@ -777,4 +777,11 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="UserID" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="6cefa5b7-07c0-479e-82b6-342a0d5a532d" ChangeDateTime="08/19/2019 16:03:11">
+    <Property Name="ElementName" Value="[dbo].[Payments].[DRPDID]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Payments]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="PaymentID" />
+  </Operation>
 </Operations>

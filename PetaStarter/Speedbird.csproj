@@ -206,6 +206,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Areas\SBBoss\Controllers\ConfigController.cs" />
     <Compile Include="Areas\SBBoss\Controllers\EmployeeController.cs" />
+    <Compile Include="Areas\SBBoss\Controllers\FinanceInfoController.cs" />
     <Compile Include="Areas\SBBoss\Controllers\OwnedAssetController.cs" />
     <Compile Include="Areas\SBBoss\Controllers\SupplierController.cs" />
     <Compile Include="Areas\SBBoss\Controllers\AgentController.cs" />
@@ -817,6 +818,8 @@
     <Content Include="Areas\SBBoss\Views\SR\ReadDailyPVs\_Sightseeing.cshtml" />
     <Content Include="Areas\SBBoss\Views\SR\ReadDailyPVs\_Transfer.cshtml" />
     <Content Include="Areas\SBBoss\Views\SR\ReadDailyPVs\_Visa.cshtml" />
+    <Content Include="Areas\SBBoss\Views\FinanceInfo\Index.cshtml" />
+    <Content Include="Areas\SBBoss\Views\FinanceInfo\_FinanceInfo.cshtml" />
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <Content Include="Areas\SBBoss\Views\RP\DriverR.cshtml" />
     <Content Include="Areas\SBBoss\Views\RP\DriverP.cshtml" />

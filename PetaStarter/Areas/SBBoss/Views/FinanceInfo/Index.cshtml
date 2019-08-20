@@ -1,0 +1,61 @@
+﻿@{
+
+    ViewBag.Title = "Finance Report";
+}
+
+<div class="card border rounded DropShadow">
+    <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
+        <span class="h5">Search</span>
+    </div>
+    <div class="card-body">
+
+            <div class="row d-print-none">
+                <table>
+                    <tr style="text-align:center">
+                        <td>&nbsp;Driver Name:</td>
+                        @Html.Hidden("DriverID", (int?)ViewBag.DriverID)
+                        <td><input placeholder="Driver Name" value="@ViewBag.DriverID" type="text" id="DriverID" name="DriverName" data-autocomplete-idholder="#DriverID" data-autodriver-url='@Url.Action("AutoCompleteDriver")' class="form-control" /></td>
+                        <td>&nbsp;From Date:</td>
+                        <td> @Html.TextBox("FromDate", ViewBag.CurrentFilter as string, new { @class = "form-control eadate", @type = "text" })</td>
+                        <td>&nbsp;To Date:</td>
+                        <td> @Html.TextBox("ToDate", ViewBag.CurrentFilter as string, new { @class = "form-control eadate", @type = "text" })</td>
+                        <td><input type="submit" value="Search" id="search" class="btn btn-primary" /></td>
+                    </tr>
+                </table>
+
+            </div>
+
+    </div>
+</div>
+
+
+        <div id="financeListPart"></div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+<script>
+    $(function () {
+        $('#search').click(function () {
+             $('#financeListPart').load('@Url.Action("_FinanceInfo", "FinanceInfo")', { DriverId: $("#DriverID").val(), FromDate: $("#FromDate").val(), ToDate: $("#ToDate").val() });
+        });
+    });
+
+    $(function () {
+        $('*[data-autodriver-url]')
+            .each(function () {
+                $(this).autocomplete({
+                    source: $(this).data("autodriver-url"),
+                    minLenght: 3,
+                    delay: 500,
+                    select: function (event, ui) {
+                        $($(this).data("autocomplete-idholder")).val(ui.item.id);
+                        LoadList();
+                    }
+                });
+            });
+    });
+</script>
+
+

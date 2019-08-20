@@ -26,6 +26,21 @@ namespace Speedbird
         public string Phone { get; set; }
     }
 
+    public class Paymentdetailvw
+    {
+        public string PaxName { get; set; }
+        public int DriverID { get; set; }
+        public string DriverName { get; set; }
+        public int SRID { get; set; }
+        public int SRDID { get; set; }
+        public string BookingNo { get; set; }
+        public DateTime Fdate { get; set; }
+        public decimal SellPrice { get; set; }
+        public decimal Cost { get; set; }
+        public string PayTo { get; set; }
+    }
+
+
     [Serializable()]
     [XmlRoot("REFUND")]
     public class REFUND

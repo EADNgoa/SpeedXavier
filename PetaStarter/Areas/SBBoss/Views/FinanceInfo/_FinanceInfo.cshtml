@@ -1,0 +1,77 @@
+﻿
+@{
+    ViewBag.Title = "Requested Info";
+}
+
+<div class="card border rounded DropShadow">
+    <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
+        <span class="h3">@ViewBag.Title</span>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-6">
+                @{
+                    var paytodriver = (IEnumerable<Speedbird.Paymentdetailvw>)ViewBag.PayToDriver;
+                }
+
+                    <table class="table SRDetsTbl">
+                        <thead>
+                            <tr>
+                                <th>BF</th>
+                                <th>Pax Name</th>
+                                <th>Date</th>
+                                <th>CP</th>
+                                <th>SP</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in paytodriver)
+                            {
+                                <tr>
+
+                                    <td>@item.BookingNo</td>
+                                    <td>@item.PaxName</td>
+                                    <td>@item.Fdate</td>
+                                    <td>@item.Cost</td>
+                                    <td>@item.SellPrice</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+            </div>
+            <div class="col-6">
+                @{
+                    var paytous = (IEnumerable<Speedbird.Paymentdetailvw>)ViewBag.PayToUs;
+                }
+
+                    <table class="table SRDetsTbl">
+                        <thead>
+                            <tr>
+                                <th>BF</th>
+                                <th>Pax Name</th>
+                                <th>Date</th>
+                                <th>CP</th>
+                                <th>SP</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                @foreach (var item in paytous)
+                                {
+                                    <td>@item.BookingNo</td>
+                                    <td>@item.PaxName</td>
+                                    <td>@item.Fdate</td>
+                                    <td>@item.Cost</td>
+                                    <td>@item.SellPrice</td>
+                                }
+                            </tr>
+                        </tbody>
+                    </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+
