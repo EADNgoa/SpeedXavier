@@ -246,6 +246,7 @@ namespace Speedbird
         public int AdultCost { get; set; }
         public int ChildCost { get; set; }
         public DateTime TourDate { get; set; }
+        public DateTime PickupTime { get; set; }
         public int CarType { get; set; }
         public bool MealIncluded { get; set; }
         public int GuideLanguageName { get; set; }

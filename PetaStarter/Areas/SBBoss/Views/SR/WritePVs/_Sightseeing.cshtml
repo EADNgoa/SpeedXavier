@@ -13,6 +13,7 @@
             <th>Half/ Full day</th>
             <th>Pick From     </th>
             <th>Picup Loc     </th>
+            <th>Pickup Time   </th>
             <th>Pvt/Sic     </th>
             <th>Tour Date     </th>
             <th>Cost Per Var  </th>
@@ -34,6 +35,7 @@
             <td>  @Html.EASelectListForP(m => m.OptionTypeID, "Half/Full day")                                                                            </td>
             <td>  @Html.EATextForP(m => m.PickUpPoint, "Pickup From")                                                                                     </td>
             <td>  @Html.EATextForP(m => m.FromLoc, "Pickup Location")                                                                                     </td>
+            <td>  @Html.EADateTimeForP(m => m.Tdate, "Private/Sic")</td>
             <td>  @Html.EASelectListForP(m => m.Heritage, "Private/Sic")                                                                                  </td>
             <td>  @Html.EADateTimeForP(m => m.Fdate, "Tour Date")                                                                                         </td>
             <td>  @Html.EANumberForP(m => m.Cost, "Cost per car")                                                                                         </td>
