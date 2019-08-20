@@ -287,18 +287,9 @@ namespace Speedbird.Areas.SBBoss.Controllers
                     //Ensure an FK to its parent exists
                     if (!fieldsInDBTable.Any(f =>f.Name==(t.ParentTblName+"_Id")) && t.ParentTblName.Length>0)
                     {
-                        string altStmtFld = $"ALTER TABLE [{t.TblName}] ADD [{t.ParentTblName}_Id] INT NULL";
-                        t.AlterSQL.Add(altStmtFld);
-                        Debug.Print(altStmtFld);
-                        db.Execute(altStmtFld);
-
-                        string altStmt = $"ALTER TABLE [{t.TblName}] ADD CONSTRAINT [FK_{t.TblName}-{t.ParentTblName}] FOREIGN KEY (ImportLog_Id, [{t.ParentTblName}_Id]) REFERENCES [{t.ParentTblName}](ImportLog_Id, [{t.ParentTblName}_Id])";
-                        t.AlterSQL.Add(altStmt);
-                        Debug.Print(altStmt);
-                        db.Execute(altStmt);
                         if (!fieldsInDBTable.Any(f => f.Name == "ImportLog_Id"))
                             {
-                                string altStmtImptf = $"ALTER TABLE [{t.TblName}] ADD [{t.ParentTblName}_Id] INT NULL";
+                                string altStmtImptf = $"ALTER TABLE [{t.TblName}] ADD [ImportLog_Id] INT NULL";
                                 t.AlterSQL.Add(altStmtImptf);
                                 Debug.Print(altStmtImptf);
                                 db.Execute(altStmtImptf);
@@ -308,6 +299,17 @@ namespace Speedbird.Areas.SBBoss.Controllers
                                 Debug.Print(altStmtImpl);
                                 db.Execute(altStmtImpl);
                         }
+                        string altStmtFld = $"ALTER TABLE [{t.TblName}] ADD [{t.ParentTblName}_Id] INT NULL";
+                        t.AlterSQL.Add(altStmtFld);
+                        Debug.Print(altStmtFld);
+                        db.Execute(altStmtFld);
+
+                        string altStmt = $"ALTER TABLE [{t.TblName}] ADD CONSTRAINT [FK_{t.TblName}-{t.ParentTblName}] FOREIGN KEY (ImportLog_Id, [{t.ParentTblName}_Id]) REFERENCES [{t.ParentTblName}](ImportLog_Id, [{t.ParentTblName}_Id])";
+                        t.AlterSQL.Add(altStmt);
+                        Debug.Print(altStmt);
+                        db.Execute(altStmt);
+
+                        t.HasMultipleFKs = true;
                     }
                 }
             });
@@ -413,8 +415,17 @@ namespace Speedbird.Areas.SBBoss.Controllers
             }
             else
             {
-                insStmt.Append($"[{t.ParentTblName}_Id])");
-                insValues.Append($"{db.Single<AbstTable>(id).Parent_Id})");//Fk from original import table
+                if (t.HasMultipleFKs)
+                {
+                    var multiParentRow = db.Single<AbstTable>(id);
+                    insStmt.Append($"[{multiParentRow.ParentTableName}_Id])");
+                    insValues.Append($"{multiParentRow.Parent_Id})");//Fk from original import table
+                }
+                else
+                {
+                    insStmt.Append($"[{t.ParentTblName}_Id])");
+                    insValues.Append($"{db.Single<AbstTable>(id).Parent_Id})");//Fk from original import table
+                }
             }
             
             t.InsertSQL.Add(insStmt.Append(insValues.ToString()).ToString());
@@ -455,6 +466,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             public string CreateSQL { get; set; }
             public List<string> InsertSQL { get; set; }
             public List<string> AlterSQL { get; set; }
+            public bool HasMultipleFKs { get; set; } = false;
 
             public TableDef()
             {
