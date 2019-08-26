@@ -784,4 +784,18 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="PaymentID" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="3747e419-ba85-4013-97e8-25f5531cad68" ChangeDateTime="08/23/2019 08:31:44">
+    <Property Name="ElementName" Value="[dbo].[Payments].[A]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Payments]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="AgentId" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="2757824c-3765-4a2c-99c0-a2a2136aa709" ChangeDateTime="08/24/2019 12:40:06">
+    <Property Name="ElementName" Value="[dbo].[Payments].[Date]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Payments]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="TDate" />
+  </Operation>
 </Operations>

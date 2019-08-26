@@ -1,19 +1,18 @@
 ﻿CREATE TABLE [dbo].[Payments]
 (
 	[PaymentID] INT NOT NULL PRIMARY KEY IDENTITY, 
-    [BankName] INT NULL, 
     [ChequeNo] VARCHAR(50) NULL, 
-    [Date] DATE NULL, 
+    [TDate] DATE NULL, 
     [Amount] DECIMAL(18, 2) NULL, 
     [TransactionNo] VARCHAR(50) NULL, 
     [Note] VARCHAR(MAX) NULL, 
-    [SRID] INT NULL, 
     [Type] INT NULL, 
-    [AmtUsed] BIT NULL, 
-    [IsPayment] BIT NULL, 
-	[Cdate] DATE NULL, 
-	[DriverID] INT Null
-
-    CONSTRAINT [FK_Payments_ToSR] FOREIGN KEY ([SRID]) REFERENCES [ServiceRequest]([SRID]), 
-    CONSTRAINT [FK_Payments_Driver] FOREIGN KEY ([DriverID]) REFERENCES [Driver]([DriverID])
+	[DriverID] INT Null,
+	[BankID] INT NULL, 
+    [AgentId] NVARCHAR(128) NULL, 
+    [SupplierID] INT NULL, 
+    CONSTRAINT [FK_Payments_ToBanks] FOREIGN KEY ([BankID]) REFERENCES [Banks]([BankID]), 
+    CONSTRAINT [FK_Payments_Driver] FOREIGN KEY ([DriverID]) REFERENCES [Driver]([DriverID]),
+	CONSTRAINT [FK_Payments_Supplier] FOREIGN KEY ([SupplierID]) REFERENCES [Supplier]([SupplierID]), 
+    CONSTRAINT [FK_Payments_Agent] FOREIGN KEY ([AgentId]) REFERENCES [Agent]([AgentId])
 )

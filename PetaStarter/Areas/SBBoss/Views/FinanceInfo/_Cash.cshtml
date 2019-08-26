@@ -1,0 +1,26 @@
+﻿@model Speedbird.RPdet
+
+<fieldset>
+    <div class="form-row">
+
+    </div>
+</fieldset>
+
+<script>
+    $(function () {
+        //DateTime picker
+        $('input[type=date]').datetimepicker({
+            dateFormat: "dd-MM-yy",
+            showButtonPanel: true,
+            changeMonth: true,
+            changeYear: true,
+            timeFormat: "HH:mm"
+
+        }).attr('type', 'text').attr('autocomplete', 'off');
+
+        //Disable the browsers default date picker
+    });
+
+
+
+</script>

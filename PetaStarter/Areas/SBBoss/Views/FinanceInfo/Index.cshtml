@@ -1,4 +1,6 @@
-﻿@{
+﻿@model  Speedbird.Models.PaymentViewModel
+
+@{
 
     ViewBag.Title = "Finance Report";
 }
@@ -8,39 +10,156 @@
         <span class="h5">Search</span>
     </div>
     <div class="card-body">
-
-            <div class="row d-print-none">
-                <table>
-                    <tr style="text-align:center">
+        @Html.Hidden("All")
+        @Html.Hidden("Pending")
+        @Html.Hidden("Paid")
+        <div class="row d-print-none">
+            <table>
+                <tr style="text-align:center">
+                    @if (ViewBag.Mode == 1)
+                    {
                         <td>&nbsp;Driver Name:</td>
-                        @Html.Hidden("DriverID", (int?)ViewBag.DriverID)
-                        <td><input placeholder="Driver Name" value="@ViewBag.DriverID" type="text" id="DriverID" name="DriverName" data-autocomplete-idholder="#DriverID" data-autodriver-url='@Url.Action("AutoCompleteDriver")' class="form-control" /></td>
-                        <td>&nbsp;From Date:</td>
-                        <td> @Html.TextBox("FromDate", ViewBag.CurrentFilter as string, new { @class = "form-control eadate", @type = "text" })</td>
-                        <td>&nbsp;To Date:</td>
-                        <td> @Html.TextBox("ToDate", ViewBag.CurrentFilter as string, new { @class = "form-control eadate", @type = "text" })</td>
-                        <td><input type="submit" value="Search" id="search" class="btn btn-primary" /></td>
-                    </tr>
-                </table>
+                        @Html.Hidden("DriverID")
+                        <td><input placeholder="Driver Name" type="text" id="DriverID" name="DriverName" data-autocomplete-idholder="#DriverID" data-autodriver-url='@Url.Action("AutoCompleteDriver")' class="form-control" /></td>
+                    }
+                    @if (ViewBag.Mode == 2)
+                    {
+                        <td>&nbsp;Supplier Name:</td>
+                        @Html.Hidden("SupplierID")
+                        <td><input placeholder="Supplier Name" type="text" id="SupplierName" name="SupplierName" data-autocomplete-idholder="#SupplierID" data-autocombo-url='@Url.Action("AutoCompleteSupplier")' class="form-control" /></td>
+                    }
+                    @if (ViewBag.Mode == 3)
+                    {
+                        <td>&nbsp;Supplier Name:</td>
+                        @Html.Hidden("AgentId")
+                        <td><input placeholder="Agent Name" type="text" id="ContactName" name="ContactName" data-autocomplete-idholder="#AgentId" data-autocombo-url='@Url.Action("AutoCompleteAgent")' class="form-control" /></td>
+                    }
+                    <td>&nbsp;From Date:</td>
+                    <td> @Html.TextBox("FromDate", ViewBag.CurrentFilter as string, new { @class = "form-control eadate", @type = "text" })</td>
+                    <td>&nbsp;To Date:</td>
+                    <td> @Html.TextBox("ToDate", ViewBag.CurrentFilter as string, new { @class = "form-control eadate", @type = "text" })</td>
+                    <td>&nbsp;All:</td>
+                    <td>  <input type="checkbox" id="All" class="form-check" /></td>
+                    <td>&nbsp;Paid:</td>
+                    <td> <input type="checkbox" id="Paid" class="form-check" /></td>
+                    <td>&nbsp;Pending:</td>
+                    <td> <input type="checkbox" id="Pending" class="form-check" /></td>
+                    <td><input type="submit" value="Search" id="search" class="btn btn-primary" /></td>
+                </tr>
+            </table>
 
-            </div>
+        </div>
 
     </div>
 </div>
 
 
+
+<div class="card border rounded DropShadow">
+    <div class="card-body">
         <div id="financeListPart"></div>
+        <div class="row d-block mx-auto">
+
+            @using (Html.BeginForm("Index", "FinanceInfo", FormMethod.Post))
+            {
+                if (Model?.PaymentID > 0)
+                {
+                    @Html.HiddenFor(model => model.PaymentID)
+                    @Html.HiddenFor(model => model.TDate)
+                    @Html.HiddenFor(model => model.LeftBkPayVm)
+                    @Html.HiddenFor(model => model.RightBkPayVm)
+                }
+
+                <div class="form-row">
+                    <div class="input-group  mb-3">
+                        <div class="input-group-prepend"><span class="input-group-text">Note</span></div>
+                        @Html.TextArea("Note", null, htmlAttributes: new { @class = " form-control" })
+                        @Html.ValidationMessageFor(model => model.Note, "", new { @class = "text-danger" })
+
+                    </div>
+
+                    <div class="input-group col mb-3">
+                        <div class="input-group-prepend"><span class="input-group-text">Amount</span></div>
+                        @Html.EditorFor(model => model.Amount, new { htmlAttributes = new { @type = "text", @class = " form-control" } })
+                        @Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="input-group col mb-3">
+                        <div class="input-group-prepend"><span class="input-group-text">Payment Type</span></div>
+                        @Html.DropDownListFor(model => model.Type, null, htmlAttributes: new { @type = "text", @class = " form-control" })
+                        @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div id="placeholderEditDiv"></div>
+                @*Dynamic Form-rows based on Selected Payment Type*@
+
+                <div class="input-group col mb-3 fa-pull-right">
+                    <button type="submit" class="btn btn-primary " name="SaveReceipt" id="SaveReceipt">Save</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }
 
 <script>
+        $('#placeholderEditDiv').load('@Url.Action("FetchRcptPartial", "FinanceInfo")', { Type: $('#Type').val() });
+
+        //Then on change of the dropDown load the dynamic fields based on the selected  type
+        $('#Type').on('change', function () {
+            var Type = $(this).val();
+
+
+            //Load the Dynamic Fields of the Form based on the selected  Type
+            $('#placeholderEditDiv').load('@Url.Action("FetchRcptPartial", "FinanceInfo")', { Type: $('#Type').val()});
+    });
+
+</script>
+
+<script>
     $(function () {
         $('#search').click(function () {
-             $('#financeListPart').load('@Url.Action("_FinanceInfo", "FinanceInfo")', { DriverId: $("#DriverID").val(), FromDate: $("#FromDate").val(), ToDate: $("#ToDate").val() });
+            LoadView();
         });
+
+        $("#All").click(function () {
+            if ((this).checked) {
+                $("#All").val(true);
+            }
+            else {
+                $("#All").val(false);
+            }
+        });
+
+
+        $("#Paid").click(function () {
+            if ((this).checked) {
+                $("#Paid").val(true);
+            }
+            else {
+                $("#Paid").val(false);
+            }
+        });
+
+        $("#Pending").click(function () {
+            if ((this).checked) {
+                $("#Pending").val(true);
+            }
+            else {
+                $("#Pending").val(false);
+            }
+        });
+
     });
+
+    function LoadView() {
+        $('#financeListPart').load('@Url.Action("_FinanceInfo", "FinanceInfo")', { DriverId: $("#DriverID").val(), FromDate: $("#FromDate").val(), ToDate: $("#ToDate").val(), All: $("#All").val(), Paid: $("#Paid").val(), Pending: $("#Pending").val() });
+    }
 
     $(function () {
         $('*[data-autodriver-url]')
@@ -51,11 +170,12 @@
                     delay: 500,
                     select: function (event, ui) {
                         $($(this).data("autocomplete-idholder")).val(ui.item.id);
-                        LoadList();
                     }
                 });
             });
     });
+
+
 </script>
 
 

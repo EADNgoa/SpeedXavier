@@ -31,7 +31,6 @@ namespace Speedbird
         public string PaxName { get; set; }
         public int DriverID { get; set; }
         public string DriverName { get; set; }
-        public int SRID { get; set; }
         public int SRDID { get; set; }
         public string BookingNo { get; set; }
         public DateTime Fdate { get; set; }
@@ -112,11 +111,12 @@ namespace Speedbird
         public decimal NoOfDays { get; set; }
         public string HotelCat { get; set; }
         public int CarType { get; set; }
+        public decimal DinnerCost { get; set; }
         public decimal Cost { get; set; }
         public decimal NetCost { get; set; }
         public decimal AddCost { get; set; }
         public string AddDtl { get; set; }
-        public override decimal TotalCost { get { return Cost + AddCost + NetCost; } }
+        public override decimal TotalCost { get { return Cost; } }
     }
 
     public class Visavw : SupplierInfo
@@ -168,6 +168,7 @@ namespace Speedbird
         public int Nights { get; set; }
         public string MealPlan { get; set; }
         public decimal Cost { get; set; }
+        public int BFCost { get; set; }
         public string CruiseName { get; set; }
         public override decimal TotalCost { get { return Cost; } }
     }
@@ -188,10 +189,11 @@ namespace Speedbird
         public int CarType { get; set; }
         public int TicketNo { get; set; }
         public decimal Cost { get; set; }
+        public decimal EBCostPNight { get; set; }
         public decimal AddCost { get; set; }
         public decimal FullCost { get; set; }
         public string AddDetl { get; set; }
-        public override decimal TotalCost { get { return Cost + AddCost; } }
+        public override decimal TotalCost { get { return Cost; } }
     }
 
     public class Railvw : SupplierInfo
@@ -210,9 +212,10 @@ namespace Speedbird
         public int CarType { get; set; }
         public int TicketNo { get; set; }
         public decimal Cost { get; set; }
+        public int BFCost { get; set; }
         public decimal AddCost { get; set; }
         public string AddDetl { get; set; }
-        public override decimal TotalCost { get { return Cost + AddCost; } }
+        public override decimal TotalCost { get { return Cost; } }
     }
 
 
@@ -231,6 +234,7 @@ namespace Speedbird
         public string ToLoc { get; set; }
         public int CarType { get; set; }
         public decimal Cost { get; set; }
+        public int LunchCost { get; set; }
         public int NoExtraBeds { get; set; }
         public string PayTo { get; set; }
         public override decimal TotalCost { get { return Cost; } }
@@ -283,7 +287,7 @@ namespace Speedbird
         public int NoExtraService { get; set; }
         public int ExtraServiceCost { get; set; }
         public int EBCostPNight { get; set; }
-        public override decimal TotalCost { get { return EBCostPNight + DinnerCost + LunchCost + BFCost ; } }
+        public override decimal TotalCost { get { return EBCostPNight + DinnerCost + LunchCost + BFCost + ExtraServiceCost ; } }
     }
 
         public class SightseeingServiceView : SupplierInfo
@@ -1423,6 +1427,14 @@ namespace Speedbird
         Internet_Banking,
         Card
     }
+
+    public enum PayToEnum
+    {
+        Supplier,
+        Agent,
+        Driver
+    }
+
 
     public class EAAuthorizeAttribute : AuthorizeAttribute
     {

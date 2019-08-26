@@ -1,77 +1,59 @@
-﻿
-@{
-    ViewBag.Title = "Requested Info";
-}
+﻿@model Speedbird.Models.PaymentViewModel
 
-<div class="card border rounded DropShadow">
-    <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
-        <span class="h3">@ViewBag.Title</span>
+
+<div class="row">
+    <div class="col-6">
+        <h4>Pay To Us</h4>
+        <table class="table SRDetsTbl left">
+            <thead>
+                <tr>
+                    <th>BF</th>
+                    <th>Pax Name</th>
+                    <th>Date</th>
+                    <th>CP</th>
+                    <th>SP</th>
+                    <th><input type="checkbox" id="checksleft" name="allchecks" class="form-check" /></th>
+                </tr>
+            </thead>
+            <tbody>
+                @Html.EditorFor(model => model.LeftBkPayVm)
+            
+            </tbody>
+        </table>
     </div>
-    <div class="card-body">
-        <div class="row">
-            <div class="col-6">
-                @{
-                    var paytodriver = (IEnumerable<Speedbird.Paymentdetailvw>)ViewBag.PayToDriver;
-                }
+    <div class="col-6">
+        <h4>Pay To Driver</h4>
+        <table class="table SRDetsTbl right">
+            <thead>
+                <tr>
+                    <th>BF</th>
+                    <th>Pax Name</th>
+                    <th>Date</th>
+                    <th>CP</th>
+                    <th>SP</th>
+                    <th><input type="checkbox" id="checksright" name="allchecks" class="form-check" /></th>
+                </tr>
+            </thead>
+            <tbody>
+                @Html.EditorFor(model => model.RightBkPayVm)
+            </tbody>
+        </table>
 
-                    <table class="table SRDetsTbl">
-                        <thead>
-                            <tr>
-                                <th>BF</th>
-                                <th>Pax Name</th>
-                                <th>Date</th>
-                                <th>CP</th>
-                                <th>SP</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var item in paytodriver)
-                            {
-                                <tr>
-
-                                    <td>@item.BookingNo</td>
-                                    <td>@item.PaxName</td>
-                                    <td>@item.Fdate</td>
-                                    <td>@item.Cost</td>
-                                    <td>@item.SellPrice</td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-            </div>
-            <div class="col-6">
-                @{
-                    var paytous = (IEnumerable<Speedbird.Paymentdetailvw>)ViewBag.PayToUs;
-                }
-
-                    <table class="table SRDetsTbl">
-                        <thead>
-                            <tr>
-                                <th>BF</th>
-                                <th>Pax Name</th>
-                                <th>Date</th>
-                                <th>CP</th>
-                                <th>SP</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                @foreach (var item in paytous)
-                                {
-                                    <td>@item.BookingNo</td>
-                                    <td>@item.PaxName</td>
-                                    <td>@item.Fdate</td>
-                                    <td>@item.Cost</td>
-                                    <td>@item.SellPrice</td>
-                                }
-                            </tr>
-                        </tbody>
-                    </table>
-
-            </div>
-        </div>
     </div>
 </div>
 
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+<script>
+    $(function () {
+        $("#checksleft").click(function () {
+            $('.left input:checkbox').not(this).prop('checked', this.checked);
+        });
+
+        $("#checksright").click(function () {
+            $('.right input:checkbox').not(this).prop('checked', this.checked);
+        });
+    });
+</script>

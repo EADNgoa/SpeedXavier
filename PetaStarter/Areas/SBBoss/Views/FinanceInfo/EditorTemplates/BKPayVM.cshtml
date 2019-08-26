@@ -1,0 +1,10 @@
+﻿@model Speedbird.Models.BKPayVM
+
+<tr>
+    <td>@Model.BookingNo</td>
+    <td>@Model.PaxName</td>
+    <td>@Model.Fdate</td>
+    <td>@Model.Cost</td>
+    <td>@Model.SellPrice</td>
+    <td>@Html.CheckBoxFor(model => model.IsSelected)</td>
+</tr>

@@ -1,0 +1,39 @@
+﻿@model Speedbird.RPdet
+
+<fieldset>
+    <div class="form-row">
+        <div class="input-group col mb-3">
+            <div class="input-group-prepend"><span class="input-group-text">Select Bank</span></div>
+            @Html.DropDownList("BankName", null, htmlAttributes: new { @type = "text", @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.BankName, "", new { @class = "text-danger" })
+        </div>
+        <div class="input-group col mb-3">
+            <div class="input-group-prepend"><span class="input-group-text">Date</span></div>
+            @Html.EditorFor(model => model.Date, new { htmlAttributes = new { @type = "text", @class = "form-control eadate " } })
+            @Html.ValidationMessageFor(model => model.Date, "", new { @class = "text-danger" })
+
+        </div>
+        <div class="input-group col mb-3">
+            <div class="input-group-prepend"><span class="input-group-text">Cheque No</span></div>
+            @Html.EditorFor(model => model.ChequeNo, new { htmlAttributes = new { @type = "text", @class = " form-control" } })
+            @Html.ValidationMessageFor(model => model.ChequeNo, "", new { @class = "text-danger" })
+
+        </div>
+    </div>
+</fieldset>
+
+<script>
+    $(function () {
+        //DateTime picker
+        $('.eadate').datepicker({
+            dateFormat: "dd-M-yy",
+            showButtonPanel: true,
+            changeMonth: true,
+            changeYear: true
+        }).attr('type', 'text').attr('autocomplete', 'off');
+
+        //Disable the browsers default date picker
+        jQuery.validator.methods["date"] = function (value, element) { return true; }
+
+    })
+</script>
