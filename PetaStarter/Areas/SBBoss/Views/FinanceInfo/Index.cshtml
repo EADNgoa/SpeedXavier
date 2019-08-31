@@ -10,40 +10,40 @@
         <span class="h5">Search</span>
     </div>
     <div class="card-body">
-        @Html.Hidden("All")
-        @Html.Hidden("Pending")
-        @Html.Hidden("Paid")
+        @Html.Hidden("#All")
+        @Html.Hidden("#Pending")
+        @Html.Hidden("#Paid")
         <div class="row d-print-none">
             <table>
                 <tr style="text-align:center">
-                    @if (ViewBag.Mode == 1)
+                    @if (ViewBag.Mode == (int)Speedbird.PayToEnum.Driver)
                     {
                         <td>&nbsp;Driver Name:</td>
                         @Html.Hidden("DriverID")
                         <td><input placeholder="Driver Name" type="text" id="DriverID" name="DriverName" data-autocomplete-idholder="#DriverID" data-autodriver-url='@Url.Action("AutoCompleteDriver")' class="form-control" /></td>
                     }
-                    @if (ViewBag.Mode == 2)
+                    @if (ViewBag.Mode == (int)Speedbird.PayToEnum.Supplier)
                     {
-                        <td>&nbsp;Supplier Name:</td>
                         @Html.Hidden("SupplierID")
-                        <td><input placeholder="Supplier Name" type="text" id="SupplierName" name="SupplierName" data-autocomplete-idholder="#SupplierID" data-autocombo-url='@Url.Action("AutoCompleteSupplier")' class="form-control" /></td>
-                    }
-                    @if (ViewBag.Mode == 3)
-                    {
                         <td>&nbsp;Supplier Name:</td>
+                        <td><input placeholder="Supplier Name" type="text" id="SupplierName" name="SupplierName" data-autocomplete-idholder="#SupplierID" data-autosupplier-url='@Url.Action("AutoCompleteSupplier")' class="form-control" /></td>
+                    }
+                    @if (ViewBag.Mode == (int)Speedbird.PayToEnum.Agent)
+                    {
+                        <td>&nbsp;Agent Name:</td>
                         @Html.Hidden("AgentId")
-                        <td><input placeholder="Agent Name" type="text" id="ContactName" name="ContactName" data-autocomplete-idholder="#AgentId" data-autocombo-url='@Url.Action("AutoCompleteAgent")' class="form-control" /></td>
+                        <td><input placeholder="Agent Name" type="text" id="ContactName" name="ContactName" data-autocomplete-idholder="#AgentId" data-autoagent-url='@Url.Action("AutoCompleteAgent")' class="form-control" /></td>
                     }
                     <td>&nbsp;From Date:</td>
                     <td> @Html.TextBox("FromDate", ViewBag.CurrentFilter as string, new { @class = "form-control eadate", @type = "text" })</td>
                     <td>&nbsp;To Date:</td>
                     <td> @Html.TextBox("ToDate", ViewBag.CurrentFilter as string, new { @class = "form-control eadate", @type = "text" })</td>
                     <td>&nbsp;All:</td>
-                    <td>  <input type="checkbox" id="All" class="form-check" /></td>
+                    <td>  <input type="radio" id="All" name="radioGroup" value="1"></td>
                     <td>&nbsp;Paid:</td>
-                    <td> <input type="checkbox" id="Paid" class="form-check" /></td>
+                    <td> <input type="radio" id="Paid" name="radioGroup" value="2" /></td>
                     <td>&nbsp;Pending:</td>
-                    <td> <input type="checkbox" id="Pending" class="form-check" /></td>
+                    <td> <input type="radio" id="Pending" name="radioGroup" value="3" /></td>
                     <td><input type="submit" value="Search" id="search" class="btn btn-primary" /></td>
                 </tr>
             </table>
@@ -57,19 +57,22 @@
 
 <div class="card border rounded DropShadow">
     <div class="card-body">
-        <div id="financeListPart"></div>
         <div class="row d-block mx-auto">
 
-            @using (Html.BeginForm("Index", "FinanceInfo", FormMethod.Post))
+            @using (Html.BeginForm("Index", "FinanceInfo", FormMethod.Post, new { mode = ViewBag.Mode }))
             {
+                <div id="financeListPart"></div>
                 if (Model?.PaymentID > 0)
                 {
                     @Html.HiddenFor(model => model.PaymentID)
                     @Html.HiddenFor(model => model.TDate)
                     @Html.HiddenFor(model => model.LeftBkPayVm)
                     @Html.HiddenFor(model => model.RightBkPayVm)
+                    @Html.HiddenFor(model => model.AgentId)
+                    @Html.HiddenFor(model => model.SupplierID)
+                    @Html.HiddenFor(model => model.DriverID)
                 }
-
+                @Html.Hidden("mode", (int?)ViewBag.Mode)
                 <div class="form-row">
                     <div class="input-group  mb-3">
                         <div class="input-group-prepend"><span class="input-group-text">Note</span></div>
@@ -128,7 +131,7 @@
         });
 
         $("#All").click(function () {
-            if ((this).checked) {
+            if ($(this).prop("checked")) {
                 $("#All").val(true);
             }
             else {
@@ -138,8 +141,9 @@
 
 
         $("#Paid").click(function () {
-            if ((this).checked) {
+            if ($(this).prop("checked"))  {
                 $("#Paid").val(true);
+                console.log(true);
             }
             else {
                 $("#Paid").val(false);
@@ -147,8 +151,9 @@
         });
 
         $("#Pending").click(function () {
-            if ((this).checked) {
+            if ($(this).prop("checked"))  {
                 $("#Pending").val(true);
+                console.log(true);
             }
             else {
                 $("#Pending").val(false);
@@ -158,7 +163,7 @@
     });
 
     function LoadView() {
-        $('#financeListPart').load('@Url.Action("_FinanceInfo", "FinanceInfo")', { DriverId: $("#DriverID").val(), FromDate: $("#FromDate").val(), ToDate: $("#ToDate").val(), All: $("#All").val(), Paid: $("#Paid").val(), Pending: $("#Pending").val() });
+        $('#financeListPart').load('@Url.Action("_FinanceInfo", "FinanceInfo")', { DriverID: $("#DriverID").val(), SupplierID: $("#SupplierID").val(), AgentId: $("#AgentId").val(),  FromDate: $("#FromDate").val(), ToDate: $("#ToDate").val(), All: $("#All").val(), Paid: $("#Paid").val(), Pending: $("#Pending").val(), mode: @ViewBag.Mode });
     }
 
     $(function () {
@@ -166,6 +171,34 @@
             .each(function () {
                 $(this).autocomplete({
                     source: $(this).data("autodriver-url"),
+                    minLenght: 3,
+                    delay: 500,
+                    select: function (event, ui) {
+                        $($(this).data("autocomplete-idholder")).val(ui.item.id);
+                    }
+                });
+            });
+    });
+
+    $(function () {
+        $('*[data-autosupplier-url]')
+            .each(function () {
+                $(this).autocomplete({
+                    source: $(this).data("autosupplier-url"),
+                    minLenght: 3,
+                    delay: 500,
+                    select: function (event, ui) {
+                        $($(this).data("autocomplete-idholder")).val(ui.item.id);
+                    }
+                });
+            });
+    });
+
+    $(function () {
+        $('*[data-autoagent-url]')
+            .each(function () {
+                $(this).autocomplete({
+                    source: $(this).data("autoagent-url"),
                     minLenght: 3,
                     delay: 500,
                     select: function (event, ui) {

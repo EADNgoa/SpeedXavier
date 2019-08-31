@@ -1,46 +1,183 @@
 ﻿@model Speedbird.Models.PaymentViewModel
 
+@Html.Hidden("DriverID", (int?)ViewBag.DriverID)
+@Html.Hidden("SupplierID", (int?)ViewBag.SupplierID)
+@Html.Hidden("AgentId", (string)ViewBag.AgentId)
+@Html.Hidden("mode", (int?)ViewBag.Mode)
 
-<div class="row">
-    <div class="col-6">
-        <h4>Pay To Us</h4>
-        <table class="table SRDetsTbl left">
-            <thead>
-                <tr>
-                    <th>BF</th>
-                    <th>Pax Name</th>
-                    <th>Date</th>
-                    <th>CP</th>
-                    <th>SP</th>
-                    <th><input type="checkbox" id="checksleft" name="allchecks" class="form-check" /></th>
-                </tr>
-            </thead>
-            <tbody>
-                @Html.EditorFor(model => model.LeftBkPayVm)
-            
-            </tbody>
-        </table>
-    </div>
-    <div class="col-6">
-        <h4>Pay To Driver</h4>
-        <table class="table SRDetsTbl right">
-            <thead>
-                <tr>
-                    <th>BF</th>
-                    <th>Pax Name</th>
-                    <th>Date</th>
-                    <th>CP</th>
-                    <th>SP</th>
-                    <th><input type="checkbox" id="checksright" name="allchecks" class="form-check" /></th>
-                </tr>
-            </thead>
-            <tbody>
-                @Html.EditorFor(model => model.RightBkPayVm)
-            </tbody>
-        </table>
+@if (ViewBag.Mode == (int)Speedbird.PayToEnum.Driver)
+{
 
+    <div class="row">
+
+        <div class="col-6">
+
+            <h4>Pay To Us</h4>
+
+            <table class="table SRDetsTbl left">
+                <thead>
+                    <tr>
+                        <th>BF</th>
+                        <th>Pax Name</th>
+                        <th>Date</th>
+                        <th>CP</th>
+                        <th>SP</th>
+                        <th><input type="checkbox" id="checksleft" name="allchecks" /></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @Html.EditorFor(model => model.LeftBkPayVm)
+                    <tr>
+                        <td colspan="3" class="text-center"><strong>Total</strong></td>
+                        <td colspan="2" id="ltot"></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-6">
+            <h4>Pay To Driver</h4>
+            <table class="table SRDetsTbl right">
+                <thead>
+                    <tr>
+                        <th>BF</th>
+                        <th>Pax Name</th>
+                        <th>Date</th>
+                        <th>CP</th>
+                        <th>SP</th>
+                        <th><input type="checkbox" id="checksright" name="allchecks" /></th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @Html.EditorFor(model => model.RightBkPayVm)
+                    <tr>
+                        <td colspan="3" class="text-center"><strong>Total</strong></td>
+                        <td colspan="2" id="rtot"></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <span style="text-align:center; margin:auto;"><strong>GrandTotal :</strong><span id="gtotal"></span></span>
     </div>
-</div>
+}
+
+@if (ViewBag.Mode == (int)Speedbird.PayToEnum.Supplier)
+{
+
+    <div class="row">
+
+        <div class="col-6">
+
+            <h4>Pay To Us</h4>
+
+            <table class="table SRDetsTbl left">
+                <thead>
+                    <tr>
+                        <th>BF</th>
+                        <th>Pax Name</th>
+                        <th>Date</th>
+                        <th>CP</th>
+                        <th>SP</th>
+                        <th><input type="checkbox" id="checksleft" name="allchecks" /></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @Html.EditorFor(model => model.LeftBkPayVm)
+                    <tr>
+                        <td colspan="3" class="text-center"><strong>Total</strong></td>
+                        <td colspan="2" id="ltot"></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-6">
+            <h4>Pay To Supplier</h4>
+            <table class="table SRDetsTbl right">
+                <thead>
+                    <tr>
+                        <th>BF</th>
+                        <th>Pax Name</th>
+                        <th>Date</th>
+                        <th>CP</th>
+                        <th>SP</th>
+                        <th><input type="checkbox" id="checksright" name="allchecks" /></th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @Html.EditorFor(model => model.RightBkPayVm)
+                    <tr>
+                        <td colspan="3" class="text-center"><strong>Total</strong></td>
+                        <td colspan="2" id="rtot"></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <span style="text-align:center; margin:auto;"><strong>GrandTotal :</strong><span id="gtotal"></span></span>
+    </div>
+}
+
+@if (ViewBag.Mode == (int)Speedbird.PayToEnum.Agent)
+{
+
+    <div class="row">
+
+        <div class="col-6">
+
+            <h4>Pay To Us</h4>
+
+            <table class="table SRDetsTbl left">
+                <thead>
+                    <tr>
+                        <th>BF</th>
+                        <th>Pax Name</th>
+                        <th>Date</th>
+                        <th>CP</th>
+                        <th>SP</th>
+                        <th><input type="checkbox" id="checksleft" name="allchecks" /></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @Html.EditorFor(model => model.RightBkPayVm)
+                    <tr>
+                        <td colspan="3" class="text-center"><strong>Total</strong></td>
+                        <td colspan="2" id="ltot"></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-6">
+            <h4>Pay To Agents</h4>
+            <table class="table SRDetsTbl right">
+                <thead>
+                    <tr>
+                        <th>BF</th>
+                        <th>Pax Name</th>
+                        <th>Date</th>
+                        <th>CP</th>
+                        <th>SP</th>
+                        <th><input type="checkbox" id="checksright" name="allchecks" /></th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @Html.EditorFor(model => model.LeftBkPayVm)
+                    <tr>
+                        <td colspan="3" class="text-center"><strong>Total</strong></td>
+                        <td colspan="2" id="rtot"></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <span style="text-align:center; margin:auto;"><strong>GrandTotal :</strong><span id="gtotal"></span></span>
+    </div>
+}
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
@@ -55,5 +192,72 @@
         $("#checksright").click(function () {
             $('.right input:checkbox').not(this).prop('checked', this.checked);
         });
+    });
+</script>
+<script>
+    $(function () {
+
+
+        $('.left input:checkbox, .right input:checkbox').change(function (e) {
+            var totalLeft = 0;
+            var totalRight = 0;
+            var Total = 0;
+            $('.left .checktotal:checked').each(function () {
+                totalLeft += Number($(this).val());
+                Total += Number($(this).val());
+            });
+            $('.right .checktotal:checked').each(function () {
+                totalRight += Number($(this).val());
+                Total -= Number($(this).val());
+            });
+            $('#ltot').text(totalLeft + ".00 Rs");
+            $('#rtot').text(totalRight + ".00 Rs");
+            $('#gtotal').text(Total + ".00 Rs");
+        });
+
+        //$('.left input:checkbox').change(function (e) {
+        //    var totalLeft = 0;
+        //    var isChecked = $('.left .checktotal:checked');
+        //    if (isChecked) {
+        //        totalLeft += Number($(this).val());
+        //        Total += Number($(this).val());
+        //    }
+        //    else {
+        //        Total -= Number($(this).val());
+        //    }
+
+        //    leftValue = $('#ltot').text(totalLeft + ".00 Rs");
+        //    total = $('#gtotal').text(Total + ".00 Rs");
+        //});
+
+        //$(".left input:checkbox").click(function () {
+        //    var totalLeft = 0;
+        //    if ($(this).is(":checked")) {
+        //        totalLeft += Number($(this).val());
+        //        Total += Number($(this).val());
+        //    }
+        //    else {
+        //        Total -= Number($(this).val());
+        //    }
+        //    leftValue = $('#ltot').text(totalLeft + ".00 Rs");
+        //     total = $('#gtotal').text(Total + ".00 Rs");
+        //}); 
+
+        //$(".right input:checkbox").click(function () {
+        //    var totalLeft = 0;
+        //    if ($(this).is(":checked")) {
+        //        totalLeft += Number($(this).val());
+        //        Total -= Number($(this).val());
+        //    }
+        //    else {
+        //        Total -= Number($(this).val());
+        //    }
+        //    rightValue = $('#rtot').text(totalLeft + ".00 Rs");
+        //    total = $('#gtotal').text(Total + ".00 Rs");
+        //}); 
+
+
+
+    
     });
 </script>

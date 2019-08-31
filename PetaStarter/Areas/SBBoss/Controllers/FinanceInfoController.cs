@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using PetaPoco;
 using Speedbird.Controllers;
 using Speedbird.Models;
 
@@ -12,9 +13,9 @@ namespace Speedbird.Areas.SBBoss.Controllers
     {
         // GET: SBBoss/FinanceInfo
         //[EAAuthorize(FunctionName = "FinanceInfo", Writable = false)]
-        public ActionResult Index(int mode)
+        public ActionResult Index(PayToEnum mode)
         {
-            ViewBag.Mode = mode;
+            ViewBag.Mode = (int)mode;
             ViewBag.Type = Enum.GetValues(typeof(AmtType)).Cast<AmtType>().Select(v => new SelectListItem { Text = v.ToString(), Value = ((int)v).ToString() }).ToList();
             return View();
         }
@@ -22,72 +23,128 @@ namespace Speedbird.Areas.SBBoss.Controllers
         // GET: SBBoss/FinanceInfo
         //[EAAuthorize(FunctionName = "FinanceInfo", Writable = false)]
         [HttpPost]
-        public ActionResult Index(PaymentViewModel paymentView)
+        public ActionResult Index(PaymentViewModel paymentView, int? mode)
         {
             using (var transaction = db.GetTransaction())
             {
+
+                try
+                {
+                    var payment = new Payment
+                    {
+                        AgentId = paymentView.AgentId,
+                        Amount = paymentView.Amount,
+                        SupplierID = paymentView.SupplierID,
+                        DriverID = paymentView.DriverID,
+                        BankID = paymentView.BankID,
+                        ChequeNo = paymentView.ChequeNo,
+                        Note = paymentView.Note,
+                        TDate = DateTime.Now,
+                        TransactionNo = paymentView.TransactionNo,
+                        Type = paymentView.Type
+                    };
+                    db.Insert(payment);
+
+                    if (paymentView.LeftBkPayVm != null)
+                    {
+                        foreach (var lsrdid in paymentView.LeftBkPayVm)
+                        {
+                            db.Execute($"Update SRdetails set PaymentID = {payment.PaymentID} where SRDID = {lsrdid.SRDID}");
+                        }
+                    }
+
+                    if (paymentView.RightBkPayVm != null)
+                    {
+                        foreach (var rsrdid in paymentView.RightBkPayVm)
+                        {
+                            db.Execute($"Update SRdetails set PaymentID = {payment.PaymentID} where SRDID = {rsrdid.SRDID}");
+                        }
+                    }
+
+                    transaction.Complete();
+                    return RedirectToAction("Index", new { mode });
+                }
+                catch (Exception ex)
+                {
+                    db.AbortTransaction();
+                    throw ex;
+                }
+
             }
-                return RedirectToAction("Index");
         }
 
         //[EAAuthorize(FunctionName = "FinanceInfo", Writable = false)]
-        public PartialViewResult _FinanceInfo(DateTime? FromDate, DateTime? ToDate, int? DriverID, bool? All, bool? Paid, bool? Pending, int? SupplierID, string AgentId)
+        public PartialViewResult _FinanceInfo(int? mode, DateTime? FromDate, DateTime? ToDate, int? DriverID, bool? All, bool? Paid, bool? Pending, int? SupplierID, string AgentId)
         {
             PaymentViewModel paymentdetailvws = new PaymentViewModel();
+            Sql leftsq = new Sql();
+            Sql rightsq = new Sql();
 
-            if (All == true)
+            if (mode == (int)PayToEnum.Driver)
             {
-                paymentdetailvws.LeftBkPayVm = db.Query<BKPayVM>("Select CONCAT(c.fName, ' ',c.sName) as PaxName, " +
-                    "srd.SRDID, srd.Cost, srq.BookingNo, srd.Fdate, SellPrice, srd.PayTo " +
-                    "from SRdetails srd, ServiceRequest srq, SR_Cust src, Customer c, SRD_Cust sc where sc.SRDID = srd.SRDID " +
-                    "and c.CustomerID = sc.CustomerID and srq.SRID = srd.SRID and src.ServiceRequestID = srq.SRID and IsLead = 1 " +
-                    "and srd.PayTo = 'Pay to us' " +
-                   $"srd.Fdate between '{String.Format("{0:yyyy-MM-dd}", FromDate)}' and '{String.Format("{0:yyyy-MM-dd}", ToDate)}' ");
+                leftsq.Append("Select CONCAT(c.fName, ' ',c.sName) as PaxName, " +
+                         "srd.SRDID, srd.Cost, srq.BookingNo, srd.Fdate, SellPrice, srd.PayTo,PaymentID " +
+                         "from SRdetails srd, ServiceRequest srq, SR_Cust src, Customer c, SRD_Cust sc where sc.SRDID = srd.SRDID " +
+                         "and c.CustomerID = sc.CustomerID and srq.SRID = srd.SRID and src.ServiceRequestID = srq.SRID and IsLead = 1 " +
+                        $"and DriverID = {DriverID} and srd.PayTo = 'Pay to us' and srd.Fdate between '{String.Format("{0:yyyy-MM-dd}", FromDate)}' and '{String.Format("{0:yyyy-MM-dd}", ToDate)}'");
 
-                paymentdetailvws.RightBkPayVm = db.Query<BKPayVM>("Select CONCAT(c.fName, ' ',c.sName) as PaxName, " +
-                   "srd.SRDID, srd.Cost, srq.BookingNo, srd.Fdate, SellPrice, srd.PayTo " +
-                   "from SRdetails srd, ServiceRequest srq, SR_Cust src, Customer c, SRD_Cust sc where sc.SRDID = srd.SRDID " +
-                   "and c.CustomerID = sc.CustomerID and srq.SRID = srd.SRID and src.ServiceRequestID = srq.SRID and IsLead = 1 " +
-                   "and srd.PayTo = 'Pay to driver' " +
-                   $"and DriverID = {DriverID} and srd.Fdate between '{String.Format("{0:yyyy-MM-dd}", FromDate)}' and '{String.Format("{0:yyyy-MM-dd}", ToDate)}' ");
+                rightsq.Append("Select CONCAT(c.fName, ' ',c.sName) as PaxName, " +
+                       "srd.SRDID, srd.Cost, srq.BookingNo, srd.Fdate, SellPrice, srd.PayTo,PaymentID " +
+                       "from SRdetails srd, ServiceRequest srq, SR_Cust src, Customer c, SRD_Cust sc where sc.SRDID = srd.SRDID " +
+                       "and c.CustomerID = sc.CustomerID and srq.SRID = srd.SRID and src.ServiceRequestID = srq.SRID and IsLead = 1 " +
+                       $"and DriverID = {DriverID} and srd.PayTo = 'Pay to driver' and srd.Fdate between '{String.Format("{0:yyyy-MM-dd}", FromDate)}' and '{String.Format("{0:yyyy-MM-dd}", ToDate)}'");
             }
+
+            if (mode == (int)PayToEnum.Supplier)
+            {
+                leftsq.Append("Select CONCAT(c.fName, ' ',c.sName) as PaxName, " +
+                        "srd.SRDID, srd.Cost, srq.BookingNo, srd.Fdate, SellPrice, srd.PayTo,PaymentID " +
+                        "from SRdetails srd, ServiceRequest srq, SR_Cust src, Customer c, SRD_Cust sc where sc.SRDID = srd.SRDID " +
+                        "and c.CustomerID = sc.CustomerID and srq.SRID = srd.SRID and src.ServiceRequestID = srq.SRID and IsLead = 1 " +
+                       $"and SupplierID = {SupplierID} and srd.Fdate between '{String.Format("{0:yyyy-MM-dd}", FromDate)}' and '{String.Format("{0:yyyy-MM-dd}", ToDate)}'");
+
+                rightsq.Append("Select CONCAT(c.fName, ' ',c.sName) as PaxName, srd.SRDID, srd.Cost, srq.BookingNo, srd.Fdate, SellPrice, srd.PayTo, " +
+                    "rf.ProdCanxCost, rf.SBCanxCost, rf.RefundId,PaymentID from SRdetails srd, ServiceRequest srq, SR_Cust src, Customer c, SRD_Cust sc, Refunds rf " +
+                    "where sc.SRDID = srd.SRDID and c.CustomerID = sc.CustomerID and srq.SRID = srd.SRID and src.ServiceRequestID = srq.SRID " +
+                    "and rf.SRDID = srd.SRDID and IsLead = 1 " +
+                    $"and SRStatusID = {(int)SRStatusEnum.Cancelled} and SupplierID = {SupplierID} and srd.Fdate between '{String.Format("{0:yyyy-MM-dd}", FromDate)}' and '{String.Format("{0:yyyy-MM-dd}", ToDate)}'");
+            }
+
+            if (mode == (int)PayToEnum.Agent)
+            {
+                leftsq.Append("Select CONCAT(c.fName, ' ',c.sName) as PaxName, srd.SRDID, srd.Cost, " +
+                    "srq.BookingNo, srd.Fdate, SellPrice, srd.PayTo, PaymentID from SRdetails srd, " +
+                    "ServiceRequest srq, SR_Cust src, Customer c, SRD_Cust sc where sc.SRDID = srd.SRDID " +
+                    "and c.CustomerID = sc.CustomerID and srq.SRID = srd.SRID and src.ServiceRequestID = srq.SRID and IsLead = 1 " +
+                    $"and AgentId = '{AgentId}' and srd.Fdate between '{String.Format("{0:yyyy-MM-dd}", FromDate)}' and '{String.Format("{0:yyyy-MM-dd}", ToDate)}'");
+
+                rightsq.Append("Select CONCAT(c.fName, ' ',c.sName) as PaxName, " +
+                   "srd.SRDID, srd.Cost, srq.BookingNo, srd.Fdate, SellPrice, srd.PayTo,rf.ProdCanxCost, rf.SBCanxCost, rf.RefundId,PaymentID " +
+                   "from SRdetails srd, ServiceRequest srq, SR_Cust src, Customer c, SRD_Cust sc, Refunds rf where sc.SRDID = srd.SRDID " +
+                   "and c.CustomerID = sc.CustomerID and srq.SRID = srd.SRID and src.ServiceRequestID = srq.SRID and rf.SRDID = srd.SRDID and IsLead = 1 " +
+                   $"and AgentId = '{AgentId}' and SRStatusID = {(int)SRStatusEnum.Cancelled} and srd.Fdate between '{String.Format("{0:yyyy-MM-dd}", FromDate)}' and '{String.Format("{0:yyyy-MM-dd}", ToDate)}'");
+            }
+
             if (Paid == true)
             {
-                paymentdetailvws.LeftBkPayVm = db.Query<BKPayVM>("Select CONCAT(c.fName, ' ',c.sName) as PaxName, " +
-                    "srd.SRDID, srd.Cost, srq.BookingNo, srd.Fdate, SellPrice, srd.PayTo " +
-                    "from SRdetails srd, ServiceRequest srq, SR_Cust src, Customer c, SRD_Cust sc where sc.SRDID = srd.SRDID " +
-                    "and c.CustomerID = sc.CustomerID and srq.SRID = srd.SRID and src.ServiceRequestID = srq.SRID and IsLead = 1 " +
-                    "and srd.PayTo = 'Pay to us' " +
-                    "and PaymentID is not null " +
-                   $"and DriverID = {DriverID} and srd.Fdate between '{String.Format("{0:yyyy-MM-dd}", FromDate)}' and '{String.Format("{0:yyyy-MM-dd}", ToDate)}' ");
+                leftsq.Append($" and py.PaymentID is not null");
+                rightsq.Append($" and py.PaymentID is not null");
 
-                paymentdetailvws.RightBkPayVm = db.Query<BKPayVM>("Select CONCAT(c.fName, ' ',c.sName) as PaxName, " +
-                    "srd.SRDID, srd.Cost, srq.BookingNo, srd.Fdate, SellPrice, srd.PayTo " +
-                    "from SRdetails srd, ServiceRequest srq, SR_Cust src, Customer c, SRD_Cust sc where sc.SRDID = srd.SRDID " +
-                    "and c.CustomerID = sc.CustomerID and srq.SRID = srd.SRID and src.ServiceRequestID = srq.SRID and IsLead = 1 " +
-                    "and srd.PayTo = 'Pay to driver' " +
-                    "and PaymentID is not null " +
-                    $"and DriverID = {DriverID} and srd.Fdate between '{String.Format("{0:yyyy-MM-dd}", FromDate)}' and '{String.Format("{0:yyyy-MM-dd}", ToDate)}' ");
             }
+
             if (Pending == true)
             {
-                paymentdetailvws.LeftBkPayVm = db.Query<BKPayVM>("Select CONCAT(c.fName, ' ',c.sName) as PaxName, " +
-                    "srd.SRDID, srd.Cost, srq.BookingNo, srd.Fdate, SellPrice, srd.PayTo " +
-                    "from SRdetails srd, ServiceRequest srq, SR_Cust src, Customer c, SRD_Cust sc where sc.SRDID = srd.SRDID " +
-                    "and c.CustomerID = sc.CustomerID and srq.SRID = srd.SRID and src.ServiceRequestID = srq.SRID and IsLead = 1 " +
-                    "and srd.PayTo = 'Pay to us' " +
-                    "and PaymentID is null " +
-                   $"and DriverID = {DriverID} and srd.Fdate between '{String.Format("{0:yyyy-MM-dd}", FromDate)}' and '{String.Format("{0:yyyy-MM-dd}", ToDate)}' ");
-
-                paymentdetailvws.RightBkPayVm = db.Query<BKPayVM>("Select CONCAT(c.fName, ' ',c.sName) as PaxName, " +
-                   "srd.SRDID, srd.Cost, srq.BookingNo, srd.Fdate, SellPrice, srd.PayTo " +
-                   "from SRdetails srd, ServiceRequest srq, SR_Cust src, Customer c, SRD_Cust sc where sc.SRDID = srd.SRDID " +
-                   "and c.CustomerID = sc.CustomerID and srq.SRID = srd.SRID and src.ServiceRequestID = srq.SRID and IsLead = 1 " +
-                   "and srd.PayTo = 'Pay to driver' " +
-                   "and PaymentID is null " +
-                   $"and DriverID = {DriverID} and srd.Fdate between '{String.Format("{0:yyyy-MM-dd}", FromDate)}' and '{String.Format("{0:yyyy-MM-dd}", ToDate)}' ");
+                leftsq.Append($" and py.PaymentID is null");
+                rightsq.Append($" and py.PaymentID is null");
             }
 
+
+            paymentdetailvws.LeftBkPayVm = db.Query<BKPayVM>(leftsq);
+            paymentdetailvws.RightBkPayVm = db.Query<BKPayVM>(rightsq);
+            ViewBag.DriverID = DriverID;
+            ViewBag.SupplierID = SupplierID;
+            ViewBag.AgentId = AgentId;
+            ViewBag.Mode = mode;
             return PartialView("_FinanceInfo", paymentdetailvws);
         }
 
@@ -119,11 +176,6 @@ namespace Speedbird.Areas.SBBoss.Controllers
             return Json(filteredItems, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult AutoCompleteDrivers(string term)
-        {
-            var filteredItems = db.Fetch<Driver>($"Select DriverID,DriverName from Driver Where DriverName like '%{term}%'").Select(c => new { id = c.DriverID, value = c.DriverName });
-            return Json(filteredItems, JsonRequestBehavior.AllowGet);
-        }
     }
 
 

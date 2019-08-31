@@ -1430,9 +1430,9 @@ namespace Speedbird
 
     public enum PayToEnum
     {
+        Driver,
         Supplier,
-        Agent,
-        Driver
+        Agent
     }
 
 

@@ -997,6 +997,18 @@ namespace Speedbird
 		[Column] public string Note { get; set; }
 	}
     
+	[TableName("dbo.Refunds")]
+	[PrimaryKey("RefundId")]
+	[ExplicitColumns]
+    public partial class Refund  
+    {
+		[Column] public int RefundId { get; set; }
+		[Column] public int? SRDID { get; set; }
+		[Column] public decimal? ProdCanxCost { get; set; }
+		[Column] public decimal? SBCanxCost { get; set; }
+		[Column] public string Note { get; set; }
+	}
+    
 	[TableName("dbo.Reminders")]
 	[PrimaryKey("ReminderID")]
 	[ExplicitColumns]

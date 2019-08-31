@@ -20,7 +20,11 @@ namespace Speedbird.Models
         public decimal SellPrice { get; set; }
         public decimal Cost { get; set; }
         public string PayTo { get; set; }
-        public int PaymentId { get; set; }
+        public int? PaymentID { get; set; }
         public bool IsSelected { get; set; }
+        public int RefundId { get; set; }
+        public decimal ProdCanxCost { get; set; }
+        public decimal SBCanxCost { get; set; }
+        public string Note { get; set; }
     }
 }
