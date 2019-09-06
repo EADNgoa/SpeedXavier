@@ -51,6 +51,7 @@
     [Name] VARCHAR(50) NULL, 
     [AdditionalDetails] VARCHAR(50) NULL, 
     [PaymentID] INT NULL, 
+    [IsCancelled] BIT NULL, 
     CONSTRAINT [FK_SRdetails_ToSR] FOREIGN KEY ([SRID]) REFERENCES [ServiceRequest]([SRID]), 
     CONSTRAINT [FK_SRdetails_ToSupplier] FOREIGN KEY ([SupplierID]) REFERENCES [Supplier]([SupplierID]), 
     CONSTRAINT [FK_SRdetails_ToGuideLanguage] FOREIGN KEY ([GuideLanguageID]) REFERENCES [GuideLanguage]([GuideLanguageID]), 

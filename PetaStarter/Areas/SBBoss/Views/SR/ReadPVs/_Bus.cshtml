@@ -46,6 +46,10 @@
         @{Html.RenderPartial("ReadPVs/_Fin", Model); }
     </div>
 </div>
+@if (Model.IsCancelled == true)
+{
+    <p class="alert alert-primary">This Booking is Cancelled</p>
+}
 
 @*@foreach (var item in ViewBag.ufs)
     {

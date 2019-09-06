@@ -26,5 +26,6 @@ namespace Speedbird.Models
         public decimal ProdCanxCost { get; set; }
         public decimal SBCanxCost { get; set; }
         public string Note { get; set; }
+        public bool IsCancelled { get; set; }
     }
 }

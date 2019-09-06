@@ -98,44 +98,44 @@ namespace Speedbird.Areas.SBBoss.Controllers
             if (mode == (int)PayToEnum.Supplier)
             {
                 leftsq.Append("Select CONCAT(c.fName, ' ',c.sName) as PaxName, " +
-                        "srd.SRDID, srd.Cost, srq.BookingNo, srd.Fdate, SellPrice, srd.PayTo,PaymentID " +
+                        "srd.SRDID, srd.Cost, srq.BookingNo, srd.Fdate, SellPrice, srd.PayTo,PaymentID,IsCancelled " +
                         "from SRdetails srd, ServiceRequest srq, SR_Cust src, Customer c, SRD_Cust sc where sc.SRDID = srd.SRDID " +
                         "and c.CustomerID = sc.CustomerID and srq.SRID = srd.SRID and src.ServiceRequestID = srq.SRID and IsLead = 1 " +
-                       $"and SupplierID = {SupplierID} and srd.Fdate between '{String.Format("{0:yyyy-MM-dd}", FromDate)}' and '{String.Format("{0:yyyy-MM-dd}", ToDate)}'");
+                       $"and IsCancelled is null and SupplierID = {SupplierID} and srd.Fdate between '{String.Format("{0:yyyy-MM-dd}", FromDate)}' and '{String.Format("{0:yyyy-MM-dd}", ToDate)}'");
 
                 rightsq.Append("Select CONCAT(c.fName, ' ',c.sName) as PaxName, srd.SRDID, srd.Cost, srq.BookingNo, srd.Fdate, SellPrice, srd.PayTo, " +
-                    "rf.ProdCanxCost, rf.SBCanxCost, rf.RefundId,PaymentID from SRdetails srd, ServiceRequest srq, SR_Cust src, Customer c, SRD_Cust sc, Refunds rf " +
+                    "rf.SRDID,rf.ProdCanxCost, rf.SBCanxCost,IsCancelled, rf.RefundId,PaymentID from SRdetails srd, ServiceRequest srq, SR_Cust src, Customer c, SRD_Cust sc, Refunds rf " +
                     "where sc.SRDID = srd.SRDID and c.CustomerID = sc.CustomerID and srq.SRID = srd.SRID and src.ServiceRequestID = srq.SRID " +
                     "and rf.SRDID = srd.SRDID and IsLead = 1 " +
-                    $"and SRStatusID = {(int)SRStatusEnum.Cancelled} and SupplierID = {SupplierID} and srd.Fdate between '{String.Format("{0:yyyy-MM-dd}", FromDate)}' and '{String.Format("{0:yyyy-MM-dd}", ToDate)}'");
+                    $"and IsCancelled = 1 and SupplierID = {SupplierID} and srd.Fdate between '{String.Format("{0:yyyy-MM-dd}", FromDate)}' and '{String.Format("{0:yyyy-MM-dd}", ToDate)}'");
             }
 
             if (mode == (int)PayToEnum.Agent)
             {
                 leftsq.Append("Select CONCAT(c.fName, ' ',c.sName) as PaxName, srd.SRDID, srd.Cost, " +
-                    "srq.BookingNo, srd.Fdate, SellPrice, srd.PayTo, PaymentID from SRdetails srd, " +
+                    "srq.BookingNo, srd.Fdate, SellPrice, srd.PayTo, PaymentID,IsCancelled from SRdetails srd, " +
                     "ServiceRequest srq, SR_Cust src, Customer c, SRD_Cust sc where sc.SRDID = srd.SRDID " +
                     "and c.CustomerID = sc.CustomerID and srq.SRID = srd.SRID and src.ServiceRequestID = srq.SRID and IsLead = 1 " +
-                    $"and AgentId = '{AgentId}' and srd.Fdate between '{String.Format("{0:yyyy-MM-dd}", FromDate)}' and '{String.Format("{0:yyyy-MM-dd}", ToDate)}'");
+                    $"and IsCancelled is null and AgentId = '{AgentId}' and srd.Fdate between '{String.Format("{0:yyyy-MM-dd}", FromDate)}' and '{String.Format("{0:yyyy-MM-dd}", ToDate)}'");
 
                 rightsq.Append("Select CONCAT(c.fName, ' ',c.sName) as PaxName, " +
-                   "srd.SRDID, srd.Cost, srq.BookingNo, srd.Fdate, SellPrice, srd.PayTo,rf.ProdCanxCost, rf.SBCanxCost, rf.RefundId,PaymentID " +
+                   "srd.SRDID, srd.Cost, srq.BookingNo, srd.Fdate, SellPrice, srd.PayTo,IsCancelled,rf.ProdCanxCost,rf.SRDID, rf.SBCanxCost, rf.RefundId,PaymentID " +
                    "from SRdetails srd, ServiceRequest srq, SR_Cust src, Customer c, SRD_Cust sc, Refunds rf where sc.SRDID = srd.SRDID " +
                    "and c.CustomerID = sc.CustomerID and srq.SRID = srd.SRID and src.ServiceRequestID = srq.SRID and rf.SRDID = srd.SRDID and IsLead = 1 " +
-                   $"and AgentId = '{AgentId}' and SRStatusID = {(int)SRStatusEnum.Cancelled} and srd.Fdate between '{String.Format("{0:yyyy-MM-dd}", FromDate)}' and '{String.Format("{0:yyyy-MM-dd}", ToDate)}'");
+                   $"and IsCancelled = 1 and AgentId = '{AgentId}' and srd.Fdate between '{String.Format("{0:yyyy-MM-dd}", FromDate)}' and '{String.Format("{0:yyyy-MM-dd}", ToDate)}'");
             }
 
             if (Paid == true)
             {
-                leftsq.Append($" and py.PaymentID is not null");
-                rightsq.Append($" and py.PaymentID is not null");
+                leftsq.Append($" and PaymentID is not null");
+                rightsq.Append($" and PaymentID is not null");
 
             }
 
             if (Pending == true)
             {
-                leftsq.Append($" and py.PaymentID is null");
-                rightsq.Append($" and py.PaymentID is null");
+                leftsq.Append($" and PaymentID is null");
+                rightsq.Append($" and PaymentID is null");
             }
 
 

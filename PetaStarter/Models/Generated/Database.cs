@@ -154,6 +154,7 @@ namespace Speedbird
 		[Column] public string BkIFSC { get; set; }
 		[Column] public string BkAddress { get; set; }
 		[Column] public string State { get; set; }
+		[Column] public decimal? CreditAmt { get; set; }
 	}
     
 	[TableName("dbo.AgentDiscount")]
@@ -1196,6 +1197,7 @@ namespace Speedbird
 		[Column] public string Name { get; set; }
 		[Column] public string AdditionalDetails { get; set; }
 		[Column] public int? PaymentID { get; set; }
+		[Column] public bool? IsCancelled { get; set; }
 	}
     
 	[TableName("dbo.SRlogs")]

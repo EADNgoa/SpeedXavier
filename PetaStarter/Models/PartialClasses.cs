@@ -116,6 +116,7 @@ namespace Speedbird
         public decimal NetCost { get; set; }
         public decimal AddCost { get; set; }
         public string AddDtl { get; set; }
+        public bool IsCancelled { get; set; }
         public override decimal TotalCost { get { return Cost; } }
     }
 
@@ -134,6 +135,7 @@ namespace Speedbird
         public string OptionTypeName { get; set; }
         public string VisaCountry { get; set; }
         public decimal ExtraServiceCost { get; set; }
+        public bool IsCancelled { get; set; }
         public override decimal TotalCost { get { return Cost + ExtraServiceCost; } }
     }
 
@@ -148,6 +150,7 @@ namespace Speedbird
         public DateTime? ValidFrom { get; set; }
         public DateTime? ValidTo { get; set; }
         public decimal Cost { get; set; }
+        public bool IsCancelled { get; set; }
         public override decimal TotalCost { get { return Cost; } }
     }
 
@@ -170,6 +173,7 @@ namespace Speedbird
         public decimal Cost { get; set; }
         public int BFCost { get; set; }
         public string CruiseName { get; set; }
+        public bool IsCancelled { get; set; }
         public override decimal TotalCost { get { return Cost; } }
     }
 
@@ -193,6 +197,7 @@ namespace Speedbird
         public decimal AddCost { get; set; }
         public decimal FullCost { get; set; }
         public string AddDetl { get; set; }
+        public bool IsCancelled { get; set; }
         public override decimal TotalCost { get { return Cost; } }
     }
 
@@ -215,6 +220,7 @@ namespace Speedbird
         public int BFCost { get; set; }
         public decimal AddCost { get; set; }
         public string AddDetl { get; set; }
+        public bool IsCancelled { get; set; }
         public override decimal TotalCost { get { return Cost; } }
     }
 
@@ -237,6 +243,7 @@ namespace Speedbird
         public int LunchCost { get; set; }
         public int NoExtraBeds { get; set; }
         public string PayTo { get; set; }
+        public bool IsCancelled { get; set; }
         public override decimal TotalCost { get { return Cost; } }
     }
 
@@ -259,6 +266,7 @@ namespace Speedbird
         public string PickUpPoint { get; set; }
         public int NoOfVehicles { get; set; }
         public decimal VehicleCost { get; set; }
+        public bool IsCancelled { get; set; }
         public override decimal TotalCost { get { return Cost + VehicleCost; } }
     }
 
@@ -287,6 +295,7 @@ namespace Speedbird
         public int NoExtraService { get; set; }
         public int ExtraServiceCost { get; set; }
         public int EBCostPNight { get; set; }
+        public bool IsCancelled { get; set; }
         public override decimal TotalCost { get { return EBCostPNight + DinnerCost + LunchCost + BFCost + ExtraServiceCost ; } }
     }
 
@@ -310,6 +319,7 @@ namespace Speedbird
         public int CarType { get; set; }
         public bool MealIncluded { get; set; }
         public int GuideLanguageName { get; set; }
+        public bool IsCancelled { get; set; }
         public override decimal TotalCost { get { return (CostPerCar * NoOfCars) + (AdultCost * AdultNo) + (ChildCost * ChildNo); } }
     }
 
@@ -320,6 +330,7 @@ namespace Speedbird
         public string Nationality { get; set; }
         public decimal Cost { get; set; }
         public string Heritage { get; set; }
+        public bool IsCancelled { get; set; }
         public override decimal TotalCost { get { return Cost; } }
     }
 
@@ -343,7 +354,8 @@ namespace Speedbird
         public decimal Cost {get; set; } 
         public string Airline {get; set; } 
         public string Extra {get; set; } 
-        public string ExtraDetails {get; set; }         
+        public string ExtraDetails {get; set; }
+        public bool IsCancelled { get; set; }
         public override decimal TotalCost { get { return Cost; } }
     }
 
@@ -704,6 +716,7 @@ namespace Speedbird
         public string BkName { get; set; }
         public string BkIFSC { get; set; }
         public string BkAddress { get; set; }
+        public decimal CreditAmt { get; set; }
     }
     public class PCdetailDets
     {
