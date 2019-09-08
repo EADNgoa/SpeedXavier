@@ -354,9 +354,10 @@ namespace Speedbird
         public int? BookingNo { get; set; }
         public int? EnquirySource { get; set; }
         public int? PaxNo { get; set; }
-        public string Id { get; set; }
-        public string RealName { get; set; }
         public DateTime? TransDate { get; set; }
+        public string Event { get; set; }
+        public string PhoneNo { get; set; }
+        public string Contact { get; set; }
     }
 
     public class VisaDaily : SupplierInfo
@@ -381,8 +382,9 @@ namespace Speedbird
         public int? EnquirySource { get; set; }
         public int? PaxNo { get; set; }
         public DateTime? TransDate { get; set; }
-        public string Id { get; set; }
-        public string RealName { get; set; }
+        public string Event { get; set; }
+        public string PhoneNo { get; set; }
+        public string Contact { get; set; }
     }
 
 
@@ -404,8 +406,9 @@ namespace Speedbird
         public int? EnquirySource { get; set; }
         public int? PaxNo { get; set; }
         public DateTime? TDate { get; set; }
-        public string Id { get; set; }
-        public string RealName { get; set; }
+        public string Event { get; set; }
+        public string PhoneNo { get; set; }
+        public string Contact { get; set; }
     }
 
     public class CruiseDaily : SupplierInfo
@@ -433,8 +436,9 @@ namespace Speedbird
         public int? EnquirySource { get; set; }
         public int? PaxNo { get; set; }
         public DateTime? TDate { get; set; }
-        public string Id { get; set; }
-        public string RealName { get; set; }
+        public string Event { get; set; }
+        public string PhoneNo { get; set; }
+        public string Contact { get; set; }
     }
 
 
@@ -462,8 +466,9 @@ namespace Speedbird
         public int? EnquirySource { get; set; }
         public int? PaxNO { get; set; }
         public DateTime? TDate { get; set; }
-        public string Id { get; set; }
-        public string RealName { get; set; }
+        public string Event { get; set; }
+        public string PhoneNo { get; set; }
+        public string Contact { get; set; }
     }
 
     public class RailDaily : SupplierInfo
@@ -491,8 +496,9 @@ namespace Speedbird
         public int? EnquirySource { get; set; }
         public int? PaxNo { get; set; }
         public DateTime? TDate { get; set; }
-        public string Id { get; set; }
-        public string RealName { get; set; }
+        public string Event { get; set; }
+        public string PhoneNo { get; set; }
+        public string Contact { get; set; }
     }
 
     public class CarDaily : SupplierInfo
@@ -518,8 +524,9 @@ namespace Speedbird
         public int? EnquirySource { get; set; }
         public int? PaxNo { get; set; }
         public DateTime? TransDate { get; set; }
-        public string Id { get; set; }
-        public string RealName { get; set; }
+        public string Event { get; set; }
+        public string PhoneNo { get; set; }
+        public string Contact { get; set; }
     }
 
     public class TransferServiceDaily : SupplierInfo
@@ -548,8 +555,9 @@ namespace Speedbird
         public int? EnquirySource { get; set; }
         public int? PaxNo { get; set; }
         public DateTime? TDate { get; set; }
-        public string Id { get; set; }
-        public string RealName { get; set; }
+        public string Event { get; set; }
+        public string PhoneNo { get; set; }
+        public string Contact { get; set; }
     }
 
     public class AccomodationServiceDaily : SupplierInfo
@@ -583,8 +591,9 @@ namespace Speedbird
         public int? BookingNo { get; set; }
         public int? EnquirySource { get; set; }
         public DateTime? TDate { get; set; }
-        public string Id { get; set; }
-        public string RealName { get; set; }
+        public string Event { get; set; }
+        public string PhoneNo { get; set; }
+        public string Contact { get; set; }
     }
 
     public class SightseeingServiceViewDaily : SupplierInfo
@@ -613,8 +622,9 @@ namespace Speedbird
         public int? BookingNo { get; set; }
         public DateTime? TDate { get; set; }
         public int? EnquirySource { get; set; }
-        public string Id { get; set; }
-        public string RealName { get; set; }
+        public string Event { get; set; }
+        public string PhoneNo { get; set; }
+        public string Contact { get; set; }
     }
 
     public class PassportDaily : SupplierInfo
@@ -631,8 +641,9 @@ namespace Speedbird
         public DateTime? TDate { get; set; }
         public int? EnquirySource { get; set; }
         public int? PaxNo { get; set; }
-        public string Id { get; set; }
-        public string RealName { get; set; }
+        public string Event { get; set; }
+        public string PhoneNo { get; set; }
+        public string Contact { get; set; }
     }
 
     public class FlightServiceDaily : SupplierInfo
@@ -662,8 +673,9 @@ namespace Speedbird
         public int? BookingNo { get; set; }
         public DateTime? TDate { get; set; }
         public int? EnquirySource { get; set; }
-        public string Id { get; set; }
-        public string RealName { get; set; }
+        public string Event { get; set; }
+        public string PhoneNo { get; set; }
+        public string Contact { get; set; }
     }
 
 

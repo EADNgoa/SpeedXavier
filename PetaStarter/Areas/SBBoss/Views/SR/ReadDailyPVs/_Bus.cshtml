@@ -26,7 +26,9 @@
                     <th>CP</th>
                     <th>SellPrice</th>
                     <th>COM</th>
-                    <th>Done By</th>
+                </tr>
+                <tr>
+                    <th>Note</th>
                 </tr>
             </thead>
             <tr>
@@ -51,14 +53,9 @@
                 <td align="right">@Model.TotalCost</td>
                 <td align="right">@Model.SellPrice</td>
                 <td>@(Model.SellPrice - Model.TotalCost)</td>
-                @if (Model.EnquirySource == (int)EnquirySourceEnum.Corporate_Client)
-                {
-                    <td>@Model.RealName</td>
-                }
-                else if (Model.EnquirySource == (int)EnquirySourceEnum.Web)
-                {
-                    <td>Web</td>
-                }
+            </tr>
+            <tr>
+                <td>@Model.Event</td>
             </tr>
         </table>
     </div>
