@@ -1,6 +1,5 @@
 ﻿@using Speedbird
 @model Speedbird.AccomodationServiceView
-
 <strong>@Model.AccomName</strong>
 <div class="row">
     <div class="col-10">
@@ -20,21 +19,6 @@
                     <th>Category</th>
                     <th>Extra Beds</th>
                 </tr>
-                <tr>
-                    <th>EB cost</th>
-                    <th>EB total</th>
-                    <th>AC/ Non AC</th>
-                    <th>Room Rate</th>
-                    <th>BF cost</th>
-                    <th>Lunch</th>
-                    <th>Dinner</th>
-                    <th>Cost/Night</th>
-                    <th>Extra</th>
-                    <th>Extra Qty</th>
-                    <th>Extras cost</th>
-                    <th>Total extras</th>                    
-
-                </tr>
             </thead>
             <tr>
                 <td>@Model.PaxName</td>
@@ -49,19 +33,38 @@
                 <td>@Model.RoomType </td>
                 <td>@Model.RoomCategory </td>
                 <td align="right">@Model.NoExtraBeds </td>
-            </tr><tr>
+            </tr>
+            <thead>
+                <tr>
+                    <th>EB cost</th>
+                    <th>EB total</th>
+                    <th>AC/ Non AC</th>
+                    <th>Room Rate</th>
+                    <th>BF cost</th>
+                    <th>Lunch</th>
+                    <th>Dinner</th>
+                    <th>Cost/Night</th>
+                    <th>Extra</th>
+                    <th>Extra Qty</th>
+                    <th>Extras cost</th>
+                    <th>Total extras</th>
+
+                </tr>
+            </thead>
+            <tr>
                 <td align="right">@Model.ExtraBedCost </td>
                 <td align="right">@(Model.ExtraBedCost * Model.NoExtraBeds) </td>
                 <td>@Model.HasAc </td>
-                <td align="right">@Model.Cost </td>
+                <td align="right">@(Model.EBCostPNight) </td>
+
                 <td align="right">@Model.BFCost </td>
                 <td align="right">@Model.LunchCost </td>
                 <td align="right">@Model.DinnerCost </td>
-                <td align="right">@(Model.EBCostPNight) </td>
+                <td align="right">@Model.TotalCost </td>
                 <td>@Model.ExtraService </td>
                 <td align="right">@Model.NoExtraService </td>
                 <td align="right">@Model.ExtraServiceCost </td>
-                <td align="right">@(Model.ExtraServiceCost * Model.NoExtraService) </td>                
+                <td align="right">@(Model.ExtraServiceCost * Model.NoExtraService) </td>
             </tr>
         </table>
         @{Html.RenderPartial("ReadPVs/_SupplierInfo", Model); }
@@ -85,5 +88,3 @@
            $('#Review').load('@Url.Action("_DrvReview")', { SRID: @Model.SRID,SRDID: @Model.SRDID});
         </script>
     }*@
-
-

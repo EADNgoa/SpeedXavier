@@ -4,7 +4,11 @@
     ViewBag.Title = $"Dairy";
 }
 
-
+<style>
+    .card-body {
+        padding-bottom: 5%;
+    }
+</style>
 
 <div class="card border rounded DropShadow">
     <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
@@ -36,8 +40,8 @@
         <div id="SRDetTbl">
             @foreach (var sd in Model)
             {
-                <div class="h3">@sd.SRDID : @(((Speedbird.ServiceTypeEnum)sd.ServiceTypeID).ToString())</div>
-                @Html.Action("FetchSRdetails", "SR", new { sType = (Speedbird.ServiceTypeEnum)sd.ServiceTypeID, srdid = sd.SRDID })
+                <div class="h3"><a target="_blank" href="@Url.Action("Manage","SR")/@sd.SRID">@sd.SRDID : @(((Speedbird.ServiceTypeEnum)sd.ServiceTypeID).ToString())</a></div>
+                @Html.Action("FetchDailyRecords", "SR", new { sType = (Speedbird.ServiceTypeEnum)sd.ServiceTypeID, srdid = sd.SRDID })
             }
         </div>
 

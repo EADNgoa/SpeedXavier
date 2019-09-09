@@ -44,6 +44,7 @@ BEGIN
 	INSERT INTO [dbo].[UserFunctions] ([FunctionID], [FunctionName], [Module]) VALUES (39, N'Agents', N'Setup')
     INSERT INTO [dbo].[UserFunctions] ([FunctionID], [FunctionName], [Module]) VALUES (40, N'OwnedAsset', N'OwnedAsset')
     INSERT INTO [dbo].[UserFunctions] ([FunctionID], [FunctionName], [Module]) VALUES (41, N'Admin', N'EditComm') ---Edit employee commission
+	INSERT INTO [dbo].[UserFunctions] ([FunctionID], [FunctionName], [Module]) VALUES (42, N'Config', N'Config')
 	
 
 
@@ -90,6 +91,13 @@ SET IDENTITY_INSERT [dbo].[ServiceCommision] ON
 		INSERT INTO [dbo].ServiceCommision ([ServiceID], [ServiceName]) VALUES (6, N'Visa')
 		INSERT INTO [dbo].ServiceCommision ([ServiceID], [ServiceName]) VALUES (7, N'CarBike')
 		INSERT INTO [dbo].ServiceCommision ([ServiceID], [ServiceName]) VALUES (8, N'Cruise')
+		SET IDENTITY_INSERT [dbo].[ServiceCommision] OFF
+END
+
+IF NOT EXISTS (SELECT * FROM Config)
+BEGIN
+SET IDENTITY_INSERT [dbo].[Config] ON
+		INSERT INTO [dbo].Config ([ConfigId], [ProductId], [TransServiceCharge], [MerchantId], [Pwd]) VALUES (1, N'NSE',0,'197','Test@123')
 		SET IDENTITY_INSERT [dbo].[ServiceCommision] OFF
 END
 

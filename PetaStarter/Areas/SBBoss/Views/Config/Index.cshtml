@@ -1,0 +1,61 @@
+﻿@model IEnumerable<Speedbird.Config>
+
+
+@{
+    ViewBag.Title = "Paymen Configuration";
+}
+
+
+<div class="card border rounded DropShadow">
+    <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
+        <span class="h3">@ViewBag.Title</span>
+    </div>
+    <div class="card-body">
+
+        <table class="table">
+            <tr>
+                <th>Sr No</th>
+                <th>
+                    Product Id
+                </th>
+                <th>
+                    Transactional Charge
+                </th>
+                <th>
+                    Merchant Id
+                </th>
+                <th>
+                    Password
+                </th>
+                <th></th>
+            </tr>
+            @{int i = 1;}
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td>
+                    @i
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProductId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TransServiceCharge)
+                </td>
+                <th>
+                    @Html.DisplayFor(modelItem => item.MerchantId)
+                </th>
+                <th>
+                    @Html.DisplayFor(modelItem => item.Pwd)
+                </th>
+                <td>
+                    <a href="@Url.Action("Manage","Config", new {id = item.ConfigId })"><i title="Edit" class="fas fa-edit fa-inverse h3 float-right DropShadow"></i></a>                 
+                </td>
+
+            </tr>
+                i++;
+            }
+
+        </table>
+    </div>
+</div>

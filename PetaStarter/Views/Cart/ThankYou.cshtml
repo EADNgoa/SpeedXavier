@@ -1,4 +1,5 @@
-﻿<style>
+﻿@model IEnumerable<AtomPaymentLog>
+<style>
     /*Reused*/
     h4 {
         font-family: "Merriweather Sans",serif;
@@ -59,53 +60,120 @@
         <div class="col-md-2">
             <div class="custinfo">
                 <table class="table table-bordered">
-                    <tr>
+                    @{
+                        var customer = (IEnumerable<Customer>)ViewBag.CustomerInfo;
+                    }
 
-                        <td colspan="2"><center><img src="/Images/World.jpg" style="width:300px; box-shadow: 0 3px 5px rgba(50,50,50,0.4);" /></center></td>
-                    </tr>
-                    <tr>
-                        <th>First Name</th>
-                        <td>Diptesh </td>
-                    </tr>
-                    <tr>
-                        <th>Surname</th>
-                        <td>Naik</td>
-                    </tr>
-                    <tr>
-                        <th>Email</th>
-                        <td>diptesh03@gmail.com</td>
-                    </tr>
-                    <tr>
-                        <th>Phone</th>
-                        <td>9872637738</td>
-                    </tr>
-                </table>
+                    @foreach (var item in customer)
+                    {
+                        <tr>
+
+                            <td colspan="2"><center><img src="/Images/@item.IdPicture" style="width:300px; box-shadow: 0 3px 5px rgba(50,50,50,0.4);" /></center></td>
+                        </tr>
+                        <tr>
+                            <th>First Name</th>
+                            <td>@item.FName </td>
+                        </tr>
+                        <tr>
+                            <th>Surname</th>
+                            <td>@item.SName</td>
+                        </tr>
+                        <tr>
+                            <th>Email</th>
+                            <td>@item.Email</td>
+                        </tr>
+                        <tr>
+                            <th>Phone</th>
+                            <td>@item.Phone</td>
+                        </tr>
+                    }
+                    </table>
             </div>
         </div>
         <div class="col-md-1"></div>
         <div class="col-md-">
             <center>
-                <h4>List of Items which are succesfully booked !!!</h4>
+                <h4>Transaction Status</h4>
                 <table class="table">
-                    <tr>
-                        <th>Sr no</th><th></th><th>Service</th><th>Qty</th><th>Prices</th>
-                    </tr>
-                    <tr>
-                        <td>
-                            1
-                        </td>
+                    @*<tr>
+            <th>Sr no</th><th></th><th>Service</th><th>Qty</th><th>Prices</th>
+        </tr>
+        <tr>
+            <td>
+                1
+            </td>
 
-                        <td>
-                            <img src="/Images/World.jpg" style="width:150px; box-shadow: 0 3px 5px rgba(50,50,50,0.4);" />
-                        </td>
-                        <td>
-                            Manali Tour
-                        </td>
-                        <td>
-                            2
-                        </td>
-                        <td>34556/-</td>
-                    </tr>
+            <td>
+                <img src="/Images/World.jpg" style="width:150px; box-shadow: 0 3px 5px rgba(50,50,50,0.4);" />
+            </td>
+            <td>
+                Manali Tour
+            </td>
+            <td>
+                2
+            </td>
+            <td>34556/-</td>
+        </tr>*@
+                    @foreach (var payment in Model)
+                    {
+
+                        if (payment.Rf_code == "Ok")
+                        {
+                            <tr>
+                                <td><h4>Successful</h4></td>
+                            </tr>
+                            <tr>
+                                <td>Merchant Txt Id : @payment.RMer_txn</td>
+                            </tr>
+                            <tr>
+                                <td>Atom Transaction Id : @payment.RMmp_txn</td>
+                            </tr>
+                            <tr>
+                                <td>Amount : @payment.RAmount</td>
+                            </tr>
+                            <tr>
+                                <td>DateTime : @payment.Rdate</td>
+                            </tr>
+                        }
+
+                        if (payment.Rf_code == "F")
+                        {
+                            <tr>
+                                <td><h3>Failed</h3></td>
+                            </tr>
+                            <tr>
+                                <td>Merchant Txt Id : @payment.RMer_txn</td>
+                            </tr>
+                            <tr>
+                                <td>Atom Transaction Id : @payment.RMmp_txn</td>
+                            </tr>
+                            <tr>
+                                <td>Amount : @payment.RAmount</td>
+                            </tr>
+                            <tr>
+                                <td>DateTime : @payment.Rdate</td>
+                            </tr>
+                        }
+
+                        if (payment.Rf_code == "C")
+                        {
+                            <tr>
+                                <td><h3>Cancelled</h3></td>
+                            </tr>
+                            <tr>
+                                <td>Merchant Txt Id : @payment.RMer_txn</td>
+                            </tr>
+                            <tr>
+                                <td>Atom Transaction Id : @payment.RMmp_txn</td>
+                            </tr>
+                            <tr>
+                                <td>Amount : @payment.RAmount</td>
+                            </tr>
+                            <tr>
+                                <td>DateTime : @payment.Rdate</td>
+                            </tr>
+                        }
+                    }
                 </table>
             </center>
         </div>

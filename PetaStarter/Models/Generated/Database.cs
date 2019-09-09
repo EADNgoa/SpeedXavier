@@ -232,6 +232,49 @@ namespace Speedbird
 		[Column] public string RealName { get; set; }
 	}
     
+	[TableName("dbo.AtomPaymentLogs")]
+	[PrimaryKey("TId")]
+	[ExplicitColumns]
+    public partial class AtomPaymentLog  
+    {
+		[Column] public int TId { get; set; }
+		[Column] public string RequestUrl { get; set; }
+		[Column] public int? SRID { get; set; }
+		[Column] public int? SRDID { get; set; }
+		[Column] public string UserID { get; set; }
+		[Column] public DateTime? TDate { get; set; }
+		[Column] public string RMmp_txn { get; set; }
+		[Column] public string RMer_txn { get; set; }
+		[Column] public string RAmount { get; set; }
+		[Column] public string RProdid { get; set; }
+		[Column] public string Rdate { get; set; }
+		[Column] public string Rbank_txn { get; set; }
+		[Column] public string Rf_code { get; set; }
+		[Column] public string Rbank_name { get; set; }
+		[Column] public string Rclientcode { get; set; }
+		[Column] public string Rsignature { get; set; }
+		[Column] public string Rdiscriminator { get; set; }
+	}
+    
+	[TableName("dbo.AtomRefundLogs")]
+	[PrimaryKey("RefundId")]
+	[ExplicitColumns]
+    public partial class AtomRefundLog  
+    {
+		[Column] public int RefundId { get; set; }
+		[Column] public DateTime? Tdate { get; set; }
+		[Column] public int? SRID { get; set; }
+		[Column] public int? SRDID { get; set; }
+		[Column] public string UserId { get; set; }
+		[Column] public string RefundAmt { get; set; }
+		[Column] public string AtomTxnId { get; set; }
+		[Column] public string MerchantReferanceId { get; set; }
+		[Column] public string AtomRefundId { get; set; }
+		[Column] public string StatusCode { get; set; }
+		[Column] public string StatusMessege { get; set; }
+		[Column] public string CustomerInfo { get; set; }
+	}
+    
 	[TableName("dbo.Attraaction")]
 	[PrimaryKey("AttractionID")]
 	[ExplicitColumns]
@@ -368,6 +411,7 @@ namespace Speedbird
 		[Column] public int? NoOfGuest { get; set; }
 		[Column] public decimal? OrigPrice { get; set; }
 		[Column] public string CouponCode { get; set; }
+		[Column] public decimal? DiscountedPrice { get; set; }
 	}
     
 	[TableName("dbo.Category")]
@@ -378,6 +422,18 @@ namespace Speedbird
 		[Column] public int CategoryID { get; set; }
 		[Column] public string CategoryName { get; set; }
 		[Column] public string ImagePath { get; set; }
+	}
+    
+	[TableName("dbo.Config")]
+	[PrimaryKey("ConfigId")]
+	[ExplicitColumns]
+    public partial class Config  
+    {
+		[Column] public int ConfigId { get; set; }
+		[Column] public string ProductId { get; set; }
+		[Column] public decimal? TransServiceCharge { get; set; }
+		[Column] public string MerchantId { get; set; }
+		[Column] public string Pwd { get; set; }
 	}
     
 	[TableName("dbo.Cruise")]
@@ -1107,6 +1163,8 @@ namespace Speedbird
 		[Column] public decimal? Tax { get; set; }
 		[Column] public DateTime? ExpiryDate { get; set; }
 		[Column] public decimal? EBCostPNight { get; set; }
+		[Column] public string Name { get; set; }
+		[Column] public string AdditionalDetails { get; set; }
 	}
     
 	[TableName("dbo.SRlogs")]
