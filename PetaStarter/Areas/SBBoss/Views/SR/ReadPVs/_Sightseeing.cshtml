@@ -12,6 +12,7 @@
                     <th>Half/Full day</th>
                     <th>Pickup From</th>
                     <th>Pickup At</th>
+                    <th>Pickup Time</th>
                     <th>Pvt/Sic</th>
                     <th>Cost per car</th>
                     <th>Car Qty</th>
@@ -30,12 +31,13 @@
                 <td>@Model.OptionTypeName</td>
                 <td>@Model.PickUpPoint</td>
                 <td>@Model.PickupLocation </td>
+                <td>@Model.PickupTime.EAFormatTime(withTime: true)</td>
                 <td>@Model.Private_Sic </td>
                 <td align="right">@Model.CostPerCar </td>
                 <td align="right">@Model.NoOfCars </td>
                 <td align="right">@Model.AdultCost </td>
                 <td align="right">@Model.ChildCost </td>
-                <td>@Model.TourDate.EAFormat(true) </td>
+                <td>@Model.TourDate.EAFormat() </td>
                 <td>@((CarTypeEnum)Model.CarType)</td>
                 <td>@Model.MealIncluded</td>
                 <td>@ViewBag.Inc</td>
