@@ -11,6 +11,7 @@
                     <th>Vehicle Qty</th>
                     <th>From Where</th>
                     <th>Pickup Point</th>
+                    <th>Pickup Time</th>
                     <th>To Where</th>
                     <th>Drop Point</th>
                     <th>Car</th>
@@ -22,10 +23,11 @@
             </thead>
             <tr>
                 <td>@Model.PaxName</td>
-                <td>@Model.Fdate.EAFormat()</td>
+                <td>@Model.Fdate.EAFormat(withTime:false)</td>
                 <td align="right">@Model.NoOfVehicles</td>
                 <td>@(Model.FromLoc.ToUpper())</td>
                 <td>@Model.PickUpPoint</td>
+                <td>@Model.Fdate.EAFormatTime(withTime:true)</td>
                 <td>@(Model.ToLoc.ToUpper())</td>
                 <td>@Model.DropPoint</td>
                 <td>@((CarTypeEnum)Model.cartype)</td>

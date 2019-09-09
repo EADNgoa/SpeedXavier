@@ -43,7 +43,7 @@ namespace Speedbird
 
         public static string EAFormatTime(this DateTime? dt, bool withTime = false, bool forSQL = false)
         {
-            return dt.HasValue ? ((DateTime)dt).EAFormat(withTime, forSQL) : "";
+            return dt.HasValue ? ((DateTime)dt).EAFormatTime(withTime, forSQL) : "";
         }
 
         //Extension method for decimal
