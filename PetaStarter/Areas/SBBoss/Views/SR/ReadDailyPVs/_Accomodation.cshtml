@@ -29,7 +29,7 @@
                 <td>@Model.TDate.EAFormat(withTime: false)</td>
                 <td>@Model.PaxName </td>
                 <td>@(Model.AdultNo + Model.ChildNo + Model.InfantNo) </td>
-                <td>@Model.ContactName </td>
+                <td>@Model.ContactName @Model.Agency @Model.PhoneNo</td>
                 <td>@Model.AccomName </td>
                 <td>@Model.checkin.EAFormat() </td>
                 <td>@Model.checkout.EAFormat() </td>

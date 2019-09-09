@@ -31,7 +31,7 @@
                 <td>@Model.TransDate.EAFormat(withTime: false)</td>
                 <td>@Model.PaxName</td>
                 <td>@Model.PaxNo</td>
-                <td>@Model.ContactName</td>
+                <td>@Model.ContactName @Model.Agency @Model.PhoneNo</td>
                 <td>@Model.PassportNo</td>
                 <td>@Model.DOB.EAFormat()</td>
                 <td>@Model.ExpiryDate.EAFormat()</td>
@@ -46,10 +46,10 @@
                 <td align="right">@(Model.SellPrice - Model.TotalCost)</td>
             </tr>
             <tr>
-                Note
+                <th>Note</th>
             </tr>
             <tr>
-                @Model.Event
+                <td>@Model.Event</td>
             </tr>
         </table>
     </div>

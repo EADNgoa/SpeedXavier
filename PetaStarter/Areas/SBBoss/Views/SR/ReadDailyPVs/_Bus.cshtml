@@ -16,8 +16,8 @@
                     <th>To</th>
                     <th>Bus Name</th>
                     <th>Bus No</th>
-                    <th>Departure Time</th>
                     <th>Arrival Time</th>
+                    <th>Departure Time</th>
                     <th>Booking Type</th>
                     <th>Ticket No</th>
                     <th>Ticket Cost</th>
@@ -27,16 +27,13 @@
                     <th>SellPrice</th>
                     <th>COM</th>
                 </tr>
-                <tr>
-                    <th>Note</th>
-                </tr>
             </thead>
             <tr>
                 <td>@Model.BookingNo</td>
                 <td>@Model.TDate.EAFormat(withTime: false)</td>
                 <td>@Model.PaxName</td>
                 <td>@Model.PaxNO</td>
-                <td>@Model.ContactName</td>
+                <td>@Model.ContactName @Model.Agency @Model.PhoneNo</td>
                 <td>@Model.Age</td>
                 <td>@Model.DOT.EAFormat()</td>
                 <td>@Model.FromLoc</td>
@@ -53,6 +50,9 @@
                 <td align="right">@Model.TotalCost</td>
                 <td align="right">@Model.SellPrice</td>
                 <td>@(Model.SellPrice - Model.TotalCost)</td>
+            </tr>
+            <tr>
+                <th>Note</th>
             </tr>
             <tr>
                 <td>@Model.Event</td>

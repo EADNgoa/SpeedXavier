@@ -358,6 +358,8 @@ namespace Speedbird
         public string Event { get; set; }
         public string PhoneNo { get; set; }
         public string Contact { get; set; }
+        public string Id { get; set; }
+        public string Agency { get; set; }
     }
 
     public class VisaDaily : SupplierInfo
@@ -385,6 +387,8 @@ namespace Speedbird
         public string Event { get; set; }
         public string PhoneNo { get; set; }
         public string Contact { get; set; }
+        public string Id { get; set; }
+        public string Agency { get; set; }
     }
 
 
@@ -409,6 +413,8 @@ namespace Speedbird
         public string Event { get; set; }
         public string PhoneNo { get; set; }
         public string Contact { get; set; }
+        public string Id { get; set; }
+        public string Agency { get; set; }
     }
 
     public class CruiseDaily : SupplierInfo
@@ -439,6 +445,8 @@ namespace Speedbird
         public string Event { get; set; }
         public string PhoneNo { get; set; }
         public string Contact { get; set; }
+        public string Id { get; set; }
+        public string Agency { get; set; }
     }
 
 
@@ -469,6 +477,8 @@ namespace Speedbird
         public string Event { get; set; }
         public string PhoneNo { get; set; }
         public string Contact { get; set; }
+        public string Id { get; set; }
+        public string Agency { get; set; }
     }
 
     public class RailDaily : SupplierInfo
@@ -499,6 +509,8 @@ namespace Speedbird
         public string Event { get; set; }
         public string PhoneNo { get; set; }
         public string Contact { get; set; }
+        public string Id { get; set; }
+        public string Agency { get; set; }
     }
 
     public class CarDaily : SupplierInfo
@@ -527,6 +539,8 @@ namespace Speedbird
         public string Event { get; set; }
         public string PhoneNo { get; set; }
         public string Contact { get; set; }
+        public string Id { get; set; }
+        public string Agency { get; set; }
     }
 
     public class TransferServiceDaily : SupplierInfo
@@ -558,6 +572,8 @@ namespace Speedbird
         public string Event { get; set; }
         public string PhoneNo { get; set; }
         public string Contact { get; set; }
+        public string Id { get; set; }
+        public string Agency { get; set; }
     }
 
     public class AccomodationServiceDaily : SupplierInfo
@@ -594,6 +610,8 @@ namespace Speedbird
         public string Event { get; set; }
         public string PhoneNo { get; set; }
         public string Contact { get; set; }
+        public string Id { get; set; }
+        public string Agency { get; set; }
     }
 
     public class SightseeingServiceViewDaily : SupplierInfo
@@ -625,6 +643,8 @@ namespace Speedbird
         public string Event { get; set; }
         public string PhoneNo { get; set; }
         public string Contact { get; set; }
+        public string Id { get; set; }
+        public string Agency { get; set; }
     }
 
     public class PassportDaily : SupplierInfo
@@ -644,6 +664,8 @@ namespace Speedbird
         public string Event { get; set; }
         public string PhoneNo { get; set; }
         public string Contact { get; set; }
+        public string Id { get; set; }
+        public string Agency { get; set; }
     }
 
     public class FlightServiceDaily : SupplierInfo
@@ -676,6 +698,8 @@ namespace Speedbird
         public string Event { get; set; }
         public string PhoneNo { get; set; }
         public string Contact { get; set; }
+        public string Id { get; set; }
+        public string Agency { get; set; }
     }
 
 

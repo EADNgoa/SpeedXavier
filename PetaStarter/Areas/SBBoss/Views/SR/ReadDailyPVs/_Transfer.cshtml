@@ -17,6 +17,7 @@
                     <th>Picup Point</th>
                     <th>To Where</th>
                     <th>Drop Point</th>
+                    <th>Driver Name</th>
                     <th>Car</th>
                     <th>Rate Basis</th>
                     <th>Has AC</th>
@@ -32,13 +33,14 @@
                 <td>@Model.TDate.EAFormat(withTime: false)</td>
                 <td>@Model.PaxName</td>
                 <td>@Model.PaxNo</td>
-                <td>@Model.ContactName</td>
+                <td>@Model.ContactName @Model.Agency @Model.PhoneNo</td>
                 <td>@Model.Fdate.EAFormat()</td>
                 <td align="right">@Model.NoOfVehicles</td>
                 <td>@(Model.FromLoc.ToUpper())</td>
                 <td>@Model.PickUpPoint</td>
                 <td>@(Model.ToLoc.ToUpper())</td>
                 <td>@Model.DropPoint</td>
+                <th>@Model.DriverName @Model.Contact</th>
                 <td>@((CarTypeEnum)Model.cartype)</td>
                 <td>@Model.RateBasis</td>
                 <td>@Model.HasAc</td>
@@ -49,10 +51,10 @@
                 <td>@(Model.SellPrice - Model.TotalCost)</td>
             </tr>
             <tr>
-                Note
+                <th>Note</th>
             </tr>
             <tr>
-                @Model.Event
+                <td>@Model.Event</td>
             </tr>
         </table>
 

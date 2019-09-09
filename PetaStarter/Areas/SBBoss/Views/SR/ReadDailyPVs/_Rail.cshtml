@@ -35,7 +35,7 @@
                 <td>@Model.TDate.EAFormat(withTime: false)</td>
                 <td>@Model.PaxName</td>
                 <td>@Model.PaxNo</td>
-                <td>@Model.ContactName</td>
+                <td>@Model.ContactName @Model.Agency @Model.PhoneNo</td>
                 <td>@Model.Age</td>
                 <td>@Model.DOT.EAFormat()</td>
                 <td>@Model.FromLoc</td>
@@ -55,7 +55,7 @@
                 <td align="right">@(Model.SellPrice - Model.TotalCost)</td>
             </tr>
             <tr>
-                Note
+                <th>Note</th>
             </tr>
             <tr>
                 <td>@Model.Event</td>
