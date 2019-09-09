@@ -55,9 +55,9 @@
                 <td>@Model.AirlinePNR</td>
                 <td>@Model.Extra </td>
                 <td>@Model.ExtraDetails </td>
-                <td>@Model.TotalCost </td>
-                <td>@Model.SellPrice </td>
-                <td>@(Model.SellPrice - Model.TotalCost)</td>
+                <td>@Model.TotalCost.EAFormat() </td>
+                <td>@Model.SellPrice.EAFormat() </td>
+                <td>@Model.COM.EAFormat()</td>
             </tr>
             <tr>
                 <th>Note</th>

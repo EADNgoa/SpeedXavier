@@ -40,10 +40,10 @@
                 <td>@Model.Fdate.EAFormat()</td>
                 <td>@Model.Tdate.EAFormat()</td>
                 <td>@(Model.Tdate.Subtract(Model.Fdate).TotalDays)</td>
-                <td align="right">@Model.Cost</td>
-                <td align="right">@Model.TotalCost</td>
-                <td align="right">@Model.SellPrice</td>
-                <td align="right">@(Model.SellPrice - Model.TotalCost)</td>
+                <td align="right">@Model.Cost.EAFormat()</td>
+                <td>@Model.TotalCost.EAFormat() </td>
+                <td>@Model.SellPrice.EAFormat() </td>
+                <td>@Model.COM.EAFormat()</td>
             </tr>
             <tr>
                 <th>Note</th>

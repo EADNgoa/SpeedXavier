@@ -42,14 +42,14 @@
                 <td>@Model.PickUpPoint</td>
                 <td>@Model.ToLoc</td>
                 <td>@Model.DropPoint</td>
-                <td align="right">@Model.Cost</td>
+                <td align="right">@Model.Cost.EAFormat()</td>
                 <td>@Model.Qty</td>
                 <td>@Model.NoExtraBeds</td>
-                <td>@(Model.Cost * Model.Qty * Model.NoExtraBeds)</td>
+                <td>@Model.NetRate.ToString("0.####")</td>
                 <td>@Model.PayTo</td>
-                <td>@Model.TotalCost</td>
-                <td>@Model.SellPrice</td>
-                <td>@(Model.SellPrice - Model.TotalCost)</td>
+                <td>@Model.TotalCost.EAFormat() </td>
+                <td>@Model.SellPrice.EAFormat() </td>
+                <td>@Model.COM.EAFormat()</td>
             </tr>
             <tr>
                 <th>Note</th>

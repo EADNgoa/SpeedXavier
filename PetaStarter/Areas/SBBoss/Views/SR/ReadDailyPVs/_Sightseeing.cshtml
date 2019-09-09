@@ -14,6 +14,7 @@
                     <th>Agent</th>
                     <th>No of Adults</th>
                     <th>No of Kids</th>
+                    <th>Name Of Tour</th>
                     <th>Half/Full day</th>
                     <th>Pickup From</th>
                     <th>Pickup At</th>
@@ -40,22 +41,23 @@
                 <td>@Model.ContactName @Model.Agency @Model.PhoneNo</td>
                 <td align="right">@Model.AdultNo</td>
                 <td align="right">@Model.ChildNo </td>
+                <td>@Model.SightseeingName</td>
                 <td>@Model.OptionTypeName</td>
                 <td>@Model.PickUpPoint</td>
                 <td>@Model.PickupLocation </td>
                 <td>@Model.Private_Sic </td>
-                <td align="right">@Model.CostPerCar </td>
+                <td align="right">@Model.CostPerCar.EAFormat() </td>
                 <td align="right">@Model.NoOfCars </td>
-                <td align="right">@Model.AdultCost </td>
-                <td align="right">@Model.ChildCost </td>
+                <td align="right">@Model.AdultCost.ToString("0.####") </td>
+                <td align="right">@Model.ChildCost.ToString("0.####") </td>
                 <td>@Model.TourDate.EAFormat(true) </td>
                 <td>@Model.DriverName @Model.Contact</td>
                 <td>@((CarTypeEnum)Model.CarType)</td>
                 <td>@Model.MealIncluded</td>
                 <td>@ViewBag.Inc</td>
-                <td>@Model.TotalCost</td>
-                <td>@Model.SellPrice</td>
-                <td>@(Model.SellPrice - Model.TotalCost)</td>
+                <td>@Model.TotalCost.EAFormat()</td>
+                <td>@Model.SellPrice.EAFormat()</td>
+                <td>@Model.COM.EAFormat()</td>
             </tr>
             <tr>
                 <th>Note</th>

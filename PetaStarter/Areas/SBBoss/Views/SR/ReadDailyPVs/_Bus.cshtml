@@ -44,12 +44,13 @@
                 <td>@Model.Departure.EAFormat(true)</td>
                 <td>@((BookingTypeEnum)Model.CarType)</td>
                 <td>@Model.TicketNo</td>
-                <td align="right">@Model.Cost</td>
-                <td align="right">@Model.AddCost</td>
+                <td align="right">@Model.Cost.EAFormat()</td>
+                <td align="right">@Model.AddCost.EAFormat()</td>
                 <td>@Model.AddDetl</td>
-                <td align="right">@Model.TotalCost</td>
-                <td align="right">@Model.SellPrice</td>
+             <td>@Model.TotalCost.EAFormat() </td>
+                <td>@Model.SellPrice.EAFormat() </td>
                 <td>@(Model.SellPrice - Model.TotalCost)</td>
+                <td>@Model.COM.EAFormat()</td>
             </tr>
             <tr>
                 <th>Note</th>

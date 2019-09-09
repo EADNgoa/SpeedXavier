@@ -13,10 +13,8 @@
                     <th>Agent</th>
                     <th>On Date</th>
                     <th>Vehicle Qty</th>
-                    <th>From Where</th>
-                    <th>Picup Point</th>
-                    <th>To Where</th>
-                    <th>Drop Point</th>
+                    <th>From & To</th>
+                    <th>Pickup & Drop Point</th>
                     <th>Driver Name</th>
                     <th>Car</th>
                     <th>Rate Basis</th>
@@ -36,19 +34,17 @@
                 <td>@Model.ContactName @Model.Agency @Model.PhoneNo</td>
                 <td>@Model.Fdate.EAFormat()</td>
                 <td align="right">@Model.NoOfVehicles</td>
-                <td>@(Model.FromLoc.ToUpper())</td>
-                <td>@Model.PickUpPoint</td>
-                <td>@(Model.ToLoc.ToUpper())</td>
-                <td>@Model.DropPoint</td>
-                <th>@Model.DriverName @Model.Contact</th>
+                <td>@(Model.FromLoc.ToUpper()) & @(Model.ToLoc.ToUpper())  </td>
+                <td>@(Model.PickUpPoint) & @(Model.DropPoint)</td>
+                <td>@Model.DriverName @Model.Contact</td>
                 <td>@((CarTypeEnum)Model.cartype)</td>
                 <td>@Model.RateBasis</td>
                 <td>@Model.HasAc</td>
                 <td>@Model.HasCarrier</td>
                 <td>@Model.PayTo</td>
-                <td>@Model.TotalCost</td>
-                <td>@Model.SellPrice</td>
-                <td>@(Model.SellPrice - Model.TotalCost)</td>
+                <td>@Model.TotalCost.EAFormat() </td>
+                <td>@Model.SellPrice.EAFormat() </td>
+                <td>@Model.COM.EAFormat()</td>
             </tr>
             <tr>
                 <th>Note</th>

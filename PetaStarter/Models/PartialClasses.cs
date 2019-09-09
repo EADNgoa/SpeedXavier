@@ -78,6 +78,7 @@ namespace Speedbird
         public string SuppConfNo { get; set; }
         public string ContractNo { get; set; }
         public abstract decimal TotalCost { get; }
+        public abstract decimal COM { get; }
         public decimal Tax { get; set; }
         public decimal ECommision { get; set; }
         public decimal SellPrice { get; set; }
@@ -102,6 +103,7 @@ namespace Speedbird
         public decimal AddCost { get; set; }
         public string AddDtl { get; set; }
         public override decimal TotalCost { get { return Cost + AddCost + NetCost; } }
+        public override decimal COM { get { return SellPrice - TotalCost; } }
     }
 
     public class Visavw : SupplierInfo
@@ -120,6 +122,7 @@ namespace Speedbird
         public string VisaCountry { get; set; }
         public decimal ExtraServiceCost { get; set; }
         public override decimal TotalCost { get { return Cost + ExtraServiceCost; } }
+        public override decimal COM { get { return SellPrice - TotalCost; } }
     }
 
     
@@ -134,6 +137,7 @@ namespace Speedbird
         public DateTime? ValidTo { get; set; }
         public decimal Cost { get; set; }
         public override decimal TotalCost { get { return Cost; } }
+        public override decimal COM { get { return SellPrice - TotalCost; } }
     }
 
     public class Cruisevw : SupplierInfo
@@ -155,6 +159,7 @@ namespace Speedbird
         public decimal Cost { get; set; }
         public string CruiseName { get; set; }
         public override decimal TotalCost { get { return Cost; } }
+        public override decimal COM { get { return SellPrice - TotalCost; } }
     }
 
 
@@ -177,6 +182,7 @@ namespace Speedbird
         public decimal FullCost { get; set; }
         public string AddDetl { get; set; }
         public override decimal TotalCost { get { return Cost + AddCost; } }
+        public override decimal COM { get { return SellPrice - TotalCost; } }
     }
 
     public class Railvw : SupplierInfo
@@ -198,6 +204,7 @@ namespace Speedbird
         public decimal AddCost { get; set; }
         public string AddDetl { get; set; }
         public override decimal TotalCost { get { return Cost + AddCost; } }
+        public override decimal COM { get { return SellPrice - TotalCost; } }
     }
 
 
@@ -219,6 +226,7 @@ namespace Speedbird
         public int NoExtraBeds { get; set; }
         public string PayTo { get; set; }
         public override decimal TotalCost { get { return Cost; } }
+        public override decimal COM { get { return SellPrice - TotalCost; } }
     }
 
     public class TransferServiceView : SupplierInfo
@@ -241,6 +249,7 @@ namespace Speedbird
         public int NoOfVehicles { get; set; }
         public decimal VehicleCost { get; set; }
         public override decimal TotalCost { get { return Cost + VehicleCost; } }
+        public override decimal COM { get { return SellPrice - TotalCost; } }
     }
 
     public class AccomodationServiceView : SupplierInfo
@@ -269,6 +278,7 @@ namespace Speedbird
         public int ExtraServiceCost { get; set; }
         public int EBCostPNight { get; set; }
         public override decimal TotalCost { get { return EBCostPNight + DinnerCost + LunchCost + BFCost ; } }
+        public override decimal COM { get { return SellPrice - TotalCost; } }
     }
 
         public class SightseeingServiceView : SupplierInfo
@@ -292,6 +302,7 @@ namespace Speedbird
         public bool MealIncluded { get; set; }
         public int GuideLanguageName { get; set; }
         public override decimal TotalCost { get { return (CostPerCar * NoOfCars) + (AdultCost * AdultNo) + (ChildCost * ChildNo); } }
+        public override decimal COM { get { return SellPrice - TotalCost; } }
     }
 
     public class PassportView : SupplierInfo
@@ -302,6 +313,7 @@ namespace Speedbird
         public decimal Cost { get; set; }
         public string Heritage { get; set; }
         public override decimal TotalCost { get { return Cost; } }
+        public override decimal COM { get { return SellPrice - TotalCost; } }
     }
 
     public class FlightServiceView : SupplierInfo
@@ -326,6 +338,7 @@ namespace Speedbird
         public string Extra {get; set; } 
         public string ExtraDetails {get; set; }         
         public override decimal TotalCost { get { return Cost; } }
+        public override decimal COM { get { return SellPrice - TotalCost; } }
     }
 
     //class daily services
@@ -360,6 +373,7 @@ namespace Speedbird
         public string Contact { get; set; }
         public string Id { get; set; }
         public string Agency { get; set; }
+        public override decimal COM { get { return SellPrice - TotalCost; } }
     }
 
     public class VisaDaily : SupplierInfo
@@ -389,6 +403,7 @@ namespace Speedbird
         public string Contact { get; set; }
         public string Id { get; set; }
         public string Agency { get; set; }
+        public override decimal COM { get { return SellPrice - TotalCost; } }
     }
 
 
@@ -415,6 +430,7 @@ namespace Speedbird
         public string Contact { get; set; }
         public string Id { get; set; }
         public string Agency { get; set; }
+        public override decimal COM { get { return SellPrice - TotalCost; } }
     }
 
     public class CruiseDaily : SupplierInfo
@@ -447,6 +463,7 @@ namespace Speedbird
         public string Contact { get; set; }
         public string Id { get; set; }
         public string Agency { get; set; }
+        public override decimal COM { get { return SellPrice - TotalCost; } }
     }
 
 
@@ -479,6 +496,7 @@ namespace Speedbird
         public string Contact { get; set; }
         public string Id { get; set; }
         public string Agency { get; set; }
+        public override decimal COM { get { return SellPrice - TotalCost; } }
     }
 
     public class RailDaily : SupplierInfo
@@ -511,6 +529,7 @@ namespace Speedbird
         public string Contact { get; set; }
         public string Id { get; set; }
         public string Agency { get; set; }
+        public override decimal COM { get { return SellPrice - TotalCost; } }
     }
 
     public class CarDaily : SupplierInfo
@@ -541,6 +560,8 @@ namespace Speedbird
         public string Contact { get; set; }
         public string Id { get; set; }
         public string Agency { get; set; }
+        public override decimal COM { get { return SellPrice - TotalCost; } }
+        public decimal NetRate { get {return Cost * Qty * NoExtraBeds; } }
     }
 
     public class TransferServiceDaily : SupplierInfo
@@ -574,6 +595,7 @@ namespace Speedbird
         public string Contact { get; set; }
         public string Id { get; set; }
         public string Agency { get; set; }
+        public override decimal COM { get { return SellPrice - TotalCost; } }
     }
 
     public class AccomodationServiceDaily : SupplierInfo
@@ -612,6 +634,7 @@ namespace Speedbird
         public string Contact { get; set; }
         public string Id { get; set; }
         public string Agency { get; set; }
+        public override decimal COM { get { return SellPrice - TotalCost; } }
     }
 
     public class SightseeingServiceViewDaily : SupplierInfo
@@ -645,6 +668,7 @@ namespace Speedbird
         public string Contact { get; set; }
         public string Id { get; set; }
         public string Agency { get; set; }
+        public override decimal COM { get { return SellPrice - TotalCost; } }
     }
 
     public class PassportDaily : SupplierInfo
@@ -666,6 +690,7 @@ namespace Speedbird
         public string Contact { get; set; }
         public string Id { get; set; }
         public string Agency { get; set; }
+        public override decimal COM { get { return SellPrice - TotalCost; } }
     }
 
     public class FlightServiceDaily : SupplierInfo
@@ -700,6 +725,7 @@ namespace Speedbird
         public string Contact { get; set; }
         public string Id { get; set; }
         public string Agency { get; set; }
+        public override decimal COM { get { return SellPrice - TotalCost; } }
     }
 
 
