@@ -232,6 +232,7 @@ namespace Speedbird
     public class TransferServiceView : SupplierInfo
     {
         public int cartype { get; set; }
+        public DateTime PickupTime { get; set; }
         public DateTime? serviceDate { get; set; }
         public decimal Cost { get; set; }
         public string DriverName { get; set; }
@@ -298,6 +299,7 @@ namespace Speedbird
         public int AdultCost { get; set; }
         public int ChildCost { get; set; }
         public DateTime TourDate { get; set; }
+        public DateTime PickupTime { get; set; }
         public int CarType { get; set; }
         public bool MealIncluded { get; set; }
         public int GuideLanguageName { get; set; }

@@ -11,12 +11,13 @@
             <th>Car Qty     </th>
             <th>From where  </th>
             <th>Pickup Pt   </th>
+            <th>Pickup Time   </th>
             <th>To where    </th>
             <th>Drop Pt     </th>
             <th>Car type    </th>
             <th>Rate Basis  </th>
             <th>Has AC?     </th>
-            <th>Has Carrier?</th>            
+            <th>Has Carrier?</th>
             <th>Pay To    </th>
             <th>Cost      </th>
             <th>Sell Price</th>
@@ -29,6 +30,7 @@
             <td>@Html.EANumberForP(m => m.Qty, "No. of Vehicles")</td>
             <td>@Html.EATextForP(m => m.FromLoc, "From Where")                                                                                          </td>
             <td>@Html.EATextForP(m => m.PickUpPoint)                                                                                                    </td>
+            <td>@Html.EADateTimeForP(m => m.Tdate,"Pickuptime")</td>
             <td>@Html.EATextForP(m => m.ToLoc, "To Where")                                                                                              </td>
             <td>@Html.EATextForP(m => m.DropPoint)                                                                                                      </td>
             <td>@Html.EASelectListForP(m => m.CarType, "Vehicle Type")                                                                                  </td>
@@ -152,7 +154,8 @@
                 showButtonPanel: true,
                 changeMonth: true,
                 changeYear: true,
-                timeFormat: "HH:mm:ss:tt"
+                timeFormat: "hh:mm:ss tt",
+
             });
 
             //Disable the browsers default date picker
