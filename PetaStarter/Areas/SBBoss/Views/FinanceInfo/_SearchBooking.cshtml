@@ -1,0 +1,258 @@
+﻿@if (ViewBag.Check != null)
+{
+    @Html.Hidden("check", (int)ViewBag.check)
+    @Html.Hidden("PaymentID", (int)ViewBag.DRPDID)
+
+
+}
+
+
+<table class="table table-striped">
+    <thead></thead>
+    @if (ViewBag.Reciepts != null)
+    {
+        <tr class="bg-info rounded">
+            <th style="float:right">Enter Customer Name:</th>
+            <th>
+                @Html.Editor("CustName", new { htmlAttributes = new { @class = "form-control " } })
+            </th>
+            <th style="float:right">Enter Agent Name:</th>
+
+            <th>
+                @Html.Editor("AgentName", new { htmlAttributes = new { @class = "form-control" } })
+
+            </th>
+            <th class="bg-white"><b>Amount Left:</b> <u>@ViewBag.TotAmt</u></th>
+        </tr>
+    }
+    else if (ViewBag.Payments != null)
+    {
+        <tr class="bg-info rounded">
+            <th style="float:right">Enter Supplier Name:</th>
+            <th>
+                <input type="text" id="SupplierName" name="SupplierName" style="color:black;" data-autocomplete-idholder="#SupplierID" value="" data-autocombo-url="@Url.Action("AutoCompleteSup")" class="form-control" />
+            </th>
+
+            <th class="bg-white"><b>Amount Left:</b> <u>@ViewBag.TotAmt</u></th>
+        </tr>
+    }
+    else if (ViewBag.DReciepts != null)
+    {
+        <tr class="bg-info rounded">
+            <td style="float:right">Enter Driver Name:</td>
+            <th>
+                @Html.Editor("DriverName", new { htmlAttributes = new { @class = "form-control" } })
+
+            </th>
+
+            <td class="bg-white"><b>Amount Left:</b> <u>@ViewBag.TotAmt</u></td>
+        </tr>
+    }
+    <tr class="bg-light">
+        <th>
+            Booking No
+        </th>
+        <th>
+            Name
+        </th>
+        <th>
+            Total
+        </th>
+        <th>Paid</th>
+        <th>Outstanding</th>
+        <th>
+            Current Payment
+        </th>
+        <th>
+
+        </th>
+    </tr>
+    @foreach (var item in (IEnumerable<Speedbird.SRBooking>)ViewBag.Bookings)
+    {
+        <tr>
+
+            <td>
+                @item.BookingNo
+            </td>
+            <td>
+                @if (item.cName != null)
+                {
+                    @: @item.cName
+                }
+                @if (item.UserName != null)
+                {
+                    @: @item.UserName
+                }
+            </td>
+            <td>@item.OA</td>
+            <td>@item.PaidAmt</td>
+            <td>
+                @(item.OA - item.PaidAmt )
+            </td>
+            <td>
+                <input name="Amt" type="text" class="form-control" data-save="@item.SRID" />
+            </td>
+            <td>
+                <div class="form-row">
+
+
+                    <div class="input-group col mb-3 fa-pull-right">
+                        <button type="button" class="btn btn-primary SavePayment" name="SavePayment" data-srid="@item.SRID" data-oa="@item.OA">Save</button>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    }
+
+</table>
+
+@if (ViewBag.Reciepts != null)
+{
+    <script>
+        $("#CustName,#AgentName").keyup(function () {
+
+            var cn = $('#CustName').val();
+            var an = $('#AgentName').val();
+
+
+            if (cn.length >= 3 || an.length >= 3) {
+                $('.searchBK').html(" ");
+                $('.searchBK').load("/SBBoss/FinanceInfo/Reciept?CustName=" + cn + "&&AgentName=" + an + "&&IsSearch=" + true + "&&Id=" + $("#RPDID").val());
+            }
+        });
+
+
+    </script>
+
+
+    <script>
+        $('.SavePayment').click(function () {
+            var srid = $(this).data('srid');
+            var oa = $(this).data('oa');
+            var ManAmt = $('input[data-save="' + srid + '"]').val();
+            var ta = $("#Amount").val();
+            $("#SRID").val(srid);
+            $("#OA").val(oa);
+            $("#ManAmt").val(ManAmt);
+            $("#TotalAmt").val(ta);
+
+            var detFrm = $('#AssignPay');
+
+        if (typeof(detFrm[0]) == 'object')
+        {
+
+            $.ajax({
+
+        url: '@Url.Action("Reciept", "FinanceInfo")',
+        type: 'post',
+        data: $(detFrm).serialize(),
+        success: function () {
+
+                        window.location.assign('@Url.Action("Reciept",new { id = (int)ViewBag.RPDID })');
+                }
+            });
+        }
+    });
+    </script>
+}
+
+@if (ViewBag.Payments != null)
+{
+    <script>
+        $("#SupplierName").change(function () {
+
+            var sid = $('#SupplierID').val();
+
+
+            $('.searchBK').html(" ");
+            $('.searchBK').load("/SBBoss/FinanceInfo/Payment?SupplierID=" + sid + "&&IsSearch=" + true + "&&Id=" + $("#RPDID").val());
+
+        });
+
+
+    </script>
+
+
+
+
+    <script>
+        $('.SavePayment').click(function () {
+            var srid = $(this).data('srid');
+            var oa = $(this).data('oa');
+            var ManAmt = $('input[data-save="' + srid + '"]').val();
+            var ta = $("#Amount").val();
+            $("#SRID").val(srid);
+            $("#OA").val(oa);
+            $("#ManAmt").val(ManAmt);
+            $("#TotalAmt").val(ta);
+
+            var detFrm = $('#AssignPay');
+
+        if (typeof(detFrm[0]) == 'object')
+        {
+
+            $.ajax({
+
+        url: '@Url.Action("Payment", "FinanceInfo")',
+        type: 'post',
+        data: $(detFrm).serialize(),
+        success: function () {
+
+                        window.location.assign('@Url.Action("Payment",new { id = (int)ViewBag.RPDID })');
+                }
+            });
+        }
+    });
+    </script>
+}
+
+@if (ViewBag.DReciepts != null)
+{
+    <script>
+        $("#DriverName").keyup(function () {
+
+            var dn = $('#DriverName').val();
+
+
+            if (dn.length >= 3) {
+                $('.searchBK').html("");
+                $('.searchBK').load("/SBBoss/FinanceInfo/DReciept?DriverName=" + dn + "&&IsSearch=" + true + "&&Id=" + $("#PaymentID").val() + "&&check=" + $('#check').val());
+            }
+        });
+
+
+    </script>
+
+
+
+
+    <script>
+        $('.SavePayment').click(function () {
+            var srid = $(this).data('srid');
+            var oa = $(this).data('oa');
+            var ManAmt = $('input[data-save="' + srid + '"]').val();
+            var ta = $("#Amount").val();
+            $("#SRID").val(srid);
+            $("#OA").val(oa);
+            $("#ManAmt").val(ManAmt);
+            $("#TotalAmt").val(ta);
+
+            var detFrm = $('#AssignPay');
+
+        if (typeof(detFrm[0]) == 'object')
+        {
+
+            $.ajax({
+
+        url: '@Url.Action("DReciept", "FinanceInfo")',
+        type: 'post',
+        data: $(detFrm).serialize(),
+        success: function () {
+
+                        window.location.assign('@Url.Action("DReciept",new {check=(int)ViewBag.check, id=(int)ViewBag.DRPDID })');
+                }
+            });
+        }
+    });
+    </script>
+}

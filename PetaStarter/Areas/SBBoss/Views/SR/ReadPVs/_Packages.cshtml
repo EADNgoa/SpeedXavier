@@ -36,7 +36,7 @@
                 <td>@Model.NameofTour</td>
                 <td>@Model.IsReturn</td>
                 <td>@Model.HotelCat</td>
-                <td align="right">@Model.Cost</td>
+                <td align="right">@Model.DinnerCost</td>
                 <td>@Model.AddDtl</td>
                 <td align="right">@Model.AddCost</td>
                 <td align="right">@Model.NetCost</td>
@@ -48,7 +48,10 @@
         @{Html.RenderPartial("ReadPVs/_Fin", Model); }
     </div>
 </div>
-
+@if (Model.IsCancelled == true)
+{
+    <p class="alert alert-primary">This Booking is Cancelled</p>
+}
 @*@foreach (var item in ViewBag.ufs)
     {
         <span class="badge badge-secondary"><a target="_blank" style="color:white !important;" href="/Images/@item.Path">@item.UploadName</a> &nbsp; <a style="color:#fe7575 !important;" href="@Url.Action("Delete","SR",new {pid=item.SRUID , id=item.SRID})">X</a></span>

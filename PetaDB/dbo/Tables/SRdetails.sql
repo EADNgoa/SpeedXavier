@@ -50,9 +50,12 @@
     [EBCostPNight] DECIMAL(10, 2) NULL, 
     [Name] VARCHAR(50) NULL, 
     [AdditionalDetails] VARCHAR(50) NULL, 
+    [PaymentID] INT NULL, 
+    [IsCancelled] BIT NULL, 
     CONSTRAINT [FK_SRdetails_ToSR] FOREIGN KEY ([SRID]) REFERENCES [ServiceRequest]([SRID]), 
     CONSTRAINT [FK_SRdetails_ToSupplier] FOREIGN KEY ([SupplierID]) REFERENCES [Supplier]([SupplierID]), 
     CONSTRAINT [FK_SRdetails_ToGuideLanguage] FOREIGN KEY ([GuideLanguageID]) REFERENCES [GuideLanguage]([GuideLanguageID]), 
 	CONSTRAINT [FK_SRdetails_OptionType] FOREIGN KEY ([OptionTypeID]) REFERENCES [OptionType]([OptionTypeID]), 
-    CONSTRAINT [FK_SRdetails_ToDriver] FOREIGN KEY ([DriverID]) REFERENCES [Driver]([DriverID])
+    CONSTRAINT [FK_SRdetails_ToDriver] FOREIGN KEY ([DriverID]) REFERENCES [Driver]([DriverID]), 
+    CONSTRAINT [FK_SRdetails_Payments] FOREIGN KEY ([PaymentID]) REFERENCES [Payments]([PaymentID])
 )

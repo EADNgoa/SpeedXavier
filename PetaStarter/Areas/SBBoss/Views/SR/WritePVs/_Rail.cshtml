@@ -21,7 +21,6 @@
             <th>Ticket Cost</th>
             <th>Additional Cost</th>
             <th>Additional Details</th>
-            <th>Total Cost</th>
             <th>Sell Price</th>
         </tr>
     </thead>
@@ -38,10 +37,9 @@
         <td>@Html.EATextForP(m => m.Heritage, "Class")</td>
         <td>@Html.EASelectListForP(m => m.CarType, "Booking Type")</td>
         <td>@Html.EANumberForP(m => m.AdultNo, "Ticket No")</td>
-        <td>@Html.EATextForP(m => m.Cost, "Ticket Cost")</td>
-        <td>@Html.EANumberForP(m => m.LunchCost, "Additional Cost")</td>
+        <td>@Html.EATextForP(m => m.BFCost, "Ticket Cost")</td>
+        <td>@Html.EATextForP(m => m.LunchCost, "Additional Cost")</td>
         <td>@Html.EATextForP(m => m.AdditionalDetails, "Additional Details")</td>
-        <td>@Html.EATextForP(m => m.BFCost, "Total Cost")</td>
         <td> @Html.EANumberForP(m => m.SellPrice)</td>
     </tr>
 </table>

@@ -26,6 +26,20 @@ namespace Speedbird
         public string Phone { get; set; }
     }
 
+    public class Paymentdetailvw
+    {
+        public string PaxName { get; set; }
+        public int DriverID { get; set; }
+        public string DriverName { get; set; }
+        public int SRDID { get; set; }
+        public string BookingNo { get; set; }
+        public DateTime Fdate { get; set; }
+        public decimal SellPrice { get; set; }
+        public decimal Cost { get; set; }
+        public string PayTo { get; set; }
+    }
+
+
     [Serializable()]
     [XmlRoot("REFUND")]
     public class REFUND
@@ -98,12 +112,13 @@ namespace Speedbird
         public decimal NoOfDays { get; set; }
         public string HotelCat { get; set; }
         public int CarType { get; set; }
+        public decimal DinnerCost { get; set; }
         public decimal Cost { get; set; }
         public decimal NetCost { get; set; }
         public decimal AddCost { get; set; }
         public string AddDtl { get; set; }
-        public override decimal TotalCost { get { return Cost + AddCost + NetCost; } }
-        public override decimal COM { get { return SellPrice - TotalCost; } }
+        public bool IsCancelled { get; set; }
+        public override decimal TotalCost { get { return Cost; } }
     }
 
     public class Visavw : SupplierInfo
@@ -121,6 +136,7 @@ namespace Speedbird
         public string OptionTypeName { get; set; }
         public string VisaCountry { get; set; }
         public decimal ExtraServiceCost { get; set; }
+        public bool IsCancelled { get; set; }
         public override decimal TotalCost { get { return Cost + ExtraServiceCost; } }
         public override decimal COM { get { return SellPrice - TotalCost; } }
     }
@@ -136,6 +152,7 @@ namespace Speedbird
         public DateTime? ValidFrom { get; set; }
         public DateTime? ValidTo { get; set; }
         public decimal Cost { get; set; }
+        public bool IsCancelled { get; set; }
         public override decimal TotalCost { get { return Cost; } }
         public override decimal COM { get { return SellPrice - TotalCost; } }
     }
@@ -157,7 +174,9 @@ namespace Speedbird
         public int Nights { get; set; }
         public string MealPlan { get; set; }
         public decimal Cost { get; set; }
+        public int BFCost { get; set; }
         public string CruiseName { get; set; }
+        public bool IsCancelled { get; set; }
         public override decimal TotalCost { get { return Cost; } }
         public override decimal COM { get { return SellPrice - TotalCost; } }
     }
@@ -178,11 +197,12 @@ namespace Speedbird
         public int CarType { get; set; }
         public int TicketNo { get; set; }
         public decimal Cost { get; set; }
+        public decimal EBCostPNight { get; set; }
         public decimal AddCost { get; set; }
         public decimal FullCost { get; set; }
         public string AddDetl { get; set; }
-        public override decimal TotalCost { get { return Cost + AddCost; } }
-        public override decimal COM { get { return SellPrice - TotalCost; } }
+        public bool IsCancelled { get; set; }
+        public override decimal TotalCost { get { return Cost; } }
     }
 
     public class Railvw : SupplierInfo
@@ -201,10 +221,11 @@ namespace Speedbird
         public int CarType { get; set; }
         public int TicketNo { get; set; }
         public decimal Cost { get; set; }
+        public int BFCost { get; set; }
         public decimal AddCost { get; set; }
         public string AddDetl { get; set; }
-        public override decimal TotalCost { get { return Cost + AddCost; } }
-        public override decimal COM { get { return SellPrice - TotalCost; } }
+        public bool IsCancelled { get; set; }
+        public override decimal TotalCost { get { return Cost; } }
     }
 
 
@@ -223,8 +244,10 @@ namespace Speedbird
         public string ToLoc { get; set; }
         public int CarType { get; set; }
         public decimal Cost { get; set; }
+        public int LunchCost { get; set; }
         public int NoExtraBeds { get; set; }
         public string PayTo { get; set; }
+        public bool IsCancelled { get; set; }
         public override decimal TotalCost { get { return Cost; } }
         public override decimal COM { get { return SellPrice - TotalCost; } }
     }
@@ -249,6 +272,7 @@ namespace Speedbird
         public string PickUpPoint { get; set; }
         public int NoOfVehicles { get; set; }
         public decimal VehicleCost { get; set; }
+        public bool IsCancelled { get; set; }
         public override decimal TotalCost { get { return Cost + VehicleCost; } }
         public override decimal COM { get { return SellPrice - TotalCost; } }
     }
@@ -278,8 +302,8 @@ namespace Speedbird
         public int NoExtraService { get; set; }
         public int ExtraServiceCost { get; set; }
         public int EBCostPNight { get; set; }
-        public override decimal TotalCost { get { return EBCostPNight + DinnerCost + LunchCost + BFCost ; } }
-        public override decimal COM { get { return SellPrice - TotalCost; } }
+        public bool IsCancelled { get; set; }
+        public override decimal TotalCost { get { return EBCostPNight + DinnerCost + LunchCost + BFCost + ExtraServiceCost ; } }
     }
 
         public class SightseeingServiceView : SupplierInfo
@@ -303,6 +327,7 @@ namespace Speedbird
         public int CarType { get; set; }
         public bool MealIncluded { get; set; }
         public int GuideLanguageName { get; set; }
+        public bool IsCancelled { get; set; }
         public override decimal TotalCost { get { return (CostPerCar * NoOfCars) + (AdultCost * AdultNo) + (ChildCost * ChildNo); } }
         public override decimal COM { get { return SellPrice - TotalCost; } }
     }
@@ -314,6 +339,7 @@ namespace Speedbird
         public string Nationality { get; set; }
         public decimal Cost { get; set; }
         public string Heritage { get; set; }
+        public bool IsCancelled { get; set; }
         public override decimal TotalCost { get { return Cost; } }
         public override decimal COM { get { return SellPrice - TotalCost; } }
     }
@@ -338,7 +364,8 @@ namespace Speedbird
         public decimal Cost {get; set; } 
         public string Airline {get; set; } 
         public string Extra {get; set; } 
-        public string ExtraDetails {get; set; }         
+        public string ExtraDetails {get; set; }
+        public bool IsCancelled { get; set; }
         public override decimal TotalCost { get { return Cost; } }
         public override decimal COM { get { return SellPrice - TotalCost; } }
     }
@@ -749,6 +776,7 @@ namespace Speedbird
         public string BkName { get; set; }
         public string BkIFSC { get; set; }
         public string BkAddress { get; set; }
+        public decimal CreditAmt { get; set; }
     }
     public class PCdetailDets
     {
@@ -1472,6 +1500,14 @@ namespace Speedbird
         Internet_Banking,
         Card
     }
+
+    public enum PayToEnum
+    {
+        Driver,
+        Supplier,
+        Agent
+    }
+
 
     public class EAAuthorizeAttribute : AuthorizeAttribute
     {

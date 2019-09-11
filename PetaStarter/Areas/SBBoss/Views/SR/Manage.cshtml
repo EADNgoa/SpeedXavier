@@ -51,7 +51,10 @@
 
     <div class="card-body">
         <span>@ViewBag.Messege</span>
-
+        @if(ViewBag.NCredit != null)
+        {
+            <span id="ncredit">@ViewBag.NCredit</span>
+        }
         <div id="TabContent">
             @if (ViewBag.SRID != null)//Edit mode
             {
@@ -74,6 +77,10 @@
                     <h3>Services </h3><br />@if (ViewBag.Response != null)
                     {
                         <span class="alert alert-primary">@ViewBag.Response</span>
+                    }
+                    @if (ViewBag.SResponse != null)
+                    {
+                        <span class="alert alert-primary">@ViewBag.SResponse</span>
                     }
                     @Html.Action("SRdetails", "SR", new { id = (int)ViewBag.SRID, EID = (int)ViewBag.EID })
                 </div>

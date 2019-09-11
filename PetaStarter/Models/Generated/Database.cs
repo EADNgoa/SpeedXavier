@@ -154,6 +154,7 @@ namespace Speedbird
 		[Column] public string BkIFSC { get; set; }
 		[Column] public string BkAddress { get; set; }
 		[Column] public string State { get; set; }
+		[Column] public decimal? CreditAmt { get; set; }
 	}
     
 	[TableName("dbo.AgentDiscount")]
@@ -893,6 +894,24 @@ namespace Speedbird
 		[Column] public int? ServiceTypeID { get; set; }
 	}
     
+	[TableName("dbo.Payments")]
+	[PrimaryKey("PaymentID")]
+	[ExplicitColumns]
+    public partial class Payment  
+    {
+		[Column] public int PaymentID { get; set; }
+		[Column] public string ChequeNo { get; set; }
+		[Column] public DateTime? TDate { get; set; }
+		[Column] public decimal? Amount { get; set; }
+		[Column] public string TransactionNo { get; set; }
+		[Column] public string Note { get; set; }
+		[Column] public int? Type { get; set; }
+		[Column] public int? DriverID { get; set; }
+		[Column] public int? BankID { get; set; }
+		[Column] public string AgentId { get; set; }
+		[Column] public int? SupplierID { get; set; }
+	}
+    
 	[TableName("dbo.PCdetails")]
 	[PrimaryKey("PCDID")]
 	[ExplicitColumns]
@@ -976,6 +995,18 @@ namespace Speedbird
 		[Column] public int RatingID { get; set; }
 		[Column] public int? Value { get; set; }
 		[Column] public int? SRDID { get; set; }
+		[Column] public string Note { get; set; }
+	}
+    
+	[TableName("dbo.Refunds")]
+	[PrimaryKey("RefundId")]
+	[ExplicitColumns]
+    public partial class Refund  
+    {
+		[Column] public int RefundId { get; set; }
+		[Column] public int? SRDID { get; set; }
+		[Column] public decimal? ProdCanxCost { get; set; }
+		[Column] public decimal? SBCanxCost { get; set; }
 		[Column] public string Note { get; set; }
 	}
     
@@ -1165,6 +1196,8 @@ namespace Speedbird
 		[Column] public decimal? EBCostPNight { get; set; }
 		[Column] public string Name { get; set; }
 		[Column] public string AdditionalDetails { get; set; }
+		[Column] public int? PaymentID { get; set; }
+		[Column] public bool? IsCancelled { get; set; }
 	}
     
 	[TableName("dbo.SRlogs")]

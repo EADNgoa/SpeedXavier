@@ -1,0 +1,64 @@
+﻿@model Speedbird.Models.BKPayVM
+@if (ViewBag.Mode == (int)Speedbird.PayToEnum.Driver)
+{
+    <tr>
+        @Html.Hidden("SRDID", Model.SRDID)
+        @Html.Hidden("mode", (int?)ViewBag.Mode)
+        <td>@Model.BookingNo</td>
+        <td>@Model.PaxName</td>
+        <td>@Model.Fdate</td>
+        <td>@Model.Cost</td>
+        <td>@Model.SellPrice</td>
+        @if (Model.PaymentID == null)
+        {
+            <td class="rtotal">@Html.CheckBoxFor(model => model.IsSelected, new { @class = "checktotal", @value = (Model.SellPrice - Model.Cost) })</td>
+        }
+        else
+        {
+            <td></td>
+        }
+    </tr>
+}
+@if (ViewBag.Mode == (int)Speedbird.PayToEnum.Supplier)
+{
+    <tr>
+        @Html.Hidden("SRDID", Model.SRDID)
+        @Html.Hidden("mode", (int?)ViewBag.Mode)
+        <td>@Model.BookingNo</td>
+        <td>@Model.PaxName</td>
+        <td>@Model.Fdate</td>
+        <td>@Model.Cost</td>
+        <td>@Model.SellPrice</td>
+        @if (Model.PaymentID == null)
+        {
+            <td class="rtotal">@Html.CheckBoxFor(model => model.IsSelected, new { @class = "checktotal", @value = (Model.Cost - Model.ProdCanxCost) })</td>
+        }
+        else
+        {
+            <td></td>
+        }
+    </tr>
+}
+
+@if (ViewBag.Mode == (int)Speedbird.PayToEnum.Agent)
+{
+    <tr>
+        @Html.Hidden("SRDID", Model.SRDID)
+        @Html.Hidden("mode", (int?)ViewBag.Mode)
+        <td>@Model.BookingNo</td>
+        <td>@Model.PaxName</td>
+        <td>@Model.Fdate</td>
+        <td>@Model.Cost</td>
+        <td>@Model.SellPrice</td>
+        @if (Model.PaymentID == null)
+        {
+            <td class="rtotal">@Html.CheckBoxFor(model => model.IsSelected, new { @class = "checktotal", @value = (Model.SellPrice - Model.SBCanxCost - Model.ProdCanxCost) })</td>
+        }
+        else
+        {
+            <td></td>
+        }
+    </tr>
+}
+
+

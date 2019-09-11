@@ -29,6 +29,7 @@ using System.Text.RegularExpressions;
 using System.Text;
 using System.Threading;
 using System;
+using Speedbird.Models;
 
 namespace PetaPoco
 {
@@ -6396,6 +6397,7 @@ namespace PetaPoco
 
         private string _sql;
         private string _sqlFinal;
+        private IEnumerable<BKPayVM> leftBkPayVm;
 
         /// <summary>
         ///     Instantiate a new SQL Builder object.  Weirdly implemented as a property but makes
@@ -6447,6 +6449,11 @@ namespace PetaPoco
         {
             _sql = sql;
             _args = args;
+        }
+
+        public Sql(IEnumerable<BKPayVM> leftBkPayVm)
+        {
+            this.leftBkPayVm = leftBkPayVm;
         }
 
         private void Build()
