@@ -26,7 +26,6 @@
                     <th>CP</th>
                     <th>Sell Price</th>
                     <th>COM</th>
-                    <th>Done By</th>
                 </tr>
             </thead>
             <tr>
@@ -34,7 +33,7 @@
                 <td>@Model.TransDate.EAFormat(withTime: false)</td>
                 <td>@Model.PaxName</td>
                 <td>@Model.PaxNo</td>
-                <td>@Model.ContactName</td>
+                <td>@Model.ContactName @Model.Agency @Model.PhoneNo</td>
                 <td>@((CarTypeEnum)Model.CarType)</td>
                 <td>@Model.Model</td>
                 <td>@Model.Fdate.EAFormat()</td>
@@ -43,22 +42,20 @@
                 <td>@Model.PickUpPoint</td>
                 <td>@Model.ToLoc</td>
                 <td>@Model.DropPoint</td>
-                <td align="right">@Model.Cost</td>
+                <td align="right">@Model.Cost.EAFormat()</td>
                 <td>@Model.Qty</td>
                 <td>@Model.NoExtraBeds</td>
-                <td>@(Model.Cost * Model.Qty * Model.NoExtraBeds)</td>
+                <td>@Model.NetRate.ToString("0.####")</td>
                 <td>@Model.PayTo</td>
-                <td>@Model.TotalCost</td>
-                <td>@Model.SellPrice</td>
-                <td>@(Model.SellPrice - Model.TotalCost)</td>
-                @if(Model.EnquirySource == (int)EnquirySourceEnum.Corporate_Client)
-                {
-                    <td>@Model.RealName</td>
-                }
-                else if (Model.EnquirySource == (int)EnquirySourceEnum.Web)
-                {
-                    <td>Web</td>
-                }
+                <td>@Model.TotalCost.EAFormat() </td>
+                <td>@Model.SellPrice.EAFormat() </td>
+                <td>@Model.COM.EAFormat()</td>
+            </tr>
+            <tr>
+                <th>Note</th>
+            </tr>
+            <tr>
+                <td>@Model.Event</td>
             </tr>
         </table>
     </div>

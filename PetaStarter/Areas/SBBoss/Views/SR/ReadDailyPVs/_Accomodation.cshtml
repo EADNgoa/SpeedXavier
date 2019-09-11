@@ -5,33 +5,31 @@
 <div class="row">
     <div class="col-12">
         <table class="SRDetsTbl SRDetsFullTable" width="100%">
-            <thead>
-                <tr>
-                    <th>Folder No</th>
-                    <th>Booked On</th>
-                    <th>Pax Name</th>
-                    <th>Pax No</th>
-                    <th>Agent</th>
-                    <th>Hotel</th>
-                    <th>Checkin</th>
-                    <th>Checkout</th>
-                    <th>Room Type</th>
-                    <th>No Of Rooms</th>
-                    <th>Adult</th>
-                    <th>Child</th>
-                    <th>CP</th>
-                    <th>Sellprice</th>
-                    <th>COM</th>
-                    <th>Done By</th>
-                </tr>
 
-            </thead>
+            <tr>
+                <th>Folder No</th>
+                <th>Booked On</th>
+                <th>Pax Name</th>
+                <th>Pax No</th>
+                <th>Agent</th>
+                <th>Hotel</th>
+                <th>Checkin</th>
+                <th>Checkout</th>
+                <th>Room Type</th>
+                <th>No Of Rooms</th>
+                <th>Adult</th>
+                <th>Child</th>
+                <th>CP</th>
+                <th>Sellprice</th>
+                <th>COM</th>
+            </tr>
+
             <tr>
                 <td>@Model.BookingNo</td>
                 <td>@Model.TDate.EAFormat(withTime: false)</td>
                 <td>@Model.PaxName </td>
                 <td>@(Model.AdultNo + Model.ChildNo + Model.InfantNo) </td>
-                <td>@Model.ContactName </td>
+                <td>@Model.ContactName @Model.Agency @Model.PhoneNo</td>
                 <td>@Model.AccomName </td>
                 <td>@Model.checkin.EAFormat() </td>
                 <td>@Model.checkout.EAFormat() </td>
@@ -39,18 +37,16 @@
                 <td>@Model.NoOfRooms </td>
                 <td>@Model.AdultNo </td>
                 <td>@Model.ChildNo </td>
-                <td>@Model.TotalCost</td>
-                <td>@Model.SellPrice</td>
-                <td>@(Model.SellPrice - Model.TotalCost)</td>
-                @if (Model.EnquirySource == (int)EnquirySourceEnum.Corporate_Client)
-                {
-                    <td>@Model.RealName</td>
-                }
-                else if (Model.EnquirySource == (int)EnquirySourceEnum.Web)
-                {
-                    <td>Web</td>
-                }
+                <td>@Model.TotalCost.EAFormat() </td>
+                <td>@Model.SellPrice.EAFormat() </td>
+                <td>@Model.COM.EAFormat()</td>
+            </tr>
+            <tr>
+                <th>Note</th>
+            </tr>
 
+            <tr>
+                <td>@Model.Event</td>
             </tr>
         </table>
     </div>

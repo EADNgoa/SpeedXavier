@@ -24,15 +24,15 @@
                     <th>CP</th>
                     <th>Sell Price</th>
                     <th>COM</th>
-                    <th>Done By</th>
                 </tr>
+
             </thead>
             <tr>
                 <td>@Model.BookingNo</td>
                 <td>@Model.TDate.EAFormat(withTime: false)</td>
                 <td>@Model.PaxName</td>
                 <td>@Model.Passengers</td>
-                <td>@Model.ContactName</td>
+                <td>@Model.ContactName @Model.Agency @Model.PhoneNo</td>
                 <td>@Model.Departuredate.EAFormat()</td>
                 <td>@Model.Cabins</td>
                 <td>@Model.CabinType</td>
@@ -42,19 +42,17 @@
                 <td>@Model.ReturnDate.EAFormat()</td>
                 <td>@(Model.ReturnDate.Subtract(Model.Departuredate).TotalDays)</td>
                 <td>@Model.MealPlan</td>
-                <td align="right">@Model.Cost</td>
+                <td align="right">@Model.Cost.EAFormat()</td>
                 <td>@Model.CruiseName</td>
-                <td>@Model.TotalCost</td>
-                <td>@Model.SellPrice</td>
-                <td>@(Model.SellPrice - Model.TotalCost)</td>
-                @if (Model.EnquirySource == (int)EnquirySourceEnum.Corporate_Client)
-                {
-                    <td>@Model.RealName</td>
-                }
-                else if (Model.EnquirySource == (int)EnquirySourceEnum.Web)
-                {
-                    <td>Web</td>
-                }
+                <td>@Model.TotalCost.EAFormat() </td>
+                <td>@Model.SellPrice.EAFormat() </td>
+                <td>@Model.COM.EAFormat()</td>
+            </tr>
+            <tr>
+                <th>Note</th>
+            </tr>
+            <tr>
+                <td>@Model.Event</td>
             </tr>
         </table>
     </div>
