@@ -9,8 +9,11 @@
                     <th>Pax Name</th>
                     <th>No of Adults</th>
                     <th>No of Kids</th>
+                    <th>Name of Tour</th>
+                    <th>Tour On</th>
                     <th>Half/Full day</th>
                     <th>Pickup From</th>
+                    <th>Pickup Time</th>
                     <th>Pickup At</th>
                     <th>Pickup Time</th>
                     <th>Pvt/Sic</th>
@@ -18,7 +21,6 @@
                     <th>Car Qty</th>
                     <th>Adult Cost</th>
                     <th>Child Cost</th>
-                    <th>Tour On</th>
                     <th>Car Type</th>
                     <th>Meal inc.</th>
                     <th>Inclusions</th>
@@ -28,8 +30,11 @@
                 <td>@Model.PaxName</td>
                 <td align="right">@Model.AdultNo</td>
                 <td align="right">@Model.ChildNo </td>
+                <td>@Model.SightseeingName</td>
+                <td>@Model.TourDate.EAFormat(withTime:false) </td>
                 <td>@Model.OptionTypeName</td>
                 <td>@Model.PickUpPoint</td>
+                <td>@Model.TourDate.EAFormatTime(withTime:true)</td>
                 <td>@Model.PickupLocation </td>
                 <td>@Model.PickupTime.EAFormatTime(withTime: true)</td>
                 <td>@Model.Private_Sic </td>
@@ -37,7 +42,6 @@
                 <td align="right">@Model.NoOfCars </td>
                 <td align="right">@Model.AdultCost </td>
                 <td align="right">@Model.ChildCost </td>
-                <td>@Model.TourDate.EAFormat() </td>
                 <td>@((CarTypeEnum)Model.CarType)</td>
                 <td>@Model.MealIncluded</td>
                 <td>@ViewBag.Inc</td>

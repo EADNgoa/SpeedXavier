@@ -26,7 +26,7 @@
     <tbody>
         <tr>
             <td>@Html.EASelectListP("CustomerId", (IEnumerable<SelectListItem>)ViewBag.CustomerList, "", "Pax Name", (string)ViewBag.SelectedCustomerId)</td>
-            <td>@Html.EADateForP(m => m.Fdate, "Transfer Date")</td>
+            <td>@Html.EADateTimeForP(m => m.Fdate, "Transfer Date")</td>
             <td>@Html.EANumberForP(m => m.Qty, "No. of Vehicles")</td>
             <td>@Html.EATextForP(m => m.FromLoc, "From Where")                                                                                          </td>
             <td>@Html.EATextForP(m => m.PickUpPoint)                                                                                                    </td>
@@ -154,8 +154,8 @@
                 showButtonPanel: true,
                 changeMonth: true,
                 changeYear: true,
-                ampm: true,
                 timeFormat: "hh:mm:ss tt",
+
             });
 
             //Disable the browsers default date picker
