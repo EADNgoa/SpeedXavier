@@ -45,6 +45,7 @@ BEGIN
     INSERT INTO [dbo].[UserFunctions] ([FunctionID], [FunctionName], [Module]) VALUES (40, N'OwnedAsset', N'OwnedAsset')
     INSERT INTO [dbo].[UserFunctions] ([FunctionID], [FunctionName], [Module]) VALUES (41, N'Admin', N'EditComm') ---Edit employee commission
 	INSERT INTO [dbo].[UserFunctions] ([FunctionID], [FunctionName], [Module]) VALUES (42, N'Config', N'Config')
+	INSERT INTO [dbo].[UserFunctions] ([FunctionID], [FunctionName], [Module]) VALUES (43, N'Finance', N'Finance')
 	
 
 

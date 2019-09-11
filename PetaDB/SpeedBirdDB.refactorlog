@@ -777,4 +777,46 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="UserID" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="6cefa5b7-07c0-479e-82b6-342a0d5a532d" ChangeDateTime="08/19/2019 16:03:11">
+    <Property Name="ElementName" Value="[dbo].[Payments].[DRPDID]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Payments]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="PaymentID" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="3747e419-ba85-4013-97e8-25f5531cad68" ChangeDateTime="08/23/2019 08:31:44">
+    <Property Name="ElementName" Value="[dbo].[Payments].[A]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Payments]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="AgentId" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="2757824c-3765-4a2c-99c0-a2a2136aa709" ChangeDateTime="08/24/2019 12:40:06">
+    <Property Name="ElementName" Value="[dbo].[Payments].[Date]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Payments]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="TDate" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="ea3c8b96-ba98-402a-84fd-90e2a95e5bd7" ChangeDateTime="08/30/2019 09:29:48">
+    <Property Name="ElementName" Value="[dbo].[Refunds].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Refunds]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="RefunId" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="ef47072f-eb4b-48a8-a6a0-d8e10ea9c22b" ChangeDateTime="08/30/2019 09:30:15">
+    <Property Name="ElementName" Value="[dbo].[Refunds].[Srdid]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Refunds]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="SRDID" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="d5000f43-9020-487c-8d2c-59e7b8b16db6" ChangeDateTime="08/31/2019 05:48:37">
+    <Property Name="ElementName" Value="[dbo].[Refunds].[RefunId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Refunds]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="RefundId" />
+  </Operation>
 </Operations>
