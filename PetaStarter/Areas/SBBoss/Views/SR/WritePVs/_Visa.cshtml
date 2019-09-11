@@ -16,7 +16,6 @@
             <th>To Date     </th>
             <th>Cost </th>
             <th>Sell Price</th>
-            <th>Total CP </th>
         </tr>
     </thead>
     <tbody>
@@ -31,7 +30,6 @@
             <td> @Html.EADateForP(m => m.Tdate, "To date")                                                                                          </td>
             <td> @Html.EANumberForP(m => m.Cost, "Cost")</td>
             <td>@Html.EANumberForP(m => m.SellPrice)</td>
-            <td> @Html.EANumberForP(m => m.ExtraServiceCost, "Total CP")</td>
 
         </tr>
     </tbody>

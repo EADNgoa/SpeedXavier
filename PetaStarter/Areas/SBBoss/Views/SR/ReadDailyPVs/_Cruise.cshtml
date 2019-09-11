@@ -9,7 +9,7 @@
                     <th>Booked On</th>
                     <th>Pax Name</th>
                     <th>Pax No</th>
-                    <th>Agent</th>
+                    <th>Agent,Agency,Conatct</th>
                     <th>Dept. Date</th>
                     <th>No. of Cabins</th>
                     <th>Cabin type</th>
@@ -31,8 +31,8 @@
                 <td>@Model.BookingNo</td>
                 <td>@Model.TDate.EAFormat(withTime: false)</td>
                 <td>@Model.PaxName</td>
-                <td>@Model.Passengers</td>
-                <td>@Model.ContactName @Model.Agency @Model.PhoneNo</td>
+                <td>@Model.Passengers.EAFormat()</td>
+                <td>@Model.ContactName,@Model.Agency,@Model.PhoneNo</td>
                 <td>@Model.Departuredate.EAFormat()</td>
                 <td>@Model.Cabins</td>
                 <td>@Model.CabinType</td>
@@ -42,11 +42,11 @@
                 <td>@Model.ReturnDate.EAFormat()</td>
                 <td>@(Model.ReturnDate.Subtract(Model.Departuredate).TotalDays)</td>
                 <td>@Model.MealPlan</td>
-                <td align="right">@Model.Cost.EAFormat()</td>
+                <td align="right">@Model.DinnerCost</td>
                 <td>@Model.CruiseName</td>
-                <td>@Model.TotalCost.EAFormat() </td>
-                <td>@Model.SellPrice.EAFormat() </td>
-                <td>@Model.COM.EAFormat()</td>
+                <td align="right">@Model.TotalCost.EAFormat() </td>
+                <td align="right">@Model.SellPrice.EAFormat() </td>
+                <td align="right">@Model.COM.EAFormat()</td>
             </tr>
             <tr>
                 <th>Note</th>
@@ -57,6 +57,8 @@
         </table>
     </div>
 </div>
+<br />
+
 @*@foreach (var item in ViewBag.ufs)
     {
         <span class="badge badge-secondary"><a target="_blank" style="color:white !important;" href="/Images/@item.Path">@item.UploadName</a> &nbsp; <a style="color:#fe7575 !important;" href="@Url.Action("Delete","SR",new {pid=item.SRUID , id=item.SRID})">X</a></span>

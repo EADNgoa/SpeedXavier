@@ -11,7 +11,7 @@
                     <th>Booked On</th>
                     <th>Pax Name</th>
                     <th>Pax No</th>
-                    <th>Agent</th>
+                    <th>Agent,Agency,Conatct</th>
                     <th>Passport No        </th>
                     <th>DOB    </th>
                     <th>Expiry Date    </th>
@@ -20,7 +20,6 @@
                     <th>From Date  </th>
                     <th>To Date     </th>
                     <th>Duration    </th>
-                    <th>Cost </th>
                     <th>CP </th>
                     <th>Sell Price </th>
                     <th>COM </th>
@@ -31,7 +30,7 @@
                 <td>@Model.TransDate.EAFormat(withTime: false)</td>
                 <td>@Model.PaxName</td>
                 <td>@Model.PaxNo</td>
-                <td>@Model.ContactName @Model.Agency @Model.PhoneNo</td>
+                <td>@Model.ContactName,@Model.Agency,@Model.PhoneNo</td>
                 <td>@Model.PassportNo</td>
                 <td>@Model.DOB.EAFormat()</td>
                 <td>@Model.ExpiryDate.EAFormat()</td>
@@ -40,10 +39,9 @@
                 <td>@Model.Fdate.EAFormat()</td>
                 <td>@Model.Tdate.EAFormat()</td>
                 <td>@(Model.Tdate.Subtract(Model.Fdate).TotalDays)</td>
-                <td align="right">@Model.Cost.EAFormat()</td>
-                <td>@Model.TotalCost.EAFormat() </td>
-                <td>@Model.SellPrice.EAFormat() </td>
-                <td>@Model.COM.EAFormat()</td>
+                <td align="right">@Model.TotalCost.EAFormat() </td>
+                <td align="right">@Model.SellPrice.EAFormat() </td>
+                <td align="right">@Model.COM.EAFormat()</td>
             </tr>
             <tr>
                 <th>Note</th>
