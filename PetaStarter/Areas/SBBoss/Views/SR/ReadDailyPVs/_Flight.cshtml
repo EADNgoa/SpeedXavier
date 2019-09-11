@@ -10,7 +10,7 @@
                     <th>Booked On</th>
                     <th>Pax Name</th>
                     <th>Pax No</th>
-                    <th>Agent</th>
+                    <th>Agent,Agency,Conatct</th>
                     <th>Adult Qty              </th>
                     <th>Child Qty              </th>
                     <th>Infant Qty             </th>
@@ -28,8 +28,6 @@
                     <th>Extra                </th>
                     <th>Extra Details         </th>
                     <th>CP        </th>
-                    <th>Sell Price</th>
-                    <th>COM</th>
                 </tr>
 
             </thead>
@@ -38,31 +36,33 @@
                 <td>@Model.TDate.EAFormat(withTime: false)</td>
                 <td>@Model.PaxName</td>
                 <td>@(Model.AdultNo + Model.ChildNo + Model.InfantNo)</td>
-                <td>@Model.ContactName @Model.Agency @Model.PhoneNo</td>
-                <td align="right">@Model.AdultNo</td>
-                <td align="right">@Model.ChildNo </td>
-                <td align="right">@Model.InfantNo </td>
+                <td>@Model.ContactName,@Model.Agency,@Model.PhoneNo</td>
+                <td>@Model.AdultNo</td>
+                <td>@Model.ChildNo </td>
+                <td>@Model.InfantNo </td>
                 <td>@Model.IsInternational </td>
                 <td>@(Model.FromLoc.ToUpper()) </td>
                 <td>@(Model.ToLoc.ToUpper()) </td>
                 <td>@Model.Class </td>
                 <td>@Model.AirlineCode </td>
                 <td>@Model.FlightNo</td>
-                <td align="right">@Model.DepartureOn.EAFormat(true) </td>
-                <td align="right">@Model.ArrivalOn.EAFormat(true) </td>
+                <td>@Model.DepartureOn.EAFormat(true) </td>
+                <td>@Model.ArrivalOn.EAFormat(true) </td>
                 <td>@Model.TicketNo </td>
                 <td>@Model.GDSConfNo</td>
                 <td>@Model.AirlinePNR</td>
                 <td>@Model.Extra </td>
                 <td>@Model.ExtraDetails </td>
-                <td>@Model.TotalCost.EAFormat() </td>
-                <td>@Model.SellPrice.EAFormat() </td>
-                <td>@Model.COM.EAFormat()</td>
+                <td align="right">@Model.TotalCost.EAFormat() </td>
             </tr>
             <tr>
+                <th>Sell Price</th>
+                <th>COM</th>
                 <th>Note</th>
             </tr>
             <tr>
+                <td align="right">@Model.SellPrice.EAFormat() </td>
+                <td align="right">@Model.COM.EAFormat()</td>
                 <td>@Model.Event</td>
             </tr>
         </table>

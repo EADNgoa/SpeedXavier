@@ -10,12 +10,11 @@
                     <th>Booked On</th>
                     <th>Pax Name</th>
                     <th>Pax No</th>
-                    <th>Agent</th>
+                    <th>Agent,Agency,Conatct</th>
                     <th>DOB</th>
                     <th>Passport No.</th>
                     <th>Nationality</th>
                     <th>Service Required</th>
-                    <th>Cost</th>
                     <th>CP</th>
                     <th>Sell Price</th>
                     <th>COM</th>
@@ -26,15 +25,14 @@
                 <td>@Model.TDate.EAFormat(withTime: false)</td>
                 <td>@Model.PaxName</td>
                 <td>@Model.PaxNo</td>
-                <td>@Model.ContactName @Model.Agency @Model.PhoneNo</td>
+                <td>@Model.ContactName,@Model.Agency,@Model.PhoneNo</td>
                 <td>@Model.Fdate.EAFormat()</td>
                 <td>@Model.PassPortNo </td>
                 <td>@Model.Nationality</td>
                 <td>@Model.Heritage</td>
-                <td align="right">@Model.Cost.EAFormat() </td>
-                <td>@Model.TotalCost.EAFormat() </td>
-                <td>@Model.SellPrice.EAFormat() </td>
-                <td>@Model.COM.EAFormat()</td>
+                <td align="right">@Model.TotalCost.EAFormat() </td>
+                <td align="right">@Model.SellPrice.EAFormat() </td>
+                <td align="right">@Model.COM.EAFormat()</td>
             </tr>
             <tr>
                 <th>Note</th>

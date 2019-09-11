@@ -10,7 +10,7 @@
                     <th>Booked On</th>
                     <th>Pax Name</th>
                     <th>Pax No</th>
-                    <th>Agent</th>
+                    <th>Agent,Agency,Conatct</th>
                     <th>On Date</th>
                     <th>Vehicle Qty</th>
                     <th>From & To</th>
@@ -31,7 +31,7 @@
                 <td>@Model.TDate.EAFormat(withTime: false)</td>
                 <td>@Model.PaxName</td>
                 <td>@Model.PaxNo</td>
-                <td>@Model.ContactName @Model.Agency @Model.PhoneNo</td>
+                <td>@Model.ContactName,@Model.Agency,@Model.PhoneNo</td>
                 <td>@Model.Fdate.EAFormat()</td>
                 <td align="right">@Model.NoOfVehicles</td>
                 <td>@(Model.FromLoc.ToUpper()) & @(Model.ToLoc.ToUpper())  </td>
@@ -42,9 +42,9 @@
                 <td>@Model.HasAc</td>
                 <td>@Model.HasCarrier</td>
                 <td>@Model.PayTo</td>
-                <td>@Model.TotalCost.EAFormat() </td>
-                <td>@Model.SellPrice.EAFormat() </td>
-                <td>@Model.COM.EAFormat()</td>
+                <td align="right">@Model.TotalCost.EAFormat() </td>
+                <td align="right">@Model.SellPrice.EAFormat() </td>
+                <td align="right">@Model.COM.EAFormat()</td>
             </tr>
             <tr>
                 <th>Note</th>
@@ -56,6 +56,7 @@
 
     </div>
 </div>
+<br />
 
 
 <script>

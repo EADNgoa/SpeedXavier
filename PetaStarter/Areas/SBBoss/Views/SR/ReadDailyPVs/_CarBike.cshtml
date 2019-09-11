@@ -9,7 +9,7 @@
                     <th>Booked On</th>
                     <th>Pax Name</th>
                     <th>Pax No</th>
-                    <th>Agent</th>
+                    <th>Agent,Agency,Conatct</th>
                     <th>Vehicle Type</th>
                     <th>Model</th>
                     <th>From Date</th>
@@ -18,10 +18,8 @@
                     <th>Pickup Address</th>
                     <th>Drop Location</th>
                     <th>Drop Address</th>
-                    <th>Net Rate</th>
                     <th>No of Days</th>
                     <th>No Of Vehicles</th>
-                    <th>Net Cost</th>
                     <th>Pay To</th>
                     <th>CP</th>
                     <th>Sell Price</th>
@@ -33,7 +31,7 @@
                 <td>@Model.TransDate.EAFormat(withTime: false)</td>
                 <td>@Model.PaxName</td>
                 <td>@Model.PaxNo</td>
-                <td>@Model.ContactName @Model.Agency @Model.PhoneNo</td>
+                <td>@Model.ContactName,@Model.Agency,@Model.PhoneNo</td>
                 <td>@((CarTypeEnum)Model.CarType)</td>
                 <td>@Model.Model</td>
                 <td>@Model.Fdate.EAFormat()</td>
@@ -42,14 +40,12 @@
                 <td>@Model.PickUpPoint</td>
                 <td>@Model.ToLoc</td>
                 <td>@Model.DropPoint</td>
-                <td align="right">@Model.Cost.EAFormat()</td>
                 <td>@Model.Qty</td>
-                <td>@Model.NoExtraBeds</td>
-                <td>@Model.NetRate.ToString("0.####")</td>
+                <td>@Model.BFCost</td>
                 <td>@Model.PayTo</td>
-                <td>@Model.TotalCost.EAFormat() </td>
-                <td>@Model.SellPrice.EAFormat() </td>
-                <td>@Model.COM.EAFormat()</td>
+                <td align="right">@Model.TotalCost.EAFormat() </td>
+                <td align="right">@Model.SellPrice.EAFormat() </td>
+                <td align="right">@Model.COM.EAFormat()</td>
             </tr>
             <tr>
                 <th>Note</th>
@@ -60,30 +56,31 @@
         </table>
     </div>
 </div>
+<br />
 
-    @*@foreach (var item in ViewBag.ufs)
-        {
-            <span class="badge badge-secondary"><a target="_blank" style="color:white !important;" href="/Images/@item.Path">@item.UploadName</a> &nbsp; <a style="color:#fe7575 !important;" href="@Url.Action("Delete","SR",new {pid=item.SRUID , id=item.SRID})">X</a></span>
-        }
+@*@foreach (var item in ViewBag.ufs)
+    {
+        <span class="badge badge-secondary"><a target="_blank" style="color:white !important;" href="/Images/@item.Path">@item.UploadName</a> &nbsp; <a style="color:#fe7575 !important;" href="@Url.Action("Delete","SR",new {pid=item.SRUID , id=item.SRID})">X</a></span>
+    }
 
-        @using (Html.BeginForm("SRUpload", "SR", FormMethod.Post, new { id = "ServiceDetsUpld-" + Model.SRDID, enctype = "multipart/form-data" }))
-        {
-            <div class="form-inline">
-                @Html.AntiForgeryToken()
-                @Html.Hidden("SRID", (int)Model.SRID)
-                @Html.Hidden("SRDID", (int)Model.SRDID)
-                @Html.EAText("UploadName", "", "File Description")
-
-
-                @Html.TextBox("UploadedFile", "", new { type = "file", @class = "UploadedFile", @data_uf = Model.SRDID })
-            </div>
-        }*@
+    @using (Html.BeginForm("SRUpload", "SR", FormMethod.Post, new { id = "ServiceDetsUpld-" + Model.SRDID, enctype = "multipart/form-data" }))
+    {
+        <div class="form-inline">
+            @Html.AntiForgeryToken()
+            @Html.Hidden("SRID", (int)Model.SRID)
+            @Html.Hidden("SRDID", (int)Model.SRDID)
+            @Html.EAText("UploadName", "", "File Description")
 
 
+            @Html.TextBox("UploadedFile", "", new { type = "file", @class = "UploadedFile", @data_uf = Model.SRDID })
+        </div>
+    }*@
 
 
 
-    <script>
+
+
+<script>
 
 
         $(function () {
@@ -106,4 +103,4 @@
 
 
 
-    </script>
+</script>

@@ -9,7 +9,7 @@
                     <th>Booked On</th>
                     <th>Pax Name</th>
                     <th>Pax No</th>
-                    <th>Agent</th>
+                    <th>Agent,Agency,Conatct</th>
                     <th>Package Type</th>
                     <th>From Date</th>
                     <th>To Date</th>
@@ -24,9 +24,7 @@
                     <th>Additional Charge Details</th>
                     <th>Additional Cost/Person</th>
                     <th>Net Cost/Person</th>
-                    <th>CP</th>
-                    <th>Sell Price</th>
-                    <th>COM</th>
+
                 </tr>
             </thead>
             <tr>
@@ -34,56 +32,61 @@
                 <td>@Model.TransDate.EAFormat(withTime: false)</td>
                 <td>@Model.PaxName</td>
                 <td>@Model.NOOfPax</td>
-                <td>@Model.ContactName @Model.Agency @Model.PhoneNo</td>
+                <td>@Model.ContactName,@Model.Agency,@Model.PhoneNo</td>
                 <td>@Model.PackageType</td>
                 <td>@Model.Fdate.EAFormat()</td>
                 <td>@Model.Tdate.EAFormat()</td>
                 <td>@(Model.Tdate.Subtract(Model.Fdate).TotalDays)</td>
-                <td>@Model.CarType</td>
+                <td>@((MealPlanEnum)Model.CarType)</td>
                 <td>@Model.FromLoc</td>
                 <td>@Model.ToLoc</td>
                 <td>@Model.NameofTour</td>
                 <td>@Model.IsReturn</td>
                 <td>@Model.HotelCat</td>
-                <td align="right">@Model.Cost.EAFormat()</td>
+                <td align="right">@Model.TotalCost.EAFormat() </td>
                 <td>@Model.AddDtl</td>
                 <td align="right">@Model.AddCost.EAFormat()</td>
                 <td align="right">@Model.NetCost.EAFormat()</td>
-                <td>@Model.TotalCost.EAFormat() </td>
-                <td>@Model.SellPrice.EAFormat() </td>
-                <td>@Model.COM.EAFormat()</td>
+
             </tr>
             <tr>
+                <th>CP</th>
+                <th>Sell Price</th>
+                <th>COM</th>
                 <th>Note</th>
             </tr>
             <tr>
+                <td align="right">@Model.TotalCost.EAFormat() </td>
+                <td align="right">@Model.SellPrice.EAFormat() </td>
+                <td align="right">@Model.COM.EAFormat()</td>
                 <td>@Model.Event</td>
             </tr>
         </table>
     </div>
 </div>
+<br />
 
-    <script>
-
-
-        $(function () {
-            //DateTime picker
+<script>
 
 
-            $('.eadate').datepicker({
-                dateFormat: "dd-MM-yy",
-                showButtonPanel: true,
-                changeMonth: true,
-                changeYear: true
-            });
-
-            //Disable the browsers default date picker
-            jQuery.validator.methods["date"] = function (value, element) { return true; }
+    $(function () {
+        //DateTime picker
 
 
+        $('.eadate').datepicker({
+            dateFormat: "dd-MM-yy",
+            showButtonPanel: true,
+            changeMonth: true,
+            changeYear: true
         });
 
+        //Disable the browsers default date picker
+        jQuery.validator.methods["date"] = function (value, element) { return true; }
+
+
+    });
 
 
 
-    </script>
+
+</script>

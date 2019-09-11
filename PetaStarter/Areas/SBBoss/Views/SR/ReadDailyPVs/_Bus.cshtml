@@ -9,7 +9,7 @@
                     <th>Booked On</th>
                     <th>Pax Name</th>
                     <th>Pax No</th>
-                    <th>Agent</th>
+                    <th>Agent,Agency,Conatct</th>
                     <th>Age</th>
                     <th>Date of travel</th>
                     <th>From</th>
@@ -33,7 +33,7 @@
                 <td>@Model.TDate.EAFormat(withTime: false)</td>
                 <td>@Model.PaxName</td>
                 <td>@Model.PaxNO</td>
-                <td>@Model.ContactName @Model.Agency @Model.PhoneNo</td>
+                <td>@Model.ContactName,@Model.Agency,@Model.PhoneNo</td>
                 <td>@Model.Age</td>
                 <td>@Model.DOT.EAFormat()</td>
                 <td>@Model.FromLoc</td>
@@ -44,13 +44,12 @@
                 <td>@Model.Departure.EAFormat(true)</td>
                 <td>@((BookingTypeEnum)Model.CarType)</td>
                 <td>@Model.TicketNo</td>
-                <td align="right">@Model.Cost.EAFormat()</td>
+                <td align="right">@Model.TicketCost</td>
                 <td align="right">@Model.AddCost.EAFormat()</td>
                 <td>@Model.AddDetl</td>
-             <td>@Model.TotalCost.EAFormat() </td>
-                <td>@Model.SellPrice.EAFormat() </td>
-                <td>@(Model.SellPrice - Model.TotalCost)</td>
-                <td>@Model.COM.EAFormat()</td>
+                <td align="right">@Model.TotalCost.EAFormat() </td>
+                <td align="right">@Model.SellPrice.EAFormat() </td>
+                <td align="right">@Model.COM.EAFormat()</td>
             </tr>
             <tr>
                 <th>Note</th>
@@ -62,29 +61,30 @@
     </div>
 
 </div>
+<br />
 
 
-    <script>
+<script>
 
 
-        $(function () {
-            //DateTime picker
+    $(function () {
+        //DateTime picker
 
 
-            $('.eadate').datepicker({
-                dateFormat: "dd-MM-yy",
-                showButtonPanel: true,
-                changeMonth: true,
-                changeYear: true
-            });
-
-            //Disable the browsers default date picker
-            jQuery.validator.methods["date"] = function (value, element) { return true; }
-
-
+        $('.eadate').datepicker({
+            dateFormat: "dd-MM-yy",
+            showButtonPanel: true,
+            changeMonth: true,
+            changeYear: true
         });
 
+        //Disable the browsers default date picker
+        jQuery.validator.methods["date"] = function (value, element) { return true; }
+
+
+    });
 
 
 
-    </script>
+
+</script>

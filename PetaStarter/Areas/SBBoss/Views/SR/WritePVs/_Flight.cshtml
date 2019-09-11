@@ -4,7 +4,6 @@
 @{ Html.RenderPartial("WritePVs/_CommonHidden", Model); }
 
 <table class="SRDetsTbl" width="100%">
-    <thead>
         <tr>
             <th>Pax Name              </th>
             <th>Adult Qty              </th>
@@ -17,20 +16,6 @@
             <th>Airline Code         </th>
             <th>Flight No             </th>
         </tr>
-        <tr>
-            <th>Departure On          </th>
-            <th>Arrival On            </th>
-            <th>Ticket No             </th>
-            <th>GDS Conf. No            </th>
-            <th>Airline PNR           </th>            
-            <th>Extra                </th>
-            <th>Extra Details         </th>
-            <th>Cost                 </th>            
-            <th>Sell Price            </th>
-           
-        </tr>
-    </thead>
-    <tbody>
         <tr>
             <td>@Html.EASelectListP("CustomerId", (IEnumerable<SelectListItem>)ViewBag.CustomerList, "", "Pax Name", (string)ViewBag.SelectedCustomerId)</td>
             <td>@Html.EANumberForP(m => m.AdultNo, "No. of Adults")                                                                                     </td>
@@ -45,6 +30,19 @@
             <td>@Html.EATextForP(m => m.Model, "Airline Code")    </td>
             <td>@Html.EATextForP(m => m.Heritage, "Flight No")    </td>
         </tr>
+
+        <tr>
+            <th>Departure On          </th>
+            <th>Arrival On            </th>
+            <th>Ticket No             </th>
+            <th>GDS Conf. No            </th>
+            <th>Airline PNR           </th>
+            <th>Extra                </th>
+            <th>Extra Details         </th>
+            <th>Cost                 </th>
+            <th>Sell Price            </th>
+
+        </tr>
         <tr>
             <td>@Html.EADateTimeForP(m => m.Fdate, "Departure on")</td>
             <td>@Html.EADateTimeForP(m => m.Tdate, "Arrival on")      </td>
@@ -56,9 +54,8 @@
             <td>@Html.EATextForP(m => m.DropPoint, "Details")                </td>
             <td>@Html.EANumberForP(m => m.Cost)                              </td>
             <td>@Html.EANumberForP(m => m.SellPrice)                         </td>
-           
+
         </tr>
-    </tbody>
 </table>
 
 
