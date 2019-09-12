@@ -48,9 +48,9 @@
         @{Html.RenderPartial("ReadPVs/_Fin", Model); }
     </div>
 </div>
-@if (Model.IsCancelled == true)
+@if (Model.Cancelled == true)
 {
-    <p class="alert alert-primary">This Booking is Cancelled</p>
+<p class="alert alert-primary">This Booking is Cancelled wth Cancellation Cost @(Model.ProdCanxCost + Model.SBCanxCost)</p>
 }
 @*@foreach (var item in ViewBag.ufs)
     {

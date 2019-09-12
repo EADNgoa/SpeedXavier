@@ -142,7 +142,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @Html.EditorFor(model => model.LeftBkPayVm)
+                    @Html.EditorFor(model => model.RightBkPayVm)
                     <tr>
                         <td colspan="3" class="text-center"><strong>Total</strong></td>
                         <td colspan="2" id="ltot"></td>
@@ -166,7 +166,7 @@
                 </thead>
                 <tbody>
 
-                    @Html.EditorFor(model => model.RightBkPayVm)
+                    @Html.EditorFor(model => model.LeftBkPayVm)
                     <tr>
                         <td colspan="3" class="text-center"><strong>Total</strong></td>
                         <td colspan="2" id="rtot"></td>
@@ -215,49 +215,5 @@
             $('#gtotal').text(Total + ".00 Rs");
         });
 
-        //$('.left input:checkbox').change(function (e) {
-        //    var totalLeft = 0;
-        //    var isChecked = $('.left .checktotal:checked');
-        //    if (isChecked) {
-        //        totalLeft += Number($(this).val());
-        //        Total += Number($(this).val());
-        //    }
-        //    else {
-        //        Total -= Number($(this).val());
-        //    }
-
-        //    leftValue = $('#ltot').text(totalLeft + ".00 Rs");
-        //    total = $('#gtotal').text(Total + ".00 Rs");
-        //});
-
-        //$(".left input:checkbox").click(function () {
-        //    var totalLeft = 0;
-        //    if ($(this).is(":checked")) {
-        //        totalLeft += Number($(this).val());
-        //        Total += Number($(this).val());
-        //    }
-        //    else {
-        //        Total -= Number($(this).val());
-        //    }
-        //    leftValue = $('#ltot').text(totalLeft + ".00 Rs");
-        //     total = $('#gtotal').text(Total + ".00 Rs");
-        //}); 
-
-        //$(".right input:checkbox").click(function () {
-        //    var totalLeft = 0;
-        //    if ($(this).is(":checked")) {
-        //        totalLeft += Number($(this).val());
-        //        Total -= Number($(this).val());
-        //    }
-        //    else {
-        //        Total -= Number($(this).val());
-        //    }
-        //    rightValue = $('#rtot').text(totalLeft + ".00 Rs");
-        //    total = $('#gtotal').text(Total + ".00 Rs");
-        //}); 
-
-
-
-    
     });
 </script>
