@@ -71,7 +71,7 @@
         </table>
         @if (Model.IsCancelled == true)
         {
-            <p class="alert alert-primary">This Booking is Cancelled</p>
+        <p class="alert alert-primary">This Booking is Cancelled wth Cancellation Cost @(Model.ProdCanxCost + Model.SBCanxCost)</p>
         }
 
 
