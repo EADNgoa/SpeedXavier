@@ -39,7 +39,7 @@
 <h2 class="EATitleFont">@ViewBag.ServiceTitle</h2>
 <div id="ResContainer">
 
-
+   
 
     @foreach (var item in Model)
     {
@@ -94,12 +94,13 @@
 
 
 <script>
-
-    //$container.imagesLoaded(function () {
-    $('#ResContainer').masonry({
-        itemSelector: '.ServiceTypes',
-        columnWidth: 150,
-        isAnimated: true,
+    $(function () {
+        //$container.imagesLoaded(function () {
+        $('#ResContainer').masonry({
+            itemSelector: '.ServiceTypes',
+            columnWidth: 150,
+            isAnimated: true,
+        });
     });
     //});
 

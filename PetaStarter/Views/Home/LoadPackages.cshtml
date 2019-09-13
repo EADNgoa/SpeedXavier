@@ -131,7 +131,12 @@
         border-radius: 3px;
     }
 </style>
+<head>
+    <script src="/Scripts/jquery.masonry.min.js"></script>
+    <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
 
+
+</head>
 
 <hr style="padding-bottom:0;margin-bottom:0;padding-top:2px;margin-top:0;line-height: 1.428571429;" />
 
@@ -328,7 +333,7 @@
         @Html.Hidden("maxPrice")
         @Html.Hidden("minPrice")
 
-        <div class=" col-5" id="partialview">
+        <div class=" col-9" id="partialview">
             <br />
             @Html.Action("PackagesPartialView", "Home", new { st = ViewBag.st, DestIds = new List<int>() { (int)ViewBag.LocId } })
         </div>
