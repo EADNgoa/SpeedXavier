@@ -379,18 +379,31 @@ namespace Speedbird.Areas.SBBoss.Controllers
                     }
 
                     //getting agentid 
-                    var agentId = db.ExecuteScalar<string>("Select ag.AgentID from ServiceRequest srq inner join Agent ag on ag.AgentID = srq.AgentID  where srq.SRID = @0", item.SRID);
-                    //getting credit amount of that agent
-                    var creditAmt = db.ExecuteScalar<decimal>("Select CreditAmt from Agent where AgentID = @0", agentId);
+                    decimal TotalCost,creditAmt = 0;
+                    TotalCost=creditAmt = 0;
 
-                    var TotalCost = db.ExecuteScalar<decimal>("select Sum(srd.cost) as TotalCost from SRdetails srd " +
-                        "inner join ServiceRequest srq on srq.SRID = srd.SRID " +
-                        "inner join Agent ag on ag.AgentId = srq.AgentID where ag.AgentId = @0 ", item.AgentID);
+                    try
+                    {
+                        if (item.AgentID?.Length>0)
+                        {
+                            var agentId = db.ExecuteScalar<string>("Select ag.AgentID from ServiceRequest srq inner join Agent ag on ag.AgentID = srq.AgentID  where srq.SRID = @0", item.SRID);
+                            //getting credit amount of that agent
+                            creditAmt = db.ExecuteScalar<decimal>($"Select coalesce(CreditAmt,0) from Agent where AgentID =  '{agentId}'");
+
+                            TotalCost = db.ExecuteScalar<decimal>("select coalesce(Sum(srd.cost),0) as TotalCost from SRdetails srd " +
+                                "inner join ServiceRequest srq on srq.SRID = srd.SRID " +
+                                $"inner join Agent ag on ag.AgentId = srq.AgentID where ag.AgentId = '{item.AgentID}'");
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        throw e;
+                    }
 
                     //Total Cost less than equal to credit amount then status is confirmed else unconfirmed
                     if (routeto == "BFSave")
                     {
-                        if (TotalCost <= creditAmt)
+                        if (item.AgentID?.Length > 0 && TotalCost <= creditAmt)
                         {
                             item.SRStatusID = (int)SRStatusEnum.Confirmed;
                         }
