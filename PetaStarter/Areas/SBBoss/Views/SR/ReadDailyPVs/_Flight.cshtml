@@ -58,14 +58,20 @@
             <tr>
                 <th>Sell Price</th>
                 <th>COM</th>
-                <th>Note</th>
             </tr>
             <tr>
                 <td align="right">@Model.SellPrice.EAFormat() </td>
                 <td align="right">@Model.COM.EAFormat()</td>
-                <td>@Model.Event</td>
             </tr>
         </table>
+        <div class="row">
+            <div class="col-2 text-center">
+                <strong>Note</strong>
+            </div>
+            <div class="col-10 text-center">
+                @Model.Event
+            </div>
+        </div>
     </div>
 </div>
 <br />

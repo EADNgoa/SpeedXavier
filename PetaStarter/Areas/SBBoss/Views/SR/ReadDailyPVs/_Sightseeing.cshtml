@@ -1,5 +1,11 @@
 ﻿@using Speedbird
 @model Speedbird.SightseeingServiceViewDaily
+<style>
+    .modal-backdrop
+    {
+        position:relative;
+    }
+</style>
 
 <strong>@Model.SightseeingName</strong>
 <div class="row">
@@ -59,13 +65,36 @@
                 <td align="right">@Model.SellPrice.EAFormat()</td>
                 <td align="right">@Model.COM.EAFormat()</td>
             </tr>
-            <tr>
-                <th>Note</th>
-            </tr>
-            <tr>
-                <td>@Model.Event</td>
-            </tr>
         </table>
+        <div class="row">
+            <div class="col-2 text-center">
+                <strong>Note</strong>
+            </div>
+            <div class="col-10 text-center">
+                @Model.Event
+            </div>
+        </div>
+        <button type="button" data-srdid="@Model.SRDID" data-srid="@Model.SRID" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+            Review Driver
+        </button>
+
+        <div class="modal" id="myModal">
+            <div id="myModalContent">
+
+            </div>
+        </div>
     </div>
 </div>
 <br />
+<script>
+    $(function () {
+        $('#myModal').on('shown.bs.modal', function (event) {
+            var button = $(event.relatedTarget); // Button that triggered the modal
+            var SRDID = button.data('srdid');
+            var SRID = button.data('srid');
+            $("#myModalContent").load('@Url.Action("_DrvReview","SR")', { SRDID: SRDID, SRID: SRID });
+
+        });
+
+    });
+</script>

@@ -1,6 +1,6 @@
 ﻿<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
 <link rel="stylesheet" href="~/scripts/themes/fontawesome-stars.css">
-<div class="modal fade" id="DrvReviewModal" tabindex="-1" role="dialog" aria-labelledby="DrvReviewLabel" aria-hidden="true">
+@*<div class="modal fade" id="DrvReviewModal" tabindex="-1" role="dialog" aria-labelledby="DrvReviewLabel" aria-hidden="true">*@
     <div class="modal-dialog" rol
          e="document">
         <div class="modal-content">
@@ -11,7 +11,7 @@
                 </button>
             </div>
 
-            @using (Html.BeginForm("DrvReview", "SR", FormMethod.Post, new { id = "ReviewDrv" }))
+            @using (Html.BeginForm("ReviewDriver", "SR", FormMethod.Post, new { id = "ReviewDrv" }))
             {
 
                 @Html.AntiForgeryToken()
@@ -38,7 +38,7 @@
                                 {
                                     <tr>
                                         <td width="30%">
-                                            <select id="Star" name="Star" class="jqStar">                                                
+                                            <select id="Star" name="Star" class="jqStar">
                                                 <option value="1">1</option>
                                                 <option value="2">2</option>
                                                 <option value="3">3</option>
@@ -69,13 +69,12 @@
 
         </div>
     </div>
-</div>
+@*</div>*@
 
 
 
-<script>
-    $(function () { 
-
+    <script>
+    $(function () {
         $('#SaveRev').click(function () {
                 var detFrm = $('#ReviewDrv');
 
@@ -86,33 +85,34 @@
                         type: 'post',
                         data: $(detFrm).serialize(),
                         success: function () {
-
-                                        window.location.assign('@Url.Action("Manage", new { id = (int)ViewBag.SRID,mode=3 })');
+                            @*window.location.assign('@Url.Action("SRDiaryDets")');*@
+                            $('#snackbar').css("display", "block");
+                            $('#snackbar').delay(5000).fadeOut('slow');
                         }
                     });
                 }
         });
 
-        $('#DrvReviewModal').on('shown.bs.modal', function (event) {        
+        //$('#DrvReviewModal').on('shown.bs.modal', function (event) {
 
-            var button = $(event.relatedTarget); // Button that triggered the modal
-            var recipient = button.data('srdid');
-            var modal = $(this);
-            modal.find('#SRDID').val(recipient);
+        //    var button = $(event.relatedTarget); // Button that triggered the modal
+        //    var recipient = button.data('srdid');
+        //    var modal = $(this);
+        //    modal.find('#SRDID').val(recipient);
 
-            modal.find('#Example').focus();
+        //    modal.find('#Example').focus();
 
 
-        });
+        //});
 
-        
+
         $('.jqStar').barrating({
             theme: 'fontawesome-stars'
-            
+
         });
-        
+
 
     })
 
 
-</script>
+    </script>
