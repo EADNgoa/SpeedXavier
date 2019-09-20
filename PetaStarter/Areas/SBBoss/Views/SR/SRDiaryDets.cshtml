@@ -8,6 +8,20 @@
     .card-body {
         padding-bottom: 5%;
     }
+
+    #snackbar {
+        display: none;
+        min-width: 250px;
+        max-width: 500px;
+        background-color: #333;
+        color: #fff;
+        text-align: center;
+        border-radius: 2px;
+        padding: 16px;
+        z-index: 99999;
+        font-size: 17px;
+    }
+
 </style>
 
 <div class="card border rounded DropShadow">
@@ -31,24 +45,26 @@
         }
     </div>
 </div>
+
 <div class="card border rounded DropShadow">
     <div class="position-absolute text-center rounded DropShadow" id="EAcardTitle">
         <span class="h3">Daily Dairy</span>
     </div>
     <div class="card-body">
-
+       
         <div id="SRDetTbl">
+
             @foreach (var sd in Model)
             {
                 <div class="h3"><a target="_blank" href="@Url.Action("Manage","SR")/@sd.SRID">@sd.SRDID : @(((Speedbird.ServiceTypeEnum)sd.ServiceTypeID).ToString())</a></div>
                 @Html.Action("FetchDailyRecords", "SR", new { sType = (Speedbird.ServiceTypeEnum)sd.ServiceTypeID, srdid = sd.SRDID })
+                <div id="snackbar" class="text-center">Your Review Saved Successfully</div>
             }
         </div>
 
-
-
     </div>
 </div>
+
 
 
 

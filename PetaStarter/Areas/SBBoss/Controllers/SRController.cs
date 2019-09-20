@@ -685,7 +685,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                     ViewBag.Inc = db.FirstOrDefault<SRlog>("where Type=1 and srdid=@0", srdid)?.Event ?? "";
                     var qry = $"select (select top 1 CONCAT(c.fName, ' ',c.sName, ' ',c.Phone) from Customer c, SRD_Cust sc where c.CustomerID=sc.CustomerID and sc.SRDID={srdid}) as PaxName, " +
                         $"slg.Event,ag.AgentID,ag.ContactName,ag.PhoneNo,aus.RealName as Agency,aus.Id,srq.BookingNo,srq.TDate,AdultNo,ChildNo,sd.Model as SightseeingName, sd.OptionTypeID, ot.OptionTypeName,PickUpPoint,FromLoc as PickupLocation, Heritage as Private_Sic, cost as CostPerCar, " +
-                        $"Qty as NoOfCars, BFCost as AdultCost, LunchCost as ChildCost,Fdate as TourDate,d.DriverID,d.DriverName,d.Phone as Contact,CONCAT (dc.CarBrand, ' ', dc.Model, ' ', dc.PlateNo) as Car, CarType,HasAc as MealIncluded, srq.srid,srq.EnquirySource, sd.srdid, IsCanceled, sd.ServiceTypeID, " +
+                        $"Qty as NoOfCars, BFCost as AdultCost, LunchCost as ChildCost,Fdate as TourDate,d.DriverID,d.DriverName,d.Phone as Contact,CONCAT (dc.CarBrand, ' ', dc.Model, ' ', dc.PlateNo) as Car, CarType,HasAc as MealIncluded, srq.SRID,srq.EnquirySource, sd.SRDID, IsCanceled, sd.ServiceTypeID, " +
                         "SellPrice,contractNo,ECommision,Tax,aus.Id,aus.RealName from SRdetails sd " +
                         "left join OptionType ot on ot.OptionTypeID=sd.OptionTypeID " +
                         $"left join ServiceRequest srq on srq.SRID = sd.SRID " +
@@ -762,7 +762,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                         $"slg.Event,ag.AgentID, ag.ContactName,ag.PhoneNo,aus.RealName as Agency,aus.Id, srq.BookingNo, srq.TDate, srq.srid, srq.EnquirySource,sd.cartype, sd.ContractNo, sd.Cost, " +
                         $"sd.CouponCode, d.DriverId,d.DriverName,d.Phone as Contact, CONCAT(dc.CarBrand, ' ', dc.Model, ' ', dc.PlateNo) AS Car," +
                         $"sd.DropPoint, sd.Fdate, sd.FromLoc, sd.ToLoc, sd.HasAc, sd.HasCarrier, sd.Heritage AS RateBasis, sd.IsCanceled, sd.Model, sd.PayTo, sd.PickUpPoint," +
-                        $"sd.Qty AS NoOfVehicles, Sellprice, sd.ServiceTypeID, sd.SRDID, aus.Id, aus.RealName FROM SRdetails sd " +
+                        $"sd.Qty AS NoOfVehicles, Sellprice, sd.ServiceTypeID, sd.SRDID,srq.SRID, aus.Id, aus.RealName FROM SRdetails sd " +
                         $"LEFT JOIN Driver d ON sd.DriverID = d.DriverID LEFT JOIN DriversCars dc ON dc.CarId = NoExtraBeds " +
                         $"left join ServiceRequest srq on srq.SRID = sd.SRID " +
                         $"left join Agent ag on ag.AgentId = srq.AgentID " +
@@ -1745,8 +1745,9 @@ namespace Speedbird.Areas.SBBoss.Controllers
             ViewBag.SRDID = SRDID;
             ViewBag.SRID = SRID;
 
-            return PartialView();
+            return PartialView("_DrvReview");
         }
+
         [EAAuthorize(FunctionName = "Service Requests", Writable = true)]
         public JsonResult GetLocations(string term)
        {

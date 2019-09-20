@@ -51,13 +51,15 @@
                 <td align="right">@Model.SellPrice.EAFormat() </td>
                 <td align="right">@Model.COM.EAFormat()</td>
             </tr>
-            <tr>
-                <th>Note</th>
-            </tr>
-            <tr>
-                <td>@Model.Event</td>
-            </tr>
         </table>
+        <div class="row">
+            <div class="col-2 text-center">
+                <strong>Note</strong>
+            </div>
+            <div class="col-10 text-center">
+                @Model.Event
+            </div>
+        </div>
     </div>
 
 </div>
@@ -68,18 +70,18 @@
 
 
     $(function () {
-        //DateTime picker
+        ////DateTime picker
 
 
-        $('.eadate').datepicker({
-            dateFormat: "dd-MM-yy",
-            showButtonPanel: true,
-            changeMonth: true,
-            changeYear: true
-        });
+        //$('.eadate').datepicker({
+        //    dateFormat: "dd-MM-yy",
+        //    showButtonPanel: true,
+        //    changeMonth: true,
+        //    changeYear: true
+        //});
 
-        //Disable the browsers default date picker
-        jQuery.validator.methods["date"] = function (value, element) { return true; }
+        ////Disable the browsers default date picker
+        //jQuery.validator.methods["date"] = function (value, element) { return true; }
 
 
     });
