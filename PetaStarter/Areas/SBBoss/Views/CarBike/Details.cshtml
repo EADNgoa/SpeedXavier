@@ -37,7 +37,7 @@
 <div class="form-row">
     <div class="input-group col mb-3">
         <div class="input-group-prepend"><span class="input-group-text">Location</span></div>
-        <select id="GeoTreeID" name="GeoTreeID" class="form-control GeoSelect input-group.input-group-lg">
+        <select id="GeoTreeID" name="GeoTreeID" class="form-control GeoSelect input-group.input-group-lg"  multiple="multiple">
             @foreach (var o in ViewBag.GeoId)
             {
                 <option value="@o.Value">@o.Text</option>
@@ -54,7 +54,7 @@
 <div class="form-row">
     <div class="input-group col mb-3">
         <div class="input-group-prepend"><span class="input-group-text">Description</span></div>
-        <div class="form-control" style="padding:0px !important">@Html.TextAreaFor(model => model.Description, 3, 43, htmlAttributes: new { @class = "form-control" })</div>
+        @Html.TextAreaFor(model => model.Description, 3, 43, htmlAttributes: new { @class = "form-control" })
         @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
     </div>
 </div>
@@ -107,10 +107,9 @@ if (Model?.CarBikeID > 0)
             </span>
         </div>
         <div class="input-group col mb-3">
-            <div class="input-group-prepend"><span class="input-group-text">Supplier Notes</span></div>
-            <div class="form-control" style="padding:0px !important">
+            <div class="input-group-prepend"><span class="input-group-text">Supplier Notes</span></div>            
                 @Html.TextAreaFor(model => model.SupplierNotepad, 3, 43, htmlAttributes: new { @class = "form-control" })
-            </div>
+            
         </div>
     </div>
 
