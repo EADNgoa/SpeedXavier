@@ -22,11 +22,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         {
         
             ViewBag.sid = sid;
-        
-            if (sid == 1) { ViewBag.Title = "Packages"; }
-            if (sid == 2) { ViewBag.Title = "Cruises"; }
-            if (sid == 3) { ViewBag.Title = "Sight Seeing"; }
-            
+            ViewBag.Title = ((ServiceTypeEnum)sid).ToString();            
             return View();
         }
 
@@ -174,9 +170,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             ViewBag.sid = sid;
             ViewBag.mode = mode;
             ViewBag.EID = EID;
-            if (sid == 1) ViewBag.Title = "Manage Package";
-            if (sid == 2) ViewBag.Title = "Manage Cruise";
-            if (sid == 3) ViewBag.Title = "Manage SightSeeing";
+            ViewBag.Title = "Manage " + ((ServiceTypeEnum)sid).ToString();
 
             ViewBag.PackageName = db.ExecuteScalar<string>("Select PackageName from Package where PackageId=@0", id);
             ViewBag.PackageId = id;
@@ -208,7 +202,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         [ValidateAntiForgeryToken]
         [EAAuthorize(FunctionName = "Package", Writable = true)]
         public ActionResult  Manage([Bind(Include = "PackageID,ServiceTypeID,PackageName,Description,Duration,Itinerary,Highlights,Dificulty,GroupSize,GuideLanguageID,StartTime,Inclusion,Exclusion,CouponCode, MeetAndInfo")] Package item,
-            System.Collections.Generic.List<int> GeoTreeID, System.Collections.Generic.List<int> SupID, string ContID, System.Collections.Generic.List<int> ActID, System.Collections.Generic.List<int> CatID,
+            System.Collections.Generic.List<int> GeoTreeID, System.Collections.Generic.List<int> SupID, string SupContrts, System.Collections.Generic.List<int> ActID, System.Collections.Generic.List<int> CatID,
             System.Collections.Generic.List<int> AtrID, System.Collections.Generic.List<int> LanID, System.Collections.Generic.List<int> AttID, System.Collections.Generic.List<string> IcnID)
         {
             using (var transaction = db.GetTransaction())
@@ -223,7 +217,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                     AttSave(item.PackageID, AttID);
                     LanSave(item.PackageID, LanID);
                     AtrSave(item.PackageID, AtrID);                    
-                    SupSave(item.PackageID, SupID, ContID);
+                    SupSave(item.PackageID, SupID, SupContrts);
                     IcnSave(item.PackageID, IcnID, item.ServiceTypeID.Value);
 
                     transaction.Complete();
@@ -517,10 +511,10 @@ namespace Speedbird.Areas.SBBoss.Controllers
         [EAAuthorize(FunctionName = "Package", Writable = true)]
         public void SupSave(int PackageId, IEnumerable<int> ActIds, string Conts)
         {
-
+            //NOTE: This method is called even before a package is initially saved, but it fails silently because the packageId sent to it is null.
             //Clean and split Contract nos
             Conts = Conts ?? "";
-            Conts= Conts.Replace("\n", "");
+            Conts= Conts.Replace("\n", "").Replace("\r", "");
             var SplitConts = Conts.Split(',');
             var GoodConts = SplitConts.Where(c => c.Trim().Length > 1).Select(c=>c.Trim()).ToArray();
 
