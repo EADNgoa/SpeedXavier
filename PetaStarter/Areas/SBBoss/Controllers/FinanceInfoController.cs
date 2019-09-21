@@ -45,19 +45,19 @@ namespace Speedbird.Areas.SBBoss.Controllers
                     };
                     db.Insert(payment);
 
-                    if (paymentView.LeftBkPayVm != null)
+                    if (paymentView.SelectedSRDID_Left != null)
                     {
-                        foreach (var lsrdid in paymentView.LeftBkPayVm)
+                        foreach (var lsrdid in paymentView.SelectedSRDID_Left)
                         {
-                            db.Execute($"Update SRdetails set PaymentID = {payment.PaymentID} where SRDID = {lsrdid.SRDID}");
+                            db.Execute($"Update SRdetails set PaymentID = {payment.PaymentID} where SRDID = {lsrdid}");
                         }
                     }
 
-                    if (paymentView.RightBkPayVm != null)
+                    if (paymentView.SelectedSRDID_Right != null)
                     {
-                        foreach (var rsrdid in paymentView.RightBkPayVm)
+                        foreach (var rsrdid in paymentView.SelectedSRDID_Right)
                         {
-                            db.Execute($"Update SRdetails set PaymentID = {payment.PaymentID} where SRDID = {rsrdid.SRDID}");
+                            db.Execute($"Update SRdetails set PaymentID = {payment.PaymentID} where SRDID = {rsrdid}");
                         }
                     }
 
@@ -86,7 +86,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                          "srd.SRDID, srd.Cost, srq.BookingNo, srd.Fdate, SellPrice, srd.PayTo,PaymentID " +
                          "from SRdetails srd, ServiceRequest srq, SR_Cust src, Customer c, SRD_Cust sc where sc.SRDID = srd.SRDID " +
                          "and c.CustomerID = sc.CustomerID and srq.SRID = srd.SRID and src.ServiceRequestID = srq.SRID and IsLead = 1 " +
-                        $"and DriverID = {DriverID} and srd.PayTo = 'Pay to us' and srd.Fdate between '{String.Format("{0:yyyy-MM-dd}", FromDate)}' and '{String.Format("{0:yyyy-MM-dd}", ToDate)}'");
+                        $"and DriverID = {DriverID} and srd.PayTo = 'Payed to us' and srd.Fdate between '{String.Format("{0:yyyy-MM-dd}", FromDate)}' and '{String.Format("{0:yyyy-MM-dd}", ToDate)}'");
 
                 rightsq.Append("Select CONCAT(c.fName, ' ',c.sName) as PaxName, " +
                        "srd.SRDID, srd.Cost, srq.BookingNo, srd.Fdate, SellPrice, srd.PayTo,PaymentID " +

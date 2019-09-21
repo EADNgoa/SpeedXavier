@@ -20,5 +20,7 @@ namespace Speedbird.Models
         public int? SupplierID { get; set; }
         public IEnumerable<BKPayVM> LeftBkPayVm { get; set; }
         public IEnumerable<BKPayVM> RightBkPayVm { get; set; }
+        public List<int> SelectedSRDID_Left { get; set; }
+        public List<int> SelectedSRDID_Right { get; set; }
     }
 }

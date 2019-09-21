@@ -26,7 +26,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @Html.EditorFor(model => model.LeftBkPayVm)
+                    @Html.EditorFor(model => model.LeftBkPayVm,new { side = "Left" })
                     <tr>
                         <td colspan="3" class="text-center"><strong>Total</strong></td>
                         <td colspan="2" id="ltot"></td>
@@ -50,7 +50,7 @@
                 </thead>
                 <tbody>
 
-                    @Html.EditorFor(model => model.RightBkPayVm)
+                    @Html.EditorFor(model => model.RightBkPayVm, new { side = "Right" })
                     <tr>
                         <td colspan="3" class="text-center"><strong>Total</strong></td>
                         <td colspan="2" id="rtot"></td>
@@ -84,7 +84,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @Html.EditorFor(model => model.LeftBkPayVm)
+                    @Html.EditorFor(model => model.LeftBkPayVm, new { side = "Left" })
                     <tr>
                         <td colspan="3" class="text-center"><strong>Total</strong></td>
                         <td colspan="2" id="ltot"></td>
@@ -108,7 +108,7 @@
                 </thead>
                 <tbody>
 
-                    @Html.EditorFor(model => model.RightBkPayVm)
+                    @Html.EditorFor(model => model.RightBkPayVm, new { side = "Right" })
                     <tr>
                         <td colspan="3" class="text-center"><strong>Total</strong></td>
                         <td colspan="2" id="rtot"></td>
@@ -142,7 +142,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @Html.EditorFor(model => model.RightBkPayVm)
+                    @Html.EditorFor(model => model.RightBkPayVm, new { side = "Right" })
                     <tr>
                         <td colspan="3" class="text-center"><strong>Total</strong></td>
                         <td colspan="2" id="ltot"></td>
@@ -166,7 +166,7 @@
                 </thead>
                 <tbody>
 
-                    @Html.EditorFor(model => model.LeftBkPayVm)
+                    @Html.EditorFor(model => model.LeftBkPayVm, new { side = "Left" })
                     <tr>
                         <td colspan="3" class="text-center"><strong>Total</strong></td>
                         <td colspan="2" id="rtot"></td>
@@ -203,12 +203,12 @@
             var totalRight = 0;
             var Total = 0;
             $('.left .checktotal:checked').each(function () {
-                totalLeft += Number($(this).val());
-                Total += Number($(this).val());
+                totalLeft += Number($(this).data("moneyval"));
+                Total += Number($(this).data("moneyval"));
             });
             $('.right .checktotal:checked').each(function () {
-                totalRight += Number($(this).val());
-                Total -= Number($(this).val());
+                totalRight += Number($(this).data("moneyval"));
+                Total -= Number($(this).data("moneyval"));
             });
             $('#ltot').text(totalLeft + ".00 Rs");
             $('#rtot').text(totalRight + ".00 Rs");
