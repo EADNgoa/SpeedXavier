@@ -159,8 +159,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
         {
             var accom = base.BaseCreateEdit<CarBike>(id, "CarBikeID");
             ViewBag.GeoId = db.Query<GeoTree>("Select * from GeoTree where GeoTreeId = (Select GeoTreeId from CarBike where CarBikeId=@0)", accom?.CarBikeID ?? 0).Select(sl => new SelectListItem { Text = sl.GeoName, Value = sl.GeoTreeID.ToString(), Selected = true });
-            ViewBag.Sups = db.Query<Supplier>("Select * from Supplier where SupplierId in (Select SupplierId from Package_Supplier where PackageId=@0)", accom?.CarBikeID ?? 0).Select(sl => new SelectListItem { Text = sl.SupplierName, Value = sl.SupplierID.ToString(), Selected = true });
-            ViewBag.SupConts = db.Query<Package_Supplier>("Select * from Package_Supplier where PackageId=@0", accom?.CarBikeID ?? 0).Select(sl => sl.ContractNo);
+            ViewBag.Sups = db.Query<Supplier>("Select * from Supplier where SupplierId in (Select SupplierId from Package_Supplier where ServiceTypeId=@1 and PackageId=@0)", accom?.CarBikeID ?? 0, (int)ServiceTypeEnum.CarBike).Select(sl => new SelectListItem { Text = sl.SupplierName, Value = sl.SupplierID.ToString(), Selected = true });
+            ViewBag.SupConts = db.Query<Package_Supplier>("Select * from Package_Supplier where ServiceTypeId=@1 and PackageId=@0", accom?.CarBikeID ?? 0, (int)ServiceTypeEnum.CarBike).Select(sl => sl.ContractNo);
             return PartialView("Details", accom);
         }
 
