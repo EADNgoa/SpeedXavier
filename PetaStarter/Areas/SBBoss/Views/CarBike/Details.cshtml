@@ -37,7 +37,7 @@
 <div class="form-row">
     <div class="input-group col mb-3">
         <div class="input-group-prepend"><span class="input-group-text">Location</span></div>
-        <select id="GeoTreeID" name="GeoTreeID" class="form-control GeoSelect input-group.input-group-lg"  multiple="multiple">
+        <select id="GeoTreeID" name="GeoTreeID" class="form-control GeoSelect input-group.input-group-lg">
             @foreach (var o in ViewBag.GeoId)
             {
                 <option value="@o.Value">@o.Text</option>
