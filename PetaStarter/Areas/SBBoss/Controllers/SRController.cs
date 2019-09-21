@@ -297,16 +297,16 @@ namespace Speedbird.Areas.SBBoss.Controllers
         {
             var sql = new PetaPoco.Sql("Select * from Customer where 1=1");
                         
-            if (fn != null)            
+            if (fn != null && fn.Length > 0)            
                 sql.Append($" and LOWER(FName) like '%{fn.ToLower()}%'");                
             
-            if (sn != "")
+            if (sn != null && fn.Length > 0)
                 sql.Append($" and LOWER(SName) like '%{sn.ToLower()}%'");
             
-            if (ph != "")
+            if (ph != null && fn.Length > 0)
                 sql.Append($" and Phone like '%{ph}%'");            
             
-            if (em != "")
+            if (em != null && fn.Length > 0)
                 sql.Append(" and LOWER(Email) like '%@0%'",em.ToLower());
 
            var recs = db.Query<CustomerDets>(sql);

@@ -133,6 +133,8 @@
         $("#All").click(function () {
             if ($(this).prop("checked")) {
                 $("#All").val(true);
+                $("#Pending").val(false);
+                $("#Paid").val(false);
             }
             else {
                 $("#All").val(false);
@@ -143,7 +145,8 @@
         $("#Paid").click(function () {
             if ($(this).prop("checked"))  {
                 $("#Paid").val(true);
-                console.log(true);
+                $("#All").val(false);
+                $("#Pending").val(false);
             }
             else {
                 $("#Paid").val(false);
@@ -153,7 +156,8 @@
         $("#Pending").click(function () {
             if ($(this).prop("checked"))  {
                 $("#Pending").val(true);
-                console.log(true);
+                $("#Paid").val(false);
+                $("#All").val(false);
             }
             else {
                 $("#Pending").val(false);
