@@ -28,7 +28,7 @@
                 <td>@(Model.FromLoc.ToUpper())</td>
                 <td>@Model.PickUpPoint</td>
                 <td>@Model.Fdate.EAFormatTime(withTime:true)</td>
-                <td>@(Model.ToLoc.ToUpper())</td>
+                <td>@(Model.ToLoc?.ToUpper())</td>
                 <td>@Model.DropPoint</td>
                 <td>@((CarTypeEnum)Model.cartype)</td>
                 <td>@Model.RateBasis</td>
