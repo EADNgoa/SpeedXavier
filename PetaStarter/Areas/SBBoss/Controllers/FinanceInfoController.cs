@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using PetaPoco;
 using Speedbird.Controllers;
 using Speedbird.Models;
+using Microsoft.AspNet.Identity;
 
 namespace Speedbird.Areas.SBBoss.Controllers
 {
@@ -45,11 +46,44 @@ namespace Speedbird.Areas.SBBoss.Controllers
                     };
                     db.Insert(payment);
 
+                    string note = null;
+                    string driver = null;
+                    string supplier = null;
+                    string agent = null;
+         
+                    if (payment.DriverID != null)
+                    {
+                        driver = db.SingleOrDefault<Driver>(paymentView.DriverID).DriverName;
+                    }
+                    if (payment.SupplierID != null)
+                    {
+                        supplier = db.SingleOrDefault<Supplier>(paymentView.SupplierID).SupplierName;
+                    }
+                    if(payment.AgentId != null)
+                    {
+                        agent = db.ExecuteScalar<string>("select ContactName from Agent where AgentId = @0", paymentView.AgentId);
+                    }
+
+                    if (mode == (int)PayToEnum.Driver)
+                    {
+                        note = $"Paid to {driver} Rs. {paymentView.Amount} towards settlement of bookings " + paymentView.Note;
+                    }
+                    if (mode == (int)PayToEnum.Supplier)
+                    {
+                        note = $"Paid to {supplier} Rs. {paymentView.Amount} towards settlement of bookings " + paymentView.Note;
+                    }
+                    if (mode == (int)PayToEnum.Agent)
+                    {
+                        note = $"Recieved from {agent} Rs. {paymentView.Amount} towards settlement of bookings " + paymentView.Note;
+                    }
+
                     if (paymentView.SelectedSRDID_Left != null)
                     {
                         foreach (var lsrdid in paymentView.SelectedSRDID_Left)
                         {
                             db.Execute($"Update SRdetails set PaymentID = {payment.PaymentID} where SRDID = {lsrdid}");
+                            var Srid = db.SingleOrDefault<int>("Select SRID from SRdetails where SRDID = @0", lsrdid);
+                            LogAction(new SRlog { SRID = Srid, SRDID = lsrdid, Event = note, Type = true });
                         }
                     }
 
@@ -58,6 +92,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
                         foreach (var rsrdid in paymentView.SelectedSRDID_Right)
                         {
                             db.Execute($"Update SRdetails set PaymentID = {payment.PaymentID} where SRDID = {rsrdid}");
+                            var Srid = db.SingleOrDefault<int>("Select SRID from SRdetails where SRDID = @0", rsrdid);
+                            LogAction(new SRlog { SRID = Srid, SRDID = rsrdid, Event = note, Type = true });
                         }
                     }
 
@@ -83,13 +119,13 @@ namespace Speedbird.Areas.SBBoss.Controllers
             if (mode == (int)PayToEnum.Driver)
             {
                 leftsq.Append("Select CONCAT(c.fName, ' ',c.sName) as PaxName, " +
-                         "srd.SRDID, srd.Cost, srq.BookingNo, srd.Fdate, SellPrice, srd.PayTo,PaymentID " +
+                         "srd.SRDID,srq.SRID, srd.Cost, srq.BookingNo, srd.Fdate, SellPrice, srd.PayTo,PaymentID " +
                          "from SRdetails srd, ServiceRequest srq, SR_Cust src, Customer c, SRD_Cust sc where sc.SRDID = srd.SRDID " +
                          "and c.CustomerID = sc.CustomerID and srq.SRID = srd.SRID and src.ServiceRequestID = srq.SRID and IsLead = 1 " +
                         $"and DriverID = {DriverID} and srd.PayTo = 'Payed to us' and srd.Fdate between '{String.Format("{0:yyyy-MM-dd}", FromDate)}' and '{String.Format("{0:yyyy-MM-dd}", ToDate)}'");
 
                 rightsq.Append("Select CONCAT(c.fName, ' ',c.sName) as PaxName, " +
-                       "srd.SRDID, srd.Cost, srq.BookingNo, srd.Fdate, SellPrice, srd.PayTo,PaymentID " +
+                       "srd.SRDID,srq.SRID, srd.Cost, srq.BookingNo, srd.Fdate, SellPrice, srd.PayTo,PaymentID " +
                        "from SRdetails srd, ServiceRequest srq, SR_Cust src, Customer c, SRD_Cust sc where sc.SRDID = srd.SRDID " +
                        "and c.CustomerID = sc.CustomerID and srq.SRID = srd.SRID and src.ServiceRequestID = srq.SRID and IsLead = 1 " +
                        $"and DriverID = {DriverID} and srd.PayTo = 'Pay to driver' and srd.Fdate between '{String.Format("{0:yyyy-MM-dd}", FromDate)}' and '{String.Format("{0:yyyy-MM-dd}", ToDate)}'");
@@ -98,12 +134,12 @@ namespace Speedbird.Areas.SBBoss.Controllers
             if (mode == (int)PayToEnum.Supplier)
             {
                 leftsq.Append("Select CONCAT(c.fName, ' ',c.sName) as PaxName, " +
-                        "srd.SRDID, srd.Cost, srq.BookingNo, srd.Fdate, SellPrice, srd.PayTo,PaymentID,IsCancelled " +
+                        "srd.SRDID,srq.SRID, srd.Cost, srq.BookingNo, srd.Fdate, SellPrice, srd.PayTo,PaymentID,IsCancelled " +
                         "from SRdetails srd, ServiceRequest srq, SR_Cust src, Customer c, SRD_Cust sc where sc.SRDID = srd.SRDID " +
                         "and c.CustomerID = sc.CustomerID and srq.SRID = srd.SRID and src.ServiceRequestID = srq.SRID and IsLead = 1 " +
                        $"and IsCancelled is null and SupplierID = {SupplierID} and srd.Fdate between '{String.Format("{0:yyyy-MM-dd}", FromDate)}' and '{String.Format("{0:yyyy-MM-dd}", ToDate)}'");
 
-                rightsq.Append("Select CONCAT(c.fName, ' ',c.sName) as PaxName, srd.SRDID, srd.Cost, srq.BookingNo, srd.Fdate, SellPrice, srd.PayTo, " +
+                rightsq.Append("Select CONCAT(c.fName, ' ',c.sName) as PaxName, srd.SRDID,srq.SRID, srd.Cost, srq.BookingNo, srd.Fdate, SellPrice, srd.PayTo, " +
                     "rf.SRDID,rf.ProdCanxCost, rf.SBCanxCost,IsCancelled, rf.RefundId,PaymentID from SRdetails srd, ServiceRequest srq, SR_Cust src, Customer c, SRD_Cust sc, Refunds rf " +
                     "where sc.SRDID = srd.SRDID and c.CustomerID = sc.CustomerID and srq.SRID = srd.SRID and src.ServiceRequestID = srq.SRID " +
                     "and rf.SRDID = srd.SRDID and IsLead = 1 " +
@@ -112,14 +148,14 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
             if (mode == (int)PayToEnum.Agent)
             {
-                leftsq.Append("Select CONCAT(c.fName, ' ',c.sName) as PaxName, srd.SRDID, srd.Cost, " +
+                leftsq.Append("Select CONCAT(c.fName, ' ',c.sName) as PaxName, srd.SRDID,srq.SRID, srd.Cost, " +
                     "srq.BookingNo, srd.Fdate, SellPrice, srd.PayTo, PaymentID,IsCancelled from SRdetails srd, " +
                     "ServiceRequest srq, SR_Cust src, Customer c, SRD_Cust sc where sc.SRDID = srd.SRDID " +
                     "and c.CustomerID = sc.CustomerID and srq.SRID = srd.SRID and src.ServiceRequestID = srq.SRID and IsLead = 1 " +
                     $"and IsCancelled is null and AgentId = '{AgentId}' and srd.Fdate between '{String.Format("{0:yyyy-MM-dd}", FromDate)}' and '{String.Format("{0:yyyy-MM-dd}", ToDate)}'");
 
                 rightsq.Append("Select CONCAT(c.fName, ' ',c.sName) as PaxName, " +
-                   "srd.SRDID, srd.Cost, srq.BookingNo, srd.Fdate, SellPrice, srd.PayTo,IsCancelled,rf.ProdCanxCost,rf.SRDID, rf.SBCanxCost, rf.RefundId,PaymentID " +
+                   "srd.SRDID,srq.SRID, srd.Cost, srq.BookingNo, srd.Fdate, SellPrice, srd.PayTo,IsCancelled,rf.ProdCanxCost,rf.SRDID, rf.SBCanxCost, rf.RefundId,PaymentID " +
                    "from SRdetails srd, ServiceRequest srq, SR_Cust src, Customer c, SRD_Cust sc, Refunds rf where sc.SRDID = srd.SRDID " +
                    "and c.CustomerID = sc.CustomerID and srq.SRID = srd.SRID and src.ServiceRequestID = srq.SRID and rf.SRDID = srd.SRDID and IsLead = 1 " +
                    $"and IsCancelled = 1 and AgentId = '{AgentId}' and srd.Fdate between '{String.Format("{0:yyyy-MM-dd}", FromDate)}' and '{String.Format("{0:yyyy-MM-dd}", ToDate)}'");
@@ -175,6 +211,19 @@ namespace Speedbird.Areas.SBBoss.Controllers
             var filteredItems = db.Fetch<Driver>($"Select DriverID,DriverName from Driver Where DriverName like '%{term}%'").Select(c => new { id = c.DriverID, value = c.DriverName });
             return Json(filteredItems, JsonRequestBehavior.AllowGet);
         }
+
+
+        private void LogAction(SRlog item)
+        {
+            if (item.Event.Length > 0)
+            {
+                item.LogDateTime = DateTime.Now;
+                item.UserID = User.Identity.GetUserId();
+
+                db.Insert(item);
+            }
+        }
+
 
     }
 

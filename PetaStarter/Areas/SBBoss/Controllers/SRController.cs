@@ -392,7 +392,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
                             TotalCost = db.ExecuteScalar<decimal>("select coalesce(Sum(srd.cost),0) as TotalCost from SRdetails srd " +
                                 "inner join ServiceRequest srq on srq.SRID = srd.SRID " +
-                                $"inner join Agent ag on ag.AgentId = srq.AgentID where ag.AgentId = '{item.AgentID}'");
+                                $"inner join Agent ag on ag.AgentId = srq.AgentID where ag.AgentId = '{item.AgentID}' and PaymentID is null");
                         }
                     }
                     catch (Exception e)
