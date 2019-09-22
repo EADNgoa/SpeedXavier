@@ -60,7 +60,7 @@
     <div class="card-body">
         <div class="row d-block mx-auto">
 
-            @using (Html.BeginForm("Index", "FinanceInfo", FormMethod.Post, new { mode = ViewBag.Mode, Amount = "Amount" }))
+            @using (Html.BeginForm("Index", "FinanceInfo", FormMethod.Post, new { mode = ViewBag.Mode }))
             {
                 <div id="financeListPart"></div>
                 if (Model?.PaymentID > 0)

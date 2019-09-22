@@ -50,13 +50,14 @@ namespace Speedbird.Areas.SBBoss.Controllers
                     string driver = null;
                     string supplier = null;
                     string agent = null;
+         
                     if (payment.DriverID != null)
                     {
                         driver = db.SingleOrDefault<Driver>(paymentView.DriverID).DriverName;
                     }
                     if (payment.SupplierID != null)
                     {
-                        supplier = db.SingleOrDefault<Driver>(paymentView.DriverID).DriverName;
+                        supplier = db.SingleOrDefault<Supplier>(paymentView.SupplierID).SupplierName;
                     }
                     if(payment.AgentId != null)
                     {
@@ -65,15 +66,15 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
                     if (mode == (int)PayToEnum.Driver)
                     {
-                        note = $"Paid to {driver} Rs. {paymentView.Amount} towards settlement of bookings ";
+                        note = $"Paid to {driver} Rs. {paymentView.Amount} towards settlement of bookings " + paymentView.Note;
                     }
                     if (mode == (int)PayToEnum.Supplier)
                     {
-                        note = $"Paid to {supplier} Rs. {paymentView.Amount} towards settlement of bookings ";
+                        note = $"Paid to {supplier} Rs. {paymentView.Amount} towards settlement of bookings " + paymentView.Note;
                     }
                     if (mode == (int)PayToEnum.Agent)
                     {
-                        note = $"Recieved from {agent} Rs. {paymentView.Amount} towards settlement of bookings ";
+                        note = $"Recieved from {agent} Rs. {paymentView.Amount} towards settlement of bookings " + paymentView.Note;
                     }
 
                     if (paymentView.SelectedSRDID_Left != null)
