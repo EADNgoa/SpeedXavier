@@ -4,11 +4,11 @@
 <tr>
     @Html.Hidden("SRDID", Model.SRDID)
     @Html.Hidden("mode", (int?)ViewBag.Mode)
-    <td>@Model.BookingNo</td>
+    <td><a target="_blank" href="@Url.Action("Manage","SR")/@Model.SRID">@Model.BookingNo</a></td>
     <td>@Model.PaxName</td>
-    <td>@Model.Fdate</td>
-    <td>@Model.Cost</td>
-    <td>@Model.SellPrice</td>
+    <td>@Model.Fdate.ToString("dd-MM-yyyy")</td>
+    <td>@Model.Cost.ToString("0.###")</td>
+    <td>@Model.SellPrice.ToString("0.###")</td>
     @if (Model.PaymentID == null)
     {
         <td><input type="checkbox" class="checktotal" name='SelectedSRDID_@ViewData["side"]' value="@Model.SRDID" data-moneyval="@(Model.SellPrice - Model.Cost)" /></td>
@@ -24,11 +24,11 @@
 <tr>
     @Html.Hidden("SRDID", Model.SRDID)
     @Html.Hidden("mode", (int?)ViewBag.Mode)
-    <td>@Model.BookingNo</td>
+    <td><a target="_blank" href="@Url.Action("Manage","SR")/@Model.SRID">@Model.BookingNo</a></td>
     <td>@Model.PaxName</td>
-    <td>@Model.Fdate</td>
-    <td>@Model.Cost</td>
-    <td>@Model.SellPrice</td>
+    <td>@Model.Fdate.ToString("dd-MM-yyyy")</td>
+    <td>@Model.Cost.ToString("0.###")</td>
+    <td>@Model.SellPrice.ToString("0.###")</td>
     @if (Model.PaymentID == null)
     {
         <td><input type="checkbox" class="checktotal" name='SelectedSRDID_@ViewData["side"]' value="@Model.SRDID" data-moneyval="@(Model.Cost - Model.ProdCanxCost)" /></td>
@@ -45,11 +45,11 @@
 <tr>
     @Html.Hidden("SRDID", Model.SRDID)
     @Html.Hidden("mode", (int?)ViewBag.Mode)
-    <td>@Model.BookingNo</td>
+    <td><a target="_blank" href="@Url.Action("Manage","SR")/@Model.SRID">@Model.BookingNo</a></td>
     <td>@Model.PaxName</td>
-    <td>@Model.Fdate</td>
-    <td>@Model.Cost</td>
-    <td>@Model.SellPrice</td>
+    <td>@Model.Fdate.ToString("dd-MM-yyyy")</td>
+    <td>@Model.Cost.ToString("0.###")</td>
+    <td>@Model.SellPrice.ToString("0.###")</td>
     @if (Model.PaymentID == null)
     {
         <td><input type="checkbox" class="checktotal" name='SelectedSRDID_@ViewData["side"]' value="@Model.SRDID" data-moneyval="@(Model.SellPrice - Model.SBCanxCost - Model.ProdCanxCost)" /></td>

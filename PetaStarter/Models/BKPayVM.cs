@@ -15,6 +15,7 @@ namespace Speedbird.Models
         public string AgentId { get; set; }
         public string ContactName { get; set; }
         public int SRDID { get; set; }
+        public int SRID { get; set; }
         public string BookingNo { get; set; }
         public DateTime Fdate { get; set; }
         public decimal SellPrice { get; set; }
