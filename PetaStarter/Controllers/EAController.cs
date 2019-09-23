@@ -88,7 +88,7 @@ namespace Speedbird.Controllers
                 string MessageStack = ex.Message;
                 while (ex.InnerException != null)
                 {
-                    MessageStack += " > " + ex.InnerException.Message;
+                    MessageStack += " EA---> " + ex.InnerException.Message;
                     ex = ex.InnerException;
                 }
 

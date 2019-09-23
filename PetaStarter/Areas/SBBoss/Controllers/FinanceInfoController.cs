@@ -175,8 +175,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
             }
 
 
-            paymentdetailvws.LeftBkPayVm = db.Query<BKPayVM>(leftsq);
-            paymentdetailvws.RightBkPayVm = db.Query<BKPayVM>(rightsq);
+            paymentdetailvws.LeftBkPayVm = db.Query<BKPayVM>(leftsq).ToList();
+            paymentdetailvws.RightBkPayVm = db.Query<BKPayVM>(rightsq).ToList();
             ViewBag.DriverID = DriverID;
             ViewBag.SupplierID = SupplierID;
             ViewBag.AgentId = AgentId;

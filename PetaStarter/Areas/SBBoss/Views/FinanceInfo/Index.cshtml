@@ -39,12 +39,17 @@
                     <td> @Html.TextBox("FromDate", ViewBag.CurrentFilter as string, new { @class = "form-control eadate", @type = "text" })</td>
                     <td>&nbsp;To Date:</td>
                     <td> @Html.TextBox("ToDate", ViewBag.CurrentFilter as string, new { @class = "form-control eadate", @type = "text" })</td>
-                    <td>&nbsp;All:</td>
-                    <td>  <input type="radio" id="All" name="radioGroup" value="1"></td>
-                    <td>&nbsp;Paid:</td>
-                    <td> <input type="radio" id="Paid" name="radioGroup" value="2" /></td>
-                    <td>&nbsp;Pending:</td>
-                    <td> <input type="radio" id="Pending" name="radioGroup" value="3" /></td>
+                </tr>
+                <tr>
+                    <td>&nbsp;All: &nbsp;<input type="radio" id="All" name="radioGroup" value="1" checked="checked"></td>                    
+                    <td>&nbsp;</td>
+                                        
+                    <td>&nbsp;Paid: &nbsp;<input type="radio" id="Paid" name="radioGroup" value="2" /></td>                    
+                    <td>&nbsp;</td>
+                    
+                    <td>&nbsp;Pending: &nbsp;<input type="radio" id="Pending" name="radioGroup" value="3" /></td>                    
+                    <td>&nbsp;</td>
+                    
                     <td><input type="submit" value="Search" id="search" class="btn btn-primary" /></td>
                 </tr>
             </table>
@@ -126,6 +131,8 @@
         $('#search').click(function () {
             LoadView();
         });
+
+        $("#All").val(true);//Set by default
 
         $("#All").click(function () {
             if ($(this).prop("checked")) {
