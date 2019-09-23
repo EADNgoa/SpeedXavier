@@ -63,7 +63,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                     {
                         agent = db.ExecuteScalar<string>("select ContactName from Agent where AgentId = @0", paymentView.AgentId);
                     }
-
+                    paymentView.Note = " User Note: " + paymentView.Note;
                     if (mode == (int)PayToEnum.Driver)
                     {
                         note = $"Paid to {driver} Rs. {paymentView.Amount} towards settlement of bookings " + paymentView.Note;
@@ -175,8 +175,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
             }
 
 
-            paymentdetailvws.LeftBkPayVm = db.Query<BKPayVM>(leftsq);
-            paymentdetailvws.RightBkPayVm = db.Query<BKPayVM>(rightsq);
+            paymentdetailvws.LeftBkPayVm = db.Query<BKPayVM>(leftsq).ToList();
+            paymentdetailvws.RightBkPayVm = db.Query<BKPayVM>(rightsq).ToList();
             ViewBag.DriverID = DriverID;
             ViewBag.SupplierID = SupplierID;
             ViewBag.AgentId = AgentId;
