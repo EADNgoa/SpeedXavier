@@ -218,7 +218,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             ViewBag.ServiceTypeID = ServiceTypeEnum.CarBike;
 
             ViewBag.Pack = db.FirstOrDefault<CarBike>($"Select * From CarBike Where CarBikeID={id}");
-            ViewBag.Pics = db.Fetch<Picture>($"Select * From Picture where ServiceID='{id}' and ServiceTypeID='{(int)ServiceTypeEnum.Accomodation}'");
+            ViewBag.Pics = db.Fetch<Picture>($"Select * From Picture where ServiceID='{id}' and ServiceTypeID='{(int)ServiceTypeEnum.CarBike}'");
             base.BaseCreateEdit<Picture>(id, "PictureID");
 
             PictureDets ci = new PictureDets() { };

@@ -96,7 +96,7 @@ namespace Speedbird.Controllers
             else 
                 ViewBag.LocId = LocId;
 
-            if (st == ServiceTypeEnum.Packages || st == ServiceTypeEnum.SightSeeing)
+            if (st == ServiceTypeEnum.Packages || st == ServiceTypeEnum.SightSeeing || st == ServiceTypeEnum.Cruise)
             {
                 ViewBag.Cats = db.Fetch<Category>("Select * From Category");
                 ViewBag.Acts = db.Fetch<Activity>("Select * From Activity");
@@ -282,7 +282,7 @@ namespace Speedbird.Controllers
                     }
                 }
             });
-            string chk = db.ExecuteScalar<string>("Select b.UserID From Booking b inner join BookingDetail bd on bd.BookingID =b.BookingID Where b.UserID=@0 and bd.ServiceID=@1 and bd.ServiceTypeID=@2",User.Identity.GetUserId(),ServiceID,st);
+            string chk = db.ExecuteScalar<string>("Select b.UserID From ServiceRequest b inner join SRdetails bd on bd.SRID =b.SRID Where b.UserID=@0 and bd.ItemId=@1 and bd.ServiceTypeID=@2", User.Identity.GetUserId(),ServiceID,st);
             if(chk != null)
             {
                 ViewBag.checkBooking = chk;

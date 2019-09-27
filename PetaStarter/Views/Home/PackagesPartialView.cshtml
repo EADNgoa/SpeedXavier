@@ -1,6 +1,9 @@
 ﻿@model  List<Speedbird.AccomPackCarBike>
 <link href="https://fonts.googleapis.com/css?family=Quattrocento+Sans" rel="stylesheet">
 <style>
+    .checked {
+        color: orange;
+    }
     .price {
         left: 5px;
         bottom: 12px;
@@ -56,33 +59,34 @@
                 {
                     <img class="card-img-top" src="/Images/ComingSoon.png" alt="Card image cap">
                 }
-                <div class="card-body">
-                    @foreach (var a in item.Attributes)
-                    {
-                        @: <span style="font-size:0.7em; color:white; background-color: @a.Color; ">
-                        @:    <i class="fas fa-@a.fatext"></i>&nbsp;@a.AttributeText
-                        @: </span>&nbsp;
-                    }
-
-                    <div class="FloatBadge">
-                        @item.ServiceGeoName
-                    </div>
-                    <h5 class="card-title">@item.ServiceName</h5>
-                    <p class="card-text">@Html.Raw(item.ServiceDescription)</p>
-
-                    <span class="icons position-absolute">
-                        @foreach (var a in item.Icons)
+                    <div class="card-body">
+                        @foreach (var a in item.Attributes)
                         {
-                            @:    <img src="/Icons/@a" height="43px;" />
+                            @: <span style="font-size:0.7em; color:white; background-color: @a.Color; ">
+                                @:    <i class="fas fa-@a.fatext"></i>&nbsp;@a.AttributeText
+                            @: </span>&nbsp;
                         }
-                    </span>&nbsp;
 
-                    <span class="position-absolute price">
-                        <span class="currency"> Rs.</span> @($"{item.Price:#,##0}")
-                        <span class="under d-block mx-auto">per person</span>
-                    </span>
+                        <div class="FloatBadge">
+                            @item.ServiceGeoName
+                        </div>
+                        <h5 class="card-title">@item.ServiceName</h5>
+                        <p class="card-text">@Html.Raw(item.ServiceDescription)</p>
 
-                </div>
+                        <span class="review">@item.TotalReview Reviews</span>
+                        <span class="icons position-absolute">
+                            @foreach (var a in item.Icons)
+                            {
+                                @:    <img src="/Icons/@a" height="43px;" />
+                            }
+                        </span>&nbsp;
+
+                        <span class="position-absolute price">
+                            <span class="currency"> Rs.</span> @($"{item.Price:#,##0}")
+                            <span class="under d-block mx-auto">per person</span>
+                        </span>
+
+                    </div>
 
 
 
