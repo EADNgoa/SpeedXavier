@@ -7,6 +7,7 @@
     [ReviewDate] DATETIME NULL, 
     [Review] VARCHAR(MAX) NULL, 
     [IsVisible] BIT NULL,
+    [Value] INT NULL, 
     CONSTRAINT [FK_Review_AspNetUsers] FOREIGN KEY ([UserID]) REFERENCES [AspNetUsers]([Id]), 
 
 )

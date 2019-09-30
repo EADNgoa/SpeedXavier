@@ -1334,6 +1334,7 @@ namespace Speedbird
         public IEnumerable<Attribute> Attributes { get; set; }
         public IEnumerable<string> Icons { get; set; }
         public int TotalReview { get; set; }
+        public int AvgReview { get; set; }
     }
 
     public class CartDets
@@ -1370,6 +1371,7 @@ namespace Speedbird
         public string Review { get; set; }
         public bool IsVisible { get; set; }
         public IEnumerable<ReviewRepDets> Replies { get; set; }
+        public int Value { get; set; }
     }
 
 

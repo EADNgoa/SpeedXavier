@@ -1033,6 +1033,7 @@ namespace Speedbird
 		[Column] public DateTime? ReviewDate { get; set; }
 		[Column("Review")] public string _Review { get; set; }
 		[Column] public bool? IsVisible { get; set; }
+		[Column] public int? Value { get; set; }
 	}
     
 	[TableName("dbo.ReviewReplies")]
