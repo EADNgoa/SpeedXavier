@@ -78,7 +78,6 @@
                     <h5 class="card-title">@item.ServiceName</h5>
                     <p class="card-text">@Html.Raw(item.ServiceDescription)</p>
 
-                    @*@Html.Hidden("AvgValue", item.AvgReview)*@
                     <label>@item.AvgReview</label>
                     <select name="AvgValue" class="AvgValue" data-val=@item.AvgReview>
                         <option value=""></option>
@@ -111,7 +110,7 @@
     }
 
 </div>
-@*<script src="~/Scripts/jquery-bar-rating/jquery.barrating.min.js"></script>*@
+<script src="~/Scripts/jquery-bar-rating/jquery.barrating.min.js"></script>
 
 <script type="text/javascript">
     $(function () {
@@ -121,8 +120,6 @@
                 theme: 'fontawesome-stars',
                 initialRating: $(this).data('val')
             });
-            alert($(this).data('val'));
-            //$(this).barrating('set', $(this).data('val'));
         });
     });
 </script>

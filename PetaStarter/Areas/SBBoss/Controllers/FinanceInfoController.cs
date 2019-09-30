@@ -201,7 +201,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
         //[EAAuthorize(FunctionName = "FinanceInfo", Writable = false)]
         public ActionResult AutoCompleteAgent(string term)
         {
-            var filteredItems = db.Fetch<Agent>($"Select ag.AgentId,ag.ContactName from Agent ag inner join AspNetUsers au on au.Id = ag.AgentId Where ContactName like '%{term}%'").Select(c => new { id = c.AgentId, value = c.ContactName });
+            var filteredItems = db.Fetch<AspNetUser>($"Select au.Id,au.RealName from AspNetUsers au " +
+                $"inner join Agent ag on ag.AgentId = au.Id Where au.RealName like '%{term}%'").Select(c => new { id = c.Id, value = c.RealName });
             return Json(filteredItems, JsonRequestBehavior.AllowGet);
         }
 

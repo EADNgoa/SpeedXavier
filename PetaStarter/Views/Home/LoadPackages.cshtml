@@ -336,7 +336,7 @@
         @Html.Hidden("minPrice")
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-<script src="~/Scripts/jquery-bar-rating/jquery.barrating.min.js"></script>
+@*<script src="~/Scripts/jquery-bar-rating/jquery.barrating.min.js"></script>*@
         <div class=" col-9" id="partialview">
             <br />
             @Html.Action("PackagesPartialView", "Home", new { st = ViewBag.st, DestIds = new List<int>() { (int)ViewBag.LocId } })
