@@ -498,7 +498,7 @@
 
 
                         @Html.TextArea("Comment", new { htmlAttributes = new { @class = "form-control" } })
-                        <select id="jqStar" class="jqStar" name="jqStar">
+                        <select id="jqStar" name="jqStar">
                             <option value=""></option>
                             <option value="1">1</option>
                             <option value="2">2</option>
@@ -538,8 +538,7 @@
                     <h4 class="media-heading">@item.UserName <small><i>Posted on @item.ReviewDate</i></small></h4>
 
                     <p>@item.Review</p>
-                    @Html.Hidden("Review", item.Value)
-                    <select id="Star" name="Star" class="Star">
+                    <select id="Star" name="Star" class="Star" data-val="@item.Value">
                         <option value=""></option>
                         <option value="1">1</option>
                         <option value="2">2</option>
@@ -601,15 +600,15 @@
 
 <script type="text/javascript">
     $(function () {
-        $('.Star').barrating({
-            theme: 'fontawesome-stars',
+        $('#jqStar').barrating({
+            theme: 'fontawesome-stars'
         });
 
-        var ReviewVal = $("#Review").val();
-        $('.Star').barrating('set', ReviewVal);
-
-        $('.jqStar').barrating({
-            theme: 'fontawesome-stars',
+        $('.Star').each(function () {
+            $(this).barrating({
+                theme: 'fontawesome-stars',
+                initialRating: $(this).data('val')
+            });
         });
 
     });

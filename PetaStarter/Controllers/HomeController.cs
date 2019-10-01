@@ -278,9 +278,9 @@ namespace Speedbird.Controllers
 
         }
 
-        public ActionResult InfoPage(int? ServiceID, ServiceTypeEnum? st, string Comment,int? Star)
+        public ActionResult InfoPage(int? ServiceID, ServiceTypeEnum? st, string Comment,int? jqStar)
         {
-            if (Comment != null) db.Insert(new Review {_Review=Comment,UserID=User.Identity.GetUserId(),ServiceID=ServiceID,ServiceTypeID=(int)st,ReviewDate=DateTime.Now,IsVisible=true,Value=Star });
+            if (Comment != null) db.Insert(new Review {_Review=Comment,UserID=User.Identity.GetUserId(),ServiceID=ServiceID,ServiceTypeID=(int)st,ReviewDate=DateTime.Now,IsVisible=true,Value=jqStar });
             var CartItems = db.Query<CartDets>("Select * from Cart c Where Id= @0", (string)User.Identity.GetUserId()).ToList();
 
             bool exec = true;
