@@ -96,7 +96,7 @@ namespace Speedbird.Controllers
             else 
                 ViewBag.LocId = LocId;
 
-            if (st == ServiceTypeEnum.Packages || st == ServiceTypeEnum.SightSeeing)
+            if (st == ServiceTypeEnum.Packages || st == ServiceTypeEnum.SightSeeing || st == ServiceTypeEnum.Cruise)
             {
                 ViewBag.Cats = db.Fetch<Category>("Select * From Category");
                 ViewBag.Acts = db.Fetch<Activity>("Select * From Activity");
@@ -126,19 +126,23 @@ namespace Speedbird.Controllers
             if (st == ServiceTypeEnum.Accomodation)
             {
                 ViewBag.ServiceTitle = "Accomodations";
-                MainSql = new PetaPoco.Sql("Select a.AccomodationID as ServiceId,@0 as ServiceTypeId, a.AccomName as ServiceName,substring(a.description,0,100) +'...' as ServiceDescription, g.geoName as ServiceGeoName, min(pr.price) as price ", (int) ServiceTypeEnum.Accomodation);
-                FromSql = new PetaPoco.Sql("from Accomodation a, GeoTree g,Prices pr,OptionType ot");
-                WhereSql = new PetaPoco.Sql($"where a.geoTreeId=g.GeoTreeId and a.GeoTreeID in (SELECT GeoTreeID FROM STRING_SPLIT('{Dests}', ',') CROSS APPLY dbo.GetChildGeos(value))");
-                WhereSql.Append("and a.AccomodationID = pr.ServiceID and ot.OptionTypeID = pr.OptionTypeID and ot.ServiceTypeID=@0 " +
-                     "and pr.PriceID = (select top 1 PriceID from Prices where a.AccomodationID= Prices.ServiceID and ot.OptionTypeID = Prices.OptionTypeID  and Prices.WEF<GetDate() order by Prices.WEF desc) ", ServiceTypeEnum.Accomodation);
+                MainSql = new PetaPoco.Sql(" Select a.AccomodationID as ServiceId,@0 as ServiceTypeId, " +
+                    "a.AccomName as ServiceName, substring(a.Description, 0, 100) + '...' as ServiceDescription," +
+                    "g.geoName as ServiceGeoName, min(pr.price) as price ", (int) ServiceTypeEnum.Accomodation);
+                FromSql = new PetaPoco.Sql("from Accomodation a " +
+                    $"left join GeoTree g on a.geoTreeId = g.GeoTreeId and a.GeoTreeID in (SELECT GeoTreeID FROM STRING_SPLIT('{Dests}', ',') CROSS APPLY dbo.GetChildGeos(value))" +
+                    "left join Prices pr on pr.PriceID = (select top 1 PriceID from Prices where a.AccomodationID = Prices.ServiceID  and Prices.WEF < GetDate() order by Prices.WEF desc) " +
+                    "left join OptionType ot on ot.OptionTypeID = pr.OptionTypeID " +
+                    "left join Facility_Accomodation fa on a.AccomodationID = fa.AccomodationID " +
+                    "left join Facility f on f.FacilityID = fa.FacilityID ");
+                WhereSql = new PetaPoco.Sql($"where ot.ServiceTypeID=@0 ", ServiceTypeEnum.Accomodation);
                 if (maxPrice != null && minPrice != null)
                 {                
-                    WhereSql.Append("and Price Between @0 and @1" , minPrice, maxPrice);
+                    WhereSql.Append(" and Price Between @0 and @1" , minPrice, maxPrice);
                 }
                 if(FacilityID != null)
                 {
-                    FromSql.Append(",Facility f,Facility_Accomodation fa");
-                    WhereSql.Append("and a.AccomodationID = fa.AccomodationID and f.FacilityID = fa.FacilityID and fa.FacilityID in (@0)",FacilityID.ToArray());
+                    WhereSql.Append(" and fa.FacilityID in (@0)",FacilityID.ToArray());
                 }
              
                 MainSql.Append(FromSql);
@@ -152,14 +156,15 @@ namespace Speedbird.Controllers
             if (st == ServiceTypeEnum.CarBike)
             {
                 ViewBag.ServiceTitle = "Car And Bikes Rental";
-                MainSql = new PetaPoco.Sql("Select [CarBikeID] as ServiceId, [CarBikeName] as ServiceName,@0 as ServiceTypeId, g.geoName as ServiceGeoName, substring(description,0,100) +'...' as ServiceDescription,min(pr.price) as price ", (int) ServiceTypeEnum.CarBike);
-                FromSql = new PetaPoco.Sql("From CarBike c, geotree g,Prices pr,OptionType ot");
-                WhereSql = new PetaPoco.Sql($"where c.geotreeId=g.geotreeId and c.GeoTreeID in (SELECT GeoTreeID FROM STRING_SPLIT('{Dests}', ',') CROSS APPLY dbo.GetChildGeos(value))");
-                WhereSql.Append("and c.CarBikeID = pr.ServiceID and ot.OptionTypeID = pr.OptionTypeID and ot.ServiceTypeID=@0 " +
-                        "and pr.PriceID = (select top 1 PriceID from Prices where c.CarBikeID = Prices.ServiceID and ot.OptionTypeID = Prices.OptionTypeID  and Prices.WEF<GetDate() order by Prices.WEF desc) ",  ServiceTypeEnum.CarBike);
+                MainSql = new PetaPoco.Sql("Select [CarBikeID] as ServiceId, [CarBikeName] as ServiceName,@0 as ServiceTypeId, g.geoName as ServiceGeoName, " +
+                    "substring(description, 0, 100) + '...' as ServiceDescription, min(pr.price) as price ", (int) ServiceTypeEnum.CarBike);
+                FromSql = new PetaPoco.Sql("From CarBike c left join GeoTree g on c.geoTreeId=c.GeoTreeId " +
+                    "left join Prices pr on pr.PriceID = (select top 1 PriceID from Prices where c.CarBikeID = Prices.ServiceID  and Prices.WEF < GetDate() order by Prices.WEF desc) " +
+                    "left join OptionType ot on ot.OptionTypeID = pr.OptionTypeID ");
+                WhereSql = new PetaPoco.Sql($"where ot.ServiceTypeID=@0 and c.GeoTreeID in (SELECT GeoTreeID FROM STRING_SPLIT('{Dests}', ',') CROSS APPLY dbo.GetChildGeos(value)) ",  ServiceTypeEnum.CarBike);
                 if (maxPrice != null && minPrice != null)
                 {                    
-                    WhereSql.Append("and Price Between @0 and @1 ", minPrice, maxPrice);
+                    WhereSql.Append(" and Price Between @0 and @1 ", minPrice, maxPrice);
                 }
                 if (NoPax != null)
                 {
@@ -196,56 +201,65 @@ namespace Speedbird.Controllers
                 ViewBag.ServiceTitle = "Our Best Tours And Excursions";
 
 
-                MainSql = new PetaPoco.Sql("Select p.PackageID as ServiceId,p.ServiceTypeID ,p.PackageName as ServiceName,substring(description,0,100) +'...' as ServiceDescription, min(pr.price) as price");
-                FromSql = new PetaPoco.Sql("from Package p,Prices pr,OptionType ot");
-                WhereSql = new PetaPoco.Sql("where p.ServiceTypeID=@0", (int)st);
-                WhereSql.Append(" and p.PackageID = pr.ServiceID and ot.OptionTypeID = pr.OptionTypeID  and pr.PriceID = (select top 1 PriceID from Prices where p.PackageID = Prices.ServiceID and ot.OptionTypeID = Prices.OptionTypeID  and Prices.WEF<GetDate() order by Prices.WEF desc) ");
+                MainSql = new PetaPoco.Sql("Select Count(rv.ReviewID) as TotalReview,Avg(rv.Value) as AvgReview," +
+                    " pv.PackageID as ServiceId,pv.ServiceTypeID ,pv.PackageName as ServiceName, " +
+                    "substring(pv.Description, 0, 100) + '...' as ServiceDescription, min(coalesce(pr.price, 0)) as price ");
+                FromSql = new PetaPoco.Sql("from Package pv left join Review rv on rv.ServiceID = pv.PackageID " +
+                    "left join Prices pr on pr.PriceID = (select top 1 PriceID from Prices " +
+                    "where pv.PackageID = Prices.ServiceID and Prices.WEF < GetDate() order by Prices.WEF desc) " +
+                    "left join OptionType ot on ot.OptionTypeID = pr.OptionTypeID " +
+                    "left join Package_Category pc on pc.PackageID = pv.PackageID " +
+                    "left join Category c on c.CategoryID = pc.CategoryID " +
+                    "left join Package_Activity pa on pa.PackageID = pv.PackageID " +
+                    "left join Activity a on a.ActivityID = pa.ActivityID " +
+                    "left join Package_Attraction pat on pat.PackageID = pv.PackageID " +
+                    "left join Attraaction at on at.AttractionID = pat.AttractionID " +
+                    "left join Package_Language pl on pl.PackageId = pv.PackageID " +
+                    "left join GuideLanguage gl on gl.GuideLanguageID = pl.GuideLanguageId " +
+                    "left join Package_GeoTree pg on pg.PackageID = pv.PackageID");
+                WhereSql = new PetaPoco.Sql(" where pv.ServiceTypeID=@0", (int)st);
+                //WhereSql.Append(" and p.PackageID = pr.ServiceID and ot.OptionTypeID = pr.OptionTypeID  and pr.PriceID = (select top 1 PriceID from Prices where p.PackageID = Prices.ServiceID and ot.OptionTypeID = Prices.OptionTypeID  and Prices.WEF<GetDate() order by Prices.WEF desc) ");
                 if (maxPrice!=null && minPrice != null)
                 {
                     WhereSql.Append(" and Price Between @0 and @1 ", minPrice,maxPrice);
                 }
                 if (CatID != null)
                 {
-                    FromSql.Append(",Package_Category pc,Category c");
-                    WhereSql.Append("and p.PackageID = pc.PackageID and c.CategoryID = pc.CategoryID and pc.CategoryID in (@0)",  CatID.ToArray());
+                    WhereSql.Append(" and pc.CategoryID in (@0)",  CatID.ToArray());
                 }
 
                 if (ActID != null)
                 {
-                    FromSql.Append(",Package_Activity pa, Activity a");
-                    WhereSql.Append("and p.PackageID = pa.PackageID and a.ActivityID= pa.ActivityID and pa.ActivityID in (@0)",  ActID.ToArray());
+                    WhereSql.Append(" and pa.ActivityID in (@0)",  ActID.ToArray());
                 }
                 if (AttractID != null)
                 {
-                    FromSql.Append(",Package_Attraction pat, Attraaction at");
-                    WhereSql.Append("and p.PackageID = pat.PackageID and at.AttractionID= pat.AttractionID and pat.AttractionID in (@0)", AttractID.ToArray());
+                    WhereSql.Append(" and pat.AttractionID in (@0)", AttractID.ToArray());
                 }
                 if (Gsize!=null)
                 {
-                    WhereSql.Append("and p.GroupSize <= @0",Gsize);
+                    WhereSql.Append(" and pv.GroupSize <= @0",Gsize);
                 }
                 if (diff != null)
                 {
-                    WhereSql.Append("and p.Dificulty <= @0", diff);
+                    WhereSql.Append(" and pv.Dificulty <= @0", diff);
                 }
                 if (dur != null)
                 {
-                    WhereSql.Append("and p.Duration <= @0", dur);
+                    WhereSql.Append(" and pv.Duration <= @0", dur);
                 }
                 if (GuideLanguageID != null)
                 {
-                    FromSql.Append(",Package_Language pl, GuideLanguage gl");
-                    WhereSql.Append("and p.PackageID= pl.PackageId and pl.GuideLanguageId = gl.GuideLanguageID and pl.GuideLanguageId =@0 ", GuideLanguageID);
+                    WhereSql.Append(" and pl.GuideLanguageId =@0 ", GuideLanguageID);
                 }
 
                 //Filter for destination
-                FromSql.Append(",Package_geotree pg");
-                WhereSql.Append($"and p.PackageID= pg.PackageId and pg.GeoTreeId in (SELECT GeoTreeID FROM STRING_SPLIT('{Dests}', ',') CROSS APPLY dbo.GetChildGeos(value))");
+                WhereSql.Append($" and pg.GeoTreeId in (SELECT GeoTreeID FROM STRING_SPLIT('{Dests}', ',') CROSS APPLY dbo.GetChildGeos(value))");
 
 
                 MainSql.Append(FromSql);
                 MainSql.Append(WhereSql);
-                MainSql.Append(" Group by p.PackageID, p.ServiceTypeID,p.PackageName, [Description] ");
+                MainSql.Append(" Group by pv.PackageID, pv.ServiceTypeID,pv.PackageName, pv.[Description] ");
             }
 
             MainSql.Append(" order by min(pr.price)");
@@ -264,9 +278,9 @@ namespace Speedbird.Controllers
 
         }
 
-        public ActionResult InfoPage(int? ServiceID, ServiceTypeEnum? st, string Comment)
+        public ActionResult InfoPage(int? ServiceID, ServiceTypeEnum? st, string Comment,int? jqStar)
         {
-            if (Comment != null) db.Insert(new Review {_Review=Comment,UserID=User.Identity.GetUserId(),ServiceID=ServiceID,ServiceTypeID=(int)st,ReviewDate=DateTime.Now,IsVisible=true });
+            if (Comment != null) db.Insert(new Review {_Review=Comment,UserID=User.Identity.GetUserId(),ServiceID=ServiceID,ServiceTypeID=(int)st,ReviewDate=DateTime.Now,IsVisible=true,Value=jqStar });
             var CartItems = db.Query<CartDets>("Select * from Cart c Where Id= @0", (string)User.Identity.GetUserId()).ToList();
 
             bool exec = true;
@@ -282,7 +296,7 @@ namespace Speedbird.Controllers
                     }
                 }
             });
-            string chk = db.ExecuteScalar<string>("Select b.UserID From Booking b inner join BookingDetail bd on bd.BookingID =b.BookingID Where b.UserID=@0 and bd.ServiceID=@1 and bd.ServiceTypeID=@2",User.Identity.GetUserId(),ServiceID,st);
+            string chk = db.ExecuteScalar<string>("Select b.UserID From ServiceRequest b inner join SRdetails bd on bd.SRID =b.SRID Where b.UserID=@0 and bd.ItemId=@1 and bd.ServiceTypeID=@2", User.Identity.GetUserId(),ServiceID,st);
             if(chk != null)
             {
                 ViewBag.checkBooking = chk;

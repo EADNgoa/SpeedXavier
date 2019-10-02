@@ -498,7 +498,7 @@
 
 
                         @Html.TextArea("Comment", new { htmlAttributes = new { @class = "form-control" } })
-                        <select id="example">
+                        <select id="jqStar" name="jqStar">
                             <option value=""></option>
                             <option value="1">1</option>
                             <option value="2">2</option>
@@ -538,6 +538,14 @@
                     <h4 class="media-heading">@item.UserName <small><i>Posted on @item.ReviewDate</i></small></h4>
 
                     <p>@item.Review</p>
+                    <select id="Star" name="Star" class="Star" data-val="@item.Value">
+                        <option value=""></option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
 
                     @foreach (var r in item.Replies)
 
@@ -592,9 +600,17 @@
 
 <script type="text/javascript">
     $(function () {
-        $('#example').barrating({
+        $('#jqStar').barrating({
             theme: 'fontawesome-stars'
         });
+
+        $('.Star').each(function () {
+            $(this).barrating({
+                theme: 'fontawesome-stars',
+                initialRating: $(this).data('val')
+            });
+        });
+
     });
 </script>
 <script src="/Scripts/blueimp/blueimp-gallery.min.js"></script>

@@ -1,4 +1,8 @@
-﻿
+﻿<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
+    <link rel="stylesheet" href="~/scripts/themes/fontawesome-stars.css">
+</head>
 <style>
 
     h2 {
@@ -134,8 +138,6 @@
 <head>
     <script src="/Scripts/jquery.masonry.min.js"></script>
     <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
-
-
 </head>
 
 <hr style="padding-bottom:0;margin-bottom:0;padding-top:2px;margin-top:0;line-height: 1.428571429;" />
@@ -333,6 +335,8 @@
         @Html.Hidden("maxPrice")
         @Html.Hidden("minPrice")
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+@*<script src="~/Scripts/jquery-bar-rating/jquery.barrating.min.js"></script>*@
         <div class=" col-9" id="partialview">
             <br />
             @Html.Action("PackagesPartialView", "Home", new { st = ViewBag.st, DestIds = new List<int>() { (int)ViewBag.LocId } })
@@ -344,6 +348,10 @@
 
 
 </div>
+
+
+
+
 <script type="text/javascript">
 
 

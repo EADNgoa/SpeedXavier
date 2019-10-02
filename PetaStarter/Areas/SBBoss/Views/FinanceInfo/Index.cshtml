@@ -33,7 +33,7 @@
                     {
                         <td>&nbsp;Agent Name:</td>
                         @Html.Hidden("AgentId")
-                        <td><input placeholder="Agent Name" type="text" id="ContactName" name="ContactName" data-autocomplete-idholder="#AgentId" data-autoagent-url='@Url.Action("AutoCompleteAgent")' class="form-control" /></td>
+                        <td><input placeholder="Agent Name" type="text" id="AgentName" name="AgentName" data-autocomplete-idholder="#AgentId" data-autoagent-url='@Url.Action("AutoCompleteAgent")' class="form-control" /></td>
                     }
                     <td>&nbsp;From Date:</td>
                     <td> @Html.TextBox("FromDate", ViewBag.CurrentFilter as string, new { @class = "form-control eadate", @type = "text" })</td>

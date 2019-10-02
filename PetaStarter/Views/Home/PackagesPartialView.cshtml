@@ -1,6 +1,12 @@
 ﻿@model  List<Speedbird.AccomPackCarBike>
+
 <link href="https://fonts.googleapis.com/css?family=Quattrocento+Sans" rel="stylesheet">
+
 <style>
+    .checked {
+        color: orange;
+    }
+
     .price {
         left: 5px;
         bottom: 12px;
@@ -8,14 +14,16 @@
         color: rgb(17,73,109);
         font-size: 19.7px;
         font-weight: 700;
-        display:block;
+        display: block;
     }
+
     .currency {
-        font-size:12.7px;
+        font-size: 12.7px;
     }
+
     .under {
         font-size: 9.7px;
-        line-height:8px;
+        line-height: 8px;
     }
 
     .icons {
@@ -23,6 +31,7 @@
         left: 85px;
         display: block;
     }
+
     .EATitleFont {
         font-family: 'Quattrocento Sans', sans-serif;
         color: #11496d;
@@ -33,13 +42,12 @@
         margin-top: 15px;
         display: block;
     }
-    
 </style>
 
 <h2 class="EATitleFont">@ViewBag.ServiceTitle</h2>
 <div id="ResContainer">
 
-   
+
 
     @foreach (var item in Model)
     {
@@ -60,7 +68,7 @@
                     @foreach (var a in item.Attributes)
                     {
                         @: <span style="font-size:0.7em; color:white; background-color: @a.Color; ">
-                        @:    <i class="fas fa-@a.fatext"></i>&nbsp;@a.AttributeText
+                            @:    <i class="fas fa-@a.fatext"></i>&nbsp;@a.AttributeText
                         @: </span>&nbsp;
                     }
 
@@ -70,10 +78,20 @@
                     <h5 class="card-title">@item.ServiceName</h5>
                     <p class="card-text">@Html.Raw(item.ServiceDescription)</p>
 
+                    <select name="AvgValue" class="AvgValue" data-val=@item.AvgReview>
+                        <option value=""></option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+
+                    <span class="review">@item.TotalReview Reviews</span>
                     <span class="icons position-absolute">
                         @foreach (var a in item.Icons)
                         {
-                            @:    <img src="/Icons/@a" height="43px;" />
+                            @:<img src="/Icons/@a" height="43px;" />
                         }
                     </span>&nbsp;
 
@@ -91,8 +109,19 @@
     }
 
 </div>
+<script src="~/Scripts/jquery-bar-rating/jquery.barrating.min.js"></script>
 
-
+<script type="text/javascript">
+    $(function () {
+        
+        $('.AvgValue').each(function () {
+            $(this).barrating({
+                theme: 'fontawesome-stars',
+                initialRating: $(this).data('val')
+            });
+        });
+    });
+</script>
 <script>
     $(function () {
         //$container.imagesLoaded(function () {
