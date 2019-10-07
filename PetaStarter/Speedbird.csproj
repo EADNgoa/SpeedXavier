@@ -381,6 +381,7 @@
     <Content Include="Content\webfonts\fa-brands-400.svg" />
     <Content Include="Content\webfonts\fa-regular-400.svg" />
     <Content Include="Content\webfonts\fa-solid-900.svg" />
+    <Content Include="Custom\error_robot.gif" />
     <Content Include="Icons\India_IMG_0161_01.png" />
     <Content Include="Icons\India_IMG_0161_02.png" />
     <Content Include="Icons\India_IMG_0161_03.png" />

@@ -1,25 +1,16 @@
 ﻿using Microsoft.AspNet.Identity;
-using Speedbird.Controllers;
 using System;
 using System.Collections.Generic;
-//using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
-using System.Net;
 using System.Web;
-//using System.Web;
 using System.Web.Mvc;
-using System.Text.RegularExpressions;
 using static PetaStarter.Areas.SBBoss.Models.DataTablesModels;
-using System.Collections;
 using KellermanSoftware.CompareNetObjects;
-using PetaPoco;
 using System.Text;
-using System.Collections.Specialized;
 using System.IO;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Xml.Serialization;
 
 namespace Speedbird.Areas.SBBoss.Controllers

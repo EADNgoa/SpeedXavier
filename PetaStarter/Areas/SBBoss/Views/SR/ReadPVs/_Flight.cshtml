@@ -22,8 +22,8 @@
                 <td align="right">@Model.ChildNo </td>
                 <td align="right">@Model.InfantNo </td>
                 <td>@Model.IsInternational </td>
-                <td>@(Model.FromLoc.ToUpper()) </td>
-                <td>@(Model.ToLoc.ToUpper()) </td>
+                <td>@(Model.FromLoc?.ToUpper()) </td>
+                <td>@(Model.ToLoc?.ToUpper()) </td>
                 <td>@Model.Class </td>
                 <td>@Model.AirlineCode </td>
             </tr>
