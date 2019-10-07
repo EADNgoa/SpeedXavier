@@ -53,7 +53,7 @@ input[type="checkbox"] {
         visibility:hidden;
         display:none;
     }
-@media screen and (max-height: 450px) {
+@media screen and (max-height: 480px) {
     .sidenav {
         padding-top: 15px;
     }
@@ -96,6 +96,56 @@ input[type="checkbox"] {
     }
 }
 
+@media (max-width: 992px) {
+
+    .wrapper .content-div .heading-text h1 {
+        font-size: 50px;
+    }
+    .navbar ul li {
+        display: block;
+        text-align: center;
+    }
+
+    .left-side {
+        padding:15px;
+    }
+
+    .wrapper .text-center {
+        padding:0 20px;
+    }
+}
+
+
+@media (max-width: 1200px) {
+
+    .wrapper .selectlist {
+        padding-bottom: 50px;
+    }
+
+    .addcart {
+        margin: 20px 20px 0 20px;
+        text-align:center;
+    }
+
+    .block-sb-info {
+        margin: 20px 20px 0 20px;
+    }
+
+    .sbhr {
+        margin: 20px 20px 0 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .service-main-title {
+        font-size: 24px;
+    }
+
+    .wrapper .content-div .heading-text h1 {
+        font-size: 38px;
+    }
+}
+
 .chat_list .list-group-item {
     padding: 5px 4px;
     min-height: 80px;
@@ -104,6 +154,9 @@ input[type="checkbox"] {
 @media (max-width: 768px) {
     .chat_list .list-group-item {
         min-height: inherit;
+    }
+    .service-main-title {
+        font-size: 32px;
     }
 }
 

@@ -1,4 +1,17 @@
-﻿
+﻿<style>
+    .navbar ul li {
+        display: inline-block;
+        text-align: center;
+        padding: 10px;
+    }
+
+    .navbar ul li:hover {
+        outline: none;
+        font-weight: 800;
+        box-shadow: none !important;
+    }
+
+</style>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="ml-5">&nbsp;</div>
     
@@ -26,16 +39,18 @@
                         <a class="dropdown-item" href="#">Contact</a>
                     </div>
                 </li>
+   
                 @Html.Partial("_LoginPartial")
 
-
+   
                 <li class="nav-item">
                     <a href="https://icons8.com " style="visibility:hidden;"></a>
                     <a href="#" class="nav-link">
-                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAMGSURBVFhHzVhLa9RQFI74nnZyM1Nf1f4DwY0bF7oQ7MKF+EBEXYgLEexGly4UQREEF8VXfWwUl0VdSXFRe2MdS8EqaouPnRtftLZJZkatdiZ+Jz0dpL2UZnJT7wcfSU5uzndy7rmPxDIeXp+d96U47Lni6HT6rnOo+Di3npv+H/iueA6Gs9O+Fw5ZS/iR+QUyNUxBeFJUwW1ej9g4xUDmNvvSvhkFKcUFfmR+4bvZ7QjyYSDFETbNAAJ8hCyWhgtNWTaZhcAVu6Msu/Y+NpmFMSkcdH8F3XyNTeYBtfgSGRziS/OA4NppIAW9jSvZZBaCHmcn1SG6ey+bzAJN6FEduuIym8wDpppX6OpB76nIpclqX8tylowHyh51c+qUth9KaxnLzh1T82HaxMLxniXjIZCNK2gkq5zqpCftkywZH3j4jcqpLiJ7E+Xu/DqWiw84uTLdqU6ih7pYqj7QPKhyrIuJ1/vis4ZVqdWhFN+rXdZSlqoftCYrBZJSiqsskQxw1jHDuQbSJpklkoHqRCWQiNJ+ze6ToyQza5QiiegcZ/d6gIHyVi0Un/A1rn0bh4K+oRKrh5j8H7BbfYDT/Sqx+ujsYLf6UC40rVWLxSOWtq/YuSxit3qB2vmgEo1DzAgX2Z1+YAN7a1JE3I0+8GMSwbXTysTu9AMCBzkLrWwyCyMy3xJ1lRTn2WQe0L3v0F0v+NI8IINnKYuBFLvYZBboKwyD5SNGdAXZ7Ec27yPgzrkS9Xs71YFCKD3JNCPIIgRpRP+kY0Rpl8HRf4n7E1E7KX7Xzl27jV2lg9rfL2mfDkNrwZgrtlIAsHVwkwgj/XkbbX4gIJfOo80vfWdL8ZmbpAOInKEAi90Nq9lEtkFkqMCXEUZ7nQ38IsfYRDV8jmyp/vNBxvaw8Cm6DlxniyqDnwaaMwj6F2WQfoZSUPwiX7hJOgg7rYWorx4KEsfyZLDiG82T3KQGzJkn+P44AvuDYwUvdoBvp4dwwFqMbLRB7A51+WwjE/dbEeR1BHfJl9lNbFbAsv4C0GzB36MkPRMAAAAASUVORK5CYII=" height="25" style="margin-left:30px; margin-bottom:10px !important;">
+                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAMGSURBVFhHzVhLa9RQFI74nnZyM1Nf1f4DwY0bF7oQ7MKF+EBEXYgLEexGly4UQREEF8VXfWwUl0VdSXFRe2MdS8EqaouPnRtftLZJZkatdiZ+Jz0dpL2UZnJT7wcfSU5uzndy7rmPxDIeXp+d96U47Lni6HT6rnOo+Di3npv+H/iueA6Gs9O+Fw5ZS/iR+QUyNUxBeFJUwW1ej9g4xUDmNvvSvhkFKcUFfmR+4bvZ7QjyYSDFETbNAAJ8hCyWhgtNWTaZhcAVu6Msu/Y+NpmFMSkcdH8F3XyNTeYBtfgSGRziS/OA4NppIAW9jSvZZBaCHmcn1SG6ey+bzAJN6FEduuIym8wDpppX6OpB76nIpclqX8tylowHyh51c+qUth9KaxnLzh1T82HaxMLxniXjIZCNK2gkq5zqpCftkywZH3j4jcqpLiJ7E+Xu/DqWiw84uTLdqU6ih7pYqj7QPKhyrIuJ1/vis4ZVqdWhFN+rXdZSlqoftCYrBZJSiqsskQxw1jHDuQbSJpklkoHqRCWQiNJ+ze6ToyQza5QiiegcZ/d6gIHyVi0Un/A1rn0bh4K+oRKrh5j8H7BbfYDT/Sqx+ujsYLf6UC40rVWLxSOWtq/YuSxit3qB2vmgEo1DzAgX2Z1+YAN7a1JE3I0+8GMSwbXTysTu9AMCBzkLrWwyCyMy3xJ1lRTn2WQe0L3v0F0v+NI8IINnKYuBFLvYZBboKwyD5SNGdAXZ7Ec27yPgzrkS9Xs71YFCKD3JNCPIIgRpRP+kY0Rpl8HRf4n7E1E7KX7Xzl27jV2lg9rfL2mfDkNrwZgrtlIAsHVwkwgj/XkbbX4gIJfOo80vfWdL8ZmbpAOInKEAi90Nq9lEtkFkqMCXEUZ7nQ38IsfYRDV8jmyp/vNBxvaw8Cm6DlxniyqDnwaaMwj6F2WQfoZSUPwiX7hJOgg7rYWorx4KEsfyZLDiG82T3KQGzJkn+P44AvuDYwUvdoBvp4dwwFqMbLRB7A51+WwjE/dbEeR1BHfJl9lNbFbAsv4C0GzB36MkPRMAAAAASUVORK5CYII=" height="25" style="margin-bottom:10px !important;">
                     </a>
                 </li>
-            </ul>
+                </ul>
+
         </div>
         @*<form class="form-inline my-2 my-lg-0">
                 <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">

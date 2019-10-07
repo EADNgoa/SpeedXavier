@@ -41,11 +41,12 @@
         margin-bottom: 15px;
         margin-top: 15px;
         display: block;
+        text-align:center;
     }
 </style>
 
 <h2 class="EATitleFont">@ViewBag.ServiceTitle</h2>
-<div id="ResContainer">
+<div id="ResContainer" style="">
 
 
 
@@ -72,7 +73,8 @@
                         @: </span>&nbsp;
                     }
 
-                    <div class="FloatBadge">
+                    <div class="FloatBadge" style="top:0!important;
+        left:0!important;">
                         @item.ServiceGeoName
                     </div>
                     <h5 class="card-title">@item.ServiceName</h5>

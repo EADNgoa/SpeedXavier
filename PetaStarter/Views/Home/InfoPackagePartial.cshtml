@@ -26,15 +26,16 @@
         color: white;
         font-size: 18px;
     }
+
 </style>
 @model  Speedbird.PackageDets
 
 
     
-        <div class="col-5 EAUpMovedDiv">
+        <div class="col-12 col-xl-6 EAUpMovedDiv">
             <div class="EATranspHeader">
                 <h1 class="EATitle">@Model.PackageName</h1>
-                <div class="FloatBadge">
+                <div class="FloatBadge" style="top:0!important;left:15px!important;">
                     @Model.GeoNames.First()
                 </div>
                 <hr style="background-color:white; border:1px solid white; margin:3px;"/>
@@ -178,7 +179,7 @@
                             </div>
                         </div>
                         <div class="col-6">
-                            <div class="row" style="border:2px dashed #523907;border-radius:7px; background-color:rgba(82, 57, 7, 0.1)">                                
+                            <div class="row" style="border:2px dashed #523907;border-radius:7px; margin:0 10px; background-color:rgba(82, 57, 7, 0.1)">                                
                                 <div class="col-12">
                                     @Html.Raw(Model.MeetAndInfo)
                                 </div>
