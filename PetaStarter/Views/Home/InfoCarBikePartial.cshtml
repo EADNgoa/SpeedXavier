@@ -35,7 +35,7 @@
 <div class="col-12 col-xl-6 EAUpMovedDiv">
     <div class="EATranspHeader">
         <h1 class="EATitle">@Model.CarBikeName</h1>
-        <div class="FloatBadge">
+        <div class="FloatBadge" style="top:0!important;left:15px!important;">
             @Model.GeoName
         </div>
         <hr style="background-color:white; border:1px solid white; margin:3px;" />
@@ -45,7 +45,7 @@
             <span class="EAIconText">@i.Substring(0, i.IndexOf('.'))</span>
         }
         <hr style="background-color:white; border:1px solid white;margin:3px;" />
-      
+
     </div>
 
     <div class="DetailBlock">
@@ -53,10 +53,10 @@
             <table class="table">
                 <tr>
                     <td class="desc">
-                        <i class="material-icons" style="color:#009de0;">&#xe25f;</i>  @Model.CarBikeName 
+                        <i class="material-icons" style="color:#009de0;">&#xe25f;</i>  @Model.CarBikeName
                     </td>
                 </tr>
-              
+
             </table>
         </div>
 
@@ -81,27 +81,31 @@
 
     </div>
 
-    <div id="blueimp-gallery" class="blueimp-gallery">
-        <div class="slides"></div>
-        <h3 class="title"></h3>
-        <a class="prev" style="color:wheat">‹</a>
-        <a class="next" style="color:white">›</a>
-        <a class="close" style="color:wheat">×</a>
-        <a class="play-pause"></a>
-        <ol class="indicator"></ol>
-    </div>
-    <div id="links" style="margin-left:30px;">
-        @foreach (var item in Model.pic)
-        {
-            <a href="/Images/@item.PictureName" title="@Model.CarBikeName">
-                <img height="200px;" src="/Images/@item.PictureName" alt="@Model.CarBikeName">
-            </a>
-        }
+    <div class="row">
+        <div class="col-9 offset-1">
+            <div id="blueimp-gallery" class="blueimp-gallery">
+                <div class="slides"></div>
+                <h3 class="title"></h3>
+                <a class="prev" style="color:wheat">‹</a>
+                <a class="next" style="color:white">›</a>
+                <a class="close" style="color:wheat">×</a>
+                <a class="play-pause"></a>
+                <ol class="indicator"></ol>
+            </div>
+            <div id="links" style="margin-left:30px;">
+                @foreach (var item in Model.pic)
+                {
+                    <a href="/Images/@item.PictureName" title="@Model.CarBikeName">
+                        <img height="200px" src="/Images/@item.PictureName" alt="@Model.CarBikeName" class="img-thumbnail">
+                    </a>
+                }
+            </div>
+        </div>
     </div>
     <br />
     <hr />
 
-    <div class="DetailBlock" style="min-height:0;">
+    <div class="DetailBlock px-2 py-2" style="min-height:0;">
 
         <div class="row">
             <div class="row desc d-lg-table-cell" style="padding-left:30px;margin-left:0px;">
@@ -111,32 +115,27 @@
         </div>
 
         <div class="row">
-            <div class="col-2">
+            <div class="col-4">
                 <b>No of Pax:</b>
+                <span>@Html.Raw(Model.NoPax)</span>
             </div>
             <div class="col-4">
-                @Html.Raw(Model.NoPax)
-            </div>
-            <div class="col-2">
                 <b>No of Small Bags:</b>
+                <span>@Html.Raw(Model.NoSmallBags)</span>
             </div>
-            <div class="col-1">
-                @Html.Raw(Model.NoSmallBags) 
-            </div>
-            <div class="col-2">
+            <div class="col-4">
                 <b>No of Large Bags:</b>
-            </div>
-            <div class="col-1">
-                @Model.NoLargeBags
+                <span>@Model.NoLargeBags</span>
             </div>
         </div>
+
         <div class="row" style="margin-top:10px;">
             <div class="col-12">
                 <b>Location: </b>
-               
-                   @ViewBag.GeoName
-                  
-              
+
+                @ViewBag.GeoName
+
+
             </div>
         </div>
         <hr />
@@ -169,7 +168,7 @@
                     </div>
                 </div>
             </div>
-          
+
         </div>
 
 

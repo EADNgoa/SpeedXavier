@@ -61,6 +61,11 @@ input[type="checkbox"] {
         .sidenav a {
             font-size: 18px;
         }
+
+    .price-label .money {
+        font-size: 18px !important;
+    }
+
 }
 
 
@@ -90,9 +95,15 @@ input[type="checkbox"] {
 
     
 }
+
+
 @media (max-width: 768px) {
     body {
         font-size: 12px;
+    }
+
+    .price-label .money {
+        font-size: 18px !important;
     }
 }
 

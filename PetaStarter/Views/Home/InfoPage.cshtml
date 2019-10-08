@@ -328,7 +328,7 @@
 
 <div class="container-fluid">
     <div class="row">
-        <img src="/Images/@ViewBag.HeadPic.PictureName" class="img-fluid" width="100%" />
+        <img src="/Images/@ViewBag.HeadPic.PictureName"style="width:100%"/>
     </div>
     <br />
     <br />
@@ -356,7 +356,7 @@
                     @*<span class="title-experiance"></span>*@
                     <div class="container">
                         <center>
-                            <div class="col-md-12">
+                            <div class="col-md-12 price-label">
                                 @Html.Action("GetPrice", "Home", new { ServiceID = ViewBag.ServiceID, st = ViewBag.ST })
                             </div>
                             @*<div style="background-color:#428bca;">
