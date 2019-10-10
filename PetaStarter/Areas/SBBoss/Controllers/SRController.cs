@@ -848,44 +848,44 @@ namespace Speedbird.Areas.SBBoss.Controllers
                     {
                         var NoNights = int.Parse((item.Tdate - item.Fdate).Value.TotalDays.ToString());
                         //item.Cost = ((item.EBCostPNight * item.Qty) * NoNights) + (item.NoExtraBeds??0 * item.CarType??0) + ((item.BFCost??0 + item.LunchCost ??0+ item.DinnerCost??0) * NoNights);
-                        item.Cost = ((item.NoExtraBeds * item.CarType) + ((item.EBCostPNight * item.Qty) * NoNights) + ((item.BFCost + item.LunchCost + item.DinnerCost)*NoNights) + (item.NoExtraService * item.ExtraServiceCost));
+                        item.Cost = (((item.NoExtraBeds ?? 0) * (item.CarType ?? 0)) + (((item.EBCostPNight ?? 0) * (item.Qty ?? 1)) * NoNights) + (((item.BFCost ?? 0) + (item.LunchCost ?? 0) + (item.DinnerCost ?? 0)) * NoNights) + ((item.NoExtraService ?? 0) * (item.ExtraServiceCost ?? 0)));
                     }
 
                     //For Sightseeing calc the total cost
                     if (item.ServiceTypeID == (int)ServiceTypeEnum.SightSeeing)
                     {
-                        var CarCost = item.Qty * item.DinnerCost;
-                         item.Cost = ((item.AdultNo * item.BFCost) + (item.ChildNo * item.LunchCost) + CarCost);
+                        var CarCost = (item.Qty ?? 1) * (item.DinnerCost ?? 0);
+                         item.Cost = (((item.AdultNo ?? 0) * (item.BFCost ?? 0)) + ((item.ChildNo ?? 0) * (item.LunchCost ?? 0)) + CarCost);
                     }
 
                     //For Bus calc the total cost
                     if (item.ServiceTypeID == (int)ServiceTypeEnum.Bus)
                     {
-                        item.Cost = (item.DinnerCost +  item.LunchCost);
+                        item.Cost = ((item.DinnerCost ?? 0) +  (item.LunchCost ?? 0));
                     }
 
                     //For Rail calc the total cost
                     if (item.ServiceTypeID == (int)ServiceTypeEnum.Rail)
                     {
-                        item.Cost = (item.DinnerCost + item.LunchCost);
+                        item.Cost = ((item.DinnerCost ?? 0) + (item.LunchCost ?? 0));
                     }
 
                     //For Package calc the total cost
                     if (item.ServiceTypeID == (int)ServiceTypeEnum.Packages)
                     {
-                        item.Cost = (item.DinnerCost + (item.ChildNo * item.BFCost) + (item.ChildNo * item.LunchCost));
+                        item.Cost = ((item.DinnerCost ?? 0) + ((item.ChildNo ?? 0) * (item.BFCost ?? 0)) + ((item.ChildNo ?? 0) * (item.LunchCost ?? 0)));
                     }
 
                     //For Cruise calc the total cost
                     if (item.ServiceTypeID == (int)ServiceTypeEnum.Cruise)
                     {
-                        item.Cost = (item.DinnerCost * item.Qty);
+                        item.Cost = ((item.DinnerCost ?? 0) * (item.Qty ?? 0));
                     }
 
                     //For CarBike calc the total cost
                     if (item.ServiceTypeID == (int)ServiceTypeEnum.CarBike)
                     {
-                        item.Cost = (item.ExtraServiceCost * item.Qty) + (item.ExtraServiceCost * item.BFCost);
+                        item.Cost = ((item.ExtraServiceCost ?? 0) * (item.Qty ?? 0)) + ((item.ExtraServiceCost ?? 0) * (item.BFCost ?? 0));
                     }
 
                     DateTime? td =(DateTime?)item?.Tdate ;
