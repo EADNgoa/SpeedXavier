@@ -879,13 +879,13 @@ namespace Speedbird.Areas.SBBoss.Controllers
                     //For Cruise calc the total cost
                     if (item.ServiceTypeID == (int)ServiceTypeEnum.Cruise)
                     {
-                        item.Cost = ((item.DinnerCost ?? 0) * (item.Qty ?? 0));
+                        item.Cost = ((item.DinnerCost ?? 0) * (item.Qty ?? 1));
                     }
 
                     //For CarBike calc the total cost
                     if (item.ServiceTypeID == (int)ServiceTypeEnum.CarBike)
                     {
-                        item.Cost = ((item.ExtraServiceCost ?? 0) * (item.Qty ?? 0)) + ((item.ExtraServiceCost ?? 0) * (item.BFCost ?? 0));
+                        item.Cost = ((item.ExtraServiceCost ?? 0) * (item.Qty ?? 1)) + ((item.ExtraServiceCost ?? 0) * (item.BFCost ?? 0));
                     }
 
                     DateTime? td =(DateTime?)item?.Tdate ;
