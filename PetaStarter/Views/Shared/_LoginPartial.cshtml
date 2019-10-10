@@ -1,40 +1,29 @@
 ﻿@using Microsoft.AspNet.Identity
-<style>
-    .TopMenu:hover {
-        outline: none;
-        font-weight: 800;
-        box-shadow: none !important;
-    }
-</style>
-    
     
         @if (Request.IsAuthenticated)
         {
-            using (Html.BeginForm("LogOff", "Account", new { @area = "" }, FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+            using (Html.BeginForm("LogOff", "Account", new { @area = "" }, FormMethod.Post, new { id = "logoutForm", @class = "navbar-right form-inline" }))
             {
                 @Html.AntiForgeryToken()
                 @Html.Hidden("ReturnUrl", (string)ViewBag.ReturnUrl)
 
-                <ul class="nav mr-5">
-                    <li class="nav-item TopMenu">
+                <ul class="navbar-nav text-center" style="width:100%;">
+                    <li class="nav-item ">
                         @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "ChangePassword", "Manage", routeValues: new { @area = "" }, htmlAttributes: new { title = "Manage" })
                     </li>
-                    <li class="nav-item TopMenu">
+                    <li class="nav-item text-center">
                         <a href="javascript:document.getElementById('logoutForm').submit()">Log off</a>
                     </li>
-                    <li class="nav-item TopMenu">
+                    <li class="nav-item text-center">
                         @Html.ActionLink("Recover a password?", "ForgotPassword", "Account", routeValues: new { @area = "" }, htmlAttributes: new { id="rcPwd"} )
                     </li>
                 </ul>
             }
-
-
-
         }
         else
         {
             <ul class="nav-item mb-2">
-                <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: new { @area = "" }, htmlAttributes: new { id = "loginLink" })</li>
+                <li class="nav-item TopMenu">@Html.ActionLink("Log in", "Login", "Account", routeValues: new { @area = "" }, htmlAttributes: new { id = "loginLink" })</li>
             </ul>
         }
 

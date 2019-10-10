@@ -26,15 +26,16 @@
         color: white;
         font-size: 18px;
     }
+
 </style>
 @model  Speedbird.PackageDets
 
 
     
-        <div class="col-5 EAUpMovedDiv">
+        <div class="col-12 col-xl-6 EAUpMovedDiv">
             <div class="EATranspHeader">
                 <h1 class="EATitle">@Model.PackageName</h1>
-                <div class="FloatBadge">
+                <div class="FloatBadge" style="top:0!important;left:15px!important;">
                     @Model.GeoNames.First()
                 </div>
                 <hr style="background-color:white; border:1px solid white; margin:3px;"/>
@@ -89,27 +90,31 @@
 
                 </div>
 
-                <div id="blueimp-gallery" class="blueimp-gallery">
-                    <div class="slides"></div>
-                    <h3 class="title"></h3>
-                    <a class="prev" style="color:wheat">‹</a>
-                    <a class="next" style="color:white">›</a>
-                    <a class="close" style="color:wheat">×</a>
-                    <a class="play-pause"></a>
-                    <ol class="indicator"></ol>
-                </div>
-                <div id="links" style="margin-left:30px;">
-                    @foreach (var item in Model.Pic)
-                    {
-                        <a href="/Images/@item.PictureName" title="@Model.PackageName">
-                            <img height="200px;" src="/Images/@item.PictureName" alt="@Model.PackageName">
-                        </a>
-                    }                    
+                <div class="row">
+                    <div class="col-9 offset-1">
+                        <div id="blueimp-gallery" class="blueimp-gallery">
+                            <div class="slides"></div>
+                            <h3 class="title"></h3>
+                            <a class="prev" style="color:wheat">‹</a>
+                            <a class="next" style="color:white">›</a>
+                            <a class="close" style="color:wheat">×</a>
+                            <a class="play-pause"></a>
+                            <ol class="indicator"></ol>
+                        </div>
+                        <div id="links" style="margin-left:30px;">
+                            @foreach (var item in Model.Pic)
+                            {
+                                <a href="/Images/@item.PictureName" title="@Model.PackageName">
+                                    <img height="200px" src="/Images/@item.PictureName" alt="@Model.PackageName" class="img-thumbnail">
+                                </a>
+                            }
+                        </div>
+                    </div>
                 </div>
             <br />
             <hr />
             
-                <div class="DetailBlock" style="min-height:0;">
+                <div class="DetailBlock px-2 py-2" style="min-height:0;">
 
                     <div class="row">
                         <div class="row desc d-lg-table-cell" style="padding-left:30px;margin-left:0px;">
@@ -119,23 +124,17 @@
                     </div>
                     
                     <div class="row">
-                        <div class="col-2">
+                        <div class="col-4">
                             <b>Start Time:</b>
+                            <span>@Html.Raw(Model.StartTime)</span>
                         </div>
                         <div class="col-4">
-                            @Html.Raw(Model.StartTime)
-                        </div>
-                        <div class="col-2">
                             <b>Duration:</b>
+                            <span>@Html.Raw(Model.Duration) h</span>
                         </div>
-                        <div class="col-1">
-                            @Html.Raw(Model.Duration) h
-                        </div>
-                        <div class="col-2">
+                        <div class="col-4">
                             <b>Group Size:</b>
-                        </div>
-                        <div class="col-1">
-                            @Model.GroupSize 
+                            <span>@Model.GroupSize </span>
                         </div>
                     </div>
                     <div class="row" style="margin-top:10px;">
@@ -178,7 +177,7 @@
                             </div>
                         </div>
                         <div class="col-6">
-                            <div class="row" style="border:2px dashed #523907;border-radius:7px; background-color:rgba(82, 57, 7, 0.1)">                                
+                            <div class="row" style="border:2px dashed #523907;border-radius:7px; margin:0 10px; background-color:rgba(82, 57, 7, 0.1)">                                
                                 <div class="col-12">
                                     @Html.Raw(Model.MeetAndInfo)
                                 </div>

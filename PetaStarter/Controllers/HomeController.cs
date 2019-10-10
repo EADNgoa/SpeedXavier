@@ -126,10 +126,10 @@ namespace Speedbird.Controllers
             if (st == ServiceTypeEnum.Accomodation)
             {
                 ViewBag.ServiceTitle = "Accomodations";
-                MainSql = new PetaPoco.Sql(" Select a.AccomodationID as ServiceId,@0 as ServiceTypeId, " +
+                MainSql = new PetaPoco.Sql(" Select Count(rv.ReviewID) as TotalReview,Avg(rv.Value) as AvgReview,a.AccomodationID as ServiceId,@0 as ServiceTypeId, " +
                     "a.AccomName as ServiceName, substring(a.Description, 0, 100) + '...' as ServiceDescription," +
                     "g.geoName as ServiceGeoName, min(pr.price) as price ", (int) ServiceTypeEnum.Accomodation);
-                FromSql = new PetaPoco.Sql("from Accomodation a " +
+                FromSql = new PetaPoco.Sql("from Accomodation a left join Review rv on rv.ServiceID = a.AccomodationID  " +
                     $"left join GeoTree g on a.geoTreeId = g.GeoTreeId and a.GeoTreeID in (SELECT GeoTreeID FROM STRING_SPLIT('{Dests}', ',') CROSS APPLY dbo.GetChildGeos(value))" +
                     "left join Prices pr on pr.PriceID = (select top 1 PriceID from Prices where a.AccomodationID = Prices.ServiceID  and Prices.WEF < GetDate() order by Prices.WEF desc) " +
                     "left join OptionType ot on ot.OptionTypeID = pr.OptionTypeID " +
@@ -156,12 +156,15 @@ namespace Speedbird.Controllers
             if (st == ServiceTypeEnum.CarBike)
             {
                 ViewBag.ServiceTitle = "Car And Bikes Rental";
-                MainSql = new PetaPoco.Sql("Select [CarBikeID] as ServiceId, [CarBikeName] as ServiceName,@0 as ServiceTypeId, g.geoName as ServiceGeoName, " +
+                MainSql = new PetaPoco.Sql("Select Count(rv.ReviewID) as TotalReview,Avg(rv.Value) as AvgReview,[CarBikeID] as ServiceId, [CarBikeName] as ServiceName,@0 as ServiceTypeId, g.geoName as ServiceGeoName, " +
                     "substring(description, 0, 100) + '...' as ServiceDescription, min(pr.price) as price ", (int) ServiceTypeEnum.CarBike);
-                FromSql = new PetaPoco.Sql("From CarBike c left join GeoTree g on c.geoTreeId=c.GeoTreeId " +
-                    "left join Prices pr on pr.PriceID = (select top 1 PriceID from Prices where c.CarBikeID = Prices.ServiceID  and Prices.WEF < GetDate() order by Prices.WEF desc) " +
+                FromSql = new PetaPoco.Sql("From CarBike c left join Review rv on rv.ServiceID = c.CarBikeID " +
+                    "left join GeoTree g on c.geoTreeId=c.GeoTreeId " +
+                    "left join Prices pr on pr.PriceID = (select top 1 PriceID from Prices where c.CarBikeID = Prices.ServiceID  " +
+                    "and Prices.WEF < GetDate() order by Prices.WEF desc) " +
                     "left join OptionType ot on ot.OptionTypeID = pr.OptionTypeID ");
-                WhereSql = new PetaPoco.Sql($"where ot.ServiceTypeID=@0 and c.GeoTreeID in (SELECT GeoTreeID FROM STRING_SPLIT('{Dests}', ',') CROSS APPLY dbo.GetChildGeos(value)) ",  ServiceTypeEnum.CarBike);
+                WhereSql = new PetaPoco.Sql($"where ot.ServiceTypeID=@0 and c.GeoTreeID in (SELECT GeoTreeID " +
+                    $"FROM STRING_SPLIT('{Dests}', ',') CROSS APPLY dbo.GetChildGeos(value)) ",  ServiceTypeEnum.CarBike);
                 if (maxPrice != null && minPrice != null)
                 {                    
                     WhereSql.Append(" and Price Between @0 and @1 ", minPrice, maxPrice);

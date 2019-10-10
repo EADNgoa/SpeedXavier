@@ -29,7 +29,7 @@
     }
 
     #map {
-        height: 400px;
+        height: auto;
         width: 90%;
         margin-left: 30px;
     }
@@ -38,10 +38,10 @@
 
 
 
-<div class="col-5 EAUpMovedDiv">
+<div class="col-12 col-xl-6 EAUpMovedDiv">
     <div class="EATranspHeader">
         <h1 class="EATitle">@Model.AccomName</h1>
-        <div class="FloatBadge">
+        <div class="FloatBadge" style="top:0!important;left:15px!important;">
             @Model.GeoName
         </div>
         <hr style="background-color:white; border:1px solid white; margin:3px;" />
@@ -87,27 +87,31 @@
 
     </div>
 
-    <div id="blueimp-gallery" class="blueimp-gallery">
-        <div class="slides"></div>
-        <h3 class="title"></h3>
-        <a class="prev" style="color:wheat">‹</a>
-        <a class="next" style="color:white">›</a>
-        <a class="close" style="color:wheat">×</a>
-        <a class="play-pause"></a>
-        <ol class="indicator"></ol>
-    </div>
-    <div id="links" style="margin-left:30px;">
-        @foreach (var item in Model.pic)
-        {
-            <a href="/Images/@item.PictureName" title="@Model.AccomName">
-                <img height="200px;" src="/Images/@item.PictureName" alt="@Model.AccomName">
-            </a>
-        }
+    <div class="row">
+        <div class="col-9 offset-1">
+            <div id="blueimp-gallery" class="blueimp-gallery">
+                <div class="slides"></div>
+                <h3 class="title"></h3>
+                <a class="prev" style="color:wheat">‹</a>
+                <a class="next" style="color:white">›</a>
+                <a class="close" style="color:wheat">×</a>
+                <a class="play-pause"></a>
+                <ol class="indicator"></ol>
+            </div>
+            <div id="links" style="margin-left:30px;">
+                @foreach (var item in Model.pic)
+                {
+                    <a href="/Images/@item.PictureName" title="@Model.AccomName">
+                        <img height="200px" src="/Images/@item.PictureName" alt="@Model.AccomName" class="img-thumbnail">
+                    </a>
+                }
+            </div>
+        </div>
     </div>
     <br />
     <hr />
 
-    <div class="DetailBlock" style="min-height:0;">
+    <div class="DetailBlock px-2 py-2" style="min-height:0;">
 
         <div class="row">
             <div class="row desc d-lg-table-cell" style="padding-left:30px;margin-left:0px;">
@@ -117,39 +121,26 @@
         </div>
 
         <div class="row">
-            <div class="col-2">
+            <div class="col-6">
                 <b>Lattitude:</b>
+                <span>@Html.Raw(Model.Lat)</span>
             </div>
-            <div class="col-4">
-                @Html.Raw(Model.Lat)
-            </div>
-            <div class="col-2">
+            <div class="col-6">
                 <b>Longitude:</b>
+                <span>@Html.Raw(Model.longt)</span>
             </div>
-            <div class="col-4">
-                @Html.Raw(Model.longt)
-            </div>
-
         </div>
-    
         <br />
         <br />
-
         <div class="row">
             <i style="font-size:24px; margin-left:30px;" class="fa">&#xf279;</i>   Location Map
             <div id="map" width="80%"></div>
         </div>
-
         <hr />
-
-
-
     </div>
-
-
 </div>
 
-<script>
+        <script>
 
     function initMap() {
         var uluru = { lat: @Model.Lat, lng: @Model.longt };
@@ -165,7 +156,7 @@
 
 
 
-</script>
-<script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAC6Yyjmk9tLMPEe6ID2rmzwcYPCHKYrZU&callback=initMap">
-</script>
+        </script>
+        <script async defer
+                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAC6Yyjmk9tLMPEe6ID2rmzwcYPCHKYrZU&callback=initMap">
+        </script>

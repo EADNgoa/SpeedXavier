@@ -34,7 +34,7 @@
         text-align: center;
         text-shadow: 3px 3px #444;
         font-family: 'Niconne', cursive;
-        padding-top: 25px;
+        padding-top: 15px;
     }
 
 
@@ -50,13 +50,13 @@
         margin-top: 20px;
     }
 
-    .carousel {
+    /*.carousel {
         width: 100% !important;
         position:relative;
         opacity:0.99;
         z-index:1;
         height:800px !important;
-    }
+    }*/
 
     .img-fluid {
         max-width: 100%;
@@ -64,14 +64,14 @@
         height: 700px;
     }
 
-    .carousel-caption {
+    /*.carousel-caption {
         max-width: 100%;
         background: rgba(0, 0, 0, 0.5);
         width: 100%;
         left: 0;
         height: 100%;
         max-height: 100%;
-    }
+    }*/
 
     .card-title {
         font-family: "Quattrocento Sans",sans-serif;
@@ -140,39 +140,146 @@
         color: white;
         background-color: black;
     }
-    .EAtalk {
-        position: absolute;
-        top: 80px;
-        right:450px;
-        z-index:100;
-        height:180px;
-        -webkit-filter: drop-shadow(12px 12px 25px rgba(0,0,0,0.5));
-        filter: drop-shadow(5px 5px 5px #222);
-        -ms-filter: "progid:DXImageTransform.Microsoft.Dropshadow(OffX=12, OffY=12, Color='#444')";
-        filter: "progid:DXImageTransform.Microsoft.Dropshadow(OffX=12, OffY=12, Color='#444')";
-    
-    }
 
     .select2-selection--single {
-        height:58px !important;
+        height:50px !important;
         border-radius: 50px !important;
     }
 
     .select2-selection__rendered {
-        margin-top:10px;
+        padding-top:10px;
         color:#444;
         font-size:25px;
         height:3em;
     }
+
+    /* for mozilla firefox*/
+    .select2-container--default .select2-selection--single .select2-selection__arrow b {
+        border-color: #888 transparent transparent transparent;
+        border-style: solid;
+        border-width: 10px 10px 0 10px;
+        height: 0;
+        right: 50%;
+        margin-left: -4px;
+        margin-top: -2px;
+        position: absolute;
+        top: 80%;
+        width: 0;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+        height: 26px;
+        position: absolute;
+        top: 1px;
+        right: 5%;
+        width: 20px;
+    }
+
+    .wrapper {
+        background-image: url(/Images/c3.jpg);
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        width: 100%;
+        height: auto;
+        position: relative;
+        opacity: 0.99;
+        z-index: 1;
+        overflow-y: hidden;
+    }
+
+    .content-div {
+        max-width: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        width: 100%;
+        height: 100%;
+        max-height: 100%;
+        padding: 0 20px;
+    }
+
+    .selectlist {
+        padding:0 0 20px 0;
+    }
+
+    .heading-text {
+        position:relative;
+    }
+
+    .EAtalk {
+        /*position: absolute;
+        top: 80px;
+        right: 450px;*/
+        z-index: 100;
+        height: 120px;
+        -webkit-filter: drop-shadow(12px 12px 25px rgba(0,0,0,0.5));
+        filter: drop-shadow(5px 5px 5px #222);
+        -ms-filter: "progid:DXImageTransform.Microsoft.Dropshadow(OffX=12, OffY=12, Color='#444')";
+        filter: "progid:DXImageTransform.Microsoft.Dropshadow(OffX=12, OffY=12, Color='#444')";
+    }
+
 </style>
+
 <head>
     <link href="https://fonts.googleapis.com/css?family=Niconne" rel="stylesheet">
     <script src="/Scripts/jquery.masonry.min.js"></script>
     <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
 </head>
-<img src="/Images/talk.png" class="EAtalk" />
-<br />
-<div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="wrapper">
+            @Html.Hidden("SRID", (int?)ViewBag.SRID)
+            <div class="content-div">
+                <div class="heading-text">
+                    <div class="row">
+                        <div class="col-6 offset-2 col-sm-6">
+                            <h1 class="item-1">How can we help?</h1>
+                        </div>
+                        <div class="col-1 col-sm-1 pt-2">
+                            <img src="/Images/talk.png" class="EAtalk" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-lg-4 col-12 text-center">
+                        <a href="~/Home/LoadService/?Goa=1">
+                            <img src="/Images/Goa 3.png" class="im" alt="Goa">
+                        </a>
+                        <div class="text-block">
+                            <h3>Goa</h3>
+                            <p>Get Wet on our hot beaches</p>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-sm-12 col-lg-4 col-12 text-center">
+                        <a href="~/Home/LoadService/?India=1">
+                            <img src="/Images/India 3.png" class="im" alt="India">
+                        </a>
+                        <div class="text-block">
+                            <h3>India</h3>
+                            <p>East Or West India is the Best</p>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-sm-12 col-lg-4 col-12 text-center">
+                        <a href="~/Home/LoadService/?World=1">
+                            <img src="/Images/International 3.png" class="im" alt="World">
+                        </a>
+                        <div class="text-block">
+                            <h3>Worldwide</h3>
+                            <p>Travel the world with Us </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row justify-content-center text-center selectlist">
+                    <select class="GeoSelect col-4" placeholder="Search for your tour here">
+                        <option value="0" style="font-size:3em;">Search for your tour here</option>
+                    </select>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@*<div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
     <div class="carousel-inner" role="listbox">
         <img src="/Images/c3.jpg" alt="First slide" style="width:100%;">
         @*<div class="carousel-item active">
@@ -191,14 +298,14 @@
             <img class="d-block img-fluid" src="/Images/c5.jpg" alt="Third slide">
         </div>*@
 
-        @Html.Hidden("SRID", (int?)ViewBag.SRID)
-        <div class="carousel-caption d-none d-md-block">
+
+@*<div class="carousel-caption d-none d-md-block">
             <center>
                 <h1 class="item-1">How can we help?</h1>
             </center>
             <br />
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-4 col-sm-4 col-12">
                     <a href="~/Home/LoadService/?Goa=1">
                         <img src="/Images/Goa 3.png" class=" im" alt="Goa">
                     </a>
@@ -207,7 +314,7 @@
                         <p>Get Wet on our hot beaches</p>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-4 col-sm-4 col-12">
                     <a href="~/Home/LoadService/?India=1">
                         <img src="/Images/India 3.png" class=" im" alt="India">
                     </a>
@@ -216,7 +323,7 @@
                         <p>East Or West India is the Best</p>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-4 col-sm-4 col-12">
                     <a href="~/Home/LoadService/?World=1">
                         <img src="/Images/International 3.png" class="im" alt="World">
                     </a>
@@ -235,9 +342,9 @@
             </div>
 
         </div>
-    </div>
+    </div>*@
 
-    @*<div class="row ">
+@*<div class="row ">
         <div class="col-md-2 high" style="background-color:dodgerblue">
 
         </div>
@@ -258,7 +365,7 @@
         </div>
     </div>*@
 
-</div>
+@*</div>*@
 
 @*<div class="container-fluid">
         <h2>Categories</h2>
@@ -282,8 +389,6 @@
             @Html.Action("IndexActPartial", "Home", new { st = ViewBag.st, Loc = ViewBag.loc })
 
     </div>*@
-
-
 
 <script>
     var $container3 = $('#Container3');
