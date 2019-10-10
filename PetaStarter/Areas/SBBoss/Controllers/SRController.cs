@@ -1387,7 +1387,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 case ServiceTypeEnum.Accomodation:
                     List<SelectListItem> AccPayTo = new List<SelectListItem>()
                     {
-                            new SelectListItem { Text = "Pay to us", Value = "Pay to us" },
+                            new SelectListItem { Text = "Payed to us", Value = "Payed to us" },
                             new SelectListItem { Text = "Pay to owner", Value = "Pay to owner" }
                         };
                     ViewBag.PayTo = AccPayTo;
@@ -1405,7 +1405,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                     List<SelectListItem> payselect = new List<SelectListItem>()
                     {
                             new SelectListItem {
-                                Text = "Pay to us", Value = "Pay to us"
+                                Text = "Payed to us", Value = "Payed to us"
                             },
                             new SelectListItem {
                                 Text = "Pay to driver", Value = "Pay to driver"
@@ -1428,7 +1428,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                     List<SelectListItem> TaxiPayToo = new List<SelectListItem>()
                     {
                             new SelectListItem {
-                                Text = "Pay to us", Value = "Pay to us"
+                                Text = "Payed to us", Value = "Payed to us"
                             },
                             new SelectListItem {
                                 Text = "Pay to driver", Value = "Pay to driver"
