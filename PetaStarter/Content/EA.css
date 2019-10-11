@@ -124,6 +124,10 @@ input[type="checkbox"] {
     .wrapper .text-center {
         padding:0 20px;
     }
+
+    .cart-wrap {
+        padding: 20px 20px !important;
+    }
 }
 
 
