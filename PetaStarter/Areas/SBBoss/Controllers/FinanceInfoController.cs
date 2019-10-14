@@ -77,12 +77,40 @@ namespace Speedbird.Areas.SBBoss.Controllers
                         note = $"Recieved from {agent} Rs. {paymentView.Amount} towards settlement of bookings " + paymentView.Note;
                     }
 
+                    decimal TotalCost, creditAmt = 0;
+                    TotalCost = creditAmt = 0;
+
+                    //getting credit amount of that agent
+                    if(mode == (int)PayToEnum.Agent)
+                    {
+                        creditAmt = db.ExecuteScalar<decimal>($"Select coalesce(CreditAmt,0) from Agent where AgentID =  '{paymentView.AgentId}'");
+
+                        TotalCost = db.ExecuteScalar<decimal>("select coalesce(Sum(srd.cost),0) as TotalCost from SRdetails srd " +
+                            "inner join ServiceRequest srq on srq.SRID = srd.SRID " +
+                            $"inner join Agent ag on ag.AgentId = srq.AgentID where ag.AgentId = '{paymentView.AgentId}' and PaymentID is null");
+                    }
+
                     if (paymentView.SelectedSRDID_Left != null)
                     {
                         foreach (var lsrdid in paymentView.SelectedSRDID_Left)
                         {
                             db.Execute($"Update SRdetails set PaymentID = {payment.PaymentID} where SRDID = {lsrdid}");
                             var Srid = db.SingleOrDefault<int>("Select SRID from SRdetails where SRDID = @0", lsrdid);
+                            bool UnconfirmedRecordsExists = db.Fetch<int?>($"Select SRDID from SRdetails where SRID = {Srid} and PaymentID is null and SRDID <> {lsrdid}").Any();
+                            if(UnconfirmedRecordsExists)
+                            { 
+                                if (payment.PaymentID != null && mode != (int)PayToEnum.Agent)
+                                {
+                                    db.Execute($"Update ServiceRequest set SRStatusID = {(int)SRStatusEnum.Confirmed} where SRID = {Srid}");
+                                }
+                                if (mode == (int)PayToEnum.Agent)
+                                {
+                                    if (payment.PaymentID != null && TotalCost <= creditAmt)
+                                    {
+                                        db.Execute($"Update ServiceRequest set SRStatusID = {(int)SRStatusEnum.Confirmed} where SRID = {Srid}");
+                                    }
+                                }
+                            }
                             LogAction(new SRlog { SRID = Srid, SRDID = lsrdid, Event = note, Type = true });
                         }
                     }
@@ -93,6 +121,21 @@ namespace Speedbird.Areas.SBBoss.Controllers
                         {
                             db.Execute($"Update SRdetails set PaymentID = {payment.PaymentID} where SRDID = {rsrdid}");
                             var Srid = db.SingleOrDefault<int>("Select SRID from SRdetails where SRDID = @0", rsrdid);
+                            bool UnconfirmedRecordsExists = db.Fetch<int?>($"Select SRDID from SRdetails where SRID = {Srid} and PaymentID is null and SRDID <> {rsrdid}").Any();
+                            if (UnconfirmedRecordsExists)
+                            {
+                                if (payment.PaymentID != null && mode != (int)PayToEnum.Agent)
+                                {
+                                    db.Execute($"Update ServiceRequest set SRStatusID = {(int)SRStatusEnum.Confirmed} where SRID = {Srid}");
+                                }
+                                if (mode == (int)PayToEnum.Agent)
+                                {
+                                    if (payment.PaymentID != null && TotalCost <= creditAmt)
+                                    {
+                                        db.Execute($"Update ServiceRequest set SRStatusID = {(int)SRStatusEnum.Confirmed} where SRID = {Srid}");
+                                    }
+                                }
+                            }
                             LogAction(new SRlog { SRID = Srid, SRDID = rsrdid, Event = note, Type = true });
                         }
                     }
