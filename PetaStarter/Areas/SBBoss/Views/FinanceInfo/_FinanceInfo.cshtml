@@ -142,7 +142,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @Html.EditorFor(model => model.RightBkPayVm, new { side = "Right" })
+                    @Html.EditorFor(model => model.LeftBkPayVm, new { side = "Left" })
                     <tr>
                         <td colspan="3" class="text-center"><strong>Total</strong></td>
                         <td colspan="2" id="ltot"></td>
@@ -165,8 +165,7 @@
                     </tr>
                 </thead>
                 <tbody>
-
-                    @Html.EditorFor(model => model.LeftBkPayVm, new { side = "Left" })
+                    @Html.EditorFor(model => model.RightBkPayVm, new { side = "Right" })
                     <tr>
                         <td colspan="3" class="text-center"><strong>Total</strong></td>
                         <td colspan="2" id="rtot"></td>
