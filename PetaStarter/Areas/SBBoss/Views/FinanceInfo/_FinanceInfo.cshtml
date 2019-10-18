@@ -1,8 +1,8 @@
 ﻿@model Speedbird.Models.PaymentViewModel
 
-@Html.Hidden("DriverID", (int?)ViewBag.DriverID)
+@*@Html.Hidden("DriverID", (int?)ViewBag.DriverID)
 @Html.Hidden("SupplierID", (int?)ViewBag.SupplierID)
-@Html.Hidden("AgentId", (string)ViewBag.AgentId)
+@Html.Hidden("AgentId", (string)ViewBag.AgentId)*@
 @Html.Hidden("mode", (int?)ViewBag.Mode)
 
 @if (ViewBag.Mode == (int)Speedbird.PayToEnum.Driver)
@@ -94,7 +94,7 @@
             </table>
         </div>
         <div class="col-6">
-            <h4>Pay To Supplier</h4>
+            <h4>Cancelled Bookings</h4>
             <table class="table SRDetsTbl right">
                 <thead>
                     <tr>
@@ -152,7 +152,7 @@
             </table>
         </div>
         <div class="col-6">
-            <h4>Pay To Agents</h4>
+            <h4>Cancelled Bookings</h4>
             <table class="table SRDetsTbl right">
                 <thead>
                     <tr>

@@ -25,7 +25,7 @@
                <td>@Model.PaxName</td>
                 <td>@Model.Fdate.EAFormat(withTime:false)</td>
                 <td align="right">@Model.NoOfVehicles</td>
-                <td>@(Model.FromLoc.ToUpper())</td>
+                <td>@(Model.FromLoc?.ToUpper())</td>
                 <td>@Model.PickUpPoint</td>
                 <td>@Model.Fdate.EAFormatTime(withTime:true)</td>
                 <td>@(Model.ToLoc?.ToUpper())</td>

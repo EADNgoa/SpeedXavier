@@ -13,7 +13,7 @@
 // 
 //     Connection String Name: `DefaultConnection`
 //     Provider:               `System.Data.SqlClient`
-//     Connection String:      `Data Source=(LocalDb)\MSSQLLocalDB;Initial Catalog=SpeedBirdDB;Integrated Security=True`
+//     Connection String:      `Data Source=(LocalDb)\MSSQLLocalDB;Initial Catalog=eeaatydy_sbxp;Integrated Security=True`
 //     Schema:                 ``
 //     Include Views:          `False`
 
@@ -93,21 +93,6 @@ namespace Speedbird
     public partial class __RefactorLog  
     {
 		[Column] public Guid OperationKey { get; set; }
-	}
-    
-	[TableName("dbo.AbstTable")]
-	[PrimaryKey("AbstId")]
-	[ExplicitColumns]
-    public partial class AbstTable  
-    {
-		[Column] public int AbstId { get; set; }
-		[Column] public string Name { get; set; }
-		[Column] public int? Type { get; set; }
-		[Column] public string Value { get; set; }
-		[Column] public int? recursionLevel { get; set; }
-		[Column] public string ParentTableName { get; set; }
-		[Column] public int? ParentId { get; set; }
-		[Column] public int? AttrElemId { get; set; }
 	}
     
 	[TableName("dbo.Accomodation")]
@@ -1197,8 +1182,9 @@ namespace Speedbird
 		[Column] public decimal? EBCostPNight { get; set; }
 		[Column] public string Name { get; set; }
 		[Column] public string AdditionalDetails { get; set; }
-		[Column] public int? PaymentID { get; set; }
+		[Column] public int? SupplierPaymentId { get; set; }
 		[Column] public bool? IsCancelled { get; set; }
+		[Column] public int? AgentPaymentId { get; set; }
 	}
     
 	[TableName("dbo.SRlogs")]

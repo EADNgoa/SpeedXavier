@@ -95,6 +95,7 @@ namespace Speedbird
         public abstract decimal COM { get; }
         public decimal Tax { get; set; }
         public decimal ECommision { get; set; }
+        public decimal Cost { get; set; }
         public decimal SellPrice { get; set; }
     }
 
@@ -281,7 +282,6 @@ namespace Speedbird
         public int cartype { get; set; }
         public DateTime PickupTime { get; set; }
         public DateTime? serviceDate { get; set; }
-        public decimal Cost { get; set; }
         public string DriverName { get; set; }
         public string Car { get; set; }
         public string DropPoint { get; set; }
@@ -359,7 +359,7 @@ namespace Speedbird
         public bool MealIncluded { get; set; }
         public int GuideLanguageName { get; set; }
         public bool IsCancelled { get; set; }
-        public override decimal TotalCost { get { return (CostPerCar * NoOfCars) + (AdultCost * AdultNo) + (ChildCost * ChildNo); } }
+        public override decimal TotalCost { get { return Cost; } }
         public override decimal COM { get { return SellPrice - TotalCost; } }
         public decimal ProdCanxCost { get; set; }
         public decimal SBCanxCost { get; set; }

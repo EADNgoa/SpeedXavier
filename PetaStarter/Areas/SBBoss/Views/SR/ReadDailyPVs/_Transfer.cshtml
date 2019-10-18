@@ -38,8 +38,8 @@
                 <td>@Model.PaxNo</td>
                 <td>@Model.ContactName,@Model.Agency,@Model.PhoneNo</td>
                 <td>@Model.Fdate.EAFormat()</td>
-                <td align="right">@Model.NoOfVehicles</td>
-                <td>@(Model.FromLoc.ToUpper()) & @(Model.ToLoc.ToUpper())  </td>
+                <td align="right">@Model.NoOfVehicles?</td>
+                <td>@(Model.FromLoc?.ToUpper()) & @(Model.ToLoc?.ToUpper())  </td>
                 <td>@(Model.PickUpPoint) & @(Model.DropPoint)</td>
                 <td>@Model.DriverName @Model.Contact</td>
                 <td>@((CarTypeEnum)Model.cartype)</td>

@@ -83,35 +83,61 @@ namespace Speedbird.Areas.SBBoss.Controllers
                     //getting credit amount of that agent
                     if(mode == (int)PayToEnum.Agent)
                     {
-                        creditAmt = db.ExecuteScalar<decimal>($"Select coalesce(CreditAmt,0) from Agent where AgentID =  '{paymentView.AgentId}'");
+                        creditAmt = db.ExecuteScalar<decimal>($"Select coalesce(CreditAmt,0) from Agent where AgentID =  '{payment.AgentId}'");
 
-                        TotalCost = db.ExecuteScalar<decimal>("select coalesce(Sum(srd.cost),0) as TotalCost from SRdetails srd " +
+                        TotalCost = db.ExecuteScalar<decimal>("select coalesce(Sum(srd.SellPrice),0) as TotalCost from SRdetails srd " +
                             "inner join ServiceRequest srq on srq.SRID = srd.SRID " +
-                            $"inner join Agent ag on ag.AgentId = srq.AgentID where ag.AgentId = '{paymentView.AgentId}' and PaymentID is null");
+                            $"inner join Agent ag on ag.AgentId = srq.AgentID where ag.AgentId = '{payment.AgentId}' and PaymentID is null");
                     }
 
                     if (paymentView.SelectedSRDID_Left != null)
                     {
                         foreach (var lsrdid in paymentView.SelectedSRDID_Left)
                         {
-                            db.Execute($"Update SRdetails set PaymentID = {payment.PaymentID} where SRDID = {lsrdid}");
-                            var Srid = db.SingleOrDefault<int>("Select SRID from SRdetails where SRDID = @0", lsrdid);
-                            bool UnconfirmedRecordsExists = db.Fetch<int?>($"Select SRDID from SRdetails where SRID = {Srid} and PaymentID is null and SRDID <> {lsrdid}").Any();
-                            if(UnconfirmedRecordsExists)
-                            { 
-                                if (payment.PaymentID != null && mode != (int)PayToEnum.Agent)
+                            if(mode == (int)PayToEnum.Supplier)
+                            {
+                                db.Execute($"Update SRdetails set SupplierPaymentId = {payment.PaymentID} where SRDID = {lsrdid}");
+                                var Srid = db.SingleOrDefault<int>("Select SRID from SRdetails where SRDID = @0", lsrdid);
+                                LogAction(new SRlog { SRID = Srid, SRDID = lsrdid, Event = note, Type = true });
+                            }
+
+                            if (mode == (int)PayToEnum.Agent)
+                            {
+                                db.Execute($"Update SRdetails set AgentPaymentId = {payment.PaymentID} where SRDID = {lsrdid}");
+                                var Srid = db.SingleOrDefault<int>("Select SRID from SRdetails where SRDID = @0", lsrdid);
+                                bool UnconfirmedRecordsExists = db.Fetch<int?>($"Select SRDID from SRdetails where SRID = {Srid} and AgentPaymentId is null and SRDID <> {lsrdid}").Any();
+                                if (!UnconfirmedRecordsExists)
                                 {
-                                    db.Execute($"Update ServiceRequest set SRStatusID = {(int)SRStatusEnum.Confirmed} where SRID = {Srid}");
+                                    db.Execute($"Update ServiceRequest set SRStatusID = {(int)SRStatusEnum.Confirmed} where SRID = {Srid}");                          
                                 }
-                                if (mode == (int)PayToEnum.Agent)
+                                LogAction(new SRlog { SRID = Srid, SRDID = lsrdid, Event = note, Type = true });
+                            }
+
+                            if(mode == (int)PayToEnum.Driver)
+                            {
+                                string PayTo = db.SingleOrDefault<string>($"Select Coalesce(PayTo,null) from SRdetails where SRDID = {lsrdid}");
+                                if(PayTo == "Payed to us")
                                 {
-                                    if (payment.PaymentID != null && TotalCost <= creditAmt)
+                                    db.Execute($"Update SRdetails set AgentPaymentId = {payment.PaymentID} where SRDID = {lsrdid}");
+                                    var Srid = db.SingleOrDefault<int>("Select SRID from SRdetails where SRDID = @0", lsrdid);
+                                    bool UnconfirmedRecordsExists = db.Fetch<int?>($"Select SRDID from SRdetails where SRID = {Srid} and AgentPaymentId is null and SRDID <> {lsrdid}").Any();
+                                    if (!UnconfirmedRecordsExists)
                                     {
                                         db.Execute($"Update ServiceRequest set SRStatusID = {(int)SRStatusEnum.Confirmed} where SRID = {Srid}");
                                     }
+                                    LogAction(new SRlog { SRID = Srid, SRDID = lsrdid, Event = note, Type = true });
                                 }
+
+                                if (PayTo == "Pay to driver")
+                                {
+                                    db.Execute($"Update SRdetails set SupplierPaymentId = {payment.PaymentID} where SRDID = {lsrdid}");
+                                    var Srid = db.SingleOrDefault<int>("Select SRID from SRdetails where SRDID = @0", lsrdid);
+                                    LogAction(new SRlog { SRID = Srid, SRDID = lsrdid, Event = note, Type = true });
+                                }
+                                
                             }
-                            LogAction(new SRlog { SRID = Srid, SRDID = lsrdid, Event = note, Type = true });
+
+
                         }
                     }
 
@@ -119,24 +145,50 @@ namespace Speedbird.Areas.SBBoss.Controllers
                     {
                         foreach (var rsrdid in paymentView.SelectedSRDID_Right)
                         {
-                            db.Execute($"Update SRdetails set PaymentID = {payment.PaymentID} where SRDID = {rsrdid}");
-                            var Srid = db.SingleOrDefault<int>("Select SRID from SRdetails where SRDID = @0", rsrdid);
-                            bool UnconfirmedRecordsExists = db.Fetch<int?>($"Select SRDID from SRdetails where SRID = {Srid} and PaymentID is null and SRDID <> {rsrdid}").Any();
-                            if (UnconfirmedRecordsExists)
+
+
+                            if (mode == (int)PayToEnum.Supplier)
                             {
-                                if (payment.PaymentID != null && mode != (int)PayToEnum.Agent)
+                                db.Execute($"Update SRdetails set SupplierPaymentId = {payment.PaymentID} where SRDID = {rsrdid}");
+                                var Srid = db.SingleOrDefault<int>("Select SRID from SRdetails where SRDID = @0", rsrdid);
+                                LogAction(new SRlog { SRID = Srid, SRDID = rsrdid, Event = note, Type = true });
+                            }
+
+                            if (mode == (int)PayToEnum.Agent)
+                            {
+                                db.Execute($"Update SRdetails set AgentPaymentId = {payment.PaymentID} where SRDID = {rsrdid}");
+                                var Srid = db.SingleOrDefault<int>("Select SRID from SRdetails where SRDID = @0", rsrdid);
+                                bool UnconfirmedRecordsExists = db.Fetch<int?>($"Select SRDID from SRdetails where SRID = {Srid} and AgentPaymentId is null and SRDID <> {rsrdid}").Any();
+                                if (!UnconfirmedRecordsExists)
                                 {
                                     db.Execute($"Update ServiceRequest set SRStatusID = {(int)SRStatusEnum.Confirmed} where SRID = {Srid}");
                                 }
-                                if (mode == (int)PayToEnum.Agent)
+                                LogAction(new SRlog { SRID = Srid, SRDID = rsrdid, Event = note, Type = true });
+                            }
+
+                            if (mode == (int)PayToEnum.Driver)
+                            {
+                                string PayTo = db.SingleOrDefault<string>($"Select Coalesce(PayTo,null) from SRdetails where SRDID = {rsrdid}");
+                                if (PayTo == "Payed to us")
                                 {
-                                    if (payment.PaymentID != null && TotalCost <= creditAmt)
+                                    db.Execute($"Update SRdetails set AgentPaymentId = {payment.PaymentID} where SRDID = {rsrdid}");
+                                    var Srid = db.SingleOrDefault<int>("Select SRID from SRdetails where SRDID = @0", rsrdid);
+                                    bool UnconfirmedRecordsExists = db.Fetch<int?>($"Select SRDID from SRdetails where SRID = {Srid} and AgentPaymentId is null and SRDID <> {rsrdid}").Any();
+                                    if (!UnconfirmedRecordsExists)
                                     {
                                         db.Execute($"Update ServiceRequest set SRStatusID = {(int)SRStatusEnum.Confirmed} where SRID = {Srid}");
                                     }
+                                    LogAction(new SRlog { SRID = Srid, SRDID = rsrdid, Event = note, Type = true });
                                 }
+
+                                if (PayTo == "Pay to driver")
+                                {
+                                    db.Execute($"Update SRdetails set SupplierPaymentId = {payment.PaymentID} where SRDID = {rsrdid}");
+                                    var Srid = db.SingleOrDefault<int>("Select SRID from SRdetails where SRDID = @0", rsrdid);
+                                    LogAction(new SRlog { SRID = Srid, SRDID = rsrdid, Event = note, Type = true });
+                                }
+
                             }
-                            LogAction(new SRlog { SRID = Srid, SRDID = rsrdid, Event = note, Type = true });
                         }
                     }
 
@@ -220,9 +272,9 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
             paymentdetailvws.LeftBkPayVm = db.Query<BKPayVM>(leftsq).ToList();
             paymentdetailvws.RightBkPayVm = db.Query<BKPayVM>(rightsq).ToList();
-            ViewBag.DriverID = DriverID;
-            ViewBag.SupplierID = SupplierID;
-            ViewBag.AgentId = AgentId;
+            //ViewBag.DriverID = DriverID;
+            //ViewBag.SupplierID = SupplierID;
+            //ViewBag.AgentId = AgentId;
             ViewBag.Mode = mode;
             return PartialView("_FinanceInfo", paymentdetailvws);
         }
