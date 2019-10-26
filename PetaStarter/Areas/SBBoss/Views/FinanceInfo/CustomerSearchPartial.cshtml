@@ -1,0 +1,82 @@
+﻿@model IEnumerable<Speedbird.CustomerDets>
+<style>
+    .table{
+        width:100%;
+        min-width:100% !important;
+    }
+</style>
+@if (Model != null)
+{
+<div>
+    @if (ViewBag.Check != null)
+    { <h4>Assigned Pax:</h4>}
+        <table class="table table-sm table-striped">
+            <thead class="bg-info">
+                <tr>
+                    @if (ViewBag.Check == null)
+                    {
+                        <th>
+
+                        </th>
+                    }
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        Mobile
+                    </th>
+                    <th>
+                        Email
+                    </th>
+                    <th>
+                        Type
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        @if (ViewBag.Check == null)
+                        {
+                            <td>
+                                <input type="radio" value=@item.CustomerID name="CID" />
+                            </td>
+                        }
+                        <td>
+                            @item.FName &nbsp; @item.SName
+                        </td>
+
+                        <td>
+                            @item.Phone
+                        </td>
+                        <td>
+                            @item.Email
+                        </td>
+                        <td>
+                            @item.Type
+                        </td>
+                    </tr>
+
+
+
+                }
+
+
+            </tbody>
+        </table>
+    </div>
+
+}
+<script>
+    $(document).ready(function () {
+        $("input[type='radio']").on('change', function () {
+            var selectedValue = $("input[name='CID']:checked").val();
+            if (selectedValue) {
+                $("#CID").val(selectedValue);
+            }
+        });
+
+    });
+   </script>

@@ -23,19 +23,35 @@ namespace Speedbird.Areas.SBBoss.Controllers
             return View("Index", base.BaseIndex<Driver>(page, " * ","Driver Where DriverName like '%" + AN + "%' order by DriverName"));
         }
 
+        //public ActionResult PaymentList(int? page, int? DriverID, DateTime? fd, DateTime? td)
+        //{
+        //    page = 1;
+        //    ViewBag.DriverID = DriverID;
+        //    ViewBag.DriverName = db.ExecuteScalar<string>("Select DriverName from Driver Where DriverID=@0", DriverID);
+
+        //    var sql = new PetaPoco.Sql("Select (Select Sum(Amount) from DRP_SR rs where rs.SRID = sd.SRID)as PaidAmt,Coalesce(sum(sd.Cost),0) as OA,d.DriverName as UserName,sd.SRID , BookingNo from SRdetails sd inner join ServiceRequest sr on sd.SRID=sr.SRID inner join Driver d on d.DriverID = sd.DriverID  left join DRP_SR rs on rs.SRID =sd.SRID  left join RPdets rd on rd.RPDID =rs.DRPDID where sd.DriverID=@0", DriverID);
+        //    if (fd != null && td != null)
+        //        sql.Append($" and cast(Cdate as Date) Between '{fd:yyyy-MM-dd}' and  '{td:yyyy-MM-dd}'");
+
+        //    sql.Append(" Group By sd.SRID,sr.BookingNo,d.DriverName");
+        //    var rec = db.Query<SRBooking>(sql).ToList();
+
+
+        //    int pageSize = 10;
+        //    int pageNumber = (page ?? 1);
+        //    return View(rec.ToPagedList(pageNumber, pageSize));
+        //}
+
         public ActionResult PaymentList(int? page, int? DriverID, DateTime? fd, DateTime? td)
         {
             page = 1;
             ViewBag.DriverID = DriverID;
             ViewBag.DriverName = db.ExecuteScalar<string>("Select DriverName from Driver Where DriverID=@0", DriverID);
 
-            var sql = new PetaPoco.Sql("Select (Select Sum(Amount) from DRP_SR rs where rs.SRID = sd.SRID)as PaidAmt,Coalesce(sum(sd.Cost),0) as OA,d.DriverName as UserName,sd.SRID , BookingNo from SRdetails sd inner join ServiceRequest sr on sd.SRID=sr.SRID inner join Driver d on d.DriverID = sd.DriverID  left join DRP_SR rs on rs.SRID =sd.SRID  left join RPdets rd on rd.RPDID =rs.DRPDID where sd.DriverID=@0", DriverID);
-            if (fd != null && td != null)
-                sql.Append($" and cast(Cdate as Date) Between '{fd:yyyy-MM-dd}' and  '{td:yyyy-MM-dd}'");
-
-            sql.Append(" Group By sd.SRID,sr.BookingNo,d.DriverName");
-            var rec = db.Query<SRBooking>(sql).ToList();
-
+            var rec = db.Query<Paymentvw>("select py.Tdate,py.Amount,py.Note,py.Type, " +
+                "b.BankID,b.BankName,py.ChequeNo,py.TransactionNo from Payments py " +
+                "left join Banks b on b.BankID = py.BankID " +
+                $"where DriverID = {DriverID}");
 
             int pageSize = 10;
             int pageNumber = (page ?? 1);

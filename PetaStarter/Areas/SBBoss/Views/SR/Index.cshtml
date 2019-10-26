@@ -102,7 +102,7 @@
                     'bSortable': false,
                     'render': function (data, type, full, meta,row) {
 
-
+    
                         if (full.PayStatusID == @((int) Speedbird.PayType.Cancelled)) {
                             return '<a href="/SBBoss/SR/manage/' + full.SRID + '"><i class="fas bg-secondary fa-edit fa-inverse h3 float-right DropShadow"></i></a>';
                         }

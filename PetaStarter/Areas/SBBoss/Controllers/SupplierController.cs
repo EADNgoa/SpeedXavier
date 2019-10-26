@@ -22,26 +22,42 @@ namespace Speedbird.Areas.SBBoss.Controllers
             return View("Index", base.BaseIndex<Supplier>(page, " * ","Supplier Where SupplierName like '%" + SP + "%'"));
         }
 
-        public ActionResult PaymentList(int? page ,int? SupplierID,DateTime? fd,DateTime? td)
+        //public ActionResult PaymentList(int? page ,int? SupplierID,DateTime? fd,DateTime? td)
+        //{
+        //    page = 1;
+        //    ViewBag.SupplierID = SupplierID;
+        //    ViewBag.SupplierName = db.ExecuteScalar<string>("Select SupplierName from Supplier Where SupplierID=@0", SupplierID);
+
+        //    var sql = new PetaPoco.Sql("Select (Select Sum(Amount) from RP_SR rs where rs.SRID = sd.SRID)as PaidAmt,Coalesce(sum(sd.Cost),0) as OA,s.SupplierName as UserName,sd.SRID,BookingNo " +
+        //        "from SRdetails sd inner join ServiceRequest sr on sd.SRID=sr.SRID inner join Supplier s on s.SupplierID = sd.SupplierID  left join RP_SR rs on rs.SRID =sd.SRID  " +
+        //        "left join RPdets rd on rd.RPDID =rs.RPDID where sd.SupplierID=@0", SupplierID,true);
+        //    if (fd != null && td != null)
+        //        sql.Append($" and cast(Cdate as Date) Between '{fd:yyyy-MM-dd}' and  '{td:yyyy-MM-dd}'");
+
+        //    sql.Append(" Group By sd.SRID,sr.BookingNo, s.SupplierName");
+        //    var rec = db.Query<SRBooking>(sql).ToList();
+
+
+        //    int pageSize = 10;
+        //    int pageNumber = (page ?? 1);
+        //    return View(rec.ToPagedList(pageNumber, pageSize));
+
+        //}
+
+        public ActionResult PaymentList(int? page, int? SupplierID, DateTime? fd, DateTime? td)
         {
             page = 1;
             ViewBag.SupplierID = SupplierID;
             ViewBag.SupplierName = db.ExecuteScalar<string>("Select SupplierName from Supplier Where SupplierID=@0", SupplierID);
 
-            var sql = new PetaPoco.Sql("Select (Select Sum(Amount) from RP_SR rs where rs.SRID = sd.SRID)as PaidAmt,Coalesce(sum(sd.Cost),0) as OA,s.SupplierName as UserName,sd.SRID,BookingNo " +
-                "from SRdetails sd inner join ServiceRequest sr on sd.SRID=sr.SRID inner join Supplier s on s.SupplierID = sd.SupplierID  left join RP_SR rs on rs.SRID =sd.SRID  " +
-                "left join RPdets rd on rd.RPDID =rs.RPDID where sd.SupplierID=@0", SupplierID,true);
-            if (fd != null && td != null)
-                sql.Append($" and cast(Cdate as Date) Between '{fd:yyyy-MM-dd}' and  '{td:yyyy-MM-dd}'");
-
-            sql.Append(" Group By sd.SRID,sr.BookingNo, s.SupplierName");
-            var rec = db.Query<SRBooking>(sql).ToList();
-
+            var rec = db.Query<Paymentvw>("select py.Tdate,py.Amount,py.Note,py.Type, " +
+                "b.BankID,b.BankName,py.ChequeNo,py.TransactionNo from Payments py " +
+                "left join Banks b on b.BankID = py.BankID " +
+                $"where SupplierID = {SupplierID}");
 
             int pageSize = 10;
             int pageNumber = (page ?? 1);
             return View(rec.ToPagedList(pageNumber, pageSize));
-
         }
 
         public ActionResult AutoCompleteSup(string term)

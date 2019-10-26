@@ -1,8 +1,9 @@
 ﻿@model Speedbird.Models.PaymentViewModel
 
-@*@Html.Hidden("DriverID", (int?)ViewBag.DriverID)
+@Html.Hidden("DriverID", (int?)ViewBag.DriverID)
 @Html.Hidden("SupplierID", (int?)ViewBag.SupplierID)
-@Html.Hidden("AgentId", (string)ViewBag.AgentId)*@
+@Html.Hidden("AgentId", (string)ViewBag.AgentId)
+@Html.Hidden("CustomerID", (int?)ViewBag.CustomerId)
 @Html.Hidden("mode", (int?)ViewBag.Mode)
 
 @if (ViewBag.Mode == (int)Speedbird.PayToEnum.Driver)
@@ -26,7 +27,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @Html.EditorFor(model => model.LeftBkPayVm,new { side = "Left" })
+                    @Html.EditorFor(model => model.LeftBkPayVm, new { side = "Left" })
                     <tr>
                         <td colspan="3" class="text-center"><strong>Total</strong></td>
                         <td colspan="2" id="ltot"></td>
@@ -122,6 +123,63 @@
 }
 
 @if (ViewBag.Mode == (int)Speedbird.PayToEnum.Agent)
+{
+
+    <div class="row">
+
+        <div class="col-6">
+
+            <h4>Payed to us</h4>
+
+            <table class="table SRDetsTbl left">
+                <thead>
+                    <tr>
+                        <th>BF</th>
+                        <th>Pax Name</th>
+                        <th>Date</th>
+                        <th>CP</th>
+                        <th>SP</th>
+                        <th><input type="checkbox" id="checksleft" name="allchecks" /></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @Html.EditorFor(model => model.LeftBkPayVm, new { side = "Left" })
+                    <tr>
+                        <td colspan="3" class="text-center"><strong>Total</strong></td>
+                        <td colspan="2" id="ltot"></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-6">
+            <h4>Cancelled Bookings</h4>
+            <table class="table SRDetsTbl right">
+                <thead>
+                    <tr>
+                        <th>BF</th>
+                        <th>Pax Name</th>
+                        <th>Date</th>
+                        <th>CP</th>
+                        <th>SP</th>
+                        <th><input type="checkbox" id="checksright" name="allchecks" /></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @Html.EditorFor(model => model.RightBkPayVm, new { side = "Right" })
+                    <tr>
+                        <td colspan="3" class="text-center"><strong>Total</strong></td>
+                        <td colspan="2" id="rtot"></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <span style="text-align:center; margin:auto;"><strong>GrandTotal :</strong><span id="gtotal"></span></span>
+    </div>
+}
+
+@if (ViewBag.Mode == (int)Speedbird.PayToEnum.Walkin)
 {
 
     <div class="row">

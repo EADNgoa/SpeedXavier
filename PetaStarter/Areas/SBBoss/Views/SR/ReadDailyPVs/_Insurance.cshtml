@@ -9,7 +9,7 @@
                     <th>Booked On</th>
                     <th>Pax Name</th>
                     <th>Pax No</th>
-                    <th>Agent,Agency,Conatct</th>
+                    <th>Agent,Agency,Contact</th>
                     <th>DOB</th>
                     <th>Today Date</th>
                     <th>Destination</th>
@@ -47,7 +47,16 @@
                 <strong>Note</strong>
             </div>
             <div class="col-10 text-center">
-                @Model.Event
+                @{
+                    var Logs = (IEnumerable<SRlog>)ViewBag.Logs;
+                }
+
+                @foreach (var item in Logs)
+                {
+                    <ul>
+                        <li>@item.Event</li>
+                    </ul>
+                }
             </div>
         </div>
     </div>

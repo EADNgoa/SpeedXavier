@@ -27,27 +27,44 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 $"and u.UserType={(int)UserTypeEnum.Agent} and realName like '%" + AN + "%' order by u.RealName"));
         }
 
+        //public ActionResult PaymentList(int? page, string Id, DateTime? fd, DateTime? td)
+        //{
+        //    page = 1;
+        //    ViewBag.Id = Id;
+        //    ViewBag.AgentName = db.ExecuteScalar<string>("Select UserName from AspNetUsers Where Id = @0", Id);
+
+        //    var sql = new PetaPoco.Sql("Select distinct rd.RPDID,sr.SRID, sr.BookingNo, anu.UserName,sum(rs.Amount) as PaidAmt ,(select Coalesce(sum(SellPrice),0) " +
+        //        "From SRdetails Where SRID =sr.SRID) as OA from ServiceRequest sr inner join AspNetUsers anu on anu.Id = sr.AgentID left join  RP_SR rs on rs.SRID = sr.SRID " +
+        //        "left join RPdets rd on rd.RPDID = rs.RPDID Where sr.AgentID Is Not Null  and AgentID=@0", Id);
+        //    if (fd != null && td != null)
+        //        sql.Append($" and cast(Cdate as Date) Between '{fd:yyyy-MM-dd}' and  '{td:yyyy-MM-dd}'");
+
+        //    sql.Append(" Group By sr.SRID,sr.BookingNo,anu.UserName,rd.RPDID");
+        //    var rec = db.Query<SRBooking>(sql).ToList();
+        //    rec= rec.Where(a => a.OA > 0).ToList();
+
+        //    int pageSize = 10;
+        //    int pageNumber = (page ?? 1);
+        //    return View(rec.ToPagedList(pageNumber, pageSize));
+
+        //}
+
         public ActionResult PaymentList(int? page, string Id, DateTime? fd, DateTime? td)
         {
             page = 1;
             ViewBag.Id = Id;
             ViewBag.AgentName = db.ExecuteScalar<string>("Select UserName from AspNetUsers Where Id = @0", Id);
 
-            var sql = new PetaPoco.Sql("Select distinct rd.RPDID,sr.SRID, sr.BookingNo, anu.UserName,sum(rs.Amount) as PaidAmt ,(select Coalesce(sum(SellPrice),0) " +
-                "From SRdetails Where SRID =sr.SRID) as OA from ServiceRequest sr inner join AspNetUsers anu on anu.Id = sr.AgentID left join  RP_SR rs on rs.SRID = sr.SRID " +
-                "left join RPdets rd on rd.RPDID = rs.RPDID Where sr.AgentID Is Not Null  and AgentID=@0", Id);
-            if (fd != null && td != null)
-                sql.Append($" and cast(Cdate as Date) Between '{fd:yyyy-MM-dd}' and  '{td:yyyy-MM-dd}'");
+            var rec = db.Query<Paymentvw>("select py.Tdate,py.Amount,py.Note,py.Type, " +
+                "b.BankID,b.BankName,py.ChequeNo,py.TransactionNo from Payments py " +
+                "left join Banks b on b.BankID = py.BankID " +
+                $"where AgentId = '{Id}'");
 
-            sql.Append(" Group By sr.SRID,sr.BookingNo,anu.UserName,rd.RPDID");
-            var rec = db.Query<SRBooking>(sql).ToList();
-            rec= rec.Where(a => a.OA > 0).ToList();
- 
             int pageSize = 10;
             int pageNumber = (page ?? 1);
             return View(rec.ToPagedList(pageNumber, pageSize));
-
         }
+
         public ActionResult AutoCompleteAgent(string term)
         {
             var filteredItems = db.Fetch<AspNetUser>($"Select * from AspNetUsers Where UserName like '%{term}%'").Select(c => new { id = c.Id, value = c.UserName });
@@ -90,7 +107,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [EAAuthorize(FunctionName = "Agents", Writable = true)]
-        public async Task<ActionResult> Manage([Bind(Include = "AgentId,RealName,ContactName,AgencyName,PhoneNo,Email,Address,State,PAN,GST,RCbook,BkAccNo,BkName,BkIFSC,BkAddress")] AgentView model)
+        public async Task<ActionResult> Manage([Bind(Include = "AgentId,RealName,ContactName,AgencyName,PhoneNo,Email,Address,State,PAN,GST,RCbook,BkAccNo,BkName,BkIFSC,BkAddress,CreditAmt")] AgentView model)
         {
             using (var transaction = db.GetTransaction())
             {
@@ -114,7 +131,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
                             GST = model.GST,
                             PAN = model.PAN,
                             PhoneNo = model.PhoneNo,
-                            RCbook = model.RCbook
+                            RCbook = model.RCbook,
+                            CreditAmt = model.CreditAmt
                         });
                     }
                     else
@@ -140,7 +158,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
                                 GST = model.GST,
                                 PAN = model.PAN,
                                 PhoneNo = model.PhoneNo,
-                                RCbook = model.RCbook
+                                RCbook = model.RCbook,
+                                CreditAmt = model.CreditAmt
                             });
                             var item = new AgentDiscount { UserID = user.Id };
                             db.Insert(item);

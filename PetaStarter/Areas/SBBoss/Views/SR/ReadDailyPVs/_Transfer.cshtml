@@ -38,7 +38,7 @@
                 <td>@Model.PaxNo</td>
                 <td>@Model.ContactName,@Model.Agency,@Model.PhoneNo</td>
                 <td>@Model.Fdate.EAFormat()</td>
-                <td align="right">@Model.NoOfVehicles?</td>
+                <td align="right">@Model.NoOfVehicles</td>
                 <td>@(Model.FromLoc?.ToUpper()) & @(Model.ToLoc?.ToUpper())  </td>
                 <td>@(Model.PickUpPoint) & @(Model.DropPoint)</td>
                 <td>@Model.DriverName @Model.Contact</td>
@@ -57,7 +57,16 @@
                 <strong>Note</strong>
             </div>
             <div class="col-10 text-center">
-                @Model.Event
+                @{
+                    var Logs = (IEnumerable<SRlog>)ViewBag.Logs;
+                }
+
+                @foreach (var item in Logs)
+                {
+                    <ul>
+                        <li>@item.Event</li>
+                    </ul>
+                }
             </div>
         </div>
         <button type="button" data-srdid="@Model.SRDID" data-srid="@Model.SRID" class="btn btn-primary" data-toggle="modal" data-target="#myModal">

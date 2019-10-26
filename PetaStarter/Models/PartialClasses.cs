@@ -26,6 +26,19 @@ namespace Speedbird
         public string Phone { get; set; }
     }
 
+    public class Paymentvw
+    {
+        public int PaymentID { get; set; }
+        public string ChequeNo { get; set; }
+        public DateTime TDate { get; set; }
+        public decimal Amount { get; set; }
+        public string TransactionNo { get; set; }
+        public string Note { get; set; }
+        public int Type { get; set; }
+        public int BankID { get; set; }
+        public string BankName { get; set; }
+    }
+
     public class Paymentdetailvw
     {
         public string PaxName { get; set; }
@@ -113,7 +126,6 @@ namespace Speedbird
         public decimal NoOfDays { get; set; }
         public string HotelCat { get; set; }
         public int CarType { get; set; }
-        public decimal Cost { get; set; }
         public int DinnerCost { get; set; }
         public decimal NetCost { get; set; }
         public decimal AddCost { get; set; }
@@ -134,7 +146,6 @@ namespace Speedbird
         public DateTime? ExpiryDate { get; set; }
         public DateTime? DOB { get; set; }
         public string Nationality { get; set; }
-        public decimal Cost { get; set; }
         public string PayTo { get; set; }
         public int Duration { get; set; }
         public int OptionTypeID { get; set; }
@@ -159,7 +170,6 @@ namespace Speedbird
         public int NoOfDays { get; set; }
         public DateTime? ValidFrom { get; set; }
         public DateTime? ValidTo { get; set; }
-        public decimal Cost { get; set; }
         public bool IsCancelled { get; set; }
         public override decimal TotalCost { get { return Cost; } }
         public override decimal COM { get { return SellPrice - TotalCost; } }
@@ -184,7 +194,6 @@ namespace Speedbird
         public string ToPort { get; set; }
         public int Nights { get; set; }
         public string MealPlan { get; set; }
-        public decimal Cost { get; set; }
         public int DinnerCost { get; set; }
         public string CruiseName { get; set; }
         public bool Cancelled { get; set; }
@@ -210,7 +219,6 @@ namespace Speedbird
         public int OptionTypeID { get; set; }
         public int CarType { get; set; }
         public int TicketNo { get; set; }
-        public decimal Cost { get; set; }
         public int DinnerCost { get; set; }
         public decimal AddCost { get; set; }
         public decimal FullCost { get; set; }
@@ -238,7 +246,6 @@ namespace Speedbird
         public int OptionTypeID { get; set; }
         public int CarType { get; set; }
         public int TicketNo { get; set; }
-        public decimal Cost { get; set; }
         public int DinnerCost { get; set; }
         public decimal AddCost { get; set; }
         public string AddDetl { get; set; }
@@ -265,7 +272,6 @@ namespace Speedbird
         public string FromLoc { get; set; }
         public string ToLoc { get; set; }
         public int CarType { get; set; }
-        public decimal Cost { get; set; }
         public int BFCost { get; set; }
         public decimal ExtraServiceCost { get; set; }
         public string PayTo { get; set; }
@@ -310,7 +316,6 @@ namespace Speedbird
         public int AdultNo { get; set; }
         public int ExtraBedCost { get; set; }
         public int ChildNo { get; set; }
-        public decimal Cost { get; set; }
         public DateTime checkin { get; set; }
         public string FromLoc { get; set; }
         public bool HasAc { get; set; }
@@ -371,7 +376,6 @@ namespace Speedbird
         public DateTime? DOB { get; set; }
         public string PassPortNo { get; set; }
         public string Nationality { get; set; }
-        public decimal Cost { get; set; }
         public string Heritage { get; set; }
         public bool IsCancelled { get; set; }
         public override decimal TotalCost { get { return Cost; } }
@@ -398,7 +402,6 @@ namespace Speedbird
         public string TicketNo {get; set; } 
         public string GDSConfNo {get; set; } 
         public string AirlinePNR {get; set; } 
-        public decimal Cost {get; set; } 
         public string Airline {get; set; } 
         public string Extra {get; set; } 
         public string ExtraDetails {get; set; }
@@ -1551,7 +1554,8 @@ namespace Speedbird
     {
         Driver,
         Supplier,
-        Agent
+        Agent,
+        Walkin
     }
 
 

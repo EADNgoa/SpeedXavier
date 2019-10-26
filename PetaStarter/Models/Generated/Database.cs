@@ -895,6 +895,7 @@ namespace Speedbird
 		[Column] public int? BankID { get; set; }
 		[Column] public string AgentId { get; set; }
 		[Column] public int? SupplierID { get; set; }
+		[Column] public int? CustomerID { get; set; }
 	}
     
 	[TableName("dbo.PCdetails")]
@@ -1182,9 +1183,12 @@ namespace Speedbird
 		[Column] public decimal? EBCostPNight { get; set; }
 		[Column] public string Name { get; set; }
 		[Column] public string AdditionalDetails { get; set; }
-		[Column] public int? SupplierPaymentId { get; set; }
+		[Column] public int? PaymentID { get; set; }
 		[Column] public bool? IsCancelled { get; set; }
 		[Column] public int? AgentPaymentId { get; set; }
+		[Column] public int? CancelledSupplierPaymentId { get; set; }
+		[Column] public int? CancelledAgentPaymentId { get; set; }
+		[Column] public int? SupplierPaymentId { get; set; }
 	}
     
 	[TableName("dbo.SRlogs")]

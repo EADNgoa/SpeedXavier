@@ -77,15 +77,15 @@ namespace Speedbird.Areas.SBBoss.Controllers
                         note = $"Recieved from {agent} Rs. {paymentView.Amount} towards settlement of bookings " + paymentView.Note;
                     }
 
-                    decimal TotalCost, creditAmt = 0;
-                    TotalCost = creditAmt = 0;
+                    decimal TotalSell, creditAmt = 0;
+                    TotalSell = creditAmt = 0;
 
                     //getting credit amount of that agent
                     if(mode == (int)PayToEnum.Agent)
                     {
                         creditAmt = db.ExecuteScalar<decimal>($"Select coalesce(CreditAmt,0) from Agent where AgentID =  '{payment.AgentId}'");
 
-                        TotalCost = db.ExecuteScalar<decimal>("select coalesce(Sum(srd.SellPrice),0) as TotalCost from SRdetails srd " +
+                        TotalSell = db.ExecuteScalar<decimal>("select coalesce(Sum(srd.SellPrice),0) as TotalCost from SRdetails srd " +
                             "inner join ServiceRequest srq on srq.SRID = srd.SRID " +
                             $"inner join Agent ag on ag.AgentId = srq.AgentID where ag.AgentId = '{payment.AgentId}' and PaymentID is null");
                     }
@@ -108,7 +108,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                                 bool UnconfirmedRecordsExists = db.Fetch<int?>($"Select SRDID from SRdetails where SRID = {Srid} and AgentPaymentId is null and SRDID <> {lsrdid}").Any();
                                 if (!UnconfirmedRecordsExists)
                                 {
-                                    db.Execute($"Update ServiceRequest set SRStatusID = {(int)SRStatusEnum.Confirmed} where SRID = {Srid}");                          
+                                    db.Execute($"Update ServiceRequest set SRStatusID = {(int)SRStatusEnum.Confirmed},PayStatusID = {(int)PayType.Full_Paid} where SRID = {Srid}");                          
                                 }
                                 LogAction(new SRlog { SRID = Srid, SRDID = lsrdid, Event = note, Type = true });
                             }
@@ -123,7 +123,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                                     bool UnconfirmedRecordsExists = db.Fetch<int?>($"Select SRDID from SRdetails where SRID = {Srid} and AgentPaymentId is null and SRDID <> {lsrdid}").Any();
                                     if (!UnconfirmedRecordsExists)
                                     {
-                                        db.Execute($"Update ServiceRequest set SRStatusID = {(int)SRStatusEnum.Confirmed} where SRID = {Srid}");
+                                        db.Execute($"Update ServiceRequest set SRStatusID = {(int)SRStatusEnum.Confirmed},PayStatusID = {(int)PayType.Full_Paid} where SRID = {Srid}");
                                     }
                                     LogAction(new SRlog { SRID = Srid, SRDID = lsrdid, Event = note, Type = true });
                                 }
@@ -135,6 +135,18 @@ namespace Speedbird.Areas.SBBoss.Controllers
                                     LogAction(new SRlog { SRID = Srid, SRDID = lsrdid, Event = note, Type = true });
                                 }
                                 
+                            }
+
+                            if (mode == (int)PayToEnum.Walkin)
+                            {
+                                db.Execute($"Update SRdetails set AgentPaymentId = {payment.PaymentID} where SRDID = {lsrdid}");
+                                var Srid = db.SingleOrDefault<int>("Select SRID from SRdetails where SRDID = @0", lsrdid);
+                                bool UnconfirmedRecordsExists = db.Fetch<int?>($"Select SRDID from SRdetails where SRID = {Srid} and AgentPaymentId is null and SRDID <> {lsrdid}").Any();
+                                if (!UnconfirmedRecordsExists)
+                                {
+                                    db.Execute($"Update ServiceRequest set SRStatusID = {(int)SRStatusEnum.Confirmed},PayStatusID = {(int)PayType.Full_Paid} where SRID = {Srid}");
+                                }
+                                LogAction(new SRlog { SRID = Srid, SRDID = lsrdid, Event = note, Type = true });
                             }
 
 
@@ -149,19 +161,19 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
                             if (mode == (int)PayToEnum.Supplier)
                             {
-                                db.Execute($"Update SRdetails set SupplierPaymentId = {payment.PaymentID} where SRDID = {rsrdid}");
+                                db.Execute($"Update SRdetails set SupplierPaymentId = {payment.PaymentID},CancelledSupplierPaymentId = {payment.PaymentID} where SRDID = {rsrdid}");
                                 var Srid = db.SingleOrDefault<int>("Select SRID from SRdetails where SRDID = @0", rsrdid);
                                 LogAction(new SRlog { SRID = Srid, SRDID = rsrdid, Event = note, Type = true });
                             }
 
                             if (mode == (int)PayToEnum.Agent)
                             {
-                                db.Execute($"Update SRdetails set AgentPaymentId = {payment.PaymentID} where SRDID = {rsrdid}");
+                                db.Execute($"Update SRdetails set AgentPaymentId = {payment.PaymentID},CancelledAgentPaymentId = {payment.PaymentID} where SRDID = {rsrdid}");
                                 var Srid = db.SingleOrDefault<int>("Select SRID from SRdetails where SRDID = @0", rsrdid);
                                 bool UnconfirmedRecordsExists = db.Fetch<int?>($"Select SRDID from SRdetails where SRID = {Srid} and AgentPaymentId is null and SRDID <> {rsrdid}").Any();
                                 if (!UnconfirmedRecordsExists)
                                 {
-                                    db.Execute($"Update ServiceRequest set SRStatusID = {(int)SRStatusEnum.Confirmed} where SRID = {Srid}");
+                                    db.Execute($"Update ServiceRequest set SRStatusID = {(int)SRStatusEnum.Confirmed},PayStatusID = {(int)PayType.Full_Paid} where SRID = {Srid}");
                                 }
                                 LogAction(new SRlog { SRID = Srid, SRDID = rsrdid, Event = note, Type = true });
                             }
@@ -171,23 +183,30 @@ namespace Speedbird.Areas.SBBoss.Controllers
                                 string PayTo = db.SingleOrDefault<string>($"Select Coalesce(PayTo,null) from SRdetails where SRDID = {rsrdid}");
                                 if (PayTo == "Payed to us")
                                 {
-                                    db.Execute($"Update SRdetails set AgentPaymentId = {payment.PaymentID} where SRDID = {rsrdid}");
+                                    db.Execute($"Update SRdetails set AgentPaymentId = {payment.PaymentID},CancelledAgentPaymentId = {payment.PaymentID} where SRDID = {rsrdid}");
                                     var Srid = db.SingleOrDefault<int>("Select SRID from SRdetails where SRDID = @0", rsrdid);
                                     bool UnconfirmedRecordsExists = db.Fetch<int?>($"Select SRDID from SRdetails where SRID = {Srid} and AgentPaymentId is null and SRDID <> {rsrdid}").Any();
                                     if (!UnconfirmedRecordsExists)
                                     {
-                                        db.Execute($"Update ServiceRequest set SRStatusID = {(int)SRStatusEnum.Confirmed} where SRID = {Srid}");
+                                        db.Execute($"Update ServiceRequest set SRStatusID = {(int)SRStatusEnum.Confirmed},PayStatusID = {(int)PayType.Full_Paid} where SRID = {Srid}");
                                     }
                                     LogAction(new SRlog { SRID = Srid, SRDID = rsrdid, Event = note, Type = true });
                                 }
 
                                 if (PayTo == "Pay to driver")
                                 {
-                                    db.Execute($"Update SRdetails set SupplierPaymentId = {payment.PaymentID} where SRDID = {rsrdid}");
+                                    db.Execute($"Update SRdetails set SupplierPaymentId = {payment.PaymentID},CancelledSupplierPaymentId = {payment.PaymentID} where SRDID = {rsrdid}");
                                     var Srid = db.SingleOrDefault<int>("Select SRID from SRdetails where SRDID = @0", rsrdid);
                                     LogAction(new SRlog { SRID = Srid, SRDID = rsrdid, Event = note, Type = true });
                                 }
 
+                            }
+
+                            if (mode == (int)PayToEnum.Walkin)
+                            {
+                                db.Execute($"Update SRdetails set CancelledAgentPaymentId = {payment.PaymentID} where SRDID = {rsrdid}");
+                                var Srid = db.SingleOrDefault<int>("Select SRID from SRdetails where SRDID = @0", rsrdid);
+                                LogAction(new SRlog { SRID = Srid, SRDID = rsrdid, Event = note, Type = true });
                             }
                         }
                     }
@@ -205,7 +224,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
         }
 
         //[EAAuthorize(FunctionName = "FinanceInfo", Writable = false)]
-        public PartialViewResult _FinanceInfo(int? mode, DateTime? FromDate, DateTime? ToDate, int? DriverID, bool? All, bool? Paid, bool? Pending, int? SupplierID, string AgentId)
+        public PartialViewResult _FinanceInfo(int? mode, DateTime? FromDate, DateTime? ToDate, int? DriverID, bool? All, bool? Paid, bool? Pending, int? SupplierID, string AgentId, int? CustomerID)
         {
             PaymentViewModel paymentdetailvws = new PaymentViewModel();
             Sql leftsq = new Sql();
@@ -214,13 +233,13 @@ namespace Speedbird.Areas.SBBoss.Controllers
             if (mode == (int)PayToEnum.Driver)
             {
                 leftsq.Append("Select CONCAT(c.fName, ' ',c.sName) as PaxName, " +
-                         "srd.SRDID,srq.SRID, srd.Cost, srq.BookingNo, srd.Fdate, SellPrice, srd.PayTo,PaymentID " +
+                         "srd.SRDID,srq.SRID, srd.Cost, srq.BookingNo, srd.Fdate, SellPrice, srd.PayTo " +
                          "from SRdetails srd, ServiceRequest srq, SR_Cust src, Customer c, SRD_Cust sc where sc.SRDID = srd.SRDID " +
                          "and c.CustomerID = sc.CustomerID and srq.SRID = srd.SRID and src.ServiceRequestID = srq.SRID and IsLead = 1 " +
                         $"and DriverID = {DriverID} and srd.PayTo = 'Payed to us' and srd.Fdate between '{String.Format("{0:yyyy-MM-dd}", FromDate)}' and '{String.Format("{0:yyyy-MM-dd}", ToDate)}'");
 
                 rightsq.Append("Select CONCAT(c.fName, ' ',c.sName) as PaxName, " +
-                       "srd.SRDID,srq.SRID, srd.Cost, srq.BookingNo, srd.Fdate, SellPrice, srd.PayTo,PaymentID " +
+                       "srd.SRDID,srq.SRID, srd.Cost, srq.BookingNo, srd.Fdate, SellPrice, srd.PayTo " +
                        "from SRdetails srd, ServiceRequest srq, SR_Cust src, Customer c, SRD_Cust sc where sc.SRDID = srd.SRDID " +
                        "and c.CustomerID = sc.CustomerID and srq.SRID = srd.SRID and src.ServiceRequestID = srq.SRID and IsLead = 1 " +
                        $"and DriverID = {DriverID} and srd.PayTo = 'Pay to driver' and srd.Fdate between '{String.Format("{0:yyyy-MM-dd}", FromDate)}' and '{String.Format("{0:yyyy-MM-dd}", ToDate)}'");
@@ -229,13 +248,13 @@ namespace Speedbird.Areas.SBBoss.Controllers
             if (mode == (int)PayToEnum.Supplier)
             {
                 leftsq.Append("Select CONCAT(c.fName, ' ',c.sName) as PaxName, " +
-                        "srd.SRDID,srq.SRID, srd.Cost, srq.BookingNo, srd.Fdate, SellPrice, srd.PayTo,PaymentID,IsCancelled " +
+                        "srd.SRDID,srq.SRID, srd.Cost, srq.BookingNo, srd.Fdate, SellPrice, srd.PayTo,IsCancelled " +
                         "from SRdetails srd, ServiceRequest srq, SR_Cust src, Customer c, SRD_Cust sc where sc.SRDID = srd.SRDID " +
                         "and c.CustomerID = sc.CustomerID and srq.SRID = srd.SRID and src.ServiceRequestID = srq.SRID and IsLead = 1 " +
                        $"and IsCancelled is null and SupplierID = {SupplierID} and srd.Fdate between '{String.Format("{0:yyyy-MM-dd}", FromDate)}' and '{String.Format("{0:yyyy-MM-dd}", ToDate)}'");
 
                 rightsq.Append("Select CONCAT(c.fName, ' ',c.sName) as PaxName, srd.SRDID,srq.SRID, srd.Cost, srq.BookingNo, srd.Fdate, SellPrice, srd.PayTo, " +
-                    "rf.SRDID,rf.ProdCanxCost, rf.SBCanxCost,IsCancelled, rf.RefundId,PaymentID from SRdetails srd, ServiceRequest srq, SR_Cust src, Customer c, SRD_Cust sc, Refunds rf " +
+                    "rf.SRDID,rf.ProdCanxCost, rf.SBCanxCost,IsCancelled, rf.RefundId from SRdetails srd, ServiceRequest srq, SR_Cust src, Customer c, SRD_Cust sc, Refunds rf " +
                     "where sc.SRDID = srd.SRDID and c.CustomerID = sc.CustomerID and srq.SRID = srd.SRID and src.ServiceRequestID = srq.SRID " +
                     "and rf.SRDID = srd.SRDID and IsLead = 1 " +
                     $"and IsCancelled = 1 and SupplierID = {SupplierID} and srd.Fdate between '{String.Format("{0:yyyy-MM-dd}", FromDate)}' and '{String.Format("{0:yyyy-MM-dd}", ToDate)}'");
@@ -244,37 +263,90 @@ namespace Speedbird.Areas.SBBoss.Controllers
             if (mode == (int)PayToEnum.Agent)
             {
                 leftsq.Append("Select CONCAT(c.fName, ' ',c.sName) as PaxName, srd.SRDID,srq.SRID, srd.Cost, " +
-                    "srq.BookingNo, srd.Fdate, SellPrice, srd.PayTo, PaymentID,IsCancelled from SRdetails srd, " +
+                    "srq.BookingNo, srd.Fdate, SellPrice, srd.PayTo,IsCancelled from SRdetails srd, " +
                     "ServiceRequest srq, SR_Cust src, Customer c, SRD_Cust sc where sc.SRDID = srd.SRDID " +
                     "and c.CustomerID = sc.CustomerID and srq.SRID = srd.SRID and src.ServiceRequestID = srq.SRID and IsLead = 1 " +
                     $"and IsCancelled is null and AgentId = '{AgentId}' and srd.Fdate between '{String.Format("{0:yyyy-MM-dd}", FromDate)}' and '{String.Format("{0:yyyy-MM-dd}", ToDate)}'");
 
                 rightsq.Append("Select CONCAT(c.fName, ' ',c.sName) as PaxName, " +
-                   "srd.SRDID,srq.SRID, srd.Cost, srq.BookingNo, srd.Fdate, SellPrice, srd.PayTo,IsCancelled,rf.ProdCanxCost,rf.SRDID, rf.SBCanxCost, rf.RefundId,PaymentID " +
+                   "srd.SRDID,srq.SRID, srd.Cost, srq.BookingNo, srd.Fdate, SellPrice, srd.PayTo,IsCancelled,rf.ProdCanxCost,rf.SRDID, rf.SBCanxCost, rf.RefundId " +
                    "from SRdetails srd, ServiceRequest srq, SR_Cust src, Customer c, SRD_Cust sc, Refunds rf where sc.SRDID = srd.SRDID " +
                    "and c.CustomerID = sc.CustomerID and srq.SRID = srd.SRID and src.ServiceRequestID = srq.SRID and rf.SRDID = srd.SRDID and IsLead = 1 " +
                    $"and IsCancelled = 1 and AgentId = '{AgentId}' and srd.Fdate between '{String.Format("{0:yyyy-MM-dd}", FromDate)}' and '{String.Format("{0:yyyy-MM-dd}", ToDate)}'");
             }
 
-            if (Paid == true)
+            if (mode == (int)PayToEnum.Walkin)
             {
-                leftsq.Append($" and PaymentID is not null");
-                rightsq.Append($" and PaymentID is not null");
+                leftsq.Append("Select CONCAT(c.fName, ' ',c.sName) as PaxName, srd.SRDID,srq.SRID, srd.Cost, " +
+                    "srq.BookingNo, srd.Fdate, SellPrice, srd.PayTo,IsCancelled from SRdetails srd, " +
+                    "ServiceRequest srq, SR_Cust src, Customer c, SRD_Cust sc where sc.SRDID = srd.SRDID " +
+                    "and c.CustomerID = sc.CustomerID and srq.SRID = srd.SRID and src.ServiceRequestID = srq.SRID and IsLead = 1 " +
+                    $"and IsCancelled is null and c.CustomerID = {CustomerID} and srd.Fdate between '{String.Format("{0:yyyy-MM-dd}", FromDate)}' and '{String.Format("{0:yyyy-MM-dd}", ToDate)}'");
 
+                rightsq.Append("Select CONCAT(c.fName, ' ',c.sName) as PaxName, " +
+                   "srd.SRDID,srq.SRID, srd.Cost, srq.BookingNo, srd.Fdate, SellPrice, srd.PayTo,IsCancelled,rf.ProdCanxCost,rf.SRDID, rf.SBCanxCost, rf.RefundId " +
+                   "from SRdetails srd, ServiceRequest srq, SR_Cust src, Customer c, SRD_Cust sc, Refunds rf where sc.SRDID = srd.SRDID " +
+                   "and c.CustomerID = sc.CustomerID and srq.SRID = srd.SRID and src.ServiceRequestID = srq.SRID and rf.SRDID = srd.SRDID and IsLead = 1 " +
+                   $"and IsCancelled = 1  and c.CustomerID = {CustomerID} and srd.Fdate between '{String.Format("{0:yyyy-MM-dd}", FromDate)}' and '{String.Format("{0:yyyy-MM-dd}", ToDate)}'");
             }
 
-            if (Pending == true)
+
+            if (Paid == true && mode == (int)PayToEnum.Driver)
             {
-                leftsq.Append($" and PaymentID is null");
-                rightsq.Append($" and PaymentID is null");
+                leftsq.Append($" and AgentPaymentId is not null");
+                rightsq.Append($" and SupplierPaymentId is not null");
+            }
+
+            if (Pending == true && mode == (int)PayToEnum.Driver)
+            {
+                leftsq.Append($" and AgentPaymentId is null");
+                rightsq.Append($" and SupplierPaymentId is null");
+            }
+
+            if (Paid == true && mode == (int)PayToEnum.Supplier)
+            {
+                leftsq.Append($" and SupplierPaymentId is not null");
+                rightsq.Append($" and SupplierPaymentId is not null");
+            }
+
+
+            if (Pending == true && mode == (int)PayToEnum.Supplier)
+            {
+                leftsq.Append($" and SupplierPaymentId is null");
+                rightsq.Append($" and SupplierPaymentId is null");
+            }
+
+            if (Paid == true && mode == (int)PayToEnum.Agent)
+            {
+                leftsq.Append($" and AgentPaymentId is not null");
+                rightsq.Append($" and AgentPaymentId is not null");
+            }
+
+            if (Pending == true && mode == (int)PayToEnum.Agent)
+            {
+                leftsq.Append($" and AgentPaymentId is null");
+                rightsq.Append($" and AgentPaymentId is null");
+            }
+
+            if (Paid == true && mode == (int)PayToEnum.Walkin)
+            {
+                leftsq.Append($" and AgentPaymentId is not null");
+                rightsq.Append($" and AgentPaymentId is not null");
+            }
+
+            if (Pending == true && mode == (int)PayToEnum.Walkin)
+            {
+                leftsq.Append($" and AgentPaymentId is null");
+                rightsq.Append($" and AgentPaymentId is null");
             }
 
 
             paymentdetailvws.LeftBkPayVm = db.Query<BKPayVM>(leftsq).ToList();
             paymentdetailvws.RightBkPayVm = db.Query<BKPayVM>(rightsq).ToList();
-            //ViewBag.DriverID = DriverID;
-            //ViewBag.SupplierID = SupplierID;
-            //ViewBag.AgentId = AgentId;
+            ViewBag.DriverID = DriverID;
+            ViewBag.SupplierID = SupplierID;
+            ViewBag.AgentId = AgentId;
+            ViewBag.CustomerId = CustomerID;
             ViewBag.Mode = mode;
             return PartialView("_FinanceInfo", paymentdetailvws);
         }
@@ -306,6 +378,27 @@ namespace Speedbird.Areas.SBBoss.Controllers
         {
             var filteredItems = db.Fetch<Driver>($"Select DriverID,DriverName from Driver Where DriverName like '%{term}%'").Select(c => new { id = c.DriverID, value = c.DriverName });
             return Json(filteredItems, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult ExistingCustRec(string fn, string sn, string ph, string em)
+        {
+            var sql = new PetaPoco.Sql("Select * from Customer where 1=1");
+
+            if (fn != null && fn.Length > 0)
+                sql.Append($" and LOWER(FName) like '%{fn.ToLower()}%'");
+
+            if (sn != null && fn.Length > 0)
+                sql.Append($" and LOWER(SName) like '%{sn.ToLower()}%'");
+
+            if (ph != null && fn.Length > 0)
+                sql.Append($" and Phone like '%{ph}%'");
+
+            if (em != null && fn.Length > 0)
+                sql.Append($" and LOWER(Email) like '%{em.ToLower()}%'");
+
+            var recs = db.Query<CustomerDets>(sql);
+
+            return PartialView("CustomerSearchPartial", recs);
         }
 
 

@@ -3,10 +3,8 @@
     ViewBag.Title = "Agent Registration";
 }
 <style>
-    .input-group-text
-    {
-        width:180px;
-        
+    .input-group-text {
+        width: 180px;
     }
 </style>
 
@@ -16,112 +14,117 @@
         <a href="@Url.Action("Index","Agent")"><i class="fas fa-undo-alt fa-inverse h3 float-right DropShadow"></i></a>
     </div>
     <div class="card-body">
-        
+
 
         @using (Html.BeginForm("Manage", "Agent", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
         {
             @Html.AntiForgeryToken()
 
-        <div class="form-horizontal">
+            <div class="form-horizontal">
 
-            
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-            <div class="form-row">
-                <div class="input-group col mb-3">
-                    <div class="input-group-prepend"><span class="input-group-text">Agency Name</span></div>
-                    @Html.EditorFor(model => model.RealName, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.RealName, "", new { @class = "text-danger" })
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                <div class="form-row">
+                    <div class="input-group col mb-3">
+                        <div class="input-group-prepend"><span class="input-group-text">Agency Name</span></div>
+                        @Html.EditorFor(model => model.RealName, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.RealName, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="input-group col mb-3">
+                        <div class="input-group-prepend"><span class="input-group-text">Agent Contact Name</span></div>
+                        @Html.EditorFor(model => model.ContactName, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.ContactName, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="input-group col mb-3">
+                        <div class="input-group-prepend"><span class="input-group-text">Agency Email</span></div>
+                        @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="input-group col mb-3">
+                        <div class="input-group-prepend"><span class="input-group-text">Agency State</span></div>
+                        @Html.EditorFor(model => model.State, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.State, "", new { @class = "text-danger" })
+                    </div>
                 </div>
-                <div class="input-group col mb-3">
-                    <div class="input-group-prepend"><span class="input-group-text">Agent Contact Name</span></div>
-                    @Html.EditorFor(model => model.ContactName, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.ContactName, "", new { @class = "text-danger" })
+
+                <div class="form-row">
+                    <div class="input-group col mb-3">
+                        <div class="input-group-prepend"><span class="input-group-text">Agent Contact Phone</span></div>
+                        @Html.EditorFor(model => model.PhoneNo, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.PhoneNo, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="input-group col mb-3">
+                        <div class="input-group-prepend"><span class="input-group-text">Agent PAN No.</span></div>
+                        @Html.EditorFor(model => model.PAN, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.PAN, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="input-group col mb-3">
+                        <div class="input-group-prepend"><span class="input-group-text">Agent GST No.</span></div>
+                        @Html.EditorFor(model => model.GST, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.PAN, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="input-group col mb-3">
+                        <div class="input-group-prepend"><span class="input-group-text">Agent RC Book No.</span></div>
+                        @Html.EditorFor(model => model.RCbook, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.RCbook, "", new { @class = "text-danger" })
+                    </div>
                 </div>
-                <div class="input-group col mb-3">
-                    <div class="input-group-prepend"><span class="input-group-text">Agency Email</span></div>
-                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+
+                <div class="form-row">
+                    <div class="input-group col mb-6">
+                        <div class="input-group-prepend"><span class="input-group-text">Agency Address</span></div>
+                        @Html.TextAreaFor(model => model.Address, new { @type = "text", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="input-group col mb-6">
+                        <div class="input-group-prepend"><span class="input-group-text">Agency Bank Address</span></div>
+                        @Html.TextAreaFor(model => model.BkAddress, new { @type = "text", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.BkAddress, "", new { @class = "text-danger" })
+                    </div>
                 </div>
-                <div class="input-group col mb-3">
-                    <div class="input-group-prepend"><span class="input-group-text">Agency State</span></div>
-                    @Html.EditorFor(model => model.State, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.State, "", new { @class = "text-danger" })
+                <br />
+                <div class="form-row">
+                    <div class="input-group col mb-3">
+                        <div class="input-group-prepend"><span class="input-group-text">Agency Bank Name</span></div>
+                        @Html.EditorFor(model => model.BkName, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.BkName, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="input-group col mb-3">
+                        <div class="input-group-prepend"><span class="input-group-text">Agency Bank Ac. No.</span></div>
+                        @Html.EditorFor(model => model.BkAccNo, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.BkAccNo, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="input-group col mb-3">
+                        <div class="input-group-prepend"><span class="input-group-text">Agency Bank IFSC</span></div>
+                        @Html.EditorFor(model => model.BkIFSC, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.BkIFSC, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="input-group col mb-3">
+                        <div class="input-group-prepend"><span class="input-group-text">Credit Amount</span></div>
+                        @Html.EditorFor(model => model.CreditAmt, new { htmlAttributes = new { @type = "number", @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.CreditAmt, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                @if (Model?.AgentId.Length > 0)
+                {
+                    @Html.HiddenFor(model => model.AgentId)
+                }
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Save" class="btn btn-primary" />
+                    </div>
                 </div>
             </div>
-
-            <div class="form-row">
-                <div class="input-group col mb-3">
-                    <div class="input-group-prepend"><span class="input-group-text">Agent Contact Phone</span></div>
-                    @Html.EditorFor(model => model.PhoneNo, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.PhoneNo, "", new { @class = "text-danger" })
-                </div>
-                <div class="input-group col mb-3">
-                    <div class="input-group-prepend"><span class="input-group-text">Agent PAN No.</span></div>
-                    @Html.EditorFor(model => model.PAN, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.PAN, "", new { @class = "text-danger" })
-                </div>                
-                <div class="input-group col mb-3">
-                    <div class="input-group-prepend"><span class="input-group-text">Agent GST No.</span></div>
-                    @Html.EditorFor(model => model.GST, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.PAN, "", new { @class = "text-danger" })
-                </div>
-                <div class="input-group col mb-3">
-                    <div class="input-group-prepend"><span class="input-group-text">Agent RC Book No.</span></div>
-                    @Html.EditorFor(model => model.RCbook, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.RCbook, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-row">
-                <div class="input-group col mb-3">
-                    <div class="input-group-prepend"><span class="input-group-text">Agency Address</span></div>
-                    @Html.TextAreaFor(model => model.Address, new { @type = "text", @class = "form-control" } )
-                    @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-row">
-                <div class="input-group col mb-3">
-                    <div class="input-group-prepend"><span class="input-group-text">Agency Bank Name</span></div>
-                    @Html.EditorFor(model => model.BkName, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.BkName, "", new { @class = "text-danger" })
-                </div>
-                <div class="input-group col mb-3">
-                    <div class="input-group-prepend"><span class="input-group-text">Agency Bank Ac. No.</span></div>
-                    @Html.EditorFor(model => model.BkAccNo, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.BkAccNo, "", new { @class = "text-danger" })
-                </div>
-                <div class="input-group col mb-3">
-                    <div class="input-group-prepend"><span class="input-group-text">Agency Bank IFSC</span></div>
-                    @Html.EditorFor(model => model.BkIFSC, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.BkIFSC, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-row">
-                <div class="input-group col mb-3">
-                    <div class="input-group-prepend"><span class="input-group-text">Agency Bank Address</span></div>
-                    @Html.TextAreaFor(model => model.BkAddress, new { @type = "text", @class = "form-control" } )
-                    @Html.ValidationMessageFor(model => model.BkAddress, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            
-            @if (Model?.AgentId.Length > 0)
-            {
-                @Html.HiddenFor(model => model.AgentId)                
-            }
-            
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Save" class="btn btn-primary" />
-                </div>
-            </div>
-        </div>
-            }
+        }
 
 
-        </div>
+    </div>
 </div>
 
 
