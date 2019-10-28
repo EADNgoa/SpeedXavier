@@ -73,7 +73,7 @@
         <td>@Model.SellPrice.ToString("0.###")</td>
         @if (Model.AgentPaymentId == null)
         {
-            <td><input type="checkbox" class="checktotal" name='SelectedSRDID_@ViewData["side"]' value="@Model.SRDID" data-moneyval="@(Model.SellPrice - Model.SBCanxCost - Model.ProdCanxCost)" /></td>
+            <td><input type="checkbox" class="checktotal" name='SelectedSRDID_@ViewData["side"]' value="@Model.SRDID" data-moneyval="@(Model.SellPrice - Model.SBCanxCost- Model.ProdCanxCost)" /></td>
         }
         else
         {

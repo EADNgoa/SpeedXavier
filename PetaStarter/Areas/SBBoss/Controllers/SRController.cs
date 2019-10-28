@@ -51,8 +51,9 @@ namespace Speedbird.Areas.SBBoss.Controllers
             ViewBag.Title = "Diary";
             AN=AN ?? DateTime.Now.Date;
             
-            return View("SRDiaryDets", base.BaseIndex<SRdetailDets>(1, " srd.serviceTypeId, srd.srdid,srd.srid ", $"ServiceRequest sr , SRdetails srd where sr.SRstatusID in ({(int)SRStatusEnum.Confirmed},{(int)SRStatusEnum.Completed}) and sr.srid=srd.SRID " +
-                $"and (convert(date,srd.FDate)='{AN:yyyy-MM-dd}' or ('{AN:yyyy-MM-dd}' between srd.Fdate and srd.TDate))"));
+            return View("SRDiaryDets", base.BaseIndex<SRdetailDets>(1, " srd.serviceTypeId, srd.srdid,srd.srid ", $"ServiceRequest sr , " +
+                $"SRdetails srd where sr.SRstatusID in ({(int)SRStatusEnum.Confirmed},{(int)SRStatusEnum.Completed}) and sr.srid=srd.SRID " +
+                $"and srd.IsCancelled is null and (convert(date,srd.FDate)='{AN:yyyy-MM-dd}' or ('{AN:yyyy-MM-dd}' between srd.Fdate and srd.TDate))"));
 
         }
 
@@ -391,9 +392,9 @@ namespace Speedbird.Areas.SBBoss.Controllers
                     }
 
                     //Total Cost less than equal to credit amount then status is confirmed else unconfirmed
-                    if (routeto == "BFSave" && agentId != null)
+                    if (routeto == "BFSave")
                     {
-                        if (item.AgentID?.Length > 0 && TotalSell <= creditAmt)
+                        if (item.AgentID?.Length > 0 && TotalSell <= creditAmt && TotalSell > 0)
                         {
                             item.SRStatusID = (int)SRStatusEnum.Confirmed;
                             item.PayStatusID = (int)PayType.Full_Paid;
@@ -571,7 +572,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                     break;
                 case ServiceTypeEnum.Transfer:
                     return PartialView($"ReadPVs/_{(sType).ToString()}", db.SingleOrDefault<TransferServiceView>($"SELECT (select top 1 CONCAT(c.fName, ' ',c.sName) from Customer c, SRD_Cust sc " +
-                        $"where c.CustomerID = sc.CustomerID and sc.SRDID ={ srdid}) as PaxName,sd.Fdate,sd.Qty AS NoOfVehicles, Coalesce(sd.FromLoc,Null),sd.PickUpPoint,Coalesce(sd.ToLoc,Null)," +
+                        $"where c.CustomerID = sc.CustomerID and sc.SRDID ={ srdid}) as PaxName,sd.Fdate,sd.Qty AS NoOfVehicles, sd.FromLoc,sd.PickUpPoint,sd.ToLoc," +
                         $"sd.DropPoint,sd.cartype,sd.IsCancelled,sd.Heritage AS RateBasis, sd.HasAc, sd.HasCarrier," +
                         $"sd.PayTo, sd.Cost,Sellprice, sd.ServiceTypeID, sd.SRDID, sd.SuppInvNo," +
                         $"sd.ContractNo,  sd.CouponCode,sd.ECommision, sd.SuppConfNo," +
@@ -632,9 +633,9 @@ namespace Speedbird.Areas.SBBoss.Controllers
                         "inner join SRdetails srd on srd.SRDID = slg.SRDID " +
                         $" where srd.SRDID = {srdid} and slg.Type is not null");
                     return PartialView($"ReadDailyPVs/_{(sType).ToString()}", db.SingleOrDefault<AccomodationServiceDaily>($"select (select top  1 CONCAT(c.fName, ' ',c.sName, ' ',c.Phone) from Customer c, SRD_Cust sc where c.CustomerID = sc.CustomerID and sc.SRDID = {srdid}) as PaxName," +
-                        $"ag.AgentID,ag.ContactName,ag.PhoneNo,aus.RealName as Agency,aus.Id,srq.BookingNo,srq.TDate,sd.AdultNo, CarType as ExtraBedCost, ChildNo, ContractNo, cost, sd.CouponCode, ECommision, sd.Fdate as checkin, sd.Tdate as checkout, FromLoc, " +
-                        $"HasAc, Heritage as ExtraService, InfantNo, Model as AccomName, ot.OptionTypeName as RoomCategory, " +
-                        $"payto, Pickuppoint as RoomType, qty as NoOfRooms, Sellprice, sd.ServiceTypeID, " +
+                        $"ag.AgentID,ag.ContactName,ag.PhoneNo,aus.RealName as Agency,aus.Id,srq.BookingNo,srq.TDate,Coalesce(sd.AdultNo,0), CarType as ExtraBedCost, Coalesce(ChildNo,0), Coalesce(ContractNo,0), cost, sd.CouponCode, Coalesce(ECommision,0), sd.Fdate as checkin, sd.Tdate as checkout, FromLoc, " +
+                        $"HasAc, Heritage as ExtraService, Coalesce(InfantNo,0), Model as AccomName, ot.OptionTypeName as RoomCategory, " +
+                        $"payto, Pickuppoint as RoomType, Coalesce(qty,0) as NoOfRooms, Sellprice, sd.ServiceTypeID, " +
                         $"sd.SRDID, srq.SRID,srq.EnquirySource,ECommision, aus.Id, aus.RealName from SRdetails sd " +
                         $"left join ServiceRequest srq on srq.SRID = sd.SRID " +
                         $"left join Supplier s on s.supplierid = sd.supplierid " +
@@ -652,9 +653,9 @@ namespace Speedbird.Areas.SBBoss.Controllers
                         $"SRD_Cust sc where c.CustomerID = sc.CustomerID and sc.SRDID = { srdid}) as PaxName," +
                         $"(select COUNT(c.CustomerID) from Customer c, SRD_Cust sc " +
                         $"where c.CustomerID = sc.CustomerID and sc.SRDID = { srdid}) as PaxNo, " +
-                        $"ag.AgentID,ag.ContactName,aus.RealName as Agency,aus.Id,ag.PhoneNo,srq.BookingNo,srq.TDate as TransDate,sd.ChildNo as NOOfPax, sd.Model as PackageType, sd.Fdate, sd.Tdate," +
+                        $"ag.AgentID,ag.ContactName,aus.RealName as Agency,aus.Id,ag.PhoneNo,srq.BookingNo,srq.TDate as TransDate,Coalesce(sd.ChildNo,0) as NOOfPax, sd.Model as PackageType, sd.Fdate, sd.Tdate," +
                         $"CarType, sd.IsReturn, sd.FromLoc,sd.ToLoc, sd.AdditionalDetails as NameofTour, sd.DropPoint as HotelCat," +
-                        $"sd.Cost, sd.Heritage as AddDtl, sd.LunchCost as AddCost, sd.BFCost as NetCost, Sellprice, sd.SRDID, srq.SRID, SuppInvNo, SupplierName, ContractNo, sd.CouponCode," +
+                        $"sd.Cost, sd.Heritage as AddDtl, Coalesce(sd.LunchCost,0) as AddCost, Coalesce(sd.BFCost,0) as NetCost, Sellprice, sd.SRDID, srq.SRID, SuppInvNo, SupplierName, ContractNo, sd.CouponCode," +
                         $"sd.SupplierID, sd.CouponCode, SuppInvDt, SuppConfNo, SuppInvAmt, srq.EnquirySource, aus.Id, aus.RealName from SRdetails sd " +
                         $"left join ServiceRequest srq on srq.SRID = sd.SRID " +
                         $"left join Supplier s on s.supplierid = sd.supplierid " +
@@ -670,8 +671,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
                         $"SRD_Cust sc where c.CustomerID = sc.CustomerID and sc.SRDID = { srdid}) as PaxName," +
                         $"(select COUNT(c.CustomerID) from Customer c, SRD_Cust sc " +
                         $"where c.CustomerID = sc.CustomerID and sc.SRDID = { srdid}) as PaxNo, " +
-                        $"ag.AgentID,ag.ContactName,aus.RealName as Agency,aus.Id,ag.PhoneNo,srq.BookingNo,srq.TDate,sd.Qty as Passengers, " +
-                        $"sd.NoExtraBeds as Cabins,sd.Model as CabinType, sd.Fdate as Departuredate, sd.Tdate as ReturnDate, " +
+                        $"ag.AgentID,ag.ContactName,aus.RealName as Agency,aus.Id,ag.PhoneNo,srq.BookingNo,srq.TDate,Coalesce(sd.Qty,0) as Passengers, " +
+                        $"Coalesce(sd.NoExtraBeds,0) as Cabins,sd.Model as CabinType, sd.Fdate as Departuredate, sd.Tdate as ReturnDate, " +
                         $"sd.PickUpPoint as FromPort, sd.FromLoc as ViaPoint, sd.DropPoint as ToPort, " +
                         $"Heritage as MealPlan, ot.OptionTypeID,ot.OptionTypeName,sd.ServiceTypeID,Sellprice, sd.SRDID, srq.SRID,srq.EnquirySource," +
                         $"sd.Cost,sd.DinnerCost, sd.Name as CruiseName,aus.Id,aus.RealName from SRdetails sd " +
@@ -687,8 +688,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
                         $" where srd.SRDID = {srdid} and slg.Type is not null");
                     ViewBag.Inc = db.FirstOrDefault<SRlog>("where Type=1 and srdid=@0", srdid)?.Event ?? "";
                     var qry = $"select (select top 1 CONCAT(c.fName, ' ',c.sName, ' ',c.Phone) from Customer c, SRD_Cust sc where c.CustomerID=sc.CustomerID and sc.SRDID={srdid}) as PaxName, " +
-                        $"ag.AgentID,ag.ContactName,ag.PhoneNo,aus.RealName as Agency,aus.Id,srq.BookingNo,srq.TDate,AdultNo,ChildNo,sd.Model as SightseeingName, sd.OptionTypeID, ot.OptionTypeName,PickUpPoint,FromLoc as PickupLocation, Heritage as Private_Sic, DinnerCost as CostPerCar,Cost, " +
-                        $"Qty as NoOfCars, BFCost as AdultCost, LunchCost as ChildCost,Fdate as TourDate,d.DriverID,d.DriverName,d.Phone as Contact,CONCAT (dc.CarBrand, ' ', dc.Model, ' ', dc.PlateNo) as Car, CarType,HasAc as MealIncluded, srq.SRID,srq.EnquirySource, sd.SRDID, IsCanceled, sd.ServiceTypeID, " +
+                        $"ag.AgentID,ag.ContactName,ag.PhoneNo,aus.RealName as Agency,aus.Id,srq.BookingNo,srq.TDate,AdultNo,ChildNo,sd.Model as SightseeingName, sd.OptionTypeID, ot.OptionTypeName,PickUpPoint,FromLoc as PickupLocation, Heritage as Private_Sic, Coalesce(DinnerCost,0) as CostPerCar,Cost, " +
+                        $"Coalesce(Qty,0) as NoOfCars, Coalesce(BFCost,0) as AdultCost, Coalesce(LunchCost,0) as ChildCost,Fdate as TourDate,d.DriverID,d.DriverName,d.Phone as Contact,CONCAT (dc.CarBrand, ' ', dc.Model, ' ', dc.PlateNo) as Car, CarType,HasAc as MealIncluded, srq.SRID,srq.EnquirySource, sd.SRDID, IsCanceled, sd.ServiceTypeID, " +
                         "SellPrice,contractNo,ECommision,Tax,aus.Id,aus.RealName from SRdetails sd " +
                         "left join OptionType ot on ot.OptionTypeID=sd.OptionTypeID " +
                         $"left join ServiceRequest srq on srq.SRID = sd.SRID " +
@@ -705,8 +706,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
                     return PartialView($"ReadDailyPVs/_{(sType).ToString()}", db.SingleOrDefault<CarDaily>($"select (select top 1 CONCAT(c.fName, ' ',c.sName, ' ',c.Phone) from Customer c, SRD_Cust sc where c.CustomerID = sc.CustomerID and sc.SRDID = {srdid}) as PaxName," +
                         $"(select COUNT(c.CustomerID) from Customer c, SRD_Cust sc where c.CustomerID = sc.CustomerID and sc.SRDID = {srdid}) as PaxNo," +
                         $"ag.AgentID,ag.ContactName,ag.PhoneNo,aus.RealName as Agency,aus.Id,srq.BookingNo,srq.TDate as TransDate,sd.Model, sd.CarType, sd.Fdate, sd.Tdate, sd.FromLoc, sd.PickUpPoint, sd.ToLoc, sd.DropPoint," +
-                        $"sd.Cost, sd.Qty, sd.BFCost, sd.PayTo, Sellprice, sd.ServiceTypeID, ContractNo, sd.SRDID, srq.SRID, SuppInvNo,d.DriverID,d.DriverName,d.Phone as Contact, " +
-                        $"SupplierName,ag.AgentID,ag.ContactName,srq.BookingNo,srq.TDate," +
+                        $"sd.Cost, Coalesce(sd.Qty,0), Coalesce(sd.BFCost,0), sd.PayTo, Sellprice, sd.ServiceTypeID, ContractNo, sd.SRDID, srq.SRID, SuppInvNo,d.DriverID,d.DriverName,d.Phone as Contact, " +
+                        $"SupplierName,srq.TDate," +
                         $"sd.CouponCode, sd.SupplierID, sd.CouponCode, sd.SuppInvDt, ot.OptionTypeId, ot.OptionTypeName, " +
                         $"sd.SuppConfNo, sd.SuppInvAmt,srq.EnquirySource,aus.Id,aus.RealName from SRdetails sd " +
                         $"left JOIN Supplier su ON su.SupplierID = sd.SupplierID left join OptionType ot on ot.OptionTypeId = sd.OptionTypeId " +
@@ -725,7 +726,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                         $"(select COUNT(c.CustomerID) from Customer c, SRD_Cust sc " +
                         $"where c.CustomerID = sc.CustomerID and sc.SRDID = {srdid}) as PaxNo," +
                         $"ag.AgentID,ag.ContactName,ag.PhoneNo,aus.RealName as Agency,aus.Id,srq.BookingNo,srq.TDate, " +
-                        $"sd.DateOfIssue as DOB, sd.PickUpPoint as Destination, sd.Model as PolicyName, sd.ToLoc as PolicyType, sd.NoExtraBeds as NoofDays, " +
+                        $"sd.DateOfIssue as DOB, sd.PickUpPoint as Destination, sd.Model as PolicyName, sd.ToLoc as PolicyType, Coalesce(sd.NoExtraBeds,0) as NoofDays, " +
                         $"sd.Fdate as ValidFrom, sd.Tdate as ValidTo, sd.Cost, Sellprice, sd.ServiceTypeID, sd.SRDID, srq.SRID, " +
                         $"srq.EnquirySource,aus.Id,aus.RealName FROM SRdetails sd " +
                         $"left join ServiceRequest srq on srq.SRID = sd.SRID " +
@@ -911,11 +912,11 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
                     decimal TotalSell, creditAmt = 0;
                     TotalSell = creditAmt = 0;
-                    string agentId = null;
+                    string agentId;
                   
                    agentId = db.ExecuteScalar<string>("Select AgentID from ServiceRequest where SRID = @0", item.SRID);
                    //getting credit amount of that agent
-                   if(agentId != null)
+                   if(agentId != null && agentId.Length > 0)
                     {
                         creditAmt = db.ExecuteScalar<decimal>($"Select coalesce(CreditAmt,0) from Agent where AgentID =  '{agentId}'");
 
@@ -923,15 +924,15 @@ namespace Speedbird.Areas.SBBoss.Controllers
                              $"inner join ServiceRequest srq on srq.SRID = srd.SRID where AgentId = '{agentId}' and AgentPaymentId is null");
                     }
                     //Total Sell less than equal to credit amount then status is confirmed else unconfirmed
-                    if (agentId != null)
+                    if (agentId != null && agentId.Length > 0)
                     {
-                        if (TotalSell <= creditAmt)
+                        if (TotalSell > 0 && TotalSell <= creditAmt)
                         {
-                            db.Execute($"Update ServiceRequest set SRStatusID = {(int)SRStatusEnum.Confirmed}");
+                            db.Execute($"Update ServiceRequest set SRStatusID = {(int)SRStatusEnum.Confirmed},PayStatusID = {(int)PayType.Full_Paid}");
                         }
                         else
                         {
-                            db.Execute($"Update ServiceRequest set SRStatusID = {(int)SRStatusEnum.Unconfirmed}");
+                            db.Execute($"Update ServiceRequest set SRStatusID = {(int)SRStatusEnum.Unconfirmed},PayStatusID = {(int)PayType.Not_Paid}");
                         }
                     }
 

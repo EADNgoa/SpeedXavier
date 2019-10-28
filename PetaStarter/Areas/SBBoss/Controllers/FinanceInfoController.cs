@@ -42,7 +42,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
                         Note = paymentView.Note,
                         TDate = DateTime.Now,
                         TransactionNo = paymentView.TransactionNo,
-                        Type = paymentView.Type
+                        Type = paymentView.Type,
+                        CustomerID = paymentView.CustomerID
                     };
                     db.Insert(payment);
 
@@ -50,6 +51,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                     string driver = null;
                     string supplier = null;
                     string agent = null;
+                    string walkin = null;
          
                     if (payment.DriverID != null)
                     {
@@ -63,6 +65,10 @@ namespace Speedbird.Areas.SBBoss.Controllers
                     {
                         agent = db.ExecuteScalar<string>("select ContactName from Agent where AgentId = @0", paymentView.AgentId);
                     }
+                    if (payment.CustomerID != null)
+                    {
+                        walkin = db.ExecuteScalar<string>("Select Concat(FName,'',SName) as Name from Customer where CustomerID = @0",paymentView.CustomerID);
+                    }
                     paymentView.Note = " User Note: " + paymentView.Note;
                     if (mode == (int)PayToEnum.Driver)
                     {
@@ -75,6 +81,10 @@ namespace Speedbird.Areas.SBBoss.Controllers
                     if (mode == (int)PayToEnum.Agent)
                     {
                         note = $"Recieved from {agent} Rs. {paymentView.Amount} towards settlement of bookings " + paymentView.Note;
+                    }
+                    if (mode == (int)PayToEnum.Walkin)
+                    {
+                        note = $"Paid to {walkin} Rs. {paymentView.Amount} towards settlement of bookings " + paymentView.Note;
                     }
 
                     decimal TotalSell, creditAmt = 0;
@@ -98,7 +108,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                             {
                                 db.Execute($"Update SRdetails set SupplierPaymentId = {payment.PaymentID} where SRDID = {lsrdid}");
                                 var Srid = db.SingleOrDefault<int>("Select SRID from SRdetails where SRDID = @0", lsrdid);
-                                LogAction(new SRlog { SRID = Srid, SRDID = lsrdid, Event = note, Type = true });
+                                db.Insert(new SRlog { SRID = Srid, LogDateTime = DateTime.Now, UserID = User.Identity.GetUserId(), SRDID = lsrdid, Event = note, Type = true });
                             }
 
                             if (mode == (int)PayToEnum.Agent)
@@ -110,7 +120,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                                 {
                                     db.Execute($"Update ServiceRequest set SRStatusID = {(int)SRStatusEnum.Confirmed},PayStatusID = {(int)PayType.Full_Paid} where SRID = {Srid}");                          
                                 }
-                                LogAction(new SRlog { SRID = Srid, SRDID = lsrdid, Event = note, Type = true });
+                                db.Insert(new SRlog { SRID = Srid, LogDateTime = DateTime.Now, UserID = User.Identity.GetUserId(), SRDID = lsrdid, Event = note, Type = true });
                             }
 
                             if(mode == (int)PayToEnum.Driver)
@@ -125,14 +135,14 @@ namespace Speedbird.Areas.SBBoss.Controllers
                                     {
                                         db.Execute($"Update ServiceRequest set SRStatusID = {(int)SRStatusEnum.Confirmed},PayStatusID = {(int)PayType.Full_Paid} where SRID = {Srid}");
                                     }
-                                    LogAction(new SRlog { SRID = Srid, SRDID = lsrdid, Event = note, Type = true });
+                                    db.Insert(new SRlog { SRID = Srid, LogDateTime = DateTime.Now, UserID = User.Identity.GetUserId(), SRDID = lsrdid, Event = note, Type = true });
                                 }
 
                                 if (PayTo == "Pay to driver")
                                 {
                                     db.Execute($"Update SRdetails set SupplierPaymentId = {payment.PaymentID} where SRDID = {lsrdid}");
                                     var Srid = db.SingleOrDefault<int>("Select SRID from SRdetails where SRDID = @0", lsrdid);
-                                    LogAction(new SRlog { SRID = Srid, SRDID = lsrdid, Event = note, Type = true });
+                                    db.Insert(new SRlog { SRID = Srid, LogDateTime = DateTime.Now, UserID = User.Identity.GetUserId(), SRDID = lsrdid, Event = note, Type = true });
                                 }
                                 
                             }
@@ -146,7 +156,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
                                 {
                                     db.Execute($"Update ServiceRequest set SRStatusID = {(int)SRStatusEnum.Confirmed},PayStatusID = {(int)PayType.Full_Paid} where SRID = {Srid}");
                                 }
-                                LogAction(new SRlog { SRID = Srid, SRDID = lsrdid, Event = note, Type = true });
+                                var LogVal = db.Insert(new SRlog { SRID = Srid, LogDateTime = DateTime.Now, UserID = User.Identity.GetUserId(), SRDID = lsrdid, Event = note, Type = true });
+                               
                             }
 
 
@@ -163,7 +174,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                             {
                                 db.Execute($"Update SRdetails set SupplierPaymentId = {payment.PaymentID},CancelledSupplierPaymentId = {payment.PaymentID} where SRDID = {rsrdid}");
                                 var Srid = db.SingleOrDefault<int>("Select SRID from SRdetails where SRDID = @0", rsrdid);
-                                LogAction(new SRlog { SRID = Srid, SRDID = rsrdid, Event = note, Type = true });
+                                db.Insert(new SRlog { SRID = Srid, LogDateTime = DateTime.Now, UserID = User.Identity.GetUserId(), SRDID = rsrdid, Event = note, Type = true });
                             }
 
                             if (mode == (int)PayToEnum.Agent)
@@ -175,7 +186,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                                 {
                                     db.Execute($"Update ServiceRequest set SRStatusID = {(int)SRStatusEnum.Confirmed},PayStatusID = {(int)PayType.Full_Paid} where SRID = {Srid}");
                                 }
-                                LogAction(new SRlog { SRID = Srid, SRDID = rsrdid, Event = note, Type = true });
+                                db.Insert(new SRlog { SRID = Srid, LogDateTime = DateTime.Now, UserID = User.Identity.GetUserId(), SRDID = rsrdid, Event = note, Type = true });
                             }
 
                             if (mode == (int)PayToEnum.Driver)
@@ -190,14 +201,14 @@ namespace Speedbird.Areas.SBBoss.Controllers
                                     {
                                         db.Execute($"Update ServiceRequest set SRStatusID = {(int)SRStatusEnum.Confirmed},PayStatusID = {(int)PayType.Full_Paid} where SRID = {Srid}");
                                     }
-                                    LogAction(new SRlog { SRID = Srid, SRDID = rsrdid, Event = note, Type = true });
+                                    db.Insert(new SRlog { SRID = Srid, LogDateTime = DateTime.Now, UserID = User.Identity.GetUserId(), SRDID = rsrdid, Event = note, Type = true });
                                 }
 
                                 if (PayTo == "Pay to driver")
                                 {
                                     db.Execute($"Update SRdetails set SupplierPaymentId = {payment.PaymentID},CancelledSupplierPaymentId = {payment.PaymentID} where SRDID = {rsrdid}");
                                     var Srid = db.SingleOrDefault<int>("Select SRID from SRdetails where SRDID = @0", rsrdid);
-                                    LogAction(new SRlog { SRID = Srid, SRDID = rsrdid, Event = note, Type = true });
+                                    db.Insert(new SRlog { SRID = Srid, LogDateTime = DateTime.Now, UserID = User.Identity.GetUserId(), SRDID = rsrdid, Event = note, Type = true });
                                 }
 
                             }
@@ -206,7 +217,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                             {
                                 db.Execute($"Update SRdetails set CancelledAgentPaymentId = {payment.PaymentID} where SRDID = {rsrdid}");
                                 var Srid = db.SingleOrDefault<int>("Select SRID from SRdetails where SRDID = @0", rsrdid);
-                                LogAction(new SRlog { SRID = Srid, SRDID = rsrdid, Event = note, Type = true });
+                                db.Insert(new SRlog { SRID = Srid, LogDateTime = DateTime.Now, UserID = User.Identity.GetUserId(), SRDID = rsrdid, Event = note, Type = true });
                             }
                         }
                     }
@@ -401,21 +412,6 @@ namespace Speedbird.Areas.SBBoss.Controllers
             return PartialView("CustomerSearchPartial", recs);
         }
 
-
-        private void LogAction(SRlog item)
-        {
-            if (item.Event.Length > 0)
-            {
-                item.LogDateTime = DateTime.Now;
-                item.UserID = User.Identity.GetUserId();
-
-                db.Insert(item);
-            }
-        }
-
-
     }
-
-
 
 }

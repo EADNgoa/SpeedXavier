@@ -61,5 +61,8 @@
     CONSTRAINT [FK_SRdetails_ToGuideLanguage] FOREIGN KEY ([GuideLanguageID]) REFERENCES [GuideLanguage]([GuideLanguageID]), 
 	CONSTRAINT [FK_SRdetails_OptionType] FOREIGN KEY ([OptionTypeID]) REFERENCES [OptionType]([OptionTypeID]), 
     CONSTRAINT [FK_SRdetails_ToDriver] FOREIGN KEY ([DriverID]) REFERENCES [Driver]([DriverID]), 
-    CONSTRAINT [FK_SRdetails_Payments] FOREIGN KEY ([PaymentID]) REFERENCES [Payments]([PaymentID])
+    CONSTRAINT [FK_SRdetails_PaymentsAP] FOREIGN KEY ([AgentPaymentId]) REFERENCES [Payments]([PaymentID]),
+	CONSTRAINT [FK_SRdetails_PaymentsSP] FOREIGN KEY ([SupplierPaymentId]) REFERENCES [Payments]([PaymentID]),
+	CONSTRAINT [FK_SRdetails_PaymentsACP] FOREIGN KEY ([CancelledAgentPaymentId]) REFERENCES [Payments]([PaymentID]),
+	CONSTRAINT [FK_SRdetails_PaymentsSCP] FOREIGN KEY ([CancelledSupplierPaymentId]) REFERENCES [Payments]([PaymentID])
 )
