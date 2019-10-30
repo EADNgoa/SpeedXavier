@@ -1189,6 +1189,7 @@ namespace Speedbird
 		[Column] public int? CancelledSupplierPaymentId { get; set; }
 		[Column] public int? CancelledAgentPaymentId { get; set; }
 		[Column] public int? SupplierPaymentId { get; set; }
+		[Column] public decimal? Commision { get; set; }
 	}
     
 	[TableName("dbo.SRlogs")]

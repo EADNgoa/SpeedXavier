@@ -854,4 +854,11 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="CancelledAgentPaymentId" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="fbb3c2b4-6a7f-402c-a641-cafcdd62396b" ChangeDateTime="10/29/2019 14:56:59">
+    <Property Name="ElementName" Value="[dbo].[SRdetails].[Comission]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[SRdetails]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Commision" />
+  </Operation>
 </Operations>
