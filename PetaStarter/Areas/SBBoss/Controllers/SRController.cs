@@ -587,7 +587,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                     break;
                 case ServiceTypeEnum.Passport:
                     return PartialView($"ReadPVs/_{(sType).ToString()}", db.SingleOrDefault<PassportView>($"SELECT (select top 1 CONCAT(c.fName, ' ',c.sName) from Customer c, SRD_Cust sc where c.CustomerID=sc.CustomerID and sc.SRDID={srdid}) as PaxName, " +
-                        $"sd.Fdate as DOB, sd.FromLoc as Nationality,sd.IsCancelled, sd.Model as PassPortNo, sd.Heritage, sd.Cost, sd.ServiceTypeID, Sellprice, " +
+                        $"sd.DateOfIssue as DOB, sd.Fdate,sd.Tdate,sd.FromLoc as Nationality,sd.IsCancelled, sd.Model as PassPortNo, sd.Heritage, sd.Cost, sd.ServiceTypeID, Sellprice, " +
                         $"sd.SRDID, SRID, SuppInvNo, SupplierName, sd.SupplierID, Commision,CouponCode, ContractNo, SuppInvDt, SuppConfNo, SuppInvAmt,rf.ProdCanxCost,rf.SBCanxCost,rf.RefundId FROM SRdetails sd " +
                         $"left join Refunds rf on rf.SRDID = sd.SRDID " +
                         $"left join Supplier s on s.supplierid = sd.supplierid WHERE sd.SRDID = { srdid} ")); 
@@ -794,7 +794,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                     return PartialView($"ReadDailyPVs/_{(sType).ToString()}", db.SingleOrDefault<PassportDaily>($"SELECT (select top 1 CONCAT(c.fName, ' ',c.sName,' ',c.Phone) from Customer c, SRD_Cust sc where c.CustomerID=sc.CustomerID and sc.SRDID={srdid}) as PaxName, " +
                         $"(select COUNT(c.CustomerID) from Customer c, SRD_Cust sc " +
                         $"where c.CustomerID = sc.CustomerID and sc.SRDID = {srdid}) as PaxNo," +
-                        "ag.AgentID,ag.ContactName,ag.PhoneNo,srq.BookingNo,srq.TDate,sd.Fdate, sd.srid, sd.FromLoc as Nationality, sd.Model as PassPortNo, sd.Heritage, sd.Cost,sd.ServiceTypeID, Sellprice, " +
+                        "ag.AgentID,ag.ContactName,ag.PhoneNo,srq.BookingNo,srq.TDate,sd.Fdate,sd.DateOfIssue, sd.srid, sd.FromLoc as Nationality, sd.Model as PassPortNo, sd.Heritage, sd.Cost,sd.ServiceTypeID, Sellprice, " +
                         "sd.SRDID, srq.SRID,sd.Commision,srq.EnquirySource,aus.Id,aus.RealName as Agency FROM SRdetails sd " +
                         $"left join ServiceRequest srq on srq.SRID = sd.SRID " +
                         $"left join Agent ag on ag.AgentId = srq.AgentID " +
@@ -912,9 +912,15 @@ namespace Speedbird.Areas.SBBoss.Controllers
                         item.Cost = ((item.ExtraServiceCost ?? 0) * (item.Qty ?? 1)) + ((item.ExtraServiceCost ?? 0) * (item.BFCost ?? 0));
                     }
 
-                    item.Commision = item.SellPrice - item.Cost;
 
+
+                    item.Commision = item.SellPrice - item.Cost;
                     DateTime? td =(DateTime?)item?.Tdate ;
+
+                    if (item.ServiceTypeID == (int)ServiceTypeEnum.Passport)
+                    {//We need to insert this duplicate record so that we can show this return flight in the Daily Diary on the return journey date
+                        item.Fdate = DateTime.Today;
+                    }
 
                     decimal TotalSell, creditAmt = 0;
                     TotalSell = creditAmt = 0;
@@ -963,7 +969,6 @@ namespace Speedbird.Areas.SBBoss.Controllers
                         {//We need to insert this duplicate record so that we can show this return flight in the Daily Diary on the return journey date
                             db.Insert(new SRdetail { FromLoc = item.ToLoc, ToLoc = item.FromLoc, Tdate = td, ParentID = item.SRDID, ServiceTypeID = item.ServiceTypeID });
                         }
-
                         db.Insert(new SRD_Cust { CustomerID = CustomerId, SRDID = item.SRDID });
                         logNote = item.SRDID + ": " + item.ServiceTypeName + " added:- " + logNote;
                         LogAction(new SRlog { SRID = item.SRID, SRDID = item.SRDID, Event = Event, Type = true });

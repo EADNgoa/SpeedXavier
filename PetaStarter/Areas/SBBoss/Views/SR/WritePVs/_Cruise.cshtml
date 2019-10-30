@@ -18,6 +18,7 @@
             <th>Meal Plan</th>
             <th>Net cost/person</th>
             <th>Name of cruise trip</th>
+            <th>SellPrice</th>
         </tr>
     </thead>
     <tr>
@@ -33,6 +34,7 @@
         <td>@Html.EATextForP(m => m.Heritage, "Meal Plan")</td>
         <td>@Html.EANumberForP(m => m.DinnerCost, "Net Rate per day")</td>
         <td>@Html.EATextForP(m => m.Name, "Name ans cruise")</td>
+        <td>@Html.EATextForP(m => m.SellPrice, "Name ans cruise")</td>
     </tr>
 </table>
 
