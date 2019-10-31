@@ -21,12 +21,15 @@ namespace Speedbird.Models
         public decimal SellPrice { get; set; }
         public decimal Cost { get; set; }
         public string PayTo { get; set; }
-        public int? PaymentID { get; set; }
+        public int? SupplierPaymentId { get; set; }
+        public int? AgentPaymentId { get; set; }
         public bool IsSelected { get; set; }
         public int RefundId { get; set; }
         public decimal ProdCanxCost { get; set; }
         public decimal SBCanxCost { get; set; }
         public string Note { get; set; }
         public bool IsCancelled { get; set; }
+        public int? CancelledAgentPaymentId { get; set; }
+        public int? CancelledSupplierPaymentId { get; set; }
     }
 }

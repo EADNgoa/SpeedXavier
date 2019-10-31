@@ -11,8 +11,10 @@
 	[BankID] INT NULL, 
     [AgentId] NVARCHAR(128) NULL, 
     [SupplierID] INT NULL, 
+    [CustomerID] INT NULL, 
     CONSTRAINT [FK_Payments_ToBanks] FOREIGN KEY ([BankID]) REFERENCES [Banks]([BankID]), 
     CONSTRAINT [FK_Payments_Driver] FOREIGN KEY ([DriverID]) REFERENCES [Driver]([DriverID]),
 	CONSTRAINT [FK_Payments_Supplier] FOREIGN KEY ([SupplierID]) REFERENCES [Supplier]([SupplierID]), 
-    CONSTRAINT [FK_Payments_Agent] FOREIGN KEY ([AgentId]) REFERENCES [Agent]([AgentId])
+    CONSTRAINT [FK_Payments_Agent] FOREIGN KEY ([AgentId]) REFERENCES [Agent]([AgentId]),
+	CONSTRAINT [FK_Payments_Customer] FOREIGN KEY ([CustomerID]) REFERENCES [Customer]([CustomerID])
 )

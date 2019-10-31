@@ -1,64 +1,85 @@
 ﻿@model Speedbird.Models.BKPayVM
 @if (ViewBag.Mode == (int)Speedbird.PayToEnum.Driver)
 {
-<tr>
-    @Html.Hidden("SRDID", Model.SRDID)
-    @Html.Hidden("mode", (int?)ViewBag.Mode)
-    <td><a target="_blank" href="@Url.Action("Manage","SR")/@Model.SRID">@Model.BookingNo</a></td>
-    <td>@Model.PaxName</td>
-    <td>@Model.Fdate.ToString("dd-MM-yyyy")</td>
-    <td>@Model.Cost.ToString("0.###")</td>
-    <td>@Model.SellPrice.ToString("0.###")</td>
-    @if (Model.PaymentID == null)
-    {
-        <td><input type="checkbox" class="checktotal" name='SelectedSRDID_@ViewData["side"]' value="@Model.SRDID" data-moneyval="@(Model.SellPrice - Model.Cost)" /></td>
-    }
-    else
-    {
-        <td></td>
-    }
-</tr>
+    <tr>
+        @Html.Hidden("SRDID", Model.SRDID)
+        @Html.Hidden("mode", (int?)ViewBag.Mode)
+        <td><a target="_blank" href="@Url.Action("Manage","SR")/@Model.SRID">@Model.BookingNo</a></td>
+        <td>@Model.PaxName</td>
+        <td>@Model.Fdate.ToString("dd-MM-yyyy")</td>
+        <td>@Model.Cost.ToString("0.###")</td>
+        <td>@Model.SellPrice.ToString("0.###")</td>
+        @if ((Model.AgentPaymentId == null && Model.IsCancelled == false ) || (Model.SupplierPaymentId == null))
+        {
+            <td><input type="checkbox" class="checktotal" name='SelectedSRDID_@ViewData["side"]' value="@Model.SRDID" data-moneyval="@(Model.SellPrice - Model.Cost)" /></td>
+        }
+        else
+        {
+            <td></td>
+        }
+    </tr>
 }
 @if (ViewBag.Mode == (int)Speedbird.PayToEnum.Supplier)
 {
-<tr>
-    @Html.Hidden("SRDID", Model.SRDID)
-    @Html.Hidden("mode", (int?)ViewBag.Mode)
-    <td><a target="_blank" href="@Url.Action("Manage","SR")/@Model.SRID">@Model.BookingNo</a></td>
-    <td>@Model.PaxName</td>
-    <td>@Model.Fdate.ToString("dd-MM-yyyy")</td>
-    <td>@Model.Cost.ToString("0.###")</td>
-    <td>@Model.SellPrice.ToString("0.###")</td>
-    @if (Model.PaymentID == null)
-    {
-        <td><input type="checkbox" class="checktotal" name='SelectedSRDID_@ViewData["side"]' value="@Model.SRDID" data-moneyval="@(Model.Cost - Model.ProdCanxCost)" /></td>
-    }
-    else
-    {
-        <td></td>
-    }
-</tr>
+    <tr>
+        @Html.Hidden("SRDID", Model.SRDID)
+        @Html.Hidden("mode", (int?)ViewBag.Mode)
+        <td><a target="_blank" href="@Url.Action("Manage","SR")/@Model.SRID">@Model.BookingNo</a></td>
+        <td>@Model.PaxName</td>
+        <td>@Model.Fdate.ToString("dd-MM-yyyy")</td>
+        <td>@Model.Cost.ToString("0.###")</td>
+        <td>@Model.SellPrice.ToString("0.###")</td>
+        @if ((Model.SupplierPaymentId == null && Model.IsCancelled == false) || (Model.CancelledSupplierPaymentId == null && Model.IsCancelled == true))
+        {
+            <td><input type="checkbox" class="checktotal" name='SelectedSRDID_@ViewData["side"]' value="@Model.SRDID" data-moneyval="@(Model.Cost - Model.ProdCanxCost)" /></td>
+        }
+        else
+        {
+            <td></td>
+        }
+    </tr>
 }
 
 @if (ViewBag.Mode == (int)Speedbird.PayToEnum.Agent)
 {
-<tr>
-    @Html.Hidden("SRDID", Model.SRDID)
-    @Html.Hidden("mode", (int?)ViewBag.Mode)
-    <td><a target="_blank" href="@Url.Action("Manage","SR")/@Model.SRID">@Model.BookingNo</a></td>
-    <td>@Model.PaxName</td>
-    <td>@Model.Fdate.ToString("dd-MM-yyyy")</td>
-    <td>@Model.Cost.ToString("0.###")</td>
-    <td>@Model.SellPrice.ToString("0.###")</td>
-    @if (Model.PaymentID == null)
-    {
-        <td><input type="checkbox" class="checktotal" name='SelectedSRDID_@ViewData["side"]' value="@Model.SRDID" data-moneyval="@(Model.SellPrice - Model.SBCanxCost - Model.ProdCanxCost)" /></td>
-    }
-    else
-    {
-        <td></td>
-    }
-</tr>
+    <tr>
+        @Html.Hidden("SRDID", Model.SRDID)
+        @Html.Hidden("mode", (int?)ViewBag.Mode)
+        <td><a target="_blank" href="@Url.Action("Manage","SR")/@Model.SRID">@Model.BookingNo</a></td>
+        <td>@Model.PaxName</td>
+        <td>@Model.Fdate.ToString("dd-MM-yyyy")</td>
+        <td>@Model.Cost.ToString("0.###")</td>
+        <td>@Model.SellPrice.ToString("0.###")</td>
+        @if ((Model.AgentPaymentId == null && Model.IsCancelled == false) || (Model.CancelledAgentPaymentId == null && Model.IsCancelled == true))
+        {
+            <td><input type="checkbox" class="checktotal" name='SelectedSRDID_@ViewData["side"]' value="@Model.SRDID" data-moneyval="@(Model.SellPrice - Model.SBCanxCost - Model.ProdCanxCost)" /></td>
+        }
+        else
+        {
+            <td></td>
+        }
+    </tr>
+}
+
+@if (ViewBag.Mode == (int)Speedbird.PayToEnum.Walkin)
+{
+    <tr>
+        @Html.Hidden("SRDID", Model.SRDID)
+        @Html.Hidden("mode", (int?)ViewBag.Mode)
+        <td><a target="_blank" href="@Url.Action("Manage","SR")/@Model.SRID">@Model.BookingNo</a></td>
+        <td>@Model.PaxName</td>
+        <td>@Model.Fdate.ToString("dd-MM-yyyy")</td>
+        <td>@Model.Cost.ToString("0.###")</td>
+        <td>@Model.SellPrice.ToString("0.###")</td>
+        @if ((Model.AgentPaymentId == null && Model.IsCancelled == false) ||  (Model.CancelledAgentPaymentId == null && Model.IsCancelled == true))
+        {
+            <td><input type="checkbox" class="checktotal" name='SelectedSRDID_@ViewData["side"]' value="@Model.SRDID" data-moneyval="@(Model.SellPrice - Model.SBCanxCost- Model.ProdCanxCost)" /></td>
+        }
+        else
+        {
+            <td></td>
+        }
+    </tr>
 }
 
 

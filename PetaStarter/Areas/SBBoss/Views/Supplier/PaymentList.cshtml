@@ -1,4 +1,4 @@
-﻿@model PagedList.IPagedList<Speedbird.SRBooking>
+﻿@model PagedList.IPagedList<Speedbird.Paymentvw>
 
 @using PagedList.Mvc;
 @{
@@ -45,20 +45,28 @@
         <a href="@Url.Action("Index","Supplier")"><i class="fas fa-undo-alt fa-inverse h3 float-right DropShadow"></i></a>
     </div>
     <div class="card-body">
-        
+
         <table class="table">
             <tr>
                 <th>Sr No</th>
-             
-                <th>Booking No</th>
+                <th>Date</th>
                 <th>
-                    Actual Amount
+                    Amount
                 </th>
                 <th>
-                    Paid Amount
+                    Note
                 </th>
                 <th>
-                    Pending Amount
+                    Type
+                </th>
+                <th>
+                    Bank Name
+                </th>
+                <th>
+                    Cheque No
+                </th>
+                <th>
+                    Transaction No
                 </th>
             </tr>
             @{int i = 1;}
@@ -68,23 +76,27 @@
                     <td>
                         @i
                     </td>
-                   
                     <td>
-                        @Html.DisplayFor(modelItem => item.BookingNo)
-
+                        @Html.DisplayFor(modelItem => item.TDate)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.OA)
+                        @Html.DisplayFor(modelItem => item.Amount)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.PaidAmt)
-
+                        @Html.DisplayFor(modelItem => item.Note)
                     </td>
                     <td>
-                        @(item.OA-item.PaidAmt)
+                        @((Speedbird.AmtType)item.Type)
                     </td>
-                   
-
+                    <td>
+                        @Html.DisplayFor(modelItem => item.BankName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ChequeNo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TransactionNo)
+                    </td>
                 </tr>
                 i++;
             }

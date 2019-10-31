@@ -819,4 +819,46 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="RefundId" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="3430730a-55b8-4a03-b3e2-206980c1c73e" ChangeDateTime="10/18/2019 06:19:14">
+    <Property Name="ElementName" Value="[dbo].[SRdetails].[PaymentID]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[SRdetails]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="SupplierPaymentId" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="a538447a-f1f3-4ef6-8884-13ede8937ce6" ChangeDateTime="10/21/2019 04:29:34">
+    <Property Name="ElementName" Value="[dbo].[SRdetails].[CancelledPayment]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[SRdetails]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="CancelledSupplierId" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="b1f3f5a0-6d8f-4627-a4ca-9743a14b8062" ChangeDateTime="10/22/2019 08:41:29">
+    <Property Name="ElementName" Value="[dbo].[SRdetails].[SupplierPaymentId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[SRdetails]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="PaymentID" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="f9b2a7f1-de82-4ec5-ae70-18abf9a53708" ChangeDateTime="10/24/2019 08:43:31">
+    <Property Name="ElementName" Value="[dbo].[SRdetails].[CancelledSupplierId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[SRdetails]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="CancelledSupplierPaymentId" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="e110963f-bbb8-4bb6-b779-adf8de2b35c7" ChangeDateTime="10/24/2019 08:43:36">
+    <Property Name="ElementName" Value="[dbo].[SRdetails].[CancelledAgentId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[SRdetails]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="CancelledAgentPaymentId" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="fbb3c2b4-6a7f-402c-a641-cafcdd62396b" ChangeDateTime="10/29/2019 14:56:59">
+    <Property Name="ElementName" Value="[dbo].[SRdetails].[Comission]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[SRdetails]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Commision" />
+  </Operation>
 </Operations>

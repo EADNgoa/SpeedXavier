@@ -13,6 +13,6 @@
     [BkIFSC] VARCHAR(15) NULL, 
     [BkAddress] VARCHAR(150) NULL, 
     [State] VARCHAR(50) NULL, 
-    [CreditAmt] DECIMAL(18, 2) NULL, 
+    [CreditAmt] DECIMAL(18, 2) NULL DEFAULT 0, 
     CONSTRAINT [FK_Agent_ToAspNetUsers] FOREIGN KEY ([AgentId]) REFERENCES [AspNetUsers]([Id])
 )

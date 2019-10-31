@@ -830,6 +830,7 @@
     <Content Include="Areas\SBBoss\Views\FinanceInfo\_NotFound.cshtml" />
     <Content Include="Areas\SBBoss\Views\FinanceInfo\_SearchBooking.cshtml" />
     <Content Include="Areas\SBBoss\Views\FinanceInfo\EditorTemplates\BKPayVM.cshtml" />
+    <Content Include="Areas\SBBoss\Views\FinanceInfo\CustomerSearchPartial.cshtml" />
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <Content Include="Areas\SBBoss\Views\RP\DriverR.cshtml" />
     <Content Include="Areas\SBBoss\Views\RP\DriverP.cshtml" />

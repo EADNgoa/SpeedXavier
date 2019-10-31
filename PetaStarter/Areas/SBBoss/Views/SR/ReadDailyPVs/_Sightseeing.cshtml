@@ -63,7 +63,7 @@
                 <td>@ViewBag.Inc</td>
                 <td align="right">@Model.TotalCost.EAFormat()</td>
                 <td align="right">@Model.SellPrice.EAFormat()</td>
-                <td align="right">@Model.COM.EAFormat()</td>
+                <td align="right">@Model.Commision.EAFormat()</td>
             </tr>
         </table>
         <div class="row">
@@ -71,7 +71,16 @@
                 <strong>Note</strong>
             </div>
             <div class="col-10 text-center">
-                @Model.Event
+                @{
+                    var Logs = (IEnumerable<SRlog>)ViewBag.Logs;
+                }
+
+                @foreach (var item in Logs)
+                {
+                    <ul>
+                        <li>@item.Event</li>
+                    </ul>
+                }
             </div>
         </div>
         <button type="button" data-srdid="@Model.SRDID" data-srid="@Model.SRID" class="btn btn-primary" data-toggle="modal" data-target="#myModal">

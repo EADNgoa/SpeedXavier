@@ -1,4 +1,4 @@
-﻿@model PagedList.IPagedList<Speedbird.SRBooking>
+﻿@model PagedList.IPagedList<Speedbird.Paymentvw>
 
 @using PagedList.Mvc;
 @{
@@ -11,12 +11,12 @@
         <span class="h5">Search</span>
     </div>
     <div class="card-body">
-        
+
         @using (Html.BeginForm("PaymentList", "Agent", FormMethod.Get))
         {
-            if (ViewBag.AgentID !=null)
+            if (ViewBag.AgentID != null)
             {
-                @Html.Hidden("Id",(int)ViewBag.AgentID )
+                @Html.Hidden("Id", (int)ViewBag.AgentID)
             }
             <div class="row d-print-none">
                 <table>
@@ -26,9 +26,9 @@
                             <input type="text" id="UserName" name="UserName" style="color:black;" data-autocomplete-idholder="#AgentID" value=" @ViewBag.AgentName " data-autocombo-url="@Url.Action("AutoCompleteAgent")" class="form-control" disabled />
                         </td>
                         <td>&nbsp;From Date:</td>
-                        <td> @Html.TextBox("fd", ViewBag.CurrentFilter as string, new { @class = "form-control eadate",type="text" })</td>
+                        <td> @Html.TextBox("fd", ViewBag.CurrentFilter as string, new { @class = "form-control eadate", type = "text" })</td>
                         <td>&nbsp;To Date:</td>
-                        <td> @Html.TextBox("td", ViewBag.CurrentFilter as string, new { @class = "form-control eadate" ,type = "text" })</td>
+                        <td> @Html.TextBox("td", ViewBag.CurrentFilter as string, new { @class = "form-control eadate", type = "text" })</td>
                         <td><input type="submit" value="Search" class="btn btn-primary" /></td>
                     </tr>
                 </table>
@@ -45,20 +45,28 @@
         <a href="@Url.Action("Index","Agent")"><i class="fas fa-undo-alt fa-inverse h3 float-right DropShadow"></i></a>
     </div>
     <div class="card-body">
-        
+
         <table class="table">
             <tr>
                 <th>Sr No</th>
-             
-                <th>Booking No</th>
+                <th>Date</th>
                 <th>
-                    Actual Amount
+                    Amount
                 </th>
                 <th>
-                    Paid Amount
+                    Note
                 </th>
                 <th>
-                    Pending Amount
+                    Type
+                </th>
+                <th>
+                    Bank Name
+                </th>
+                <th>
+                    Cheque No
+                </th>
+                <th>
+                    Transaction No
                 </th>
             </tr>
             @{int i = 1;}
@@ -68,23 +76,27 @@
                     <td>
                         @i
                     </td>
-                   
                     <td>
-                        @Html.DisplayFor(modelItem => item.BookingNo)
-
+                        @Html.DisplayFor(modelItem => item.TDate)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.OA)
+                        @Html.DisplayFor(modelItem => item.Amount)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.PaidAmt)
-
+                        @Html.DisplayFor(modelItem => item.Note)
                     </td>
                     <td>
-                        @(item.OA-item.PaidAmt)
+                        @((Speedbird.AmtType)item.Type)
                     </td>
-                   
-
+                    <td>
+                        @Html.DisplayFor(modelItem => item.BankName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ChequeNo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TransactionNo)
+                    </td>
                 </tr>
                 i++;
             }

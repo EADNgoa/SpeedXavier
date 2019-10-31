@@ -35,21 +35,38 @@
                         @Html.Hidden("AgentId")
                         <td><input placeholder="Agent Name" type="text" id="AgentName" name="AgentName" data-autocomplete-idholder="#AgentId" data-autoagent-url='@Url.Action("AutoCompleteAgent")' class="form-control" /></td>
                     }
+                    @if (ViewBag.Mode == (int)Speedbird.PayToEnum.Walkin)
+                    {
+                        @Html.Hidden("CID")
+                        <td>Firstname</td>
+                        <td>@Html.Editor("FName", new { htmlAttributes = new { @class = "form-control" } })</td>
+
+                        <td>Surname</td>
+                        <td>@Html.Editor("SName", new { htmlAttributes = new { @class = "form-control" } })</td>
+
+                        <td>Phone</td>
+                        <td>@Html.Editor("Phone", new { htmlAttributes = new { @class = "form-control" } })</td>
+
+                        <td>Email</td>
+                        <td>@Html.Editor("Email", new { htmlAttributes = new { @class = "form-control" } })</td>
+
+                    }
                     <td>&nbsp;From Date:</td>
                     <td> @Html.TextBox("FromDate", ViewBag.CurrentFilter as string, new { @class = "form-control eadate", @type = "text" })</td>
                     <td>&nbsp;To Date:</td>
                     <td> @Html.TextBox("ToDate", ViewBag.CurrentFilter as string, new { @class = "form-control eadate", @type = "text" })</td>
                 </tr>
+                <tr><td colspan="12" id="ExistingCust"></td></tr>
                 <tr>
-                    <td>&nbsp;All: &nbsp;<input type="radio" id="All" name="radioGroup" value="1" checked="checked"></td>                    
+                    <td>&nbsp;All: &nbsp;<input type="radio" id="All" name="radioGroup" value="1" checked="checked"></td>
                     <td>&nbsp;</td>
-                                        
-                    <td>&nbsp;Paid: &nbsp;<input type="radio" id="Paid" name="radioGroup" value="2" /></td>                    
+
+                    <td>&nbsp;Paid: &nbsp;<input type="radio" id="Paid" name="radioGroup" value="2" /></td>
                     <td>&nbsp;</td>
-                    
-                    <td>&nbsp;Pending: &nbsp;<input type="radio" id="Pending" name="radioGroup" value="3" /></td>                    
+
+                    <td>&nbsp;Pending: &nbsp;<input type="radio" id="Pending" name="radioGroup" value="3" /></td>
                     <td>&nbsp;</td>
-                    
+
                     <td><input type="submit" value="Search" id="search" class="btn btn-primary" /></td>
                 </tr>
             </table>
@@ -77,6 +94,7 @@
                     @Html.HiddenFor(model => model.AgentId)
                     @Html.HiddenFor(model => model.SupplierID)
                     @Html.HiddenFor(model => model.DriverID)
+                    @Html.HiddenFor(model => model.CustomerID)
                 }
                 @Html.Hidden("mode", (int?)ViewBag.Mode)
                 @Html.Hidden("Amount")
@@ -171,7 +189,7 @@
     });
 
     function LoadView() {
-        $('#financeListPart').load('@Url.Action("_FinanceInfo", "FinanceInfo")', { DriverID: $("#DriverID").val(), SupplierID: $("#SupplierID").val(), AgentId: $("#AgentId").val(),  FromDate: $("#FromDate").val(), ToDate: $("#ToDate").val(), All: $("#All").val(), Paid: $("#Paid").val(), Pending: $("#Pending").val(), mode: @ViewBag.Mode });
+        $('#financeListPart').load('@Url.Action("_FinanceInfo", "FinanceInfo")', { DriverID: $("#DriverID").val(), SupplierID: $("#SupplierID").val(), AgentId: $("#AgentId").val(),  FromDate: $("#FromDate").val(), ToDate: $("#ToDate").val(), All: $("#All").val(), Paid: $("#Paid").val(), Pending: $("#Pending").val(), mode: @ViewBag.Mode, CustomerID: $("#CID").val() });
     }
 
     $(function () {
@@ -216,6 +234,21 @@
             });
     });
 
+
+    $(document).ready(function () {
+        $("#FName,#SName,#Phone,#Email").keyup(function () {
+
+            var fname = $('#FName').val();
+            var sname = $('#SName').val();
+            var phone = $('#Phone').val();
+            var email = $('#Email').val();
+
+            if (fname.length == 3 || sname.length == 3 || phone.length == 3 || email.length == 5) {
+                $('#ExistingCust').html("");
+                $('#ExistingCust').load("@Url.Action("ExistingCustRec","FinanceInfo")?fn=" + fname + "&&sn=" + sname + "&&ph=" + phone + "&&em=" + email);
+            } 
+        });
+    });
 
 </script>
 
