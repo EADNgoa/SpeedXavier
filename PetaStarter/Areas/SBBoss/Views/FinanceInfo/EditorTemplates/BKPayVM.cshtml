@@ -9,7 +9,7 @@
         <td>@Model.Fdate.ToString("dd-MM-yyyy")</td>
         <td>@Model.Cost.ToString("0.###")</td>
         <td>@Model.SellPrice.ToString("0.###")</td>
-        @if (Model.SupplierPaymentId == null && Model.AgentPaymentId == null)
+        @if ((Model.AgentPaymentId == null && Model.IsCancelled == false ) || (Model.SupplierPaymentId == null))
         {
             <td><input type="checkbox" class="checktotal" name='SelectedSRDID_@ViewData["side"]' value="@Model.SRDID" data-moneyval="@(Model.SellPrice - Model.Cost)" /></td>
         }
@@ -29,7 +29,7 @@
         <td>@Model.Fdate.ToString("dd-MM-yyyy")</td>
         <td>@Model.Cost.ToString("0.###")</td>
         <td>@Model.SellPrice.ToString("0.###")</td>
-        @if (Model.SupplierPaymentId == null)
+        @if ((Model.SupplierPaymentId == null && Model.IsCancelled == false) || (Model.CancelledSupplierPaymentId == null && Model.IsCancelled == true))
         {
             <td><input type="checkbox" class="checktotal" name='SelectedSRDID_@ViewData["side"]' value="@Model.SRDID" data-moneyval="@(Model.Cost - Model.ProdCanxCost)" /></td>
         }
@@ -50,7 +50,7 @@
         <td>@Model.Fdate.ToString("dd-MM-yyyy")</td>
         <td>@Model.Cost.ToString("0.###")</td>
         <td>@Model.SellPrice.ToString("0.###")</td>
-        @if (Model.AgentPaymentId == null)
+        @if ((Model.AgentPaymentId == null && Model.IsCancelled == false) || (Model.CancelledAgentPaymentId == null && Model.IsCancelled == true))
         {
             <td><input type="checkbox" class="checktotal" name='SelectedSRDID_@ViewData["side"]' value="@Model.SRDID" data-moneyval="@(Model.SellPrice - Model.SBCanxCost - Model.ProdCanxCost)" /></td>
         }
@@ -71,7 +71,7 @@
         <td>@Model.Fdate.ToString("dd-MM-yyyy")</td>
         <td>@Model.Cost.ToString("0.###")</td>
         <td>@Model.SellPrice.ToString("0.###")</td>
-        @if (Model.AgentPaymentId == null)
+        @if ((Model.AgentPaymentId == null && Model.IsCancelled == false) ||  (Model.CancelledAgentPaymentId == null && Model.IsCancelled == true))
         {
             <td><input type="checkbox" class="checktotal" name='SelectedSRDID_@ViewData["side"]' value="@Model.SRDID" data-moneyval="@(Model.SellPrice - Model.SBCanxCost- Model.ProdCanxCost)" /></td>
         }

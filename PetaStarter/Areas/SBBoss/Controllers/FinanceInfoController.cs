@@ -244,7 +244,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             if (mode == (int)PayToEnum.Driver)
             {
                 leftsq.Append("Select CONCAT(c.fName, ' ',c.sName) as PaxName, " +
-                         "srd.SRDID,srq.SRID, srd.Cost, srd.AgentPaymentId,srd.SupplierPaymentId,srq.BookingNo, srd.Fdate, SellPrice, srd.PayTo " +
+                         "srd.SRDID,srq.SRID, srd.Cost, srd.AgentPaymentId,srd.SupplierPaymentId,srd.CancelledAgentPaymentId,srd.CancelledSupplierPaymentId,srq.BookingNo, srd.Fdate, SellPrice, srd.PayTo " +
                          "from SRdetails srd, ServiceRequest srq, SR_Cust src, Customer c, SRD_Cust sc where sc.SRDID = srd.SRDID " +
                          "and c.CustomerID = sc.CustomerID and srq.SRID = srd.SRID and src.ServiceRequestID = srq.SRID and IsLead = 1 " +
                         $"and DriverID = {DriverID} and srd.PayTo = 'Payed to us' and srd.Fdate between '{String.Format("{0:yyyy-MM-dd}", FromDate)}' and '{String.Format("{0:yyyy-MM-dd}", ToDate)}'");
@@ -259,46 +259,46 @@ namespace Speedbird.Areas.SBBoss.Controllers
             if (mode == (int)PayToEnum.Supplier)
             {
                 leftsq.Append("Select CONCAT(c.fName, ' ',c.sName) as PaxName, " +
-                        "srd.SRDID,srq.SRID, srd.Cost, srq.BookingNo, srd.Fdate, SellPrice, srd.PayTo,IsCancelled,srd.SupplierPaymentId " +
+                        "srd.SRDID,srq.SRID, srd.Cost, srq.BookingNo, srd.Fdate, SellPrice, srd.PayTo,Coalesce(IsCancelled,0) as IsCancelled,srd.SupplierPaymentId " +
                         "from SRdetails srd, ServiceRequest srq, SR_Cust src, Customer c, SRD_Cust sc where sc.SRDID = srd.SRDID " +
                         "and c.CustomerID = sc.CustomerID and srq.SRID = srd.SRID and src.ServiceRequestID = srq.SRID and IsLead = 1 " +
                        $"and IsCancelled is null and SupplierID = {SupplierID} and srd.Fdate between '{String.Format("{0:yyyy-MM-dd}", FromDate)}' and '{String.Format("{0:yyyy-MM-dd}", ToDate)}'");
 
-                rightsq.Append("Select CONCAT(c.fName, ' ',c.sName) as PaxName, srd.SRDID,srq.SRID, srd.Cost, srq.BookingNo, srd.Fdate, SellPrice, srd.PayTo,srd.SupplierPaymentId, " +
-                    "rf.SRDID,rf.ProdCanxCost, rf.SBCanxCost,IsCancelled, rf.RefundId from SRdetails srd, ServiceRequest srq, SR_Cust src, Customer c, SRD_Cust sc, Refunds rf " +
+                rightsq.Append("Select CONCAT(c.fName, ' ',c.sName) as PaxName, srd.SRDID,srq.SRID, srd.Cost, srq.BookingNo,srd.CancelledSupplierPaymentId, srd.Fdate, SellPrice, srd.PayTo,srd.SupplierPaymentId, " +
+                    "rf.SRDID,rf.ProdCanxCost, rf.SBCanxCost,Coalesce(IsCancelled,0)as IsCancelled, rf.RefundId from SRdetails srd, ServiceRequest srq, SR_Cust src, Customer c, SRD_Cust sc, Refunds rf " +
                     "where sc.SRDID = srd.SRDID and c.CustomerID = sc.CustomerID and srq.SRID = srd.SRID and src.ServiceRequestID = srq.SRID " +
                     "and rf.SRDID = srd.SRDID and IsLead = 1 " +
-                    $"and IsCancelled = 1 and SupplierID = {SupplierID} and srd.Fdate between '{String.Format("{0:yyyy-MM-dd}", FromDate)}' and '{String.Format("{0:yyyy-MM-dd}", ToDate)}'");
+                    $"and IsCancelled = 1 and srd.CancelledSupplierPaymentId is null and SupplierID = {SupplierID} and srd.Fdate between '{String.Format("{0:yyyy-MM-dd}", FromDate)}' and '{String.Format("{0:yyyy-MM-dd}", ToDate)}'");
             }
 
             if (mode == (int)PayToEnum.Agent)
             {
                 leftsq.Append("Select CONCAT(c.fName, ' ',c.sName) as PaxName, srd.SRDID,srq.SRID, srd.Cost,srd.AgentPaymentId, " +
-                    "srq.BookingNo, srd.Fdate, SellPrice, srd.PayTo,IsCancelled from SRdetails srd, " +
+                    "srq.BookingNo, srd.Fdate, SellPrice, srd.PayTo,Coalesce(IsCancelled,0) as IsCancelled from SRdetails srd, " +
                     "ServiceRequest srq, SR_Cust src, Customer c, SRD_Cust sc where sc.SRDID = srd.SRDID " +
                     "and c.CustomerID = sc.CustomerID and srq.SRID = srd.SRID and src.ServiceRequestID = srq.SRID and IsLead = 1 " +
                     $"and IsCancelled is null and AgentId = '{AgentId}' and srd.Fdate between '{String.Format("{0:yyyy-MM-dd}", FromDate)}' and '{String.Format("{0:yyyy-MM-dd}", ToDate)}'");
 
                 rightsq.Append("Select CONCAT(c.fName, ' ',c.sName) as PaxName, " +
-                   "srd.SRDID,srq.SRID, srd.Cost, srq.BookingNo, srd.Fdate, SellPrice, srd.PayTo,srd.AgentPaymentId,IsCancelled,rf.ProdCanxCost,rf.SRDID, rf.SBCanxCost, rf.RefundId " +
+                   "srd.SRDID,srq.SRID, srd.Cost, srq.BookingNo, srd.Fdate, SellPrice, srd.PayTo,srd.AgentPaymentId,Coalesce(IsCancelled,0) as IsCancelled,srd.CancelledAgentPaymentId,rf.ProdCanxCost,rf.SRDID, rf.SBCanxCost, rf.RefundId " +
                    "from SRdetails srd, ServiceRequest srq, SR_Cust src, Customer c, SRD_Cust sc, Refunds rf where sc.SRDID = srd.SRDID " +
                    "and c.CustomerID = sc.CustomerID and srq.SRID = srd.SRID and src.ServiceRequestID = srq.SRID and rf.SRDID = srd.SRDID and IsLead = 1 " +
-                   $"and IsCancelled = 1 and AgentId = '{AgentId}' and srd.Fdate between '{String.Format("{0:yyyy-MM-dd}", FromDate)}' and '{String.Format("{0:yyyy-MM-dd}", ToDate)}'");
+                   $"and IsCancelled = 1 and srd.CancelledAgentPaymentId is null and AgentId = '{AgentId}' and srd.Fdate between '{String.Format("{0:yyyy-MM-dd}", FromDate)}' and '{String.Format("{0:yyyy-MM-dd}", ToDate)}'");
             }
 
             if (mode == (int)PayToEnum.Walkin)
             {
                 leftsq.Append("Select CONCAT(c.fName, ' ',c.sName) as PaxName, srd.SRDID,srq.SRID, srd.Cost,srd.AgentPaymentId, " +
-                    "srq.BookingNo, srd.Fdate, SellPrice, srd.PayTo,IsCancelled from SRdetails srd, " +
+                    "srq.BookingNo, srd.Fdate, SellPrice, srd.PayTo,Coalesce(IsCancelled,0) as IsCancelled from SRdetails srd, " +
                     "ServiceRequest srq, SR_Cust src, Customer c, SRD_Cust sc where sc.SRDID = srd.SRDID " +
                     "and c.CustomerID = sc.CustomerID and srq.SRID = srd.SRID and src.ServiceRequestID = srq.SRID and IsLead = 1 " +
                     $"and IsCancelled is null and c.CustomerID = {CustomerID} and srd.Fdate between '{String.Format("{0:yyyy-MM-dd}", FromDate)}' and '{String.Format("{0:yyyy-MM-dd}", ToDate)}'");
 
                 rightsq.Append("Select CONCAT(c.fName, ' ',c.sName) as PaxName, " +
-                   "srd.SRDID,srq.SRID, srd.Cost, srq.BookingNo, srd.Fdate, SellPrice, srd.PayTo,IsCancelled,srd.AgentPaymentId,rf.ProdCanxCost,rf.SRDID, rf.SBCanxCost, rf.RefundId " +
+                   "srd.SRDID,srq.SRID, srd.Cost, srq.BookingNo, srd.Fdate, SellPrice, srd.PayTo,Coalesce(IsCancelled,0) as IsCancelled,srd.AgentPaymentId,srd.CancelledAgentPaymentId,rf.ProdCanxCost,rf.SRDID, rf.SBCanxCost, rf.RefundId " +
                    "from SRdetails srd, ServiceRequest srq, SR_Cust src, Customer c, SRD_Cust sc, Refunds rf where sc.SRDID = srd.SRDID " +
                    "and c.CustomerID = sc.CustomerID and srq.SRID = srd.SRID and src.ServiceRequestID = srq.SRID and rf.SRDID = srd.SRDID and IsLead = 1 " +
-                   $"and IsCancelled = 1  and c.CustomerID = {CustomerID} and srd.Fdate between '{String.Format("{0:yyyy-MM-dd}", FromDate)}' and '{String.Format("{0:yyyy-MM-dd}", ToDate)}'");
+                   $"and IsCancelled = 1 and c.CustomerID = {CustomerID} and srd.Fdate between '{String.Format("{0:yyyy-MM-dd}", FromDate)}' and '{String.Format("{0:yyyy-MM-dd}", ToDate)}'");
             }
 
 
@@ -317,38 +317,38 @@ namespace Speedbird.Areas.SBBoss.Controllers
             if (Paid == true && mode == (int)PayToEnum.Supplier)
             {
                 leftsq.Append($" and srd.SupplierPaymentId is not null");
-                rightsq.Append($" and srd.SupplierPaymentId is not null");
+                rightsq.Append($" and srd.CancelledSupplierPaymentId is not null");
             }
 
 
             if (Pending == true && mode == (int)PayToEnum.Supplier)
             {
                 leftsq.Append($" and srd.SupplierPaymentId is null");
-                rightsq.Append($" and srd.SupplierPaymentId is null");
+                rightsq.Append($" and srd.CancelledSupplierPaymentId is null");
             }
 
             if (Paid == true && mode == (int)PayToEnum.Agent)
             {
                 leftsq.Append($" and srd.AgentPaymentId is not null");
-                rightsq.Append($" and srd.AgentPaymentId is not null");
+                rightsq.Append($" and srd.CancelledAgentPaymentId is not null");
             }
 
             if (Pending == true && mode == (int)PayToEnum.Agent)
             {
                 leftsq.Append($" and srd.AgentPaymentId is null");
-                rightsq.Append($" and srd.AgentPaymentId is null");
+                rightsq.Append($" and srd.CancelledAgentPaymentId is null");
             }
 
             if (Paid == true && mode == (int)PayToEnum.Walkin)
             {
                 leftsq.Append($" and srd.AgentPaymentId is not null");
-                rightsq.Append($" and srd.AgentPaymentId is not null");
+                rightsq.Append($" and srd.CancelledAgentPaymentId is not null");
             }
 
             if (Pending == true && mode == (int)PayToEnum.Walkin)
             {
                 leftsq.Append($" and srd.AgentPaymentId is null");
-                rightsq.Append($" and srd.AgentPaymentId is null");
+                rightsq.Append($" and srd.CancelledAgentPaymentId is null");
             }
 
 
