@@ -52,7 +52,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
             AN=AN ?? DateTime.Now.Date;
             
             return View("SRDiaryDets", base.BaseIndex<SRdetailDets>(1, " srd.serviceTypeId, srd.srdid,srd.srid ", $"ServiceRequest sr , " +
-                $"SRdetails srd where sr.SRstatusID in ({(int)SRStatusEnum.Confirmed},{(int)SRStatusEnum.Completed}) and sr.srid=srd.SRID " +
+                $"SRdetails srd where ( sr.SRstatusID in ({(int)SRStatusEnum.Confirmed},{(int)SRStatusEnum.Completed}) or srd.PayTo = 'Pay to driver') and sr.srid=srd.SRID " +
                 $"and srd.IsCancelled is null and (convert(date,srd.FDate)='{AN:yyyy-MM-dd}' or ('{AN:yyyy-MM-dd}' between srd.Fdate and srd.TDate))"));
 
         }

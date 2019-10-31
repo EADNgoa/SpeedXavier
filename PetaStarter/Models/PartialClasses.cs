@@ -916,7 +916,7 @@ namespace Speedbird
     {
         public string tstr { get { return $"{Tdate:dd MMM yyyy HH:mm}"; } }
         public string fstr { get { return $"{Fdate:dd MMM yyyy HH:mm}"; } }
-        public string ServiceTypeName { get { return ((ServiceTypeEnum)ServiceTypeID).ToString(); } }
+        public string ServiceTypeName { get { return ServiceTypeID.HasValue ? ((ServiceTypeEnum)ServiceTypeID.Value).ToString() : ""; } }
 
 
     }
