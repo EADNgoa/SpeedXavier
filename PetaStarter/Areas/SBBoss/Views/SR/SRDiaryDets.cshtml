@@ -21,7 +21,6 @@
         z-index: 99999;
         font-size: 17px;
     }
-
 </style>
 
 <div class="card border rounded DropShadow">
@@ -51,12 +50,29 @@
         <span class="h3">Daily Dairy</span>
     </div>
     <div class="card-body">
-       
+
         <div id="SRDetTbl">
 
             @foreach (var sd in Model)
             {
-                <div class="h3"><a target="_blank" href="@Url.Action("Manage","SR")/@sd.SRID">@sd.SRDID : @(((Speedbird.ServiceTypeEnum)sd.ServiceTypeID).ToString())</a></div>
+                <div class="row">
+                    <div class="col-4">
+                        <a target="_blank" href="@Url.Action("Manage", "SR")/@sd.SRID">@sd.SRDID : @(((Speedbird.ServiceTypeEnum)sd.ServiceTypeID).ToString())</a>
+                    </div>
+                    <div class="col-8 pb-1">
+                        @if (sd.ServiceTypeID == (int)Speedbird.ServiceTypeEnum.Transfer || sd.ServiceTypeID == (int)Speedbird.ServiceTypeEnum.SightSeeing)
+                        {
+                            <button type="button" data-srdid="@sd.SRDID" data-srid="@sd.SRID" class="btn btn-primary float-right" data-toggle="modal" data-target="#myModal">
+                                <i class="fas fa-star"></i>
+                            </button>
+                        }
+                    </div>
+                </div>
+                <div class="modal" id="myModal">
+                    <div id="myModalContent">
+
+                    </div>
+                </div>
                 @Html.Action("FetchDailyRecords", "SR", new { sType = (Speedbird.ServiceTypeEnum)sd.ServiceTypeID, srdid = sd.SRDID })
                 <div id="snackbar" class="text-center">Your Review Saved Successfully</div>
             }
@@ -64,7 +80,18 @@
 
     </div>
 </div>
+<script>
+    $(function () {
+        $('#myModal').on('shown.bs.modal', function (event) {
+            var button = $(event.relatedTarget); // Button that triggered the modal
+            var SRDID = button.data('srdid');
+            var SRID = button.data('srid');
+            $("#myModalContent").load('@Url.Action("_DrvReview","SR")', { SRDID: SRDID, SRID: SRID });
 
+        });
+
+    });
+</script>
 
 
 

@@ -335,8 +335,8 @@ namespace Speedbird.Areas.SBBoss.Controllers
 
             if (Pending == true && mode == (int)PayToEnum.Agent)
             {
-                leftsq.Append($" and srd.AgentPaymentId is null");
-                rightsq.Append($" and srd.CancelledAgentPaymentId is null");
+                leftsq.Append($" and srd.AgentPaymentId is null and srd.PayTo <> 'Pay to driver'");
+                rightsq.Append($" and srd.CancelledAgentPaymentId is null and srd.PayTo <> 'Pay to driver'");
             }
 
             if (Paid == true && mode == (int)PayToEnum.Walkin)
