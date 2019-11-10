@@ -41,7 +41,7 @@
         margin-bottom: 15px;
         margin-top: 15px;
         display: block;
-        text-align:center;
+        text-align: center;
     }
 </style>
 
@@ -49,11 +49,10 @@
 <div id="ResContainer" style="">
 
 
-
     @foreach (var item in Model)
     {
-
         <a href="/Home/InfoPage/?st=@ViewBag.st&&ServiceID=@item.ServiceID">
+
 
 
             <div class="card ServiceTypes" style="width: 18rem;">
@@ -78,8 +77,6 @@
                         @item.ServiceGeoName
                     </div>
                     <h5 class="card-title">@item.ServiceName</h5>
-                    <p class="card-text">@Html.Raw(item.ServiceDescription)</p>
-
                     <select name="AvgValue" class="AvgValue" data-val=@item.AvgReview>
                         <option value=""></option>
                         <option value="1">1</option>
@@ -88,6 +85,8 @@
                         <option value="4">4</option>
                         <option value="5">5</option>
                     </select>
+                    <p class="card-text">@Html.Raw(item.ServiceDescription)</p>
+
 
                     <span class="review">@item.TotalReview Reviews</span>
                     <span class="icons position-absolute">
@@ -111,11 +110,10 @@
     }
 
 </div>
-<script src="~/Scripts/jquery-bar-rating/jquery.barrating.min.js"></script>
 
 <script type="text/javascript">
     $(function () {
-        
+
         $('.AvgValue').each(function () {
             $(this).barrating({
                 theme: 'fontawesome-stars',

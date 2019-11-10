@@ -246,13 +246,13 @@ namespace Speedbird.Areas.SBBoss.Controllers
                 leftsq.Append("Select CONCAT(c.fName, ' ',c.sName) as PaxName, " +
                          "srd.SRDID,srq.SRID, srd.Cost, srd.AgentPaymentId,srd.SupplierPaymentId,srd.CancelledAgentPaymentId,srd.CancelledSupplierPaymentId,srq.BookingNo, srd.Fdate, SellPrice, srd.PayTo " +
                          "from SRdetails srd, ServiceRequest srq, SR_Cust src, Customer c, SRD_Cust sc where sc.SRDID = srd.SRDID " +
-                         "and c.CustomerID = sc.CustomerID and srq.SRID = srd.SRID and src.ServiceRequestID = srq.SRID and IsLead = 1 " +
+                         "and c.CustomerID = sc.CustomerID and srq.SRID = srd.SRID and src.ServiceRequestID = srq.SRID and IsLead = 1 and IsCancelled is null " +
                         $"and DriverID = {DriverID} and srd.PayTo = 'Payed to us' and srd.Fdate between '{String.Format("{0:yyyy-MM-dd}", FromDate)}' and '{String.Format("{0:yyyy-MM-dd}", ToDate)}'");
 
                 rightsq.Append("Select CONCAT(c.fName, ' ',c.sName) as PaxName, " +
                        "srd.SRDID,srq.SRID, srd.Cost, srq.BookingNo, srd.Fdate, SellPrice, srd.PayTo,srd.AgentPaymentId,srd.SupplierPaymentId " +
                        "from SRdetails srd, ServiceRequest srq, SR_Cust src, Customer c, SRD_Cust sc where sc.SRDID = srd.SRDID " +
-                       "and c.CustomerID = sc.CustomerID and srq.SRID = srd.SRID and src.ServiceRequestID = srq.SRID and IsLead = 1 " +
+                       "and c.CustomerID = sc.CustomerID and srq.SRID = srd.SRID and src.ServiceRequestID = srq.SRID and IsLead = 1 and IsCancelled is null " +
                        $"and DriverID = {DriverID} and srd.PayTo = 'Pay to driver' and srd.Fdate between '{String.Format("{0:yyyy-MM-dd}", FromDate)}' and '{String.Format("{0:yyyy-MM-dd}", ToDate)}'");
             }
 
@@ -265,7 +265,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                        $"and IsCancelled is null and SupplierID = {SupplierID} and srd.Fdate between '{String.Format("{0:yyyy-MM-dd}", FromDate)}' and '{String.Format("{0:yyyy-MM-dd}", ToDate)}'");
 
                 rightsq.Append("Select CONCAT(c.fName, ' ',c.sName) as PaxName, srd.SRDID,srq.SRID, srd.Cost, srq.BookingNo,srd.CancelledSupplierPaymentId, srd.Fdate, SellPrice, srd.PayTo,srd.SupplierPaymentId, " +
-                    "rf.SRDID,rf.ProdCanxCost, rf.SBCanxCost,Coalesce(IsCancelled,0)as IsCancelled, rf.RefundId from SRdetails srd, ServiceRequest srq, SR_Cust src, Customer c, SRD_Cust sc, Refunds rf " +
+                    "rf.SRDID,rf.ProdCanxCost, rf.SBCanxCost,Coalesce(IsCancelled,0) as IsCancelled, rf.RefundId from SRdetails srd, ServiceRequest srq, SR_Cust src, Customer c, SRD_Cust sc, Refunds rf " +
                     "where sc.SRDID = srd.SRDID and c.CustomerID = sc.CustomerID and srq.SRID = srd.SRID and src.ServiceRequestID = srq.SRID " +
                     "and rf.SRDID = srd.SRDID and IsLead = 1 " +
                     $"and IsCancelled = 1 and srd.CancelledSupplierPaymentId is null and SupplierID = {SupplierID} and srd.Fdate between '{String.Format("{0:yyyy-MM-dd}", FromDate)}' and '{String.Format("{0:yyyy-MM-dd}", ToDate)}'");
