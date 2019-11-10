@@ -556,7 +556,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                         $"where c.CustomerID = sc.CustomerID and sc.SRDID ={ srdid}) as PaxName, " +
                         $"sd.AdultNo, sd.ChildNo,sd.IsCancelled,sd.InfantNo, IsInternational, FromLoc ,ToLoc,CarType as ClassID, " +
                         $"Model as AirlineCode, Heritage as FlightNo,Fdate as DepartureOn, Tdate as ArrivalOn, " +
-                        $"PickupPoint as TicketNo,GDSConfNo,PayTo as AirlinePNR,sd.CouponCode,ECommision,IsCanceled, ot.OptionTypeId," +
+                        $"PickupPoint as TicketNo,GDSConfNo,Name as AirlinePNR,sd.CouponCode,ECommision,IsCanceled, ot.OptionTypeId," +
                         $"ot.OptionTypeName as Extra,DropPoint as ExtraDetails,Cost, Sellprice,sd.ServiceTypeID,sd.SRDID,SRID," +
                         $"SuppInvNo,SupplierName,sd.SupplierID, SuppInvDt,SuppConfNo,SuppInvAmt, Commision,Tax,ContractNo,rf.ProdCanxCost,rf.SBCanxCost,rf.RefundId " +
                         $"from SRdetails sd left join Supplier s on s.supplierid = sd.supplierid " +
@@ -746,7 +746,7 @@ namespace Speedbird.Areas.SBBoss.Controllers
                         $"(select COUNT(c.CustomerID) from Customer c, SRD_Cust sc " +
                         $"where c.CustomerID = sc.CustomerID and sc.SRDID = {srdid}) as PaxNo," +
                         "ag.AgentID,ag.ContactName,ag.PhoneNo,aus.RealName as Agency,aus.Id,srq.BookingNo,srq.TDate,sd.AdultNo, sd.ChildNo,sd.InfantNo, IsInternational, FromLoc ,ToLoc,CarType as ClassID, Model as AirlineCode, Heritage as FlightNo,Fdate as DepartureOn, sd.Tdate as ArrivalOn, " +
-                        "PickupPoint as TicketNo,GDSConfNo,PayTo as AirlinePNR, Cost,ContractNo,sd.CouponCode,IsCanceled, ot.OptionTypeName as Extra, " +
+                        "PickupPoint as TicketNo,GDSConfNo,Name as AirlinePNR, Cost,ContractNo,sd.CouponCode,IsCanceled, ot.OptionTypeName as Extra, " +
                         "DropPoint as ExtraDetails, Sellprice,sd.Commision,sd.ServiceTypeID,sd.SRDID,srq.SRID,srq.EnquirySource," +
                         $"aus.Id,aus.RealName from SRdetails sd " +
                         $"left join ServiceRequest srq on srq.SRID = sd.SRID " +
